@@ -1,3 +1,15 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src --verbose
+4:06:00 PM - Projects in this build: 
+    * src/tsconfig.json
+
+4:06:00 PM - Project 'src/tsconfig.json' is out of date because output file 'src/obj/bar.js' does not exist
+
+4:06:00 PM - Building project '/src/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/obj/bar.d.ts]
 declare const _default: (param: string) => void;
 export default _default;

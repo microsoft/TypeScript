@@ -1,3 +1,22 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/app --verbose
+4:13:00 PM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+4:13:00 PM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+4:13:00 PM - Building project '/src/lib/tsconfig.json'...
+
+4:13:00 PM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+4:13:00 PM - Updating output of project '/src/app/tsconfig.json'...
+
+4:13:00 PM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC"}
 

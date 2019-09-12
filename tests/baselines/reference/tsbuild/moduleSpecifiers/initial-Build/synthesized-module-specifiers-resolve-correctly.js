@@ -1,3 +1,27 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc -b / --verbose
+4:00:00 PM - Projects in this build: 
+    * src/common/tsconfig.json
+    * src/sub-project/tsconfig.json
+    * src/sub-project-2/tsconfig.json
+    * src/tsconfig.json
+    * tsconfig.json
+
+4:00:00 PM - Project 'src/common/tsconfig.json' is out of date because output file 'lib/src/common/nominal.js' does not exist
+
+4:00:00 PM - Building project '/src/common/tsconfig.json'...
+
+4:00:00 PM - Project 'src/sub-project/tsconfig.json' is out of date because output file 'lib/src/sub-project/index.js' does not exist
+
+4:00:00 PM - Building project '/src/sub-project/tsconfig.json'...
+
+4:00:00 PM - Project 'src/sub-project-2/tsconfig.json' is out of date because output file 'lib/src/sub-project-2/index.js' does not exist
+
+4:00:00 PM - Building project '/src/sub-project-2/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/lib/src/common/nominal.d.ts]
 export declare type Nominal<T, Name extends string> = T & {
     [Symbol.species]: Name;

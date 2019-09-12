@@ -1,3 +1,15 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/core --verbose
+4:42:00 PM - Projects in this build: 
+    * src/core/tsconfig.json
+
+4:42:00 PM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+
+4:42:00 PM - Building project '/src/core/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/core/anotherModule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";

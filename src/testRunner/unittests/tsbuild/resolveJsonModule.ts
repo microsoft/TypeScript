@@ -17,7 +17,7 @@ namespace ts {
         }
 
         function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
             builder.build();
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
@@ -68,7 +68,7 @@ export default hello.hello`);
             const fs = projFs.shadow();
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -91,7 +91,7 @@ export default hello.hello`);
             const fs = projFs.shadow();
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"outDir": "dist",`, "");
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -128,7 +128,7 @@ export default hello.hello`);
             const configFile = "src/tsconfig.json";
             const stringsConfigFile = "src/strings/tsconfig.json";
             const mainConfigFile = "src/main/tsconfig.json";
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(

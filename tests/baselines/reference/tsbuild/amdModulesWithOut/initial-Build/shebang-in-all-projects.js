@@ -1,3 +1,20 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src/app --verbose
+4:15:00 PM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+4:15:00 PM - Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
+
+4:15:00 PM - Building project '/src/lib/tsconfig.json'...
+
+4:15:00 PM - Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+
+4:15:00 PM - Building project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/file3.ts]
 #!someshebang app file3
 export const z = 30;

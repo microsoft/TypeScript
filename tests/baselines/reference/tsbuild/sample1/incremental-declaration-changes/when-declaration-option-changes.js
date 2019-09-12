@@ -1,3 +1,15 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/core --verbose
+4:32:00 PM - Projects in this build: 
+    * src/core/tsconfig.json
+
+4:32:00 PM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.d.ts' does not exist
+
+4:32:00 PM - Building project '/src/core/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";
 

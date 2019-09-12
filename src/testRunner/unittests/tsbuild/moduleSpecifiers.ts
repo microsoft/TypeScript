@@ -1,10 +1,11 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
-        before(() => {
-            projFs = loadProjectFromFiles({
+        const { time } = getTime();
+        verifyTsc({
+            scenario: "moduleSpecifiers",
+            subScenario: `synthesized module specifiers resolve correctly`,
+            fs: () => loadProjectFromFiles({
                 "/src/common/nominal.ts": utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
@@ -84,22 +85,8 @@ namespace ts {
                     ],
                     "include": []
                 }`
-            }, time, symbolLibContent);
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsbuildOutput({
-            scenario: `synthesized module specifiers resolve correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "moduleSpecifiers",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            baselineOnly: true
+            }, time, symbolLibContent),
+            commandLineArgs: ["-b", "/", "--verbose"]
         });
     });
 }

@@ -1,3 +1,15 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src/core --verbose
+4:29:00 PM - Projects in this build: 
+    * src/core/tsconfig.json
+
+4:29:00 PM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+
+4:29:00 PM - Building project '/src/core/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;

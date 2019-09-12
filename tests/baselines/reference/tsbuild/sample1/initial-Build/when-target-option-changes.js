@@ -1,3 +1,23 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src/core --verbose
+4:34:00 PM - Projects in this build: 
+    * src/core/tsconfig.json
+
+4:34:00 PM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+
+4:34:00 PM - Building project '/src/core/tsconfig.json'...
+
+TSFILE: /src/core/anotherModule.js
+TSFILE: /src/core/index.js
+TSFILE: /src/core/tsconfig.tsbuildinfo
+/lib/lib.esnext.d.ts
+/lib/lib.esnext.full.d.ts
+/src/core/anotherModule.ts
+/src/core/index.ts
+/src/core/some_decl.d.ts
+exitCode:: 0
+
+
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />

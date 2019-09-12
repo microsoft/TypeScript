@@ -1,3 +1,22 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/app --verbose
+4:27:00 PM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+4:27:00 PM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+4:27:00 PM - Building project '/src/lib/tsconfig.json'...
+
+4:27:00 PM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+4:27:00 PM - Updating output of project '/src/app/tsconfig.json'...
+
+4:27:00 PM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/module.js]
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];

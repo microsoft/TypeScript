@@ -1,3 +1,38 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/tests --verbose
+4:23:00 PM - Projects in this build: 
+    * src/core/tsconfig.json
+    * src/logic/tsconfig.json
+    * src/tests/tsconfig.json
+
+4:23:00 PM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
+
+4:23:00 PM - Building project '/src/core/tsconfig.json'...
+
+4:23:00 PM - Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+
+4:23:00 PM - Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+4:23:00 PM - Updating output timestamps of project '/src/logic/tsconfig.json'...
+
+4:23:00 PM - Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+4:23:00 PM - Updating output timestamps of project '/src/tests/tsconfig.json'...
+
+exitCode:: 0
+readFiles:: {
+ "/src/tests/tsconfig.json": 1,
+ "/src/core/tsconfig.json": 1,
+ "/src/logic/tsconfig.json": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/index.d.ts": 1,
+ "/src/logic/tsconfig.tsbuildinfo": 1,
+ "/src/tests/tsconfig.tsbuildinfo": 1
+} 
+
 //// [/src/core/index.d.ts] file written with same contents
 //// [/src/core/index.d.ts.map] file written with same contents
 //// [/src/core/index.d.ts.map.baseline.txt] file written with same contents

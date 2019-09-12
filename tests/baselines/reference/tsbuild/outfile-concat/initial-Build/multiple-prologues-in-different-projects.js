@@ -1,3 +1,25 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src/third --verbose
+4:52:00 PM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+4:52:00 PM - Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+
+4:52:00 PM - Building project '/src/first/tsconfig.json'...
+
+4:52:00 PM - Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
+
+4:52:00 PM - Building project '/src/second/tsconfig.json'...
+
+4:52:00 PM - Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+
+4:52:00 PM - Building project '/src/third/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }

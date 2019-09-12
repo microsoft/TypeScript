@@ -316,7 +316,7 @@ namespace ts {
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
-            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            let output = pretty ? `[${formatColorAndReset((system.now ? system.now() : new Date()).toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${(system.now ? system.now() : new Date()).toLocaleTimeString()} - `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
             system.write(output);
         };

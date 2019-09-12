@@ -1,3 +1,15 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc --b /src/tsconfig.json --verbose
+4:01:00 PM - Projects in this build: 
+    * src/tsconfig.json
+
+4:01:00 PM - Project 'src/tsconfig.json' is out of date because output file 'src/src/hkt.js' does not exist
+
+4:01:00 PM - Building project '/src/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/src/hkt.js]
 "use strict";
 exports.__esModule = true;
