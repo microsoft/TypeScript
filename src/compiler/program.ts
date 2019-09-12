@@ -1759,13 +1759,12 @@ namespace ts {
                     switch (parent.kind) {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.PropertyDeclaration:
-                            if ((<ParameterDeclaration | PropertyDeclaration>parent).questionToken === node) {
+                        case SyntaxKind.MethodDeclaration:
+                            if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-                            // falls through
-
-                        case SyntaxKind.MethodDeclaration:
+                        // falls through
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
@@ -1835,7 +1834,6 @@ namespace ts {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
@@ -1843,7 +1841,7 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
                             // Check type parameters
-                            if (nodes === (<ClassLikeDeclaration | FunctionLikeDeclaration>parent).typeParameters) {
+                            if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
@@ -1851,8 +1849,8 @@ namespace ts {
 
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
-                            if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
-                                return checkModifiers(<NodeArray<Modifier>>nodes, parent.kind === SyntaxKind.VariableStatement);
+                            if (nodes === parent.modifiers) {
+                                return checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
@@ -1878,8 +1876,9 @@ namespace ts {
                         case SyntaxKind.ExpressionWithTypeArguments:
                         case SyntaxKind.JsxSelfClosingElement:
                         case SyntaxKind.JsxOpeningElement:
+                        case SyntaxKind.TaggedTemplateExpression:
                             // Check type arguments
-                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments | JsxOpeningLikeElement>parent).typeArguments) {
+                            if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                                 return;
                             }
