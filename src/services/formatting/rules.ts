@@ -313,8 +313,8 @@ namespace ts.formatting {
 
             rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
             rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteTrivia),
-            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolonPreference", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
-            rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolonPreference", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
+            rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
+            rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
         ];
 
         // These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.

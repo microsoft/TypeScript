@@ -740,7 +740,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
-        readonly semicolonPreference?: SemicolonPreference;
+        readonly semicolons?: SemicolonPreference;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -764,7 +764,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
-            semicolonPreference: SemicolonPreference.Ignore,
+            semicolons: SemicolonPreference.Ignore,
         };
     }
 
