@@ -770,7 +770,11 @@ namespace ts {
                 fixupParentReferences(sourceFile);
             }
 
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.identifiers = identifiers;
             sourceFile.parseDiagnostics = parseDiagnostics;
+
             const result = sourceFile as JsonSourceFile;
             clearState();
             return result;
