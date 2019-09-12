@@ -236,7 +236,7 @@ namespace ts.formatting {
      * This function will return a predicate that for a given text range will tell
      * if there are any parse errors that overlap with the range.
      */
-    function prepareRangeContainsErrorFunction(errors: ReadonlyArray<Diagnostic>, originalRange: TextRange): (r: TextRange) => boolean {
+    function prepareRangeContainsErrorFunction(errors: readonly Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
         if (!errors.length) {
             return rangeHasNoErrors;
         }
@@ -525,7 +525,8 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                // falls through
+                    // falls through
+
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     const name = getNameOfDeclaration(<Declaration>node);
@@ -1234,7 +1235,7 @@ namespace ts.formatting {
     export function getRangeOfEnclosingComment(
         sourceFile: SourceFile,
         position: number,
-        precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
+        precedingToken?: Node | null,
         tokenAtPosition = getTokenAtPosition(sourceFile, position),
     ): CommentRange | undefined {
         const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
@@ -1244,6 +1245,7 @@ namespace ts.formatting {
             return undefined;
         }
 
+        // eslint-disable-next-line no-null/no-null
         precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
 
         // Between two consecutive tokens, all comments are either trailing on the former
@@ -1268,7 +1270,7 @@ namespace ts.formatting {
             position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
     }
 
-    function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {
+    function getOpenTokenForList(node: Node, list: readonly Node[]) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:

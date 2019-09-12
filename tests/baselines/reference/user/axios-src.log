@@ -1,24 +1,24 @@
 Exit Code: 1
 Standard output:
-lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-lib/adapters/http.js(85,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+lib/adapters/http.js(87,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/adapters/http.js(121,17): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(121,40): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(122,17): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(122,54): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(122,54): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(221,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(227,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(233,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
-lib/adapters/http.js(245,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/http.js(269,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(62,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(74,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(81,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(84,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(93,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(163,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/http.js(123,17): error TS2532: Object is possibly 'undefined'.
+lib/adapters/http.js(123,40): error TS2532: Object is possibly 'undefined'.
+lib/adapters/http.js(124,17): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(124,54): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(124,54): error TS2532: Object is possibly 'undefined'.
+lib/adapters/http.js(223,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(229,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(235,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.
+lib/adapters/http.js(247,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/http.js(271,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/xhr.js(64,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(76,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(83,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/xhr.js(86,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(95,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(165,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/axios.js(23,9): error TS2554: Expected 3 arguments, but got 2.
 lib/axios.js(25,3): error TS2739: Type '(...args: any[]) => any' is missing the following properties from type 'Axios': defaults, interceptors, request, getUri
 lib/axios.js(32,7): error TS2339: Property 'Axios' does not exist on type 'Axios'.

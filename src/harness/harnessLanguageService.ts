@@ -1,11 +1,10 @@
 namespace Harness.LanguageService {
 
     export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-        // tslint:disable-next-line:no-null-keyword
-        const proxy = Object.create(/*prototype*/ null);
+        const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
         const langSvc: any = info.languageService;
         for (const k of Object.keys(langSvc)) {
-            // tslint:disable-next-line only-arrow-functions
+            // eslint-disable-next-line only-arrow-functions
             proxy[k] = function () {
                 return langSvc[k].apply(langSvc, arguments);
             };
@@ -253,7 +252,7 @@ namespace Harness.LanguageService {
             return this.sys.fileExists(fileName);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -559,10 +558,10 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
-        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
+        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
-        getEditsForFileRename(): ReadonlyArray<ts.FileTextChanges> {
+        getEditsForFileRename(): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -594,15 +593,13 @@ namespace Harness.LanguageService {
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
         getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
-            let shimResult: {
+            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
+            const shimResult: {
                 referencedFiles: ts.ShimsFileReference[];
                 typeReferenceDirectives: ts.ShimsFileReference[];
                 importedFiles: ts.ShimsFileReference[];
                 isLibFile: boolean;
-            };
-
-            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
-            shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
+            } = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
             const convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
@@ -728,7 +725,7 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -770,19 +767,22 @@ namespace Harness.LanguageService {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-            // tslint:disable-next-line:ban
+            // eslint-disable-next-line no-restricted-globals
             return setTimeout(callback, ms, args);
         }
 
         clearTimeout(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearTimeout(timeoutId);
         }
 
         setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
+            // eslint-disable-next-line no-restricted-globals
             return setImmediate(callback, args);
         }
 
         clearImmediate(timeoutId: any): void {
+            // eslint-disable-next-line no-restricted-globals
             clearImmediate(timeoutId);
         }
 
@@ -800,7 +800,7 @@ namespace Harness.LanguageService {
                             create(info: ts.server.PluginCreateInfo) {
                                 const proxy = makeDefaultProxy(info);
                                 const langSvc: any = info.languageService;
-                                // tslint:disable-next-line only-arrow-functions
+                                // eslint-disable-next-line only-arrow-functions
                                 proxy.getQuickInfoAtPosition = function () {
                                     const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                     if (parts.displayParts.length > 0) {
