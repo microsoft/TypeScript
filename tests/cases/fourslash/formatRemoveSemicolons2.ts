@@ -12,7 +12,7 @@
 ////}
 ////let z = 0; //
 
-format.setFormatOptions({ ...format.copyFormatOptions(), insertTrailingSemicolon: false });
+format.setFormatOptions({ ...format.copyFormatOptions(), semicolons: ts.SemicolonPreference.Remove });
 format.document();
 verify.currentFileContentIs(`namespace ts {
     let x = 0

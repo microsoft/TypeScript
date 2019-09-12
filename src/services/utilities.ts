@@ -2064,7 +2064,7 @@ namespace ts {
         }
 
         const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
-        const endLine = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line;
+        const endLine = sourceFile.getLineAndCharacterOfPosition(nextToken.getStart(sourceFile)).line;
         return startLine !== endLine;
     }
 

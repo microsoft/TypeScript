@@ -23,7 +23,7 @@
 ////declare module 'bar'
 ////type T = { x: string, y: number }
 
-format.setFormatOptions({ ...format.copyFormatOptions(), insertTrailingSemicolon: true });
+format.setFormatOptions({ ...format.copyFormatOptions(), semicolons: ts.SemicolonPreference.Insert });
 format.document();
 verify.currentFileContentIs(`console.log(1);
 console.log(2);

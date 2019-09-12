@@ -37,7 +37,7 @@
 ////    ();
 ////}
 
-format.setFormatOptions({ ...format.copyFormatOptions(), insertTrailingSemicolon: false });
+format.setFormatOptions({ ...format.copyFormatOptions(), semicolons: ts.SemicolonPreference.Remove });
 format.document();
 verify.currentFileContentIs(`; (function f() { })()
 const a = 3;
