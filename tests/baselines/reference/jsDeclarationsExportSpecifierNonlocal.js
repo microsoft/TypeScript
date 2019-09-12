@@ -36,5 +36,4 @@ export class Thing {
 export class OtherThing {
 }
 //// [index.d.ts]
-export { Thing } from "./source";
-export { OtherThing as default } from "./source";
+export { Thing, OtherThing as default } from "./source";

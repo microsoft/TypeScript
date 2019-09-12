@@ -4977,6 +4977,27 @@ namespace ts {
                         )];
                         // TODO combine multiple `export {a} from "..."` into a single statement
                     }
+                    // Pass 2b: Also combine all `export {} from "..."` declarations as needed
+                    const reexports = filter(statements, d => isExportDeclaration(d) && !!d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
+                    if (length(reexports) > 1) {
+                        const groups = group(reexports, decl => isStringLiteral(decl.moduleSpecifier!) ? ">" + decl.moduleSpecifier!.text : ">");
+                        if (groups.length !== reexports.length) {
+                            for (const group of groups) {
+                                if (group.length > 1) {
+                                    // remove group members from statements and then merge group members and add back to statements
+                                    statements = [
+                                        ...filter(statements, s => group.indexOf(s as ExportDeclaration) === -1),
+                                        createExportDeclaration(
+                                            /*decorators*/ undefined,
+                                            /*modifiers*/ undefined,
+                                            createNamedExports(flatMap(group, e => e.exportClause!.elements)),
+                                            group[0].moduleSpecifier
+                                        )
+                                    ];
+                                }
+                            }
+                        }
+                    }
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
                     const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
                     if (exportDecl) {
