@@ -4,8 +4,8 @@
 import Octokit = require("@octokit/rest");
 import {runSequence} from "./run-sequence";
 
-function padNum(number: number) {
-    const str = "" + number;
+function padNum(num: number) {
+    const str = "" + num;
     return str.length >= 2 ? str : "0" + str;
 }
 

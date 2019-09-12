@@ -141,7 +141,7 @@ namespace ts {
     export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
-        if (ensureUseStrict) statements = ts.ensureUseStrict(statements); // tslint:disable-line no-unnecessary-qualifier
+        if (ensureUseStrict) statements = ts.ensureUseStrict(statements); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         return mergeLexicalEnvironment(statements, context.endLexicalEnvironment());
     }
 
@@ -229,7 +229,6 @@ namespace ts {
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
             // Signature elements
-
             case SyntaxKind.TypeParameter:
                 return updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
                     visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
@@ -251,7 +250,6 @@ namespace ts {
                     visitNode((<Decorator>node).expression, visitor, isExpression));
 
             // Type elements
-
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
                     nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
@@ -331,10 +329,9 @@ namespace ts {
                     nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier),
                     nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
-                    visitNode((<IndexSignatureDeclaration>node).type!, visitor, isTypeNode));
+                    visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
 
             // Types
-
             case SyntaxKind.TypePredicate:
                 return updateTypePredicateNode(<TypePredicateNode>node,
                     visitNode((<TypePredicateNode>node).parameterName, visitor),
@@ -433,7 +430,6 @@ namespace ts {
                     visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
             // Binding patterns
-
             case SyntaxKind.ObjectBindingPattern:
                 return updateObjectBindingPattern(<ObjectBindingPattern>node,
                     nodesVisitor((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
@@ -450,7 +446,6 @@ namespace ts {
                     visitNode((<BindingElement>node).initializer, visitor, isExpression));
 
             // Expression
-
             case SyntaxKind.ArrayLiteralExpression:
                 return updateArrayLiteral(<ArrayLiteralExpression>node,
                     nodesVisitor((<ArrayLiteralExpression>node).elements, visitor, isExpression));
@@ -561,7 +556,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
                     visitNode((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
-                    visitNode((<YieldExpression>node).expression!, visitor, isExpression));
+                    visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
                 return updateSpread(<SpreadElement>node,
@@ -594,14 +589,12 @@ namespace ts {
                     visitNode((<MetaProperty>node).name, visitor, isIdentifier));
 
             // Misc
-
             case SyntaxKind.TemplateSpan:
                 return updateTemplateSpan(<TemplateSpan>node,
                     visitNode((<TemplateSpan>node).expression, visitor, isExpression),
                     visitNode((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
-
             case SyntaxKind.Block:
                 return updateBlock(<Block>node,
                     nodesVisitor((<Block>node).statements, visitor, isStatement));
@@ -680,7 +673,7 @@ namespace ts {
 
             case SyntaxKind.ThrowStatement:
                 return updateThrow(<ThrowStatement>node,
-                    visitNode((<ThrowStatement>node).expression!, visitor, isExpression));
+                    visitNode((<ThrowStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.TryStatement:
                 return updateTry(<TryStatement>node,
@@ -816,13 +809,11 @@ namespace ts {
                     visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
 
             // Module references
-
             case SyntaxKind.ExternalModuleReference:
                 return updateExternalModuleReference(<ExternalModuleReference>node,
                     visitNode((<ExternalModuleReference>node).expression, visitor, isExpression));
 
             // JSX
-
             case SyntaxKind.JsxElement:
                 return updateJsxElement(<JsxElement>node,
                     visitNode((<JsxElement>node).openingElement, visitor, isJsxOpeningElement),
@@ -854,7 +845,7 @@ namespace ts {
             case SyntaxKind.JsxAttribute:
                 return updateJsxAttribute(<JsxAttribute>node,
                     visitNode((<JsxAttribute>node).name, visitor, isIdentifier),
-                    visitNode((<JsxAttribute>node).initializer!, visitor, isStringLiteralOrJsxExpression));
+                    visitNode((<JsxAttribute>node).initializer, visitor, isStringLiteralOrJsxExpression));
 
             case SyntaxKind.JsxAttributes:
                 return updateJsxAttributes(<JsxAttributes>node,
@@ -869,7 +860,6 @@ namespace ts {
                     visitNode((<JsxExpression>node).expression, visitor, isExpression));
 
             // Clauses
-
             case SyntaxKind.CaseClause:
                 return updateCaseClause(<CaseClause>node,
                     visitNode((<CaseClause>node).expression, visitor, isExpression),
@@ -889,7 +879,6 @@ namespace ts {
                     visitNode((<CatchClause>node).block, visitor, isBlock));
 
             // Property assignments
-
             case SyntaxKind.PropertyAssignment:
                 return updatePropertyAssignment(<PropertyAssignment>node,
                     visitNode((<PropertyAssignment>node).name, visitor, isPropertyName),
@@ -936,7 +925,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function extractSingleNode(nodes: ReadonlyArray<Node>): Node | undefined {
+    function extractSingleNode(nodes: readonly Node[]): Node | undefined {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
         return singleOrUndefined(nodes);
     }
@@ -1014,7 +1003,6 @@ namespace ts {
                 break;
 
             // Type member
-
             case SyntaxKind.PropertySignature:
                 result = reduceNodes((<PropertySignature>node).modifiers, cbNodes, result);
                 result = reduceNode((<PropertySignature>node).name, cbNode, result);
@@ -1464,13 +1452,13 @@ namespace ts {
     /**
      * Merges generated lexical declarations into a new statement list.
      */
-    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: ReadonlyArray<Statement> | undefined): NodeArray<Statement>;
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: readonly Statement[] | undefined): NodeArray<Statement>;
 
     /**
      * Appends generated lexical declarations to an array of statements.
      */
-    export function mergeLexicalEnvironment(statements: Statement[], declarations: ReadonlyArray<Statement> | undefined): Statement[];
-    export function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: ReadonlyArray<Statement> | undefined) {
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: readonly Statement[] | undefined): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: readonly Statement[] | undefined) {
         if (!some(declarations)) {
             return statements;
         }
@@ -1485,7 +1473,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    export function liftToBlock(nodes: ReadonlyArray<Node>): Statement {
+    export function liftToBlock(nodes: readonly Node[]): Statement {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return <Statement>singleOrUndefined(nodes) || createBlock(<NodeArray<Statement>>nodes);
     }

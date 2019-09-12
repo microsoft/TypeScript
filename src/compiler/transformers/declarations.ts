@@ -87,7 +87,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly string[] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -693,10 +693,10 @@ namespace ts {
                 // Namespace import (optionally with visible default)
                 const namedBindings = resolver.isDeclarationVisible(decl.importClause.namedBindings) ? decl.importClause.namedBindings : /*namedBindings*/ undefined;
                 return visibleDefaultBinding || namedBindings ? updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
-                        decl.importClause,
-                        visibleDefaultBinding,
-                        namedBindings
-                    ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
+                    decl.importClause,
+                    visibleDefaultBinding,
+                    namedBindings
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -1254,7 +1254,7 @@ namespace ts {
                     const modifiers = createNodeArray(ensureModifiers(input));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
-                    let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
+                    let parameterProperties: readonly PropertyDeclaration[] | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
@@ -1427,11 +1427,11 @@ namespace ts {
             return isExportAssignment(node) || isExportDeclaration(node);
         }
 
-        function hasScopeMarker(statements: ReadonlyArray<Statement>) {
+        function hasScopeMarker(statements: readonly Statement[]) {
             return some(statements, isScopeMarker);
         }
 
-        function ensureModifiers(node: Node): ReadonlyArray<Modifier> | undefined {
+        function ensureModifiers(node: Node): readonly Modifier[] | undefined {
             const currentFlags = getModifierFlags(node);
             const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {
@@ -1622,7 +1622,7 @@ namespace ts {
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.ImportType:
-            return true;
+                return true;
         }
         return false;
     }

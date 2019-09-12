@@ -38,7 +38,7 @@ namespace compiler {
      * Correlates compilation inputs and outputs
      */
     export interface CompilationOutput {
-        readonly inputs: ReadonlyArray<documents.TextDocument>;
+        readonly inputs: readonly documents.TextDocument[];
         readonly js: documents.TextDocument | undefined;
         readonly dts: documents.TextDocument | undefined;
         readonly map: documents.TextDocument | undefined;
@@ -49,7 +49,7 @@ namespace compiler {
         public readonly program: ts.Program | undefined;
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
-        public readonly diagnostics: ReadonlyArray<ts.Diagnostic>;
+        public readonly diagnostics: readonly ts.Diagnostic[];
         public readonly js: ReadonlyMap<string, documents.TextDocument>;
         public readonly dts: ReadonlyMap<string, documents.TextDocument>;
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
@@ -58,7 +58,7 @@ namespace compiler {
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ReadonlyArray<ts.Diagnostic>) {
+        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: readonly ts.Diagnostic[]) {
             this.host = host;
             this.program = program;
             this.result = result;
@@ -143,15 +143,15 @@ namespace compiler {
             return this.host.vfs;
         }
 
-        public get inputs(): ReadonlyArray<documents.TextDocument> {
+        public get inputs(): readonly documents.TextDocument[] {
             return this._inputs;
         }
 
-        public get outputs(): ReadonlyArray<documents.TextDocument> {
+        public get outputs(): readonly documents.TextDocument[] {
             return this.host.outputs;
         }
 
-        public get traces(): ReadonlyArray<string> {
+        public get traces(): readonly string[] {
             return this.host.traces;
         }
 
@@ -172,7 +172,7 @@ namespace compiler {
             return this._inputsAndOutputs.get(vpath.resolve(this.vfs.cwd(), path));
         }
 
-        public getInputs(path: string): ReadonlyArray<documents.TextDocument> | undefined {
+        public getInputs(path: string): readonly documents.TextDocument[] | undefined {
             const outputs = this.getInputsAndOutputs(path);
             return outputs && outputs.inputs;
         }

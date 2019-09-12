@@ -376,7 +376,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
+        function addInitializedPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
                 const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
@@ -392,7 +392,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyExpressions(properties: ReadonlyArray<PropertyDeclaration>, receiver: LeftHandSideExpression) {
+        function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
                 const expression = transformInitializedProperty(property, receiver);
@@ -417,7 +417,7 @@ namespace ts {
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
-            const initializer = visitNode(property.initializer!, visitor, isExpression);
+            const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
             return createAssignment(memberAccess, initializer);

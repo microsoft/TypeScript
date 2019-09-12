@@ -1,6 +1,4 @@
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
-/* tslint:disable:no-null-keyword */
-
 namespace RWC {
     function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.IO) => void) {
         const oldIO = Harness.IO;
@@ -11,7 +9,8 @@ namespace RWC {
 
         try {
             fn(oldIO);
-        } finally {
+        }
+        finally {
             wrappedIO.endReplay();
             Harness.IO = oldIO;
         }
@@ -156,7 +155,7 @@ namespace RWC {
             it("has the expected declaration file content", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     if (!compilerResult.dts.size) {
-                        return null;
+                        return null; // eslint-disable-line no-null/no-null
                     }
 
                     return Harness.Compiler.iterateOutputs(compilerResult.dts.values());
@@ -166,7 +165,7 @@ namespace RWC {
             it("has the expected source maps", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     if (!compilerResult.maps.size) {
-                        return null;
+                        return null; // eslint-disable-line no-null/no-null
                     }
 
                     return Harness.Compiler.iterateOutputs(compilerResult.maps.values());
@@ -176,7 +175,7 @@ namespace RWC {
             it("has the expected errors", () => {
                 Harness.Baseline.runMultifileBaseline(baseName, ".errors.txt", () => {
                     if (compilerResult.diagnostics.length === 0) {
-                        return null;
+                        return null; // eslint-disable-line no-null/no-null
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
@@ -191,7 +190,7 @@ namespace RWC {
                 if (compilerOptions.declaration && !compilerResult.diagnostics.length) {
                     Harness.Baseline.runMultifileBaseline(baseName, ".dts.errors.txt", () => {
                         if (compilerResult.diagnostics.length === 0) {
-                            return null;
+                            return null; // eslint-disable-line no-null/no-null
                         }
 
                         const declContext = Harness.Compiler.prepareDeclarationCompilationContext(

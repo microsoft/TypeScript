@@ -19,8 +19,8 @@ namespace ts {
      */
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
-        sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
-        emitOnlyDtsFiles = false,
+        sourceFilesOrTargetSourceFile?: readonly SourceFile[] | SourceFile,
+        forceDtsEmit = false,
         onlyBuildInfo?: boolean,
         includeBuildInfo?: boolean) {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
@@ -29,7 +29,7 @@ namespace ts {
             const prepends = host.getPrependNodes();
             if (sourceFiles.length || prepends.length) {
                 const bundle = createBundle(sourceFiles, prepends);
-                const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
+                const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
                 if (result) {
                     return result;
                 }
@@ -38,7 +38,7 @@ namespace ts {
         else {
             if (!onlyBuildInfo) {
                 for (const sourceFile of sourceFiles) {
-                    const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
+                    const result = action(getOutputPathsFor(sourceFile, host, forceDtsEmit), sourceFile);
                     if (result) {
                         return result;
                     }
@@ -169,7 +169,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): ReadonlyArray<string> {
+    export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): readonly string[] {
         let outputs: string[] | undefined;
         const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
         if (configFile.options.outFile || configFile.options.out) {
@@ -225,7 +225,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -239,7 +239,14 @@ namespace ts {
 
         // Emit each output file
         enter();
-        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles, onlyBuildInfo, !targetSourceFile);
+        forEachEmittedFile(
+            host,
+            emitSourceFileOrBundle,
+            getSourceFilesToEmit(host, targetSourceFile),
+            forceDtsEmit,
+            onlyBuildInfo,
+            !targetSourceFile
+        );
         exit();
 
 
@@ -397,7 +404,7 @@ namespace ts {
             });
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
-            if (!declBlocked || emitOnlyDtsFiles) {
+            if (!declBlocked || forceDtsEmit) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(
                     declarationFilePath,
@@ -412,7 +419,7 @@ namespace ts {
                         // Explicitly do not passthru either `inline` option
                     }
                 );
-                if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
+                if (forceDtsEmit && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
                     const sourceFile = declarationTransform.transformed[0];
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
                 }
@@ -622,7 +629,7 @@ namespace ts {
 
     /*@internal*/
     /** File that isnt present resulting in error or output files */
-    export type EmitUsingBuildInfoResult = string | ReadonlyArray<OutputFile>;
+    export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
 
     /*@internal*/
     export interface EmitUsingBuildInfoHost extends ModuleResolutionHost {
@@ -632,7 +639,7 @@ namespace ts {
         getNewLine(): string;
     }
 
-    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): ReadonlyArray<SourceFile> {
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
         const sourceFiles = bundle.sourceFiles.map(fileName => {
             const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
             sourceFile.fileName = getRelativePathFromDirectory(
@@ -815,7 +822,7 @@ namespace ts {
         let containerPos = -1;
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
-        let currentLineMap: ReadonlyArray<number> | undefined;
+        let currentLineMap: readonly number[] | undefined;
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
@@ -1182,7 +1189,6 @@ namespace ts {
                         return emitIdentifier(<Identifier>node);
 
                     // Parse tree nodes
-
                     // Names
                     case SyntaxKind.QualifiedName:
                         return emitQualifiedName(<QualifiedName>node);
@@ -2694,7 +2700,7 @@ namespace ts {
             writeKeyword("function");
             emit(node.asteriskToken);
             writeSpace();
-            emitIdentifierName(node.name!); // TODO: GH#18217
+            emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -3447,7 +3453,7 @@ namespace ts {
             if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
         }
 
-        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>, libs: ReadonlyArray<FileReference>) {
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
             if (hasNoDefaultLib) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference no-default-lib="true"/>`);
@@ -3514,7 +3520,7 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: ReadonlyArray<Node>, sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>, recordBundleFileSection?: true): number {
+        function emitPrologueDirectives(statements: readonly Node[], sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>, recordBundleFileSection?: true): number {
             let needsToSetSourceFile = !!sourceFile;
             for (let i = 0; i < statements.length; i++) {
                 const statement = statements[i];
@@ -3523,7 +3529,7 @@ namespace ts {
                     if (shouldEmitPrologueDirective) {
                         if (needsToSetSourceFile) {
                             needsToSetSourceFile = false;
-                            setSourceFile(sourceFile!);
+                            setSourceFile(sourceFile);
                         }
                         writeLine();
                         const pos = writer.getTextPos();
@@ -3543,7 +3549,7 @@ namespace ts {
             return statements.length;
         }
 
-        function emitUnparsedPrologues(prologues: ReadonlyArray<UnparsedPrologue>, seenPrologueDirectives: Map<true>) {
+        function emitUnparsedPrologues(prologues: readonly UnparsedPrologue[], seenPrologueDirectives: Map<true>) {
             for (const prologue of prologues) {
                 if (!seenPrologueDirectives.has(prologue.data)) {
                     writeLine();

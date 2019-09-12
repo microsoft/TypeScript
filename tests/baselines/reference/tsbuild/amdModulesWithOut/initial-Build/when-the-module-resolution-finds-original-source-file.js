@@ -521,6 +521,123 @@ declare const globalConst = 10;
 //// [/src/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["lib/file0.ts","lib/file1.ts","lib/file2.ts","lib/global.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
 
+//// [/src/module.d.ts.map.baseline.txt]
+===================================================================
+JsFile: module.d.ts
+mapUrl: module.d.ts.map
+sourceRoot: 
+sources: lib/file0.ts,lib/file1.ts,lib/file2.ts,lib/global.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/src/module.d.ts
+sourceFile:lib/file0.ts
+-------------------------------------------------------------------
+>>>declare const myGlob = 20;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^
+4 >              ^^^^^^
+5 >                    ^^^^^
+6 >                         ^
+7 >                          ^^^->
+1 >
+2 >
+3 >        const 
+4 >              myGlob
+5 >                     = 20
+6 >                         ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 9) Source(1, 1) + SourceIndex(0)
+3 >Emitted(1, 15) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 21) Source(1, 13) + SourceIndex(0)
+5 >Emitted(1, 26) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.d.ts
+sourceFile:lib/file1.ts
+-------------------------------------------------------------------
+>>>declare module "lib/file1" {
+>>>    export const x = 10;
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^
+5 >                 ^
+6 >                  ^^^^^
+7 >                       ^
+1->
+2 >    export
+3 >           
+4 >           const 
+5 >                 x
+6 >                   = 10
+7 >                       ;
+1->Emitted(3, 5) Source(1, 1) + SourceIndex(1)
+2 >Emitted(3, 11) Source(1, 7) + SourceIndex(1)
+3 >Emitted(3, 12) Source(1, 8) + SourceIndex(1)
+4 >Emitted(3, 18) Source(1, 14) + SourceIndex(1)
+5 >Emitted(3, 19) Source(1, 15) + SourceIndex(1)
+6 >Emitted(3, 24) Source(1, 20) + SourceIndex(1)
+7 >Emitted(3, 25) Source(1, 21) + SourceIndex(1)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.d.ts
+sourceFile:lib/file2.ts
+-------------------------------------------------------------------
+>>>}
+>>>declare module "lib/file2" {
+>>>    export const y = 20;
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^
+5 >                 ^
+6 >                  ^^^^^
+7 >                       ^
+1 >
+2 >    export
+3 >           
+4 >           const 
+5 >                 y
+6 >                   = 20
+7 >                       ;
+1 >Emitted(6, 5) Source(1, 1) + SourceIndex(2)
+2 >Emitted(6, 11) Source(1, 7) + SourceIndex(2)
+3 >Emitted(6, 12) Source(1, 8) + SourceIndex(2)
+4 >Emitted(6, 18) Source(1, 14) + SourceIndex(2)
+5 >Emitted(6, 19) Source(1, 15) + SourceIndex(2)
+6 >Emitted(6, 24) Source(1, 20) + SourceIndex(2)
+7 >Emitted(6, 25) Source(1, 21) + SourceIndex(2)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.d.ts
+sourceFile:lib/global.ts
+-------------------------------------------------------------------
+>>>}
+>>>declare const globalConst = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^
+4 >              ^^^^^^^^^^^
+5 >                         ^^^^^
+6 >                              ^
+7 >                               ^^^^->
+1 >
+2 >
+3 >        const 
+4 >              globalConst
+5 >                          = 10
+6 >                              ;
+1 >Emitted(8, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(8, 9) Source(1, 1) + SourceIndex(3)
+3 >Emitted(8, 15) Source(1, 7) + SourceIndex(3)
+4 >Emitted(8, 26) Source(1, 18) + SourceIndex(3)
+5 >Emitted(8, 31) Source(1, 23) + SourceIndex(3)
+6 >Emitted(8, 32) Source(1, 24) + SourceIndex(3)
+---
+>>>//# sourceMappingURL=module.d.ts.map
+
 //// [/src/module.js]
 var myGlob = 20;
 define("lib/file1", ["require", "exports"], function (require, exports) {
@@ -538,6 +655,121 @@ var globalConst = 10;
 
 //// [/src/module.js.map]
 {"version":3,"file":"module.js","sourceRoot":"","sources":["lib/file0.ts","lib/file1.ts","lib/file2.ts","lib/global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+
+//// [/src/module.js.map.baseline.txt]
+===================================================================
+JsFile: module.js
+mapUrl: module.js.map
+sourceRoot: 
+sources: lib/file0.ts,lib/file1.ts,lib/file2.ts,lib/global.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:/src/module.js
+sourceFile:lib/file0.ts
+-------------------------------------------------------------------
+>>>var myGlob = 20;
+1 >
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^
+5 >             ^^
+6 >               ^
+7 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >const 
+3 >    myGlob
+4 >           = 
+5 >             20
+6 >               ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.js
+sourceFile:lib/file1.ts
+-------------------------------------------------------------------
+>>>define("lib/file1", ["require", "exports"], function (require, exports) {
+>>>    "use strict";
+>>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.x = 10;
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^
+6 >                  ^
+1->export const 
+2 >    
+3 >            x
+4 >              = 
+5 >                10
+6 >                  ;
+1->Emitted(5, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(5, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(5, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(5, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(5, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(5, 20) Source(1, 21) + SourceIndex(1)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.js
+sourceFile:lib/file2.ts
+-------------------------------------------------------------------
+>>>});
+>>>define("lib/file2", ["require", "exports"], function (require, exports) {
+>>>    "use strict";
+>>>    Object.defineProperty(exports, "__esModule", { value: true });
+>>>    exports.y = 20;
+1 >^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^
+6 >                  ^
+1 >export const 
+2 >    
+3 >            y
+4 >              = 
+5 >                20
+6 >                  ;
+1 >Emitted(10, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(10, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(10, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(10, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(10, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(10, 20) Source(1, 21) + SourceIndex(2)
+---
+-------------------------------------------------------------------
+emittedFile:/src/module.js
+sourceFile:lib/global.ts
+-------------------------------------------------------------------
+>>>});
+>>>var globalConst = 10;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^
+4 >               ^^^
+5 >                  ^^
+6 >                    ^
+7 >                     ^^^^^^^^^^^^->
+1 >
+2 >const 
+3 >    globalConst
+4 >                = 
+5 >                  10
+6 >                    ;
+1 >Emitted(12, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(12, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(12, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(12, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(12, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(12, 22) Source(1, 24) + SourceIndex(3)
+---
+>>>//# sourceMappingURL=module.js.map
 
 //// [/src/module.tsbuildinfo]
 {
@@ -570,4 +802,38 @@ var globalConst = 10;
   },
   "version": "FakeTSVersion"
 }
+
+//// [/src/module.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/module.js
+----------------------------------------------------------------------
+text: (0-417)
+var myGlob = 20;
+define("lib/file1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = 10;
+});
+define("lib/file2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = 20;
+});
+var globalConst = 10;
+
+======================================================================
+======================================================================
+File:: /src/module.d.ts
+----------------------------------------------------------------------
+text: (0-179)
+declare const myGlob = 20;
+declare module "lib/file1" {
+    export const x = 10;
+}
+declare module "lib/file2" {
+    export const y = 20;
+}
+declare const globalConst = 10;
+
+======================================================================
 

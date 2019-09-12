@@ -612,12 +612,7 @@ export class cNew {}`);
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
-                lastProjectOutput: "/src/tests/index.js",
+                baselineSourceMap: true,
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
@@ -697,22 +692,6 @@ class someClass { }`),
                         ],
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/index.d.ts",
-                    "/src/logic/tsconfig.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ]
             });
 
             verifyTsbuildOutput({
@@ -722,12 +701,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
-                lastProjectOutput: "/src/tests/index.js",
+                baselineSourceMap: true,
                 initialBuild,
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
@@ -765,22 +739,6 @@ class someClass { }`),
                         ]
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/decls/index.d.ts",
-                    "/src/logic/tsconfig.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ],
             });
 
             verifyTsbuildOutput({
@@ -790,12 +748,7 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                expectedMapFileNames: [
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.d.ts.map",
-                    "/src/logic/index.js.map"
-                ],
-                lastProjectOutput: "/src/tests/index.js",
+                baselineSourceMap: true,
                 initialBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
@@ -826,22 +779,6 @@ class someClass { }`),
                         ]
                     )
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/anotherModule.d.ts.map",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/index.d.ts.map",
-                    "/src/core/tsconfig.tsbuildinfo",
-                    "/src/logic/index.js",
-                    "/src/logic/index.js.map",
-                    "/src/logic/index.d.ts",
-                    "/src/logic/ownFile.tsbuildinfo",
-                    "/src/tests/index.js",
-                    "/src/tests/index.d.ts",
-                    "/src/tests/tsconfig.tsbuildinfo",
-                ]
             });
 
             verifyTsbuildOutput({
@@ -851,7 +788,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -873,13 +809,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -891,7 +820,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => {
                         fs.writeFileSync("/lib/lib.esnext.full.d.ts", `/// <reference no-default-lib="true"/>
@@ -922,13 +850,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/anotherModule.d.ts",
-                    "/src/core/index.js",
-                    "/src/core/index.d.ts",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -940,7 +861,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/core"],
-                lastProjectOutput: "/src/core/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
     "compilerOptions": {
@@ -962,11 +882,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                     ]
                 },
-                outputFiles: [
-                    "/src/core/anotherModule.js",
-                    "/src/core/index.js",
-                    "/src/core/tsconfig.tsbuildinfo",
-                ],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
@@ -978,7 +893,6 @@ class someClass { }`),
                 tick,
                 proj: "sample1",
                 rootNames: ["/src/tests"],
-                lastProjectOutput: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{
     "references": [
@@ -1014,7 +928,6 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                     ]
                 },
-                outputFiles: [],
                 baselineOnly: true,
                 verifyDiagnostics: true
             });
