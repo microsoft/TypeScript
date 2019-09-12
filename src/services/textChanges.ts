@@ -835,10 +835,12 @@ namespace ts.textChanges {
         function getFormatCodeSettingsForWriting(context: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
             return {
                 ...context.options,
-                // If the user has no semicolon preference defined, try to match whatever’s in the source file
-                semicolonPreference: !context.options.semicolonPreference || context.options.semicolonPreference === SemicolonPreference.Ignore
-                    ? probablyUsesSemicolons(sourceFile) ? SemicolonPreference.Ignore : SemicolonPreference.Remove
-                    : context.options.semicolonPreference,
+                // If the user has no semicolon preference defined and the file doesn’t use semicolons,
+                // make the formatter remove them. Otherwise, ignore semicolons in the formatter because
+                // the writer will insert them by default.
+                semicolonPreference: context.options.semicolonPreference === SemicolonPreference.Remove || (!context.options.semicolonPreference || context.options.semicolonPreference === SemicolonPreference.Ignore) && !probablyUsesSemicolons(sourceFile)
+                    ? SemicolonPreference.Remove
+                    : SemicolonPreference.Ignore,
             };
         }
 
