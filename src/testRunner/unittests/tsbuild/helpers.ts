@@ -283,10 +283,14 @@ interface Symbol {
         return { fs, actualReadFileMap, host, builder, writtenFiles };
     }
 
-    function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
+    export function baselineFs(fs: vfs.FileSystem, baseFs: vfs.FileSystem, baselineFolder: string, scenario: string, subScenario: string) {
         const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
         // eslint-disable-next-line no-null/no-null
-        Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+        Harness.Baseline.runBaseline(`${baselineFolder}/${scenario.split(" ").join("-")}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+    }
+
+    function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
+        baselineFs(fs, baseFs, `tsbuild/${proj}`, subScenario, scenario);
     }
 
     function verifyReadFileCalls(actualReadFileMap: Map<number>, expectedReadFiles: ReadonlyMap<number>) {
