@@ -322,6 +322,10 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
         if (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics) {
             statistics = [];
+
+            // @ts-ignore
+            if (typeof gc === "function") { gc(); }
+
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
