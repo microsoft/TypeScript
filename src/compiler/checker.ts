@@ -842,6 +842,7 @@ namespace ts {
         const flowLoopTypes: Type[][] = [];
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
+        const flowNodeReachable: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -16991,6 +16992,40 @@ namespace ts {
             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
         }
 
+        function isReachableFlowNode(flow: FlowNode) {
+            return isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+        }
+
+        function isReachableFlowNodeWorker(flow: FlowNode, skipCacheCheck: boolean): boolean {
+            while (true) {
+                const flags = flow.flags;
+                if (flags & FlowFlags.Shared && !skipCacheCheck) {
+                    const id = getFlowNodeId(flow);
+                    const reachable = flowNodeReachable[id];
+                    return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                }
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ArrayMutation | FlowFlags.PreFinally | FlowFlags.AfterFinally)) {
+                    flow = (<FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | PreFinallyFlow | AfterFinallyFlow>flow).antecedent;
+                }
+                else if (flags & FlowFlags.Call) {
+                    const signature = getEffectsSignature((<FlowCall>flow).node);
+                    if (signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                        return false;
+                    }
+                    flow = (<FlowCall>flow).antecedent;
+                }
+                else if (flags & FlowFlags.LoopLabel) {
+                    flow = (<FlowLabel>flow).antecedents![0];
+                }
+                else if (flags & FlowFlags.BranchLabel) {
+                    return every((<FlowLabel>flow).antecedents!, isReachableFlowNode);
+                }
+                else {
+                    return true;
+                }
+            }
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let keySet = false;
@@ -17146,11 +17181,11 @@ namespace ts {
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    if (flowType === unreachableNeverType) {
-                        return flowType;
+                    if (!isReachableFlowNode(flow)) {
+                        return unreachableNeverType;
                     }
                     if (getAssignmentTargetKind(node) === AssignmentKind.Compound) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
                         return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
                     }
                     if (declaredType === autoType || declaredType === autoArrayType) {
@@ -17170,16 +17205,15 @@ namespace ts {
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
                 if (containsMatchingReference(reference, node)) {
-                    const flowType = getTypeAtFlowNode(flow.antecedent);
-                    if (flowType === unreachableNeverType) {
-                        return flowType;
+                    if (!isReachableFlowNode(flow)) {
+                        return unreachableNeverType;
                     }
                     // A matching dotted name might also be an expando property on a function *expression*,
                     // in which case we continue control flow analysis back to the function's declaration
                     if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
                         const init = getDeclaredExpandoInitializer(node);
                         if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
-                            return flowType;
+                            return getTypeAtFlowNode(flow.antecedent);
                         }
                     }
                     return declaredType;
