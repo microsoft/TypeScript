@@ -1,0 +1,24 @@
+tests/cases/compiler/genericPrototypeProperty2.ts(7,5): error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must provide an initializer with this override.
+tests/cases/compiler/genericPrototypeProperty2.ts(14,5): error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must provide an initializer with this override.
+
+
+==== tests/cases/compiler/genericPrototypeProperty2.ts (2 errors) ====
+    interface EventTarget { x } 
+    class BaseEvent {
+        target: EventTarget;
+    }
+    
+    class MyEvent<T extends EventTarget> extends BaseEvent {
+        target: T;
+        ~~~~~~
+!!! error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must provide an initializer with this override.
+    }
+    class BaseEventWrapper {
+        t: BaseEvent;
+    }
+    
+    class MyEventWrapper extends BaseEventWrapper {
+        t: MyEvent<any>; // any satisfies constraint and passes assignability check between 'target' properties
+        ~
+!!! error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must provide an initializer with this override.
+    }

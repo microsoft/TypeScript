@@ -1,8 +1,9 @@
 tests/cases/compiler/scopeTests.ts(2,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Property 'v' is private in type 'C' but not in type 'D'.
+tests/cases/compiler/scopeTests.ts(4,10): error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
 
 
-==== tests/cases/compiler/scopeTests.ts (1 errors) ====
+==== tests/cases/compiler/scopeTests.ts (2 errors) ====
     class C { private v; public p; static s; }
     class D extends C {
           ~
@@ -10,6 +11,8 @@ tests/cases/compiler/scopeTests.ts(2,7): error TS2415: Class 'D' incorrectly ext
 !!! error TS2415:   Property 'v' is private in type 'C' but not in type 'D'.
       public v: number;
       public p: number
+             ~
+!!! error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
       constructor() {
        super()
        this.v = 1;

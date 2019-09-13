@@ -1,0 +1,28 @@
+tests/cases/compiler/subtypingTransitivity.ts(6,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must provide an initializer with this override.
+tests/cases/compiler/subtypingTransitivity.ts(9,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must provide an initializer with this override.
+
+
+==== tests/cases/compiler/subtypingTransitivity.ts (2 errors) ====
+    class B {
+        x: Object;
+    }
+    
+    class D extends B {
+        public x: string;
+               ~
+!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must provide an initializer with this override.
+    }
+    class D2 extends B {
+        public x: number;
+               ~
+!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must provide an initializer with this override.
+    }
+    
+    var b: B;
+    var d: D;
+    var d2: D2;
+    
+    d.x = '';
+    b = d;
+    b.x = 1; // assigned number to string
+    

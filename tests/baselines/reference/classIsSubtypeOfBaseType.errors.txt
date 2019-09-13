@@ -1,15 +1,19 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts(6,5): error TS2610: Class 'Base<{ bar: string; }>' defines instance member property 'foo', so extended class 'Derived' must provide an initializer with this override.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts(12,5): error TS2610: Class 'Base<{ bar: string; }>' defines instance member property 'foo', so extended class 'Derived2' must provide an initializer with this override.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts (1 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts (3 errors) ====
     class Base<T> {
         foo: T;
     }
     
     class Derived extends Base<{ bar: string; }> {
         foo: {
+        ~~~
+!!! error TS2610: Class 'Base<{ bar: string; }>' defines instance member property 'foo', so extended class 'Derived' must provide an initializer with this override.
             bar: string; baz: number; // ok
         }
     }
@@ -20,6 +24,8 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
 !!! error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
 !!! error TS2416:   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
 !!! error TS2416:     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+        ~~~
+!!! error TS2610: Class 'Base<{ bar: string; }>' defines instance member property 'foo', so extended class 'Derived2' must provide an initializer with this override.
             bar?: string; // error
         }
     }

@@ -10,9 +10,10 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
   Property 'y' is missing in type 'Bar5' but required in type 'I'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Class 'Bar6' incorrectly implements interface 'I'.
   Property 'y' is protected in type 'Bar6' but public in type 'I'.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts(38,5): error TS2610: Class 'Foo' defines instance member property 'x', so extended class 'Bar8' must provide an initializer with this override.
 
 
-==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts (6 errors) ====
+==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts (7 errors) ====
     class Foo {
         protected x: string;
     }
@@ -71,6 +72,8 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
     
     class Bar8 extends Foo implements I {
         x: string;
+        ~
+!!! error TS2610: Class 'Foo' defines instance member property 'x', so extended class 'Bar8' must provide an initializer with this override.
         y: number;
     }
     

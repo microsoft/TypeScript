@@ -1,0 +1,13 @@
+tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts(6,5): error TS2610: Class 'a' defines instance member property 'x', so extended class 'b' must provide an initializer with this override.
+
+
+==== tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts (1 errors) ====
+    class a {
+        x: () => string;
+    }
+    
+    class b extends a {
+        x: () => string;
+        ~
+!!! error TS2610: Class 'a' defines instance member property 'x', so extended class 'b' must provide an initializer with this override.
+    }

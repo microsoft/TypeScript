@@ -1,18 +1,30 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(13,5): error TS2610: Class 'A' defines instance member property 'foo', so extended class 'B' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2610: Class 'A' defines instance member property 'bar', so extended class 'B' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(23,5): error TS2610: Class 'A2' defines instance member property '1', so extended class 'B2' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2610: Class 'A2' defines instance member property '2.0', so extended class 'B2' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(33,5): error TS2610: Class 'A3' defines instance member property ''1'', so extended class 'B3' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2610: Class 'A3' defines instance member property ''2.0'', so extended class 'B3' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(44,9): error TS2610: Class 'A' defines instance member property 'foo', so extended class 'B' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2610: Class 'A' defines instance member property 'bar', so extended class 'B' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(54,9): error TS2610: Class 'A2' defines instance member property '1', so extended class 'B2' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2610: Class 'A2' defines instance member property '2.0', so extended class 'B2' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(64,9): error TS2610: Class 'A3' defines instance member property ''1'', so extended class 'B3' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2610: Class 'A3' defines instance member property ''2.0'', so extended class 'B3' must provide an initializer with this override.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (6 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (18 errors) ====
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
@@ -26,10 +38,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B extends A {
         foo: Derived; // ok
+        ~~~
+!!! error TS2610: Class 'A' defines instance member property 'foo', so extended class 'B' must provide an initializer with this override.
         bar: string; // error
         ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+        ~~~
+!!! error TS2610: Class 'A' defines instance member property 'bar', so extended class 'B' must provide an initializer with this override.
     }
     
     class A2 {
@@ -39,10 +55,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B2 extends A2 {
         1: Derived; // ok
+        ~
+!!! error TS2610: Class 'A2' defines instance member property '1', so extended class 'B2' must provide an initializer with this override.
         2: string; // error
         ~
 !!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+        ~
+!!! error TS2610: Class 'A2' defines instance member property '2.0', so extended class 'B2' must provide an initializer with this override.
     }
     
     class A3 {
@@ -52,10 +72,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B3 extends A3 {
         '1': Derived; // ok
+        ~~~
+!!! error TS2610: Class 'A3' defines instance member property ''1'', so extended class 'B3' must provide an initializer with this override.
         '2.0': string; // error
         ~~~~~
 !!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+        ~~~~~
+!!! error TS2610: Class 'A3' defines instance member property ''2.0'', so extended class 'B3' must provide an initializer with this override.
     }
     
     module TwoLevels {
@@ -66,10 +90,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B extends A {
             foo: Derived2; // ok
+            ~~~
+!!! error TS2610: Class 'A' defines instance member property 'foo', so extended class 'B' must provide an initializer with this override.
             bar: string; // error
             ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+            ~~~
+!!! error TS2610: Class 'A' defines instance member property 'bar', so extended class 'B' must provide an initializer with this override.
         }
     
         class A2 {
@@ -79,10 +107,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B2 extends A2 {
             1: Derived2; // ok
+            ~
+!!! error TS2610: Class 'A2' defines instance member property '1', so extended class 'B2' must provide an initializer with this override.
             2: string; // error
             ~
 !!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+            ~
+!!! error TS2610: Class 'A2' defines instance member property '2.0', so extended class 'B2' must provide an initializer with this override.
         }
     
         class A3 {
@@ -92,9 +124,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3 extends A3 {
             '1': Derived2; // ok
+            ~~~
+!!! error TS2610: Class 'A3' defines instance member property ''1'', so extended class 'B3' must provide an initializer with this override.
             '2.0': string; // error
             ~~~~~
 !!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+            ~~~~~
+!!! error TS2610: Class 'A3' defines instance member property ''2.0'', so extended class 'B3' must provide an initializer with this override.
         }
     }

@@ -1,9 +1,10 @@
+tests/cases/compiler/inheritance.ts(22,12): error TS2610: Class 'N' defines instance member property 'y', so extended class 'ND' must provide an initializer with this override.
 tests/cases/compiler/inheritance.ts(31,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
 tests/cases/compiler/inheritance.ts(32,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
   Type '(n: number) => number' is not assignable to type '() => number'.
 
 
-==== tests/cases/compiler/inheritance.ts (2 errors) ====
+==== tests/cases/compiler/inheritance.ts (3 errors) ====
     class B1 {
         public x;
     }
@@ -26,6 +27,8 @@ tests/cases/compiler/inheritance.ts(32,12): error TS2416: Property 'g' in type '
     
     class ND extends N { // any is assignable to number
         public y;
+               ~
+!!! error TS2610: Class 'N' defines instance member property 'y', so extended class 'ND' must provide an initializer with this override.
     }
     
     class Good {

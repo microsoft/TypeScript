@@ -1,0 +1,29 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts ===
+class A {
+>A : A
+
+    property = 'x';
+>property : string
+>'x' : "x"
+}
+class B extends A {
+>B : B
+>A : A
+
+    property; // should be an error
+>property : any
+}
+class C {
+>C : C
+
+    p: string;
+>p : string
+}
+class D extends C {
+>D : D
+>C : C
+
+    p: 'hi'; // should also be an error?
+>p : "hi"
+}
+

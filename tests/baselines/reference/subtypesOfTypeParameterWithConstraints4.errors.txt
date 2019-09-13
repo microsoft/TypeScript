@@ -1,27 +1,36 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(37,5): error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D1<T, U, V>' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(42,5): error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D2<T, U, V>' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
   Type 'V' is not assignable to type 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D3<T, U, V>' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(52,5): error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D4<T, U, V>' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'U' is not assignable to type 'T'.
     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
       Type 'Foo' is not assignable to type 'T'.
         'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D5<T, U, V>' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'V' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D6<T, U, V>' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
       Type 'Foo' is not assignable to type 'U'.
         'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D7<T, U, V>' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(72,5): error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D8<T, U, V>' must provide an initializer with this override.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'V' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D9<T, U, V>' must provide an initializer with this override.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (10 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (19 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     class Foo { foo: number; }
@@ -59,11 +68,15 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
         [x: string]: Foo;
         foo: T; // ok
+        ~~~
+!!! error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D1<T, U, V>' must provide an initializer with this override.
     }
     
     class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
         [x: string]: Foo;
         foo: U; // ok
+        ~~~
+!!! error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D2<T, U, V>' must provide an initializer with this override.
     }
     
     class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
@@ -74,11 +87,15 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'Foo'.
+        ~~~
+!!! error TS2610: Class 'B1<Foo>' defines instance member property 'foo', so extended class 'D3<T, U, V>' must provide an initializer with this override.
     }
     
     class D4<T extends Foo, U extends Foo, V> extends B1<T> {
         [x: string]: T;
         foo: T; // ok
+        ~~~
+!!! error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D4<T, U, V>' must provide an initializer with this override.
     }
     
     class D5<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -92,6 +109,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 !!! error TS2416:       Type 'Foo' is not assignable to type 'T'.
 !!! error TS2416:         'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+        ~~~
+!!! error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D5<T, U, V>' must provide an initializer with this override.
     }
     
     class D6<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -102,6 +121,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         ~~~
 !!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'T'.
+        ~~~
+!!! error TS2610: Class 'B1<T>' defines instance member property 'foo', so extended class 'D6<T, U, V>' must provide an initializer with this override.
     }
     
     class D7<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -115,11 +136,15 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
 !!! error TS2416:       Type 'Foo' is not assignable to type 'U'.
 !!! error TS2416:         'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+        ~~~
+!!! error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D7<T, U, V>' must provide an initializer with this override.
     }
     
     class D8<T extends Foo, U extends Foo, V> extends B1<U> {
         [x: string]: U;
         foo: U; // ok
+        ~~~
+!!! error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D8<T, U, V>' must provide an initializer with this override.
     }
     
     class D9<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -130,4 +155,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         ~~~
 !!! error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'U'.
+        ~~~
+!!! error TS2610: Class 'B1<U>' defines instance member property 'foo', so extended class 'D9<T, U, V>' must provide an initializer with this override.
     }

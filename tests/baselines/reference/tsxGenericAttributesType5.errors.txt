@@ -1,0 +1,19 @@
+tests/cases/conformance/jsx/file.tsx(9,5): error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must provide an initializer with this override.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    class B1<T extends { x: string }> extends React.Component<T, {}> {
+        render() {
+            return <div>hi</div>; 
+        }
+    }
+    class B<U> extends React.Component<U, {}> {
+        props: U;
+        ~~~~~
+!!! error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must provide an initializer with this override.
+        render() {
+            return <B1 {...this.props} x="hi" />;
+        }
+    }

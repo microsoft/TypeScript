@@ -1,0 +1,22 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(5,5): error TS2610: Class 'A' defines instance member property 'property', so extended class 'B' must provide an initializer with this override.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(11,5): error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (2 errors) ====
+    class A {
+        property = 'x';
+    }
+    class B extends A {
+        property; // should be an error
+        ~~~~~~~~
+!!! error TS2610: Class 'A' defines instance member property 'property', so extended class 'B' must provide an initializer with this override.
+    }
+    class C {
+        p: string;
+    }
+    class D extends C {
+        p: 'hi'; // should also be an error?
+        ~
+!!! error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
+    }
+    
