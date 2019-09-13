@@ -574,12 +574,7 @@ namespace ts.server {
 
         markContainingProjectsAsDirty() {
             for (const p of this.containingProjects) {
-                if (this.cacheSourceFile) {
-                    p.markFileAsDirty(this.cacheSourceFile.sourceFile.fileName);
-                }
-                else {
-                    p.markAsDirty();
-                }
+                p.markFileAsDirty(this.path);
             }
         }
 

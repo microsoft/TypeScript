@@ -855,7 +855,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        markFileAsDirty(changedFile: string) {
+        markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
             if (!this.importSuggestionsCache.isEmpty) {
                 (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile, true);
