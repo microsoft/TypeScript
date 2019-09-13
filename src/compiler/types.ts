@@ -5922,11 +5922,13 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
-    /** @internal */
+
     export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
+        /* @internal */
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

@@ -11,8 +11,6 @@ namespace ts.moduleSpecifiers {
         readonly ending: Ending;
     }
 
-    let discoverProbableSymlinksCached: (() => ReadonlyMap<string>) | undefined;
-
     function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
             relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
@@ -190,7 +188,7 @@ namespace ts.moduleSpecifiers {
         return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
     }
 
-    function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
         const result = createMap<string>();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
@@ -202,15 +200,6 @@ namespace ts.moduleSpecifiers {
         return result;
     }
 
-    export function withCachedSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string, cb: () => void) {
-        discoverProbableSymlinksCached = memoize(() => discoverProbableSymlinks(files, getCanonicalFileName, cwd));
-        try {
-            cb();
-        } finally {
-            discoverProbableSymlinksCached = undefined;
-        }
-    }
-
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
@@ -220,8 +209,8 @@ namespace ts.moduleSpecifiers {
         const importedFileNames = redirects ? [...redirects, importedFileName] : [importedFileName];
         const cwd = host.getCurrentDirectory ? host.getCurrentDirectory() : "";
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
-        const links = discoverProbableSymlinksCached
-            ? discoverProbableSymlinksCached()
+        const links = host.getProbableSymlinks
+            ? host.getProbableSymlinks(files)
             : discoverProbableSymlinks(files, getCanonicalFileName, cwd);
 
         const result: string[] = [];

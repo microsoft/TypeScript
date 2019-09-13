@@ -190,7 +190,7 @@ namespace ts {
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
+    export interface LanguageServiceHost extends ModuleSpecifierResolutionHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -206,7 +206,6 @@ namespace ts {
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
-        useCaseSensitiveFileNames?(): boolean;
 
         /*
          * LS host can optionally implement these methods to support completions for module specifiers.

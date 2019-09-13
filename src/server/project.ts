@@ -235,6 +235,7 @@ namespace ts.server {
 
         private importSuggestionsCache = Completions.createImportSuggestionsCache();
         private dirtyFilesForSuggestions: Map<true> | undefined;
+        private symlinks: ReadonlyMap<string> | undefined;
 
         /*@internal*/
         constructor(
@@ -298,6 +299,13 @@ namespace ts.server {
 
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
+        }
+
+        getProbableSymlinks(files: readonly SourceFile[]): ReadonlyMap<string> {
+            return this.symlinks || (this.symlinks = moduleSpecifiers.discoverProbableSymlinks(
+                files,
+                this.getCanonicalFileName,
+                this.getCurrentDirectory()));
         }
 
         // Method of LanguageServiceHost
@@ -1032,6 +1040,10 @@ namespace ts.server {
             }
             if (this.dirtyFilesForSuggestions) {
                 this.dirtyFilesForSuggestions.clear();
+            }
+
+            if (this.hasAddedorRemovedFiles) {
+                this.symlinks = undefined;
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;

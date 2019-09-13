@@ -632,25 +632,23 @@ namespace ts.codefix {
     ) {
         let filteredCount = 0;
         const packageJson = filterByPackageJson && createAutoImportFilter(from, host, redirectTargetsMap);
-        moduleSpecifiers.withCachedSymlinks(allSourceFiles, hostGetCanonicalFileName(host), host.getCurrentDirectory(), () => {
-            forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-                if (sourceFile === undefined) {
-                    if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
-                        cb(module);
-                    }
-                    else if (packageJson) {
-                        filteredCount++;
-                    }
+        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
+            if (sourceFile === undefined) {
+                if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
+                    cb(module);
                 }
-                else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                    if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
-                        cb(module);
-                    }
-                    else if (packageJson) {
-                        filteredCount++;
-                    }
+                else if (packageJson) {
+                    filteredCount++;
                 }
-            });
+            }
+            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                    cb(module);
+                }
+                else if (packageJson) {
+                    filteredCount++;
+                }
+            }
         });
         if (host.log) {
             host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
