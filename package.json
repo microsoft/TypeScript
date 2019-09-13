@@ -102,6 +102,7 @@
         "xml2js": "^0.4.19"
     },
     "scripts": {
+        "prepare": "gulp build-eslint-rules",
         "pretest": "gulp tests",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",
