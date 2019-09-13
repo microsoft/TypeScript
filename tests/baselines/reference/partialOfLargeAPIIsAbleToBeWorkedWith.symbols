@@ -1,0 +1,253 @@
+=== tests/cases/compiler/partialOfLargeAPIIsAbleToBeWorkedWith.ts ===
+interface MyAPI {
+>MyAPI : Symbol(MyAPI, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 0))
+
+    0: (x: 0) => string;
+>0 : Symbol(MyAPI[0], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 17))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 1, 8))
+
+    1: (x: 1) => string;
+>1 : Symbol(MyAPI[1], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 1, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 2, 8))
+
+    2: (x: 2) => string;
+>2 : Symbol(MyAPI[2], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 2, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 3, 8))
+
+    3: (x: 3) => string;
+>3 : Symbol(MyAPI[3], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 3, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 4, 8))
+
+    4: (x: 4) => string;
+>4 : Symbol(MyAPI[4], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 4, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 5, 8))
+
+    5: (x: 5) => string;
+>5 : Symbol(MyAPI[5], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 5, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 6, 8))
+
+    6: (x: 6) => string;
+>6 : Symbol(MyAPI[6], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 6, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 7, 8))
+
+    7: (x: 7) => string;
+>7 : Symbol(MyAPI[7], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 7, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 8, 8))
+
+    8: (x: 8) => string;
+>8 : Symbol(MyAPI[8], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 8, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 9, 8))
+
+    9: (x: 9) => string;
+>9 : Symbol(MyAPI[9], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 9, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 10, 8))
+
+    10: (x: 10) => string;
+>10 : Symbol(MyAPI[10], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 10, 24))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 11, 9))
+
+    11: (x: 11) => string;
+>11 : Symbol(MyAPI[11], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 11, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 12, 9))
+
+    12: (x: 12) => string;
+>12 : Symbol(MyAPI[12], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 12, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 13, 9))
+
+    13: (x: 13) => string;
+>13 : Symbol(MyAPI[13], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 13, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 14, 9))
+
+    14: (x: 14) => string;
+>14 : Symbol(MyAPI[14], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 14, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 15, 9))
+
+    15: (x: 15) => string;
+>15 : Symbol(MyAPI[15], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 15, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 16, 9))
+
+    16: (x: 16) => string;
+>16 : Symbol(MyAPI[16], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 16, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 17, 9))
+
+    17: (x: 17) => string;
+>17 : Symbol(MyAPI[17], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 17, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 18, 9))
+
+    18: (x: 18) => string;
+>18 : Symbol(MyAPI[18], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 18, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 19, 9))
+
+    19: (x: 19) => string;
+>19 : Symbol(MyAPI[19], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 19, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 20, 9))
+
+    20: (x: 20) => string;
+>20 : Symbol(MyAPI[20], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 20, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 21, 9))
+
+    21: (x: 21) => string;
+>21 : Symbol(MyAPI[21], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 21, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 22, 9))
+
+    22: (x: 22) => string;
+>22 : Symbol(MyAPI[22], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 22, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 23, 9))
+
+    23: (x: 23) => string;
+>23 : Symbol(MyAPI[23], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 23, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 24, 9))
+
+    24: (x: 24) => string;
+>24 : Symbol(MyAPI[24], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 24, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 25, 9))
+
+    25: (x: 25) => string;
+>25 : Symbol(MyAPI[25], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 25, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 26, 9))
+
+    26: (x: 26) => string;
+>26 : Symbol(MyAPI[26], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 26, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 27, 9))
+
+    27: (x: 27) => string;
+>27 : Symbol(MyAPI[27], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 27, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 28, 9))
+
+    28: (x: 28) => string;
+>28 : Symbol(MyAPI[28], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 28, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 29, 9))
+
+    29: (x: 29) => string;
+>29 : Symbol(MyAPI[29], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 29, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 30, 9))
+
+    30: (x: 30) => string;
+>30 : Symbol(MyAPI[30], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 30, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 31, 9))
+
+    31: (x: 31) => string;
+>31 : Symbol(MyAPI[31], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 31, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 32, 9))
+
+    32: (x: 32) => string;
+>32 : Symbol(MyAPI[32], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 32, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 33, 9))
+
+    33: (x: 33) => string;
+>33 : Symbol(MyAPI[33], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 33, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 34, 9))
+
+    34: (x: 34) => string;
+>34 : Symbol(MyAPI[34], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 34, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 35, 9))
+
+    35: (x: 35) => string;
+>35 : Symbol(MyAPI[35], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 35, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 36, 9))
+
+    36: (x: 36) => string;
+>36 : Symbol(MyAPI[36], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 36, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 37, 9))
+
+    37: (x: 37) => string;
+>37 : Symbol(MyAPI[37], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 37, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 38, 9))
+
+    38: (x: 38) => string;
+>38 : Symbol(MyAPI[38], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 38, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 39, 9))
+
+    39: (x: 39) => string;
+>39 : Symbol(MyAPI[39], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 39, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 40, 9))
+
+    40: (x: 40) => string;
+>40 : Symbol(MyAPI[40], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 40, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 41, 9))
+
+    41: (x: 41) => string;
+>41 : Symbol(MyAPI[41], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 41, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 42, 9))
+
+    42: (x: 42) => string;
+>42 : Symbol(MyAPI[42], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 42, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 43, 9))
+
+    43: (x: 43) => string;
+>43 : Symbol(MyAPI[43], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 43, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 44, 9))
+
+    44: (x: 44) => string;
+>44 : Symbol(MyAPI[44], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 44, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 45, 9))
+
+    45: (x: 45) => string;
+>45 : Symbol(MyAPI[45], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 45, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 46, 9))
+
+    46: (x: 46) => string;
+>46 : Symbol(MyAPI[46], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 46, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 47, 9))
+
+    47: (x: 47) => string;
+>47 : Symbol(MyAPI[47], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 47, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 48, 9))
+
+    48: (x: 48) => string;
+>48 : Symbol(MyAPI[48], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 48, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 49, 9))
+
+    49: (x: 49) => string;
+>49 : Symbol(MyAPI[49], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 49, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 50, 9))
+
+    50: (x: 50) => string;
+>50 : Symbol(MyAPI[50], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 50, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 51, 9))
+
+    51: (x: 51) => string;
+>51 : Symbol(MyAPI[51], Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 51, 26))
+>x : Symbol(x, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 52, 9))
+}
+
+const obj: Partial<MyAPI> = {};
+>obj : Symbol(obj, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 55, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MyAPI : Symbol(MyAPI, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 0))
+
+declare var keys: (keyof MyAPI)[];
+>keys : Symbol(keys, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 57, 11))
+>MyAPI : Symbol(MyAPI, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 0))
+
+for (const k of keys) {
+>k : Symbol(k, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 59, 10))
+>keys : Symbol(keys, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 57, 11))
+
+    obj[k] = () => "12"; // shouldn't cause a complexity error
+>obj : Symbol(obj, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 55, 5))
+>k : Symbol(k, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 59, 10))
+}
+
+type PartialNull<T> = {[K in keyof T]?: T[K] | null};
+>PartialNull : Symbol(PartialNull, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 61, 1))
+>T : Symbol(T, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 63, 17))
+>K : Symbol(K, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 63, 24))
+>T : Symbol(T, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 63, 17))
+>T : Symbol(T, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 63, 17))
+>K : Symbol(K, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 63, 24))
+
+const obj2: PartialNull<MyAPI> = {};
+>obj2 : Symbol(obj2, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 65, 5))
+>PartialNull : Symbol(PartialNull, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 61, 1))
+>MyAPI : Symbol(MyAPI, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 0))
+
+for (const k of keys) {
+>k : Symbol(k, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 67, 10))
+>keys : Symbol(keys, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 57, 11))
+
+    obj2[k] = () => "12"; // shouldn't cause a complexity error
+>obj2 : Symbol(obj2, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 65, 5))
+>k : Symbol(k, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 67, 10))
+}
+

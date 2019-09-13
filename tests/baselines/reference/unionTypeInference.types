@@ -104,8 +104,8 @@ const c4 = f3(b);  // true
 >b : boolean
 
 const c5 = f3("abc");  // never
->c5 : unknown
->f3("abc") : unknown
+>c5 : "abc"
+>f3("abc") : "abc"
 >f3 : <T>(x: string | false | T) => T
 >"abc" : "abc"
 

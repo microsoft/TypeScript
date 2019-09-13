@@ -75,7 +75,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: ReadonlyArray<Diagnostic>;
+        projectErrors: readonly Diagnostic[];
     }
 
     export interface PluginCreateInfo {
@@ -134,7 +134,7 @@ namespace ts.server {
          * Maop does not contain entries for files that do not have unresolved imports
          * This helps in containing the set of files to invalidate
          */
-        cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
+        cachedUnresolvedImportsPerFile = createMap<readonly string[]>();
 
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -318,7 +318,7 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+        getProjectReferences(): readonly ProjectReference[] | undefined {
             return undefined;
         }
 
@@ -386,7 +386,7 @@ namespace ts.server {
             return this.projectService.host.useCaseSensitiveFileNames;
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth);
         }
 
@@ -505,11 +505,11 @@ namespace ts.server {
         /**
          * Get the errors that dont have any file name associated
          */
-        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+        getGlobalProjectErrors(): readonly Diagnostic[] {
             return emptyArray;
         }
 
-        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+        getAllProjectErrors(): readonly Diagnostic[] {
             return emptyArray;
         }
 
@@ -726,7 +726,7 @@ namespace ts.server {
             });
         }
 
-        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+        getExcludedFiles(): readonly NormalizedPath[] {
             return emptyArray;
         }
 
@@ -878,7 +878,7 @@ namespace ts.server {
             const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
             this.hasAddedorRemovedFiles = false;
 
-            const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -1380,6 +1380,7 @@ namespace ts.server {
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 const newLS = pluginModule.create(info);
                 for (const k of Object.keys(this.languageService)) {
+                    // eslint-disable-next-line no-in-operator
                     if (!(k in newLS)) {
                         this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
                         (newLS as any)[k] = (this.languageService as any)[k];
@@ -1473,12 +1474,12 @@ namespace ts.server {
         }
     }
 
-    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): SortedReadonlyArray<string> {
+    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<readonly string[]>): SortedReadonlyArray<string> {
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
         return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
             extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
     }
-    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: ReadonlyArray<string>, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): ReadonlyArray<string> {
+    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: Map<readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
             if (!file.resolvedModules) return emptyArray;
             let unresolvedImports: string[] | undefined;
@@ -1640,7 +1641,7 @@ namespace ts.server {
 
         private projectErrors: Diagnostic[] | undefined;
 
-        private projectReferences: ReadonlyArray<ProjectReference> | undefined;
+        private projectReferences: readonly ProjectReference[] | undefined;
 
         /*@internal*/
         projectOptions?: ProjectOptions | true;
@@ -1704,11 +1705,11 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+        getProjectReferences(): readonly ProjectReference[] | undefined {
             return this.projectReferences;
         }
 
-        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
+        updateReferences(refs: readonly ProjectReference[] | undefined) {
             this.projectReferences = refs;
         }
 
@@ -1750,14 +1751,14 @@ namespace ts.server {
         /**
          * Get the errors that dont have any file name associated
          */
-        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+        getGlobalProjectErrors(): readonly Diagnostic[] {
             return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
         /**
          * Get all the project errors
          */
-        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+        getAllProjectErrors(): readonly Diagnostic[] {
             return this.projectErrors || emptyArray;
         }
 
@@ -1862,7 +1863,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
-        excludedFiles: ReadonlyArray<NormalizedPath> = [];
+        excludedFiles: readonly NormalizedPath[] = [];
         private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /*@internal*/
         constructor(public externalProjectName: string,

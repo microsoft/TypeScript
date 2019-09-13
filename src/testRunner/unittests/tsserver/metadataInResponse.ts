@@ -24,7 +24,7 @@ namespace ts.projectSystem {
                 compilerOptions: { plugins: [{ name: "myplugin" }] }
             })
         };
-        function createHostWithPlugin(files: ReadonlyArray<File>) {
+        function createHostWithPlugin(files: readonly File[]) {
             const host = createServerHost(files);
             host.require = (_initialPath, moduleName) => {
                 assert.equal(moduleName, "myplugin");
@@ -54,7 +54,7 @@ namespace ts.projectSystem {
                 line: 1,
                 offset: aTs.content.indexOf("this.") + 1 + "this.".length
             };
-            const expectedCompletionEntries: ReadonlyArray<protocol.CompletionEntry> = [
+            const expectedCompletionEntries: readonly protocol.CompletionEntry[] = [
                 { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: "0" },
                 { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: "0" }
             ];
@@ -63,7 +63,7 @@ namespace ts.projectSystem {
                 const host = createHostWithPlugin([aTs, tsconfig]);
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
-                verifyCommandWithMetadata<protocol.CompletionsRequest, ReadonlyArray<protocol.CompletionEntry>>(session, host, {
+                verifyCommandWithMetadata<protocol.CompletionsRequest, readonly protocol.CompletionEntry[]>(session, host, {
                     command: protocol.CommandTypes.Completions,
                     arguments: completionRequestArgs
                 }, expectedCompletionEntries);
@@ -77,11 +77,11 @@ namespace ts.projectSystem {
                     command: protocol.CommandTypes.CompletionInfo,
                     arguments: completionRequestArgs
                 }, {
-                        isGlobalCompletion: false,
-                        isMemberCompletion: true,
-                        isNewIdentifierLocation: false,
-                        entries: expectedCompletionEntries
-                    });
+                    isGlobalCompletion: false,
+                    isMemberCompletion: true,
+                    isNewIdentifierLocation: false,
+                    entries: expectedCompletionEntries
+                });
             });
 
             it("returns undefined correctly", () => {
