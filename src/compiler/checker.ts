@@ -23803,15 +23803,10 @@ namespace ts {
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
         }
 
-        function isNeverFunctionCall(expr: Expression) {
-            const signature = expr.kind === SyntaxKind.CallExpression && getEffectsSignature(<CallExpression>expr);
-            return !!(signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never);
-        }
-
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            return !!(func.flags & NodeFlags.HasImplicitReturn) && !some((<Block>func.body).statements, statement =>
-                statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement) ||
-                statement.kind === SyntaxKind.ExpressionStatement && isNeverFunctionCall((<ExpressionStatement>statement).expression));
+            return !!(func.flags & NodeFlags.HasImplicitReturn &&
+                !some((<Block>func.body).statements, s => s.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>s)) &&
+                !(func.returnFlowNode && !isReachableFlowNode(func.returnFlowNode)));
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
