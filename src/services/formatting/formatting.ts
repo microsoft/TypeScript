@@ -652,7 +652,7 @@ namespace ts.formatting {
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
             }
 
-            if (formattingScanner.isOnEOF()) {
+            if (!node.parent && formattingScanner.isOnEOF()) {
                 const token = formattingScanner.readEOFTokenRange();
                 if (token.end <= node.end && previousRange) {
                     processPair(
@@ -1148,11 +1148,7 @@ namespace ts.formatting {
 
         function recordDelete(start: number, len: number) {
             if (len) {
-                const newEdit = createTextChangeFromStartLength(start, len, "");
-                const lastEdit = lastOrUndefined(edits);
-                if (!lastEdit || !textSpansEqual(lastEdit.span, newEdit.span) || lastEdit.newText !== newEdit.newText) {
-                    edits.push(newEdit);
-                }
+                edits.push(createTextChangeFromStartLength(start, len, ""));
             }
         }
 
@@ -1164,11 +1160,7 @@ namespace ts.formatting {
 
         function recordInsert(start: number, text: string) {
             if (text) {
-                const newEdit = createTextChangeFromStartLength(start, 0, text);
-                const lastEdit = lastOrUndefined(edits);
-                if (!lastEdit || !textSpansEqual(lastEdit.span, newEdit.span) || lastEdit.newText !== newEdit.newText) {
-                    edits.push(newEdit);
-                }
+                edits.push(createTextChangeFromStartLength(start, 0, text));
             }
         }
 
