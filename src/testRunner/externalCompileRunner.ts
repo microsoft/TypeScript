@@ -10,6 +10,7 @@ interface ExecResult {
 
 interface UserConfig {
     types: string[];
+    cloneUrl: string;
     path?: string;
 }
 
@@ -49,13 +50,17 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
-                    const submoduleDir = path.join(cwd, directoryName);
-                    exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                    exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: originalCwd });
-
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
+                    ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
+                    const submoduleDir = path.join(cwd, directoryName);
+                    if (!fs.existsSync(submoduleDir)) {
+                        exec("git", ["clone", config.cloneUrl, directoryName], { cwd });
+                    }
+                    exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                    exec("git", ["clean", "-f"], { cwd: submoduleDir });
+                    exec("git", ["pull", "-f"], { cwd: submoduleDir });
+
                     types = config.types;
 
                     cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
