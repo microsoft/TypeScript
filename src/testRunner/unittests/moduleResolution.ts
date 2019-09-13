@@ -170,7 +170,7 @@ namespace ts {
             testTypingsIgnored(["a", "b"]);
             testTypingsIgnored({ a: "b" });
             testTypingsIgnored(/*typings*/ true);
-            testTypingsIgnored(/*typings*/ null); // tslint:disable-line no-null-keyword
+            testTypingsIgnored(/*typings*/ null); // eslint-disable-line no-null/no-null
             testTypingsIgnored(/*typings*/ undefined);
         });
         it("module name as directory - load index.d.ts", () => {
@@ -966,7 +966,7 @@ import b = require("./moduleB");
 
             function test(hasDirectoryExists: boolean) {
                 const file1: File = { name: "/root/folder1/file1.ts" };
-                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // tslint:disable-line variable-name
+                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // eslint-disable-line @typescript-eslint/camelcase
                 const file2: File = { name: "/root/generated/folder1/file2.ts" };
                 const file3: File = { name: "/root/generated/folder2/file3.ts" };
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file1_1, file2, file3);
@@ -1102,7 +1102,7 @@ import b = require("./moduleB");
                     paths: {
                         "libs/guid": [ "src/libs/guid" ]
                     }
-                 };
+                };
                 const result = resolveModuleName("libs/guid", app.name, options, host);
                 checkResolvedModuleWithFailedLookupLocations(result, createResolvedModule(libsTypings.name), [
                     // first try to load module as file

@@ -39,7 +39,7 @@
                 this._trampolineEnabled = false;
 >this._trampolineEnabled = false : false
 >this._trampolineEnabled : boolean
->this : Async
+>this : this
 >_trampolineEnabled : boolean
 >false : false
             }

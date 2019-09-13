@@ -332,6 +332,9 @@ declare const myVar = 30;
 //// [/src/lib/file1.ts]
 export const x = 10;console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {

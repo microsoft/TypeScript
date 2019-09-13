@@ -16,15 +16,6 @@ namespace ts {
             tick,
             proj: "inferredTypeFromTransitiveModule",
             rootNames: ["/src"],
-            expectedMapFileNames: emptyArray,
-            lastProjectOutputJs: `/src/obj/index.js`,
-            outputFiles: [
-                "/src/obj/bar.js", "/src/obj/bar.d.ts",
-                "/src/obj/bundling.js", "/src/obj/bundling.d.ts",
-                "/src/obj/lazyIndex.js", "/src/obj/lazyIndex.d.ts",
-                "/src/obj/index.js", "/src/obj/index.d.ts",
-                "/src/obj/tsconfig.tsbuildinfo"
-            ],
             initialBuild: {
                 modifyFs: noop,
                 expectedDiagnostics: [

@@ -29,10 +29,10 @@ namespace ts.tscWatch {
                 solutionBuilder.build();
                 checkOutputErrorsInitial(system, emptyArray, /*disableConsoleClears*/ undefined, [
                     `Projects in this build: \r\n${
-                    concatenate(
-                        pkgs(index => `    * pkg${index}/tsconfig.json`),
-                        ["    * tsconfig.json"]
-                    ).join("\r\n")}\n\n`,
+                        concatenate(
+                            pkgs(index => `    * pkg${index}/tsconfig.json`),
+                            ["    * tsconfig.json"]
+                        ).join("\r\n")}\n\n`,
                     ...flatArray(pkgs(index => [
                         `Project 'pkg${index}/tsconfig.json' is out of date because output file 'pkg${index}/index.js' does not exist\n\n`,
                         `Building project '${project}/pkg${index}/tsconfig.json'...\n\n`

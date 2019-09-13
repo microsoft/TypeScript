@@ -2,27 +2,9 @@ namespace ts {
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
         const { time, tick } = getTime();
-        const enum ext { js, jsmap, dts, dtsmap, buildinfo }
         const enum project { lib, app }
-        type OutputFile = [string, string, string, string, string];
         function relName(path: string) { return path.slice(1); }
-        const outputFiles: [OutputFile, OutputFile] = [
-            [
-                "/src/lib/module.js",
-                "/src/lib/module.js.map",
-                "/src/lib/module.d.ts",
-                "/src/lib/module.d.ts.map",
-                "/src/lib/module.tsbuildinfo"
-            ],
-            [
-                "/src/app/module.js",
-                "/src/app/module.js.map",
-                "/src/app/module.d.ts",
-                "/src/app/module.d.ts.map",
-                "/src/app/module.tsbuildinfo"
-            ]
-        ];
-        type Sources = [string, ReadonlyArray<string>];
+        type Sources = [string, readonly string[]];
         const enum source { config, ts }
         const sources: [Sources, Sources] = [
             [
@@ -67,17 +49,7 @@ namespace ts {
                 tick,
                 proj: "amdModulesWithOut",
                 rootNames: ["/src/app"],
-                expectedMapFileNames: [
-                    outputFiles[project.lib][ext.jsmap],
-                    outputFiles[project.lib][ext.dtsmap],
-                    outputFiles[project.app][ext.jsmap],
-                    outputFiles[project.app][ext.dtsmap],
-                ],
-                expectedBuildInfoFilesForSectionBaselines: [
-                    [outputFiles[project.lib][ext.buildinfo], outputFiles[project.lib][ext.js], outputFiles[project.lib][ext.dts]],
-                    [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
-                ],
-                lastProjectOutputJs: outputFiles[project.app][ext.js],
+                baselineSourceMap: true,
                 initialBuild: {
                     modifyFs
                 },
@@ -87,10 +59,6 @@ namespace ts {
                 incrementalHeaderChangedBuild: modifyAgainFs ? {
                     modifyFs: modifyAgainFs
                 } : undefined,
-                outputFiles: [
-                    ...outputFiles[project.lib],
-                    ...outputFiles[project.app]
-                ],
                 baselineOnly: true
             });
         }
@@ -207,13 +175,6 @@ ${internal} export enum internalEnum { a, b, c }`);
                     replaceText(fs, sources[project.app][source.ts][0], "file1", "lib/file1");
                 }
 
-                const libOutputFile: OutputFile = [
-                    "/src/lib/module.js",
-                    "/src/lib/module.js.map",
-                    "/src/lib/module.d.ts",
-                    "/src/lib/module.d.ts.map",
-                    "/src/lib/module.tsbuildinfo"
-                ];
                 verifyTsbuildOutput({
                     scenario: "when the module resolution finds original source file",
                     projFs: () => outFileFs,
@@ -221,17 +182,7 @@ ${internal} export enum internalEnum { a, b, c }`);
                     tick,
                     proj: "amdModulesWithOut",
                     rootNames: ["/src/app"],
-                    expectedMapFileNames: [
-                        libOutputFile[ext.jsmap],
-                        libOutputFile[ext.dtsmap],
-                        outputFiles[project.app][ext.jsmap],
-                        outputFiles[project.app][ext.dtsmap],
-                    ],
-                    expectedBuildInfoFilesForSectionBaselines: [
-                        [libOutputFile[ext.buildinfo], libOutputFile[ext.js], libOutputFile[ext.dts]],
-                        [outputFiles[project.app][ext.buildinfo], outputFiles[project.app][ext.js], outputFiles[project.app][ext.dts]]
-                    ],
-                    lastProjectOutputJs: outputFiles[project.app][ext.js],
+                    baselineSourceMap: true,
                     initialBuild: {
                         modifyFs,
                         expectedDiagnostics: [
@@ -242,10 +193,6 @@ ${internal} export enum internalEnum { a, b, c }`);
                             [Diagnostics.Building_project_0, sources[project.app][source.config]],
                         ]
                     },
-                    outputFiles: [
-                        ...libOutputFile,
-                        ...outputFiles[project.app]
-                    ],
                     baselineOnly: true,
                     verifyDiagnostics: true
                 });
