@@ -124,9 +124,11 @@ namespace ts.server {
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
-        private packageJsonFilesMap: Map<FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
         private plugins: PluginModuleWithName[] = [];
+
+        /*@internal*/
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
 
         /*@internal*/
         /**
@@ -233,8 +235,11 @@ namespace ts.server {
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
 
+        /*@internal*/
         private importSuggestionsCache = Completions.createImportSuggestionsCache();
+        /*@internal*/
         private dirtyFilesForSuggestions: Map<true> | undefined;
+        /*@internal*/
         private symlinks: ReadonlyMap<string> | undefined;
 
         /*@internal*/
@@ -301,6 +306,7 @@ namespace ts.server {
             return this.projectService.typingsCache;
         }
 
+        /*@internal*/
         getProbableSymlinks(files: readonly SourceFile[]): ReadonlyMap<string> {
             return this.symlinks || (this.symlinks = moduleSpecifiers.discoverProbableSymlinks(
                 files,
@@ -1069,6 +1075,7 @@ namespace ts.server {
             return hasNewProgram;
         }
 
+        /*@internal*/
         private sourceFileHasChangedOwnImportSuggestions(oldSourceFile: SourceFile | undefined, newSourceFile: SourceFile | undefined) {
             if (!oldSourceFile && !newSourceFile) {
                 return false;
@@ -1098,6 +1105,7 @@ namespace ts.server {
             return false;
         }
 
+        /*@internal*/
         private ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
             if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
                 return false;
