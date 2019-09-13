@@ -9,5 +9,7 @@
         "rulePaths": ["../scripts/eslint/built/rules/"],
         "ext": [".ts"]
     },
-    "eslint.workingDirectories": ["./src", "./scripts"]
+    "eslint.workingDirectories": ["./src", "./scripts"],
+    "typescript.tsserver.log": "normal",
+    "typescript.tsdk": "built/local"
 }

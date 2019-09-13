@@ -18,12 +18,10 @@ namespace ts {
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
         /* @internal */
-        // tslint:disable-next-line unified-signatures
-        getFirstToken(sourceFile?: SourceFileLike): Node | undefined;
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getLastToken(sourceFile?: SourceFile): Node | undefined;
         /* @internal */
-        // tslint:disable-next-line unified-signatures
-        getLastToken(sourceFile?: SourceFileLike): Node | undefined;
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }

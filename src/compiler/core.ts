@@ -332,7 +332,7 @@ namespace ts {
     /**
      * Like `forEach`, but iterates in reverse order.
      */
-    export function forEachRight<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    export function forEachRight<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = array.length - 1; i >= 0; i--) {
                 const result = callback(array[i], i);
