@@ -671,6 +671,7 @@ namespace ts {
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonInferrableType = createIntrinsicType(TypeFlags.Never, "never", ObjectFlags.NonInferrableType);
         const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const unreachableNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
@@ -17008,7 +17009,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -17037,6 +17038,7 @@ namespace ts {
                         if (key) {
                             const id = getFlowNodeId(flow);
                             if (flowAssignmentKeys[id] === key) {
+                                flowDepth--;
                                 return flowAssignmentTypes[id];
                             }
                         }
@@ -17144,8 +17146,11 @@ namespace ts {
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
+                    const flowType = getTypeAtFlowNode(flow.antecedent);
+                    if (flowType === unreachableNeverType) {
+                        return flowType;
+                    }
                     if (getAssignmentTargetKind(node) === AssignmentKind.Compound) {
-                        const flowType = getTypeAtFlowNode(flow.antecedent);
                         return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
                     }
                     if (declaredType === autoType || declaredType === autoArrayType) {
@@ -17165,12 +17170,16 @@ namespace ts {
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
                 if (containsMatchingReference(reference, node)) {
+                    const flowType = getTypeAtFlowNode(flow.antecedent);
+                    if (flowType === unreachableNeverType) {
+                        return flowType;
+                    }
                     // A matching dotted name might also be an expando property on a function *expression*,
                     // in which case we continue control flow analysis back to the function's declaration
                     if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
                         const init = getDeclaredExpandoInitializer(node);
                         if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
-                            return getTypeAtFlowNode(flow.antecedent);
+                            return flowType;
                         }
                     }
                     return declaredType;
@@ -17209,7 +17218,7 @@ namespace ts {
                         return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
                     }
                     if (getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
-                        return neverType;
+                        return unreachableNeverType;
                     }
                 }
                 return undefined;
