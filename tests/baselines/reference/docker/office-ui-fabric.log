@@ -34,6 +34,10 @@ Standard output:
 @uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
 @uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
 @uifabric/migration: Done in ?s.
+@uifabric/monaco-editor: yarn run vX.X.X
+@uifabric/monaco-editor: $ just-scripts build --production --lint
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Removing [lib]
+@uifabric/monaco-editor: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build --production --lint
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -84,7 +88,6 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/server.test.ts
-@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
@@ -223,7 +226,7 @@ Standard output:
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 41 packages: "yarn run build --production --lint"
+lerna info Executing command in 42 packages: "yarn run build --production --lint"
 @uifabric/codepen-loader: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
 @uifabric/codepen-loader: Force exiting Jest
 @uifabric/codepen-loader: 
