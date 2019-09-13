@@ -8,17 +8,29 @@ Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/core-http] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
-XX of XX: [@azure/core-arm] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/core-http@X.X.X-preview.3 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:tsc script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! @azure/core-http@X.X.X-preview.3 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:lib script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:lib" exited with 1.
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
-XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-XX of XX: [@azure/app-configuration] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
@@ -56,37 +68,23 @@ atob (guessing 'atob')
 (!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
 (!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
-XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
-XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (22)
+SUCCESS (11)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-tracing (? seconds)
-@azure/core-http (? seconds)
-@azure/identity (? seconds)
-@azure/core-amqp (? seconds)
-@azure/core-arm (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
-@azure/event-hubs (? seconds)
 @azure/event-processor-host (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
-@azure/app-configuration (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
-@azure/eventhubs-checkpointstore-blob (? seconds)
-@azure/keyvault-certificates (? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
-@azure/template (? seconds)
 testhub (? seconds)
 ================================
 SUCCESS WITH WARNINGS (2)
@@ -131,11 +129,61 @@ created dist/index.js in ?s
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 ================================
-rush rebuild ( ? seconds)
+BLOCKED (10)
+================================
+@azure/identity
+@azure/core-amqp
+@azure/core-arm
+@azure/event-hubs
+@azure/keyvault-keys
+@azure/keyvault-secrets
+@azure/app-configuration
+@azure/eventhubs-checkpointstore-blob
+@azure/keyvault-certificates
+@azure/template
+================================
+FAILURE (1)
+================================
+@azure/core-http ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/core-http@X.X.X-preview.3 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:tsc script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! @azure/core-http@X.X.X-preview.3 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! Exit status 1
+npm ERR!
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.3 build:lib script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:lib" exited with 1.
+================================
+Error: Project(s) failed to build
+rush rebuild - Errors! ( ? seconds)
 
 
 
 Standard error:
+
+XX of XX: [@azure/core-http] failed to build!
+XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
+XX of XX: [@azure/identity] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
+XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/template] blocked by [@azure/core-http]!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-Project(s) succeeded with warnings
+[@azure/core-http] Returned error code: 1
