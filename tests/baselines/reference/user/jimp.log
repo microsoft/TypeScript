@@ -1,10 +1,6 @@
 Exit Code: 1
 Standard output:
-node_modules/@jimp/core/index.d.ts(200,3): error TS2411: Property 'class' of type 'undefined' is not assignable to string index type 'Function'.
-node_modules/@jimp/core/index.d.ts(201,3): error TS2411: Property 'constants' of type 'undefined' is not assignable to string index type 'Function'.
-node_modules/@jimp/core/index.d.ts(255,42): error TS2344: Type 'T' does not satisfy the constraint 'WellFormedPlugin<Image>'.
-  Type 'JimpType<Image> | undefined' is not assignable to type 'WellFormedPlugin<Image>'.
-    Type 'undefined' is not assignable to type 'WellFormedPlugin<Image>'.
+index.ts(1,23): error TS2307: Cannot find module 'jimp'.
 
 
 
