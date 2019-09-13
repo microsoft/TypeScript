@@ -15,11 +15,14 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const nodes = getNodes(diag.file, diag.start);
-            if (!nodes) return;
-            doChange(changes, context.sourceFile, nodes);
-        }),
+        getAllCodeActions: context => {
+            const seen = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                const nodes = getNodes(diag.file, diag.start);
+                if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;
+                doChange(changes, context.sourceFile, nodes);
+            });
+        },
     });
 
     function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction) {
