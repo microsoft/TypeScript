@@ -29513,19 +29513,20 @@ namespace ts {
                         // either base or derived property is private - not override, skip it
                         continue;
                     }
-                    if (isPrototypeProperty(base)) {
-                        // method is overridden with method - correct case
-                        continue;
-                    }
                     let errorMessage: DiagnosticMessage;
                     const basePropertyFlags = base.flags & SymbolFlags.PropertyOrAccessor;
                     const derivedPropertyFlags = derived.flags & SymbolFlags.PropertyOrAccessor;
                     if (basePropertyFlags && derivedPropertyFlags) {
                         // property/accessor is overridden with property/accessor
-                        if (!(baseDeclarationFlags & ModifierFlags.Abstract) && basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property) {
+                        if (baseDeclarationFlags & ModifierFlags.Abstract
+                            || getObjectFlags(getTargetType(baseType)) & ObjectFlags.Interface) {
+                            // when the base property is abstract or from an interface, base/derived flags don't need to match
+                            continue;
+                        }
+                        if (basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property) {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_property;
                         }
-                        else if (!(baseDeclarationFlags & ModifierFlags.Abstract) && basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property) {
+                        else if (basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property) {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
@@ -29534,7 +29535,11 @@ namespace ts {
                         }
                     }
                     else if (isPrototypeProperty(base)) {
-                        if (derived.flags & SymbolFlags.Accessor) {
+                        if (isPrototypeProperty(derived)) {
+                            // method is overridden with method -- correct case
+                            continue;
+                        }
+                        else if (derived.flags & SymbolFlags.Accessor) {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
