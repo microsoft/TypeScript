@@ -17052,10 +17052,13 @@ namespace ts {
                     else if (flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
-                            flow = (<FlowAssignment>flow).antecedent;
-                            continue;
+                            if (!(flags & FlowFlags.Shared)) {
+                                flow = (<FlowAssignment>flow).antecedent;
+                                continue;
+                            }
+                            type = getTypeAtFlowNode((<FlowAssignment>flow).antecedent);
                         }
-                        else if (flowLoopCount === flowLoopStart) { // Only cache assignments when not within loop analysis
+                        if (flowLoopCount === flowLoopStart) { // Only cache assignments when not within loop analysis
                             const key = getOrSetCacheKey();
                             if (key && !isIncomplete(type)) {
                                 flow.flags |= FlowFlags.Cached;
@@ -17073,18 +17076,26 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents!.length === 1) {
-                            flow = (<FlowLabel>flow).antecedents![0];
-                            continue;
+                            if (!(flags & FlowFlags.Shared)) {
+                                flow = (<FlowLabel>flow).antecedents![0];
+                                continue;
+                            }
+                            type = getTypeAtFlowNode((<FlowLabel>flow).antecedents![0]);
                         }
-                        type = flags & FlowFlags.BranchLabel ?
-                            getTypeAtFlowBranchLabel(<FlowLabel>flow) :
-                            getTypeAtFlowLoopLabel(<FlowLabel>flow);
+                        else {
+                            type = flags & FlowFlags.BranchLabel ?
+                                getTypeAtFlowBranchLabel(<FlowLabel>flow) :
+                                getTypeAtFlowLoopLabel(<FlowLabel>flow);
+                        }
                     }
                     else if (flags & FlowFlags.ArrayMutation) {
                         type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
                         if (!type) {
-                            flow = (<FlowArrayMutation>flow).antecedent;
-                            continue;
+                            if (!(flags & FlowFlags.Shared)) {
+                                flow = (<FlowArrayMutation>flow).antecedent;
+                                continue;
+                            }
+                            type = getTypeAtFlowNode((<FlowArrayMutation>flow).antecedent);
                         }
                     }
                     else if (flags & FlowFlags.Start) {
