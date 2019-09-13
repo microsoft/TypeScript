@@ -3180,7 +3180,7 @@
         "category": "Error",
         "code": 5075
     },
-    "Operator '{0}' cannot immediately contain, or be contained within an '{1}' operation.": {
+    "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
         "category": "Error",
         "code": 5076
     },
