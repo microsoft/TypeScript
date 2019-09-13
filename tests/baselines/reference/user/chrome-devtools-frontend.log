@@ -93,6 +93,7 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,10): error TS2339:
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,41): error TS2339: Property 'domAutomationController' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(9,11): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(11,46): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(54,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ARIAAttributesTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(64,18): error TS2339: Property 'setTextContentTruncatedIfNeeded' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(77,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(79,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -188,9 +189,11 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeV
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(222,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(256,28): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(267,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(275,10): error TS2610: Class 'AXNodePropertyTreeElement' defines instance member accessor 'selectable', but extended class 'AXNodePropertyTreePropertyElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(288,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(292,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(303,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(309,10): error TS2610: Class 'AXNodePropertyTreeElement' defines instance member accessor 'selectable', but extended class 'AXValueSourceTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(320,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(333,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(345,81): error TS2345: Argument of type '{ idref: any; }' is not assignable to parameter of type '{ deferredNode: DeferredDOMNode; idref: string; }'.
@@ -213,10 +216,12 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeV
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(438,28): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(445,62): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(461,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(468,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'AXRelatedNodeSourceTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(492,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(521,84): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(522,20): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(535,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(543,10): error TS2610: Class 'AXNodePropertyTreeElement' defines instance member accessor 'selectable', but extended class 'AXNodeIgnoredReasonTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(619,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilitySidebarView.js(195,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationGroupPreviewUI.js(7,11): error TS2339: Property 'AnimationGroupPreviewUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
@@ -3240,6 +3245,8 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(14
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(144,39): error TS2339: Property 'blankLine' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(147,39): error TS2339: Property 'blankLine' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesSidebar.js(30,90): error TS2339: Property 'uiSourceCode' does not exist on type 'TreeElement'.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesSidebar.js(113,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'UISourceCodeTreeElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesSidebar.js(118,10): error TS2610: Class 'TreeElement' defines instance member accessor 'tooltip', but extended class 'UISourceCodeTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(31,56): error TS2345: Argument of type '{ lineNumbers: true; lineWrapping: false; maxHighlightLength: number; }' is not assignable to parameter of type '{ bracketMatchingSetting: Setting<any>; lineNumbers: boolean; lineWrapping: boolean; mimeType: string; autoHeight: boolean; padBottom: boolean; maxHighlightLength: number; placeholder: string; }'.
   Type '{ lineNumbers: true; lineWrapping: false; maxHighlightLength: number; }' is missing the following properties from type '{ bracketMatchingSetting: Setting<any>; lineNumbers: boolean; lineWrapping: boolean; mimeType: string; autoHeight: boolean; padBottom: boolean; maxHighlightLength: number; placeholder: string; }': bracketMatchingSetting, mimeType, autoHeight, padBottom, placeholder
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(37,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -3867,6 +3874,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(133,9)
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(147,27): error TS2740: Type 'Element' is missing the following properties from type 'Icon': createdCallback, _descriptor, _spriteSheet, _iconType, and 117 more.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(177,67): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(179,61): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(180,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'FilterTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(209,41): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(213,28): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(214,31): error TS2345: Argument of type '{ key: any; text: string; negative: false; }' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
@@ -5228,6 +5236,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(856,15): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(878,19): error TS2339: Property 'runPendingUpdates' does not exist on type 'TreeOutline'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(972,37): error TS2339: Property 'selectNodeAfterEdit' does not exist on type 'TreeOutline'.
+node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1055,12): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'ElementsTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1106,27): error TS2339: Property '_decoratorExtensions' does not exist on type 'TreeOutline'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1108,24): error TS2339: Property '_decoratorExtensions' does not exist on type 'TreeOutline'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1111,42): error TS2339: Property '_decoratorExtensions' does not exist on type 'TreeOutline'.
@@ -5545,6 +5554,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(19
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1984,25): error TS2339: Property 'key' does not exist on type 'CSSRule'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1987,17): error TS2339: Property 'setKeyText' does not exist on type 'CSSRule'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2018,64): error TS2339: Property 'key' does not exist on type 'CSSRule'.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2045,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'StylePropertyTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2109,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2109,46): error TS2339: Property '_updateFilter' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2266,49): error TS2339: Property 'section' does not exist on type 'TreeOutline'.
@@ -5873,7 +5883,9 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersVi
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(156,45): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(158,47): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(211,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(216,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'EventListenersTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(252,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(258,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ObjectEventListenerBar' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(283,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(284,41): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(292,41): error TS2555: Expected at least 2 arguments, but got 1.
@@ -6550,6 +6562,7 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(199,80): error TS2339: Property '_layer' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(222,11): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(223,25): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(225,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'LayerTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(125,84): error TS2339: Property 'scrollRectIndex' does not exist on type 'Selection'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(149,34): error TS2339: Property '_snapshot' does not exist on type 'Selection'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(231,16): error TS2555: Expected at least 2 arguments, but got 1.
@@ -6634,9 +6647,11 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.j
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(412,27): error TS2339: Property '_logItem' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(418,27): error TS2339: Property '_logItem' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(495,11): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(496,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'LogTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(531,29): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(533,34): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(536,32): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(540,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'LogPropertyTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/TransformController.js(19,22): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/TransformController.js(20,20): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/TransformController.js(35,55): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7196,6 +7211,8 @@ node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(48
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(496,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(514,51): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(514,84): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(532,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'Category' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/network/RequestHeadersView.js(534,10): error TS2610: Class 'TreeElement' defines instance member accessor 'hidden', but extended class 'Category' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/network/RequestPreviewView.js(60,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestPreviewView.js(93,38): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestResponseView.js(118,40): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7355,7 +7372,9 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(328,20): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(392,11): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(395,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(432,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'RootElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(468,48): error TS2339: Property '_skipProto' does not exist on type 'TreeOutline'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(487,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ObjectPropertyTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(565,16): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(571,38): error TS2339: Property 'getter' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(572,92): error TS2339: Property 'getter' does not exist on type 'RemoteObjectProperty'.
@@ -7403,6 +7422,7 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(923,51): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(924,51): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(980,18): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(982,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ArrayGroupingTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1153,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1182,26): error TS2339: Property '_readOnly' does not exist on type 'ObjectPropertyTreeElement'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1211,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -8234,6 +8254,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(445,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(451,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(487,29): error TS2339: Property 'snapshot' does not exist on type 'HeapSnapshotSortableDataGrid'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(490,10): error TS2610: Class 'HeapSnapshotGridNode' defines instance member accessor 'data', but extended class 'HeapSnapshotGenericObjectNode' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(492,29): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(493,30): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(504,38): error TS2339: Property 'snapshot' does not exist on type 'HeapSnapshotSortableDataGrid'.
@@ -8244,6 +8265,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(602,82): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(871,36): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(874,34): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(964,10): error TS2610: Class 'HeapSnapshotGridNode' defines instance member accessor 'data', but extended class 'HeapSnapshotConstructorNode' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(966,23): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(968,29): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(969,30): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
@@ -8251,6 +8273,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1019,14): error TS2339: Property '_searchMatched' does not exist on type 'HeapSnapshotConstructorNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1029,81): error TS2339: Property 'snapshot' does not exist on type 'HeapSnapshotSortableDataGrid'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1140,22): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1176,10): error TS2610: Class 'HeapSnapshotGridNode' defines instance member accessor 'data', but extended class 'HeapSnapshotDiffNode' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1178,28): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1179,30): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1180,67): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
@@ -8263,6 +8286,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1215,14): error TS2339: Property 'isAddedNotRemoved' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1216,83): error TS2339: Property 'snapshot' does not exist on type 'HeapSnapshotSortableDataGrid'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1218,83): error TS2339: Property 'baseSnapshot' does not exist on type 'HeapSnapshotSortableDataGrid'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1285,10): error TS2610: Class 'HeapSnapshotGridNode' defines instance member accessor 'data', but extended class 'AllocationGridNode' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1286,27): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1287,23): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(1288,26): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
@@ -8485,6 +8509,8 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(304,68
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(310,31): error TS2339: Property 'click' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(374,29): error TS2339: Property 'syncToolbarItems' does not exist on type 'Widget'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(383,24): error TS2694: Namespace 'Protocol' has no exported member 'HeapProfiler'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(439,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ProfileTypeSidebarSection' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(446,10): error TS2610: Class 'TreeElement' defines instance member accessor 'hidden', but extended class 'ProfileTypeSidebarSection' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(494,9): error TS2322: Type 'ProfileGroupSidebarTreeElement' is not assignable to type 'this'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(530,9): error TS2322: Type 'ProfileGroupSidebarTreeElement' is not assignable to type 'this'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(596,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -8497,9 +8523,11 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(714,32
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(714,87): error TS2339: Property '_fileSelectorElement' does not exist on type 'typeof ProfilesPanel'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(716,51): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(717,51): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(752,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ProfileGroupSidebarTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(766,62): error TS2339: Property 'profile' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(775,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(776,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(789,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'ProfilesSidebarTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(807,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(808,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfilesPanel.js(811,31): error TS2555: Expected at least 2 arguments, but got 1.
@@ -8651,18 +8679,23 @@ node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSideba
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1052,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1094,35): error TS2339: Property 'remove' does not exist on type 'IDBDatabaseTreeElement[]'.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1179,52): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1225,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'tooltip', but extended class 'IDBDatabaseTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1225,27): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1298,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1356,58): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1358,38): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1359,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'tooltip', but extended class 'IDBObjectStoreTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1405,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1449,30): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1451,32): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1453,32): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1454,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'tooltip', but extended class 'IDBIndexTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1487,88): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1518,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1530,62): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1555,16): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1577,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'tooltip', but extended class 'ApplicationCacheManifestTreeElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/resources/ApplicationPanelSidebar.js(1637,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'title', but extended class 'ApplicationCacheFrameTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/resources/ClearStorageView.js(22,49): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ClearStorageView.js(37,55): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/ClearStorageView.js(40,54): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
@@ -8794,6 +8827,8 @@ node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBViews.js(295,
 node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBViews.js(433,14): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesPanel.js(22,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(69,33): error TS2339: Property 'remove' does not exist on type 'Map<string, FrameTreeElement>'.
+node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(140,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'title', but extended class 'FrameTreeElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(252,10): error TS2610: Class 'BaseStorageTreeElement' defines instance member accessor 'tooltip', but extended class 'FrameResourceTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(311,26): error TS2339: Property 'draggable' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(321,11): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent'.
 node_modules/chrome-devtools-frontend/front_end/resources/ResourcesSection.js(322,11): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent'.
@@ -10212,10 +10247,12 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(54,59): 
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(73,28): error TS2339: Property 'setSearchRegex' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(80,23): error TS2339: Property 'setSearchRegex' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(223,35): error TS2339: Property 'childElementCount' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(226,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'Node' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(290,24): error TS2339: Property 'tagName' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(296,31): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(305,20): error TS2339: Property 'childElementCount' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(342,21): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(343,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'Node' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/sources/AddSourceMapURLDialog.js(9,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sources/AddSourceMapURLDialog.js(14,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/AddSourceMapURLDialog.js(14,67): error TS2555: Expected at least 2 arguments, but got 1.
@@ -10312,6 +10349,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpoints
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(106,41): error TS2339: Property 'checked' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(120,14): error TS2339: Property 'checked' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/EventListenerBreakpointsSidebarPane.js(121,14): error TS2339: Property 'indeterminate' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/sources/FileBasedSearchResultsPane.js(64,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'FileTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(140,21): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(159,13): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/FilteredUISourceCodeListProvider.js(163,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -10471,8 +10509,12 @@ node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(779,56)
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(803,50): error TS2339: Property 'hasFocus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(851,14): error TS2339: Property 'parent' does not exist on type 'NavigatorGroupTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(852,12): error TS2339: Property 'parent' does not exist on type 'NavigatorGroupTreeNode'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(912,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'NavigatorFolderTreeElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(913,10): error TS2610: Class 'TreeElement' defines instance member accessor 'tooltip', but extended class 'NavigatorFolderTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(951,23): error TS2339: Property '_title' does not exist on type 'NavigatorTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(952,19): error TS2339: Property 'parent' does not exist on type 'NavigatorTreeNode'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1003,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'NavigatorSourceTreeElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1006,10): error TS2610: Class 'TreeElement' defines instance member accessor 'tooltip', but extended class 'NavigatorSourceTreeElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1023,17): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1024,29): error TS2322: Type 'Element' is not assignable to type 'Icon'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1045,26): error TS2339: Property 'draggable' does not exist on type 'Element'.
@@ -11682,6 +11724,8 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1869
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1872,80): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1876,79): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1877,14): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1943,10): error TS2610: Class 'TreeElement' defines instance member accessor 'selectable', but extended class 'InvalidationsGroupElement' defines it as instance member property.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1949,10): error TS2610: Class 'TreeElement' defines instance member accessor 'title', but extended class 'InvalidationsGroupElement' defines it as instance member property.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1963,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1965,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1965,36): error TS2555: Expected at least 2 arguments, but got 1.
