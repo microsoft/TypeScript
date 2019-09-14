@@ -16996,16 +16996,19 @@ namespace ts {
             return isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
         }
 
-        function isReachableFlowNodeWorker(flow: FlowNode, skipCacheCheck: boolean): boolean {
+        function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
             while (true) {
                 const flags = flow.flags;
-                if (flags & FlowFlags.Shared && !skipCacheCheck) {
-                    const id = getFlowNodeId(flow);
-                    const reachable = flowNodeReachable[id];
-                    return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                if (flags & FlowFlags.Shared | flags & FlowFlags.SwitchClause) {
+                    if (!noCacheCheck) {
+                        const id = getFlowNodeId(flow);
+                        const reachable = flowNodeReachable[id];
+                        return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                    }
+                    noCacheCheck = false;
                 }
-                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ArrayMutation | FlowFlags.PreFinally | FlowFlags.AfterFinally)) {
-                    flow = (<FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | PreFinallyFlow | AfterFinallyFlow>flow).antecedent;
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.PreFinally | FlowFlags.AfterFinally)) {
+                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow | AfterFinallyFlow>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
                     const signature = getEffectsSignature((<FlowCall>flow).node);
@@ -17014,14 +17017,20 @@ namespace ts {
                     }
                     flow = (<FlowCall>flow).antecedent;
                 }
+                else if (flags & FlowFlags.BranchLabel) {
+                    return some((<FlowLabel>flow).antecedents!, isReachableFlowNode);
+                }
                 else if (flags & FlowFlags.LoopLabel) {
                     flow = (<FlowLabel>flow).antecedents![0];
                 }
-                else if (flags & FlowFlags.BranchLabel) {
-                    return every((<FlowLabel>flow).antecedents!, isReachableFlowNode);
+                else if (flags & FlowFlags.SwitchClause) {
+                    if ((<FlowSwitchClause>flow).clauseStart === (<FlowSwitchClause>flow).clauseEnd && isExhaustiveSwitchStatement((<FlowSwitchClause>flow).switchStatement)) {
+                        return false;
+                    }
+                    flow = (<FlowSwitchClause>flow).antecedent;
                 }
                 else {
-                    return true;
+                    return !(flags & FlowFlags.Unreachable);
                 }
             }
         }
@@ -17044,7 +17053,11 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType) {
+                error(reference, Diagnostics.Unreachable_code_detected);
+                return declaredType;
+            }
+            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -23804,9 +23817,7 @@ namespace ts {
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            return !!(func.flags & NodeFlags.HasImplicitReturn &&
-                !some((<Block>func.body).statements, s => s.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>s)) &&
-                !(func.returnFlowNode && !isReachableFlowNode(func.returnFlowNode)));
+            return func.endFlowNode && isReachableFlowNode(func.endFlowNode);
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
