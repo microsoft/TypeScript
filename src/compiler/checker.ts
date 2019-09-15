@@ -31531,8 +31531,7 @@ namespace ts {
                     const nameType = checkComputedPropertyName(name);
                     return isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike) ? nameType : stringType;
                 default:
-                    Debug.fail("Unsupported property name.");
-                    return errorType;
+                    return Debug.fail("Unsupported property name.");
             }
         }
 
