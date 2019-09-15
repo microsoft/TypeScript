@@ -1032,12 +1032,12 @@ namespace ts {
         function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
+            bind(node.expression);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             if (node.kind === SyntaxKind.ForOfStatement) {
                 bind(node.awaitModifier);
             }
-            bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
             if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
