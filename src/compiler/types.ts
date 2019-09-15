@@ -4016,6 +4016,7 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        isExhaustive?: boolean;           // Is node an exhaustive switch statement
     }
 
     export const enum TypeFlags {

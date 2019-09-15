@@ -1224,7 +1224,8 @@ namespace ts {
             addAntecedent(postSwitchLabel, currentFlow);
             const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
             // We mark a switch statement as possibly exhaustive if it has no default clause and if all
-            // case clauses have unreachable end points (e.g. they all return).
+            // case clauses have unreachable end points (e.g. they all return). Note, we no longer need
+            // this property in control flow analysis, it's there only for backwards compatibility.
             node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
             if (!hasDefault) {
                 addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));

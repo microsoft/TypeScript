@@ -16999,7 +16999,7 @@ namespace ts {
         function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
             while (true) {
                 const flags = flow.flags;
-                if (flags & FlowFlags.Shared | flags & FlowFlags.SwitchClause) {
+                if (flags & FlowFlags.Shared) {
                     if (!noCacheCheck) {
                         const id = getFlowNodeId(flow);
                         const reachable = flowNodeReachable[id];
@@ -17018,12 +17018,16 @@ namespace ts {
                     flow = (<FlowCall>flow).antecedent;
                 }
                 else if (flags & FlowFlags.BranchLabel) {
+                    // A branching point is reachable if any branch is reachable.
                     return some((<FlowLabel>flow).antecedents!, isReachableFlowNode);
                 }
                 else if (flags & FlowFlags.LoopLabel) {
+                    // A loop is reachable if the control flow path that leads to the top is reachable.
                     flow = (<FlowLabel>flow).antecedents![0];
                 }
                 else if (flags & FlowFlags.SwitchClause) {
+                    // The control flow path representing an unmatched value in a switch statement with
+                    // no default clause is unreachable if the switch statement is exhaustive.
                     if ((<FlowSwitchClause>flow).clauseStart === (<FlowSwitchClause>flow).clauseEnd && isExhaustiveSwitchStatement((<FlowSwitchClause>flow).switchStatement)) {
                         return false;
                     }
@@ -17327,6 +17331,9 @@ namespace ts {
             }
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
+                if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement((<FlowSwitchClause>flow).switchStatement)) {
+                    return neverType;
+                }
                 const expr = flow.switchStatement.expression;
                 const flowType = getTypeAtFlowNode(flow.antecedent);
                 let type = getTypeFromFlowType(flowType);
@@ -23793,9 +23800,11 @@ namespace ts {
         }
 
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
-            if (!node.possiblyExhaustive) {
-                return false;
-            }
+            const links = getNodeLinks(node);
+            return links.isExhaustive !== undefined ? links.isExhaustive : (links.isExhaustive = computeExhaustiveSwitchStatement(node));
+        }
+
+        function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             if (node.expression.kind === SyntaxKind.TypeOfExpression) {
                 const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
                 // This cast is safe because the switch is possibly exhaustive and does not contain a default case, so there can be no undefined.
