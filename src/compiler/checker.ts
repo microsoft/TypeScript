@@ -6,6 +6,7 @@ namespace ts {
     let nextNodeId = 1;
     let nextMergeId = 1;
     let nextFlowId = 1;
+    let nextCheckerId = 1;
 
     const enum IterationUse {
         AllowsSyncIterablesFlag = 1 << 0,
@@ -298,6 +299,7 @@ namespace ts {
         let instantiationDepth = 0;
         let constraintDepth = 0;
         let currentNode: Node | undefined;
+        let checkerId: number;
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
@@ -842,7 +844,6 @@ namespace ts {
         const flowLoopTypes: Type[][] = [];
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
-        const flowNodeReachable: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -16993,17 +16994,21 @@ namespace ts {
         }
 
         function isReachableFlowNode(flow: FlowNode) {
-            return isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+            return isReachableFlowNodeWorker(flow, /*noCacheCheck*/ false);
         }
 
         function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
             while (true) {
                 const flags = flow.flags;
-                if (flags & FlowFlags.Shared) {
+                if (flags & (FlowFlags.Shared | FlowFlags.Assignment | FlowFlags.Label)) {
                     if (!noCacheCheck) {
-                        const id = getFlowNodeId(flow);
-                        const reachable = flowNodeReachable[id];
-                        return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                        if (flow.checkerId === checkerId) {
+                            return !!(flow.flags & FlowFlags.Reachable);
+                        }
+                        const reachable = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true);
+                        flow.checkerId = checkerId;
+                        flow.flags = (flow.flags & ~FlowFlags.Reachable) | (reachable ? FlowFlags.Reachable : 0);
+                        return reachable;
                     }
                     noCacheCheck = false;
                 }
@@ -32287,6 +32292,9 @@ namespace ts {
         }
 
         function initializeTypeChecker() {
+            checkerId = nextCheckerId;
+            nextCheckerId++;
+
             // Bind all source files and propagate errors
             for (const file of host.getSourceFiles()) {
                 bindSourceFile(file, compilerOptions);
