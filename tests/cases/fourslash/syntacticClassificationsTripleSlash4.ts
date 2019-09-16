@@ -4,5 +4,4 @@
 
 var c = classification;
 verify.syntacticClassificationsAre(
-    c.comment("/// "),
-    c.punctuation("<"));
+    c.comment("/// <")); // Don't classify until we recognize the element name

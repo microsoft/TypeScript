@@ -916,7 +916,7 @@ namespace ts.tscWatch {
         });
 
         describe("should not trigger should not trigger recompilation because of program emit", () => {
-            function verifyWithOptions(options: CompilerOptions, outputFiles: ReadonlyArray<string>) {
+            function verifyWithOptions(options: CompilerOptions, outputFiles: readonly string[]) {
                 const proj = "/user/username/projects/myproject";
                 const file1: File = {
                     path: `${proj}/file1.ts`,
@@ -1056,14 +1056,14 @@ export default test;`;
                 getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type)
             ]);
 
-            function changeParameterType(parameterName: string, toType: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+            function changeParameterType(parameterName: string, toType: string, expectedErrors: readonly Diagnostic[]) {
                 const newContent = bFileContent.replace(new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
 
                 verifyErrorsWithBFileContents(newContent, expectedErrors);
                 verifyErrorsWithBFileContents(bFileContent, emptyArray);
             }
 
-            function verifyErrorsWithBFileContents(content: string, expectedErrors: ReadonlyArray<Diagnostic>) {
+            function verifyErrorsWithBFileContents(content: string, expectedErrors: readonly Diagnostic[]) {
                 host.writeFile(bFile.path, content);
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrorsIncremental(host, expectedErrors);
@@ -1146,7 +1146,7 @@ foo().hello`
             const currentDirectory = "/user/username/projects/myproject";
             const field = "fullscreen";
             const fieldWithoutReadonly = `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`;
 
             const libFileWithDocument: File = {
@@ -1227,13 +1227,13 @@ var y: number;
             const aFile: File = {
                 path: `${currentDirectory}/a.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const bFile: File = {
                 path: `${currentDirectory}/b.d.ts`,
                 content: `interface Document {
-	${field}: boolean;
+    ${field}: boolean;
 }`
             };
             const libFileWithDocument: File = {
@@ -1266,7 +1266,7 @@ interface Document {
             verifyConfigChange({ skipLibCheck: true }, [aFile]);
             verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
 
-            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: ReadonlyArray<File>) {
+            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: readonly File[]) {
                 host.writeFile(configFile.path, JSON.stringify({ compilerOptions }));
                 host.runQueuedTimeoutCallbacks();
                 verifyProgramFiles();

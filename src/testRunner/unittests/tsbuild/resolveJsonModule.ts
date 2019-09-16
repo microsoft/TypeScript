@@ -16,7 +16,7 @@ namespace ts {
             verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
         }
 
-        function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
+        function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
             builder.build();

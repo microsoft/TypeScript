@@ -20,7 +20,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         readonly renameAccessor: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         if (!getConvertibleFieldAtPosition(context)) return emptyArray;
 
         return [{
@@ -214,11 +214,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
-        isParameterPropertyDeclaration(declaration)
-            ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
-            : isPropertyAssignment(declaration)
-                ? changeTracker.insertNodeAfterComma(file, declaration, accessor)
-                : changeTracker.insertNodeAfter(file, declaration, accessor);
+        isParameterPropertyDeclaration(declaration) ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor) :
+            isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
+            changeTracker.insertNodeAfter(file, declaration, accessor);
     }
 
     function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, fieldName: string, originalName: string) {

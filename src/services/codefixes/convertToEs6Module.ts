@@ -163,7 +163,7 @@ namespace ts.codefix {
     }
 
     /** Converts `const name = require("moduleSpecifier").propertyName` */
-    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
+    function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): readonly Node[] {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern: {
@@ -178,7 +178,7 @@ namespace ts.codefix {
                 // `const a = require("b").c` --> `import { c as a } from "./b";
                 return [makeSingleImport(name.text, propertyName, moduleSpecifier, quotePreference)];
             default:
-                return Debug.assertNever(name);
+                return Debug.assertNever(name, `Convert to ES6 module got invalid syntax form ${(name as BindingName).kind}`);
         }
     }
 
@@ -224,12 +224,13 @@ namespace ts.codefix {
      * Convert `module.exports = { ... }` to individual exports..
      * We can't always do this if the module has interesting members -- then it will be a default export instead.
      */
-    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): [ReadonlyArray<Statement>, ModuleExportsChanged] | undefined {
+    function tryChangeModuleExportsObject(object: ObjectLiteralExpression): [readonly Statement[], ModuleExportsChanged] | undefined {
         const statements = mapAllOrFail(object.properties, prop => {
             switch (prop.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 // TODO: Maybe we should handle this? See fourslash test `refactorConvertToEs6Module_export_object_shorthand.ts`.
+                // falls through
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
@@ -238,7 +239,7 @@ namespace ts.codefix {
                 case SyntaxKind.MethodDeclaration:
                     return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
-                    Debug.assertNever(prop);
+                    Debug.assertNever(prop, `Convert to ES6 got invalid prop kind ${(prop as ObjectLiteralElementLike).kind}`);
             }
         });
         return statements && [statements, false];
@@ -269,17 +270,15 @@ namespace ts.codefix {
         }
     }
 
-    function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [ReadonlyArray<Statement>, ModuleExportsChanged] {
+    function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [readonly Statement[], ModuleExportsChanged] {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
         const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
-        return exports.has("export=" as __String)
-            ? [[reExportDefault(moduleSpecifier)], true]
-            : !exports.has("default" as __String)
-            ? [[reExportStar(moduleSpecifier)], false]
+        return exports.has("export=" as __String) ? [[reExportDefault(moduleSpecifier)], true] :
+            !exports.has("default" as __String) ? [[reExportStar(moduleSpecifier)], false] :
             // If there's some non-default export, must include both `export *` and `export default`.
-            : exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
+            exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
     }
     function reExportStar(moduleSpecifier: string): ExportDeclaration {
         return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
@@ -318,7 +317,8 @@ namespace ts.codefix {
                     return exportConst();
                 }
             }
-                // falls through
+
+            // falls through
             case SyntaxKind.ArrowFunction:
                 // `exports.f = function() {}` --> `export function f() {}`
                 return functionExpressionToDeclaration(name, modifiers, exported as FunctionExpression | ArrowFunction);
@@ -349,13 +349,15 @@ namespace ts.codefix {
         identifiers: Identifiers,
         target: ScriptTarget,
         quotePreference: QuotePreference,
-    ): ReadonlyArray<Node> {
+    ): readonly Node[] {
         switch (name.kind) {
             case SyntaxKind.ObjectBindingPattern: {
                 const importSpecifiers = mapAllOrFail(name.elements, e =>
                     e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                         ? undefined
-                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text)); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
+                        // (TODO: GH#18217)
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                        : makeImportSpecifier(e.propertyName && (e.propertyName as Identifier).text, e.name.text));
                 if (importSpecifiers) {
                     return [makeImport(/*name*/ undefined, importSpecifiers, moduleSpecifier, quotePreference)];
                 }
@@ -375,7 +377,7 @@ namespace ts.codefix {
             case SyntaxKind.Identifier:
                 return convertSingleIdentifierImport(file, name, moduleSpecifier, changes, checker, identifiers, quotePreference);
             default:
-                return Debug.assertNever(name);
+                return Debug.assertNever(name, `Convert to ES6 module got invalid name kind ${(name as BindingName).kind}`);
         }
     }
 
@@ -383,7 +385,7 @@ namespace ts.codefix {
      * Convert `import x = require("x").`
      * Also converts uses like `x.y()` to `y()` and uses a named import.
      */
-    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ReadonlyArray<Node> {
+    function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): readonly Node[] {
         const nameSymbol = checker.getSymbolAtLocation(name);
         // Maps from module property name to name actually used. (The same if there isn't shadowing.)
         const namedBindingsNames = createMap<string>();
@@ -399,7 +401,7 @@ namespace ts.codefix {
             const { parent } = use;
             if (isPropertyAccessExpression(parent)) {
                 const { expression, name: { text: propertyName } } = parent;
-                Debug.assert(expression === use); // Else shouldn't have been in `collectIdentifiers`
+                Debug.assert(expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
                 let idName = namedBindingsNames.get(propertyName);
                 if (idName === undefined) {
                     idName = makeUniqueName(propertyName, identifiers);
@@ -442,7 +444,7 @@ namespace ts.codefix {
         readonly additional: Map<true>;
     }
 
-    type FreeIdentifiers = ReadonlyMap<ReadonlyArray<Identifier>>;
+    type FreeIdentifiers = ReadonlyMap<readonly Identifier[]>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
         forEachFreeIdentifier(file, id => map.add(id.text, id));
@@ -474,7 +476,7 @@ namespace ts.codefix {
 
     // Node helpers
 
-    function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
+    function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
         return createFunctionDeclaration(
             getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
@@ -486,7 +488,7 @@ namespace ts.codefix {
             convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
     }
 
-    function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {
+    function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression): ClassDeclaration {
         return createClassDeclaration(
             getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
@@ -506,7 +508,7 @@ namespace ts.codefix {
         return createImportSpecifier(propertyName !== undefined && propertyName !== name ? createIdentifier(propertyName) : undefined, createIdentifier(name));
     }
 
-    function makeConst(modifiers: ReadonlyArray<Modifier> | undefined, name: string | BindingName, init: Expression): VariableStatement {
+    function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {
         return createVariableStatement(
             modifiers,
             createVariableDeclarationList(

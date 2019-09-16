@@ -14,7 +14,7 @@ namespace ts.formatting {
     }
 
     export type RulesMap = (context: FormattingContext) => Rule | undefined;
-    function createRulesMap(rules: ReadonlyArray<RuleSpec>): RulesMap {
+    function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
         const map = buildMap(rules);
         return context => {
             const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];
@@ -22,7 +22,7 @@ namespace ts.formatting {
         };
     }
 
-    function buildMap(rules: ReadonlyArray<RuleSpec>): ReadonlyArray<ReadonlyArray<Rule>> {
+    function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
         // Map from bucket index to array of rules
         const map: Rule[][] = new Array(mapRowLength * mapRowLength);
         // This array is used only during construction of the rulesbucket in the map
@@ -78,11 +78,12 @@ namespace ts.formatting {
     // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
     // the values in the bitmap segments 3rd, 2nd, and 1st.
     function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
-        const position = rule.action === RuleAction.Ignore
-            ? specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny
-            : rule.context !== anyContext
-            ? specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny
-            : specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+        const position = rule.action === RuleAction.Ignore ?
+            specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny :
+            rule.context !== anyContext ?
+                specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
+                specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+
         const state = constructionState[rulesBucketIndex] || 0;
         rules.splice(getInsertionIndex(state, position), 0, rule);
         constructionState[rulesBucketIndex] = increaseInsertionIndex(state, position);

@@ -20,19 +20,19 @@ class DeclarationsWalker {
     }
 
     static getExtraDeclarations(typeChecker: ts.TypeChecker, protocolFile: ts.SourceFile): string {
+        const walker = new DeclarationsWalker(typeChecker, protocolFile);
         let text = "declare namespace ts.server.protocol {\n";
-        var walker = new DeclarationsWalker(typeChecker, protocolFile);
         walker.visitTypeNodes(protocolFile);
         text = walker.text
             ? `declare namespace ts.server.protocol {\n${walker.text}}`
             : "";
         if (walker.removedTypes) {
             text += "\ndeclare namespace ts {\n";
-            text += "    // these types are empty stubs for types from services and should not be used directly\n"
+            text += "    // these types are empty stubs for types from services and should not be used directly\n";
             for (const type of walker.removedTypes) {
-                text += `    export type ${type.symbol!.name} = never;\n`;
+                text += `    export type ${type.symbol.name} = never;\n`;
             }
-            text += "}"
+            text += "}";
         }
         return text;
     }
@@ -42,7 +42,7 @@ class DeclarationsWalker {
             return;
         }
         this.visitedTypes.push(type);
-        let s = type.aliasSymbol || type.getSymbol();
+        const s = type.aliasSymbol || type.getSymbol();
         if (!s) {
             return;
         }
@@ -64,7 +64,7 @@ class DeclarationsWalker {
                     }
                     else {
                         // splice declaration in final d.ts file
-                        let text = decl.getFullText();
+                        const text = decl.getFullText();
                         this.text += `${text}\n`;
                         // recursively pull all dependencies into result dts file
 
@@ -139,10 +139,10 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
 
         if (protocolDts === undefined) {
             const diagHost: ts.FormatDiagnosticsHost = {
-                getCanonicalFileName: function (f) { return f; },
-                getCurrentDirectory: function() { return '.'; },
-                getNewLine: function() { return "\r\n"; }
-            }
+                getCanonicalFileName(f) { return f; },
+                getCurrentDirectory() { return "."; },
+                getNewLine() { return "\r\n"; }
+            };
             const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
             throw new Error(`Declaration file for protocol.ts is not generated:\r\n${diags}`);
         }
@@ -161,7 +161,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
                 return ts.createSourceFile(fileName, protocolDts, options.target);
             }
             return originalGetSourceFile.apply(host, [fileName]);
-        }
+        };
         const rootFiles = includeTypeScriptServices ? [protocolFileName, typeScriptServicesDts] : [protocolFileName];
         return ts.createProgram(rootFiles, options, host);
     }

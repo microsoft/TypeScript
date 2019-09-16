@@ -672,10 +672,12 @@ declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
         LocationPriority = "0",
-        SuggestedClassMembers = "1",
-        GlobalsOrKeywords = "2",
-        AutoImportSuggestions = "3",
-        JavascriptIdentifiers = "4"
+        OptionalMember = "1",
+        MemberDeclaredBySpreadAssignment = "2",
+        SuggestedClassMembers = "3",
+        GlobalsOrKeywords = "4",
+        AutoImportSuggestions = "5",
+        JavascriptIdentifiers = "6"
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

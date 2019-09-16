@@ -267,7 +267,7 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet.set(cacheLocation, true);
         }
 
-        private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
+        private filterTypings(typingsToInstall: readonly string[]): readonly string[] {
             return mapDefined(typingsToInstall, typing => {
                 const typingKey = mangleScopedPackageName(typing);
                 if (this.missingTypingsSet.get(typingKey)) {
@@ -329,7 +329,9 @@ namespace ts.server.typingsInstaller {
             this.sendResponse(<BeginInstallTypes>{
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
-                typingsInstallerVersion: ts.version, // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
+                // qualified explicitly to prevent occasional shadowing
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+                typingsInstallerVersion: ts.version,
                 projectName: req.projectName
             });
 
@@ -378,7 +380,9 @@ namespace ts.server.typingsInstaller {
                         projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
-                        typingsInstallerVersion: ts.version // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
+                        // qualified explicitly to prevent occasional shadowing
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+                        typingsInstallerVersion: ts.version
                     };
                     this.sendResponse(response);
                 }
