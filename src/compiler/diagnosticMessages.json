@@ -2204,7 +2204,7 @@
         "category": "Error",
         "code": 2609
     },
-    "Class '{0}' defines instance member property '{1}', so extended class '{2}' must use 'declare' to make it ambient.": {
+    "Property '{0}' will overwrite the base property in '{1}'. Add a 'declare' modifier or an initializer to avoid this.": {
         "category": "Error",
         "code": 2610
     },

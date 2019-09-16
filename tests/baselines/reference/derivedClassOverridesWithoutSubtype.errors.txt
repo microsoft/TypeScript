@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts(8,5): error TS2610: Class 'Base' defines instance member property 'x', so extended class 'Derived' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts(8,5): error TS2610: Property 'x' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived extends Base {
         x: {
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'x', so extended class 'Derived' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
             foo: any;
         }
     }

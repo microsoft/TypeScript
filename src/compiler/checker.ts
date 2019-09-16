@@ -29534,8 +29534,8 @@ namespace ts {
                                 || !isIdentifier(propName)
                                 || !strictNullChecks
                                 || !isPropertyInitializedInConstructor(propName, type, constructor)) {
-                                const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_use_declare_to_make_it_ambient;
-                                error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                                const errorMessage = Diagnostics.Property_0_will_overwrite_the_base_property_in_1_Add_a_declare_modifier_or_an_initializer_to_avoid_this;
+                                error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType));
                             }
                         }
                         continue;

@@ -1,5 +1,5 @@
-tests/cases/compiler/mutuallyRecursiveInference.ts(9,5): error TS2610: Class 'L<X>' defines instance member property 'a', so extended class 'X' must use 'declare' to make it ambient.
-tests/cases/compiler/mutuallyRecursiveInference.ts(10,5): error TS2610: Class 'L<X>' defines instance member property 'b', so extended class 'X' must use 'declare' to make it ambient.
+tests/cases/compiler/mutuallyRecursiveInference.ts(9,5): error TS2610: Property 'a' will overwrite the base property in 'L<X>'. Add a 'declare' modifier or an initializer to avoid this.
+tests/cases/compiler/mutuallyRecursiveInference.ts(10,5): error TS2610: Property 'b' will overwrite the base property in 'L<X>'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/mutuallyRecursiveInference.ts (2 errors) ====
@@ -13,10 +13,10 @@ tests/cases/compiler/mutuallyRecursiveInference.ts(10,5): error TS2610: Class 'L
     class X extends L<X> {
         a: 'a' | 'b'
         ~
-!!! error TS2610: Class 'L<X>' defines instance member property 'a', so extended class 'X' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'a' will overwrite the base property in 'L<X>'. Add a 'declare' modifier or an initializer to avoid this.
         b: number
         ~
-!!! error TS2610: Class 'L<X>' defines instance member property 'b', so extended class 'X' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'b' will overwrite the base property in 'L<X>'. Add a 'declare' modifier or an initializer to avoid this.
         m2() {
             this.a
         }

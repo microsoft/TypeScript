@@ -1,4 +1,4 @@
-tests/cases/compiler/declarationEmitProtectedMembers.ts(34,5): error TS2610: Class 'C2' defines instance member property 'x', so extended class 'C3' must use 'declare' to make it ambient.
+tests/cases/compiler/declarationEmitProtectedMembers.ts(34,5): error TS2610: Property 'x' will overwrite the base property in 'C2'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/declarationEmitProtectedMembers.ts (1 errors) ====
@@ -37,7 +37,7 @@ tests/cases/compiler/declarationEmitProtectedMembers.ts(34,5): error TS2610: Cla
     class C3 extends C2 {
         x: number;
         ~
-!!! error TS2610: Class 'C2' defines instance member property 'x', so extended class 'C3' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'C2'. Add a 'declare' modifier or an initializer to avoid this.
         static sx: number;
         f() {
             return super.f();

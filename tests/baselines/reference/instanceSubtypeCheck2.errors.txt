@@ -1,6 +1,6 @@
 tests/cases/compiler/instanceSubtypeCheck2.ts(6,5): error TS2416: Property 'x' in type 'C2<T>' is not assignable to the same property in base type 'C1<T>'.
   Type 'string' is not assignable to type 'C2<T>'.
-tests/cases/compiler/instanceSubtypeCheck2.ts(6,5): error TS2610: Class 'C1<T>' defines instance member property 'x', so extended class 'C2<T>' must use 'declare' to make it ambient.
+tests/cases/compiler/instanceSubtypeCheck2.ts(6,5): error TS2610: Property 'x' will overwrite the base property in 'C1<T>'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/instanceSubtypeCheck2.ts (2 errors) ====
@@ -14,5 +14,5 @@ tests/cases/compiler/instanceSubtypeCheck2.ts(6,5): error TS2610: Class 'C1<T>' 
 !!! error TS2416: Property 'x' in type 'C2<T>' is not assignable to the same property in base type 'C1<T>'.
 !!! error TS2416:   Type 'string' is not assignable to type 'C2<T>'.
         ~
-!!! error TS2610: Class 'C1<T>' defines instance member property 'x', so extended class 'C2<T>' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'C1<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }

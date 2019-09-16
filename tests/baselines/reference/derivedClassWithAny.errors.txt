@@ -1,9 +1,9 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(18,5): error TS2610: Class 'C' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(18,5): error TS2610: Property 'x' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(27,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(37,5): error TS2610: Class 'D' defines instance member property 'x', so extended class 'E' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(37,5): error TS2610: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(38,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
@@ -35,7 +35,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     class D extends C {
         x: any;
         ~
-!!! error TS2610: Class 'C' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): any {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -60,7 +60,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     class E extends D {
         x: string;
         ~
-!!! error TS2610: Class 'D' defines instance member property 'x', so extended class 'E' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): string{ return ''; }
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

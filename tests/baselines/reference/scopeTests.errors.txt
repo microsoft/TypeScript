@@ -1,6 +1,6 @@
 tests/cases/compiler/scopeTests.ts(2,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Property 'v' is private in type 'C' but not in type 'D'.
-tests/cases/compiler/scopeTests.ts(4,10): error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must use 'declare' to make it ambient.
+tests/cases/compiler/scopeTests.ts(4,10): error TS2610: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/scopeTests.ts (2 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/scopeTests.ts(4,10): error TS2610: Class 'C' defines instan
       public v: number;
       public p: number
              ~
-!!! error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
       constructor() {
        super()
        this.v = 1;

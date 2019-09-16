@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(9,12): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(9,12): error TS2610: Property 'a' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(12,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(13,15): error TS2610: Class 'Derived1' defines instance member property 'a', so extended class 'Derived2' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts(13,15): error TS2610: Property 'a' will overwrite the base property in 'Derived1'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts (3 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived1 extends Base {
         public a: typeof x;
                ~
-!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'a' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class Derived2 extends Derived1 {
@@ -24,5 +24,5 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS2415:   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
         protected a: typeof x; // Error, parent was public
                   ~
-!!! error TS2610: Class 'Derived1' defines instance member property 'a', so extended class 'Derived2' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'a' will overwrite the base property in 'Derived1'. Add a 'declare' modifier or an initializer to avoid this.
     }

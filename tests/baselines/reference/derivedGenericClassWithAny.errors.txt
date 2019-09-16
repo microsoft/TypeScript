@@ -1,8 +1,8 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(10,5): error TS2610: Class 'C<number>' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(10,5): error TS2610: Property 'x' will overwrite the base property in 'C<number>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(29,5): error TS2610: Class 'D' defines instance member property 'x', so extended class 'E<T>' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(29,5): error TS2610: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type '""' is not assignable to type 'T'.
   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
@@ -27,7 +27,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     class D extends C<number> {
         x: any;
         ~
-!!! error TS2610: Class 'C<number>' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'C<number>'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): any {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -52,7 +52,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     class E<T extends string> extends D {
         x: T;
         ~
-!!! error TS2610: Class 'D' defines instance member property 'x', so extended class 'E<T>' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): T { return ''; } // error
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

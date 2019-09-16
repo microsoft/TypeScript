@@ -1,4 +1,4 @@
-tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts(6,5): error TS2610: Class 'a' defines instance member property 'x', so extended class 'b' must use 'declare' to make it ambient.
+tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts(6,5): error TS2610: Property 'x' will overwrite the base property in 'a'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts(6,5): error 
     class b extends a {
         x: () => string;
         ~
-!!! error TS2610: Class 'a' defines instance member property 'x', so extended class 'b' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'a'. Add a 'declare' modifier or an initializer to avoid this.
     }

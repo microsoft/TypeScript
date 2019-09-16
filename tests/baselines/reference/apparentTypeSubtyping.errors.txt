@@ -1,8 +1,8 @@
 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
   Type 'String' is not assignable to type 'string'.
     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2610: Class 'Base<string>' defines instance member property 'x', so extended class 'Derived<U>' must use 'declare' to make it ambient.
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(20,5): error TS2610: Class 'Base2' defines instance member property 'x', so extended class 'Derived2<U>' must use 'declare' to make it ambient.
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2610: Property 'x' will overwrite the base property in 'Base<string>'. Add a 'declare' modifier or an initializer to avoid this.
+tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(20,5): error TS2610: Property 'x' will overwrite the base property in 'Base2'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (3 errors) ====
@@ -21,7 +21,7 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
 !!! error TS2416:   Type 'String' is not assignable to type 'string'.
 !!! error TS2416:     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
         ~
-!!! error TS2610: Class 'Base<string>' defines instance member property 'x', so extended class 'Derived<U>' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'Base<string>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class Base2 {
@@ -33,5 +33,5 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
     class Derived2<U extends String> extends Base2 { // error because of the prototype's not matching, not because of the instance side
         x: U;
         ~
-!!! error TS2610: Class 'Base2' defines instance member property 'x', so extended class 'Derived2<U>' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'x' will overwrite the base property in 'Base2'. Add a 'declare' modifier or an initializer to avoid this.
     }

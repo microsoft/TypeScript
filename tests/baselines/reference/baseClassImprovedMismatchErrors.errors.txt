@@ -5,7 +5,7 @@ tests/cases/compiler/baseClassImprovedMismatchErrors.ts(8,5): error TS2416: Prop
         Types of property 'n' are incompatible.
           Type 'string | Derived' is not assignable to type 'string | Base'.
             Type 'Derived' is not assignable to type 'string | Base'.
-tests/cases/compiler/baseClassImprovedMismatchErrors.ts(8,5): error TS2610: Class 'Base' defines instance member property 'n', so extended class 'Derived' must use 'declare' to make it ambient.
+tests/cases/compiler/baseClassImprovedMismatchErrors.ts(8,5): error TS2610: Property 'n' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/compiler/baseClassImprovedMismatchErrors.ts(9,5): error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type '() => string | number' is not assignable to type '() => number'.
     Type 'string | number' is not assignable to type 'number'.
@@ -41,7 +41,7 @@ tests/cases/compiler/baseClassImprovedMismatchErrors.ts(15,5): error TS2416: Pro
 !!! error TS2416:           Type 'string | Derived' is not assignable to type 'string | Base'.
 !!! error TS2416:             Type 'Derived' is not assignable to type 'string | Base'.
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'n', so extended class 'Derived' must use 'declare' to make it ambient.
+!!! error TS2610: Property 'n' will overwrite the base property in 'Base'. Add a 'declare' modifier or an initializer to avoid this.
         fn() {
         ~~
 !!! error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
