@@ -16945,18 +16945,20 @@ namespace ts {
         // parameter symbols with declarations that have explicit type annotations. Such references are
         // resolvable with no possibility of triggering circularities in control flow analysis.
         function getTypeOfDottedName(node: Expression): Type | undefined {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    const symbol = getResolvedSymbol(<Identifier>node);
-                    return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                case SyntaxKind.ThisKeyword:
-                    return checkThisExpression(node);
-                case SyntaxKind.PropertyAccessExpression:
-                    const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
-                    const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
-                    return prop && getExplicitTypeOfSymbol(prop);
-                case SyntaxKind.ParenthesizedExpression:
-                    return getTypeOfDottedName((<ParenthesizedExpression>node).expression);
+            if (!(node.flags & NodeFlags.InWithStatement)) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        const symbol = getResolvedSymbol(<Identifier>node);
+                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                    case SyntaxKind.ThisKeyword:
+                        return checkThisExpression(node);
+                    case SyntaxKind.PropertyAccessExpression:
+                        const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
+                        const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
+                        return prop && getExplicitTypeOfSymbol(prop);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return getTypeOfDottedName((<ParenthesizedExpression>node).expression);
+                }
             }
         }
 
