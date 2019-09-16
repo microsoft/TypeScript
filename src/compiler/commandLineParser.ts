@@ -2504,6 +2504,7 @@ namespace ts {
         return options;
     }
 
+    /* @internal */
     function convertOptionsFromJson(optionDeclarations: ReadonlyArray<CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition, diagnosticMessage: DiagnosticMessage, errors: Push<Diagnostic>) {
 
@@ -2516,7 +2517,16 @@ namespace ts {
         for (const id in jsonOptions) {
             const opt = optionNameMap.get(id);
             if (opt) {
-                defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
+
+                const value = convertJsonOption(opt, jsonOptions[id], basePath, errors);
+
+                const relative = isString(opt) && !isRootedDiskPath(opt);
+                if (relative && opt && opt.isFilePath) {
+                    defaultOptions[opt.name] = getNormalizedAbsolutePath(value as string, sys.getCurrentDirectory());
+                }
+                else {
+                    defaultOptions[opt.name] = value;
+                }
             }
             else {
                 errors.push(createCompilerDiagnostic(diagnosticMessage, id));

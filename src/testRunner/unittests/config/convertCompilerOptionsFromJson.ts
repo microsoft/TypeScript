@@ -572,6 +572,23 @@ namespace ts {
             );
         });
 
+        it("Convert relative paths to absolute paths ", () => {
+            assertCompilerOptions({
+                compilerOptions: {
+                    incremental: true,
+                    outDir: "dist"
+                }
+            }, "tsconfig.json",
+            {
+                compilerOptions: {
+                    incremental: true,
+                    outDir: "/apath/dist",
+                    configFilePath: "tsconfig.json"
+                },
+                errors: []
+            });
+        });
+
         it("Convert tsconfig options when there are multiple invalid strings", () => {
             assertCompilerOptionsWithJsonText(`{
   "compilerOptions": {

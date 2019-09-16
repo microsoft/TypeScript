@@ -381,25 +381,5 @@ namespace ts {
             const parsed = getParsedCommandJsonNode(jsonText, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"]);
             assert.isTrue(parsed.errors.length >= 0);
         });
-
-        it("converts relative paths from the CLI to absolute paths internally based on the tsconfig", () => {
-            const existingOptions = {
-                rootDir: "src"
-            };
-
-            const jsonText = `{
-              "compilerOptions": {
-                "incremental": true,
-                "outDir": "dist"
-              }
-            }`;
-
-            const parsed = parseJsonText("/path/to/config.tsconfig", jsonText);
-            const files = ["/path/to/src/file.ts"].reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-            const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: ".", files: { "/": {}, ...files } }));
-            const config = parseJsonSourceFileConfigFileContent(parsed, host, ".", existingOptions, "/path/to/config.tsconfig");
-
-            assert.equal(config.options.rootDir, "/path/to/src");
-        });
     });
 }
