@@ -1,5 +1,5 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts(21,15): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts(25,15): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts(21,15): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts(25,15): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts (2 errors) ====
@@ -25,13 +25,13 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived extends Base {
         protected a: typeof y;
                   ~
-!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
         protected b(a: typeof y) { }
         protected get c() { return y; }
         protected set c(v: typeof y) { }
         protected d: (a: typeof y) => void;
                   ~
-!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
     
         protected static r: typeof y;
         protected static s(a: typeof y) { }

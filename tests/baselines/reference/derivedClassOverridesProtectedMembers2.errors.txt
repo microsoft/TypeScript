@@ -1,5 +1,5 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts(22,5): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts(26,5): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts(22,5): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts(26,5): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts (2 errors) ====
@@ -26,13 +26,13 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived extends Base {
         a: typeof y;
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
         b(a: typeof y) { }
         get c() { return y; }
         set c(v: typeof y) { }
         d: (a: typeof y) => void;
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
     
         static r: typeof y;
         static s(a: typeof y) { }

@@ -1,6 +1,6 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(22,7): error TS2415: Class 'Derived1' incorrectly extends base class 'Base'.
   Property 'a' is protected in type 'Derived1' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(23,15): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(23,15): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must use 'declare' to make it ambient.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(27,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Base'.
   Property 'b' is protected in type 'Derived2' but public in type 'Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(32,7): error TS2415: Class 'Derived3' incorrectly extends base class 'Base'.
@@ -9,7 +9,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
   Property 'c' is protected in type 'Derived4' but public in type 'Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(42,7): error TS2415: Class 'Derived5' incorrectly extends base class 'Base'.
   Property 'd' is protected in type 'Derived5' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(43,15): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived5' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(43,15): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived5' must use 'declare' to make it ambient.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(47,7): error TS2417: Class static side 'typeof Derived6' incorrectly extends base class static side 'typeof Base'.
   Property 'r' is protected in type 'typeof Derived6' but public in type 'typeof Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(52,7): error TS2417: Class static side 'typeof Derived7' incorrectly extends base class static side 'typeof Base'.
@@ -50,7 +50,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS2415:   Property 'a' is protected in type 'Derived1' but public in type 'Base'.
         protected a: typeof x;
                   ~
-!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived1' must use 'declare' to make it ambient.
         constructor(a: typeof x) { super(a); }
     }
     
@@ -84,7 +84,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS2415:   Property 'd' is protected in type 'Derived5' but public in type 'Base'.
         protected d: (a: typeof x) => void ;
                   ~
-!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived5' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived5' must use 'declare' to make it ambient.
         constructor(a: typeof x) { super(a); }
     }
     

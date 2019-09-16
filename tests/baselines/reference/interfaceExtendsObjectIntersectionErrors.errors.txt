@@ -16,19 +16,19 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2610: Class 'T1' defines instance member property 'a', so extended class 'C1' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2610: Class 'T1' defines instance member property 'a', so extended class 'C1' must use 'declare' to make it ambient.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2610: Class 'T2' defines instance member property 'b', so extended class 'C2' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2610: Class 'T2' defines instance member property 'b', so extended class 'C2' must use 'declare' to make it ambient.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2610: Class 'number[]' defines instance member property 'length', so extended class 'C3' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2610: Class 'number[]' defines instance member property 'length', so extended class 'C3' must use 'declare' to make it ambient.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2610: Class '[string, number]' defines instance member property '0', so extended class 'C4' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2610: Class '[string, number]' defines instance member property '0', so extended class 'C4' must use 'declare' to make it ambient.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2610: Class 'T5' defines instance member property 'c', so extended class 'C5' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2610: Class 'T5' defines instance member property 'c', so extended class 'C5' must use 'declare' to make it ambient.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -102,31 +102,31 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 !!! error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
                                          ~
-!!! error TS2610: Class 'T1' defines instance member property 'a', so extended class 'C1' must provide an initializer with this override.
+!!! error TS2610: Class 'T1' defines instance member property 'a', so extended class 'C1' must use 'declare' to make it ambient.
     class C2 extends Constructor<T2>() { b: string }
                                          ~
 !!! error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
                                          ~
-!!! error TS2610: Class 'T2' defines instance member property 'b', so extended class 'C2' must provide an initializer with this override.
+!!! error TS2610: Class 'T2' defines instance member property 'b', so extended class 'C2' must use 'declare' to make it ambient.
     class C3 extends Constructor<T3>() { length: string }
                                          ~~~~~~
 !!! error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
                                          ~~~~~~
-!!! error TS2610: Class 'number[]' defines instance member property 'length', so extended class 'C3' must provide an initializer with this override.
+!!! error TS2610: Class 'number[]' defines instance member property 'length', so extended class 'C3' must use 'declare' to make it ambient.
     class C4 extends Constructor<T4>() { 0: number }
                                          ~
 !!! error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
 !!! error TS2416:   Type 'number' is not assignable to type 'string'.
                                          ~
-!!! error TS2610: Class '[string, number]' defines instance member property '0', so extended class 'C4' must provide an initializer with this override.
+!!! error TS2610: Class '[string, number]' defines instance member property '0', so extended class 'C4' must use 'declare' to make it ambient.
     class C5 extends Constructor<T5>() { c: number }
                                          ~
 !!! error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
 !!! error TS2416:   Type 'number' is not assignable to type 'string'.
                                          ~
-!!! error TS2610: Class 'T5' defines instance member property 'c', so extended class 'C5' must provide an initializer with this override.
+!!! error TS2610: Class 'T5' defines instance member property 'c', so extended class 'C5' must use 'declare' to make it ambient.
     
     declare class CX { static a: string }
     declare enum EX { A, B, C }

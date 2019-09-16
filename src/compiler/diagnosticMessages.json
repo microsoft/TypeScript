@@ -2204,7 +2204,7 @@
         "category": "Error",
         "code": 2609
     },
-    "Class '{0}' defines instance member property '{1}', so extended class '{2}' must provide an initializer with this override.": {
+    "Class '{0}' defines instance member property '{1}', so extended class '{2}' must use 'declare' to make it ambient.": {
         "category": "Error",
         "code": 2610
     },

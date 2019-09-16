@@ -1,10 +1,10 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(20,38): error TS2610: Class 'I1' defines instance member property 'x', so extended class 'C1' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(21,38): error TS2610: Class 'I2' defines instance member property 'x', so extended class 'C2' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(22,38): error TS2610: Class 'I3' defines instance member property 'x', so extended class 'C3' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(23,38): error TS2610: Class 'I4' defines instance member property 'x', so extended class 'C4' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(24,38): error TS2610: Class 'I5' defines instance member property 'x', so extended class 'C5' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(25,38): error TS2610: Class 'I6' defines instance member property 'x', so extended class 'C6' must provide an initializer with this override.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(26,38): error TS2610: Class 'I7' defines instance member property 'x', so extended class 'C7' must provide an initializer with this override.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(20,38): error TS2610: Class 'I1' defines instance member property 'x', so extended class 'C1' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(21,38): error TS2610: Class 'I2' defines instance member property 'x', so extended class 'C2' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(22,38): error TS2610: Class 'I3' defines instance member property 'x', so extended class 'C3' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(23,38): error TS2610: Class 'I4' defines instance member property 'x', so extended class 'C4' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(24,38): error TS2610: Class 'I5' defines instance member property 'x', so extended class 'C5' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(25,38): error TS2610: Class 'I6' defines instance member property 'x', so extended class 'C6' must use 'declare' to make it ambient.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts(26,38): error TS2610: Class 'I7' defines instance member property 'x', so extended class 'C7' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts (7 errors) ====
@@ -29,25 +29,25 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     
     class C1 extends Constructor<I1>() { x: string }
                                          ~
-!!! error TS2610: Class 'I1' defines instance member property 'x', so extended class 'C1' must provide an initializer with this override.
+!!! error TS2610: Class 'I1' defines instance member property 'x', so extended class 'C1' must use 'declare' to make it ambient.
     class C2 extends Constructor<I2>() { x: string }
                                          ~
-!!! error TS2610: Class 'I2' defines instance member property 'x', so extended class 'C2' must provide an initializer with this override.
+!!! error TS2610: Class 'I2' defines instance member property 'x', so extended class 'C2' must use 'declare' to make it ambient.
     class C3 extends Constructor<I3>() { x: string }
                                          ~
-!!! error TS2610: Class 'I3' defines instance member property 'x', so extended class 'C3' must provide an initializer with this override.
+!!! error TS2610: Class 'I3' defines instance member property 'x', so extended class 'C3' must use 'declare' to make it ambient.
     class C4 extends Constructor<I4>() { x: string }
                                          ~
-!!! error TS2610: Class 'I4' defines instance member property 'x', so extended class 'C4' must provide an initializer with this override.
+!!! error TS2610: Class 'I4' defines instance member property 'x', so extended class 'C4' must use 'declare' to make it ambient.
     class C5 extends Constructor<I5>() { x: string }
                                          ~
-!!! error TS2610: Class 'I5' defines instance member property 'x', so extended class 'C5' must provide an initializer with this override.
+!!! error TS2610: Class 'I5' defines instance member property 'x', so extended class 'C5' must use 'declare' to make it ambient.
     class C6 extends Constructor<I6>() { x: string }
                                          ~
-!!! error TS2610: Class 'I6' defines instance member property 'x', so extended class 'C6' must provide an initializer with this override.
+!!! error TS2610: Class 'I6' defines instance member property 'x', so extended class 'C6' must use 'declare' to make it ambient.
     class C7 extends Constructor<I7>() { x: string }
                                          ~
-!!! error TS2610: Class 'I7' defines instance member property 'x', so extended class 'C7' must provide an initializer with this override.
+!!! error TS2610: Class 'I7' defines instance member property 'x', so extended class 'C7' must use 'declare' to make it ambient.
     
     declare function fx(x: string): string;
     declare class CX { a: number }

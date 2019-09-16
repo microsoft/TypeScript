@@ -29534,7 +29534,7 @@ namespace ts {
                                 || !isIdentifier(propName)
                                 || !strictNullChecks
                                 || !isPropertyInitializedInConstructor(propName, type, constructor)) {
-                                const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
+                                const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_use_declare_to_make_it_ambient;
                                 error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                             }
                         }

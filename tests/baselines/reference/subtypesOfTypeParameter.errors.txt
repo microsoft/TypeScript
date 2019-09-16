@@ -1,7 +1,7 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2610: Class 'C3<T>' defines instance member property 'foo', so extended class 'D1<T, U>' must provide an initializer with this override.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2610: Class 'C3<T>' defines instance member property 'foo', so extended class 'D1<T, U>' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (2 errors) ====
@@ -18,7 +18,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         ~~~
-!!! error TS2610: Class 'C3<T>' defines instance member property 'foo', so extended class 'D1<T, U>' must provide an initializer with this override.
+!!! error TS2610: Class 'C3<T>' defines instance member property 'foo', so extended class 'D1<T, U>' must use 'declare' to make it ambient.
     }
     
     function f1<T, U>(x: T, y: U) {

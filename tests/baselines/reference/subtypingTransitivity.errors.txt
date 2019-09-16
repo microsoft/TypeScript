@@ -1,5 +1,5 @@
-tests/cases/compiler/subtypingTransitivity.ts(6,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must provide an initializer with this override.
-tests/cases/compiler/subtypingTransitivity.ts(9,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must provide an initializer with this override.
+tests/cases/compiler/subtypingTransitivity.ts(6,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
+tests/cases/compiler/subtypingTransitivity.ts(9,12): error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/compiler/subtypingTransitivity.ts (2 errors) ====
@@ -10,12 +10,12 @@ tests/cases/compiler/subtypingTransitivity.ts(9,12): error TS2610: Class 'B' def
     class D extends B {
         public x: string;
                ~
-!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must provide an initializer with this override.
+!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D' must use 'declare' to make it ambient.
     }
     class D2 extends B {
         public x: number;
                ~
-!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must provide an initializer with this override.
+!!! error TS2610: Class 'B' defines instance member property 'x', so extended class 'D2' must use 'declare' to make it ambient.
     }
     
     var b: B;

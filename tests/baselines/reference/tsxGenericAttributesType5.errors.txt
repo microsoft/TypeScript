@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(9,5): error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must provide an initializer with this override.
+tests/cases/conformance/jsx/file.tsx(9,5): error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/jsx/file.tsx(9,5): error TS2610: Class 'Component<U, {}>
     class B<U> extends React.Component<U, {}> {
         props: U;
         ~~~~~
-!!! error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must provide an initializer with this override.
+!!! error TS2610: Class 'Component<U, {}>' defines instance member property 'props', so extended class 'B<U>' must use 'declare' to make it ambient.
         render() {
             return <B1 {...this.props} x="hi" />;
         }

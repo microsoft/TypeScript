@@ -1,5 +1,5 @@
-tests/cases/compiler/genericPrototypeProperty3.ts(6,5): error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must provide an initializer with this override.
-tests/cases/compiler/genericPrototypeProperty3.ts(13,5): error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must provide an initializer with this override.
+tests/cases/compiler/genericPrototypeProperty3.ts(6,5): error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must use 'declare' to make it ambient.
+tests/cases/compiler/genericPrototypeProperty3.ts(13,5): error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must use 'declare' to make it ambient.
 
 
 ==== tests/cases/compiler/genericPrototypeProperty3.ts (2 errors) ====
@@ -10,7 +10,7 @@ tests/cases/compiler/genericPrototypeProperty3.ts(13,5): error TS2610: Class 'Ba
     class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}
         target: T;
         ~~~~~~
-!!! error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must provide an initializer with this override.
+!!! error TS2610: Class 'BaseEvent' defines instance member property 'target', so extended class 'MyEvent<T>' must use 'declare' to make it ambient.
     }
     class BaseEventWrapper {
         t: BaseEvent;
@@ -19,5 +19,5 @@ tests/cases/compiler/genericPrototypeProperty3.ts(13,5): error TS2610: Class 'Ba
     class MyEventWrapper extends BaseEventWrapper {
         t: MyEvent<any>;
         ~
-!!! error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must provide an initializer with this override.
+!!! error TS2610: Class 'BaseEventWrapper' defines instance member property 't', so extended class 'MyEventWrapper' must use 'declare' to make it ambient.
     }

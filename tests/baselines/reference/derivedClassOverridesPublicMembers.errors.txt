@@ -2,10 +2,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(13,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(14,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(21,5): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(21,5): error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(25,5): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(25,5): error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(29,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPublicMembers.ts(30,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
@@ -41,7 +41,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     class Derived extends Base {
         a: typeof y;
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'a', so extended class 'Derived' must use 'declare' to make it ambient.
         b(a: typeof y) { }
         get c() { return y; }
             ~
@@ -51,7 +51,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         d: (a: typeof y) => void;
         ~
-!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must provide an initializer with this override.
+!!! error TS2610: Class 'Base' defines instance member property 'd', so extended class 'Derived' must use 'declare' to make it ambient.
     
         static r: typeof y;
         static s(a: typeof y) { }
