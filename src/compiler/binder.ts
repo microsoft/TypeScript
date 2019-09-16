@@ -672,6 +672,9 @@ namespace ts {
                 bindJSDoc(node);
                 return;
             }
+            if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+                node.flowNode = currentFlow;
+            }
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
                     bindWhileStatement(<WhileStatement>node);

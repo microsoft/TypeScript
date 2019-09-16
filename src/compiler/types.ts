@@ -363,8 +363,8 @@ namespace ts {
         SemicolonClassElement,
         // Element
         Block,
-        VariableStatement,
         EmptyStatement,
+        VariableStatement,
         ExpressionStatement,
         IfStatement,
         DoStatement,
@@ -514,6 +514,8 @@ namespace ts {
         LastTemplateToken = TemplateTail,
         FirstBinaryOperator = LessThanToken,
         LastBinaryOperator = CaretEqualsToken,
+        FirstStatement = VariableStatement,
+        LastStatement = DebuggerStatement,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocPropertyTag,

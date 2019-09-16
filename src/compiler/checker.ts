@@ -17057,11 +17057,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (resultType === unreachableNeverType) {
-                error(reference, Diagnostics.Unreachable_code_detected);
-                return declaredType;
-            }
-            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType|| reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -30532,6 +30528,10 @@ namespace ts {
                     case SyntaxKind.FunctionDeclaration:
                         cancellationToken.throwIfCancellationRequested();
                 }
+            }
+            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement &&
+                !compilerOptions.allowUnreachableCode && node.flowNode && !isReachableFlowNode(node.flowNode)) {
+                errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
             }
 
             switch (kind) {
