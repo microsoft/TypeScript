@@ -40,3 +40,16 @@ class F extends E {
     p1!: 'z'
     declare p2: 'alpha'
 }
+
+class G extends E {
+    p1: 'z'
+    constructor() {
+        super()
+        this.p1 = 'z'
+    }
+}
+
+abstract class H extends E {
+    abstract p1: 'a' | 'b' | 'c'
+    declare abstract p2: 'a' | 'b' | 'c'
+}

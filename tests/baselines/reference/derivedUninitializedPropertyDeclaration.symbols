@@ -91,3 +91,32 @@ class F extends E {
 >p2 : Symbol(F.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 38, 12))
 }
 
+class G extends E {
+>G : Symbol(G, Decl(derivedUninitializedPropertyDeclaration.ts, 40, 1))
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    p1: 'z'
+>p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+
+    constructor() {
+        super()
+>super : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+        this.p1 = 'z'
+>this.p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+>this : Symbol(G, Decl(derivedUninitializedPropertyDeclaration.ts, 40, 1))
+>p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+    }
+}
+
+abstract class H extends E {
+>H : Symbol(H, Decl(derivedUninitializedPropertyDeclaration.ts, 48, 1))
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    abstract p1: 'a' | 'b' | 'c'
+>p1 : Symbol(H.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 50, 28))
+
+    declare abstract p2: 'a' | 'b' | 'c'
+>p2 : Symbol(H.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 51, 32))
+}
+

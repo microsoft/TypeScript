@@ -41,6 +41,19 @@ class F extends E {
     declare p2: 'alpha'
 }
 
+class G extends E {
+    p1: 'z'
+    constructor() {
+        super()
+        this.p1 = 'z'
+    }
+}
+
+abstract class H extends E {
+    abstract p1: 'a' | 'b' | 'c'
+    declare abstract p2: 'a' | 'b' | 'c'
+}
+
 
 //// [derivedUninitializedPropertyDeclaration.js]
 "use strict";
@@ -125,4 +138,20 @@ var F = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
+}(E));
+var G = /** @class */ (function (_super) {
+    __extends(G, _super);
+    function G() {
+        var _this = _super.call(this) || this;
+        _this.p1 = 'z';
+        return _this;
+    }
+    return G;
+}(E));
+var H = /** @class */ (function (_super) {
+    __extends(H, _super);
+    function H() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return H;
 }(E));

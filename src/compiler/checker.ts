@@ -29520,14 +29520,23 @@ namespace ts {
                         continue;
                     }
                     if (base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
-                        if (derived.flags & SymbolFlags.Property
+                        const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
+                        if (uninitialized
+                            && derived.flags & SymbolFlags.Property
                             && !(derived.flags & SymbolFlags.Transient)
                             && !(baseDeclarationFlags & ModifierFlags.Abstract)
-                            && !(derivedDeclarationFlags & ModifierFlags.Ambient)
-                            && !derived.declarations.some(d => d.flags & NodeFlags.Ambient)
-                            && derived.declarations.some(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer)) {
-                            const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
-                            error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                            && !(derivedDeclarationFlags & (ModifierFlags.Ambient | ModifierFlags.Abstract))
+                            && !derived.declarations.some(d => d.flags & NodeFlags.Ambient)) {
+                            const constructor = findConstructorDeclaration(getClassLikeDeclarationOfSymbol(type.symbol)!);
+                            const propName = (uninitialized as PropertyDeclaration).name;
+                            if ((uninitialized as PropertyDeclaration).exclamationToken
+                                || !constructor
+                                || !isIdentifier(propName)
+                                || !strictNullChecks
+                                || !isPropertyInitializedInConstructor(propName, type, constructor)) {
+                                const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
+                                error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                            }
                         }
                         continue;
                     }

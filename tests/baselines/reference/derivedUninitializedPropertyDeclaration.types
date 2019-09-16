@@ -95,3 +95,35 @@ class F extends E {
 >p2 : "alpha"
 }
 
+class G extends E {
+>G : G
+>E : E
+
+    p1: 'z'
+>p1 : "z"
+
+    constructor() {
+        super()
+>super() : void
+>super : typeof E
+
+        this.p1 = 'z'
+>this.p1 = 'z' : "z"
+>this.p1 : "z"
+>this : this
+>p1 : "z"
+>'z' : "z"
+    }
+}
+
+abstract class H extends E {
+>H : H
+>E : E
+
+    abstract p1: 'a' | 'b' | 'c'
+>p1 : "a" | "b" | "c"
+
+    declare abstract p2: 'a' | 'b' | 'c'
+>p2 : "a" | "b" | "c"
+}
+
