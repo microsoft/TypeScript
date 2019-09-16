@@ -29206,6 +29206,11 @@ namespace ts {
             }
         }
 
+        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
+            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
+                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
+        }
+
         function areTypeParametersIdentical(declarations: readonly (ClassDeclaration | InterfaceDeclaration)[], targetParameters: TypeParameter[]) {
             const maxTypeArgumentCount = length(targetParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
@@ -29299,6 +29304,7 @@ namespace ts {
                 checkClassForStaticPropertyNameConflicts(node);
             }
 
+            let baseType: BaseType | undefined;
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             if (baseTypeNode) {
                 if (languageVersion < ScriptTarget.ES2015) {
@@ -29312,7 +29318,7 @@ namespace ts {
 
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
-                    const baseType = baseTypes[0];
+                    baseType = baseTypes[0];
                     const baseConstructorType = getBaseConstructorTypeOfClass(type);
                     const staticBaseType = getApparentType(baseConstructorType);
                     checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
@@ -29352,6 +29358,7 @@ namespace ts {
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
             }
+            checkAmbientPropertyMemberOverrides(type, baseType);
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
@@ -29435,11 +29442,6 @@ namespace ts {
             // if symbol is instantiated its flags are not copied from the 'target'
             // so we'll need to get back original 'target' symbol to work with correct set of flags
             return getCheckFlags(s) & CheckFlags.Instantiated ? (<TransientSymbol>s).target! : s;
-        }
-
-        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
-            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
-                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
         }
 
         /**
@@ -29529,11 +29531,6 @@ namespace ts {
                         }
                         continue;
                     }
-                    if (derivedDeclarationFlags & ModifiersFlags.Ambient) {
-                        const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
-                        error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
-                        continue;
-                    }
 
                     let errorMessage: DiagnosticMessage;
                     if (isPrototypeProperty(base)) {
@@ -29552,6 +29549,20 @@ namespace ts {
                     }
 
                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                }
+            }
+        }
+
+        function checkAmbientPropertyMemberOverrides(type: Type, baseType?: Type) {
+            for (const derivedProperty of getPropertiesOfType(type)) {
+                const derived = getTargetSymbol(derivedProperty);
+                if (derived.flags & SymbolFlags.Prototype) {
+                    continue;
+                }
+                const base = baseType && getPropertyOfObjectType(baseType, derived.escapedName);
+                if (!base && getDeclarationModifierFlagsFromSymbol(derived) & ModifierFlags.Ambient) {
+                    const errorMessage = Diagnostics.Ambient_property_declarations_must_override_a_property_in_a_base_class;
+                    error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage);
                 }
             }
         }
@@ -29599,6 +29610,9 @@ namespace ts {
             }
             const constructor = findConstructorDeclaration(node);
             for (const member of node.members) {
+                if (getModifierFlags(member) & ModifierFlags.Ambient) {
+                    continue;
+                }
                 if (isInstancePropertyWithoutInitializer(member)) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName)) {

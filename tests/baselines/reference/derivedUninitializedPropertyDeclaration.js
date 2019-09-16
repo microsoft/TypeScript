@@ -1,13 +1,26 @@
 //// [derivedUninitializedPropertyDeclaration.ts]
 class A {
     property = 'x';
+    m() { return 1 }
 }
 class B extends A {
-    property; // error
+    property: any; // error
 }
 class BD extends A {
-    declare property; // still has implicit any
+    declare property: any; // ok because it's implicitly initialised
 }
+class BDBang extends A {
+    declare property!: any; // doesn't need !, but is still allowed
+}
+class BOther extends A {
+    declare m() { return 2 } // not allowed on methods
+    declare nonce: any; // only allowed when exists in base
+    declare property = 'y' // initialiser not allowed with declare
+}
+class U {
+    declare nonce: any; // ambient declaration only allowed when an override
+}
+
 class C {
     p: string;
 }
@@ -19,7 +32,18 @@ class DD extends C {
 }
 
 
+declare class E {
+    p1: string
+    p2: string
+}
+class F extends E {
+    p1!: 'z'
+    declare p2: 'alpha'
+}
+
+
 //// [derivedUninitializedPropertyDeclaration.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -37,6 +61,7 @@ var A = /** @class */ (function () {
     function A() {
         this.property = 'x';
     }
+    A.prototype.m = function () { return 1; };
     return A;
 }());
 var B = /** @class */ (function (_super) {
@@ -53,6 +78,28 @@ var BD = /** @class */ (function (_super) {
     }
     return BD;
 }(A));
+var BDBang = /** @class */ (function (_super) {
+    __extends(BDBang, _super);
+    function BDBang() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return BDBang;
+}(A));
+var BOther = /** @class */ (function (_super) {
+    __extends(BOther, _super);
+    function BOther() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.property = 'y'; // initialiser not allowed with declare
+        return _this;
+    }
+    BOther.prototype.m = function () { return 2; }; // not allowed on methods
+    return BOther;
+}(A));
+var U = /** @class */ (function () {
+    function U() {
+    }
+    return U;
+}());
 var C = /** @class */ (function () {
     function C() {
     }
@@ -72,3 +119,10 @@ var DD = /** @class */ (function (_super) {
     }
     return DD;
 }(C));
+var F = /** @class */ (function (_super) {
+    __extends(F, _super);
+    function F() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return F;
+}(E));

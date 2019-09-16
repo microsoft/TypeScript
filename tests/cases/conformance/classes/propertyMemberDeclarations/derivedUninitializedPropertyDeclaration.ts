@@ -4,18 +4,21 @@ class A {
     m() { return 1 }
 }
 class B extends A {
-    property; // error
+    property: any; // error
 }
 class BD extends A {
-    declare property; // still has implicit any, but is implicitly initialised
+    declare property: any; // ok because it's implicitly initialised
 }
 class BDBang extends A {
-    declare property!; // still has implicit any, doesn't need !, but has it anyway
+    declare property!: any; // doesn't need !, but is still allowed
 }
 class BOther extends A {
     declare m() { return 2 } // not allowed on methods
-    declare nonce; // only allowed when exists in base
+    declare nonce: any; // only allowed when exists in base
     declare property = 'y' // initialiser not allowed with declare
+}
+class U {
+    declare nonce: any; // ambient declaration only allowed when an override
 }
 
 class C {
@@ -26,4 +29,14 @@ class D extends C {
 }
 class DD extends C {
     declare p: 'bye'; // ok
+}
+
+
+declare class E {
+    p1: string
+    p2: string
+}
+class F extends E {
+    p1!: 'z'
+    declare p2: 'alpha'
 }

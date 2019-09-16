@@ -1,28 +1,72 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(5,5): error TS2610: Class 'A' defines instance member property 'property', so extended class 'B' must provide an initializer with this override.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(14,5): error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(6,5): error TS2610: Class 'A' defines instance member property 'property', so extended class 'B' must provide an initializer with this override.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on a class element.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(16,13): error TS2611: Ambient property declarations must override a property in a base class.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(20,13): error TS2611: Ambient property declarations must override a property in a base class.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(39,5): error TS2610: Class 'E' defines instance member property 'p1', so extended class 'F' must provide an initializer with this override.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (2 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (9 errors) ====
     class A {
         property = 'x';
+        m() { return 1 }
     }
     class B extends A {
-        property; // error
+        property: any; // error
         ~~~~~~~~
 !!! error TS2610: Class 'A' defines instance member property 'property', so extended class 'B' must provide an initializer with this override.
     }
     class BD extends A {
-        declare property; // still has implicit any
+        declare property: any; // ok because it's implicitly initialised
     }
+    class BDBang extends A {
+        declare property!: any; // doesn't need !, but is still allowed
+    }
+    class BOther extends A {
+        declare m() { return 2 } // not allowed on methods
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on a class element.
+        declare nonce: any; // only allowed when exists in base
+                ~~~~~
+!!! error TS2611: Ambient property declarations must override a property in a base class.
+        declare property = 'y' // initialiser not allowed with declare
+                           ~~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    }
+    class U {
+        declare nonce: any; // ambient declaration only allowed when an override
+                ~~~~~
+!!! error TS2611: Ambient property declarations must override a property in a base class.
+    }
+    
     class C {
         p: string;
+        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     }
     class D extends C {
         p: 'hi'; // error
+        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
         ~
 !!! error TS2610: Class 'C' defines instance member property 'p', so extended class 'D' must provide an initializer with this override.
     }
     class DD extends C {
         declare p: 'bye'; // ok
+    }
+    
+    
+    declare class E {
+        p1: string
+        p2: string
+    }
+    class F extends E {
+        p1!: 'z'
+        ~~
+!!! error TS2610: Class 'E' defines instance member property 'p1', so extended class 'F' must provide an initializer with this override.
+        declare p2: 'alpha'
     }
     

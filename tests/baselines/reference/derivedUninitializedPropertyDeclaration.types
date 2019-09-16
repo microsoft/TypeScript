@@ -5,21 +5,54 @@ class A {
     property = 'x';
 >property : string
 >'x' : "x"
+
+    m() { return 1 }
+>m : () => number
+>1 : 1
 }
 class B extends A {
 >B : B
 >A : A
 
-    property; // error
+    property: any; // error
 >property : any
 }
 class BD extends A {
 >BD : BD
 >A : A
 
-    declare property; // still has implicit any
+    declare property: any; // ok because it's implicitly initialised
 >property : any
 }
+class BDBang extends A {
+>BDBang : BDBang
+>A : A
+
+    declare property!: any; // doesn't need !, but is still allowed
+>property : any
+}
+class BOther extends A {
+>BOther : BOther
+>A : A
+
+    declare m() { return 2 } // not allowed on methods
+>m : () => number
+>2 : 2
+
+    declare nonce: any; // only allowed when exists in base
+>nonce : any
+
+    declare property = 'y' // initialiser not allowed with declare
+>property : string
+>'y' : "y"
+}
+class U {
+>U : U
+
+    declare nonce: any; // ambient declaration only allowed when an override
+>nonce : any
+}
+
 class C {
 >C : C
 
@@ -39,5 +72,26 @@ class DD extends C {
 
     declare p: 'bye'; // ok
 >p : "bye"
+}
+
+
+declare class E {
+>E : E
+
+    p1: string
+>p1 : string
+
+    p2: string
+>p2 : string
+}
+class F extends E {
+>F : F
+>E : E
+
+    p1!: 'z'
+>p1 : "z"
+
+    declare p2: 'alpha'
+>p2 : "alpha"
 }
 
