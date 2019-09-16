@@ -29477,7 +29477,6 @@ namespace ts {
                 // type declaration, derived and base resolve to the same symbol even in the case of generic classes.
                 if (derived === base) {
                     // derived class inherits base without override/redeclaration
-
                     const derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol)!;
 
                     // It is an error to inherit an abstract member without implementing it or being declared abstract.
@@ -29522,11 +29521,17 @@ namespace ts {
                         if (derived.flags & SymbolFlags.Property
                             && !(derived.flags & SymbolFlags.Transient)
                             && !(baseDeclarationFlags & ModifierFlags.Abstract)
+                            && !(derivedDeclarationFlags & ModifierFlags.Ambient)
                             && !derived.declarations.some(d => d.flags & NodeFlags.Ambient)
                             && derived.declarations.some(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer)) {
                             const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
                             error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                         }
+                        continue;
+                    }
+                    if (derivedDeclarationFlags & ModifiersFlags.Ambient) {
+                        const errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_so_extended_class_2_must_provide_an_initializer_with_this_override;
+                        error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                         continue;
                     }
 
@@ -32518,7 +32523,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (isClassLike(node.parent)) {
+                        else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
@@ -33627,7 +33632,7 @@ namespace ts {
                 }
             }
 
-            if (node.flags & NodeFlags.Ambient) {
+            if (node.flags & NodeFlags.Ambient || getModifierFlags(node) & ModifierFlags.Ambient) {
                 checkAmbientInitializer(node);
             }
 

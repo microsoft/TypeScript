@@ -10,7 +10,14 @@ class B extends A {
 >B : B
 >A : A
 
-    property; // should be an error
+    property; // error
+>property : any
+}
+class BD extends A {
+>BD : BD
+>A : A
+
+    declare property; // still has implicit any
 >property : any
 }
 class C {
@@ -23,7 +30,14 @@ class D extends C {
 >D : D
 >C : C
 
-    p: 'hi'; // should also be an error?
+    p: 'hi'; // error
 >p : "hi"
+}
+class DD extends C {
+>DD : DD
+>C : C
+
+    declare p: 'bye'; // ok
+>p : "bye"
 }
 

@@ -3,13 +3,19 @@ class A {
     property = 'x';
 }
 class B extends A {
-    property; // should be an error
+    property; // error
+}
+class BD extends A {
+    declare property; // still has implicit any
 }
 class C {
     p: string;
 }
 class D extends C {
-    p: 'hi'; // should also be an error?
+    p: 'hi'; // error
+}
+class DD extends C {
+    declare p: 'bye'; // ok
 }
 
 
@@ -40,6 +46,13 @@ var B = /** @class */ (function (_super) {
     }
     return B;
 }(A));
+var BD = /** @class */ (function (_super) {
+    __extends(BD, _super);
+    function BD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return BD;
+}(A));
 var C = /** @class */ (function () {
     function C() {
     }
@@ -51,4 +64,11 @@ var D = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
+}(C));
+var DD = /** @class */ (function (_super) {
+    __extends(DD, _super);
+    function DD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return DD;
 }(C));

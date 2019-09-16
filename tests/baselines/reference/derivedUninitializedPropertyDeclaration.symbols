@@ -9,20 +9,34 @@ class B extends A {
 >B : Symbol(B, Decl(derivedUninitializedPropertyDeclaration.ts, 2, 1))
 >A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
 
-    property; // should be an error
+    property; // error
 >property : Symbol(B.property, Decl(derivedUninitializedPropertyDeclaration.ts, 3, 19))
 }
+class BD extends A {
+>BD : Symbol(BD, Decl(derivedUninitializedPropertyDeclaration.ts, 5, 1))
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    declare property; // still has implicit any
+>property : Symbol(BD.property, Decl(derivedUninitializedPropertyDeclaration.ts, 6, 20))
+}
 class C {
->C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 5, 1))
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 8, 1))
 
     p: string;
->p : Symbol(C.p, Decl(derivedUninitializedPropertyDeclaration.ts, 6, 9))
+>p : Symbol(C.p, Decl(derivedUninitializedPropertyDeclaration.ts, 9, 9))
 }
 class D extends C {
->D : Symbol(D, Decl(derivedUninitializedPropertyDeclaration.ts, 8, 1))
->C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 5, 1))
+>D : Symbol(D, Decl(derivedUninitializedPropertyDeclaration.ts, 11, 1))
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 8, 1))
 
-    p: 'hi'; // should also be an error?
->p : Symbol(D.p, Decl(derivedUninitializedPropertyDeclaration.ts, 9, 19))
+    p: 'hi'; // error
+>p : Symbol(D.p, Decl(derivedUninitializedPropertyDeclaration.ts, 12, 19))
+}
+class DD extends C {
+>DD : Symbol(DD, Decl(derivedUninitializedPropertyDeclaration.ts, 14, 1))
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 8, 1))
+
+    declare p: 'bye'; // ok
+>p : Symbol(DD.p, Decl(derivedUninitializedPropertyDeclaration.ts, 15, 20))
 }
 
