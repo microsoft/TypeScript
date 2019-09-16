@@ -1,5 +1,5 @@
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'T'.
-  'A & B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'A & B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'U'.
   'A & B' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'V'.
@@ -28,7 +28,7 @@ tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Ty
         t = a_and_b;
         ~
 !!! error TS2322: Type 'A & B' is not assignable to type 'T'.
-!!! error TS2322:   'A & B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'A & B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown'.
         u = a_and_b;
         ~
 !!! error TS2322: Type 'A & B' is not assignable to type 'U'.

@@ -692,7 +692,7 @@ namespace ts {
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.objectFlags |= ObjectFlags.NonInferrableType;
 
-        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const noConstraintType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const resolvingDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
