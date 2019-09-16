@@ -2582,8 +2582,6 @@ namespace ts {
         AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
         /** @internal */
         Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
-        /** @internal */
-        Reachable      = 1 << 15, // Reachability as computed by isReachableFlowNode
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2602,8 +2600,6 @@ namespace ts {
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
-        /** @internal */
-        checkerId?: number;  // Checker id for FlowFlags.Reachable
     }
 
     export interface FlowLock {
