@@ -1040,6 +1040,21 @@
         "code": 1357
     },
 
+    "'{0}' is incompatible between these types.": {
+        "category": "Error",
+        "code": 2200
+    },
+    "Call signature return types are incompatible.": {
+        "category": "Error",
+        "code": 2201,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signature return types are incompatible.": {
+        "category": "Error",
+        "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

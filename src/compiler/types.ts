@@ -4631,6 +4631,8 @@ namespace ts {
         code: number;
         message: string;
         reportsUnnecessary?: {};
+        /* @internal */
+        elidedInCompatabilityPyramid?: boolean;
     }
 
     /**
