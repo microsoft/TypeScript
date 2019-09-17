@@ -288,6 +288,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1095,29): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1098,56): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1098,79): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1111,33): error TS2304: Cannot find name 'IFileReference'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1120,16): error TS2610: Property 'vars' will overwrite the base property in 'FuncDecl'. Add a 'declare' modifier or an initializer to avoid this.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1121,16): error TS2610: Property 'scopes' will overwrite the base property in 'FuncDecl'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1127,84): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1132,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1144,42): error TS2304: Cannot find name 'NodeType'.
@@ -511,7 +513,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (511 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (513 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -2212,7 +2214,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             public leftCurlyCount = 0;
             public rightCurlyCount = 0;
             public vars: ASTList;
+                   ~~~~
+!!! error TS2610: Property 'vars' will overwrite the base property in 'FuncDecl'. Add a 'declare' modifier or an initializer to avoid this.
             public scopes: ASTList;
+                   ~~~~~~
+!!! error TS2610: Property 'scopes' will overwrite the base property in 'FuncDecl'. Add a 'declare' modifier or an initializer to avoid this.
             // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
             public containsUnicodeChar = false;
             public containsUnicodeCharInComment = false;
