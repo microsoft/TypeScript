@@ -33637,7 +33637,7 @@ namespace ts {
                 }
             }
 
-            if (node.flags & NodeFlags.Ambient || getModifierFlags(node) & ModifierFlags.Ambient) {
+            if (node.flags & NodeFlags.Ambient) {
                 checkAmbientInitializer(node);
             }
 
