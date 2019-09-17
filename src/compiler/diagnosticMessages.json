@@ -5140,6 +5140,10 @@
         "category": "Message",
         "code": 95092
     },
+    "Convert 'const' to 'let'": {
+        "category": "Message",
+        "code": 95093
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
