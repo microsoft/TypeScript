@@ -13040,6 +13040,16 @@ namespace ts {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
+
+                                    if (errorNode && isJsxOpeningLikeElement(errorNode.parent)) {
+                                        const attributes = errorNode.parent.attributes;
+                                        for (const jsxProperty of attributes.properties) {
+                                            if (jsxProperty.kind === SyntaxKind.JsxAttribute && jsxProperty.name.escapedText === prop.escapedName) {
+                                                // Move the error node to the actual JSX property, instead of pointing to the identifier in the JSX element.
+                                                errorNode = jsxProperty;
+                                            }
+                                        }
+                                    }
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(errorTarget));
                                 }
                                 else {
