@@ -1,5 +1,5 @@
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts(17,11): error TS2430: Interface 'Derived2' incorrectly extends interface 'Base'.
-  'x.a' is incompatible between these types.
+  The types of 'x.a' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
 
 
@@ -23,7 +23,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
     interface Derived2 extends Base, Base2 { // error
               ~~~~~~~~
 !!! error TS2430: Interface 'Derived2' incorrectly extends interface 'Base'.
-!!! error TS2430:   'x.a' is incompatible between these types.
+!!! error TS2430:   The types of 'x.a' are incompatible between these types.
 !!! error TS2430:     Type 'number' is not assignable to type 'string'.
         x: { a: number; b: string }
     }

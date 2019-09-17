@@ -1040,7 +1040,7 @@
         "code": 1357
     },
 
-    "'{0}' is incompatible between these types.": {
+    "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
     },
@@ -1052,6 +1052,16 @@
     "Construct signature return types are incompatible.": {
         "category": "Error",
         "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Call signatures with no arguments have incompatible return types.": {
+        "category": "Error",
+        "code": 2203,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signatures with no arguments have incompatible return types.": {
+        "category": "Error",
+        "code": 2204,
         "elidedInCompatabilityPyramid": true
     },
 

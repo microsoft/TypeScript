@@ -12801,11 +12801,19 @@ namespace ts {
                             path = path.length === 0 ? "new (...)" : `new ${path}(...)`;
                             break;
                         }
+                        case Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types.code: {
+                            path = path.length === 0 ? "()" : `${path}()`;
+                            break;
+                        }
+                        case Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types.code: {
+                            path = path.length === 0 ? "new ()" : `new ${path}()`;
+                            break;
+                        }
                         default:
                             return Debug.fail(`Unhandled Diagnostic: ${msg.code}`);
                     }
                 }
-                reportError(Diagnostics._0_is_incompatible_between_these_types, path);
+                reportError(Diagnostics.The_types_of_0_are_incompatible_between_these_types, path);
                 if (info) {
                     // Actually do the last relation error
                     reportRelationError(/*headMessage*/ undefined, ...info);
@@ -14253,7 +14261,7 @@ namespace ts {
                     // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
                     // as they are known to always be the same.
                     for (let i = 0; i < targetSignatures.length; i++) {
-                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter);
+                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
                         if (!related) {
                             return Ternary.False;
                         }
@@ -14267,14 +14275,14 @@ namespace ts {
                     // this regardless of the number of signatures, but the potential costs are prohibitive due
                     // to the quadratic nature of the logic below.
                     const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
-                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors, incompatibleReporter);
+                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors, incompatibleReporter(sourceSignatures[0], targetSignatures[0]));
                 }
                 else {
                     outer: for (const t of targetSignatures) {
                         // Only elaborate errors from the first failure
                         let shouldElaborateErrors = reportErrors;
                         for (const s of sourceSignatures) {
-                            const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors, incompatibleReporter);
+                            const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors, incompatibleReporter(s, t));
                             if (related) {
                                 result &= related;
                                 resetErrorInfo(saveErrorInfo);
@@ -14294,12 +14302,18 @@ namespace ts {
                 return result;
             }
 
-            function reportIncompatibleCallSignatureReturn() {
-                reportIncompatibleError(Diagnostics.Call_signature_return_types_are_incompatible);
+            function reportIncompatibleCallSignatureReturn(siga: Signature, sigb: Signature) {
+                if (siga.parameters.length === 0 && sigb.parameters.length === 0) {
+                    return () => reportIncompatibleError(Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types);
+                }
+                return () => reportIncompatibleError(Diagnostics.Call_signature_return_types_are_incompatible);
             }
 
-            function reportIncompatibleConstructSignatureReturn() {
-                reportIncompatibleError(Diagnostics.Construct_signature_return_types_are_incompatible);
+            function reportIncompatibleConstructSignatureReturn(siga: Signature, sigb: Signature) {
+                if (siga.parameters.length === 0 && sigb.parameters.length === 0) {
+                    return () => reportIncompatibleError(Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types);
+                }
+                return () => reportIncompatibleError(Diagnostics.Construct_signature_return_types_are_incompatible);
             }
 
             /**

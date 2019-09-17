@@ -1,5 +1,5 @@
 tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
-  'foo(...)' is incompatible between these types.
+  The types of 'foo()' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
 
 
@@ -13,7 +13,7 @@ tests/cases/compiler/inheritedModuleMembersForClodule.ts(7,7): error TS2417: Cla
     class D extends C {
           ~
 !!! error TS2417: Class static side 'typeof D' incorrectly extends base class static side 'typeof C'.
-!!! error TS2417:   'foo(...)' is incompatible between these types.
+!!! error TS2417:   The types of 'foo()' are incompatible between these types.
 !!! error TS2417:     Type 'number' is not assignable to type 'string'.
     }
     

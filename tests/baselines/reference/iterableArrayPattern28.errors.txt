@@ -1,7 +1,7 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error TS2769: No overload matches this call.
   Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
-      '[Symbol.iterator](...).next(...)' is incompatible between these types.
+      The types of '[Symbol.iterator]().next(...)' are incompatible between these types.
         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
@@ -20,7 +20,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
-!!! error TS2769:       '[Symbol.iterator](...).next(...)' is incompatible between these types.
+!!! error TS2769:       The types of '[Symbol.iterator]().next(...)' are incompatible between these types.
 !!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
 !!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
 !!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
