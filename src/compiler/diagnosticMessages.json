@@ -5148,6 +5148,14 @@
         "category": "Message",
         "code": 95092
     },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95093
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

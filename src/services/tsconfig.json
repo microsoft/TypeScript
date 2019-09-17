@@ -47,6 +47,7 @@
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addMissingAwait.ts",
         "codefixes/addMissingConst.ts",
+        "codefixes/addMissingDeclareProperty.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/addNameToNamelessParameter.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
