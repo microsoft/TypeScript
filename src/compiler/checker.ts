@@ -820,6 +820,8 @@ namespace ts {
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
         let flowAnalysisDisabled = false;
+        let lastFlowNode: FlowNode | undefined;
+        let lastFlowNodeReachable: boolean;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -16995,11 +16997,17 @@ namespace ts {
         }
 
         function isReachableFlowNode(flow: FlowNode) {
-            return isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+            const result = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+            lastFlowNode = flow;
+            lastFlowNodeReachable = result;
+            return result;
         }
 
         function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
             while (true) {
+                if (flow === lastFlowNode) {
+                    return lastFlowNodeReachable;
+                }
                 const flags = flow.flags;
                 if (flags & FlowFlags.Shared) {
                     if (!noCacheCheck) {
@@ -17329,9 +17337,6 @@ namespace ts {
             }
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-                if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
-                    return neverType;
-                }
                 const expr = flow.switchStatement.expression;
                 const flowType = getTypeAtFlowNode(flow.antecedent);
                 let type = getTypeFromFlowType(flowType);
@@ -17349,6 +17354,9 @@ namespace ts {
                 }
                 else if (containsMatchingReferenceDiscriminant(reference, expr)) {
                     type = declaredType;
+                }
+                else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
+                    return unreachableNeverType;
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
