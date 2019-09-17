@@ -1879,32 +1879,32 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 234,
-          "end": 322,
+          "end": 339,
           "kind": "internal"
         },
         {
-          "pos": 324,
-          "end": 356,
+          "pos": 341,
+          "end": 373,
           "kind": "text"
         },
         {
-          "pos": 356,
-          "end": 748,
+          "pos": 373,
+          "end": 765,
           "kind": "internal"
         },
         {
-          "pos": 750,
-          "end": 753,
+          "pos": 767,
+          "end": 770,
           "kind": "text"
         },
         {
-          "pos": 753,
-          "end": 1166,
+          "pos": 770,
+          "end": 1183,
           "kind": "internal"
         },
         {
-          "pos": 1168,
-          "end": 1216,
+          "pos": 1185,
+          "end": 1233,
           "kind": "text"
         }
       ]
@@ -2060,18 +2060,19 @@ declare namespace N {
 declare class normalC {
 
 ----------------------------------------------------------------------
-internal: (234-322)
+internal: (234-339)
     constructor();
     prop: string;
     method(): void;
-    /*@internal*/ c: number;
+    get c(): number;
+    set c(val: number);
 ----------------------------------------------------------------------
-text: (324-356)
+text: (341-373)
 }
 declare namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (356-748)
+internal: (373-765)
     class C {
     }
     function foo(): void;
@@ -2092,11 +2093,11 @@ internal: (356-748)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (750-753)
+text: (767-770)
 }
 
 ----------------------------------------------------------------------
-internal: (753-1166)
+internal: (770-1183)
 declare class internalC {
 }
 declare function internalfoo(): void;
@@ -2117,7 +2118,7 @@ declare enum internalEnum {
     c = 2
 }
 ----------------------------------------------------------------------
-text: (1168-1216)
+text: (1185-1233)
 declare class C {
     doSomething(): void;
 }
