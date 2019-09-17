@@ -29206,11 +29206,6 @@ namespace ts {
             }
         }
 
-        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
-            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
-                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
-        }
-
         function areTypeParametersIdentical(declarations: readonly (ClassDeclaration | InterfaceDeclaration)[], targetParameters: TypeParameter[]) {
             const maxTypeArgumentCount = length(targetParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
@@ -29304,7 +29299,6 @@ namespace ts {
                 checkClassForStaticPropertyNameConflicts(node);
             }
 
-            let baseType: BaseType | undefined;
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             if (baseTypeNode) {
                 if (languageVersion < ScriptTarget.ES2015) {
@@ -29318,7 +29312,7 @@ namespace ts {
 
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
-                    baseType = baseTypes[0];
+                    const baseType = baseTypes[0];
                     const baseConstructorType = getBaseConstructorTypeOfClass(type);
                     const staticBaseType = getApparentType(baseConstructorType);
                     checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
@@ -29441,6 +29435,11 @@ namespace ts {
             // if symbol is instantiated its flags are not copied from the 'target'
             // so we'll need to get back original 'target' symbol to work with correct set of flags
             return getCheckFlags(s) & CheckFlags.Instantiated ? (<TransientSymbol>s).target! : s;
+        }
+
+        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
+            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
+                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
         }
 
         /**
