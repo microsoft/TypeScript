@@ -1,5 +1,5 @@
-tests/cases/compiler/commentsInheritance.ts(90,12): error TS2610: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/compiler/commentsInheritance.ts(98,12): error TS2610: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
+tests/cases/compiler/commentsInheritance.ts(90,12): error TS2612: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
+tests/cases/compiler/commentsInheritance.ts(98,12): error TS2612: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/compiler/commentsInheritance.ts (2 errors) ====
@@ -94,7 +94,7 @@ tests/cases/compiler/commentsInheritance.ts(98,12): error TS2610: Property 'nc_p
         /** c3 p1*/
         public p1: number;
                ~~
-!!! error TS2610: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
+!!! error TS2612: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
         /** c3 f1*/
         public f1() {
         }
@@ -104,7 +104,7 @@ tests/cases/compiler/commentsInheritance.ts(98,12): error TS2610: Property 'nc_p
         }
         public nc_p1: number;
                ~~~~~
-!!! error TS2610: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
+!!! error TS2612: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
         public nc_f1() {
         }
         public get nc_prop() {
