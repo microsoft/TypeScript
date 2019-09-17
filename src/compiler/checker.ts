@@ -29442,22 +29442,21 @@ namespace ts {
                 d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
         }
 
-        /**
-         * TypeScript 1.0 spec (April 2014): 8.2.3
-         * A derived class inherits all members from its base class it doesn't override.
-         * Inheritance means that a derived class implicitly contains all non - overridden members of the base class.
-         * Both public and private property members are inherited, but only public property members can be overridden.
-         * A property member in a derived class is said to override a property member in a base class
-         * when the derived class property member has the same name and kind(instance or static)
-         * as the base class property member.
-         * The type of an overriding property member must be assignable(section 3.8.4)
-         * to the type of the overridden property member, or otherwise a compile - time error occurs.
-         * Base class instance member functions can be overridden by derived class instance member functions,
-         * but not by other kinds of members.
-         * Base class instance member variables and accessors can be overridden by
-         * derived class instance member variables and accessors, but not by other kinds of members.
-         */
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: BaseType): void {
+            // TypeScript 1.0 spec (April 2014): 8.2.3
+            // A derived class inherits all members from its base class it doesn't override.
+            // Inheritance means that a derived class implicitly contains all non - overridden members of the base class.
+            // Both public and private property members are inherited, but only public property members can be overridden.
+            // A property member in a derived class is said to override a property member in a base class
+            // when the derived class property member has the same name and kind(instance or static)
+            // as the base class property member.
+            // The type of an overriding property member must be assignable(section 3.8.4)
+            // to the type of the overridden property member, or otherwise a compile - time error occurs.
+            // Base class instance member functions can be overridden by derived class instance member functions,
+            // but not by other kinds of members.
+            // Base class instance member variables and accessors can be overridden by
+            // derived class instance member variables and accessors, but not by other kinds of members.
+
             // NOTE: assignability is checked in checkClassDeclaration
             const baseProperties = getPropertiesOfType(baseType);
             basePropertyCheck: for (const baseProperty of baseProperties) {
