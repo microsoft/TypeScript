@@ -1,3 +1,4 @@
 {
+    "cloneUrl": "https://github.com/Microsoft/TypeScript-React-Starter",
     "types": ["jest", "node"]
 }

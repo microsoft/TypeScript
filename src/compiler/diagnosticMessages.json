@@ -5148,13 +5148,17 @@
         "category": "Message",
         "code": 95092
     },
-    "Prefix with 'declare'": {
+    "Convert 'const' to 'let'": {
         "category": "Message",
         "code": 95093
     },
-    "Prefix all incorrect property declarations with 'declare'": {
+    "Prefix with 'declare'": {
         "category": "Message",
         "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
