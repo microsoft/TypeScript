@@ -2494,7 +2494,7 @@ namespace ts {
                 const flags = isClassExpression(node.right) ?
                     SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
                     SymbolFlags.Property | SymbolFlags.ExportValue;
-                declareSymbol(symbol.exports!, symbol, lhs as any, flags, SymbolFlags.None);
+                declareSymbol(symbol.exports!, symbol, lhs, flags, SymbolFlags.None);
             }
         }
 
@@ -2750,7 +2750,7 @@ namespace ts {
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, parent: Symbol | undefined, action: (e: Identifier, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
+        function forEachIdentifierInEntityName(e: BindableNameExpression, parent: Symbol | undefined, action: (e: Declaration, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
             if (isExportsOrModuleExportsOrAlias(file, e)) {
                 return file.symbol;
             }
@@ -2759,7 +2759,7 @@ namespace ts {
             }
             else {
                 const s = forEachIdentifierInEntityName(e.expression, parent, action);
-                return action(e.name, s && s.exports && s.exports.get(e.name.escapedText), s);
+                return action(getNameOrArgument(e), s && s.exports && s.exports.get(getNameOrArgumentText(e)), s);
             }
         }
 

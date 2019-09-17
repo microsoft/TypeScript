@@ -5834,10 +5834,11 @@ namespace ts {
             }
             else if (isInJSFile(declaration) &&
                 (isCallExpression(declaration) || isBinaryExpression(declaration) || (isPropertyAccessExpression(declaration) || isBindableElementAccessExpression(declaration)) && isBinaryExpression(declaration.parent))) {
-                type = getWidenedTypeFromAssignmentDeclaration(symbol);
+                type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
                 || isPropertyAccessExpression(declaration)
+                || isElementAccessExpression(declaration)
                 || isIdentifier(declaration)
                 || isClassDeclaration(declaration)
                 || isFunctionDeclaration(declaration)

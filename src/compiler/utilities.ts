@@ -2049,14 +2049,21 @@ namespace ts {
     export function isBindableElementAccessExpression(node: Node): node is BindableElementAccessExpression {
         return isElementAccessExpression(node)
             && isStringOrNumericLiteralLike(node.argumentExpression)
-            && isEntityNameExpression(node.expression);
+            && (isEntityNameExpression(node.expression) || isBindableElementAccessExpression(node.expression));
     }
 
-    function getNameOrArgumentText(expr: PropertyAccessExpression | BindableElementAccessExpression) {
+    export function getNameOrArgument(expr: PropertyAccessExpression | BindableElementAccessExpression) {
+        if (isPropertyAccessExpression(expr)) {
+            return expr.name;
+        }
+        return expr.argumentExpression;
+    }
+
+    export function getNameOrArgumentText(expr: PropertyAccessExpression | BindableElementAccessExpression): __String {
         if (isPropertyAccessExpression(expr)) {
             return expr.name.escapedText;
         }
-        return expr.argumentExpression.text;
+        return escapeLeadingUnderscores(expr.argumentExpression.text);
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
