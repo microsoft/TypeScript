@@ -22,7 +22,7 @@ namespace ts.projectSystem {
             Debug.assert(!!project.resolveModuleNames);
 
             const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatSettings, emptyOptions);
-            assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
+            assert.deepEqual<readonly FileTextChanges[]>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{
                     span: textSpanFromSubstring(userTs.content, "./old"),
@@ -61,7 +61,7 @@ namespace ts.projectSystem {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
                 {
                     fileName: aTsconfig.path,
                     textChanges: [{ ...protocolTextSpanFromSubstring(aTsconfig.content, "./old.ts"), newText: "new.ts" }],
@@ -90,7 +90,7 @@ namespace ts.projectSystem {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
                 {
                     fileName: "/tsconfig.json",
                     textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), newText: "c.ts" }],

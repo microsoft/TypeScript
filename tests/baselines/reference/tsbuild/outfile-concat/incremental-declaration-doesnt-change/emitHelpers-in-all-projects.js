@@ -1,3 +1,6 @@
+//// [/src/first/bin/first-output.d.ts] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
