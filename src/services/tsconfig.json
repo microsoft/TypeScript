@@ -83,6 +83,7 @@
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
         "codefixes/convertToMappedObjectType.ts",
         "codefixes/removeUnnecessaryAwait.ts",
+        "codefixes/convertConstToLet.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",
