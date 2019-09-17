@@ -1,0 +1,19 @@
+tests/cases/conformance/jsx/file.tsx(9,5): error TS2612: Property 'props' will overwrite the base property in 'Component<U, {}>'. Add a 'declare' modifier or an initializer to avoid this.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    class B1<T extends { x: string }> extends React.Component<T, {}> {
+        render() {
+            return <div>hi</div>; 
+        }
+    }
+    class B<U> extends React.Component<U, {}> {
+        props: U;
+        ~~~~~
+!!! error TS2612: Property 'props' will overwrite the base property in 'Component<U, {}>'. Add a 'declare' modifier or an initializer to avoid this.
+        render() {
+            return <B1 {...this.props} x="hi" />;
+        }
+    }

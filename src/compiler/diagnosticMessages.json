@@ -2212,6 +2212,10 @@
         "category": "Error",
         "code": 2611
     },
+    "Property '{0}' will overwrite the base property in '{1}'. Add a 'declare' modifier or an initializer to avoid this.": {
+        "category": "Error",
+        "code": 2612
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -5152,6 +5156,14 @@
     "Convert 'const' to 'let'": {
         "category": "Message",
         "code": 95093
+    },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
