@@ -208,7 +208,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
     assertAll(x);
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : never
+>x : T
 }
 
 function testAny(x: any) {
