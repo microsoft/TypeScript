@@ -3220,16 +3220,22 @@ namespace ts {
     }
 
     /**
-     * Strip off existed single quotes or double quotes from a given string
+     * Strip off existed surrounding single quotes, double quotes, or backticks from a given string
      *
      * @return non-quoted string
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isQuoteOrBacktick(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    function isQuoteOrBacktick(charCode: number) {
+        return charCode === CharacterCodes.singleQuote ||
+            charCode === CharacterCodes.doubleQuote ||
+            charCode === CharacterCodes.backtick;
     }
 
     export function startsWithQuote(name: string): boolean {
