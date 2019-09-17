@@ -2,3 +2,5 @@
 /tests/**
 /lib/**
 /src/lib/*.generated.d.ts
+# TODO: Remove once tag types are supported by eslint's TS parser
+/src/lib/es5.d.ts

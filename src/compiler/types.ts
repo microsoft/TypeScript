@@ -4463,8 +4463,8 @@ namespace ts {
         type: Type;
         /* @internal */ members?: SymbolTable;                          // Always emptySymbols
         /* @internal */ properties?: Symbol[];                          // Always emptyArray
-        /* @internal */ callSignatures?: ReadonlyArray<Signature>;      // Always emptyArray
-        /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Always emptyArray
+        /* @internal */ callSignatures?: readonly Signature[];      // Always emptyArray
+        /* @internal */ constructSignatures?: readonly Signature[]; // Always emptyArray
         /* @internal */ stringIndexInfo?: undefined;
         /* @internal */ numberIndexInfo?: undefined;
     }
