@@ -39,7 +39,7 @@ class BOther extends A {
 >m : () => number
 >2 : 2
 
-    declare nonce: any; // only allowed when exists in base
+    declare nonce: any; // ok, even though it's not in the base
 >nonce : any
 
     declare property = 'y' // initialiser not allowed with declare
@@ -49,7 +49,7 @@ class BOther extends A {
 class U {
 >U : U
 
-    declare nonce: any; // ambient declaration only allowed when an override
+    declare nonce: any; // ok, even though there's no base
 >nonce : any
 }
 

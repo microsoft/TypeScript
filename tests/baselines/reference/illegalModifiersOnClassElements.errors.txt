@@ -1,13 +1,10 @@
-tests/cases/compiler/illegalModifiersOnClassElements.ts(2,13): error TS2611: Ambient property declarations must override a property in a base class.
 tests/cases/compiler/illegalModifiersOnClassElements.ts(2,19): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.
 
 
-==== tests/cases/compiler/illegalModifiersOnClassElements.ts (3 errors) ====
+==== tests/cases/compiler/illegalModifiersOnClassElements.ts (2 errors) ====
     class C {
         declare foo = 1;
-                ~~~
-!!! error TS2611: Ambient property declarations must override a property in a base class.
                       ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
         export bar = 1;

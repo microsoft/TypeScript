@@ -29358,7 +29358,6 @@ namespace ts {
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
             }
-            checkAmbientPropertyMemberOverrides(type, baseType);
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
@@ -29558,20 +29557,6 @@ namespace ts {
                     }
 
                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
-                }
-            }
-        }
-
-        function checkAmbientPropertyMemberOverrides(type: Type, baseType?: Type) {
-            for (const derivedProperty of getPropertiesOfType(type)) {
-                const derived = getTargetSymbol(derivedProperty);
-                if (derived.flags & SymbolFlags.Prototype) {
-                    continue;
-                }
-                const base = baseType && getPropertyOfObjectType(baseType, derived.escapedName);
-                if (!base && getDeclarationModifierFlagsFromSymbol(derived) & ModifierFlags.Ambient) {
-                    const errorMessage = Diagnostics.Ambient_property_declarations_must_override_a_property_in_a_base_class;
-                    error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage);
                 }
             }
         }

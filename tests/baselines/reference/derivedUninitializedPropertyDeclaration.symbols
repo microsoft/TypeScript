@@ -36,7 +36,7 @@ class BOther extends A {
     declare m() { return 2 } // not allowed on methods
 >m : Symbol(BOther.m, Decl(derivedUninitializedPropertyDeclaration.ts, 13, 24))
 
-    declare nonce: any; // only allowed when exists in base
+    declare nonce: any; // ok, even though it's not in the base
 >nonce : Symbol(BOther.nonce, Decl(derivedUninitializedPropertyDeclaration.ts, 14, 28))
 
     declare property = 'y' // initialiser not allowed with declare
@@ -45,7 +45,7 @@ class BOther extends A {
 class U {
 >U : Symbol(U, Decl(derivedUninitializedPropertyDeclaration.ts, 17, 1))
 
-    declare nonce: any; // ambient declaration only allowed when an override
+    declare nonce: any; // ok, even though there's no base
 >nonce : Symbol(U.nonce, Decl(derivedUninitializedPropertyDeclaration.ts, 18, 9))
 }
 

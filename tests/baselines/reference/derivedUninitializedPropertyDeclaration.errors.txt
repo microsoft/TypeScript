@@ -1,15 +1,13 @@
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(6,5): error TS2610: Property 'property' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on a class element.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(16,13): error TS2611: Ambient property declarations must override a property in a base class.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(20,13): error TS2611: Ambient property declarations must override a property in a base class.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2610: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(39,5): error TS2610: Property 'p1' will overwrite the base property in 'E'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (9 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (7 errors) ====
     class A {
         property = 'x';
         m() { return 1 }
@@ -29,17 +27,13 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
         declare m() { return 2 } // not allowed on methods
         ~~~~~~~
 !!! error TS1031: 'declare' modifier cannot appear on a class element.
-        declare nonce: any; // only allowed when exists in base
-                ~~~~~
-!!! error TS2611: Ambient property declarations must override a property in a base class.
+        declare nonce: any; // ok, even though it's not in the base
         declare property = 'y' // initialiser not allowed with declare
                            ~~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     }
     class U {
-        declare nonce: any; // ambient declaration only allowed when an override
-                ~~~~~
-!!! error TS2611: Ambient property declarations must override a property in a base class.
+        declare nonce: any; // ok, even though there's no base
     }
     
     class C {

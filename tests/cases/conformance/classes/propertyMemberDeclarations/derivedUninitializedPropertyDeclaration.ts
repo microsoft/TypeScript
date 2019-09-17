@@ -14,11 +14,11 @@ class BDBang extends A {
 }
 class BOther extends A {
     declare m() { return 2 } // not allowed on methods
-    declare nonce: any; // only allowed when exists in base
+    declare nonce: any; // ok, even though it's not in the base
     declare property = 'y' // initialiser not allowed with declare
 }
 class U {
-    declare nonce: any; // ambient declaration only allowed when an override
+    declare nonce: any; // ok, even though there's no base
 }
 
 class C {
