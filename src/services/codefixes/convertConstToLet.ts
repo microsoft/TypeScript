@@ -7,14 +7,14 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, span, program } = context;
-            const variableStatement = getVaribleStatement(sourceFile, span.start, program);
+            const variableStatement = getVariableStatement(sourceFile, span.start, program);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, variableStatement));
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_const_to_let)];
         },
         fixIds: [fixId]
     });
 
-    function getVaribleStatement(sourceFile: SourceFile, pos: number, program: Program) {
+    function getVariableStatement(sourceFile: SourceFile, pos: number, program: Program) {
         const token = getTokenAtPosition(sourceFile, pos);
         const checker = program.getTypeChecker();
         const symbol = checker.getSymbolAtLocation(token);
