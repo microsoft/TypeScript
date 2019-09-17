@@ -2204,6 +2204,15 @@
         "category": "Error",
         "code": 2609
     },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+        "category": "Error",
+        "code": 2610
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+        "category": "Error",
+        "code": 2611
+    },
+
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
