@@ -29519,10 +29519,9 @@ namespace ts {
                     if (base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                         const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
                         if (uninitialized
-                            && derived.flags & SymbolFlags.Property
                             && !(derived.flags & SymbolFlags.Transient)
                             && !(baseDeclarationFlags & ModifierFlags.Abstract)
-                            && !(derivedDeclarationFlags & (ModifierFlags.Ambient | ModifierFlags.Abstract))
+                            && !(derivedDeclarationFlags & ModifierFlags.Abstract)
                             && !derived.declarations.some(d => d.flags & NodeFlags.Ambient)) {
                             const constructor = findConstructorDeclaration(getClassLikeDeclarationOfSymbol(type.symbol)!);
                             const propName = (uninitialized as PropertyDeclaration).name;

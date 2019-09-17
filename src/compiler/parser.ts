@@ -5982,8 +5982,16 @@ namespace ts {
                 token() === SyntaxKind.NumericLiteral ||
                 token() === SyntaxKind.AsteriskToken ||
                 token() === SyntaxKind.OpenBracketToken) {
-
-                return parsePropertyOrMethodDeclaration(<PropertyDeclaration | MethodDeclaration>node);
+                const isAmbient = node.modifiers && some(node.modifiers, isDeclareModifier);
+                if (isAmbient) {
+                    for (const m of node.modifiers!) {
+                        m.flags |= NodeFlags.Ambient;
+                    }
+                    return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(node as PropertyDeclaration | MethodDeclaration));
+                }
+                else {
+                    return parsePropertyOrMethodDeclaration(node as PropertyDeclaration | MethodDeclaration);
+                }
             }
 
             if (node.decorators || node.modifiers) {

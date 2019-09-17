@@ -10,7 +10,7 @@ class BD extends A {
     declare property: any; // ok because it's implicitly initialised
 }
 class BDBang extends A {
-    declare property!: any; // doesn't need !, but is still allowed
+    declare property!: any; // ! is not allowed, this is an ambient declaration
 }
 class BOther extends A {
     declare m() { return 2 } // not allowed on methods

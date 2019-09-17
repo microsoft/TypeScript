@@ -28,7 +28,7 @@ class BDBang extends A {
 >BDBang : BDBang
 >A : A
 
-    declare property!: any; // doesn't need !, but is still allowed
+    declare property!: any; // ! is not allowed, this is an ambient declaration
 >property : any
 }
 class BOther extends A {
