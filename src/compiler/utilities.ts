@@ -975,6 +975,8 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
+        Debug.assert(!isJSDoc(errorNode));
+
         const isMissing = nodeIsMissing(errorNode);
         const pos = isMissing || isJsxText(node)
             ? errorNode.pos
