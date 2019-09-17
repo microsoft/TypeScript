@@ -7955,7 +7955,7 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
-        function getUnionConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
+        function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
             for (const t of types) {
@@ -7967,7 +7967,10 @@ namespace ts {
                         constraint = getConstraintOfType(constraint);
                     }
                     if (constraint) {
-                        constraints = append(constraints, targetIsUnion ? intersectTypes(constraint, t) : constraint);
+                        constraints = append(constraints, constraint);
+                        if (targetIsUnion) {
+                            constraints = append(constraints, t);
+                        }
                     }
                 }
                 else if (t.flags & TypeFlags.DisjointDomains) {
@@ -12958,10 +12961,9 @@ namespace ts {
                     // needs to have its constraint hoisted into an intersection with said type parameter, this way
                     // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getUnionConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types: [source], !!(target.flags & TypeFlags.Union));
+                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types: [source], !!(target.flags & TypeFlags.Union));
                     if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
-                        const filtered = filterType(constraint, c => c !== source);
-                        if (filtered === constraint) { // Skip comparison if expansion contains the source itself
+                        if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
                                 errorInfo = saveErrorInfo;
