@@ -1,7 +1,8 @@
+// @noEmit: true
 // @strict: true
 
 function F() {}
-F["prop"] = 3;
+F["prop"] = function() {};
 
 const f = function () {};
 F["prop"] = 3;
