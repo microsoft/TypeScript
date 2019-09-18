@@ -384,16 +384,16 @@ namespace ts.NavigationBar {
                     }
                     case AssignmentDeclarationKind.Property: {
                         const binaryExpression = (node as BinaryExpression);
-                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
+                        const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
                         const targetFunction = assignmentTarget.expression;
-                        if (isIdentifier(targetFunction) && assignmentTarget.name.escapedText !== "prototype" &&
+                        if (isIdentifier(targetFunction) && getNameOrArgumentText(assignmentTarget) !== "prototype" &&
                             trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
                             if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                                 addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
                             }
                             else {
                                 startNode(binaryExpression, targetFunction);
-                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, assignmentTarget.name);
+                                    addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
                                 endNode();
                             }
                             return;
