@@ -672,7 +672,7 @@ namespace ts {
                 bindJSDoc(node);
                 return;
             }
-            if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+            if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
                 node.flowNode = currentFlow;
             }
             switch (node.kind) {

@@ -30539,8 +30539,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
-            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement &&
-                !compilerOptions.allowUnreachableCode && node.flowNode && !isReachableFlowNode(node.flowNode)) {
+            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && node.flowNode && !isReachableFlowNode(node.flowNode)) {
                 errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
             }
 
