@@ -178,6 +178,14 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 
+// Repros from #33457
+
+type T82 = ReturnType<(arg: never) => string>;  // string
+type T83 = ReturnType<(arg: never) => void>;  // void
+type T84 = ReturnType<(arg0: never, arg1: any, arg2: never, arg3: string) => void>;  // void
+type T85 = ReturnType<(...args : never) => number>;  // number
+type T86 = ReturnType<(...args : never[]) => number>;  // number
+
 
 //// [inferTypes1.js]
 "use strict";

@@ -740,3 +740,33 @@ type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 >args : Symbol(args, Decl(inferTypes1.ts, 177, 41))
 >A : Symbol(A, Decl(inferTypes1.ts, 177, 10))
 
+// Repros from #33457
+
+type T82 = ReturnType<(arg: never) => string>;  // string
+>T82 : Symbol(T82, Decl(inferTypes1.ts, 177, 64))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(inferTypes1.ts, 181, 23))
+
+type T83 = ReturnType<(arg: never) => void>;  // void
+>T83 : Symbol(T83, Decl(inferTypes1.ts, 181, 46))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(inferTypes1.ts, 182, 23))
+
+type T84 = ReturnType<(arg0: never, arg1: any, arg2: never, arg3: string) => void>;  // void
+>T84 : Symbol(T84, Decl(inferTypes1.ts, 182, 44))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>arg0 : Symbol(arg0, Decl(inferTypes1.ts, 183, 23))
+>arg1 : Symbol(arg1, Decl(inferTypes1.ts, 183, 35))
+>arg2 : Symbol(arg2, Decl(inferTypes1.ts, 183, 46))
+>arg3 : Symbol(arg3, Decl(inferTypes1.ts, 183, 59))
+
+type T85 = ReturnType<(...args : never) => number>;  // number
+>T85 : Symbol(T85, Decl(inferTypes1.ts, 183, 83))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(inferTypes1.ts, 184, 23))
+
+type T86 = ReturnType<(...args : never[]) => number>;  // number
+>T86 : Symbol(T86, Decl(inferTypes1.ts, 184, 51))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(inferTypes1.ts, 185, 23))
+

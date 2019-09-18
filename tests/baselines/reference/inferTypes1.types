@@ -84,7 +84,7 @@ type T18 = ReturnType<Function>;  // Error
 >T18 : any
 
 type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
->T19 : T[]
+>T19 : ReturnType<(x: string, ...args: T) => T[]>
 >x : string
 >args : T
 
@@ -466,4 +466,29 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 >Foo2 : string
 >args : A
+
+// Repros from #33457
+
+type T82 = ReturnType<(arg: never) => string>;  // string
+>T82 : string
+>arg : never
+
+type T83 = ReturnType<(arg: never) => void>;  // void
+>T83 : void
+>arg : never
+
+type T84 = ReturnType<(arg0: never, arg1: any, arg2: never, arg3: string) => void>;  // void
+>T84 : void
+>arg0 : never
+>arg1 : any
+>arg2 : never
+>arg3 : string
+
+type T85 = ReturnType<(...args : never) => number>;  // number
+>T85 : number
+>args : never
+
+type T86 = ReturnType<(...args : never[]) => number>;  // number
+>T86 : number
+>args : never[]
 
