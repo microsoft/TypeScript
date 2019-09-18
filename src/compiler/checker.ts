@@ -6434,7 +6434,7 @@ namespace ts {
         // object types.
         function isValidBaseType(type: Type): type is BaseType {
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
-                !!(type.flags & TypeFlags.Intersection) && every(filter((<IntersectionType>type).types, t => !isConstructorType(t)), isValidBaseType);
+                !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, t => isConstructorType(t) || isValidBaseType(t));
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
