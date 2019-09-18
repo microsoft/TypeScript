@@ -17003,6 +17003,10 @@ namespace ts {
             return result;
         }
 
+        function isUnlockedReachableFlowNode(flow: FlowNode) {
+            return !(flow.flags & FlowFlags.PreFinally && (<PreFinallyFlow>flow).lock.locked) && isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+        }
+
         function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
             while (true) {
                 if (flow === lastFlowNode) {
@@ -17017,8 +17021,8 @@ namespace ts {
                     }
                     noCacheCheck = false;
                 }
-                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.PreFinally | FlowFlags.AfterFinally)) {
-                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow | AfterFinallyFlow>flow).antecedent;
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.PreFinally)) {
+                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
                     const signature = getEffectsSignature((<FlowCall>flow).node);
@@ -17029,7 +17033,7 @@ namespace ts {
                 }
                 else if (flags & FlowFlags.BranchLabel) {
                     // A branching point is reachable if any branch is reachable.
-                    return some((<FlowLabel>flow).antecedents, isReachableFlowNode);
+                    return some((<FlowLabel>flow).antecedents, isUnlockedReachableFlowNode);
                 }
                 else if (flags & FlowFlags.LoopLabel) {
                     // A loop is reachable if the control flow path that leads to the top is reachable.
@@ -17042,6 +17046,14 @@ namespace ts {
                         return false;
                     }
                     flow = (<FlowSwitchClause>flow).antecedent;
+                }
+                else if (flags & FlowFlags.AfterFinally) {
+                    // Cache is unreliable once we start locking nodes
+                    lastFlowNode = undefined;
+                    (<AfterFinallyFlow>flow).locked = true;
+                    const result = isReachableFlowNodeWorker((<AfterFinallyFlow>flow).antecedent, /*skipCacheCheck*/ false);
+                    (<AfterFinallyFlow>flow).locked = false;
+                    return result;
                 }
                 else {
                     return !(flags & FlowFlags.Unreachable);
