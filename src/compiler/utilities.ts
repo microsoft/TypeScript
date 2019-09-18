@@ -1906,18 +1906,23 @@ namespace ts {
     }
 
     function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
-        return forEach(node.properties, p => isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === "value" && p.initializer && getExpandoInitializer(p.initializer, isPrototypeAssignment));
+        return forEach(node.properties, p =>
+            isPropertyAssignment(p) &&
+            isIdentifier(p.name) &&
+            p.name.escapedText === "value" &&
+            p.initializer &&
+            getExpandoInitializer(p.initializer, isPrototypeAssignment));
     }
 
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedExpandoInitializer(node: Node | undefined) {
+    export function getAssignedExpandoInitializer(node: Node | undefined): Expression | undefined {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
-                getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+                getDefaultedExpandoInitializer(node.parent.left, node.parent.right, isPrototypeAssignment);
         }
         if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
             const result = hasExpandoValueProperty(node.arguments[2], node.arguments[1].text === "prototype");
@@ -1960,9 +1965,9 @@ namespace ts {
      * The second Lhs is required to be the same as the first except that it may be prefixed with
      * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
      */
-    function getDefaultedExpandoInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
+    function getDefaultedExpandoInitializer(name: Expression, initializer: Expression, isPrototypeAssignment: boolean) {
         const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
+        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
             return e;
         }
     }
@@ -1997,19 +2002,19 @@ namespace ts {
      * my.app = self.my.app || class { }
      */
     function isSameEntityName(name: Expression, initializer: Expression): boolean {
-        if (isIdentifier(name) && isIdentifier(initializer)) {
-            return name.escapedText === initializer.escapedText;
+        if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
+            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
         }
-        if (isIdentifier(name) && isPropertyAccessExpression(initializer)) {
-            return (initializer.expression.kind as SyntaxKind.ThisKeyword === SyntaxKind.ThisKeyword ||
+        if (isIdentifier(name) && isBindableAccessExpression(initializer)) {
+            return (initializer.expression.kind as SyntaxKind === SyntaxKind.ThisKeyword ||
                 isIdentifier(initializer.expression) &&
                 (initializer.expression.escapedText === "window" as __String ||
                     initializer.expression.escapedText === "self" as __String ||
                     initializer.expression.escapedText === "global" as __String)) &&
-                isSameEntityName(name, initializer.name);
+                isSameEntityName(name, getNameOrArgument(initializer));
         }
-        if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
-            return name.name.escapedText === initializer.name.escapedText && isSameEntityName(name.expression, initializer.expression);
+        if (isBindableAccessExpression(name) && isBindableAccessExpression(initializer)) {
+            return getNameOrArgumentText(name) === getNameOrArgumentText(initializer) && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
     }
@@ -2043,13 +2048,25 @@ namespace ts {
             idText(expr.expression.expression) === "Object" &&
             idText(expr.expression.name) === "defineProperty" &&
             isStringOrNumericLiteralLike(expr.arguments[1]) &&
-            isEntityNameExpression(expr.arguments[0]);
+            isBindableNameExpression(expr.arguments[0]);
     }
 
     export function isBindableElementAccessExpression(node: Node): node is BindableElementAccessExpression {
         return isElementAccessExpression(node)
             && isStringOrNumericLiteralLike(node.argumentExpression)
             && (isEntityNameExpression(node.expression) || isBindableElementAccessExpression(node.expression));
+    }
+
+    export function isBindableAccessExpression(node: Node): node is BindableAccessExpression {
+        return isPropertyAccessEntityNameExpression(node) || isBindableElementAccessExpression(node);
+    }
+
+    export function isBindableNameExpression(node: Node): node is BindableNameExpression {
+        return isEntityNameExpression(node) || isBindableAccessExpression(node);
+    }
+
+    export function isBindableAssignmentExpression(node: Node): node is BindableAssignmentExpression {
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken && isBindableNameExpression(node.left);
     }
 
     export function getNameOrArgument(expr: PropertyAccessExpression | BindableElementAccessExpression) {
@@ -2075,21 +2092,19 @@ namespace ts {
             if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
-            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+            if (isBindableAccessExpression(entityName) && getNameOrArgumentText(entityName) === "prototype") {
                 return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
-            !(isPropertyAccessExpression(expr.left) || isBindableElementAccessExpression(expr.left))) {
+        if (!isBindableAssignmentExpression(expr) || !isBindableAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        const lhs = expr.left;
-        if (isEntityNameExpression(lhs.expression) && getNameOrArgumentText(lhs) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isBindableNameExpression(expr.left.expression) && getNameOrArgumentText(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
-        return getAssignmentDeclarationPropertyAccessKind(lhs);
+        return getAssignmentDeclarationPropertyAccessKind(expr.left);
     }
 
     export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression | ElementAccessExpression): AssignmentDeclarationKind {
@@ -2100,23 +2115,17 @@ namespace ts {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
-        // This check for EntityNameExpression prohibits multiple levels of
-        // element access from being treated as special assignment, e.g.
-        // `F["prototype"]["X"]` is not special, but `F.prototype["x"]` is.
-        else if (isEntityNameExpression(lhs.expression)) {
-            if (isElementAccessExpression(lhs) && !isBindableElementAccessExpression(lhs)) {
-                return AssignmentDeclarationKind.None;
-            }
+        else if (isBindableAccessExpression(lhs)) {
             if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return AssignmentDeclarationKind.PrototypeProperty;
             }
 
             let nextToLast = lhs;
-            while (isPropertyAccessExpression(nextToLast.expression)) {
+            while (!isIdentifier(nextToLast.expression)) {
                 nextToLast = nextToLast.expression;
             }
-            const id = cast(nextToLast.expression, isIdentifier);
+            const id = nextToLast.expression;
             if (id.escapedText === "exports" ||
                 id.escapedText === "module" && getNameOrArgumentText(nextToLast) === "exports") {
                 // exports.name = expr OR module.exports.name = expr
@@ -2140,7 +2149,7 @@ namespace ts {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
-    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): boolean {
         return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
@@ -4101,8 +4110,8 @@ namespace ts {
         return undefined;
     }
 
-    export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
-        return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
+    export function isPrototypeAccess(node: Node): node is BindableAccessExpression {
+        return isBindableAccessExpression(node) && getNameOrArgumentText(node) === "prototype";
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {

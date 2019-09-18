@@ -1790,7 +1790,7 @@ namespace ts {
         expression: EntityNameExpression;
     }
 
-    export interface ElementAccessExpression extends MemberExpression {
+    export interface ElementAccessExpression extends MemberExpression, Declaration {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
         argumentExpression: Expression;
@@ -1811,14 +1811,24 @@ namespace ts {
     }
 
     /** @internal */
-    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
+    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
     /** @internal */
     export type BindableNameExpression = EntityNameExpression | BindableElementAccessExpression;
+    /** @internal */
+    export type BindableAccessExpression = PropertyAccessEntityNameExpression | BindableElementAccessExpression;
     /** @internal */
     export type BindableElementAccessExpression = ElementAccessExpression & Declaration & {
         expression: BindableNameExpression;
         argumentExpression: StringLiteralLike | NumericLiteral;
     };
+    /** @internal */
+    export interface BindableAssignmentExpression extends BinaryExpression {
+        left: BindableNameExpression;
+    }
+    /** @internal */
+    export interface BindablePropertyAssignmentExpression extends BindableAssignmentExpression {
+        left: BindableAccessExpression;
+    }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {

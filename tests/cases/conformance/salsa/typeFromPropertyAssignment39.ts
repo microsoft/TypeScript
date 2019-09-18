@@ -2,7 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @strict: true
-// @Filename: mod.js
+// @Filename: a.js
 
 const foo = {};
 foo["baz"] = {};
