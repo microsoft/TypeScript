@@ -75,7 +75,7 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDi
       x: T;
     }
     
-    interface C<T extends number> { // error
+    interface C<T extends number> { // ok
       y: T;
     }
     
