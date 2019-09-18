@@ -2005,15 +2005,15 @@ namespace ts {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
         }
-        if (isIdentifier(name) && isBindableAccessExpression(initializer)) {
-            return (initializer.expression.kind as SyntaxKind === SyntaxKind.ThisKeyword ||
+        if (isIdentifier(name) && (isLiteralLikeAccess(initializer))) {
+            return (initializer.expression.kind === SyntaxKind.ThisKeyword ||
                 isIdentifier(initializer.expression) &&
-                (initializer.expression.escapedText === "window" as __String ||
-                    initializer.expression.escapedText === "self" as __String ||
-                    initializer.expression.escapedText === "global" as __String)) &&
+                (initializer.expression.escapedText === "window" ||
+                    initializer.expression.escapedText === "self" ||
+                    initializer.expression.escapedText === "global")) &&
                 isSameEntityName(name, getNameOrArgument(initializer));
         }
-        if (isBindableAccessExpression(name) && isBindableAccessExpression(initializer)) {
+        if (isLiteralLikeAccess(name) && isLiteralLikeAccess(initializer)) {
             return getNameOrArgumentText(name) === getNameOrArgumentText(initializer) && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
@@ -2052,13 +2052,22 @@ namespace ts {
     }
 
     export function isBindableElementAccessExpression(node: Node): node is BindableElementAccessExpression {
-        return isElementAccessExpression(node)
-            && isStringOrNumericLiteralLike(node.argumentExpression)
+        return isLiteralLikeElementAccess(node)
             && (isEntityNameExpression(node.expression) || isBindableElementAccessExpression(node.expression));
     }
 
+    export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
+        return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
+    }
+
+    export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
+        return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
+    }
+
     export function isBindableAccessExpression(node: Node): node is BindableAccessExpression {
-        return isPropertyAccessEntityNameExpression(node) || isBindableElementAccessExpression(node);
+        return isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword
+            || isPropertyAccessEntityNameExpression(node)
+            || isBindableElementAccessExpression(node);
     }
 
     export function isBindableNameExpression(node: Node): node is BindableNameExpression {
@@ -2069,14 +2078,14 @@ namespace ts {
         return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken && isBindableNameExpression(node.left);
     }
 
-    export function getNameOrArgument(expr: PropertyAccessExpression | BindableElementAccessExpression) {
+    export function getNameOrArgument(expr: PropertyAccessExpression | LiteralLikeElementAccessExpression) {
         if (isPropertyAccessExpression(expr)) {
             return expr.name;
         }
         return expr.argumentExpression;
     }
 
-    export function getNameOrArgumentText(expr: PropertyAccessExpression | BindableElementAccessExpression): __String {
+    export function getNameOrArgumentText(expr: PropertyAccessExpression | LiteralLikeElementAccessExpression): __String {
         if (isPropertyAccessExpression(expr)) {
             return expr.name.escapedText;
         }

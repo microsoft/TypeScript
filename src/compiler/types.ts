@@ -1817,9 +1817,12 @@ namespace ts {
     /** @internal */
     export type BindableAccessExpression = PropertyAccessEntityNameExpression | BindableElementAccessExpression;
     /** @internal */
-    export type BindableElementAccessExpression = ElementAccessExpression & Declaration & {
-        expression: BindableNameExpression;
+    export interface LiteralLikeElementAccessExpression extends ElementAccessExpression {
         argumentExpression: StringLiteralLike | NumericLiteral;
+    };
+    /** @internal */
+    export type BindableElementAccessExpression = LiteralLikeElementAccessExpression & Declaration & {
+        expression: BindableNameExpression;
     };
     /** @internal */
     export interface BindableAssignmentExpression extends BinaryExpression {

@@ -1,7 +1,6 @@
 // @noEmit: true
 // @allowJs: true
 // @checkJs: true
-// @noLib: true
 // @Filename: a.js
 function Outer() {
     this.y = 2

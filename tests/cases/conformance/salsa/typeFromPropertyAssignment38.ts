@@ -2,7 +2,7 @@
 // @strict: true
 
 function F() {}
-F["prop"] = function() {};
+F["prop"] = 3;
 
 const f = function () {};
-F["prop"] = 3;
+f["prop"] = 3;

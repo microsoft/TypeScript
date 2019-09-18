@@ -10,13 +10,13 @@ F["prop"] = 3;
 >3 : 3
 
 const f = function () {};
->f : () => void
->function () {} : () => void
+>f : { (): void; "prop": number; }
+>function () {} : { (): void; "prop": number; }
 
-F["prop"] = 3;
->F["prop"] = 3 : 3
->F["prop"] : number
->F : typeof F
+f["prop"] = 3;
+>f["prop"] = 3 : 3
+>f["prop"] : number
+>f : { (): void; "prop": number; }
 >"prop" : "prop"
 >3 : 3
 
