@@ -82,7 +82,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
 !!! error TS2322:   Type '{ foo: number; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: string; }': bar, baz
     const c = <Component bar="yes" baz="yeah" />;
     const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
-                                            ~~~~~~~~~~
+                                            ~~~
 !!! error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
 !!! error TS2322:   Property 'bat' does not exist on type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
     const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
@@ -116,7 +116,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     
     const k = <JustDefaultProps foo={12} />;
     const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
-                                         ~~~~~~~~
+                                         ~~~
 !!! error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
     const m = <JustDefaultProps foo="no" />; // error, wrong type
@@ -145,7 +145,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
 !!! error TS2322:   Type '{ foo: string; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: number; }': bar, baz
     const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
     const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
-                                                           ~~~~~~~~~~
+                                                           ~~~
 !!! error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
 !!! error TS2322:   Property 'bat' does not exist on type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
     const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
@@ -181,7 +181,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     
     const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
     const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
-                                                             ~~~~~~~~
+                                                             ~~~
 !!! error TS2322: Type '{ foo: string; bar: string; }' is not assignable to type 'Defaultize<FooProps, { foo: string; }>'.
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<FooProps, { foo: string; }>'.
     const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type

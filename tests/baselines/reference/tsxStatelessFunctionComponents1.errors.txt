@@ -32,7 +32,7 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     let a1 = <Greet name='world' extra-prop />;
     // Error
     let b = <Greet naaame='world' />;
-                   ~~~~~~~~~~~~~~
+                   ~~~~~~
 !!! error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
 !!! error TS2322:   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
     
@@ -47,7 +47,7 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     // Error
     let f = <Meet naaaaaaame='no' />;
-                  ~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~
 !!! error TS2322: Type '{ naaaaaaame: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
 !!! error TS2322:   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
     
@@ -65,7 +65,7 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
 !!! error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
     let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~
 !!! error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes'.
     
