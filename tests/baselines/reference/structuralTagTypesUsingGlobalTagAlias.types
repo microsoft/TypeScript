@@ -3,10 +3,10 @@ export type Paired = {
 >Paired : Paired
 
     x: number & Tag<"x">;
->x : any
+>x : number & Tag<"x">
 
     y: number & Tag<"y">;
->y : any
+>y : number & Tag<"y">
 
 };
 
@@ -57,22 +57,22 @@ if (Math.random() > 0.3) {
 >0.3 : 0.3
 
     b.x = a.x;
->b.x = a.x : any
+>b.x = a.x : number & Tag<"x">
 >b.x : number
 >b : { x: number; y: number; }
 >x : number
->a.x : any
+>a.x : number & Tag<"x">
 >a : Paired
->x : any
+>x : number & Tag<"x">
 
     b.y = a.y;
->b.y = a.y : any
+>b.y = a.y : number & Tag<"y">
 >b.y : number
 >b : { x: number; y: number; }
 >y : number
->a.y : any
+>a.y : number & Tag<"y">
 >a : Paired
->y : any
+>y : number & Tag<"y">
 }
 
 if (isPaired(b)) {
@@ -81,75 +81,75 @@ if (isPaired(b)) {
 >b : { x: number; y: number; }
 
     b.x = a.x;
->b.x = a.x : any
->b.x : number
->b : { x: number; y: number; }
->x : number
->a.x : any
+>b.x = a.x : number & Tag<"x">
+>b.x : number & Tag<"x">
+>b : Paired
+>x : number & Tag<"x">
+>a.x : number & Tag<"x">
 >a : Paired
->x : any
+>x : number & Tag<"x">
 
     b.y = a.y;
->b.y = a.y : any
->b.y : number
->b : { x: number; y: number; }
->y : number
->a.y : any
+>b.y = a.y : number & Tag<"y">
+>b.y : number & Tag<"y">
+>b : Paired
+>y : number & Tag<"y">
+>a.y : number & Tag<"y">
 >a : Paired
->y : any
+>y : number & Tag<"y">
 
     a.x = b.x;
->a.x = b.x : number
->a.x : any
+>a.x = b.x : number & Tag<"x">
+>a.x : number & Tag<"x">
 >a : Paired
->x : any
->b.x : number
->b : { x: number; y: number; }
->x : number
+>x : number & Tag<"x">
+>b.x : number & Tag<"x">
+>b : Paired
+>x : number & Tag<"x">
 
     a.y = b.y;
->a.y = b.y : number
->a.y : any
+>a.y = b.y : number & Tag<"y">
+>a.y : number & Tag<"y">
 >a : Paired
->y : any
->b.y : number
->b : { x: number; y: number; }
->y : number
+>y : number & Tag<"y">
+>b.y : number & Tag<"y">
+>b : Paired
+>y : number & Tag<"y">
 }
 
 
 type NormalizedPath = string & Tag<"NormalizedPath">;
->NormalizedPath : any
+>NormalizedPath : NormalizedPath
 
 type AbsolutePath = string & Tag<"AbsolutePath">;
->AbsolutePath : any
+>AbsolutePath : AbsolutePath
 
 type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
->NormalizedAbsolutePath : any
+>NormalizedAbsolutePath : NormalizedAbsolutePath
 
 declare function isNormalizedPath(x: string): x is NormalizedPath;
->isNormalizedPath : (x: string) => x is any
+>isNormalizedPath : (x: string) => x is NormalizedPath
 >x : string
 
 declare function isAbsolutePath(x: string): x is AbsolutePath;
->isAbsolutePath : (x: string) => x is any
+>isAbsolutePath : (x: string) => x is AbsolutePath
 >x : string
 
 declare function consumeNormalizedPath(x: NormalizedPath): void;
->consumeNormalizedPath : (x: any) => void
->x : any
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>x : NormalizedPath
 
 declare function consumeAbsolutePath(x: AbsolutePath): void;
->consumeAbsolutePath : (x: any) => void
->x : any
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>x : AbsolutePath
 
 declare function consumeNormalizedOrAbsolutePath(x: NormalizedPath | AbsolutePath): void;
->consumeNormalizedOrAbsolutePath : (x: any) => void
->x : any
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>x : NormalizedPath | AbsolutePath
 
 declare function consumeNormalizedAbsolutePath(x: NormalizedAbsolutePath): void;
->consumeNormalizedAbsolutePath : (x: any) => void
->x : any
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>x : NormalizedAbsolutePath
 
 const p = "/a/b/c";
 >p : "/a/b/c"
@@ -157,102 +157,102 @@ const p = "/a/b/c";
 
 if (isNormalizedPath(p)) {
 >isNormalizedPath(p) : boolean
->isNormalizedPath : (x: string) => x is any
+>isNormalizedPath : (x: string) => x is NormalizedPath
 >p : "/a/b/c"
 
     if (isAbsolutePath(p)) {
 >isAbsolutePath(p) : boolean
->isAbsolutePath : (x: string) => x is any
->p : "/a/b/c"
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c" & Tag<"NormalizedPath">
 
         consumeNormalizedPath(p);
 >consumeNormalizedPath(p) : void
->consumeNormalizedPath : (x: any) => void
->p : "/a/b/c"
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
 
         consumeAbsolutePath(p);
 >consumeAbsolutePath(p) : void
->consumeAbsolutePath : (x: any) => void
->p : "/a/b/c"
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
 
         consumeNormalizedOrAbsolutePath(p);
 >consumeNormalizedOrAbsolutePath(p) : void
->consumeNormalizedOrAbsolutePath : (x: any) => void
->p : "/a/b/c"
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
 
         consumeNormalizedAbsolutePath(p);
 >consumeNormalizedAbsolutePath(p) : void
->consumeNormalizedAbsolutePath : (x: any) => void
->p : "/a/b/c"
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & (Tag<"NormalizedPath"> & Tag<"AbsolutePath">)
     }
     else {
         consumeNormalizedPath(p);
 >consumeNormalizedPath(p) : void
->consumeNormalizedPath : (x: any) => void
->p : never
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
 
         consumeAbsolutePath(p); // err
 >consumeAbsolutePath(p) : void
->consumeAbsolutePath : (x: any) => void
->p : never
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
 
         consumeNormalizedOrAbsolutePath(p);
 >consumeNormalizedOrAbsolutePath(p) : void
->consumeNormalizedOrAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
 
         consumeNormalizedAbsolutePath(p); // err
 >consumeNormalizedAbsolutePath(p) : void
->consumeNormalizedAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & Tag<"NormalizedPath">
     }
 }
 else {
     if (isAbsolutePath(p)) {
 >isAbsolutePath(p) : boolean
->isAbsolutePath : (x: string) => x is any
->p : never
+>isAbsolutePath : (x: string) => x is AbsolutePath
+>p : "/a/b/c"
 
         consumeNormalizedPath(p); // err
 >consumeNormalizedPath(p) : void
->consumeNormalizedPath : (x: any) => void
->p : never
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
 
         consumeAbsolutePath(p);
 >consumeAbsolutePath(p) : void
->consumeAbsolutePath : (x: any) => void
->p : never
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
 
         consumeNormalizedOrAbsolutePath(p);
 >consumeNormalizedOrAbsolutePath(p) : void
->consumeNormalizedOrAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
 
         consumeNormalizedAbsolutePath(p); // err
 >consumeNormalizedAbsolutePath(p) : void
->consumeNormalizedAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c" & Tag<"AbsolutePath">
     }
     else {
         consumeNormalizedPath(p); // err
 >consumeNormalizedPath(p) : void
->consumeNormalizedPath : (x: any) => void
->p : never
+>consumeNormalizedPath : (x: NormalizedPath) => void
+>p : "/a/b/c"
 
         consumeAbsolutePath(p); // err
 >consumeAbsolutePath(p) : void
->consumeAbsolutePath : (x: any) => void
->p : never
+>consumeAbsolutePath : (x: AbsolutePath) => void
+>p : "/a/b/c"
 
         consumeNormalizedOrAbsolutePath(p); // err
 >consumeNormalizedOrAbsolutePath(p) : void
->consumeNormalizedOrAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedOrAbsolutePath : (x: NormalizedPath | AbsolutePath) => void
+>p : "/a/b/c"
 
         consumeNormalizedAbsolutePath(p); // err
 >consumeNormalizedAbsolutePath(p) : void
->consumeNormalizedAbsolutePath : (x: any) => void
->p : never
+>consumeNormalizedAbsolutePath : (x: NormalizedAbsolutePath) => void
+>p : "/a/b/c"
     }
 }
 
