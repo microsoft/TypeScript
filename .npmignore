@@ -9,8 +9,9 @@ netci.groovy
 scripts
 src
 tests
-tslint.json
 Jakefile.js
+.eslintrc
+.eslintignore
 .editorconfig
 .failed-tests
 .git

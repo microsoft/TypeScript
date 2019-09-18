@@ -102,7 +102,7 @@ namespace ts.tscWatch {
                 host.runQueuedTimeoutCallbacks();
                 verifyProgram(checkOutputErrorsIncremental);
 
-                function verifyProgram(checkOutputErrors: (host: WatchedSystem, errors: ReadonlyArray<Diagnostic>) => void) {
+                function verifyProgram(checkOutputErrors: (host: WatchedSystem, errors: readonly Diagnostic[]) => void) {
                     checkProgramActualFiles(watch(), programFiles.map(f => f.path));
                     checkOutputErrors(host, emptyArray);
 

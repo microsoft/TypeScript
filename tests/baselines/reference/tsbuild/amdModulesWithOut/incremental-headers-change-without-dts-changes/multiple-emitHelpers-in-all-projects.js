@@ -724,6 +724,9 @@ declare function appfile4Spread(...b: number[]): void;
 //// [/src/lib/file1.ts]
 export const x = 10;function forlibfile1Rest() { }
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];

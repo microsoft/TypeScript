@@ -5,7 +5,7 @@ namespace ts.refactor {
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context);
             if (!info) return emptyArray;
 
@@ -49,11 +49,11 @@ namespace ts.refactor {
     });
 
     interface TypeAliasInfo {
-        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements?: ReadonlyArray<TypeElement>;
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements?: readonly TypeElement[];
     }
 
     interface InterfaceInfo {
-        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements: ReadonlyArray<TypeElement>;
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
     }
 
     type Info = TypeAliasInfo | InterfaceInfo;
@@ -76,7 +76,7 @@ namespace ts.refactor {
         return { isJS, selection, firstStatement, typeParameters, typeElements };
     }
 
-    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeElement> | undefined {
+    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {
         if (!node) return undefined;
         if (isIntersectionTypeNode(node)) {
             const result: TypeElement[] = [];
