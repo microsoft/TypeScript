@@ -111,7 +111,7 @@ async function * f15() {
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
 async function * f16() {
->f16 : () => AsyncGenerator<any, void, undefined>
+>f16 : () => AsyncGenerator<any, void, unknown>
 
     yield * [];
 >yield * [] : any

@@ -3,8 +3,7 @@
 // @noemit: true
 // @strict: false
 
-// Allow generators to fallback to IterableIterator if they are not in strictNullChecks mode
-// NOTE: In non-strictNullChecks mode, `undefined` (the default sent value) is assignable to everything.
+// Do not allow generators to fallback to IterableIterator if they need a type for the sent value while not in strictNullChecks mode.
 function* f() {
     const x: string = yield 1;
 }

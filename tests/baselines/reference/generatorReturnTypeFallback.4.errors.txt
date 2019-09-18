@@ -1,0 +1,9 @@
+error TS2318: Cannot find global type 'Generator'.
+
+
+!!! error TS2318: Cannot find global type 'Generator'.
+==== tests/cases/conformance/generators/generatorReturnTypeFallback.4.ts (0 errors) ====
+    // Do not allow generators to fallback to IterableIterator if they need a type for the sent value while not in strictNullChecks mode.
+    function* f() {
+        const x: string = yield 1;
+    }

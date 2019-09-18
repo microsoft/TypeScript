@@ -36,7 +36,7 @@ class C4 {
 >C4 : C4
 
     async * f() {
->f : () => AsyncGenerator<number, void, undefined>
+>f : () => AsyncGenerator<number, void, unknown>
 
         const x = yield* [1];
 >x : any

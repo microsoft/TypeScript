@@ -23585,7 +23585,7 @@ namespace ts {
                 const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
                 const iterationTypes = globalType !== emptyGenericType ? getIterationTypesOfGlobalIterableType(globalType, resolver) : undefined;
                 const iterableIteratorReturnType = iterationTypes ? iterationTypes.returnType : anyType;
-                const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : undefinedType;
+                const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : unknownType;
                 if (isTypeAssignableTo(returnType, iterableIteratorReturnType) &&
                     isTypeAssignableTo(iterableIteratorNextType, nextType)) {
                     if (globalType !== emptyGenericType) {

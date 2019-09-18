@@ -24,8 +24,8 @@ const f3 = async function * () {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/F4.ts ===
 const f4 = async function * () {
->f4 : () => AsyncGenerator<number, void, undefined>
->async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, undefined>
+>f4 : () => AsyncGenerator<number, void, unknown>
+>async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, unknown>
 
     const x = yield* [1];
 >x : any
