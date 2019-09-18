@@ -32797,7 +32797,7 @@ namespace ts {
                         typeToString(node.type ? getTypeFromTypeNode(node.type) : anyType));
                 }
 
-                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.StringLiteral, /*strict*/ true)) {
+                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.StringOrNumberLiteral, /*strict*/ true)) {
                     return grammarErrorOnNode(parameter.name,
                         Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
                 }
