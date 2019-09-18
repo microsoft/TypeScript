@@ -4,11 +4,9 @@ export type Paired = {
 
     x: number & Tag<"x">;
 >x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
->Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
 
     y: number & Tag<"y">;
 >y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
->Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
 
 };
 
@@ -72,17 +70,17 @@ if (isPaired(b)) {
 >b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
 
     b.x = a.x;
->b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
 >b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
->x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
 >a.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
 >a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
 >x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
 
     b.y = a.y;
->b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
 >b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
->y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
 >a.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
 >a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
 >y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
@@ -91,27 +89,25 @@ if (isPaired(b)) {
 >a.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
 >a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
 >x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
->b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>b.x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
 >b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
->x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 0, 22))
+>x : Symbol(x, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 11))
 
     a.y = b.y;
 >a.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
 >a : Symbol(a, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 14, 5))
 >y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
->b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>b.y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
 >b : Symbol(b, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 5))
->y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 1, 25))
+>y : Symbol(y, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 15, 16))
 }
 
 
 type NormalizedPath = string & Tag<"NormalizedPath">;
 >NormalizedPath : Symbol(NormalizedPath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 27, 1))
->Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
 
 type AbsolutePath = string & Tag<"AbsolutePath">;
 >AbsolutePath : Symbol(AbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 30, 53))
->Tag : Symbol(Tag, Decl(lib.es5.d.ts, --, --))
 
 type NormalizedAbsolutePath = NormalizedPath & AbsolutePath;
 >NormalizedAbsolutePath : Symbol(NormalizedAbsolutePath, Decl(structuralTagTypesUsingGlobalTagAlias.ts, 31, 49))

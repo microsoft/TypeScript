@@ -1481,9 +1481,9 @@ interface ThisType<T> { }
 /**
  * Constructs a structural tag over property name(s) `K`
  */
-type Tag<K extends keyof any> = tag {
-    [_ in K]: void;
-};
+// type Tag<K extends keyof any> = tag {
+//     [_ in K]: void;
+// };
 
 /**
  * Represents a raw buffer of binary data, which is used to store data for the
