@@ -1,6 +1,51 @@
 Exit Code: 1
 Standard output:
-index.ts(1,23): error TS2307: Cannot find module 'jimp'.
+node_modules/@jimp/bmp/index.d.ts(1,38): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/gif/index.d.ts(1,27): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/jpeg/index.d.ts(1,59): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-blit/index.d.ts(1,54): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-blur/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-color/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-contain/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-cover/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-crop/index.d.ts(1,37): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-displace/index.d.ts(1,54): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-dither/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-flip/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-gaussian/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-invert/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-mask/index.d.ts(1,54): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-normalize/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-print/index.d.ts(1,54): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-resize/index.d.ts(1,37): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-rotate/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/plugin-scale/index.d.ts(1,31): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/png/index.d.ts(1,59): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/@jimp/tiff/index.d.ts(1,38): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
+node_modules/jimp/types/ts3.1/index.d.ts(16,8): error TS7016: Could not find a declaration file for module '@jimp/core'. '../../../tests/cases/user/jimp/node_modules/@jimp/core/dist/index.js' implicitly has an 'any' type.
+  Try `npm install @types/jimp__core` if it exists or add a new declaration (.d.ts) file containing `declare module '@jimp/core';`
 
 
 

@@ -337,7 +337,7 @@ namespace ts {
             if (constructor && constructor.body) {
                 let parameterPropertyDeclarationCount = 0;
                 for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]))) {
+                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {
                         parameterPropertyDeclarationCount++;
                     }
                     else {

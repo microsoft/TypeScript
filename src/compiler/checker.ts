@@ -8971,9 +8971,8 @@ namespace ts {
             return undefined;
         }
 
-        function getConstraintDeclaration(type: TypeParameter) {
-            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
-            return decl && getEffectiveConstraintOfTypeParameter(decl);
+        function getConstraintDeclaration(type: TypeParameter): TypeNode | undefined {
+            return mapDefined(filter(type.symbol && type.symbol.declarations, isTypeParameterDeclaration), getEffectiveConstraintOfTypeParameter)[0];
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -15154,9 +15153,9 @@ namespace ts {
          * Return true if type was inferred from an object literal, written as an object type literal, or is the shape of a module
          * with no call or construct signatures.
          */
-        function isObjectTypeWithInferableIndex(type: Type) {
-            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
-                !typeHasCallOrConstructSignatures(type);
+        function isObjectTypeWithInferableIndex(type: Type): boolean {
+            return !!(type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
+                !typeHasCallOrConstructSignatures(type)) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
@@ -15556,6 +15555,13 @@ namespace ts {
                 topLevel: inference.topLevel,
                 isFixed: inference.isFixed
             };
+        }
+
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            const inferences = filter(context.inferences, hasInferenceCandidates);
+            return inferences.length ?
+                createInferenceContextWorker(map(inferences, cloneInferenceInfo), context.signature, context.flags, context.compareTypes) :
+                undefined;
         }
 
         function getMapperFromContext<T extends InferenceContext | undefined>(context: T): TypeMapper | T & undefined {
@@ -17603,7 +17609,7 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
-                if ((type.flags & TypeFlags.Unknown) && (operator === SyntaxKind.EqualsEqualsEqualsToken) && assumeTrue) {
+                if ((type.flags & TypeFlags.Unknown) && assumeTrue && (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
                     if (valueType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                         return valueType;
                     }
@@ -21615,7 +21621,7 @@ namespace ts {
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
                     inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
-                    context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(returnContext) : undefined;
+                    context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                 }
             }
 
@@ -25855,7 +25861,7 @@ namespace ts {
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
-                        if (isParameterPropertyDeclaration(param) && !isBindingPattern(param.name)) {
+                        if (isParameterPropertyDeclaration(param, member) && !isBindingPattern(param.name)) {
                             addName(instanceNames, param.name, param.name.escapedText, DeclarationMeaning.GetOrSetAccessor);
                         }
                     }
@@ -27619,7 +27625,7 @@ namespace ts {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
                         const name = local.valueDeclaration && getNameOfDeclaration(local.valueDeclaration);
                         if (parameter && name) {
-                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
+                            if (!isParameterPropertyDeclaration(parameter, parameter.parent) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(parameter, UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
@@ -28890,11 +28896,13 @@ namespace ts {
             let nextType: Type | undefined;
             if (methodName !== "throw") {
                 const methodParameterType = methodParameterTypes ? getUnionType(methodParameterTypes) : unknownType;
-                const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                 if (methodName === "next") {
-                    nextType = resolvedMethodParameterType;
+                    // The value of `next(value)` is *not* awaited by async generators
+                    nextType = methodParameterType;
                 }
                 else if (methodName === "return") {
+                    // The value of `return(value)` *is* awaited by async generators
+                    const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                     returnTypes = append(returnTypes, resolvedMethodParameterType);
                 }
             }
@@ -29383,11 +29391,10 @@ namespace ts {
                     const constraint = getEffectiveConstraintOfTypeParameter(source);
                     const sourceConstraint = constraint && getTypeFromTypeNode(constraint);
                     const targetConstraint = getConstraintOfTypeParameter(target);
-                    if (sourceConstraint) {
-                        // relax check if later interface augmentation has no constraint
-                        if (!targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
-                            return false;
-                        }
+                    // relax check if later interface augmentation has no constraint, it's more broad and is OK to merge with
+                    // a more constrained interface (this could be generalized to a full heirarchy check, but that's maybe overkill)
+                    if (sourceConstraint && targetConstraint && !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
+                        return false;
                     }
 
                     // If the type parameter node has a default and it is not identical to the default

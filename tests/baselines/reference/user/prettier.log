@@ -55,16 +55,18 @@ src/doc/doc-printer.js(501,37): error TS2345: Argument of type 'any[][]' is not 
 src/index.js(3,25): error TS2732: Cannot find module '../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 src/index.js(30,17): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
 src/language-css/clean.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
-src/language-css/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/css'.
-src/language-css/index.js(8,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-css/index.js(15,26): error TS2307: Cannot find module 'linguist-languages/data/postcss'.
-src/language-css/index.js(25,26): error TS2307: Cannot find module 'linguist-languages/data/less'.
-src/language-css/index.js(25,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-css/index.js(32,26): error TS2307: Cannot find module 'linguist-languages/data/scss'.
-src/language-css/index.js(32,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-css/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/CSS'.
+src/language-css/index.js(8,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-css/index.js(15,26): error TS2307: Cannot find module 'linguist-languages/data/PostCSS'.
+src/language-css/index.js(15,62): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { extensions: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
+src/language-css/index.js(25,26): error TS2307: Cannot find module 'linguist-languages/data/Less'.
+src/language-css/index.js(25,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-css/index.js(32,26): error TS2307: Cannot find module 'linguist-languages/data/SCSS'.
+src/language-css/index.js(32,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-css/parser-postcss.js(64,32): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(74,30): error TS2345: Argument of type '{ open: null; close: null; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(79,30): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
@@ -72,12 +74,12 @@ src/language-css/parser-postcss.js(86,30): error TS2345: Argument of type 'any' 
 src/language-css/parser-postcss.js(90,28): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(449,32): error TS2531: Object is possibly 'null'.
 src/language-css/utils.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
-src/language-graphql/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/graphql'.
-src/language-graphql/index.js(8,62): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-handlebars/index.js(7,26): error TS2307: Cannot find module 'linguist-languages/data/handlebars'.
-src/language-handlebars/index.js(7,65): error TS2345: Argument of type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-graphql/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/GraphQL'.
+src/language-graphql/index.js(8,62): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-handlebars/index.js(7,26): error TS2307: Cannot find module 'linguist-languages/data/Handlebars'.
+src/language-handlebars/index.js(7,65): error TS2345: Argument of type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-html/ast.js(53,11): error TS2536: Type 'Extract<keyof this, string>' cannot be used to index type 'Node'.
 src/language-html/ast.js(56,15): error TS2339: Property 'index' does not exist on type 'Node'.
 src/language-html/ast.js(56,22): error TS2339: Property 'siblings' does not exist on type 'Node'.
@@ -100,16 +102,18 @@ src/language-html/ast.js(90,69): error TS2339: Property 'name' does not exist on
 src/language-html/conditional-comment.js(23,16): error TS2349: This expression is not callable.
   Not all constituents of type 'RegExp | ((node: any) => { type: string; sourceSpan: any; })' are callable.
     Type 'RegExp' has no call signatures.
-src/language-html/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/html'.
-src/language-html/index.js(8,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-html/index.js(19,26): error TS2307: Cannot find module 'linguist-languages/data/html'.
-src/language-html/index.js(31,26): error TS2307: Cannot find module 'linguist-languages/data/html'.
-src/language-html/index.js(31,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: never[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: never[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-html/index.js(42,26): error TS2307: Cannot find module 'linguist-languages/data/vue'.
-src/language-html/index.js(42,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-html/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/HTML'.
+src/language-html/index.js(8,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: string[]; filenames: never[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-html/index.js(19,26): error TS2307: Cannot find module 'linguist-languages/data/HTML'.
+src/language-html/index.js(19,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { extensions: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
+src/language-html/index.js(31,26): error TS2307: Cannot find module 'linguist-languages/data/HTML'.
+src/language-html/index.js(31,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: never[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: never[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-html/index.js(42,26): error TS2307: Cannot find module 'linguist-languages/data/Vue'.
+src/language-html/index.js(42,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-html/parser-html.js(52,12): error TS2339: Property 'type' does not exist on type 'Attribute'.
 src/language-html/parser-html.js(54,12): error TS2339: Property 'type' does not exist on type 'CDATA'.
 src/language-html/parser-html.js(56,12): error TS2339: Property 'type' does not exist on type 'Comment'.
@@ -166,24 +170,33 @@ src/language-html/utils.js(10,30): error TS2307: Cannot find module 'html-tag-na
 src/language-html/utils.js(11,39): error TS2307: Cannot find module 'html-element-attributes'.
 src/language-html/utils.js(444,17): error TS2554: Expected 0 arguments, but got 1.
 src/language-js/comments.js(864,64): error TS2554: Expected 0 arguments, but got 1.
-src/language-js/index.js(9,26): error TS2307: Cannot find module 'linguist-languages/data/javascript'.
-src/language-js/index.js(19,26): error TS2307: Cannot find module 'linguist-languages/data/javascript'.
-src/language-js/index.js(19,65): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; aliases: never[]; filenames: never[]; extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; aliases: never[]; filenames: never[]; extensions: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/index.js(31,26): error TS2307: Cannot find module 'linguist-languages/data/jsx'.
-src/language-js/index.js(31,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/index.js(38,26): error TS2307: Cannot find module 'linguist-languages/data/typescript'.
-src/language-js/index.js(38,65): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/index.js(45,26): error TS2307: Cannot find module 'linguist-languages/data/json'.
-src/language-js/index.js(45,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/index.js(56,26): error TS2307: Cannot find module 'linguist-languages/data/json'.
-src/language-js/index.js(66,26): error TS2307: Cannot find module 'linguist-languages/data/json-with-comments'.
-src/language-js/index.js(76,26): error TS2307: Cannot find module 'linguist-languages/data/json5'.
-src/language-js/index.js(76,60): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-js/index.js(9,26): error TS2307: Cannot find module 'linguist-languages/data/JavaScript'.
+src/language-js/index.js(9,65): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { interpreters: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { interpreters: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
+src/language-js/index.js(19,26): error TS2307: Cannot find module 'linguist-languages/data/JavaScript'.
+src/language-js/index.js(19,65): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; aliases: never[]; filenames: never[]; extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; aliases: never[]; filenames: never[]; extensions: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-js/index.js(30,26): error TS2307: Cannot find module 'linguist-languages/data/JSX'.
+src/language-js/index.js(30,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-js/index.js(37,26): error TS2307: Cannot find module 'linguist-languages/data/TypeScript'.
+src/language-js/index.js(37,65): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-js/index.js(44,26): error TS2307: Cannot find module 'linguist-languages/data/TSX'.
+src/language-js/index.js(44,58): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-js/index.js(51,26): error TS2307: Cannot find module 'linguist-languages/data/JSON'.
+src/language-js/index.js(51,59): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; extensions: never[]; filenames: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
+src/language-js/index.js(61,26): error TS2307: Cannot find module 'linguist-languages/data/JSON'.
+src/language-js/index.js(61,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { filenames: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { filenames: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
+src/language-js/index.js(71,26): error TS2307: Cannot find module 'linguist-languages/data/JSON with Comments'.
+src/language-js/index.js(71,73): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { filenames: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { filenames: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
+src/language-js/index.js(81,26): error TS2307: Cannot find module 'linguist-languages/data/JSON5'.
+src/language-js/index.js(81,60): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-js/needs-parens.js(871,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
@@ -260,17 +273,18 @@ src/language-js/printer-estree.js(6130,7): error TS2769: No overload matches thi
     Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
       Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
 src/language-js/utils.js(107,55): error TS2554: Expected 0-1 arguments, but got 2.
-src/language-markdown/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/markdown'.
-src/language-markdown/index.js(20,5): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-markdown/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/Markdown'.
+src/language-markdown/index.js(21,26): error TS2307: Cannot find module 'linguist-languages/data/Markdown'.
+src/language-markdown/index.js(21,63): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; filenames: never[]; extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; filenames: never[]; extensions: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-markdown/printer-markdown.js(278,18): error TS2532: Object is possibly 'undefined'.
 src/language-markdown/printer-markdown.js(279,17): error TS2532: Object is possibly 'undefined'.
 src/language-markdown/printer-markdown.js(300,14): error TS2532: Object is possibly 'undefined'.
 src/language-markdown/utils.js(203,5): error TS2322: Type 'never[]' is not assignable to type 'null'.
 src/language-markdown/utils.js(213,47): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'null'.
-src/language-yaml/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/yaml'.
-src/language-yaml/index.js(8,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
-  Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
+src/language-yaml/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/YAML'.
+src/language-yaml/index.js(8,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
+  Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
 src/language-yaml/printer-yaml.js(226,41): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
