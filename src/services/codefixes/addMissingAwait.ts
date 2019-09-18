@@ -106,9 +106,7 @@ namespace ts.codefix {
 
         return expression
             && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
-            && isInsideAwaitableBody(expression)
-                ? expression
-                : undefined;
+            && isInsideAwaitableBody(expression) ? expression : undefined;
     }
 
     interface AwaitableInitializer {

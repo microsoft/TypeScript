@@ -1,0 +1,11 @@
+{
+    "extends": "./.eslintrc.json",
+    "parserOptions": {
+        "tsconfigRootDir": "src",
+        "project": "./tsconfig-base.json"
+    },
+    "rules": {
+        "@typescript-eslint/no-unnecessary-qualifier": "error",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error"
+    }
+}

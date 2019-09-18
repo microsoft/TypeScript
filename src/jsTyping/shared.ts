@@ -1,6 +1,5 @@
 /* @internal */
 namespace ts.server {
-    // tslint:disable variable-name
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
     export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";

@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace Harness.Parallel.Worker {
     export function start() {
         function hookUncaughtExceptions() {
@@ -21,7 +19,7 @@ namespace Harness.Parallel.Worker {
         let exceptionsHooked = false;
         hookUncaughtExceptions();
 
-        // tslint:disable-next-line:variable-name - Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
+        // Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
         const Mocha = require("mocha") as typeof import("mocha");
 
         /**
@@ -99,7 +97,6 @@ namespace Harness.Parallel.Worker {
          * @param context The test context (usually the NodeJS `global` object).
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
-            // tslint:disable-next-line:variable-name
             const suites = [rootSuite];
             context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
             context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
@@ -125,7 +122,10 @@ namespace Harness.Parallel.Worker {
             }
 
             function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
-                if (typeof title === "function") fn = title, title = fn.name;
+                if (typeof title === "function") {
+                    fn = title;
+                    title = fn.name;
+                }
                 const test = new Test(title, suites[0].pending ? undefined : fn);
                 suites[0].addTest(test);
                 return test;

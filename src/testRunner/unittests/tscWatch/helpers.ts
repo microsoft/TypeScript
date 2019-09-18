@@ -21,11 +21,11 @@ namespace ts.tscWatch {
         content: "let y = 1"
     };
 
-    export function checkProgramActualFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramActualFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }
 
-    export function checkProgramRootFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramRootFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
@@ -172,7 +172,7 @@ namespace ts.tscWatch {
         return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
     }
 
-    export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsInitial(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -185,7 +185,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -199,7 +199,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -213,7 +213,7 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function checkNormalBuildErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, reportErrorSummary?: boolean) {
+    export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], reportErrorSummary?: boolean) {
         checkOutputErrors(
             host,
             [
@@ -260,7 +260,7 @@ namespace ts.tscWatch {
     }
 
     export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
-        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
+        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
             start, length, message, ...args);
     }
 

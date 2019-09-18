@@ -83,7 +83,7 @@ namespace ts.codefix {
         },
     });
 
-    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): ReadonlyArray<ClassOrInterface> {
+    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
         const res: ClassLikeDeclaration[] = [];
         while (decl) {
             const superElement = getClassExtendsHeritageElement(decl);

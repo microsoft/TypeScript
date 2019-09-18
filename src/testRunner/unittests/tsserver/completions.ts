@@ -68,7 +68,7 @@ namespace ts.projectSystem {
                 source: [{ text: "./a", kind: "text" }],
                 tags: undefined,
             };
-            assert.deepEqual<ReadonlyArray<protocol.CompletionEntryDetails> | undefined>(detailsResponse, [
+            assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
                     codeActions: [
                         {
@@ -97,10 +97,10 @@ namespace ts.projectSystem {
                 readonly arguments: protocol.CompletionDetailsRequestArgs;
             }
             interface CompletionDetailsFullResponse extends protocol.Response {
-                readonly body?: ReadonlyArray<CompletionEntryDetails>;
+                readonly body?: readonly CompletionEntryDetails[];
             }
             const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
-            assert.deepEqual<ReadonlyArray<CompletionEntryDetails> | undefined>(detailsFullResponse, [
+            assert.deepEqual<readonly CompletionEntryDetails[] | undefined>(detailsFullResponse, [
                 {
                     codeActions: [
                         {

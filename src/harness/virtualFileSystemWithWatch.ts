@@ -39,11 +39,11 @@ interface Array<T> { length: number; [n: number]: T; }`
         environmentVariables?: Map<string>;
     }
 
-    export function createWatchedSystem(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
+    export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
 
-    export function createServerHost(fileOrFolderList: ReadonlyArray<FileOrFolderOrSymLink>, params?: TestServerHostCreationParameters): TestServerHost {
+    export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
     }
 
@@ -106,7 +106,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return s && isString((<FsSymLink>s).symLink);
     }
 
-    function invokeWatcherCallbacks<T>(callbacks: ReadonlyArray<T> | undefined, invokeCallback: (cb: T) => void): void {
+    function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCallback: (cb: T) => void): void {
         if (callbacks) {
             // The array copy is made to ensure that even if one of the callback removes the callbacks,
             // we dont miss any callbacks following it
@@ -117,7 +117,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function getDiffInKeys<T>(map: Map<T>, expectedKeys: ReadonlyArray<string>) {
+    function getDiffInKeys<T>(map: Map<T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -144,11 +144,11 @@ interface Array<T> { length: number; [n: number]: T; }`
         return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
     }
 
-    export function verifyMapSize(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+    export function verifyMapSize(caption: string, map: Map<any>, expectedKeys: readonly string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
 
-    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: ReadonlyArray<string>) {
+    function checkMapKeys(caption: string, map: Map<any>, expectedKeys: readonly string[]) {
         verifyMapSize(caption, map, expectedKeys);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
@@ -156,8 +156,8 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyMap<number>): void;
-    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyArray<string>, eachKeyCount: number): void;
-    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeysMapOrArray: ReadonlyMap<number> | ReadonlyArray<string>, eachKeyCount?: number) {
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: readonly string[], eachKeyCount: number): void;
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeysMapOrArray: ReadonlyMap<number> | readonly string[], eachKeyCount?: number) {
         const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCount!) : expectedKeysMapOrArray;
         verifyMapSize(caption, actual, arrayFrom(expectedKeys.keys()));
         expectedKeys.forEach((count, name) => {
@@ -166,7 +166,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         });
     }
 
-    export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+    export function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
         checkMapKeys(caption, arrayToMap(actual, identity), expected);
         assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
         for (const f of expected) {
@@ -179,8 +179,8 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyArray<string>, eachFileWatchCount: number): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | ReadonlyArray<string>, eachFileWatchCount?: number) {
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCount?: number) {
         if (isArray(expectedFiles)) {
             checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles, eachFileWatchCount!);
         }
@@ -194,8 +194,8 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyArray<string>, eachDirectoryWatchCount: number, recursive: boolean): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | ReadonlyArray<string>, recursiveOrEachDirectoryWatchCount: boolean | number, recursive?: boolean) {
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursive?: boolean) {
         if (isArray(expectedDirectories)) {
             checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories, recursiveOrEachDirectoryWatchCount as number);
         }
@@ -205,7 +205,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
+    export function checkOutputContains(host: TestServerHost, expected: readonly string[]) {
         const mapExpected = arrayToSet(expected);
         const mapSeen = createMap<true>();
         for (const f of host.getOutput()) {
@@ -218,7 +218,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
     }
 
-    export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | ReadonlyArray<string>) {
+    export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | readonly string[]) {
         const mapExpectedToBeAbsent = arrayToSet(expectedToBeAbsent);
         for (const f of host.getOutput()) {
             assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
@@ -308,7 +308,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         useCaseSensitiveFileNames: boolean;
         executingFilePath: string;
         currentDirectory: string;
-        fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>;
+        fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[];
         newLine?: string;
         useWindowsStylePaths?: boolean;
         environmentVariables?: Map<string>;
@@ -342,7 +342,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         constructor(
             public withSafeList: boolean,
-            fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>,
+            fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
             {
                 useCaseSensitiveFileNames, executingFilePath, currentDirectory,
                 newLine, windowsStyleRoot, environmentVariables
@@ -432,11 +432,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             return new Date(this.time);
         }
 
-        reloadFS(fileOrFolderOrSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, options?: Partial<ReloadWatchInvokeOptions>) {
+        reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
-            const filesOrFoldersToLoad: ReadonlyArray<FileOrFolderOrSymLink> = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
+            const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
                     result.path = this.getHostSpecificPath(f.path);
@@ -829,7 +829,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             return [];
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
                 const directories: string[] = [];
                 const files: string[] = [];
@@ -976,7 +976,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.output.push(message);
         }
 
-        getOutput(): ReadonlyArray<string> {
+        getOutput(): readonly string[] {
             return this.output;
         }
 

@@ -14,7 +14,7 @@ class Carousel<T> extends Vue {
             "vue.d.ts": `export namespace Vue { export type Config = { template: string }; }`,
             "vue-class-component.d.ts": `import Vue from "./vue";
 export function Component(x: Config): any;`
-};
+        };
         // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
         //  to write an alias to a module's default export was referrenced across files and had no default export
         it("should be able to create a language service which can respond to deinition requests without throwing", () => {
@@ -40,7 +40,7 @@ export function Component(x: Config): any;`
                 },
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
-            expect(definitions).to.exist; // tslint:disable-line no-unused-expression
+            expect(definitions).to.exist; // eslint-disable-line no-unused-expressions
         });
     });
 }
