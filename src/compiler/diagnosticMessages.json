@@ -1044,22 +1044,22 @@
         "category": "Error",
         "code": 2200
     },
-    "Call signature return types are incompatible.": {
+    "Call signature return types '{0}' and '{1}' are incompatible.": {
         "category": "Error",
         "code": 2201,
         "elidedInCompatabilityPyramid": true
     },
-    "Construct signature return types are incompatible.": {
+    "Construct signature return types '{0}' and '{1}' are incompatible.": {
         "category": "Error",
         "code": 2202,
         "elidedInCompatabilityPyramid": true
     },
-    "Call signatures with no arguments have incompatible return types.": {
+    "Call signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
         "category": "Error",
         "code": 2203,
         "elidedInCompatabilityPyramid": true
     },
-    "Construct signatures with no arguments have incompatible return types.": {
+    "Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
         "category": "Error",
         "code": 2204,
         "elidedInCompatabilityPyramid": true

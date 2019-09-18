@@ -12343,7 +12343,7 @@ namespace ts {
             ignoreReturnTypes: boolean,
             reportErrors: boolean,
             errorReporter: ErrorReporter | undefined,
-            incompatibleErrorReporter: (() => void) | undefined,
+            incompatibleErrorReporter: ((source: Type, target: Type) => void) | undefined,
             compareTypes: TypeComparer): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
@@ -12461,7 +12461,7 @@ namespace ts {
                     result &= callbackCheck === CallbackCheck.Bivariant && compareTypes(targetReturnType, sourceReturnType, /*reportErrors*/ false) ||
                         compareTypes(sourceReturnType, targetReturnType, reportErrors);
                     if (!result && reportErrors && incompatibleErrorReporter) {
-                        incompatibleErrorReporter();
+                        incompatibleErrorReporter(sourceReturnType, targetReturnType);
                     }
                 }
 
@@ -12766,6 +12766,7 @@ namespace ts {
                 // The first error will be the innermost, while the last will be the outermost - so by popping off the end,
                 // we can build from left to right
                 let path = "";
+                const secondaryRootErrors: typeof incompatibleStack = [];
                 while (stack.length) {
                     const [msg, ...args] = stack.pop()!;
                     switch (msg.code) {
@@ -12793,27 +12794,52 @@ namespace ts {
                             }
                             break;
                         }
-                        case Diagnostics.Call_signature_return_types_are_incompatible.code: {
-                            path = path.length === 0 ? "(...)" : `${path}(...)`;
-                            break;
-                        }
-                        case Diagnostics.Construct_signature_return_types_are_incompatible.code: {
-                            path = path.length === 0 ? "new (...)" : `new ${path}(...)`;
-                            break;
-                        }
-                        case Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types.code: {
-                            path = path.length === 0 ? "()" : `${path}()`;
-                            break;
-                        }
-                        case Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types.code: {
-                            path = path.length === 0 ? "new ()" : `new ${path}()`;
+                        case Diagnostics.Call_signature_return_types_0_and_1_are_incompatible.code:
+                        case Diagnostics.Construct_signature_return_types_0_and_1_are_incompatible.code:
+                        case Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code:
+                        case Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code: {
+                            if (path.length === 0) {
+                                // Don't flatten signature compatability errors at the start of a chain - instead prefer
+                                // to unify (the with no arguments bit is excessive for printback) and print them back
+                                let mappedMsg = msg;
+                                if (msg.code === Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code) {
+                                    mappedMsg = Diagnostics.Call_signature_return_types_0_and_1_are_incompatible;
+                                }
+                                else if (msg.code === Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code) {
+                                    mappedMsg = Diagnostics.Construct_signature_return_types_0_and_1_are_incompatible;
+                                }
+                                secondaryRootErrors.unshift([mappedMsg, args[0], args[1]]);
+                            }
+                            else {
+                                const prefix = (msg.code === Diagnostics.Construct_signature_return_types_0_and_1_are_incompatible.code ||
+                                    msg.code === Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code)
+                                        ? "new "
+                                        : "";
+                                const params = (msg.code === Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code ||
+                                    msg.code === Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types_0_and_1.code)
+                                        ? ""
+                                        : "...";
+                                path = `${prefix}${path}(${params})`;
+                            }
                             break;
                         }
                         default:
                             return Debug.fail(`Unhandled Diagnostic: ${msg.code}`);
                     }
                 }
-                reportError(Diagnostics.The_types_of_0_are_incompatible_between_these_types, path);
+                if (path) {
+                    reportError(Diagnostics.The_types_of_0_are_incompatible_between_these_types, path);
+                }
+                else {
+                    // Remove the innermost secondary error as it will duplicate the error already reported by `reportRelationError` on entry
+                    secondaryRootErrors.shift();
+                }
+                for (const [msg, ...args] of secondaryRootErrors) {
+                    const originalValue = msg.elidedInCompatabilityPyramid;
+                    msg.elidedInCompatabilityPyramid = false; // Teporarily override elision to ensure error is reported
+                    reportError(msg, ...args);
+                    msg.elidedInCompatabilityPyramid = originalValue;
+                }
                 if (info) {
                     // Actually do the last relation error
                     reportRelationError(/*headMessage*/ undefined, ...info);
@@ -14304,22 +14330,22 @@ namespace ts {
 
             function reportIncompatibleCallSignatureReturn(siga: Signature, sigb: Signature) {
                 if (siga.parameters.length === 0 && sigb.parameters.length === 0) {
-                    return () => reportIncompatibleError(Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types);
+                    return (source: Type, target: Type) => reportIncompatibleError(Diagnostics.Call_signatures_with_no_arguments_have_incompatible_return_types_0_and_1, typeToString(source), typeToString(target));
                 }
-                return () => reportIncompatibleError(Diagnostics.Call_signature_return_types_are_incompatible);
+                return (source: Type, target: Type) => reportIncompatibleError(Diagnostics.Call_signature_return_types_0_and_1_are_incompatible, typeToString(source), typeToString(target));
             }
 
             function reportIncompatibleConstructSignatureReturn(siga: Signature, sigb: Signature) {
                 if (siga.parameters.length === 0 && sigb.parameters.length === 0) {
-                    return () => reportIncompatibleError(Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types);
+                    return (source: Type, target: Type) => reportIncompatibleError(Diagnostics.Construct_signatures_with_no_arguments_have_incompatible_return_types_0_and_1, typeToString(source), typeToString(target));
                 }
-                return () => reportIncompatibleError(Diagnostics.Construct_signature_return_types_are_incompatible);
+                return (source: Type, target: Type) => reportIncompatibleError(Diagnostics.Construct_signature_return_types_0_and_1_are_incompatible, typeToString(source), typeToString(target));
             }
 
             /**
              * See signatureAssignableTo, compareSignaturesIdentical
              */
-            function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: () => void): Ternary {
+            function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
                     CallbackCheck.None, /*ignoreReturnTypes*/ false, reportErrors, reportError, incompatibleReporter, isRelatedTo);
             }
