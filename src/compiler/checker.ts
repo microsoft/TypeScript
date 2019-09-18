@@ -17363,7 +17363,14 @@ namespace ts {
                 }
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
-                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType!));
+                if (propType === narrowedPropType) {
+                    return type;
+                }
+                const isPropertyDiscriminated = (t: Type) => {
+                    const constituentPropType = getTypeOfPropertyOrIndexSignature(t, propName);
+                    return (constituentPropType.flags & TypeFlags.Never) === 0 && isTypeComparableTo(constituentPropType, narrowedPropType!);
+                };
+                return filterType(type, isPropertyDiscriminated);
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {

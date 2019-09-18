@@ -289,3 +289,67 @@ function f31(foo: Foo) {
     }
 }
 
+// Repro from #33448
+
+type a = {
+>a : a
+
+    type: 'a',
+>type : "a"
+
+    data: string
+>data : string
+}
+type b = {
+>b : b
+
+    type: 'b',
+>type : "b"
+
+    name: string
+>name : string
+}
+type c = {
+>c : c
+
+    type: 'c',
+>type : "c"
+
+    other: string
+>other : string
+}
+type abc = a | b | c;
+>abc : abc
+
+function f(problem: abc & (b | c)) {
+>f : (problem: b | c | (a & b) | (a & c) | (b & c) | (c & b)) => void
+>problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+
+    if (problem.type === 'b') {
+>problem.type === 'b' : boolean
+>problem.type : "b" | "c"
+>problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+>type : "b" | "c"
+>'b' : "b"
+
+        console.log(problem.name);
+>console.log(problem.name) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>problem.name : string
+>problem : b
+>name : string
+
+    } else {
+        console.log(problem.other);
+>console.log(problem.other) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>problem.other : string
+>problem : c
+>other : string
+    }
+}
+

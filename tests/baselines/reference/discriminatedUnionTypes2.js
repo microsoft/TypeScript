@@ -94,6 +94,29 @@ function f31(foo: Foo) {
     }
 }
 
+// Repro from #33448
+
+type a = {
+    type: 'a',
+    data: string
+}
+type b = {
+    type: 'b',
+    name: string
+}
+type c = {
+    type: 'c',
+    other: string
+}
+type abc = a | b | c;
+function f(problem: abc & (b | c)) {
+    if (problem.type === 'b') {
+        console.log(problem.name);
+    } else {
+        console.log(problem.other);
+    }
+}
+
 
 //// [discriminatedUnionTypes2.js]
 "use strict";
@@ -162,5 +185,13 @@ function f31(foo) {
     }
     else {
         foo;
+    }
+}
+function f(problem) {
+    if (problem.type === 'b') {
+        console.log(problem.name);
+    }
+    else {
+        console.log(problem.other);
     }
 }
