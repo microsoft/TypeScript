@@ -8971,7 +8971,7 @@ namespace ts {
             return undefined;
         }
 
-        function getConstraintDeclaration(type: TypeParameter) {
+        function getConstraintDeclaration(type: TypeParameter): TypeNode | undefined {
             return mapDefined(filter(type.symbol && type.symbol.declarations, isTypeParameterDeclaration), getEffectiveConstraintOfTypeParameter)[0];
         }
 
