@@ -22,7 +22,6 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2610: Property 'b' will overwrite the base property in 'T2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2610: Property 'length' will overwrite the base property in 'number[]'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2610: Property '0' will overwrite the base property in '[string, number]'. Add a 'declare' modifier or an initializer to avoid this.
@@ -60,7 +59,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(47,26): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts (28 errors) ====
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts (27 errors) ====
     type T1 = { a: number };
     type T2 = T1 & { b: number };
     type T3 = number[];
@@ -113,8 +112,6 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
                                          ~~~~~~
 !!! error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
-                                         ~~~~~~
-!!! error TS2610: Property 'length' will overwrite the base property in 'number[]'. Add a 'declare' modifier or an initializer to avoid this.
     class C4 extends Constructor<T4>() { 0: number }
                                          ~
 !!! error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
