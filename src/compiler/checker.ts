@@ -6430,8 +6430,7 @@ namespace ts {
             return true;
         }
 
-        // A valid base type is `any`, any non-generic object type or intersection of constructor types and non-generic
-        // object types.
+        // A valid base type is `any`, an object type or intersection of object types.
         function isValidBaseType(type: Type): type is BaseType {
             if (type.flags & TypeFlags.TypeParameter) {
                 const constraint = getBaseConstraintOfType(type);
@@ -6439,6 +6438,8 @@ namespace ts {
                     return isValidBaseType(constraint);
                 }
             }
+            // TODO: Given that we allow type parmeters here now, is this `!isGenericMappedType(type)` check really needed?
+            // There's no reason a `T` should be allowed while a `Readonly<T>` should not.
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
                 !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
         }
