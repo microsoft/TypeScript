@@ -8,9 +8,5 @@
     "eslint.options": {
         "rulePaths": ["./scripts/eslint/built/rules/"],
         "ext": [".ts"]
-    },
-    "eslint.workingDirectories": [
-        { "directory": "./src", "changeProcessCWD": false },
-        { "directory": "./scripts", "changeProcessCWD": false }
-    ]
+    }
 }
