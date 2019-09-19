@@ -58,9 +58,12 @@ interface I {
     q: number
 }
 interface J extends I { }
-class K { }
-class L extends K {
-    q: 1 | 2 | 3 // ok, extends a property from an interface
+class J {
+    r = 5
+}
+class K extends J {
+    q!: 1 | 2 | 3 // ok, extends a property from an interface
+    r!: 4 | 5 // error, from class
 }
 
 
@@ -164,15 +167,16 @@ var H = /** @class */ (function (_super) {
     }
     return H;
 }(E));
-var K = /** @class */ (function () {
-    function K() {
+var J = /** @class */ (function () {
+    function J() {
+        this.r = 5;
     }
-    return K;
+    return J;
 }());
-var L = /** @class */ (function (_super) {
-    __extends(L, _super);
-    function L() {
+var K = /** @class */ (function (_super) {
+    __extends(K, _super);
+    function K() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return L;
-}(K));
+    return K;
+}(J));

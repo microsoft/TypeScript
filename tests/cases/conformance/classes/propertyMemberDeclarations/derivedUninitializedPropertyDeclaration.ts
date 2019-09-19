@@ -58,7 +58,10 @@ interface I {
     q: number
 }
 interface J extends I { }
-class K { }
-class L extends K {
-    q: 1 | 2 | 3 // ok, extends a property from an interface
+class J {
+    r = 5
+}
+class K extends J {
+    q!: 1 | 2 | 3 // ok, extends a property from an interface
+    r!: 4 | 5 // error, from class
 }

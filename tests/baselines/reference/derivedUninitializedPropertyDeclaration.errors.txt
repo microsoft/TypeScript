@@ -7,7 +7,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2610: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(39,5): error TS2610: Property 'p1' will overwrite the base property in 'E'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(62,5): error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(65,5): error TS2610: Property 'r' will overwrite the base property in 'J'. Add a 'declare' modifier or an initializer to avoid this.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (10 errors) ====
@@ -88,10 +88,13 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
         q: number
     }
     interface J extends I { }
-    class K { }
-    class L extends K {
-        q: 1 | 2 | 3 // ok, extends a property from an interface
+    class J {
+        r = 5
+    }
+    class K extends J {
+        q!: 1 | 2 | 3 // ok, extends a property from an interface
+        r!: 4 | 5 // error, from class
         ~
-!!! error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2610: Property 'r' will overwrite the base property in 'J'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
