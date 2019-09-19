@@ -6264,12 +6264,12 @@ namespace ts {
         }
 
         function isConstructorType(type: Type): boolean {
-            if (isValidBaseType(type) && getSignaturesOfType(type, SignatureKind.Construct).length > 0) {
+            if (getSignaturesOfType(type, SignatureKind.Construct).length > 0) {
                 return true;
             }
             if (type.flags & TypeFlags.TypeVariable) {
                 const constraint = getBaseConstraintOfType(type);
-                return !!constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
+                return !!constraint && isMixinConstructorType(constraint);
             }
             return false;
         }
@@ -6433,8 +6433,14 @@ namespace ts {
         // A valid base type is `any`, any non-generic object type or intersection of constructor types and non-generic
         // object types.
         function isValidBaseType(type: Type): type is BaseType {
+            if (type.flags & TypeFlags.TypeParameter) {
+                const constraint = getBaseConstraintOfType(type);
+                if (constraint) {
+                    return isValidBaseType(constraint);
+                }
+            }
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
-                !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, t => isConstructorType(t) || isValidBaseType(t));
+                !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
