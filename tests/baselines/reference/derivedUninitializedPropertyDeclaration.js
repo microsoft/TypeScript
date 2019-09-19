@@ -54,6 +54,15 @@ abstract class H extends E {
     declare abstract p2: 'a' | 'b' | 'c'
 }
 
+interface I {
+    q: number
+}
+interface J extends I { }
+class K { }
+class L extends K {
+    q: 1 | 2 | 3 // ok, extends a property from an interface
+}
+
 
 //// [derivedUninitializedPropertyDeclaration.js]
 "use strict";
@@ -155,3 +164,15 @@ var H = /** @class */ (function (_super) {
     }
     return H;
 }(E));
+var K = /** @class */ (function () {
+    function K() {
+    }
+    return K;
+}());
+var L = /** @class */ (function (_super) {
+    __extends(L, _super);
+    function L() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return L;
+}(K));

@@ -29518,7 +29518,9 @@ namespace ts {
                     }
                     if (base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                         const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
+                        const baseParent = getParentOfSymbol(base);
                         if (uninitialized
+                            && !(baseParent && baseParent.flags & SymbolFlags.Interface)
                             && !(derived.flags & SymbolFlags.Transient)
                             && !(baseDeclarationFlags & ModifierFlags.Abstract)
                             && !(derivedDeclarationFlags & ModifierFlags.Abstract)

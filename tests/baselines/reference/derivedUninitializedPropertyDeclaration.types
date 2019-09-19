@@ -127,3 +127,19 @@ abstract class H extends E {
 >p2 : "a" | "b" | "c"
 }
 
+interface I {
+    q: number
+>q : number
+}
+interface J extends I { }
+class K { }
+>K : K
+
+class L extends K {
+>L : L
+>K : K
+
+    q: 1 | 2 | 3 // ok, extends a property from an interface
+>q : 1 | 2 | 3
+}
+
