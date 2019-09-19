@@ -1621,7 +1621,7 @@ namespace ts {
 
         if (!state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
-            const buildInfoPath = getOutputPathForBuildInfo(project.options);
+            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
                 const value = state.readFileWithCache(buildInfoPath);
                 const buildInfo = value && getBuildInfo(value);
