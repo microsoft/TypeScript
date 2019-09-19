@@ -53,3 +53,15 @@ abstract class H extends E {
     abstract p1: 'a' | 'b' | 'c'
     declare abstract p2: 'a' | 'b' | 'c'
 }
+
+interface I {
+    q: number
+}
+interface J extends I { }
+class J {
+    r = 5
+}
+class K extends J {
+    q!: 1 | 2 | 3 // ok, extends a property from an interface
+    r!: 4 | 5 // error, from class
+}

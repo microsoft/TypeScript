@@ -120,3 +120,30 @@ abstract class H extends E {
 >p2 : Symbol(H.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 51, 32))
 }
 
+interface I {
+>I : Symbol(I, Decl(derivedUninitializedPropertyDeclaration.ts, 53, 1))
+
+    q: number
+>q : Symbol(I.q, Decl(derivedUninitializedPropertyDeclaration.ts, 55, 13))
+}
+interface J extends I { }
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+>I : Symbol(I, Decl(derivedUninitializedPropertyDeclaration.ts, 53, 1))
+
+class J {
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+
+    r = 5
+>r : Symbol(J.r, Decl(derivedUninitializedPropertyDeclaration.ts, 59, 9))
+}
+class K extends J {
+>K : Symbol(K, Decl(derivedUninitializedPropertyDeclaration.ts, 61, 1))
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+
+    q!: 1 | 2 | 3 // ok, extends a property from an interface
+>q : Symbol(K.q, Decl(derivedUninitializedPropertyDeclaration.ts, 62, 19))
+
+    r!: 4 | 5 // error, from class
+>r : Symbol(K.r, Decl(derivedUninitializedPropertyDeclaration.ts, 63, 17))
+}
+
