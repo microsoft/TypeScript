@@ -3948,6 +3948,10 @@
         "category": "Message",
         "code": 6201
     },
+        "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
     "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
@@ -4020,6 +4024,10 @@
         "category": "Message",
         "code": 6220
     },
+    "Emit legacy class fields.": {
+        "category": "Message",
+        "code": 6221
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4029,10 +4037,7 @@
         "category": "Message",
         "code": 6302
     },
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6202
-    },
+
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
