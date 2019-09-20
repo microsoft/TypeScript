@@ -9,4 +9,4 @@
 
 goTo.marker();
 verify.quickInfoIs(`module mod["@@thing1"]
-(property) mod["@@thing1"]: typeof mod["@@thing1"]`);
+(property) mod["@@thing1"]: typeof mod."@@thing1"`);
