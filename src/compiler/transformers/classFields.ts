@@ -44,7 +44,15 @@ namespace ts {
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile) {
+            const options = context.getCompilerOptions();
+            if (node.isDeclarationFile
+                // TODO: ES3 target will still need to emit set semantics probably
+                // TODO: Need to test computed proeprties too
+                // [x] = 1 => Object.defineProperty(this, x, ...)
+                // -vs-
+                // [x] = 1 -> this[x] = 1
+                // TODO: Unininitialised properties need to be emitted too.
+                || !options.legacyClassFields && options.target === ScriptTarget.ESNext) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);
@@ -172,9 +180,9 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addInitializedPropertyStatements(statements, staticProperties, getInternalName(node));
+                addPropertyStatements(statements, staticProperties, getInternalName(node));
             }
 
             return statements;
@@ -196,7 +204,7 @@ namespace ts {
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = isClassDeclaration(getOriginalNode(node));
 
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
@@ -220,7 +228,7 @@ namespace ts {
                     pendingExpressions = savedPendingExpressions;
 
                     if (pendingStatements && some(staticProperties)) {
-                        addInitializedPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
+                        addPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
                     }
                     return classExpression;
                 }
@@ -266,8 +274,8 @@ namespace ts {
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             const constructor = visitNode(getFirstConstructorWithBody(node), visitor, isConstructorDeclaration);
-            const containsPropertyInitializer = forEach(node.members, isInitializedProperty);
-            if (!containsPropertyInitializer) {
+            const containsProperty = forEach(node.members, m => isInitializedProperty(m, !!context.getCompilerOptions().legacyClassFields));
+            if (!containsProperty) {
                 return constructor;
             }
             const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
@@ -292,7 +300,7 @@ namespace ts {
         }
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-            const properties = getInitializedProperties(node, /*isStatic*/ false);
+            const properties = getProperties(node, /*requireInitializer*/ !!context.getCompilerOptions().legacyClassFields, /*isStatic*/ false);
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
@@ -335,6 +343,7 @@ namespace ts {
             //  }
             //
             if (constructor && constructor.body) {
+                // TODO: Need to think about parameter property declarations
                 let parameterPropertyDeclarationCount = 0;
                 for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
                     if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {
@@ -349,7 +358,7 @@ namespace ts {
                     indexOfFirstStatement += parameterPropertyDeclarationCount;
                 }
             }
-            addInitializedPropertyStatements(statements, properties, createThis());
+            addPropertyStatements(statements, properties, createThis());
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {
@@ -376,7 +385,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
                 const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
@@ -413,14 +422,20 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
-            // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
-            const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
-                : property.name;
-            const initializer = visitNode(property.initializer, visitor, isExpression);
-            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+            if (context.getCompilerOptions().legacyClassFields) {
+                // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
+                const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
+                    ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
+                    : property.name;
+                const initializer = visitNode(property.initializer, visitor, isExpression);
+                const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
-            return createAssignment(memberAccess, initializer);
+                return createAssignment(memberAccess, initializer);
+            }
+            else {
+                return createIdentifier('hi');
+                // return createCall();
+            }
         }
 
         function enableSubstitutionForClassAliases() {

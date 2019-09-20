@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2015
 class A {
     get p() { return 'oh no' }
 }

@@ -4803,13 +4803,14 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
+        legacyClassFields?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
         /* @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead.
+         * Use typeAcquisition.enable instead. 
          */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
