@@ -427,15 +427,25 @@ namespace ts {
                 const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                     ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                     : property.name;
-                const initializer = visitNode(property.initializer, visitor, isExpression);
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
-
+                const initializer = visitNode(property.initializer, visitor, isExpression);
                 return createAssignment(memberAccess, initializer);
             }
             else {
-                return createIdentifier('hi');
-                // return createCall();
+                // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
+                const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
+                    ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
+                    : property.name;
+                const initializer = property.initializer ? visitNode(property.initializer, visitor, isExpression) : createVoidZero()
+                return createObjectDefineForPropertyName(receiver, propertyName, initializer);
             }
+        }
+
+        function createObjectDefineForPropertyName(target: Expression, name: PropertyName, initializer: Expression) {
+            return createCall(
+                createPropertyAccess(createIdentifier("Object"), createIdentifier("defineProperty")),
+                undefined,
+                [target, isComputedPropertyName(name) ? name.expression : name, createObjectLiteral([createPropertyAssignment("value", initializer)])]);
         }
 
         function enableSubstitutionForClassAliases() {
