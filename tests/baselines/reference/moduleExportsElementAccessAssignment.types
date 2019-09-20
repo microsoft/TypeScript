@@ -20,6 +20,18 @@ mod1.c;
 >mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
 >c : { x: string; }
 
+mod1.d;
+>mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
+>d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+
+mod1.d.e;
+>mod1.d.e : number
+>mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
+>d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>e : number
+
 mod1.default;
 >mod1.default : { x: string; }
 >mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
@@ -63,4 +75,24 @@ module.exports["c"] = { x: "x" };
 >{ x: "x" } : { x: string; }
 >x : string
 >"x" : "x"
+
+module["exports"]["d"] = {};
+>module["exports"]["d"] = {} : typeof "d"
+>module["exports"]["d"] : typeof "d"
+>module["exports"] : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>"exports" : "exports"
+>"d" : "d"
+>{} : {}
+
+module["exports"]["d"].e = 0;
+>module["exports"]["d"].e = 0 : 0
+>module["exports"]["d"].e : number
+>module["exports"]["d"] : typeof "d"
+>module["exports"] : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>"exports" : "exports"
+>"d" : "d"
+>e : number
+>0 : 0
 

@@ -1790,7 +1790,7 @@ namespace ts {
         expression: EntityNameExpression;
     }
 
-    export interface ElementAccessExpression extends MemberExpression, Declaration {
+    export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
         argumentExpression: Expression;
@@ -1817,11 +1817,11 @@ namespace ts {
     /** @internal */
     export type BindableAccessExpression = PropertyAccessEntityNameExpression | BindableElementAccessExpression;
     /** @internal */
-    export interface LiteralLikeElementAccessExpression extends ElementAccessExpression {
+    export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
         argumentExpression: StringLiteralLike | NumericLiteral;
     };
     /** @internal */
-    export type BindableElementAccessExpression = LiteralLikeElementAccessExpression & Declaration & {
+    export type BindableElementAccessExpression = LiteralLikeElementAccessExpression & {
         expression: BindableNameExpression;
     };
     /** @internal */

@@ -2169,17 +2169,18 @@ namespace ts {
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    if (currentFlow && isNarrowableReference(<Expression>node)) {
-                        node.flowNode = currentFlow;
+                    const expr = node as PropertyAccessExpression | ElementAccessExpression;
+                    if (currentFlow && isNarrowableReference(expr)) {
+                        expr.flowNode = currentFlow;
                     }
-                    if (isSpecialPropertyDeclaration(node as PropertyAccessExpression | ElementAccessExpression)) {
-                        bindSpecialPropertyDeclaration(node as PropertyAccessExpression | ElementAccessExpression);
+                    if (isSpecialPropertyDeclaration(expr)) {
+                        bindSpecialPropertyDeclaration(expr);
                     }
-                    if (isInJSFile(node) &&
+                    if (isInJSFile(expr) &&
                         file.commonJsModuleIndicator &&
-                        isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression | ElementAccessExpression) &&
+                        isModuleExportsAccessExpression(expr) &&
                         !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
-                        declareSymbol(file.locals!, /*parent*/ undefined, (node as PropertyAccessExpression | ElementAccessExpression).expression as Identifier,
+                        declareSymbol(file.locals!, /*parent*/ undefined, expr.expression,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
                     break;
@@ -2517,7 +2518,7 @@ namespace ts {
             declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
-        function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression | ElementAccessExpression) {
+        function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
             Debug.assert(isInJSFile(node));
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (thisContainer.kind) {
@@ -2567,7 +2568,7 @@ namespace ts {
             }
         }
 
-        function bindSpecialPropertyDeclaration(node: PropertyAccessExpression | ElementAccessExpression) {
+        function bindSpecialPropertyDeclaration(node: PropertyAccessExpression | LiteralLikeElementAccessExpression) {
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
@@ -3030,7 +3031,7 @@ namespace ts {
         while (q.length && i < 100) {
             i++;
             node = q.shift()!;
-            if (isExportsIdentifier(node) || isModuleExportsPropertyAccessExpression(node)) {
+            if (isExportsIdentifier(node) || isModuleExportsAccessExpression(node)) {
                 return true;
             }
             else if (isIdentifier(node)) {

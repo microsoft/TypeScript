@@ -5840,6 +5840,8 @@ namespace ts {
                 || isPropertyAccessExpression(declaration)
                 || isElementAccessExpression(declaration)
                 || isIdentifier(declaration)
+                || isStringLiteralLike(declaration)
+                || isNumericLiteral(declaration)
                 || isClassDeclaration(declaration)
                 || isFunctionDeclaration(declaration)
                 || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))

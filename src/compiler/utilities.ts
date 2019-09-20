@@ -2030,8 +2030,11 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
-    export function isModuleExportsPropertyAccessExpression(node: Node) {
-        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name.escapedText === "exports";
+    export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
+        return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
+            && isIdentifier(node.expression)
+            && node.expression.escapedText === "module"
+            && getNameOrArgumentText(node) === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -2064,14 +2067,13 @@ namespace ts {
         return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
     }
 
-    export function isBindableAccessExpression(node: Node): node is BindableAccessExpression {
-        return isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword
-            || isPropertyAccessEntityNameExpression(node)
+    export function isBindableAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableAccessExpression {
+        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableNameExpression(node.expression, /*excludeThisKeyword*/ true))
             || isBindableElementAccessExpression(node);
     }
 
-    export function isBindableNameExpression(node: Node): node is BindableNameExpression {
-        return isEntityNameExpression(node) || isBindableAccessExpression(node);
+    export function isBindableNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableNameExpression {
+        return isEntityNameExpression(node) || isBindableAccessExpression(node, excludeThisKeyword);
     }
 
     export function isBindableAssignmentExpression(node: Node): node is BindableAssignmentExpression {
@@ -2098,7 +2100,7 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
+            if (isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
             if (isBindableAccessExpression(entityName) && getNameOrArgumentText(entityName) === "prototype") {
@@ -2120,7 +2122,7 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isModuleExportsPropertyAccessExpression(lhs)) {
+        else if (isModuleExportsAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
@@ -2158,9 +2160,10 @@ namespace ts {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
-    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
         return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
+            (!isElementAccessExpression(expr) || isLiteralLikeElementAccess(expr)) &&
             !!getJSDocTypeTag(expr.parent);
     }
 
