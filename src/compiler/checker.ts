@@ -6015,7 +6015,8 @@ namespace ts {
                 return anyType;
             }
             else if (declaration.kind === SyntaxKind.BinaryExpression ||
-                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    (declaration.kind === SyntaxKind.PropertyAccessExpression || declaration.kind === SyntaxKind.ElementAccessExpression) &&
+                    declaration.parent.kind === SyntaxKind.BinaryExpression) {
                 return getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {

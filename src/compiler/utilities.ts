@@ -1874,7 +1874,7 @@ namespace ts {
                 decl = name;
             }
 
-            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
+            if (!name || !isBindableNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
                 return undefined;
             }
         }
