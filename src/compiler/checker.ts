@@ -17099,7 +17099,7 @@ namespace ts {
                 }
             }
 
-            function getInitialOrAssignedType(flow: FlowAssignment, reference: Node) {
+            function getInitialOrAssignedType(flow: FlowAssignment) {
                 const node = flow.node;
                 if (flow.flags & FlowFlags.Cached) {
                     const cached = flowAssignmentTypes[getNodeId(node)];
@@ -17133,11 +17133,11 @@ namespace ts {
                         if (isEmptyArrayAssignment(node)) {
                             return getEvolvingArrayType(neverType);
                         }
-                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(flow, reference));
+                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(flow));
                         return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                     }
                     if (declaredType.flags & TypeFlags.Union) {
-                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(flow, reference));
+                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(flow));
                     }
                     return declaredType;
                 }
