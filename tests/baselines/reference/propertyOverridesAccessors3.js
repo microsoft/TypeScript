@@ -26,9 +26,7 @@ lion.makeSound() // with [[Define]]: Expected "RAWR!" but got "rustling noise in
 
 //// [propertyOverridesAccessors3.js]
 class Animal {
-    constructor() {
-        this._sound = 'rustling noise in the bushes';
-    }
+    _sound = 'rustling noise in the bushes';
     get sound() { return this._sound; }
     set sound(val) {
         this._sound = val;
@@ -41,10 +39,7 @@ class Animal {
 const a = new Animal;
 a.makeSound(); // 'rustling noise in the bushes'
 class Lion extends Animal {
-    constructor() {
-        super(...arguments);
-        this.sound = 'RAWR!'; // error here
-    }
+    sound = 'RAWR!'; // error here
 }
 const lion = new Lion;
 lion.makeSound(); // with [[Define]]: Expected "RAWR!" but got "rustling noise in the bushes"

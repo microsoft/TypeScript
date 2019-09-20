@@ -14,9 +14,7 @@ console.log(obj.x); // 1
 
 //// [accessorsOverrideProperty2.js]
 class Base {
-    constructor() {
-        this.x = 1;
-    }
+    x = 1;
 }
 class Derived extends Base {
     get x() { return 2; } // should be an error

@@ -18,10 +18,7 @@ class Base {
     set x(value) { console.log(`x was set to ${value}`); }
 }
 class Derived extends Base {
-    constructor() {
-        super(...arguments);
-        this.x = 1;
-    }
+    x = 1;
 }
 const obj = new Derived(); // prints 'x was set to 1'
 console.log(obj.x); // 2

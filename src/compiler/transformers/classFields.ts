@@ -51,7 +51,6 @@ namespace ts {
                 // [x] = 1 => Object.defineProperty(this, x, ...)
                 // -vs-
                 // [x] = 1 -> this[x] = 1
-                // TODO: Unininitialised properties need to be emitted too.
                 || !options.legacyClassFields && options.target === ScriptTarget.ESNext) {
                 return node;
             }
@@ -439,10 +438,11 @@ namespace ts {
 
         function createObjectDefineProperty(target: Expression, name: PropertyName, initializer: Expression) {
             const e = isComputedPropertyName(name) ? name.expression
-                : isIdentifier(name) ? createStringLiteral(unescapeLeadingUnderscores(name.escapedText)) : name;
+                : isIdentifier(name) ? createStringLiteral(unescapeLeadingUnderscores(name.escapedText))
+                : name;
             return createCall(
                 createPropertyAccess(createIdentifier("Object"), createIdentifier("defineProperty")),
-                undefined,
+                /*typeArguments*/ undefined,
                 [target, e, createObjectLiteral([createPropertyAssignment("value", initializer)])]);
         }
 

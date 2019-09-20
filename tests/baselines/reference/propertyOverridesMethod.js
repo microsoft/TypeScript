@@ -12,8 +12,5 @@ class A {
     m() { }
 }
 class B extends A {
-    constructor() {
-        super(...arguments);
-        this.m = () => 1;
-    }
+    m = () => 1;
 }

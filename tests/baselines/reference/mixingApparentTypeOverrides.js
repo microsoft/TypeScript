@@ -51,6 +51,7 @@ function Tagged(Base) {
                 args[_i] = arguments[_i];
             }
             var _this = _super.apply(this, args) || this;
+            Object.defineProperty(_this, "_tag", { value: void 0 });
             _this._tag = "";
             return _this;
         }

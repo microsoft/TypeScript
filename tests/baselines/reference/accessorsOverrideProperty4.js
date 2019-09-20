@@ -11,10 +11,7 @@ class Lion extends Animal {
 
 //// [accessorsOverrideProperty4.js]
 class Lion extends Animal {
-    constructor() {
-        super(...arguments);
-        this._sound = 'roar';
-    }
+    _sound = 'roar';
     get sound() { return this._sound; }
     set sound(val) { this._sound = val; }
 }

@@ -1,0 +1,15 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors5.ts(5,24): error TS2610: Class 'A' defines instance member accessor 'p', but extended class 'B' defines it as instance member property.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors5.ts (1 errors) ====
+    class A {
+        get p() { return 'oh no' }
+    }
+    class B extends A {
+        constructor(public p: string) {
+                           ~
+!!! error TS2610: Class 'A' defines instance member accessor 'p', but extended class 'B' defines it as instance member property.
+            super()
+        }
+    }
+    
