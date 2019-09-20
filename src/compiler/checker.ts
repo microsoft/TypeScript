@@ -819,6 +819,7 @@ namespace ts {
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
         let flowAnalysisDisabled = false;
+        let flowInvocationCount = 0;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -834,8 +835,7 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
-        const flowAssignmentKeys: string[] = [];
-        const flowAssignmentTypes: FlowType[] = [];
+        const flowAssignmentTypes: Type[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -16698,12 +16698,6 @@ namespace ts {
                 getInitialTypeOfBindingElement(node);
         }
 
-        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression, reference: Node) {
-            return getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
-                getInitialType(<VariableDeclaration | BindingElement>node) :
-                getAssignedType(node), reference);
-        }
-
         function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
             return node.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node).initializer &&
                 isEmptyArrayLiteral((<VariableDeclaration>node).initializer!) ||
@@ -16990,6 +16984,7 @@ namespace ts {
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
+            flowInvocationCount++;
             const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             sharedFlowCount = sharedFlowStart;
@@ -17022,15 +17017,6 @@ namespace ts {
                 flowDepth++;
                 while (true) {
                     const flags = flow.flags;
-                    if (flags & FlowFlags.Cached) {
-                        const key = getOrSetCacheKey();
-                        if (key) {
-                            const id = getFlowNodeId(flow);
-                            if (flowAssignmentKeys[id] === key) {
-                                return flowAssignmentTypes[id];
-                            }
-                        }
-                    }
                     if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
@@ -17060,15 +17046,6 @@ namespace ts {
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
-                        }
-                        else if (flowLoopCount === flowLoopStart) { // Only cache assignments when not within loop analysis
-                            const key = getOrSetCacheKey();
-                            if (key && !isIncomplete(type)) {
-                                flow.flags |= FlowFlags.Cached;
-                                const id = getFlowNodeId(flow);
-                                flowAssignmentKeys[id] = key;
-                                flowAssignmentTypes[id] = type;
-                            }
                         }
                     }
                     else if (flags & FlowFlags.Condition) {
@@ -17122,6 +17099,27 @@ namespace ts {
                 }
             }
 
+            function getInitialOrAssignedType(flow: FlowAssignment, reference: Node) {
+                const node = flow.node;
+                if (flow.flags & FlowFlags.Cached) {
+                    const cached = flowAssignmentTypes[getNodeId(node)];
+                    if (cached) {
+                        return cached;
+                    }
+                }
+                const startInvocationCount = flowInvocationCount;
+                const type = getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                    getInitialType(<VariableDeclaration | BindingElement>node) :
+                    getAssignedType(node), reference);
+                // We cache the assigned type when getFlowTypeOfReference was recursively invoked in the
+                // resolution of the assigned type and we're not within loop analysis.
+                if (flowInvocationCount !== startInvocationCount && flowLoopCount === flowLoopStart) {
+                    flow.flags |= FlowFlags.Cached;
+                    flowAssignmentTypes[getNodeId(node)] = type;
+                }
+                return type;
+            }
+
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -17135,11 +17133,11 @@ namespace ts {
                         if (isEmptyArrayAssignment(node)) {
                             return getEvolvingArrayType(neverType);
                         }
-                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(node, reference));
+                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(flow, reference));
                         return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                     }
                     if (declaredType.flags & TypeFlags.Union) {
-                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node, reference));
+                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(flow, reference));
                     }
                     return declaredType;
                 }
