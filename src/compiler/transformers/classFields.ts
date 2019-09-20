@@ -422,30 +422,28 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
-            if (context.getCompilerOptions().legacyClassFields) {
-                // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
-                const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                    ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
-                    : property.name;
+            // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
+            const emitAssignment = context.getCompilerOptions().legacyClassFields;
+            const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
+                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
+                : property.name;
+            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : createVoidZero()
+            if (emitAssignment) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
-                const initializer = visitNode(property.initializer, visitor, isExpression);
                 return createAssignment(memberAccess, initializer);
             }
             else {
-                // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
-                const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                    ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
-                    : property.name;
-                const initializer = property.initializer ? visitNode(property.initializer, visitor, isExpression) : createVoidZero()
-                return createObjectDefineForPropertyName(receiver, propertyName, initializer);
+                return createObjectDefineProperty(receiver, propertyName, initializer);
             }
         }
 
-        function createObjectDefineForPropertyName(target: Expression, name: PropertyName, initializer: Expression) {
+        function createObjectDefineProperty(target: Expression, name: PropertyName, initializer: Expression) {
+            const e = isComputedPropertyName(name) ? name.expression
+                : isIdentifier(name) ? createStringLiteral(unescapeLeadingUnderscores(name.escapedText)) : name;
             return createCall(
                 createPropertyAccess(createIdentifier("Object"), createIdentifier("defineProperty")),
                 undefined,
-                [target, isComputedPropertyName(name) ? name.expression : name, createObjectLiteral([createPropertyAssignment("value", initializer)])]);
+                [target, e, createObjectLiteral([createPropertyAssignment("value", initializer)])]);
         }
 
         function enableSubstitutionForClassAliases() {

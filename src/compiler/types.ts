@@ -4810,7 +4810,7 @@ namespace ts {
 
     export interface TypeAcquisition {
         /* @deprecated typingOptions.enableAutoDiscovery
-         * Use typeAcquisition.enable instead. 
+         * Use typeAcquisition.enable instead.
          */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
