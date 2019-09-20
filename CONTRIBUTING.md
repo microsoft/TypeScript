@@ -71,7 +71,7 @@ Design changes will not be accepted at this time. If you have a design change pr
 
 You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright.
 
-Please submit a Contributor License Agreement (CLA) before submitting a pull request. You may visit https://cla.microsoft.com to sign digitally. Alternatively, download the agreement ([Microsoft Contribution License Agreement.pdf](https://opensource.microsoft.com/pdf/microsoft-contribution-license-agreement.pdf)), sign, scan, and email it back to <cla@microsoft.com>. Be sure to include your github user name along with the agreement. Once we have received the signed CLA, we'll review the request. 
+Please submit a Contributor License Agreement (CLA) before submitting a pull request. You may visit https://cla.microsoft.com to sign digitally. Alternatively, download the agreement ([Microsoft Contribution License Agreement.pdf](https://opensource.microsoft.com/pdf/microsoft-contribution-license-agreement.pdf)), sign, scan, and email it back to <cla@microsoft.com>. Be sure to include your GitHub user name along with the agreement. Once we have received the signed CLA, we'll review the request. 
 
 ## Housekeeping
 
@@ -148,7 +148,7 @@ You will probably only want to debug one test at a time:
 gulp runtests-browser --tests=2dArrays
 ```
 
-You can specify which browser to use for debugging. Currently Chrome and IE are supported:
+You can specify which browser to use for debugging. Currently, Chrome and IE are supported:
 
 ```Shell
 gulp runtests-browser --tests=2dArrays --browser=chrome
