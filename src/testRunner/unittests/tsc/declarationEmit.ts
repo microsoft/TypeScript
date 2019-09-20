@@ -67,7 +67,7 @@ namespace ts {
                     "/plugin-one/node_modules/plugin-two": new vfs.Symlink("/plugin-two"),
                 });
             },
-            commandLineArgs: ["-p", "plugin-one"]
+            commandLineArgs: ["-p", "plugin-one", "--listFiles"]
         });
     });
 }
