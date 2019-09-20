@@ -1463,7 +1463,7 @@ type Exclude<T, U> = T extends U ? never : T;
  */
 type Extract<T, U> = T extends U ? T : never;
 
-export type KnownKeys<T> = {
+type KnownKeys<T> = {
     [K in keyof T]: string extends K ? never : number extends K ? never : K
 } extends { [_ in keyof T]: infer U } ? ({} extends U ? never : U) : never;
 type OmitFromKnownKeys<T, K extends keyof T> = KnownKeys<T> extends infer U ?
