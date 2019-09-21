@@ -18,7 +18,7 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-XX of XX: [@azure/app-configuration] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/app-configuration.api.md
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
@@ -39,7 +39,7 @@ crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/Ordere
 fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
 (!) Missing global variable names
 Use output.globals to specify browser global variable names corresponding to external modules
-universal-user-agent (guessing 'userAgent')
+universal-user-agent (guessing 'universalUserAgent')
 tslib (guessing 'tslib')
 @azure/cosmos-sign (guessing 'cosmosSign')
 debug (guessing 'debugLib')
@@ -64,7 +64,7 @@ XX of XX: [@azure/storage-file] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (22)
+SUCCESS (21)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -79,7 +79,6 @@ SUCCESS (22)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
-@azure/app-configuration (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/eventhubs-checkpointstore-blob (? seconds)
 @azure/keyvault-certificates (? seconds)
@@ -89,8 +88,10 @@ SUCCESS (22)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (2)
+SUCCESS WITH WARNINGS (3)
 ================================
+@azure/app-configuration (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/app-configuration.api.md
 @azure/cosmos (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
@@ -111,7 +112,7 @@ crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/Ordere
 fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
 (!) Missing global variable names
 Use output.globals to specify browser global variable names corresponding to external modules
-universal-user-agent (guessing 'userAgent')
+universal-user-agent (guessing 'universalUserAgent')
 tslib (guessing 'tslib')
 @azure/cosmos-sign (guessing 'cosmosSign')
 debug (guessing 'debugLib')
@@ -136,6 +137,7 @@ rush rebuild ( ? seconds)
 
 
 Standard error:
+XX of XX: [@azure/app-configuration] completed with warnings in ? seconds
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
 Project(s) succeeded with warnings

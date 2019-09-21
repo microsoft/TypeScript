@@ -160,4 +160,22 @@ namespace ts {
             }
         }
     });
+
+    describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
+        it("works on projects that have .json files", () => {
+            const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
+            const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
+            const program = createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            const json = program.getSourceFile("/package.json")!;
+            assert.equal(json.scriptKind, ScriptKind.JSON);
+            assert.isNumber(json.nodeCount);
+            assert.isNumber(json.identifierCount);
+
+            assert.isNotNaN(program.getNodeCount());
+            assert.isNotNaN(program.getIdentifierCount());
+        });
+    });
 }

@@ -770,7 +770,11 @@ namespace ts {
                 fixupParentReferences(sourceFile);
             }
 
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.identifiers = identifiers;
             sourceFile.parseDiagnostics = parseDiagnostics;
+
             const result = sourceFile as JsonSourceFile;
             clearState();
             return result;
@@ -2121,7 +2125,7 @@ namespace ts {
 
                     // We didn't get a comma, and the list wasn't terminated, explicitly parse
                     // out a comma so we give a good error message.
-                    parseExpected(SyntaxKind.CommaToken);
+                    parseExpected(SyntaxKind.CommaToken, getExpectedCommaDiagnostic(kind));
 
                     // If the token was a semicolon, and the caller allows that, then skip it and
                     // continue.  This ensures we get back on track and don't result in tons of
@@ -2162,6 +2166,10 @@ namespace ts {
                 result.hasTrailingComma = true;
             }
             return result;
+        }
+
+        function getExpectedCommaDiagnostic(kind: ParsingContext) {
+            return kind === ParsingContext.EnumMembers ? Diagnostics.An_enum_member_name_must_be_followed_by_a_or : undefined;
         }
 
         interface MissingList<T extends Node> extends NodeArray<T> {

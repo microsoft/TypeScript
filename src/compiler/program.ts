@@ -1530,18 +1530,18 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             let declarationDiagnostics: readonly Diagnostic[] = [];
 
-            if (!emitOnlyDtsFiles) {
+            if (!forceDtsEmit) {
                 if (options.noEmit) {
                     return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
                 }
@@ -1590,6 +1590,8 @@ namespace ts {
                 sourceFile,
                 getTransformers(options, customTransformers, emitOnlyDtsFiles),
                 emitOnlyDtsFiles,
+                /*onlyBuildInfo*/ false,
+                forceDtsEmit
             );
 
             performance.mark("afterEmit");
@@ -1757,13 +1759,12 @@ namespace ts {
                     switch (parent.kind) {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.PropertyDeclaration:
-                            if ((<ParameterDeclaration | PropertyDeclaration>parent).questionToken === node) {
+                        case SyntaxKind.MethodDeclaration:
+                            if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-                            // falls through
-
-                        case SyntaxKind.MethodDeclaration:
+                        // falls through
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
@@ -1833,7 +1834,6 @@ namespace ts {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
@@ -1841,7 +1841,7 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
                             // Check type parameters
-                            if (nodes === (<ClassLikeDeclaration | FunctionLikeDeclaration>parent).typeParameters) {
+                            if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
@@ -1849,8 +1849,8 @@ namespace ts {
 
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
-                            if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
-                                return checkModifiers(<NodeArray<Modifier>>nodes, parent.kind === SyntaxKind.VariableStatement);
+                            if (nodes === parent.modifiers) {
+                                return checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
@@ -1876,8 +1876,9 @@ namespace ts {
                         case SyntaxKind.ExpressionWithTypeArguments:
                         case SyntaxKind.JsxSelfClosingElement:
                         case SyntaxKind.JsxOpeningElement:
+                        case SyntaxKind.TaggedTemplateExpression:
                             // Check type arguments
-                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments | JsxOpeningLikeElement>parent).typeArguments) {
+                            if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                                 return;
                             }
@@ -2806,10 +2807,6 @@ namespace ts {
             }
 
             if (options.isolatedModules) {
-                if (getEmitDeclarations(options)) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, getEmitDeclarationOptionName(options), "isolatedModules");
-                }
-
                 if (options.out) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
                 }
@@ -3107,7 +3104,7 @@ namespace ts {
         }
 
         function verifyProjectReferences() {
-            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getOutputPathForBuildInfo(options) : undefined;
+            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
             forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
@@ -3134,7 +3131,7 @@ namespace ts {
                         createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
                     }
                 }
-                if (!parent && buildInfoPath && buildInfoPath === getOutputPathForBuildInfo(options)) {
+                if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
                     createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
                     hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
                 }
