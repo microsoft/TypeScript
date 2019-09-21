@@ -9630,6 +9630,7 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.ConditionalType:
+                case SyntaxKind.TypeOperator:
                     return isAliasedType(parent);
                 case SyntaxKind.TypeAliasDeclaration:
                     return true;
