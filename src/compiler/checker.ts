@@ -177,6 +177,7 @@ namespace ts {
     const enum ContextFlags {
         None = 0,
         Signature = 1 << 0,  // Obtaining contextual signature
+        NoConstraints = 1 << 1,  // Don't obtain type variable constraints
     }
 
     const enum AccessFlags {
@@ -19236,7 +19237,7 @@ namespace ts {
                 getContextualTypeForObjectLiteralMethod(node, contextFlags) :
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
-            if (instantiatedType) {
+            if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
                 const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
                 if (apparentType.flags & TypeFlags.Union) {
                     if (isObjectLiteralExpression(node)) {
@@ -25142,8 +25143,8 @@ namespace ts {
                 const constructSignature = getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ true);
                 const signature = callSignature || constructSignature;
                 if (signature && signature.typeParameters) {
-                    const contextualType = getApparentTypeOfContextualType(<Expression>node);
-                    if (contextualType && !isMixinConstructorType(contextualType)) {
+                    const contextualType = getApparentTypeOfContextualType(<Expression>node, ContextFlags.NoConstraints);
+                    if (contextualType) {
                         const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ false);
                         if (contextualSignature && !contextualSignature.typeParameters) {
                             if (checkMode & CheckMode.SkipGenericFunctions) {
