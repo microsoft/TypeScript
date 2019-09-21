@@ -165,7 +165,8 @@ namespace ts {
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
             case SyntaxKind.TypePredicate:
-                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                return visitNode(cbNode, (<TypePredicateNode>node).assertsModifier) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
                     visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
