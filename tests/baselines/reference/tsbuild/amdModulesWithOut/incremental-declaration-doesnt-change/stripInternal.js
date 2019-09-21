@@ -1893,6 +1893,9 @@ export namespace normalN {
 /*@internal*/ export const internalConst = 10;
 /*@internal*/ export enum internalEnum { a, b, c }console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {

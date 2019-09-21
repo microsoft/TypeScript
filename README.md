@@ -90,7 +90,7 @@ gulp runtests          # Run tests using the built compiler and test infrastruct
 gulp runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
                        # core count by default. Use --workers=<number> to adjust this.
 gulp baseline-accept   # This replaces the baseline test results with the results obtained from gulp runtests.
-gulp lint              # Runs tslint on the TypeScript source.
+gulp lint              # Runs eslint on the TypeScript source.
 gulp help              # List the above commands.
 ```
 

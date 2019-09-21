@@ -383,9 +383,9 @@ namespace ts.tscWatch {
             const {
                 moduleFile1, verifyAffectedFiles
             } = getInitialState({
-                    configObj: { compilerOptions: { module: "system", outFile: outFilePath } },
-                    getEmitLine: (_, host) => getEmittedLineForSingleFileOutput(outFilePath, host)
-                });
+                configObj: { compilerOptions: { module: "system", outFile: outFilePath } },
+                getEmitLine: (_, host) => getEmittedLineForSingleFileOutput(outFilePath, host)
+            });
 
             moduleFile1.content = `export var T: number;export function Foo() { };`;
             verifyAffectedFiles([moduleFile1]);
@@ -399,8 +399,8 @@ namespace ts.tscWatch {
             const {
                 moduleFile1, file1Consumer1, file1Consumer2, verifyAffectedFiles, getFile
             } = getInitialState({
-                    getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
-                });
+                getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
+            });
 
             const file1Consumer1Consumer1Emit = getFile(file1Consumer1Consumer1.path);
             file1Consumer1.content += "export var T: number;";
@@ -436,10 +436,10 @@ namespace ts.tscWatch {
                 getFile,
                 verifyAffectedFiles
             } = getInitialState({
-                    firstCompilationEmitFiles: [file1.path, file2.path],
-                    getAdditionalFileOrFolder: () => [file1, file2],
-                    firstReloadFileList: [libFile.path, file1.path, file2.path, configFilePath]
-                });
+                firstCompilationEmitFiles: [file1.path, file2.path],
+                getAdditionalFileOrFolder: () => [file1, file2],
+                firstReloadFileList: [libFile.path, file1.path, file2.path, configFilePath]
+            });
             const file1Emit = getFile(file1.path), file2Emit = getFile(file2.path);
 
             file1Emit.content += "export var t3 = 10;";
@@ -459,10 +459,10 @@ namespace ts.tscWatch {
                 getFile,
                 verifyAffectedFiles
             } = getInitialState({
-                    firstCompilationEmitFiles: [referenceFile1.path, moduleFile1Path],
-                    getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [libFile.path, referenceFile1.path, moduleFile1Path, configFilePath]
-                });
+                firstCompilationEmitFiles: [referenceFile1.path, moduleFile1Path],
+                getAdditionalFileOrFolder: () => [referenceFile1],
+                firstReloadFileList: [libFile.path, referenceFile1.path, moduleFile1Path, configFilePath]
+            });
 
             const referenceFile1Emit = getFile(referenceFile1.path);
             verifyAffectedFiles([referenceFile1Emit], [libFile, referenceFile1Emit, configFile]);
@@ -481,10 +481,10 @@ namespace ts.tscWatch {
                 getFile,
                 verifyAffectedFiles
             } = getInitialState({
-                    firstCompilationEmitFiles: [referenceFile1.path],
-                    getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [libFile.path, referenceFile1.path, configFilePath]
-                });
+                firstCompilationEmitFiles: [referenceFile1.path],
+                getAdditionalFileOrFolder: () => [referenceFile1],
+                firstReloadFileList: [libFile.path, referenceFile1.path, configFilePath]
+            });
 
             const referenceFile1Emit = getFile(referenceFile1.path);
             referenceFile1Emit.content += "export var yy = Foo();";

@@ -1,5 +1,5 @@
 namespace evaluator {
-    declare var Symbol: SymbolConstructor;
+    declare let Symbol: SymbolConstructor;
 
     const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
     const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
@@ -23,7 +23,6 @@ namespace evaluator {
 
     // Define a custom "Symbol" constructor to attach missing built-in symbols without
     // modifying the global "Symbol" constructor
-    // tslint:disable-next-line:variable-name
     const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
     (<any>FakeSymbol).prototype = Symbol.prototype;
     for (const key of Object.getOwnPropertyNames(Symbol)) {
@@ -62,7 +61,7 @@ namespace evaluator {
         }
 
         const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${sourceText} })`;
-        // tslint:disable-next-line:no-eval no-unused-expression
+        // eslint-disable-next-line no-eval
         const evaluateThunk = (void 0, eval)(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
         const module: { exports: any; } = { exports: {} };
         evaluateThunk.call(globals, module, module.exports, noRequire, vpath.dirname(sourceFile), sourceFile, FakeSymbol, ...globalArgs);

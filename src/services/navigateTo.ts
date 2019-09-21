@@ -8,7 +8,7 @@ namespace ts.NavigateTo {
         readonly declaration: Declaration;
     }
 
-    export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
+    export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         if (!patternMatcher) return emptyArray;
         const rawItems: RawNavigateToItem[] = [];
@@ -30,7 +30,7 @@ namespace ts.NavigateTo {
         return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
     }
 
-    function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: ReadonlyArray<Declaration>, checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
+    function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
         // First do a quick check to see if the name of the declaration matches the
         // last portion of the (possibly) dotted name they're searching for.
         const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
@@ -84,7 +84,7 @@ namespace ts.NavigateTo {
         return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
     }
 
-    function getContainers(declaration: Declaration): ReadonlyArray<string> {
+    function getContainers(declaration: Declaration): readonly string[] {
         const containers: string[] = [];
 
         // First, if we started with a computed property name, then add all but the last

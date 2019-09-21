@@ -1,24 +1,22 @@
 {
     "compilerOptions": {
+        "strictNullChecks": true,
         "removeComments": false,
-        "target": "es6",
-        "module": "commonjs",
         "declaration": false,
         "sourceMap": true,
-        "lib": [
-            "es6",
-            "scripthost"
-        ],
-        "strictNullChecks": true,
         "newLine": "lf",
-        "types": ["node"]
+        "target": "es6",
+        "module": "commonjs",
+        "types": ["node"],
+        "lib": ["es6", "scripthost"],
     },
-    "files": [
-        "produceLKG.ts",
-        "buildProtocol.ts",
-        "processDiagnosticMessages.ts",
+
+    "include": [
         "generateLocalizedDiagnosticMessages.ts",
+        "processDiagnosticMessages.ts",
         "configurePrerelease.ts",
+        "buildProtocol.ts",
+        "produceLKG.ts",
         "word2md.ts"
     ]
 }

@@ -283,9 +283,7 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    /* tslint:disable no-null-keyword */
-                    req.arguments = null;
-                    /* tslint:enable no-null-keyword */
+                    req.arguments = null; // eslint-disable-line no-null/no-null
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
@@ -337,7 +335,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
+                expect(session.send(msg)).to.not.exist; // eslint-disable-line no-unused-expressions
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -548,7 +546,6 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            // tslint:disable-next-line no-unused-expression
             new class extends TestSession {
                 constructor() {
                     super();

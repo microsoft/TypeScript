@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        function createHost(files: ReadonlyArray<File>, rootNames: ReadonlyArray<string>) {
+        function createHost(files: readonly File[], rootNames: readonly string[]) {
             const host = createServerHost(files);
 
             // ts build should succeed
@@ -150,12 +150,12 @@ fn5();
 
             const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
 
-            function verifyScriptInfos(session: TestSession, host: TestServerHost, openInfos: ReadonlyArray<string>, closedInfos: ReadonlyArray<string>, otherWatchedFiles: ReadonlyArray<string>) {
+            function verifyScriptInfos(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[]) {
                 checkScriptInfos(session.getProjectService(), openInfos.concat(closedInfos));
                 checkWatchedFiles(host, closedInfos.concat(otherWatchedFiles).map(f => f.toLowerCase()));
             }
 
-            function verifyInfosWithRandom(session: TestSession, host: TestServerHost, openInfos: ReadonlyArray<string>, closedInfos: ReadonlyArray<string>, otherWatchedFiles: ReadonlyArray<string>) {
+            function verifyInfosWithRandom(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[]) {
                 verifyScriptInfos(session, host, openInfos.concat(randomFile.path), closedInfos, otherWatchedFiles.concat(randomConfig.path));
             }
 
@@ -281,14 +281,14 @@ fn5();
             // Open File, expectedProjectActualFiles, actionGetter, openFileLastLine
             interface DocumentPositionMapperVerifier {
                 openFile: File;
-                expectedProjectActualFiles: ReadonlyArray<string>;
+                expectedProjectActualFiles: readonly string[];
                 actionGetter: SessionActionGetter;
                 openFileLastLine: number;
             }
             function verifyDocumentPositionMapperUpdates(
                 mainScenario: string,
-                verifier: ReadonlyArray<DocumentPositionMapperVerifier>,
-                closedInfos: ReadonlyArray<string>,
+                verifier: readonly DocumentPositionMapperVerifier[],
+                closedInfos: readonly string[],
                 withRefs: boolean) {
 
                 const openFiles = verifier.map(v => v.openFile);

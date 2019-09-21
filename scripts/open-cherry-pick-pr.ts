@@ -35,7 +35,7 @@ async function main() {
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
 Component commits:
-${logText.trim()}`
+${logText.trim()}`;
     const logpath = path.join(__dirname, "../", "logmessage.txt");
     const mergebase = runSequence([["git", ["merge-base", "origin/master", currentSha]]]).trim();
     runSequence([

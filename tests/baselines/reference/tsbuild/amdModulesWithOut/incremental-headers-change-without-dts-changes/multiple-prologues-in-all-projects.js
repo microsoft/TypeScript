@@ -647,6 +647,7 @@ declare const myVar = 30;
 "myPrologue5"
 export const x = 10;
 
+//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
 
