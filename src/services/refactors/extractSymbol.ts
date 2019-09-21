@@ -1164,7 +1164,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturn(<Expression>body)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturn(<Expression>body)]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();

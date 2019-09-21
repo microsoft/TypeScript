@@ -136,12 +136,12 @@ namespace ts.refactor {
 
             const parameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
             parameter.name = typeParameter.name;
-            template.typeParameters = createNodeArray([parameter]);
+            template.typeParameters = factory.createNodeArray([parameter]);
 
             templates.push(template);
         });
 
-        changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 }

@@ -642,7 +642,7 @@ namespace ts {
                 !host.useCaseSensitiveFileNames()
             );
             sourceFile.text = "";
-            sourceFile.statements = createNodeArray();
+            sourceFile.statements = factory.createNodeArray();
             return sourceFile;
         });
         const jsBundle = Debug.assertDefined(bundle.js);
@@ -650,7 +650,7 @@ namespace ts {
             const sourceFile = sourceFiles[prologueInfo.file];
             sourceFile.text = prologueInfo.text;
             sourceFile.end = prologueInfo.text.length;
-            sourceFile.statements = createNodeArray(prologueInfo.directives.map(directive => {
+            sourceFile.statements = factory.createNodeArray(prologueInfo.directives.map(directive => {
                 const statement = createNode(SyntaxKind.ExpressionStatement, directive.pos, directive.end) as PrologueDirective;
                 statement.expression = createNode(SyntaxKind.StringLiteral, directive.expression.pos, directive.expression.end) as StringLiteral;
                 statement.expression.text = directive.expression.text;
@@ -3357,15 +3357,15 @@ namespace ts {
         }
 
         function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
-            emitList(lit, createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
+            emitList(lit, factory.createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
         }
 
         function emitJSDocSignature(sig: JSDocSignature) {
             if (sig.typeParameters) {
-                emitList(sig, createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
+                emitList(sig, factory.createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
             }
             if (sig.parameters) {
-                emitList(sig, createNodeArray(sig.parameters), ListFormat.JSDocComment);
+                emitList(sig, factory.createNodeArray(sig.parameters), ListFormat.JSDocComment);
             }
             if (sig.type) {
                 writeLine();

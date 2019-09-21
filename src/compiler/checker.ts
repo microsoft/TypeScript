@@ -3785,7 +3785,7 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyKeyword | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
                     const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
@@ -4249,7 +4249,7 @@ namespace ts {
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
                 const node = factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
                 if (typeArguments) {
-                    node.typeArguments = createNodeArray(typeArguments);
+                    node.typeArguments = factory.createNodeArray(typeArguments);
                 }
                 return node;
             }
@@ -4411,7 +4411,7 @@ namespace ts {
                 let typeParameterNodes: NodeArray<TypeParameterDeclaration> | undefined;
                 const targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                    typeParameterNodes = createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
+                    typeParameterNodes = factory.createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
                 }
                 return typeParameterNodes;
             }
@@ -21819,14 +21819,14 @@ namespace ts {
             }
 
             if (hasRestParameter || hasSpreadArgument) {
-                spanArray = createNodeArray(args);
+                spanArray = factory.createNodeArray(args);
                 if (hasSpreadArgument && argCount) {
                     const nextArg = elementAt(args, getSpreadArgumentIndex(args) + 1) || undefined;
-                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : Math.min(max, args.length - 1)));
+                    spanArray = factory.createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : Math.min(max, args.length - 1)));
                 }
             }
             else {
-                spanArray = createNodeArray(args.slice(max));
+                spanArray = factory.createNodeArray(args.slice(max));
             }
 
             spanArray.pos = first(spanArray).pos;
@@ -28058,7 +28058,7 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeyword | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
             const use = awaitModifier ? IterationUse.ForAwaitOf : IterationUse.ForOf;
             return checkIteratedTypeOrElementType(use, expressionType, undefinedType, rhsExpression);

@@ -11,112 +11,6 @@ namespace ts {
         end: number;
     }
 
-    export type JSDocSyntaxKind =
-        | SyntaxKind.EndOfFileToken
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.AtToken
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.AsteriskToken
-        | SyntaxKind.OpenBraceToken
-        | SyntaxKind.CloseBraceToken
-        | SyntaxKind.LessThanToken
-        | SyntaxKind.GreaterThanToken
-        | SyntaxKind.OpenBracketToken
-        | SyntaxKind.CloseBracketToken
-        | SyntaxKind.EqualsToken
-        | SyntaxKind.CommaToken
-        | SyntaxKind.DotToken
-        | SyntaxKind.Identifier
-        | SyntaxKind.BacktickToken
-        | SyntaxKind.Unknown
-        | KeywordSyntaxKind;
-
-    export type KeywordSyntaxKind =
-        | SyntaxKind.AbstractKeyword
-        | SyntaxKind.AnyKeyword
-        | SyntaxKind.AsKeyword
-        | SyntaxKind.BigIntKeyword
-        | SyntaxKind.BooleanKeyword
-        | SyntaxKind.BreakKeyword
-        | SyntaxKind.CaseKeyword
-        | SyntaxKind.CatchKeyword
-        | SyntaxKind.ClassKeyword
-        | SyntaxKind.ContinueKeyword
-        | SyntaxKind.ConstKeyword
-        | SyntaxKind.ConstructorKeyword
-        | SyntaxKind.DebuggerKeyword
-        | SyntaxKind.DeclareKeyword
-        | SyntaxKind.DefaultKeyword
-        | SyntaxKind.DeleteKeyword
-        | SyntaxKind.DoKeyword
-        | SyntaxKind.ElseKeyword
-        | SyntaxKind.EnumKeyword
-        | SyntaxKind.ExportKeyword
-        | SyntaxKind.ExtendsKeyword
-        | SyntaxKind.FalseKeyword
-        | SyntaxKind.FinallyKeyword
-        | SyntaxKind.ForKeyword
-        | SyntaxKind.FromKeyword
-        | SyntaxKind.FunctionKeyword
-        | SyntaxKind.GetKeyword
-        | SyntaxKind.IfKeyword
-        | SyntaxKind.ImplementsKeyword
-        | SyntaxKind.ImportKeyword
-        | SyntaxKind.InKeyword
-        | SyntaxKind.InferKeyword
-        | SyntaxKind.InstanceOfKeyword
-        | SyntaxKind.InterfaceKeyword
-        | SyntaxKind.IsKeyword
-        | SyntaxKind.KeyOfKeyword
-        | SyntaxKind.LetKeyword
-        | SyntaxKind.ModuleKeyword
-        | SyntaxKind.NamespaceKeyword
-        | SyntaxKind.NeverKeyword
-        | SyntaxKind.NewKeyword
-        | SyntaxKind.NullKeyword
-        | SyntaxKind.NumberKeyword
-        | SyntaxKind.ObjectKeyword
-        | SyntaxKind.PackageKeyword
-        | SyntaxKind.PrivateKeyword
-        | SyntaxKind.ProtectedKeyword
-        | SyntaxKind.PublicKeyword
-        | SyntaxKind.ReadonlyKeyword
-        | SyntaxKind.RequireKeyword
-        | SyntaxKind.GlobalKeyword
-        | SyntaxKind.ReturnKeyword
-        | SyntaxKind.SetKeyword
-        | SyntaxKind.StaticKeyword
-        | SyntaxKind.StringKeyword
-        | SyntaxKind.SuperKeyword
-        | SyntaxKind.SwitchKeyword
-        | SyntaxKind.SymbolKeyword
-        | SyntaxKind.ThisKeyword
-        | SyntaxKind.ThrowKeyword
-        | SyntaxKind.TrueKeyword
-        | SyntaxKind.TryKeyword
-        | SyntaxKind.TypeKeyword
-        | SyntaxKind.TypeOfKeyword
-        | SyntaxKind.UndefinedKeyword
-        | SyntaxKind.UniqueKeyword
-        | SyntaxKind.UnknownKeyword
-        | SyntaxKind.VarKeyword
-        | SyntaxKind.VoidKeyword
-        | SyntaxKind.WhileKeyword
-        | SyntaxKind.WithKeyword
-        | SyntaxKind.YieldKeyword
-        | SyntaxKind.AsyncKeyword
-        | SyntaxKind.AwaitKeyword
-        | SyntaxKind.OfKeyword;
-
-    export type JsxTokenSyntaxKind =
-        | SyntaxKind.LessThanSlashToken
-        | SyntaxKind.EndOfFileToken
-        | SyntaxKind.ConflictMarkerTrivia
-        | SyntaxKind.JsxText
-        | SyntaxKind.JsxTextAllWhiteSpaces
-        | SyntaxKind.OpenBraceToken
-        | SyntaxKind.LessThanToken;
-
     // token > SyntaxKind.Identifier => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
@@ -524,6 +418,209 @@ namespace ts {
         /* @internal */ LastContextualKeyword = OfKeyword,
     }
 
+    export type TriviaSyntaxKind =
+        | SyntaxKind.SingleLineCommentTrivia
+        | SyntaxKind.MultiLineCommentTrivia
+        | SyntaxKind.NewLineTrivia
+        | SyntaxKind.WhitespaceTrivia
+        | SyntaxKind.ShebangTrivia
+        | SyntaxKind.ConflictMarkerTrivia
+        ;
+
+    export type LiteralSyntaxKind =
+        | SyntaxKind.NumericLiteral
+        | SyntaxKind.BigIntLiteral
+        | SyntaxKind.StringLiteral
+        | SyntaxKind.JsxText
+        | SyntaxKind.JsxTextAllWhiteSpaces
+        | SyntaxKind.RegularExpressionLiteral
+        | SyntaxKind.NoSubstitutionTemplateLiteral
+        ;
+
+    export type PseudoLiteralSyntaxKind =
+        | SyntaxKind.TemplateHead
+        | SyntaxKind.TemplateMiddle
+        | SyntaxKind.TemplateTail
+        ;
+
+    export type PunctuationSyntaxKind =
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.CloseBraceToken
+        | SyntaxKind.OpenParenToken
+        | SyntaxKind.CloseParenToken
+        | SyntaxKind.OpenBracketToken
+        | SyntaxKind.CloseBracketToken
+        | SyntaxKind.DotToken
+        | SyntaxKind.DotDotDotToken
+        | SyntaxKind.SemicolonToken
+        | SyntaxKind.CommaToken
+        | SyntaxKind.LessThanToken
+        | SyntaxKind.LessThanSlashToken
+        | SyntaxKind.GreaterThanToken
+        | SyntaxKind.LessThanEqualsToken
+        | SyntaxKind.GreaterThanEqualsToken
+        | SyntaxKind.EqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsToken
+        | SyntaxKind.EqualsEqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsEqualsToken
+        | SyntaxKind.EqualsGreaterThanToken
+        | SyntaxKind.PlusToken
+        | SyntaxKind.MinusToken
+        | SyntaxKind.AsteriskToken
+        | SyntaxKind.AsteriskAsteriskToken
+        | SyntaxKind.SlashToken
+        | SyntaxKind.PercentToken
+        | SyntaxKind.PlusPlusToken
+        | SyntaxKind.MinusMinusToken
+        | SyntaxKind.LessThanLessThanToken
+        | SyntaxKind.GreaterThanGreaterThanToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+        | SyntaxKind.AmpersandToken
+        | SyntaxKind.BarToken
+        | SyntaxKind.CaretToken
+        | SyntaxKind.ExclamationToken
+        | SyntaxKind.TildeToken
+        | SyntaxKind.AmpersandAmpersandToken
+        | SyntaxKind.BarBarToken
+        | SyntaxKind.QuestionToken
+        | SyntaxKind.ColonToken
+        | SyntaxKind.AtToken
+        | SyntaxKind.BacktickToken
+        | SyntaxKind.EqualsToken
+        | SyntaxKind.PlusEqualsToken
+        | SyntaxKind.MinusEqualsToken
+        | SyntaxKind.AsteriskEqualsToken
+        | SyntaxKind.AsteriskAsteriskEqualsToken
+        | SyntaxKind.SlashEqualsToken
+        | SyntaxKind.PercentEqualsToken
+        | SyntaxKind.LessThanLessThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+        | SyntaxKind.AmpersandEqualsToken
+        | SyntaxKind.BarEqualsToken
+        | SyntaxKind.CaretEqualsToken
+        ;
+
+    export type KeywordSyntaxKind =
+        | SyntaxKind.AbstractKeyword
+        | SyntaxKind.AnyKeyword
+        | SyntaxKind.AsKeyword
+        | SyntaxKind.BigIntKeyword
+        | SyntaxKind.BooleanKeyword
+        | SyntaxKind.BreakKeyword
+        | SyntaxKind.CaseKeyword
+        | SyntaxKind.CatchKeyword
+        | SyntaxKind.ClassKeyword
+        | SyntaxKind.ContinueKeyword
+        | SyntaxKind.ConstKeyword
+        | SyntaxKind.ConstructorKeyword
+        | SyntaxKind.DebuggerKeyword
+        | SyntaxKind.DeclareKeyword
+        | SyntaxKind.DefaultKeyword
+        | SyntaxKind.DeleteKeyword
+        | SyntaxKind.DoKeyword
+        | SyntaxKind.ElseKeyword
+        | SyntaxKind.EnumKeyword
+        | SyntaxKind.ExportKeyword
+        | SyntaxKind.ExtendsKeyword
+        | SyntaxKind.FalseKeyword
+        | SyntaxKind.FinallyKeyword
+        | SyntaxKind.ForKeyword
+        | SyntaxKind.FromKeyword
+        | SyntaxKind.FunctionKeyword
+        | SyntaxKind.GetKeyword
+        | SyntaxKind.IfKeyword
+        | SyntaxKind.ImplementsKeyword
+        | SyntaxKind.ImportKeyword
+        | SyntaxKind.InKeyword
+        | SyntaxKind.InferKeyword
+        | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.IsKeyword
+        | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.LetKeyword
+        | SyntaxKind.ModuleKeyword
+        | SyntaxKind.NamespaceKeyword
+        | SyntaxKind.NeverKeyword
+        | SyntaxKind.NewKeyword
+        | SyntaxKind.NullKeyword
+        | SyntaxKind.NumberKeyword
+        | SyntaxKind.ObjectKeyword
+        | SyntaxKind.PackageKeyword
+        | SyntaxKind.PrivateKeyword
+        | SyntaxKind.ProtectedKeyword
+        | SyntaxKind.PublicKeyword
+        | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.RequireKeyword
+        | SyntaxKind.GlobalKeyword
+        | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SetKeyword
+        | SyntaxKind.StaticKeyword
+        | SyntaxKind.StringKeyword
+        | SyntaxKind.SuperKeyword
+        | SyntaxKind.SwitchKeyword
+        | SyntaxKind.SymbolKeyword
+        | SyntaxKind.ThisKeyword
+        | SyntaxKind.ThrowKeyword
+        | SyntaxKind.TrueKeyword
+        | SyntaxKind.TryKeyword
+        | SyntaxKind.TypeKeyword
+        | SyntaxKind.TypeOfKeyword
+        | SyntaxKind.UndefinedKeyword
+        | SyntaxKind.UniqueKeyword
+        | SyntaxKind.UnknownKeyword
+        | SyntaxKind.VarKeyword
+        | SyntaxKind.VoidKeyword
+        | SyntaxKind.WhileKeyword
+        | SyntaxKind.WithKeyword
+        | SyntaxKind.YieldKeyword
+        | SyntaxKind.AsyncKeyword
+        | SyntaxKind.AwaitKeyword
+        | SyntaxKind.OfKeyword
+        ;
+
+    export type TokenSyntaxKind =
+        | SyntaxKind.Unknown
+        | SyntaxKind.EndOfFileToken
+        | TriviaSyntaxKind
+        | LiteralSyntaxKind
+        | PseudoLiteralSyntaxKind
+        | PunctuationSyntaxKind
+        | SyntaxKind.Identifier
+        | KeywordSyntaxKind
+        ;
+
+    export type JsxTokenSyntaxKind =
+        | SyntaxKind.LessThanSlashToken
+        | SyntaxKind.EndOfFileToken
+        | SyntaxKind.ConflictMarkerTrivia
+        | SyntaxKind.JsxText
+        | SyntaxKind.JsxTextAllWhiteSpaces
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.LessThanToken
+        ;
+
+    export type JSDocSyntaxKind =
+        | SyntaxKind.EndOfFileToken
+        | SyntaxKind.WhitespaceTrivia
+        | SyntaxKind.AtToken
+        | SyntaxKind.NewLineTrivia
+        | SyntaxKind.AsteriskToken
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.CloseBraceToken
+        | SyntaxKind.LessThanToken
+        | SyntaxKind.GreaterThanToken
+        | SyntaxKind.OpenBracketToken
+        | SyntaxKind.CloseBracketToken
+        | SyntaxKind.EqualsToken
+        | SyntaxKind.CommaToken
+        | SyntaxKind.DotToken
+        | SyntaxKind.Identifier
+        | SyntaxKind.BacktickToken
+        | SyntaxKind.Unknown
+        | KeywordSyntaxKind
+        ;
+
     export const enum NodeFlags {
         None               = 0,
         Let                = 1 << 0,  // Variable declaration
@@ -727,35 +824,78 @@ namespace ts {
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
+    // TODO(rbuckton): Constraint 'TKind' to 'TokenSyntaxKind'
     export interface Token<TKind extends SyntaxKind> extends Node {
         kind: TKind;
     }
 
-    export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
-    export type QuestionToken = Token<SyntaxKind.QuestionToken>;
-    export type ExclamationToken = Token<SyntaxKind.ExclamationToken>;
-    export type ColonToken = Token<SyntaxKind.ColonToken>;
-    export type EqualsToken = Token<SyntaxKind.EqualsToken>;
-    export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
-    export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
-    export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
-    export type PlusToken = Token<SyntaxKind.PlusToken>;
-    export type MinusToken = Token<SyntaxKind.MinusToken>;
+
+    export interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> {
+    }
+
+    // Punctuation
+    export type DotDotDotToken = PunctuationToken<SyntaxKind.DotDotDotToken>;
+    export type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
+    export type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
+    export type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
+    export type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
+    export type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
+    export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
+    export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
+    export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
+
+    export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {
+    }
+
+    /** @deprecated Use `AwaitKeyword` instead. */
+    export type AwaitKeywordToken = AwaitKeyword;
+
+    /** @deprecated Use `ReadonlyKeyword` instead. */
+    export type ReadonlyToken = ReadonlyKeyword;
+
+    export type AwaitKeyword = Token<SyntaxKind.AwaitKeyword>;
+    export type AbstractKeyword = Token<SyntaxKind.AbstractKeyword>;
+    export type AsyncKeyword = Token<SyntaxKind.AsyncKeyword>;
+    export type ConstKeyword = Token<SyntaxKind.ConstKeyword>;
+    export type DeclareKeyword = Token<SyntaxKind.DeclareKeyword>;
+    export type DefaultKeyword = Token<SyntaxKind.DefaultKeyword>;
+    export type ExportKeyword = Token<SyntaxKind.ExportKeyword>;
+    export type PublicKeyword = Token<SyntaxKind.PublicKeyword>;
+    export type PrivateKeyword = Token<SyntaxKind.PrivateKeyword>;
+    export type ProtectedKeyword = Token<SyntaxKind.ProtectedKeyword>;
+    export type ReadonlyKeyword = Token<SyntaxKind.ReadonlyKeyword>;
+    export type StaticKeyword = Token<SyntaxKind.StaticKeyword>;
 
     export type Modifier
-        = Token<SyntaxKind.AbstractKeyword>
-        | Token<SyntaxKind.AsyncKeyword>
-        | Token<SyntaxKind.ConstKeyword>
-        | Token<SyntaxKind.DeclareKeyword>
-        | Token<SyntaxKind.DefaultKeyword>
-        | Token<SyntaxKind.ExportKeyword>
-        | Token<SyntaxKind.PublicKeyword>
-        | Token<SyntaxKind.PrivateKeyword>
-        | Token<SyntaxKind.ProtectedKeyword>
-        | Token<SyntaxKind.ReadonlyKeyword>
-        | Token<SyntaxKind.StaticKeyword>
+        = AbstractKeyword
+        | AsyncKeyword
+        | ConstKeyword
+        | DeclareKeyword
+        | DefaultKeyword
+        | ExportKeyword
+        | PublicKeyword
+        | PrivateKeyword
+        | ProtectedKeyword
+        | ReadonlyKeyword
+        | StaticKeyword
+        ;
+
+    export type AccessibilityModifier =
+        | PublicKeyword
+        | PrivateKeyword
+        | ProtectedKeyword
+        ;
+
+    export type ParameterPropertyModifier =
+        | AccessibilityModifier
+        | ReadonlyKeyword
+        ;
+
+    export type ClassMemberModifier =
+        | AccessibilityModifier
+        | ReadonlyKeyword
+        | StaticKeyword
         ;
 
     export type ModifiersArray = NodeArray<Modifier>;
@@ -956,12 +1096,14 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
+    // TODO(rbuckton): Rename to 'BaseObjectLiteralElement'
     export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrand: any;
         name?: PropertyName;
     }
 
     /** Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute. */
+    // TODO(rbuckton): Rename to 'ObjectLiteralElement'
     export type ObjectLiteralElementLike
         = PropertyAssignment
         | ShorthandPropertyAssignment
@@ -1271,7 +1413,7 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
+        readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken | PlusToken | MinusToken;
         type?: TypeNode;
@@ -2125,7 +2267,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
-        awaitModifier?: AwaitKeywordToken;
+        awaitModifier?: AwaitKeyword;
         initializer: ForInitializer;
         expression: Expression;
     }
@@ -2231,16 +2373,40 @@ namespace ts {
 
     export type ClassLikeDeclaration = ClassDeclaration | ClassExpression;
 
+    // TODO(rbuckton): Rename to 'BaseClassElement'
     export interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
         name?: PropertyName;
     }
 
+    // TODO(rbuckton): Rename to 'ClassElement' and make public
+    /* @internal */
+    export type ClassElementNode =
+        | ConstructorDeclaration
+        | PropertyDeclaration
+        | MethodDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | IndexSignatureDeclaration
+        | SemicolonClassElement
+        ;
+
+    // TODO(rbuckton): Rename to 'BaseTypeElement'
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
         questionToken?: QuestionToken;
     }
+
+    // TODO(rbuckton): Rename to 'TypeElement' and make public
+    /* @internal */
+    export type TypeElementNode =
+        | PropertySignature
+        | MethodSignature
+        | ConstructSignatureDeclaration
+        | CallSignatureDeclaration
+        | IndexSignatureDeclaration
+        ;
 
     export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.InterfaceDeclaration;
@@ -4721,6 +4887,13 @@ namespace ts {
         length: number;
     }
 
+    /* @internal*/
+    export interface DiagnosticWithDetachedLocation extends Diagnostic {
+        file: undefined;
+        start: number;
+        length: number;
+    }
+
     export enum DiagnosticCategory {
         Warning,
         Error,
@@ -5735,6 +5908,22 @@ namespace ts {
         set?: Expression;
     }
 
+    /* @internal */
+    export interface BaseNodeFactory {
+        createBaseSourceFileNode(kind: SyntaxKind): Node;
+        createBaseIdentifierNode(kind: SyntaxKind): Node;
+        createBaseTokenNode(kind: SyntaxKind): Node;
+        createBaseNode(kind: SyntaxKind): Node;
+    }
+
+    /* @internal */
+    export const enum NodeFactoryFlags {
+        None = 0,
+        NoParenthesizerRules = 1 << 0,
+        NoNodeConverters = 1 << 1,
+        NoIndentationOnFreshPropertyAccess = 1 << 2,
+    }
+
     export interface NodeFactory {
         /* @internal */ getParenthesizerRules(): ParenthesizerRules;
         /* @internal */ getConverters(): NodeConverters;
@@ -5747,6 +5936,7 @@ namespace ts {
         createNumericLiteral(value: string | number, numericLiteralFlags?: TokenFlags): NumericLiteral;
         createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral;
         createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral;
+        /* @internal*/ createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean): StringLiteral; // tslint:disable-line unified-signatures
         createStringLiteralFromNode(sourceNode: PropertyNameLiteral, isSingleQuote?: boolean): StringLiteral;
         createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
 
@@ -5890,8 +6080,8 @@ namespace ts {
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-        createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
 
@@ -6012,8 +6202,8 @@ namespace ts {
         updateFor(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement;
         createForIn(initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
         updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
-        createForOf(awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
-        updateForOf(node: ForOfStatement, awaitModifier: AwaitKeywordToken | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+        createForOf(awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+        updateForOf(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
         createContinue(label?: string | Identifier): ContinueStatement;
         updateContinue(node: ContinueStatement, label: Identifier | undefined): ContinueStatement;
         createBreak(label?: string | Identifier): BreakStatement;
@@ -6034,6 +6224,7 @@ namespace ts {
         createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
         createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
+        updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
         updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
         createFunctionDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
@@ -6175,6 +6366,7 @@ namespace ts {
         // Top-level nodes
         //
 
+        createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken): SourceFile;
         updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
 
         //
@@ -6340,11 +6532,12 @@ namespace ts {
 
     /* @internal */
     export interface TreeStateObserver {
-        onSetChild(parent: Node, child: Node): void;
-        onSetChildren(parent: Node, children: NodeArray<Node>): void;
-        onFinishNode(node: Node): void;
-        onUpdateNode(updated: Node, original: Node): void;
-        onReuseNode(node: Node): void;
+        onCreateNode?(node: Node): void;
+        onSetChild?(parent: Node, child: Node): void;
+        onSetChildren?(parent: Node, children: NodeArray<Node>): void;
+        onFinishNode?(node: Node): void;
+        onUpdateNode?(updated: Node, original: Node): void;
+        onReuseNode?(node: Node): void;
     }
 
     export interface CoreTransformationContext {

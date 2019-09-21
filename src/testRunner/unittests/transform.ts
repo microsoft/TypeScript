@@ -175,7 +175,7 @@ namespace ts {
             function replaceWithClassAndNamespace() {
                 return (sourceFile: SourceFile) => {
                     const result = getMutableClone(sourceFile);
-                    result.statements = createNodeArray([
+                    result.statements = factory.createNodeArray([
                         createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
                         createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
                     ]);
@@ -191,7 +191,7 @@ namespace ts {
                 function visitNode<T extends Node>(node: T): T {
                     if (node.kind === SyntaxKind.ModuleBlock) {
                         const block = node as T & ModuleBlock;
-                        const statements = createNodeArray([...block.statements]);
+                        const statements = factory.createNodeArray([...block.statements]);
                         return updateModuleBlock(block, statements) as typeof block;
                     }
                     return visitEachChild(node, visitNode, context);

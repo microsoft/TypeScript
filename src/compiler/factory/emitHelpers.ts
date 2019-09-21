@@ -343,6 +343,15 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
+        if (x === y) return Comparison.EqualTo;
+        if (x.priority === y.priority) return Comparison.EqualTo;
+        if (x.priority === undefined) return Comparison.GreaterThan;
+        if (y.priority === undefined) return Comparison.LessThan;
+        return compareValues(x.priority, y.priority);
+    }
+
     /**
      * @param input Template string input strings
      * @param args Names which need to be made file-level unique

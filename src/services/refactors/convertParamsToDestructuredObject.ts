@@ -356,7 +356,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
         if (hasThisParameter(parameters)) {
-            parameters = createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
+            parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
         }
         return parameters;
     }
@@ -431,9 +431,9 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 copyComments(thisParameter.type, newThisParameter.type!);
             }
 
-            return createNodeArray([newThisParameter, objectParameter]);
+            return factory.createNodeArray([newThisParameter, objectParameter]);
         }
-        return createNodeArray([objectParameter]);
+        return factory.createNodeArray([objectParameter]);
 
         function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
             const element = factory.createBindingElement(

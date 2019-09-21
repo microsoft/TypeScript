@@ -919,7 +919,7 @@ namespace ts {
             }
 
             addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
-            return setTextRange(createNodeArray(members), /*location*/ node.members);
+            return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
         }
 
 
@@ -1941,7 +1941,7 @@ namespace ts {
 
             // End the lexical environment.
             statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
-            const block = factory.createBlock(setTextRange(createNodeArray(statements), body.statements), /*multiLine*/ true);
+            const block = factory.createBlock(setTextRange(factory.createNodeArray(statements), body.statements), /*multiLine*/ true);
             setTextRange(block, /*location*/ body);
             setOriginalNode(block, body);
             return block;
@@ -2386,7 +2386,7 @@ namespace ts {
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
             return factory.createBlock(
-                setTextRange(createNodeArray(statements), /*location*/ node.members),
+                setTextRange(factory.createNodeArray(statements), /*location*/ node.members),
                 /*multiLine*/ true
             );
         }
@@ -2710,7 +2710,7 @@ namespace ts {
 
             const block = factory.createBlock(
                 setTextRange(
-                    createNodeArray(statements),
+                    factory.createNodeArray(statements),
                     /*location*/ statementsLocation
                 ),
                 /*multiLine*/ true

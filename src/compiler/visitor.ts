@@ -84,7 +84,7 @@ namespace ts {
             return nodes;
         }
 
-        let updated: MutableNodeArray<T> | undefined;
+        let updated: T[] | undefined;
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -96,11 +96,15 @@ namespace ts {
             count = length - start;
         }
 
+        let hasTrailingComma: boolean | undefined;
+        let pos = -1;
+        let end = -1;
         if (start > 0 || count < length) {
             // If we are not visiting all of the original nodes, we must always create a new array.
             // Since this is a fragment of a node array, we do not copy over the previous location
             // and will only copy over `hasTrailingComma` if we are including the last element.
-            updated = createNodeArray<T>([], /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
+            updated = [];
+            hasTrailingComma = nodes.hasTrailingComma && start + count === length;
         }
 
         // Visit each original node.
@@ -111,8 +115,10 @@ namespace ts {
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
-                    updated = createNodeArray(nodes.slice(0, i), nodes.hasTrailingComma);
-                    setTextRange(updated, nodes);
+                    updated = nodes.slice(0, i);
+                    hasTrailingComma = nodes.hasTrailingComma;
+                    pos = nodes.pos;
+                    end = nodes.end;
                 }
                 if (visited) {
                     if (isArray(visited)) {
@@ -131,7 +137,15 @@ namespace ts {
             }
         }
 
-        return updated || nodes;
+        if (updated) {
+            // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
+            const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
+            updatedArray.pos = pos;
+            updatedArray.end = end;
+            return updatedArray;
+        }
+
+        return nodes;
     }
 
     /**
@@ -143,10 +157,12 @@ namespace ts {
         startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatementOrBlock, start);
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
+            // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
             statements = setTextRange(factory.createNodeArray([factory.createUseStrictPrologue(), ...statements]), statements);
         }
         const declarations = endLexicalEnvironment();
-        return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
+        // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
+        return setTextRange(factory.createNodeArray(concatenate(declarations, statements)), statements);
     }
 
     /**
@@ -1483,8 +1499,9 @@ namespace ts {
             return statements;
         }
 
+        // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(insertStatementsAfterStandardPrologue(statements.slice(), declarations)), statements)
+            ? setTextRange(factory.createNodeArray(insertStatementsAfterStandardPrologue(statements.slice(), declarations)), statements)
             : insertStatementsAfterStandardPrologue(statements, declarations);
     }
 
@@ -1508,7 +1525,15 @@ namespace ts {
             return TransformFlags.None;
         }
         if (node.transformFlags & TransformFlags.HasComputedFlags) {
-            return node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
+            const nodeFlags = node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
+            switch (node.kind) {
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return nodeFlags | ((node as NamedDeclaration).name!.transformFlags & TransformFlags.PropertyNamePropagatingFlags);
+            }
+            return nodeFlags;
         }
         const subtreeFlags = aggregateTransformFlagsForSubtree(node);
         return computeTransformFlagsForNode(node, subtreeFlags);

@@ -2083,9 +2083,14 @@ namespace ts {
         }
     }
 
+    export interface OverloadOptions<A extends any[]> {
+        minLength?: A["length"];
+        maxLength?: A["length"];
+    }
+    export interface OverloadLengthOptions<A extends any[]> {
+        length: A["length"];
+    }
     export type Overload<This, A extends any[], R> = ((this: This, ...args: A) => R) & OverloadOptions<A>;
-    export type OverloadOptions<A extends any[]> = { minLength?: A["length"], maxLength?: A["length"] };
-    export type OverloadLengthOptions<A extends any[]> = { length: A["length"] };
     export type OverloadParameters<O extends Overload<any, any, any>> = O extends unknown ? Parameters<O> : never;
     export type OverloadList<This, O extends Overload<This, any, R>[], R> = (this: This, ...args: OverloadParameters<O[number]>) => R;
 

@@ -31,7 +31,12 @@ namespace ts {
     }
 
     /* @internal */
-    export const parseNodeFactory = createNodeFactory(createNode, createParenthesizerRules, createNodeConverters, nullTreeStateObserver);
+    export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.None, {
+        createBaseSourceFileNode: createNode,
+        createBaseIdentifierNode: createNode,
+        createBaseTokenNode: createNode,
+        createBaseNode: createNode
+    });
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
         return node && cbNode(node);
@@ -590,7 +595,16 @@ namespace ts {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-        const factory = createNodeFactory(createNode, getNullParenthesizerRules, getNullNodeConverters, nullTreeStateObserver);
+
+        const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters, {
+            createBaseSourceFileNode: kind => new SourceFileConstructor(kind, /*pos*/ 0, /*end*/ 0),
+            createBaseIdentifierNode: kind => new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0),
+            createBaseTokenNode: kind => new TokenConstructor(kind, /*pos*/ 0, /*end*/ 0),
+            createBaseNode: kind => new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0)
+        }, {
+            onCreateNode: _node => nodeCount++
+        });
+
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
@@ -601,12 +615,16 @@ namespace ts {
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         // tslint:enable variable-name
 
-        let sourceFile: SourceFile;
-        let parseDiagnostics: DiagnosticWithLocation[];
+        let sourceFlags: NodeFlags;
+        let sourceText: string;
+        let languageVersion: ScriptTarget;
+        let scriptKind: ScriptKind;
+        let languageVariant: LanguageVariant;
+        let parseDiagnostics: DiagnosticWithDetachedLocation[];
+        let jsDocDiagnostics: DiagnosticWithDetachedLocation[];
         let syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
 
         let currentToken: SyntaxKind;
-        let sourceText: string;
         let nodeCount: number;
         let identifiers: Map<string>;
         let identifierCount: number;
@@ -728,17 +746,15 @@ namespace ts {
 
         export function parseJsonText(fileName: string, sourceText: string, languageVersion: ScriptTarget = ScriptTarget.ES2015, syntaxCursor?: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): JsonSourceFile {
             initializeState(sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
-            // Set source file so that errors will be reported with this file name
-            sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
-            sourceFile.flags = contextFlags;
+            sourceFlags = contextFlags;
 
             // Prime the scanner.
             nextToken();
             const pos = getNodePos();
+            let statements, endOfFileToken;
             if (token() === SyntaxKind.EndOfFileToken) {
-                // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
-                sourceFile.statements = createNodeArray([], pos, pos);
-                sourceFile.endOfFileToken = parseTokenNode<EndOfFileToken>();
+                statements = createNodeArray([], pos, pos);
+                endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else {
                 let expression;
@@ -774,34 +790,46 @@ namespace ts {
                 // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
-                sourceFile.statements = createNodeArray([statement], pos);
-                sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+                statements = createNodeArray([statement], pos);
+                endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
             }
+
+            // Set source file so that errors will be reported with this file name
+            const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken);
+            sourceFile.flags |= sourceFlags;
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }
 
-            sourceFile.parseDiagnostics = parseDiagnostics;
+            sourceFile.parseDiagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
+            if (jsDocDiagnostics) {
+                sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
+            }
+
             const result = sourceFile as JsonSourceFile;
             clearState();
             return result;
         }
 
-        function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, scriptKind: ScriptKind) {
+        function initializeState(_sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
             sourceText = _sourceText;
+            languageVersion = _languageVersion;
             syntaxCursor = _syntaxCursor;
+            scriptKind = _scriptKind;
+            languageVariant = getLanguageVariant(_scriptKind);
 
             parseDiagnostics = [];
             parsingContext = 0;
             identifiers = createMap<string>();
             identifierCount = 0;
             nodeCount = 0;
+            sourceFlags = 0;
 
             switch (scriptKind) {
                 case ScriptKind.JS:
@@ -821,7 +849,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(getLanguageVariant(scriptKind));
+            scanner.setLanguageVariant(languageVariant);
         }
 
         function clearState() {
@@ -830,11 +858,16 @@ namespace ts {
             scanner.setOnError(undefined);
 
             // Clear any data.  We don't want to accidentally hold onto it for too long.
-            parseDiagnostics = undefined!;
-            sourceFile = undefined!;
-            identifiers = undefined!;
-            syntaxCursor = undefined;
             sourceText = undefined!;
+            languageVersion = undefined!;
+            syntaxCursor = undefined;
+            scriptKind = undefined!;
+            languageVariant = undefined!;
+            sourceFlags = 0;
+            parseDiagnostics = undefined!;
+            jsDocDiagnostics = undefined!;
+            parsingContext = 0;
+            identifiers = undefined!;
             notParenthesizedArrow = undefined!;
         }
 
@@ -844,27 +877,31 @@ namespace ts {
                 contextFlags |= NodeFlags.Ambient;
             }
 
-            sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile);
-            sourceFile.flags = contextFlags;
+            sourceFlags = contextFlags;
 
             // Prime the scanner.
             nextToken();
+
+            const statements = parseList(ParsingContext.SourceElements, parseStatement);
+            Debug.assert(token() === SyntaxKind.EndOfFileToken);
+            const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
+
+            const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken);
+            sourceFile.flags |= sourceFlags;
+
             // A member of ReadonlyArray<T> isn't assignable to a member of T[] (and prevents a direct cast) - but this is where we set up those members so they can be readonly in the future
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
             processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
-            // TODO(rbuckton): this does not create the tree correctly and transform flags won't be properly set
-            sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
-            Debug.assert(token() === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode());
-
-            setExternalModuleIndicator(sourceFile);
-
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;
-            sourceFile.parseDiagnostics = parseDiagnostics;
+            sourceFile.parseDiagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
+            if (jsDocDiagnostics) {
+                sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
+            }
 
+            setExternalModuleIndicator(sourceFile);
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }
@@ -872,7 +909,7 @@ namespace ts {
             return sourceFile;
 
             function reportPragmaDiagnostic(pos: number, end: number, diagnostic: DiagnosticMessage) {
-                parseDiagnostics.push(createFileDiagnostic(sourceFile, pos, end, diagnostic));
+                parseDiagnostics.push(createDetachedDiagnostic(pos, end, diagnostic));
             }
         }
 
@@ -882,7 +919,7 @@ namespace ts {
 
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
             Debug.assert(!node.jsDoc); // Should only be called once per node
-            const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceFile.text), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+            const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
             if (jsDoc.length) node.jsDoc = jsDoc;
             return node;
         }
@@ -919,12 +956,12 @@ namespace ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean): SourceFile {
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
-            const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
-            nodeCount++;
-
+            const sourceFile = factory.createSourceFile(statements, endOfFileToken);
+            sourceFile.pos = 0;
+            sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
             sourceFile.bindSuggestionDiagnostics = undefined;
@@ -1060,7 +1097,7 @@ namespace ts {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
-                parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
+                parseDiagnostics.push(createDetachedDiagnostic(start, length, message, arg0));
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
@@ -1320,19 +1357,8 @@ namespace ts {
             }
         }
 
-        function createNode(kind: SyntaxKind): Node {
-            nodeCount++;
-            return isNodeKind(kind) || kind === SyntaxKind.Unknown ? new NodeConstructor(kind, 0, 0) :
-                kind === SyntaxKind.Identifier ? new IdentifierConstructor(kind, 0, 0) :
-                new TokenConstructor(kind, 0, 0);
-        }
-
         function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number): NodeArray<T> {
-            // Since the element list of a node array is typically created by starting with an empty array and
-            // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
-            // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
-            const length = elements.length;
-            const array = <MutableNodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
+            const array = factory.createNodeArray(elements, /*hasTrailingComma*/ undefined);
             array.pos = pos;
             array.end = end === undefined ? scanner.getStartPos() : end;
             return array;
@@ -2335,6 +2361,7 @@ namespace ts {
                 // We also do not need to check for negatives because any prefix operator would be part of a
                 // parent unary expression.
                 kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
+                kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
                 isLiteralKind(kind) ? factory.createLiteralLikeNode(kind, scanner.getTokenValue()) :
                 Debug.fail();
 
@@ -2940,9 +2967,9 @@ namespace ts {
         function parseMappedType() {
             const pos = getNodePos();
             parseExpected(SyntaxKind.OpenBraceToken);
-            let readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined;
+            let readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined;
             if (token() === SyntaxKind.ReadonlyKeyword || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
-                readonlyToken = parseTokenNode<ReadonlyToken | PlusToken | MinusToken>();
+                readonlyToken = parseTokenNode<ReadonlyKeyword | PlusToken | MinusToken>();
                 if (readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
                     parseExpected(SyntaxKind.ReadonlyKeyword);
                 }
@@ -3033,7 +3060,7 @@ namespace ts {
         }
 
         function parseImportType(): ImportTypeNode {
-            sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+            sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
             const pos = getNodePos();
             const isTypeOf = parseOptional(SyntaxKind.TypeOfKeyword);
             parseExpected(SyntaxKind.ImportKeyword);
@@ -3762,7 +3789,7 @@ namespace ts {
                 }
 
                 // JSX overrides
-                if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                if (languageVariant === LanguageVariant.JSX) {
                     const isArrowFunctionInJsx = lookAhead(() => {
                         const third = nextToken();
                         if (third === SyntaxKind.ExtendsKeyword) {
@@ -4182,7 +4209,7 @@ namespace ts {
                     return false;
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
-                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
+                    if (languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
                     // We are in JSX context and the token is part of JSXElement.
@@ -4208,7 +4235,7 @@ namespace ts {
                 const pos = getNodePos();
                 return finishNode(factory.createPrefix(<PrefixUnaryOperator>token(), nextTokenAnd(parseLeftHandSideExpressionOrHigher)), pos);
             }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX && token() === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeywordOrGreaterThan)) {
+            else if (languageVariant === LanguageVariant.JSX && token() === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeywordOrGreaterThan)) {
                 // JSXElement is part of primaryExpression
                 return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
             }
@@ -4266,7 +4293,7 @@ namespace ts {
                     //      var foo3 = require("subfolder
                     //      import * as foo1 from "module-from-node
                     // We want this import to be a statement rather than import call expression
-                    sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+                    sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
                     expression = parseTokenNode<PrimaryExpression>();
                 }
                 else if (lookAhead(nextTokenIsDot)) {
@@ -4274,7 +4301,7 @@ namespace ts {
                     nextToken(); // advance past the 'import'
                     nextToken(); // advance past the dot
                     expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName()), pos);
-                    sourceFile.flags |= NodeFlags.PossiblyContainsImportMeta;
+                    sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
                 }
                 else {
                     expression = parseMemberExpressionOrHigher();
@@ -6522,11 +6549,16 @@ namespace ts {
         export namespace JSDocParser {
             export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-                sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false);
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
-                const diagnostics = parseDiagnostics;
+
+                const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken));
+                const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
+                if (jsDocDiagnostics) {
+                    sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
+                }
+
                 clearState();
 
                 return jsDocTypeExpression ? { jsDocTypeExpression, diagnostics } : undefined;
@@ -6549,9 +6581,10 @@ namespace ts {
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-                sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
-                const diagnostics = parseDiagnostics;
+
+                const sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
+                const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
                 clearState();
 
                 return jsDoc ? { jsDoc, diagnostics } : undefined;
@@ -6568,10 +6601,10 @@ namespace ts {
                 }
 
                 if (contextFlags & NodeFlags.JavaScriptFile) {
-                    if (!sourceFile.jsDocDiagnostics) {
-                        sourceFile.jsDocDiagnostics = [];
+                    if (!jsDocDiagnostics) {
+                        jsDocDiagnostics = [];
                     }
-                    sourceFile.jsDocDiagnostics.push(...parseDiagnostics);
+                    jsDocDiagnostics.push(...parseDiagnostics);
                 }
                 currentToken = saveToken;
                 parseDiagnostics.length = saveParseDiagnosticsLength;

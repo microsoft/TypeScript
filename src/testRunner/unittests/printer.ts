@@ -104,7 +104,7 @@ namespace ts {
                     /*heritageClauses*/ undefined,
                     [createProperty(
                         /*decorators*/ undefined,
-                        createNodeArray([createToken(SyntaxKind.PublicKeyword)]),
+                        factory.createNodeArray([createToken(SyntaxKind.PublicKeyword)]),
                         createIdentifier("prop"),
                         /*questionToken*/ undefined,
                         /*type*/ undefined,

@@ -52,7 +52,7 @@ namespace ts.codefix {
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
-        const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
+        const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);

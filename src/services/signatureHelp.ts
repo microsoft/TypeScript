@@ -569,7 +569,7 @@ namespace ts.SignatureHelp {
         const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
         const parameterParts = mapToDisplayParts(writer => {
             const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
-            const params = createNodeArray([...thisParameter, ...checker.getExpandedParameters(candidateSignature).map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
+            const params = factory.createNodeArray([...thisParameter, ...checker.getExpandedParameters(candidateSignature).map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
             printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
         });
         return { isVariadic: false, parameters, prefix: [punctuationPart(SyntaxKind.LessThanToken)], suffix: [punctuationPart(SyntaxKind.GreaterThanToken), ...parameterParts] };
@@ -580,7 +580,7 @@ namespace ts.SignatureHelp {
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration)!));
+                const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration)!));
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });

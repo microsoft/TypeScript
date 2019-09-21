@@ -315,7 +315,7 @@ namespace ts {
 
         function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
             const result = sameMap(elements, parenthesizeExpressionForDisallowedComma);
-            return setTextRange(createNodeArray(result, elements.hasTrailingComma), elements);
+            return setTextRange(factory.createNodeArray(result, elements.hasTrailingComma), elements);
         }
 
         function parenthesizeExpressionForDisallowedComma(expression: Expression): Expression {
@@ -387,7 +387,7 @@ namespace ts {
         }
 
         function parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
-            return createNodeArray(sameMap(members, parenthesizeMemberOfElementType));
+            return factory.createNodeArray(sameMap(members, parenthesizeMemberOfElementType));
 
         }
 
@@ -397,12 +397,12 @@ namespace ts {
 
         function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
             if (some(typeArguments)) {
-                return createNodeArray(sameMap(typeArguments, parenthesizeOrdinalTypeArgument));
+                return factory.createNodeArray(sameMap(typeArguments, parenthesizeOrdinalTypeArgument));
             }
         }
     }
 
-    const nullParenthesizerRules: ParenthesizerRules = {
+    export const nullParenthesizerRules: ParenthesizerRules = {
         parenthesizeLeftSideOfBinary: (_binaryOperator, leftSide) => leftSide,
         parenthesizeRightSideOfBinary: (_binaryOperator, _leftSide, rightSide) => rightSide,
         parenthesizeExpressionOfComputedPropertyName: identity,
@@ -413,18 +413,14 @@ namespace ts {
         parenthesizeLeftSideOfAccess: expression => cast(expression, isLeftHandSideExpression),
         parenthesizeOperandOfPostfixUnary: operand => cast(operand, isLeftHandSideExpression),
         parenthesizeOperandOfPrefixUnary: operand => cast(operand, isUnaryExpression),
-        parenthesizeExpressionsOfCommaDelimitedList: nodes => createNodeArray(nodes),
+        parenthesizeExpressionsOfCommaDelimitedList: nodes => cast(nodes, isNodeArray),
         parenthesizeExpressionForDisallowedComma: identity,
         parenthesizeExpressionOfExpressionStatement: identity,
         parenthesizeConciseBodyOfArrowFunction: identity,
         parenthesizeMemberOfConditionalType: identity,
         parenthesizeMemberOfElementType: identity,
         parenthesizeElementTypeOfArrayType: identity,
-        parenthesizeConstituentTypesOfUnionOrIntersectionType: nodes => createNodeArray(nodes),
-        parenthesizeTypeArguments: nodes => nodes && createNodeArray(nodes),
+        parenthesizeConstituentTypesOfUnionOrIntersectionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeTypeArguments: nodes => nodes && cast(nodes, isNodeArray),
     };
-
-    export function getNullParenthesizerRules(_factory: NodeFactory): ParenthesizerRules {
-        return nullParenthesizerRules;
-    }
 }

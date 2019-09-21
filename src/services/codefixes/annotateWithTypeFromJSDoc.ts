@@ -144,7 +144,7 @@ namespace ts.codefix {
             }
             name = factory.createIdentifier(text);
             if ((text === "Array" || text === "Promise") && !node.typeArguments) {
-                args = createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
+                args = factory.createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
             }
             else {
                 args = visitNodes(node.typeArguments, transformJSDocType);

@@ -3382,13 +3382,13 @@ namespace ts {
         }
     }
 
-    function createPreprocessedNode(kind: SyntaxKind) {
-        const node = createNode(kind, -1, -1);
-        node.flags |= NodeFlags.Preprocessed;
-        return node;
-    }
-
-    const preprocessorNodeFactory = createNodeFactory(createPreprocessedNode, createParenthesizerRules, createNodeConverters, nullTreeStateObserver);
+    const preprocessorNodeFactory = createNodeFactory(NodeFactoryFlags.None, createBaseNodeFactory(), {
+        onCreateNode: node => {
+            node.flags |= NodeFlags.Preprocessed;
+            node.pos = -1;
+            node.end = -1;
+        }
+    });
 
     /**
      * Create a new 'AsyncProgram' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
@@ -3657,5 +3657,29 @@ namespace ts {
             // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
         }
         return res;
+    }
+
+    export function isUnprocessedSourceFile(node: SourceFile) {
+        return !node.preprocessInfo || node === node.preprocessInfo.unprocessed;
+    }
+
+    export function isProcessedSourceFile(node: SourceFile) {
+        return !!node.preprocessInfo && node !== node.preprocessInfo.unprocessed;
+    }
+
+    /**
+     * If the source file has been preprocessed due to a plugin, gets the unprocessed
+     * source file. Otherwise, returns the source file.
+     */
+    export function getUnprocessedSourceFile(node: SourceFile) {
+        return node.preprocessInfo ? node.preprocessInfo.unprocessed : node;
+    }
+
+    /**
+     * If the source file has been preprocessed due to a plugin, gets the processed
+     * source file. Otherwise, returns the source file.
+     */
+    export function getProcessedSourceFile(node: SourceFile) {
+        return node.preprocessInfo ? node.preprocessInfo.processed : node;
     }
 }

@@ -55,7 +55,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorModifiers = isInClassLike
             ? !modifierFlags || modifierFlags & ModifierFlags.Private
                 ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword)
-                : createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags))
+                : factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags))
             : undefined;
         const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
 
@@ -109,7 +109,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             !isJS ? [factory.createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
             isStatic ? factory.createToken(SyntaxKind.StaticKeyword) : undefined
         );
-        return modifiers && createNodeArray(modifiers);
+        return modifiers && factory.createNodeArray(modifiers);
     }
 
     function startsWithUnderscore(name: string): boolean {

@@ -1,6 +1,7 @@
 namespace ts {
     // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance and exist here purely for backwards compatibility reasons.
     export const {
+        createNodeArray,
         createNumericLiteral,
         createBigIntLiteral,
         createStringLiteral,
