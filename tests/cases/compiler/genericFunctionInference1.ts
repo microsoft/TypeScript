@@ -112,6 +112,8 @@ declare class GenericComp<T> extends Comp<GenericProps<T>> {}
 
 const GenericComp2 = myHoc(GenericComp);
 
+const l: string[] = list.call(undefined, "");
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }

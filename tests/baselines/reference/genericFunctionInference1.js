@@ -110,6 +110,8 @@ declare class GenericComp<T> extends Comp<GenericProps<T>> {}
 
 const GenericComp2 = myHoc(GenericComp);
 
+const l: string[] = list.call(undefined, "");
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
@@ -301,6 +303,7 @@ const p2 = newPoint(10, 20);
 const bag1 = new Bag(1, 2, 3);
 const bag2 = newBag('a', 'b', 'c');
 const GenericComp2 = myHoc(GenericComp);
+const l = list.call(undefined, "");
 // #417
 function mirror(f) { return f; }
 var identityM = mirror(identity);

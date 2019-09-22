@@ -647,299 +647,306 @@ const GenericComp2 = myHoc(GenericComp);
 >myHoc : Symbol(myHoc, Decl(genericFunctionInference1.ts, 101, 46))
 >GenericComp : Symbol(GenericComp, Decl(genericFunctionInference1.ts, 105, 49))
 
+const l: string[] = list.call(undefined, "");
+>l : Symbol(l, Decl(genericFunctionInference1.ts, 111, 5))
+>list.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>list : Symbol(list, Decl(genericFunctionInference1.ts, 2, 124))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
->mirror : Symbol(mirror, Decl(genericFunctionInference1.ts, 109, 40))
->A : Symbol(A, Decl(genericFunctionInference1.ts, 113, 16))
->B : Symbol(B, Decl(genericFunctionInference1.ts, 113, 18))
->f : Symbol(f, Decl(genericFunctionInference1.ts, 113, 22))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 113, 26))
->A : Symbol(A, Decl(genericFunctionInference1.ts, 113, 16))
->B : Symbol(B, Decl(genericFunctionInference1.ts, 113, 18))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 113, 40))
->A : Symbol(A, Decl(genericFunctionInference1.ts, 113, 16))
->B : Symbol(B, Decl(genericFunctionInference1.ts, 113, 18))
->f : Symbol(f, Decl(genericFunctionInference1.ts, 113, 22))
+>mirror : Symbol(mirror, Decl(genericFunctionInference1.ts, 111, 45))
+>A : Symbol(A, Decl(genericFunctionInference1.ts, 115, 16))
+>B : Symbol(B, Decl(genericFunctionInference1.ts, 115, 18))
+>f : Symbol(f, Decl(genericFunctionInference1.ts, 115, 22))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 115, 26))
+>A : Symbol(A, Decl(genericFunctionInference1.ts, 115, 16))
+>B : Symbol(B, Decl(genericFunctionInference1.ts, 115, 18))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 115, 40))
+>A : Symbol(A, Decl(genericFunctionInference1.ts, 115, 16))
+>B : Symbol(B, Decl(genericFunctionInference1.ts, 115, 18))
+>f : Symbol(f, Decl(genericFunctionInference1.ts, 115, 22))
 
 var identityM = mirror(identity);
->identityM : Symbol(identityM, Decl(genericFunctionInference1.ts, 114, 3))
->mirror : Symbol(mirror, Decl(genericFunctionInference1.ts, 109, 40))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>identityM : Symbol(identityM, Decl(genericFunctionInference1.ts, 116, 3))
+>mirror : Symbol(mirror, Decl(genericFunctionInference1.ts, 111, 45))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
 var x = 1;
->x : Symbol(x, Decl(genericFunctionInference1.ts, 116, 3))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 118, 3))
 
 var y = identity(x);
->y : Symbol(y, Decl(genericFunctionInference1.ts, 117, 3))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 116, 3))
+>y : Symbol(y, Decl(genericFunctionInference1.ts, 119, 3))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 118, 3))
 
 var z = identityM(x);
->z : Symbol(z, Decl(genericFunctionInference1.ts, 118, 3))
->identityM : Symbol(identityM, Decl(genericFunctionInference1.ts, 114, 3))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 116, 3))
+>z : Symbol(z, Decl(genericFunctionInference1.ts, 120, 3))
+>identityM : Symbol(identityM, Decl(genericFunctionInference1.ts, 116, 3))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 118, 3))
 
 // #3038
 
 export function keyOf<a>(value: { key: a; }): a {
->keyOf : Symbol(keyOf, Decl(genericFunctionInference1.ts, 118, 21))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 122, 22))
->value : Symbol(value, Decl(genericFunctionInference1.ts, 122, 25))
->key : Symbol(key, Decl(genericFunctionInference1.ts, 122, 33))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 122, 22))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 122, 22))
+>keyOf : Symbol(keyOf, Decl(genericFunctionInference1.ts, 120, 21))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 124, 22))
+>value : Symbol(value, Decl(genericFunctionInference1.ts, 124, 25))
+>key : Symbol(key, Decl(genericFunctionInference1.ts, 124, 33))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 124, 22))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 124, 22))
 
     return value.key;
->value.key : Symbol(key, Decl(genericFunctionInference1.ts, 122, 33))
->value : Symbol(value, Decl(genericFunctionInference1.ts, 122, 25))
->key : Symbol(key, Decl(genericFunctionInference1.ts, 122, 33))
+>value.key : Symbol(key, Decl(genericFunctionInference1.ts, 124, 33))
+>value : Symbol(value, Decl(genericFunctionInference1.ts, 124, 25))
+>key : Symbol(key, Decl(genericFunctionInference1.ts, 124, 33))
 }
 export interface Data {
->Data : Symbol(Data, Decl(genericFunctionInference1.ts, 124, 1))
+>Data : Symbol(Data, Decl(genericFunctionInference1.ts, 126, 1))
 
     key: number;
->key : Symbol(Data.key, Decl(genericFunctionInference1.ts, 125, 23))
+>key : Symbol(Data.key, Decl(genericFunctionInference1.ts, 127, 23))
 
     value: Date;
->value : Symbol(Data.value, Decl(genericFunctionInference1.ts, 126, 16))
+>value : Symbol(Data.value, Decl(genericFunctionInference1.ts, 128, 16))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 var data: Data[] = [];
->data : Symbol(data, Decl(genericFunctionInference1.ts, 130, 3))
->Data : Symbol(Data, Decl(genericFunctionInference1.ts, 124, 1))
+>data : Symbol(data, Decl(genericFunctionInference1.ts, 132, 3))
+>Data : Symbol(Data, Decl(genericFunctionInference1.ts, 126, 1))
 
 declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
->toKeys : Symbol(toKeys, Decl(genericFunctionInference1.ts, 130, 22))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 132, 24))
->values : Symbol(values, Decl(genericFunctionInference1.ts, 132, 27))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 132, 24))
->toKey : Symbol(toKey, Decl(genericFunctionInference1.ts, 132, 39))
->value : Symbol(value, Decl(genericFunctionInference1.ts, 132, 48))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 132, 24))
+>toKeys : Symbol(toKeys, Decl(genericFunctionInference1.ts, 132, 22))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 134, 24))
+>values : Symbol(values, Decl(genericFunctionInference1.ts, 134, 27))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 134, 24))
+>toKey : Symbol(toKey, Decl(genericFunctionInference1.ts, 134, 39))
+>value : Symbol(value, Decl(genericFunctionInference1.ts, 134, 48))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 134, 24))
 
 toKeys(data, keyOf);  // Error
->toKeys : Symbol(toKeys, Decl(genericFunctionInference1.ts, 130, 22))
->data : Symbol(data, Decl(genericFunctionInference1.ts, 130, 3))
->keyOf : Symbol(keyOf, Decl(genericFunctionInference1.ts, 118, 21))
+>toKeys : Symbol(toKeys, Decl(genericFunctionInference1.ts, 132, 22))
+>data : Symbol(data, Decl(genericFunctionInference1.ts, 132, 3))
+>keyOf : Symbol(keyOf, Decl(genericFunctionInference1.ts, 120, 21))
 
 // #9366
 
 function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
->flip : Symbol(flip, Decl(genericFunctionInference1.ts, 134, 20))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 14))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 16))
->c : Symbol(c, Decl(genericFunctionInference1.ts, 138, 19))
->f : Symbol(f, Decl(genericFunctionInference1.ts, 138, 23))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 27))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 14))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 32))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 16))
->c : Symbol(c, Decl(genericFunctionInference1.ts, 138, 19))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 47))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 16))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 52))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 14))
->c : Symbol(c, Decl(genericFunctionInference1.ts, 138, 19))
+>flip : Symbol(flip, Decl(genericFunctionInference1.ts, 136, 20))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 14))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 16))
+>c : Symbol(c, Decl(genericFunctionInference1.ts, 140, 19))
+>f : Symbol(f, Decl(genericFunctionInference1.ts, 140, 23))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 27))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 14))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 32))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 16))
+>c : Symbol(c, Decl(genericFunctionInference1.ts, 140, 19))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 47))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 16))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 52))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 14))
+>c : Symbol(c, Decl(genericFunctionInference1.ts, 140, 19))
 
   return (b: b, a: a) => f(a, b);
->b : Symbol(b, Decl(genericFunctionInference1.ts, 139, 10))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 138, 16))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 139, 15))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 138, 14))
->f : Symbol(f, Decl(genericFunctionInference1.ts, 138, 23))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 139, 15))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 139, 10))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 141, 10))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 140, 16))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 141, 15))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 140, 14))
+>f : Symbol(f, Decl(genericFunctionInference1.ts, 140, 23))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 141, 15))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 141, 10))
 }
 function zip<T, U>(x: T, y: U): [T, U] {
->zip : Symbol(zip, Decl(genericFunctionInference1.ts, 140, 1))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 141, 13))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 141, 15))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 141, 19))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 141, 13))
->y : Symbol(y, Decl(genericFunctionInference1.ts, 141, 24))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 141, 15))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 141, 13))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 141, 15))
+>zip : Symbol(zip, Decl(genericFunctionInference1.ts, 142, 1))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 143, 13))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 143, 15))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 143, 19))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 143, 13))
+>y : Symbol(y, Decl(genericFunctionInference1.ts, 143, 24))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 143, 15))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 143, 13))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 143, 15))
 
   return [x, y];
->x : Symbol(x, Decl(genericFunctionInference1.ts, 141, 19))
->y : Symbol(y, Decl(genericFunctionInference1.ts, 141, 24))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 143, 19))
+>y : Symbol(y, Decl(genericFunctionInference1.ts, 143, 24))
 }
 
 var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
->expected : Symbol(expected, Decl(genericFunctionInference1.ts, 145, 3))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 145, 15))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 145, 17))
->y : Symbol(y, Decl(genericFunctionInference1.ts, 145, 21))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 145, 17))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 145, 26))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 145, 15))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 145, 15))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 145, 17))
->flip : Symbol(flip, Decl(genericFunctionInference1.ts, 134, 20))
->zip : Symbol(zip, Decl(genericFunctionInference1.ts, 140, 1))
+>expected : Symbol(expected, Decl(genericFunctionInference1.ts, 147, 3))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 147, 15))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 147, 17))
+>y : Symbol(y, Decl(genericFunctionInference1.ts, 147, 21))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 147, 17))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 147, 26))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 147, 15))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 147, 15))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 147, 17))
+>flip : Symbol(flip, Decl(genericFunctionInference1.ts, 136, 20))
+>zip : Symbol(zip, Decl(genericFunctionInference1.ts, 142, 1))
 
 var actual = flip(zip);
->actual : Symbol(actual, Decl(genericFunctionInference1.ts, 146, 3))
->flip : Symbol(flip, Decl(genericFunctionInference1.ts, 134, 20))
->zip : Symbol(zip, Decl(genericFunctionInference1.ts, 140, 1))
+>actual : Symbol(actual, Decl(genericFunctionInference1.ts, 148, 3))
+>flip : Symbol(flip, Decl(genericFunctionInference1.ts, 136, 20))
+>zip : Symbol(zip, Decl(genericFunctionInference1.ts, 142, 1))
 
 // #9366
 
 const map = <T, U>(transform: (t: T) => U) =>
->map : Symbol(map, Decl(genericFunctionInference1.ts, 150, 5))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 150, 15))
->transform : Symbol(transform, Decl(genericFunctionInference1.ts, 150, 19))
->t : Symbol(t, Decl(genericFunctionInference1.ts, 150, 31))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 150, 15))
+>map : Symbol(map, Decl(genericFunctionInference1.ts, 152, 5))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 152, 13))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 152, 15))
+>transform : Symbol(transform, Decl(genericFunctionInference1.ts, 152, 19))
+>t : Symbol(t, Decl(genericFunctionInference1.ts, 152, 31))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 152, 13))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 152, 15))
 
     (arr: T[]) => arr.map(transform)
->arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
+>arr : Symbol(arr, Decl(genericFunctionInference1.ts, 153, 5))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 152, 13))
 >arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
+>arr : Symbol(arr, Decl(genericFunctionInference1.ts, 153, 5))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->transform : Symbol(transform, Decl(genericFunctionInference1.ts, 150, 19))
+>transform : Symbol(transform, Decl(genericFunctionInference1.ts, 152, 19))
 
 const identityStr = (t: string) => t;
->identityStr : Symbol(identityStr, Decl(genericFunctionInference1.ts, 153, 5))
->t : Symbol(t, Decl(genericFunctionInference1.ts, 153, 21))
->t : Symbol(t, Decl(genericFunctionInference1.ts, 153, 21))
+>identityStr : Symbol(identityStr, Decl(genericFunctionInference1.ts, 155, 5))
+>t : Symbol(t, Decl(genericFunctionInference1.ts, 155, 21))
+>t : Symbol(t, Decl(genericFunctionInference1.ts, 155, 21))
 
 const arr: string[] = map(identityStr)(['a']);
->arr : Symbol(arr, Decl(genericFunctionInference1.ts, 155, 5))
->map : Symbol(map, Decl(genericFunctionInference1.ts, 150, 5))
->identityStr : Symbol(identityStr, Decl(genericFunctionInference1.ts, 153, 5))
+>arr : Symbol(arr, Decl(genericFunctionInference1.ts, 157, 5))
+>map : Symbol(map, Decl(genericFunctionInference1.ts, 152, 5))
+>identityStr : Symbol(identityStr, Decl(genericFunctionInference1.ts, 155, 5))
 
 const arr1: string[] = map(identity)(['a']);
->arr1 : Symbol(arr1, Decl(genericFunctionInference1.ts, 156, 5))
->map : Symbol(map, Decl(genericFunctionInference1.ts, 150, 5))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>arr1 : Symbol(arr1, Decl(genericFunctionInference1.ts, 158, 5))
+>map : Symbol(map, Decl(genericFunctionInference1.ts, 152, 5))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
 // #9949
 
 function of2<a, b>(one: a, two: b): [a, b] {
->of2 : Symbol(of2, Decl(genericFunctionInference1.ts, 156, 44))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 160, 13))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 160, 15))
->one : Symbol(one, Decl(genericFunctionInference1.ts, 160, 19))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 160, 13))
->two : Symbol(two, Decl(genericFunctionInference1.ts, 160, 26))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 160, 15))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 160, 13))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 160, 15))
+>of2 : Symbol(of2, Decl(genericFunctionInference1.ts, 158, 44))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 162, 13))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 162, 15))
+>one : Symbol(one, Decl(genericFunctionInference1.ts, 162, 19))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 162, 13))
+>two : Symbol(two, Decl(genericFunctionInference1.ts, 162, 26))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 162, 15))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 162, 13))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 162, 15))
 
     return [one, two];
->one : Symbol(one, Decl(genericFunctionInference1.ts, 160, 19))
->two : Symbol(two, Decl(genericFunctionInference1.ts, 160, 26))
+>one : Symbol(one, Decl(genericFunctionInference1.ts, 162, 19))
+>two : Symbol(two, Decl(genericFunctionInference1.ts, 162, 26))
 }
 
 const flipped = flip(of2);
->flipped : Symbol(flipped, Decl(genericFunctionInference1.ts, 164, 5))
->flip : Symbol(flip, Decl(genericFunctionInference1.ts, 134, 20))
->of2 : Symbol(of2, Decl(genericFunctionInference1.ts, 156, 44))
+>flipped : Symbol(flipped, Decl(genericFunctionInference1.ts, 166, 5))
+>flip : Symbol(flip, Decl(genericFunctionInference1.ts, 136, 20))
+>of2 : Symbol(of2, Decl(genericFunctionInference1.ts, 158, 44))
 
 // #29904.1
 
 type Component<P> = (props: P) => {};
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 168, 15))
->props : Symbol(props, Decl(genericFunctionInference1.ts, 168, 21))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 168, 15))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 170, 15))
+>props : Symbol(props, Decl(genericFunctionInference1.ts, 170, 21))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 170, 15))
 
 declare const myHoc1: <P>(C: Component<P>) => Component<P>;
->myHoc1 : Symbol(myHoc1, Decl(genericFunctionInference1.ts, 170, 13))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 170, 23))
->C : Symbol(C, Decl(genericFunctionInference1.ts, 170, 26))
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 170, 23))
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 170, 23))
+>myHoc1 : Symbol(myHoc1, Decl(genericFunctionInference1.ts, 172, 13))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 172, 23))
+>C : Symbol(C, Decl(genericFunctionInference1.ts, 172, 26))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 172, 23))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 172, 23))
 
 declare const myHoc2: <P>(C: Component<P>) => Component<P>;
->myHoc2 : Symbol(myHoc2, Decl(genericFunctionInference1.ts, 171, 13))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 171, 23))
->C : Symbol(C, Decl(genericFunctionInference1.ts, 171, 26))
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 171, 23))
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->P : Symbol(P, Decl(genericFunctionInference1.ts, 171, 23))
+>myHoc2 : Symbol(myHoc2, Decl(genericFunctionInference1.ts, 173, 13))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 173, 23))
+>C : Symbol(C, Decl(genericFunctionInference1.ts, 173, 26))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 173, 23))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>P : Symbol(P, Decl(genericFunctionInference1.ts, 173, 23))
 
 declare const MyComponent1: Component<{ foo: 1 }>;
->MyComponent1 : Symbol(MyComponent1, Decl(genericFunctionInference1.ts, 173, 13))
->Component : Symbol(Component, Decl(genericFunctionInference1.ts, 164, 26))
->foo : Symbol(foo, Decl(genericFunctionInference1.ts, 173, 39))
+>MyComponent1 : Symbol(MyComponent1, Decl(genericFunctionInference1.ts, 175, 13))
+>Component : Symbol(Component, Decl(genericFunctionInference1.ts, 166, 26))
+>foo : Symbol(foo, Decl(genericFunctionInference1.ts, 175, 39))
 
 const enhance = pipe(
->enhance : Symbol(enhance, Decl(genericFunctionInference1.ts, 175, 5))
+>enhance : Symbol(enhance, Decl(genericFunctionInference1.ts, 177, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     myHoc1,
->myHoc1 : Symbol(myHoc1, Decl(genericFunctionInference1.ts, 170, 13))
+>myHoc1 : Symbol(myHoc1, Decl(genericFunctionInference1.ts, 172, 13))
 
     myHoc2,
->myHoc2 : Symbol(myHoc2, Decl(genericFunctionInference1.ts, 171, 13))
+>myHoc2 : Symbol(myHoc2, Decl(genericFunctionInference1.ts, 173, 13))
 
 );
 
 const MyComponent2 = enhance(MyComponent1);
->MyComponent2 : Symbol(MyComponent2, Decl(genericFunctionInference1.ts, 180, 5))
->enhance : Symbol(enhance, Decl(genericFunctionInference1.ts, 175, 5))
->MyComponent1 : Symbol(MyComponent1, Decl(genericFunctionInference1.ts, 173, 13))
+>MyComponent2 : Symbol(MyComponent2, Decl(genericFunctionInference1.ts, 182, 5))
+>enhance : Symbol(enhance, Decl(genericFunctionInference1.ts, 177, 5))
+>MyComponent1 : Symbol(MyComponent1, Decl(genericFunctionInference1.ts, 175, 13))
 
 // #29904.2
 
 const fn20 = pipe((_a?: {}) => 1);
->fn20 : Symbol(fn20, Decl(genericFunctionInference1.ts, 184, 5))
+>fn20 : Symbol(fn20, Decl(genericFunctionInference1.ts, 186, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
->_a : Symbol(_a, Decl(genericFunctionInference1.ts, 184, 19))
+>_a : Symbol(_a, Decl(genericFunctionInference1.ts, 186, 19))
 
 // #29904.3
 
 type Fn = (n: number) => number;
->Fn : Symbol(Fn, Decl(genericFunctionInference1.ts, 184, 34))
->n : Symbol(n, Decl(genericFunctionInference1.ts, 188, 11))
+>Fn : Symbol(Fn, Decl(genericFunctionInference1.ts, 186, 34))
+>n : Symbol(n, Decl(genericFunctionInference1.ts, 190, 11))
 
 const fn30: Fn = pipe(
->fn30 : Symbol(fn30, Decl(genericFunctionInference1.ts, 189, 5))
->Fn : Symbol(Fn, Decl(genericFunctionInference1.ts, 184, 34))
+>fn30 : Symbol(fn30, Decl(genericFunctionInference1.ts, 191, 5))
+>Fn : Symbol(Fn, Decl(genericFunctionInference1.ts, 186, 34))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     x => x + 1,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 189, 22))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 189, 22))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 191, 22))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 191, 22))
 
     x => x * 2,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 190, 15))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 190, 15))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 192, 15))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 192, 15))
 
 );
 
 const promise = Promise.resolve(1);
->promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
+>promise : Symbol(promise, Decl(genericFunctionInference1.ts, 196, 5))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 promise.then(
 >promise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
+>promise : Symbol(promise, Decl(genericFunctionInference1.ts, 196, 5))
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 
     pipe(
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
         x => x + 1,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 196, 9))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 196, 9))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 198, 9))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 198, 9))
 
         x => x * 2,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 197, 19))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 197, 19))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 199, 19))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 199, 19))
 
     ),
 );
@@ -947,137 +954,137 @@ promise.then(
 // #29904.4
 
 declare const getString: () => string;
->getString : Symbol(getString, Decl(genericFunctionInference1.ts, 204, 13))
+>getString : Symbol(getString, Decl(genericFunctionInference1.ts, 206, 13))
 
 declare const orUndefined: (name: string) => string | undefined;
->orUndefined : Symbol(orUndefined, Decl(genericFunctionInference1.ts, 205, 13))
->name : Symbol(name, Decl(genericFunctionInference1.ts, 205, 28))
+>orUndefined : Symbol(orUndefined, Decl(genericFunctionInference1.ts, 207, 13))
+>name : Symbol(name, Decl(genericFunctionInference1.ts, 207, 28))
 
 declare const identity: <T>(value: T) => T;
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 206, 25))
->value : Symbol(value, Decl(genericFunctionInference1.ts, 206, 28))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 206, 25))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 206, 25))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 208, 25))
+>value : Symbol(value, Decl(genericFunctionInference1.ts, 208, 28))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 208, 25))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 208, 25))
 
 const fn40 = pipe(
->fn40 : Symbol(fn40, Decl(genericFunctionInference1.ts, 208, 5))
+>fn40 : Symbol(fn40, Decl(genericFunctionInference1.ts, 210, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     getString,
->getString : Symbol(getString, Decl(genericFunctionInference1.ts, 204, 13))
+>getString : Symbol(getString, Decl(genericFunctionInference1.ts, 206, 13))
 
     string => orUndefined(string),
->string : Symbol(string, Decl(genericFunctionInference1.ts, 209, 14))
->orUndefined : Symbol(orUndefined, Decl(genericFunctionInference1.ts, 205, 13))
->string : Symbol(string, Decl(genericFunctionInference1.ts, 209, 14))
+>string : Symbol(string, Decl(genericFunctionInference1.ts, 211, 14))
+>orUndefined : Symbol(orUndefined, Decl(genericFunctionInference1.ts, 207, 13))
+>string : Symbol(string, Decl(genericFunctionInference1.ts, 211, 14))
 
     identity,
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
 );
 
 // #29904.6
 
 declare const getArray: () => string[];
->getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 216, 13))
+>getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 218, 13))
 
 declare const first: <T>(ts: T[]) => T;
->first : Symbol(first, Decl(genericFunctionInference1.ts, 217, 13))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 217, 22))
->ts : Symbol(ts, Decl(genericFunctionInference1.ts, 217, 25))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 217, 22))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 217, 22))
+>first : Symbol(first, Decl(genericFunctionInference1.ts, 219, 13))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 219, 22))
+>ts : Symbol(ts, Decl(genericFunctionInference1.ts, 219, 25))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 219, 22))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 219, 22))
 
 const fn60 = pipe(
->fn60 : Symbol(fn60, Decl(genericFunctionInference1.ts, 219, 5))
+>fn60 : Symbol(fn60, Decl(genericFunctionInference1.ts, 221, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     getArray,
->getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 216, 13))
+>getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 218, 13))
 
     x => x,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 220, 13))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 220, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 222, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 222, 13))
 
     first,
->first : Symbol(first, Decl(genericFunctionInference1.ts, 217, 13))
+>first : Symbol(first, Decl(genericFunctionInference1.ts, 219, 13))
 
 );
 
 const fn61 = pipe(
->fn61 : Symbol(fn61, Decl(genericFunctionInference1.ts, 225, 5))
+>fn61 : Symbol(fn61, Decl(genericFunctionInference1.ts, 227, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     getArray,
->getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 216, 13))
+>getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 218, 13))
 
     identity,
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
     first,
->first : Symbol(first, Decl(genericFunctionInference1.ts, 217, 13))
+>first : Symbol(first, Decl(genericFunctionInference1.ts, 219, 13))
 
 );
 
 const fn62 = pipe(
->fn62 : Symbol(fn62, Decl(genericFunctionInference1.ts, 231, 5))
+>fn62 : Symbol(fn62, Decl(genericFunctionInference1.ts, 233, 5))
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 
     getArray,
->getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 216, 13))
+>getArray : Symbol(getArray, Decl(genericFunctionInference1.ts, 218, 13))
 
     x => x,
->x : Symbol(x, Decl(genericFunctionInference1.ts, 232, 13))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 232, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 234, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 234, 13))
 
     x => first(x),
->x : Symbol(x, Decl(genericFunctionInference1.ts, 233, 11))
->first : Symbol(first, Decl(genericFunctionInference1.ts, 217, 13))
->x : Symbol(x, Decl(genericFunctionInference1.ts, 233, 11))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 235, 11))
+>first : Symbol(first, Decl(genericFunctionInference1.ts, 219, 13))
+>x : Symbol(x, Decl(genericFunctionInference1.ts, 235, 11))
 
 );
 
 // Repro from #30297
 
 declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
->foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 235, 2))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 239, 22))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 239, 24))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 239, 22))
->fn : Symbol(fn, Decl(genericFunctionInference1.ts, 239, 32))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 239, 22))
->a : Symbol(a, Decl(genericFunctionInference1.ts, 239, 38))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 239, 24))
->b : Symbol(b, Decl(genericFunctionInference1.ts, 239, 45))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 239, 24))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 239, 22))
->U : Symbol(U, Decl(genericFunctionInference1.ts, 239, 24))
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 237, 2))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 241, 22))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 241, 24))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 241, 22))
+>fn : Symbol(fn, Decl(genericFunctionInference1.ts, 241, 32))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 241, 22))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 241, 38))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 241, 24))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 241, 45))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 241, 24))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 241, 22))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 241, 24))
 
 foo2(() => {});
->foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 235, 2))
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 237, 2))
 
 foo2(identity);
->foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 235, 2))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 237, 2))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
 foo2(identity, 1);
->foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 235, 2))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 237, 2))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
 // Repro from #30324
 
 declare function times<T>(fn: (i: number) => T): (n: number) => T[];
->times : Symbol(times, Decl(genericFunctionInference1.ts, 243, 18))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 247, 23))
->fn : Symbol(fn, Decl(genericFunctionInference1.ts, 247, 26))
->i : Symbol(i, Decl(genericFunctionInference1.ts, 247, 31))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 247, 23))
->n : Symbol(n, Decl(genericFunctionInference1.ts, 247, 50))
->T : Symbol(T, Decl(genericFunctionInference1.ts, 247, 23))
+>times : Symbol(times, Decl(genericFunctionInference1.ts, 245, 18))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 249, 23))
+>fn : Symbol(fn, Decl(genericFunctionInference1.ts, 249, 26))
+>i : Symbol(i, Decl(genericFunctionInference1.ts, 249, 31))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 249, 23))
+>n : Symbol(n, Decl(genericFunctionInference1.ts, 249, 50))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 249, 23))
 
 const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]
->a2 : Symbol(a2, Decl(genericFunctionInference1.ts, 248, 5))
->times : Symbol(times, Decl(genericFunctionInference1.ts, 243, 18))
->identity : Symbol(identity, Decl(genericFunctionInference1.ts, 206, 13))
+>a2 : Symbol(a2, Decl(genericFunctionInference1.ts, 250, 5))
+>times : Symbol(times, Decl(genericFunctionInference1.ts, 245, 18))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 208, 13))
 
