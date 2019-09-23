@@ -2807,10 +2807,6 @@ namespace ts {
             }
 
             if (options.isolatedModules) {
-                if (getEmitDeclarations(options)) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, getEmitDeclarationOptionName(options), "isolatedModules");
-                }
-
                 if (options.out) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
                 }
@@ -3108,7 +3104,7 @@ namespace ts {
         }
 
         function verifyProjectReferences() {
-            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getOutputPathForBuildInfo(options) : undefined;
+            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
             forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
@@ -3135,7 +3131,7 @@ namespace ts {
                         createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
                     }
                 }
-                if (!parent && buildInfoPath && buildInfoPath === getOutputPathForBuildInfo(options)) {
+                if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
                     createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
                     hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
                 }

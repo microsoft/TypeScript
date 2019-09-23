@@ -169,7 +169,7 @@ src/language-html/syntax-vue.js(14,27): error TS2339: Property 'right' does not 
 src/language-html/utils.js(10,30): error TS2307: Cannot find module 'html-tag-names'.
 src/language-html/utils.js(11,39): error TS2307: Cannot find module 'html-element-attributes'.
 src/language-html/utils.js(444,17): error TS2554: Expected 0 arguments, but got 1.
-src/language-js/comments.js(864,64): error TS2554: Expected 0 arguments, but got 1.
+src/language-js/comments.js(865,64): error TS2554: Expected 0 arguments, but got 1.
 src/language-js/index.js(9,26): error TS2307: Cannot find module 'linguist-languages/data/JavaScript'.
 src/language-js/index.js(9,65): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { interpreters: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
   Property 'exclude' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; extend: { interpreters: string[]; }; }' but required in type '{ extend: any; override: any; exclude: any; }'.
@@ -335,8 +335,6 @@ src/main/options-normalizer.js(36,35): error TS2339: Property 'blue' does not ex
 src/main/options-normalizer.js(54,5): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 src/main/options-normalizer.js(74,16): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.
 src/main/options-normalizer.js(80,39): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.
-src/main/options-normalizer.js(90,44): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type 'SchemaHandlers<any>'.
-  Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
 src/main/options-normalizer.js(99,11): error TS2345: Argument of type '{ name: any; sourceName: any; }' is not assignable to parameter of type 'SchemaHandlers<any>'.
   Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
 src/main/options-normalizer.js(143,13): error TS2769: No overload matches this call.
