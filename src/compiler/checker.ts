@@ -12561,12 +12561,12 @@ namespace ts {
                 return true;
             }
             const id = getSymbolId(sourceSymbol) + "," + getSymbolId(targetSymbol);
-            const relation = enumRelation.get(id);
-            if (relation !== undefined && !(relation === RelationComparisonResult.Failed && errorReporter)) {
-                return relation === RelationComparisonResult.Succeeded;
+            const entry = enumRelation.get(id);
+            if (entry !== undefined && !(!(entry & RelationComparisonResult.Reported) && entry & RelationComparisonResult.Failed && errorReporter)) {
+                return !!(entry & RelationComparisonResult.Succeeded);
             }
             if (sourceSymbol.escapedName !== targetSymbol.escapedName || !(sourceSymbol.flags & SymbolFlags.RegularEnum) || !(targetSymbol.flags & SymbolFlags.RegularEnum)) {
-                enumRelation.set(id, RelationComparisonResult.FailedAndReported);
+                enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                 return false;
             }
             const targetEnumType = getTypeOfSymbol(targetSymbol);
@@ -12577,7 +12577,7 @@ namespace ts {
                         if (errorReporter) {
                             errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(property),
                                 typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                            enumRelation.set(id, RelationComparisonResult.FailedAndReported);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                         }
                         else {
                             enumRelation.set(id, RelationComparisonResult.Failed);
@@ -12642,7 +12642,7 @@ namespace ts {
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, relation));
                 if (related !== undefined) {
-                    return related === RelationComparisonResult.Succeeded;
+                    return !!(related & RelationComparisonResult.Succeeded);
                 }
             }
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
@@ -13463,18 +13463,6 @@ namespace ts {
                 return result;
             }
 
-            function propagateSidebandVarianceFlags(typeArguments: readonly Type[], variances: VarianceFlags[]) {
-                for (let i = 0; i < variances.length; i++) {
-                    const v = variances[i];
-                    if (v & VarianceFlags.Unmeasurable) {
-                        instantiateType(typeArguments[i], reportUnmeasurableMarkers);
-                    }
-                    if (v & VarianceFlags.Unreliable) {
-                        instantiateType(typeArguments[i], reportUnreliableMarkers);
-                    }
-                }
-            }
-
             // Determine if possibly recursive types are related. First, check if the result is already available in the global cache.
             // Second, check if we have already started a comparison of the given two types in which case we assume the result to be true.
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
@@ -13485,24 +13473,24 @@ namespace ts {
                     return Ternary.False;
                 }
                 const id = getRelationKey(source, target, relation);
-                const related = relation.get(id);
-                if (related !== undefined) {
-                    if (reportErrors && related === RelationComparisonResult.Failed) {
+                const entry = relation.get(id);
+                if (entry !== undefined) {
+                    if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
                         // We are elaborating errors and the cached result is an unreported failure. The result will be reported
                         // as a failure, and should be updated as a reported failure by the bottom of this function.
                     }
                     else {
                         if (outofbandVarianceMarkerHandler) {
                             // We're in the middle of variance checking - integrate any unmeasurable/unreliable flags from this cached component
-                            if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
-                            source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
-                                propagateSidebandVarianceFlags(source.aliasTypeArguments, getAliasVariances(source.aliasSymbol));
+                            const saved = entry & RelationComparisonResult.ReportsMask;
+                            if (saved & RelationComparisonResult.ReportsUnmeasurable) {
+                                instantiateType(source, reportUnmeasurableMarkers);
                             }
-                            if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target && length((<TypeReference>source).typeArguments)) {
-                                propagateSidebandVarianceFlags((<TypeReference>source).typeArguments!, getVariances((<TypeReference>source).target));
+                            if (saved & RelationComparisonResult.ReportsUnreliable) {
+                                instantiateType(source, reportUnreliableMarkers);
                             }
                         }
-                        return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
+                        return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
                 if (!maybeKeys) {
@@ -13531,14 +13519,26 @@ namespace ts {
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= ExpandingFlags.Source;
                 if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= ExpandingFlags.Target;
+                let originalHandler: typeof outofbandVarianceMarkerHandler;
+                let propagatingVarianceFlags: RelationComparisonResult = 0;
+                if (outofbandVarianceMarkerHandler) {
+                    originalHandler = outofbandVarianceMarkerHandler;
+                    outofbandVarianceMarkerHandler = onlyUnreliable => {
+                        propagatingVarianceFlags |= onlyUnreliable ? RelationComparisonResult.ReportsUnreliable : RelationComparisonResult.ReportsUnmeasurable;
+                        return originalHandler!(onlyUnreliable);
+                    };
+                }
                 const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent) : Ternary.Maybe;
+                if (outofbandVarianceMarkerHandler) {
+                    outofbandVarianceMarkerHandler = originalHandler;
+                }
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
                     if (result === Ternary.True || depth === 0) {
                         // If result is definitely true, record all maybe keys as having succeeded
                         for (let i = maybeStart; i < maybeCount; i++) {
-                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded);
+                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
                         }
                         maybeCount = maybeStart;
                     }
@@ -13546,7 +13546,7 @@ namespace ts {
                 else {
                     // A false result goes straight into global cache (when something is false under
                     // assumptions it will also be false without assumptions)
-                    relation.set(id, reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
+                    relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
                     maybeCount = maybeStart;
                 }
                 return result;
