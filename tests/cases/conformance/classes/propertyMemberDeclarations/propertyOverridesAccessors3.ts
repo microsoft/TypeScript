@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: true
 class Animal {
     _sound = 'rustling noise in the bushes'
 

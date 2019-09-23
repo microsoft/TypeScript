@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: true
 class A {
     get p() { return 'oh no' }
 }

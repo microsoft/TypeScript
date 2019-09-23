@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: true
 class A {
     p = 'yep'
 }

@@ -32,25 +32,20 @@ var x;
 var y;
 var Base = /** @class */ (function () {
     function Base() {
-        Object.defineProperty(this, "a", { value: void 0 });
     }
     return Base;
 }());
 var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        Object.defineProperty(_this, "a", { value: void 0 });
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base));
 var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        Object.defineProperty(_this, "a", { value: void 0 }); // Error, parent was public
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Derived1));

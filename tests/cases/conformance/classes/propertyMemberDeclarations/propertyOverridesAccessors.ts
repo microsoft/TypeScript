@@ -1,5 +1,5 @@
 // @target: es2015
-// @legacyClassFields: false
+// @useDefineForClassFields: true
 class A {
     get p() { return 'oh no' }
 }

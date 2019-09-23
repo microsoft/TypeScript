@@ -3093,6 +3093,10 @@
         "category": "Error",
         "code": 5047
     },
+    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
+        "category": "Error",
+        "code": 5048
+    },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
@@ -4024,7 +4028,7 @@
         "category": "Message",
         "code": 6220
     },
-    "Emit legacy class fields.": {
+    "Emit class fields with Define instead of Set.": {
         "category": "Message",
         "code": 6221
     },

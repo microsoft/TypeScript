@@ -31,16 +31,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Base = /** @class */ (function () {
     function Base() {
-        Object.defineProperty(this, "x", { value: void 0 });
     }
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        Object.defineProperty(_this, "x", { value: void 0 }); // error
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));

@@ -88,8 +88,6 @@ var x;
 var y;
 var Base = /** @class */ (function () {
     function Base(a) {
-        Object.defineProperty(this, "a", { value: void 0 });
-        Object.defineProperty(this, "d", { value: void 0 });
     }
     Base.prototype.b = function (a) { };
     Object.defineProperty(Base.prototype, "c", {
@@ -112,9 +110,7 @@ var Base = /** @class */ (function () {
 var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1(a) {
-        var _this = _super.call(this, a) || this;
-        Object.defineProperty(_this, "a", { value: void 0 });
-        return _this;
+        return _super.call(this, a) || this;
     }
     return Derived1;
 }(Base));
@@ -153,9 +149,7 @@ var Derived4 = /** @class */ (function (_super) {
 var Derived5 = /** @class */ (function (_super) {
     __extends(Derived5, _super);
     function Derived5(a) {
-        var _this = _super.call(this, a) || this;
-        Object.defineProperty(_this, "d", { value: void 0 });
-        return _this;
+        return _super.call(this, a) || this;
     }
     return Derived5;
 }(Base));

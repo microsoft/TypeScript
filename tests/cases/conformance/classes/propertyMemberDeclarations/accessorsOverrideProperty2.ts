@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: true
 class Base {
   x = 1;
 }

@@ -3003,6 +3003,10 @@ namespace ts {
                 }
             }
 
+            if (options.useDefineForClassFields && languageVersion === ScriptTarget.ES3) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_target_is_ES3, "useDefineForClassFields");
+            }
+
             if (!options.noEmit && options.allowJs && getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", getEmitDeclarationOptionName(options));
             }

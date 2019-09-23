@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: true
 declare class Animal {
     sound: string;
 }

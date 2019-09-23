@@ -1,5 +1,5 @@
 // @target: esnext
-// @legacyClassFields: false
+// @useDefineForClassFields: true
 interface I {
     p: number
 }
