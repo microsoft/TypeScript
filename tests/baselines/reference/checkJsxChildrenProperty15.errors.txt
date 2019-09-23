@@ -17,7 +17,7 @@ tests/cases/conformance/jsx/file.tsx(12,13): error TS2322: Type '{ children: Ele
     
     // Not OK (excess children)
     const k3 = <Tag children={<div></div>} />;
-                    ~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~
 !!! error TS2322: Type '{ children: Element; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
     const k4 = <Tag key="1"><div></div></Tag>;
