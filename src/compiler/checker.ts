@@ -672,6 +672,7 @@ namespace ts {
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonInferrableType = createIntrinsicType(TypeFlags.Never, "never", ObjectFlags.NonInferrableType);
         const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const unreachableNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
@@ -702,7 +703,7 @@ namespace ts {
         markerSubType.constraint = markerSuperType;
         const markerOtherType = createTypeParameter();
 
-        const noTypePredicate = createIdentifierTypePredicate("<<unresolved>>", 0, anyType);
+        const noTypePredicate = createTypePredicate(TypePredicateKind.Identifier, "<<unresolved>>", 0, anyType);
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, errorType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -821,6 +822,8 @@ namespace ts {
         let sharedFlowCount = 0;
         let flowAnalysisDisabled = false;
         let flowInvocationCount = 0;
+        let lastFlowNode: FlowNode | undefined;
+        let lastFlowNodeReachable: boolean;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -842,6 +845,7 @@ namespace ts {
         const flowLoopTypes: Type[][] = [];
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
+        const flowNodeReachable: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
@@ -4247,11 +4251,14 @@ namespace ts {
                 let returnTypeNode: TypeNode | undefined;
                 const typePredicate = getTypePredicateOfSignature(signature);
                 if (typePredicate) {
-                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier ?
+                    const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                        createToken(SyntaxKind.AssertsKeyword) :
+                        undefined;
+                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                         setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                         createThisTypeNode();
-                    const typeNode = typeToTypeNodeHelper(typePredicate.type, context);
-                    returnTypeNode = createTypePredicateNode(parameterName, typeNode);
+                    const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
+                    returnTypeNode = createTypePredicateNodeWithModifier(assertsModifier, parameterName, typeNode);
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(signature);
@@ -4718,9 +4725,10 @@ namespace ts {
             return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
-                const predicate = createTypePredicateNode(
-                    typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
-                    nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)!, // TODO: GH#18217
+                const predicate = createTypePredicateNodeWithModifier(
+                    typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createToken(SyntaxKind.AssertsKeyword) : undefined,
+                    typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                    typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
                 );
                 const printer = createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
@@ -8497,12 +8505,8 @@ namespace ts {
             return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
-        function createIdentifierTypePredicate(parameterName: string, parameterIndex: number, type: Type): IdentifierTypePredicate {
-            return { kind: TypePredicateKind.Identifier, parameterName, parameterIndex, type };
-        }
-
-        function createThisTypePredicate(type: Type): ThisTypePredicate {
-            return { kind: TypePredicateKind.This, type };
+        function createTypePredicate(kind: TypePredicateKind, parameterName: string | undefined, parameterIndex: number | undefined, type: Type | undefined): TypePredicate {
+            return { kind, parameterName, parameterIndex, type } as TypePredicate;
         }
 
         /**
@@ -8737,10 +8741,6 @@ namespace ts {
             }
         }
 
-        function signatureHasTypePredicate(signature: Signature): boolean {
-            return getTypePredicateOfSignature(signature) !== undefined;
-        }
-
         function getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined {
             if (!signature.resolvedTypePredicate) {
                 if (signature.target) {
@@ -8768,18 +8768,13 @@ namespace ts {
             return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
         }
 
-        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode, signature: Signature): IdentifierTypePredicate | ThisTypePredicate {
-            const { parameterName } = node;
-            const type = getTypeFromTypeNode(node.type);
-            if (parameterName.kind === SyntaxKind.Identifier) {
-                return createIdentifierTypePredicate(
-                    parameterName.escapedText as string,
-                    findIndex(signature.parameters, p => p.escapedName === parameterName.escapedText),
-                    type);
-            }
-            else {
-                return createThisTypePredicate(type);
-            }
+        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode, signature: Signature): TypePredicate {
+            const parameterName = node.parameterName;
+            const type = node.type && getTypeFromTypeNode(node.type);
+            return parameterName.kind === SyntaxKind.ThisType ?
+                createTypePredicate(node.assertsModifier ? TypePredicateKind.AssertsThis : TypePredicateKind.This, /*parameterName*/ undefined, /*parameterIndex*/ undefined, type) :
+                createTypePredicate(node.assertsModifier ? TypePredicateKind.AssertsIdentifier : TypePredicateKind.Identifier, parameterName.escapedText as string,
+                    findIndex(signature.parameters, p => p.escapedName === parameterName.escapedText), type);
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -9868,7 +9863,7 @@ namespace ts {
             const types: Type[] = [];
             for (const sig of signatures) {
                 const pred = getTypePredicateOfSignature(sig);
-                if (!pred) {
+                if (!pred || pred.kind === TypePredicateKind.AssertsThis || pred.kind === TypePredicateKind.AssertsIdentifier) {
                     continue;
                 }
 
@@ -9888,15 +9883,11 @@ namespace ts {
                 return undefined;
             }
             const unionType = getUnionType(types);
-            return isIdentifierTypePredicate(first)
-                ? createIdentifierTypePredicate(first.parameterName, first.parameterIndex, unionType)
-                : createThisTypePredicate(unionType);
+            return createTypePredicate(first.kind, first.parameterName, first.parameterIndex, unionType);
         }
 
         function typePredicateKindsMatch(a: TypePredicate, b: TypePredicate): boolean {
-            return isIdentifierTypePredicate(a)
-                ? isIdentifierTypePredicate(b) && a.parameterIndex === b.parameterIndex
-                : !isIdentifierTypePredicate(b);
+            return a.kind === b.kind && a.parameterIndex === b.parameterIndex;
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
@@ -11196,7 +11187,7 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
-                    return booleanType;
+                    return (<TypePredicateNode>node).assertsModifier ? voidType : booleanType;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
@@ -11354,21 +11345,8 @@ namespace ts {
             return result;
         }
 
-        function instantiateTypePredicate(predicate: TypePredicate, mapper: TypeMapper): ThisTypePredicate | IdentifierTypePredicate {
-            if (isIdentifierTypePredicate(predicate)) {
-                return {
-                    kind: TypePredicateKind.Identifier,
-                    parameterName: predicate.parameterName,
-                    parameterIndex: predicate.parameterIndex,
-                    type: instantiateType(predicate.type, mapper)
-                };
-            }
-            else {
-                return {
-                    kind: TypePredicateKind.This,
-                    type: instantiateType(predicate.type, mapper)
-                };
-            }
+        function instantiateTypePredicate(predicate: TypePredicate, mapper: TypeMapper): TypePredicate {
+            return createTypePredicate(predicate.kind, predicate.parameterName, predicate.parameterIndex, instantiateType(predicate.type, mapper));
         }
 
         function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
@@ -12422,7 +12400,7 @@ namespace ts {
                 // with respect to T.
                 const sourceSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
                 const targetSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(targetType));
-                const callbacks = sourceSig && targetSig && !signatureHasTypePredicate(sourceSig) && !signatureHasTypePredicate(targetSig) &&
+                const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
                     // TODO: GH#18217 It will work if they're both `undefined`, but not if only one is
@@ -12496,7 +12474,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            if (source.kind === TypePredicateKind.Identifier) {
+            if (source.kind === TypePredicateKind.Identifier || source.kind === TypePredicateKind.AssertsIdentifier) {
                 if (source.parameterIndex !== (target as IdentifierTypePredicate).parameterIndex) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, source.parameterName, (target as IdentifierTypePredicate).parameterName);
@@ -12506,7 +12484,9 @@ namespace ts {
                 }
             }
 
-            const related = compareTypes(source.type, target.type, reportErrors);
+            const related = source.type === target.type ? Ternary.True :
+                source.type && target.type ? compareTypes(source.type, target.type, reportErrors) :
+                Ternary.False;
             if (related === Ternary.False && reportErrors) {
                 errorReporter!(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
             }
@@ -14893,16 +14873,18 @@ namespace ts {
             if (!ignoreReturnTypes) {
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
-                result &= sourceTypePredicate !== undefined || targetTypePredicate !== undefined
-                    ? compareTypePredicatesIdentical(sourceTypePredicate, targetTypePredicate, compareTypes)
-                    // If they're both type predicates their return types will both be `boolean`, so no need to compare those.
-                    : compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                result &= sourceTypePredicate || targetTypePredicate ?
+                    compareTypePredicatesIdentical(sourceTypePredicate, targetTypePredicate, compareTypes) :
+                    compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
             return result;
         }
 
         function compareTypePredicatesIdentical(source: TypePredicate | undefined, target: TypePredicate | undefined, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
-            return source === undefined || target === undefined || !typePredicateKindsMatch(source, target) ? Ternary.False : compareTypes(source.type, target.type);
+            return !(source && target && typePredicateKindsMatch(source, target)) ? Ternary.False :
+                source.type === target.type ? Ternary.True :
+                source.type && target.type ? compareTypes(source.type, target.type) :
+                Ternary.False;
         }
 
         function literalTypesWithSameBaseType(types: Type[]): boolean {
@@ -15510,8 +15492,7 @@ namespace ts {
         function applyToReturnTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceTypePredicate = getTypePredicateOfSignature(source);
             const targetTypePredicate = getTypePredicateOfSignature(target);
-            if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind &&
-                (sourceTypePredicate.kind === TypePredicateKind.This || sourceTypePredicate.parameterIndex === (<IdentifierTypePredicate>targetTypePredicate).parameterIndex)) {
+            if (sourceTypePredicate && targetTypePredicate && typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.type && targetTypePredicate.type) {
                 callback(sourceTypePredicate.type, targetTypePredicate.type);
             }
             else {
@@ -17127,23 +17108,64 @@ namespace ts {
             return isLengthPushOrUnshift || isElementAssignment;
         }
 
-        function maybeTypePredicateCall(node: CallExpression) {
-            const links = getNodeLinks(node);
-            if (links.maybeTypePredicate === undefined) {
-                links.maybeTypePredicate = getMaybeTypePredicate(node);
-            }
-            return links.maybeTypePredicate;
+        function isDeclarationWithExplicitTypeAnnotation(declaration: Declaration | undefined) {
+            return !!(declaration && (
+                declaration.kind === SyntaxKind.VariableDeclaration || declaration.kind === SyntaxKind.Parameter ||
+                declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature) &&
+                getEffectiveTypeAnnotationNode(declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature));
         }
 
-        function getMaybeTypePredicate(node: CallExpression) {
-            if (node.expression.kind !== SyntaxKind.SuperKeyword) {
-                const funcType = checkNonNullExpression(node.expression);
-                if (funcType !== silentNeverType) {
-                    const apparentType = getApparentType(funcType);
-                    return apparentType !== errorType && some(getSignaturesOfType(apparentType, SignatureKind.Call), signatureHasTypePredicate);
+        function getExplicitTypeOfSymbol(symbol: Symbol) {
+            return symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule) ||
+                symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property) && isDeclarationWithExplicitTypeAnnotation(symbol.valueDeclaration) ?
+                getTypeOfSymbol(symbol) : undefined;
+        }
+
+        // We require the dotted function name in an assertion expression to be comprised of identifiers
+        // that reference function, method, class or value module symbols; or variable, property or
+        // parameter symbols with declarations that have explicit type annotations. Such references are
+        // resolvable with no possibility of triggering circularities in control flow analysis.
+        function getTypeOfDottedName(node: Expression): Type | undefined {
+            if (!(node.flags & NodeFlags.InWithStatement)) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        const symbol = getResolvedSymbol(<Identifier>node);
+                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                    case SyntaxKind.ThisKeyword:
+                        return checkThisExpression(node);
+                    case SyntaxKind.PropertyAccessExpression:
+                        const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
+                        const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
+                        return prop && getExplicitTypeOfSymbol(prop);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return getTypeOfDottedName((<ParenthesizedExpression>node).expression);
                 }
             }
-            return false;
+        }
+
+        function getEffectsSignature(node: CallExpression) {
+            const links = getNodeLinks(node);
+            let signature = links.effectsSignature;
+            if (signature === undefined) {
+                // A call expression parented by an expression statement is a potential assertion. Other call
+                // expressions are potential type predicate function calls. In order to avoid triggering
+                // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
+                // target expression of an assertion.
+                const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
+                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
+                    undefined;
+                const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
+                const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
+                    some(signatures, hasTypePredicateOrNeverReturnType) ? getResolvedSignature(node) :
+                    undefined;
+                signature = links.effectsSignature = candidate && hasTypePredicateOrNeverReturnType(candidate) ? candidate : unknownSignature;
+            }
+            return signature === unknownSignature ? undefined : signature;
+        }
+
+        function hasTypePredicateOrNeverReturnType(signature: Signature) {
+            return !!(getTypePredicateOfSignature(signature) ||
+                signature.declaration && (getReturnTypeFromAnnotation(signature.declaration) || unknownType).flags & TypeFlags.Never);
         }
 
         function reportFlowControlError(node: Node) {
@@ -17151,6 +17173,71 @@ namespace ts {
             const sourceFile = getSourceFileOfNode(node);
             const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+        }
+
+        function isReachableFlowNode(flow: FlowNode) {
+            const result = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+            lastFlowNode = flow;
+            lastFlowNodeReachable = result;
+            return result;
+        }
+
+        function isUnlockedReachableFlowNode(flow: FlowNode) {
+            return !(flow.flags & FlowFlags.PreFinally && (<PreFinallyFlow>flow).lock.locked) && isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ false);
+        }
+
+        function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
+            while (true) {
+                if (flow === lastFlowNode) {
+                    return lastFlowNodeReachable;
+                }
+                const flags = flow.flags;
+                if (flags & FlowFlags.Shared) {
+                    if (!noCacheCheck) {
+                        const id = getFlowNodeId(flow);
+                        const reachable = flowNodeReachable[id];
+                        return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*skipCacheCheck*/ true));
+                    }
+                    noCacheCheck = false;
+                }
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.PreFinally)) {
+                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
+                }
+                else if (flags & FlowFlags.Call) {
+                    const signature = getEffectsSignature((<FlowCall>flow).node);
+                    if (signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                        return false;
+                    }
+                    flow = (<FlowCall>flow).antecedent;
+                }
+                else if (flags & FlowFlags.BranchLabel) {
+                    // A branching point is reachable if any branch is reachable.
+                    return some((<FlowLabel>flow).antecedents, isUnlockedReachableFlowNode);
+                }
+                else if (flags & FlowFlags.LoopLabel) {
+                    // A loop is reachable if the control flow path that leads to the top is reachable.
+                    flow = (<FlowLabel>flow).antecedents![0];
+                }
+                else if (flags & FlowFlags.SwitchClause) {
+                    // The control flow path representing an unmatched value in a switch statement with
+                    // no default clause is unreachable if the switch statement is exhaustive.
+                    if ((<FlowSwitchClause>flow).clauseStart === (<FlowSwitchClause>flow).clauseEnd && isExhaustiveSwitchStatement((<FlowSwitchClause>flow).switchStatement)) {
+                        return false;
+                    }
+                    flow = (<FlowSwitchClause>flow).antecedent;
+                }
+                else if (flags & FlowFlags.AfterFinally) {
+                    // Cache is unreliable once we start locking nodes
+                    lastFlowNode = undefined;
+                    (<AfterFinallyFlow>flow).locked = true;
+                    const result = isReachableFlowNodeWorker((<AfterFinallyFlow>flow).antecedent, /*skipCacheCheck*/ false);
+                    (<AfterFinallyFlow>flow).locked = false;
+                    return result;
+                }
+                else {
+                    return !(flags & FlowFlags.Unreachable);
+                }
+            }
         }
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
@@ -17172,7 +17259,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType|| reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -17227,6 +17314,13 @@ namespace ts {
                             continue;
                         }
                     }
+                    else if (flags & FlowFlags.Call) {
+                        type = getTypeAtFlowCall(<FlowCall>flow);
+                        if (!type) {
+                            flow = (<FlowCall>flow).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -17251,7 +17345,7 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
-                        const container = (<FlowStart>flow).container;
+                        const container = (<FlowStart>flow).node;
                         if (container && container !== flowContainer &&
                             reference.kind !== SyntaxKind.PropertyAccessExpression &&
                             reference.kind !== SyntaxKind.ElementAccessExpression &&
@@ -17304,6 +17398,9 @@ namespace ts {
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if (isMatchingReference(reference, node)) {
+                    if (!isReachableFlowNode(flow)) {
+                        return unreachableNeverType;
+                    }
                     if (getAssignmentTargetKind(node) === AssignmentKind.Compound) {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
                         return createFlowType(getBaseTypeOfLiteralType(getTypeFromFlowType(flowType)), isIncomplete(flowType));
@@ -17325,6 +17422,9 @@ namespace ts {
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
                 if (containsMatchingReference(reference, node)) {
+                    if (!isReachableFlowNode(flow)) {
+                        return unreachableNeverType;
+                    }
                     // A matching dotted name might also be an expando property on a function *expression*,
                     // in which case we continue control flow analysis back to the function's declaration
                     if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
@@ -17340,6 +17440,38 @@ namespace ts {
                     return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
                 }
                 // Assignment doesn't affect reference
+                return undefined;
+            }
+
+            function narrowTypeByAssertion(type: Type, expr: Expression): Type {
+                const node = skipParentheses(expr);
+                if (node.kind === SyntaxKind.BinaryExpression) {
+                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                        return narrowTypeByAssertion(narrowTypeByAssertion(type, (<BinaryExpression>node).left), (<BinaryExpression>node).right);
+                    }
+                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
+                        return getUnionType([narrowTypeByAssertion(type, (<BinaryExpression>node).left), narrowTypeByAssertion(type, (<BinaryExpression>node).right)]);
+                    }
+                }
+                return narrowType(type, node, /*assumeTrue*/ true);
+            }
+
+            function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
+                const signature = getEffectsSignature(flow.node);
+                if (signature) {
+                    const predicate = getTypePredicateOfSignature(signature);
+                    if (predicate && (predicate.kind === TypePredicateKind.AssertsThis || predicate.kind === TypePredicateKind.AssertsIdentifier)) {
+                        const flowType = getTypeAtFlowNode(flow.antecedent);
+                        const type = getTypeFromFlowType(flowType);
+                        const narrowedType = predicate.type ? narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
+                            predicate.kind === TypePredicateKind.AssertsIdentifier ? narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]) :
+                            type;
+                        return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
+                    }
+                    if (getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                        return unreachableNeverType;
+                    }
+                }
                 return undefined;
             }
 
@@ -17389,7 +17521,7 @@ namespace ts {
                 // *only* place a silent never type is ever generated.
                 const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                 const nonEvolvingType = finalizeEvolvingArrayType(type);
-                const narrowedType = narrowType(nonEvolvingType, flow.expression, assumeTrue);
+                const narrowedType = narrowType(nonEvolvingType, flow.node, assumeTrue);
                 if (narrowedType === nonEvolvingType) {
                     return flowType;
                 }
@@ -17416,6 +17548,9 @@ namespace ts {
                 }
                 else if (containsMatchingReferenceDiscriminant(reference, expr)) {
                     type = declaredType;
+                }
+                else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
+                    return unreachableNeverType;
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -17933,24 +18068,25 @@ namespace ts {
                     getIntersectionType([type, candidate]);
             }
 
-            function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (!hasMatchingArgument(callExpression, reference) || !maybeTypePredicateCall(callExpression)) {
-                    return type;
+            function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
+                if (hasMatchingArgument(callExpression, reference)) {
+                    const signature = getEffectsSignature(callExpression);
+                    const predicate = signature && getTypePredicateOfSignature(signature);
+                    if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
+                        return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
+                    }
                 }
-                const signature = getResolvedSignature(callExpression);
-                const predicate = getTypePredicateOfSignature(signature);
-                if (!predicate) {
-                    return type;
-                }
+                return type;
+            }
 
+            function narrowTypeByTypePredicate(type: Type, predicate: TypePredicate, callExpression: CallExpression, assumeTrue: boolean): Type {
                 // Don't narrow from 'any' if the predicate type is exactly 'Object' or 'Function'
                 if (isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType)) {
                     return type;
                 }
-
-                if (isIdentifierTypePredicate(predicate)) {
+                if (predicate.kind === TypePredicateKind.Identifier || predicate.kind === TypePredicateKind.AssertsIdentifier) {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
-                    if (predicateArgument) {
+                    if (predicateArgument && predicate.type) {
                         if (isMatchingReference(reference, predicateArgument)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
                         }
@@ -17961,7 +18097,7 @@ namespace ts {
                 }
                 else {
                     const invokedExpression = skipParentheses(callExpression.expression);
-                    if (isAccessExpression(invokedExpression)) {
+                    if (isAccessExpression(invokedExpression) && predicate.type) {
                         const possibleReference = skipParentheses(invokedExpression.expression);
                         if (isMatchingReference(reference, possibleReference)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
@@ -17985,7 +18121,7 @@ namespace ts {
                     case SyntaxKind.ElementAccessExpression:
                         return narrowTypeByTruthiness(type, expr, assumeTrue);
                     case SyntaxKind.CallExpression:
-                        return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
+                        return narrowTypeByCallExpression(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
                         return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
@@ -23871,9 +24007,11 @@ namespace ts {
         }
 
         function isExhaustiveSwitchStatement(node: SwitchStatement): boolean {
-            if (!node.possiblyExhaustive) {
-                return false;
-            }
+            const links = getNodeLinks(node);
+            return links.isExhaustive !== undefined ? links.isExhaustive : (links.isExhaustive = computeExhaustiveSwitchStatement(node));
+        }
+
+        function computeExhaustiveSwitchStatement(node: SwitchStatement): boolean {
             if (node.expression.kind === SyntaxKind.TypeOfExpression) {
                 const operandType = getTypeOfExpression((node.expression as TypeOfExpression).expression);
                 // This cast is safe because the switch is possibly exhaustive and does not contain a default case, so there can be no undefined.
@@ -23895,14 +24033,7 @@ namespace ts {
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
-            if (!(func.flags & NodeFlags.HasImplicitReturn)) {
-                return false;
-            }
-
-            if (some((<Block>func.body).statements, statement => statement.kind === SyntaxKind.SwitchStatement && isExhaustiveSwitchStatement(<SwitchStatement>statement))) {
-                return false;
-            }
-            return true;
+            return func.endFlowNode && isReachableFlowNode(func.endFlowNode);
         }
 
         /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
@@ -25728,7 +25859,7 @@ namespace ts {
             checkSourceElement(node.type);
 
             const { parameterName } = node;
-            if (isThisTypePredicate(typePredicate)) {
+            if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
                 getTypeFromThisTypeNode(parameterName as ThisTypeNode);
             }
             else {
@@ -25737,12 +25868,14 @@ namespace ts {
                         error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
-                        const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
-                        checkTypeAssignableTo(typePredicate.type,
-                            getTypeOfSymbol(signature.parameters[typePredicate.parameterIndex]),
-                            node.type,
-                            /*headMessage*/ undefined,
-                            leadingError);
+                        if (typePredicate.type) {
+                            const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
+                            checkTypeAssignableTo(typePredicate.type,
+                                getTypeOfSymbol(signature.parameters[typePredicate.parameterIndex]),
+                                node.type,
+                                /*headMessage*/ undefined,
+                                leadingError);
+                        }
                     }
                 }
                 else if (parameterName) {
@@ -30608,6 +30741,9 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
+            if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && node.flowNode && !isReachableFlowNode(node.flowNode)) {
+                errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+            }
 
             switch (kind) {
                 case SyntaxKind.TypeParameter:
@@ -31606,8 +31742,7 @@ namespace ts {
                     const nameType = checkComputedPropertyName(name);
                     return isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike) ? nameType : stringType;
                 default:
-                    Debug.fail("Unsupported property name.");
-                    return errorType;
+                    return Debug.fail("Unsupported property name.");
             }
         }
 
