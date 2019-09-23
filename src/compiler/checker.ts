@@ -7965,10 +7965,10 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
-        function getUnionConstraintOfIntersection(type: IntersectionType, targetIsUnion: boolean) {
+        function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
-            for (const t of type.types) {
+            for (const t of types) {
                 if (t.flags & TypeFlags.Instantiable) {
                     // We keep following constraints as long as we have an instantiable type that is known
                     // not to be circular or infinite (hence we stop on index access types).
@@ -7978,6 +7978,9 @@ namespace ts {
                     }
                     if (constraint) {
                         constraints = append(constraints, constraint);
+                        if (targetIsUnion) {
+                            constraints = append(constraints, t);
+                        }
                     }
                 }
                 else if (t.flags & TypeFlags.DisjointDomains) {
@@ -7990,7 +7993,7 @@ namespace ts {
                 if (hasDisjointDomainType) {
                     // We add any types belong to one of the disjoint domains because they might cause the final
                     // intersection operation to reduce the union constraints.
-                    for (const t of type.types) {
+                    for (const t of types) {
                         if (t.flags & TypeFlags.DisjointDomains) {
                             constraints = append(constraints, t);
                         }
@@ -13089,7 +13092,7 @@ namespace ts {
                         }
                     }
                 }
-                if (!result && source.flags & TypeFlags.Intersection) {
+                if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
                     // the constituents. When an intersection type contains instantiable types with union type
                     // constraints, there are situations where we need to examine the combined constraint. One is
@@ -13099,10 +13102,17 @@ namespace ts {
                     // we need to check this constraint against a union on the target side. Also, given a type
                     // variable V constrained to 'string | number', 'V & number' has a combined constraint of
                     // 'string & number | number & number' which reduces to just 'number'.
-                    const constraint = getUnionConstraintOfIntersection(<IntersectionType>source, !!(target.flags & TypeFlags.Union));
-                    if (constraint) {
-                        if (result = isRelatedTo(constraint, target, reportErrors, /*headMessage*/ undefined, isIntersectionConstituent)) {
-                            resetErrorInfo(saveErrorInfo);
+                    // This also handles type parameters, as a type parameter with a union constraint compared against a union
+                    // needs to have its constraint hoisted into an intersection with said type parameter, this way
+                    // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
+                    // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
+                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types: [source], !!(target.flags & TypeFlags.Union));
+                    if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
+                        if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
+                            if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
+                                resetErrorInfo(saveErrorInfo);
+                            }
                         }
                     }
                 }
