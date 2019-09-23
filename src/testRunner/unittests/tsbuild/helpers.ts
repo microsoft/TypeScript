@@ -230,7 +230,7 @@ interface Symbol {
         }
     }
 
-    interface BuildInput {
+    export interface BuildInput {
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: readonly string[];
@@ -239,7 +239,7 @@ interface Symbol {
         baselineBuildInfo?: true;
     }
 
-    function build({ fs, tick, rootNames, modifyFs, baselineSourceMap, baselineBuildInfo }: BuildInput) {
+    export function tscBuild({ fs, tick, rootNames, modifyFs, baselineSourceMap, baselineBuildInfo }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
@@ -344,7 +344,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             let host: fakes.SolutionBuilderHost;
             let initialWrittenFiles: Map<true>;
             before(() => {
-                const result = build({
+                const result = tscBuild({
                     fs: projFs().shadow(),
                     tick,
                     rootNames,
@@ -390,7 +390,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         tick();
                         newFs = fs.shadow();
                         tick();
-                        ({ actualReadFileMap, host } = build({
+                        ({ actualReadFileMap, host } = tscBuild({
                             fs: newFs,
                             tick,
                             rootNames,
@@ -429,7 +429,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         });
                     }
                     it(`Verify emit output file text is same when built clean`, () => {
-                        const { fs, writtenFiles } = build({
+                        const { fs, writtenFiles } = tscBuild({
                             fs: newFs.shadow(),
                             tick,
                             rootNames,

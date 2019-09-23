@@ -975,6 +975,8 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
+        Debug.assert(!isJSDoc(errorNode));
+
         const isMissing = nodeIsMissing(errorNode);
         const pos = isMissing || isJsxText(node)
             ? errorNode.pos
@@ -1007,7 +1009,7 @@ namespace ts {
     }
 
     export function isDeclarationReadonly(declaration: Declaration): boolean {
-        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
     }
 
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -4981,8 +4983,8 @@ namespace ts {
     }
 
     export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
-    export function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration {
-        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor;
+    export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
+        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {

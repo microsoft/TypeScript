@@ -45,14 +45,13 @@ namespace ts {
                 }
             }
             if (includeBuildInfo) {
-                const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions());
+                const buildInfoPath = getTsBuildInfoEmitOutputFilePath(host.getCompilerOptions());
                 if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
             }
         }
     }
 
-    /*@internal*/
-    export function getOutputPathForBuildInfo(options: CompilerOptions) {
+    export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
         const configFile = options.configFilePath;
         if (!isIncrementalCompilation(options)) return undefined;
         if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
@@ -80,7 +79,7 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const buildInfoPath = getOutputPathForBuildInfo(options);
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
@@ -170,38 +169,71 @@ namespace ts {
             undefined;
     }
 
+    function createAddOutput() {
+        let outputs: string[] | undefined;
+        return { addOutput, getOutputs };
+        function addOutput(path: string | undefined) {
+            if (path) {
+                (outputs || (outputs = [])).push(path);
+            }
+        }
+        function getOutputs(): readonly string[] {
+            return outputs || emptyArray;
+        }
+    }
+
+    function getSingleOutputFileNames(configFile: ParsedCommandLine, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
+        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+        addOutput(jsFilePath);
+        addOutput(sourceMapFilePath);
+        addOutput(declarationFilePath);
+        addOutput(declarationMapPath);
+        addOutput(buildInfoPath);
+    }
+
+    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
+        if (fileExtensionIs(inputFileName, Extension.Dts)) return;
+        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+        addOutput(js);
+        if (fileExtensionIs(inputFileName, Extension.Json)) return;
+        if (js && configFile.options.sourceMap) {
+            addOutput(`${js}.map`);
+        }
+        if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            addOutput(dts);
+            if (configFile.options.declarationMap) {
+                addOutput(`${dts}.map`);
+            }
+        }
+    }
+
     /*@internal*/
     export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): readonly string[] {
-        let outputs: string[] | undefined;
-        const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
+        const { addOutput, getOutputs } = createAddOutput();
         if (configFile.options.outFile || configFile.options.out) {
-            const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
-            addOutput(jsFilePath);
-            addOutput(sourceMapFilePath);
-            addOutput(declarationFilePath);
-            addOutput(declarationMapPath);
-            addOutput(buildInfoPath);
+            getSingleOutputFileNames(configFile, addOutput);
         }
         else {
             for (const inputFileName of configFile.fileNames) {
-                if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
-                const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
-                addOutput(js);
-                if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-                if (js && configFile.options.sourceMap) {
-                    addOutput(`${js}.map`);
-                }
-                if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
-                    const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
-                    addOutput(dts);
-                    if (configFile.options.declarationMap) {
-                        addOutput(`${dts}.map`);
-                    }
-                }
+                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput);
             }
-            addOutput(getOutputPathForBuildInfo(configFile.options));
+            addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
         }
-        return outputs || emptyArray;
+        return getOutputs();
+    }
+
+    export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[] {
+        inputFileName = normalizePath(inputFileName);
+        Debug.assert(contains(commandLine.fileNames, inputFileName), `Expected fileName to be present in command line`);
+        const { addOutput, getOutputs } = createAddOutput();
+        if (commandLine.options.outFile || commandLine.options.out) {
+            getSingleOutputFileNames(commandLine, addOutput);
+        }
+        else {
+            getOwnOutputFileNames(commandLine, inputFileName, ignoreCase, addOutput);
+        }
+        return getOutputs();
     }
 
     /*@internal*/
@@ -220,7 +252,7 @@ namespace ts {
                 return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             }
         }
-        const buildInfoPath = getOutputPathForBuildInfo(configFile.options);
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(configFile.options);
         if (buildInfoPath) return buildInfoPath;
         return Debug.fail(`project ${configFile.options.configFilePath} expected to have at least one output`);
     }

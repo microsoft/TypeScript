@@ -447,7 +447,7 @@ namespace ts {
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
-        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
         const content = host.readFile(buildInfoPath);
         if (!content) return undefined;

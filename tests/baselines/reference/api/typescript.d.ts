@@ -2340,7 +2340,7 @@ declare namespace ts {
         localTypeParameters: TypeParameter[] | undefined;
         thisType: TypeParameter | undefined;
     }
-    export type BaseType = ObjectType | IntersectionType;
+    export type BaseType = ObjectType | IntersectionType | TypeVariable;
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
@@ -3274,7 +3274,7 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration;
+    function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration;
     function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
     function isEmptyBindingElement(node: BindingElement): boolean;
     function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration;
@@ -4289,6 +4289,8 @@ declare namespace ts {
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 }
 declare namespace ts {
+    function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
+    function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {

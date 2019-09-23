@@ -173,8 +173,7 @@ namespace ts {
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
         // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
-        // With --isolatedModules, emitting changed file doesnt emit dependent files so we cant know of dependent files to retrieve errors so dont cache the errors
-        if (!compilerOptions.outFile && !compilerOptions.out && !compilerOptions.isolatedModules) {
+        if (!compilerOptions.outFile && !compilerOptions.out) {
             state.semanticDiagnosticsPerFile = createMap<readonly Diagnostic[]>();
         }
         state.changedFilesSet = createMap<true>();
@@ -257,7 +256,7 @@ namespace ts {
 
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
         if (!diagnostics.length) return emptyArray;
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -483,14 +482,41 @@ namespace ts {
         return !state.semanticDiagnosticsFromOldState.size;
     }
 
+    function isChangedSignagure(state: BuilderProgramState, path: Path) {
+        const newSignature = Debug.assertDefined(state.currentAffectedFilesSignatures).get(path);
+        const oldSignagure = Debug.assertDefined(state.fileInfos.get(path)).signature;
+        return newSignature !== oldSignagure;
+    }
+
     /**
      * Iterate on referencing modules that export entities from affected file
      */
     function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
         // If there was change in signature (dts output) for the changed file,
         // then only we need to handle pending file emit
-        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+        if (!state.exportedModulesMap || !state.changedFilesSet.has(affectedFile.path)) {
             return;
+        }
+
+        if (!isChangedSignagure(state, affectedFile.path)) return;
+
+        // Since isolated modules dont change js files, files affected by change in signature is itself
+        // But we need to cleanup semantic diagnostics and queue dts emit for affected files
+        if (state.compilerOptions.isolatedModules) {
+            const seenFileNamesMap = createMap<true>();
+            seenFileNamesMap.set(affectedFile.path, true);
+            const queue = BuilderState.getReferencedByPaths(state, affectedFile.resolvedPath);
+            while (queue.length > 0) {
+                const currentPath = queue.pop()!;
+                if (!seenFileNamesMap.has(currentPath)) {
+                    seenFileNamesMap.set(currentPath, true);
+                    const result = fn(state, currentPath);
+                    if (result && isChangedSignagure(state, currentPath)) {
+                        const currentSourceFile = Debug.assertDefined(state.program).getSourceFileByPath(currentPath)!;
+                        queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
+                    }
+                }
+            }
         }
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
@@ -656,7 +682,7 @@ namespace ts {
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
         const currentDirectory = Debug.assertDefined(state.program).getCurrentDirectory();
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, currentDirectory));
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);

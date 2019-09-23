@@ -122,8 +122,8 @@ tests/cases/compiler/promisePermutations.ts(159,21): error TS2769: No overload m
 tests/cases/compiler/promisePermutations.ts(160,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
-      Type 'Promise<number>' is not assignable to type 'IPromise<string>'.
-        Types of property 'then' are incompatible.
+      Call signature return types 'Promise<number>' and 'IPromise<string>' are incompatible.
+        The types of 'then' are incompatible between these types.
           Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
             Types of parameters 'onfulfilled' and 'success' are incompatible.
               Types of parameters 'value' and 'value' are incompatible.
@@ -481,8 +481,8 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2769: No overload m
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
-!!! error TS2769:       Type 'Promise<number>' is not assignable to type 'IPromise<string>'.
-!!! error TS2769:         Types of property 'then' are incompatible.
+!!! error TS2769:       Call signature return types 'Promise<number>' and 'IPromise<string>' are incompatible.
+!!! error TS2769:         The types of 'then' are incompatible between these types.
 !!! error TS2769:           Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
 !!! error TS2769:             Types of parameters 'onfulfilled' and 'success' are incompatible.
 !!! error TS2769:               Types of parameters 'value' and 'value' are incompatible.

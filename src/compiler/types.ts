@@ -4202,7 +4202,7 @@ namespace ts {
     }
 
     // Object type or intersection of object types
-    export type BaseType = ObjectType | IntersectionType;
+    export type BaseType = ObjectType | IntersectionType | TypeVariable; // Also `any` and `object`
 
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];                   // Declared members
@@ -4631,6 +4631,8 @@ namespace ts {
         code: number;
         message: string;
         reportsUnnecessary?: {};
+        /* @internal */
+        elidedInCompatabilityPyramid?: boolean;
     }
 
     /**

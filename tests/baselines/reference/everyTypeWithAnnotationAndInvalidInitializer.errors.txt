@@ -17,9 +17,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(48,32): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
-  Types of property 'A' are incompatible.
-    Type 'typeof N.A' is not assignable to type 'typeof M.A'.
-      Property 'name' is missing in type 'N.A' but required in type 'M.A'.
+  The types returned by 'new A()' are incompatible between these types.
+    Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2322: Type 'N.A' is not assignable to type 'M.A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.
   Type 'boolean' is not assignable to type 'string'.
@@ -112,9 +111,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     var aModule: typeof M = N;
         ~~~~~~~
 !!! error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
-!!! error TS2322:   Types of property 'A' are incompatible.
-!!! error TS2322:     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
-!!! error TS2322:       Property 'name' is missing in type 'N.A' but required in type 'M.A'.
+!!! error TS2322:   The types returned by 'new A()' are incompatible between these types.
+!!! error TS2322:     Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
