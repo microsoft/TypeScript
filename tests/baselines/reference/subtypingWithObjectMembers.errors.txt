@@ -1,30 +1,18 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(13,5): error TS2612: Property 'foo' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(14,5): error TS2612: Property 'bar' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(23,5): error TS2612: Property '1' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(24,5): error TS2612: Property '2.0' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(33,5): error TS2612: Property ''1'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(34,5): error TS2612: Property ''2.0'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(44,9): error TS2612: Property 'foo' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(45,9): error TS2612: Property 'bar' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(54,9): error TS2612: Property '1' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(55,9): error TS2612: Property '2.0' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(64,9): error TS2612: Property ''1'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts(65,9): error TS2612: Property ''2.0'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (18 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts (6 errors) ====
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
@@ -38,14 +26,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B extends A {
         foo: Derived; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
         bar: string; // error
         ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-        ~~~
-!!! error TS2612: Property 'bar' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class A2 {
@@ -55,14 +39,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B2 extends A2 {
         1: Derived; // ok
-        ~
-!!! error TS2612: Property '1' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
         2: string; // error
         ~
 !!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-        ~
-!!! error TS2612: Property '2.0' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class A3 {
@@ -72,14 +52,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B3 extends A3 {
         '1': Derived; // ok
-        ~~~
-!!! error TS2612: Property ''1'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
         '2.0': string; // error
         ~~~~~
 !!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-        ~~~~~
-!!! error TS2612: Property ''2.0'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     module TwoLevels {
@@ -90,14 +66,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B extends A {
             foo: Derived2; // ok
-            ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
             bar: string; // error
             ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-            ~~~
-!!! error TS2612: Property 'bar' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
         }
     
         class A2 {
@@ -107,14 +79,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B2 extends A2 {
             1: Derived2; // ok
-            ~
-!!! error TS2612: Property '1' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
             2: string; // error
             ~
 !!! error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-            ~
-!!! error TS2612: Property '2.0' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
         }
     
         class A3 {
@@ -124,13 +92,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3 extends A3 {
             '1': Derived2; // ok
-            ~~~
-!!! error TS2612: Property ''1'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
             '2.0': string; // error
             ~~~~~
 !!! error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
-            ~~~~~
-!!! error TS2612: Property ''2.0'' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
         }
     }

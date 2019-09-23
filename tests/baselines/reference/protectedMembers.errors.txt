@@ -1,4 +1,3 @@
-tests/cases/compiler/protectedMembers.ts(25,5): error TS2612: Property 'x' will overwrite the base property in 'C2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/compiler/protectedMembers.ts(40,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
 tests/cases/compiler/protectedMembers.ts(41,4): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
 tests/cases/compiler/protectedMembers.ts(42,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
@@ -13,13 +12,11 @@ tests/cases/compiler/protectedMembers.ts(97,1): error TS2322: Type 'B1' is not a
   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
 tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
   Property 'x' is protected in type 'A1' but public in type 'B1'.
-tests/cases/compiler/protectedMembers.ts(104,5): error TS2612: Property 'x' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/compiler/protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property 'x' is protected in type 'B3' but public in type 'A3'.
-tests/cases/compiler/protectedMembers.ts(112,15): error TS2612: Property 'x' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/compiler/protectedMembers.ts (16 errors) ====
+==== tests/cases/compiler/protectedMembers.ts (13 errors) ====
     // Class with protected members
     class C1 {
         protected x: number;
@@ -45,8 +42,6 @@ tests/cases/compiler/protectedMembers.ts(112,15): error TS2612: Property 'x' wil
     // Derived class making protected members public
     class C3 extends C2 {
         x: number;
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'C2'. Add a 'declare' modifier or an initializer to avoid this.
         static sx: number;
         f() {
             return super.f();
@@ -152,8 +147,6 @@ tests/cases/compiler/protectedMembers.ts(112,15): error TS2612: Property 'x' wil
     }
     class B2 extends A2 {
         x;
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'A2'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class A3 {
@@ -165,8 +158,6 @@ tests/cases/compiler/protectedMembers.ts(112,15): error TS2612: Property 'x' wil
 !!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
 !!! error TS2415:   Property 'x' is protected in type 'B3' but public in type 'A3'.
         protected x;
-                  ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'A3'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     

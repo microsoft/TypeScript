@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts' />
+// @useDefineForClassFields: true
 
 ////class B {
 ////    p = 1

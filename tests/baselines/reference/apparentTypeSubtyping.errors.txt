@@ -1,11 +1,9 @@
 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
   Type 'String' is not assignable to type 'string'.
     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(10,5): error TS2612: Property 'x' will overwrite the base property in 'Base<string>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(20,5): error TS2612: Property 'x' will overwrite the base property in 'Base2'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (3 errors) ====
+==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (1 errors) ====
     // subtype checks use the apparent type of the target type
     // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
     
@@ -20,8 +18,6 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
 !!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
 !!! error TS2416:   Type 'String' is not assignable to type 'string'.
 !!! error TS2416:     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'Base<string>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class Base2 {
@@ -32,6 +28,4 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
     // is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
     class Derived2<U extends String> extends Base2 { // error because of the prototype's not matching, not because of the instance side
         x: U;
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'Base2'. Add a 'declare' modifier or an initializer to avoid this.
     }

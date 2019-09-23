@@ -1,24 +1,18 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(6,5): error TS2612: Property 'property' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on a class element.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2612: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(39,5): error TS2612: Property 'p1' will overwrite the base property in 'E'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(65,5): error TS2612: Property 'r' will overwrite the base property in 'J'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (10 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (6 errors) ====
     class A {
         property = 'x';
         m() { return 1 }
     }
     class B extends A {
         property: any; // error
-        ~~~~~~~~
-!!! error TS2612: Property 'property' will overwrite the base property in 'A'. Add a 'declare' modifier or an initializer to avoid this.
     }
     class BD extends A {
         declare property: any; // ok because it's implicitly initialised
@@ -52,8 +46,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
         p: 'hi'; // error
         ~
 !!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
-        ~
-!!! error TS2612: Property 'p' will overwrite the base property in 'C'. Add a 'declare' modifier or an initializer to avoid this.
     }
     class DD extends C {
         declare p: 'bye'; // ok
@@ -66,8 +58,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
     }
     class F extends E {
         p1!: 'z'
-        ~~
-!!! error TS2612: Property 'p1' will overwrite the base property in 'E'. Add a 'declare' modifier or an initializer to avoid this.
         declare p2: 'alpha'
     }
     
@@ -94,7 +84,5 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
     class K extends J {
         q!: 1 | 2 | 3 // ok, extends a property from an interface
         r!: 4 | 5 // error, from class
-        ~
-!!! error TS2612: Property 'r' will overwrite the base property in 'J'. Add a 'declare' modifier or an initializer to avoid this.
     }
     

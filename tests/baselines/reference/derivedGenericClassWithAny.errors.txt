@@ -1,8 +1,6 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(10,5): error TS2612: Property 'x' will overwrite the base property in 'C<number>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(29,5): error TS2612: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type '""' is not assignable to type 'T'.
   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
@@ -13,7 +11,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (9 errors) ====
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (7 errors) ====
     class C<T extends number> {
         x: T;
         get X(): T { return null; }
@@ -26,8 +24,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     
     class D extends C<number> {
         x: any;
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'C<number>'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): any {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -51,8 +47,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     // if D is a valid class definition than E is now not safe tranisitively through C
     class E<T extends string> extends D {
         x: T;
-        ~
-!!! error TS2612: Property 'x' will overwrite the base property in 'D'. Add a 'declare' modifier or an initializer to avoid this.
         get X(): T { return ''; } // error
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
