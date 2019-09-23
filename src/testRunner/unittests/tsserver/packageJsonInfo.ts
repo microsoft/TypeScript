@@ -26,11 +26,11 @@ namespace ts.projectSystem {
         it("detects new package.json files that are added, caches them, and watches them", () => {
             // Initialize project without package.json
             const { project, host } = setup([tsConfig]);
-            assert.isUndefined(project.packageJsonCache.getInDirectory("/"));
+            assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
 
             // Add package.json
             host.reloadFS([tsConfig, packageJson]);
-            let packageJsonInfo = project.packageJsonCache.getInDirectory("/")!;
+            let packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
             assert.ok(packageJsonInfo);
             assert.ok(packageJsonInfo.dependencies);
             assert.ok(packageJsonInfo.devDependencies);
@@ -48,19 +48,19 @@ namespace ts.projectSystem {
                     })
                 }
             ]);
-            packageJsonInfo = project.packageJsonCache.getInDirectory("/")!;
+            packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
             assert.isUndefined(packageJsonInfo.dependencies);
         });
 
         it("finds package.json on demand, watches for deletion, and removes them from cache", () => {
             // Initialize project with package.json
             const { project, host } = setup();
-            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts");
-            assert.ok(project.packageJsonCache.getInDirectory("/"));
+            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            assert.ok(project.packageJsonCache.getInDirectory("/" as Path));
 
             // Delete package.json
             host.reloadFS([tsConfig]);
-            assert.isUndefined(project.packageJsonCache.getInDirectory("/"));
+            assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
         });
 
         it("finds multiple package.json files when present", () => {
@@ -68,8 +68,8 @@ namespace ts.projectSystem {
             const { project, host } = setup();
             // Add package.json in /src
             host.reloadFS([tsConfig, packageJson, { ...packageJson, path: "/src/package.json" }]);
-            assert.lengthOf(project.getPackageJsonsVisibleToFile("/a.ts"), 1);
-            assert.lengthOf(project.getPackageJsonsVisibleToFile("/src/b.ts"), 2);
+            assert.lengthOf(project.getPackageJsonsVisibleToFile("/a.ts" as Path), 1);
+            assert.lengthOf(project.getPackageJsonsVisibleToFile("/src/b.ts" as Path), 2);
         });
     });
 

@@ -1,12 +1,12 @@
 /*@internal*/
 namespace ts.server {
     export interface PackageJsonCache {
-        addOrUpdate(fileName: string): void;
-        delete(fileName: string): void;
-        getInDirectory(directory: string): PackageJsonInfo | undefined;
-        entries(): Iterator<[string, PackageJsonInfo]>;
-        directoryHasPackageJson(directory: string): Ternary;
-        searchDirectoryAndAncestors(directory: string): void;
+        addOrUpdate(fileName: Path): void;
+        delete(fileName: Path): void;
+        getInDirectory(directory: Path): PackageJsonInfo | undefined;
+        entries(): Iterator<[Path, PackageJsonInfo]>;
+        directoryHasPackageJson(directory: Path): Ternary;
+        searchDirectoryAndAncestors(directory: Path): void;
     }
 
     export function createPackageJsonCache(project: Project): PackageJsonCache {
@@ -21,14 +21,14 @@ namespace ts.server {
             getInDirectory: directory => {
                 return packageJsons.get(combinePaths(directory, "package.json"));
             },
-            entries: () => packageJsons.entries(),
+            entries: () => packageJsons.entries() as Iterator<[Path, PackageJsonInfo]>,
             directoryHasPackageJson,
             searchDirectoryAndAncestors: directory => {
                 forEachAncestorDirectory(directory, ancestor => {
                     if (directoryHasPackageJson(ancestor) !== Ternary.Maybe) {
                         return true;
                     }
-                    const packageJsonFileName = combinePaths(ancestor, "package.json");
+                    const packageJsonFileName = project.toPath(combinePaths(ancestor, "package.json"));
                     if (tryFileExists(project, packageJsonFileName)) {
                         addOrUpdate(packageJsonFileName);
                     }
@@ -39,7 +39,7 @@ namespace ts.server {
             },
         };
 
-        function addOrUpdate(fileName: string) {
+        function addOrUpdate(fileName: Path) {
             const packageJsonInfo = createPackageJsonInfo(fileName, project);
             if (packageJsonInfo) {
                 packageJsons.set(fileName, packageJsonInfo);
@@ -47,7 +47,7 @@ namespace ts.server {
             }
         }
 
-        function directoryHasPackageJson(directory: string) {
+        function directoryHasPackageJson(directory: Path) {
             return packageJsons.has(combinePaths(directory, "package.json")) ? Ternary.True :
                 directoriesWithoutPackageJson.has(directory) ? Ternary.False :
                 Ternary.Maybe;

@@ -1430,13 +1430,12 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: Path, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const currentDirectory = this.currentDirectory;
-            const getCanonicalFileName = this.getCanonicalFileName;
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
             const result: PackageJsonInfo[] = [];
-            const rootPath = rootDir && toPath(rootDir, currentDirectory, this.getCanonicalFileName);
             forEachAncestorDirectory(getDirectoryPath(fileName), function processDirectory(directory): boolean | undefined {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
@@ -1449,7 +1448,7 @@ namespace ts.server {
                         watchPackageJsonFile(packageJsonFileName);
                         result.push(Debug.assertDefined(packageJsonCache.getInDirectory(directory)));
                 }
-                if (rootPath && rootPath === toPath(directory, currentDirectory, getCanonicalFileName)) {
+                if (rootPath && rootPath === toPath(directory)) {
                     return true;
                 }
             });
@@ -1458,9 +1457,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        onAddPackageJson(fileName: string) {
-            this.packageJsonCache.addOrUpdate(fileName);
-            this.watchPackageJsonFile(fileName);
+        onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
         }
 
         /*@internal*/
@@ -1468,23 +1467,24 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
-        private watchPackageJsonFile(fileName: string) {
+        private watchPackageJsonFile(path: Path) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
-            if (!watchers.has(fileName)) {
-                watchers.set(fileName, this.projectService.watchFactory.watchFile(
+            if (!watchers.has(path)) {
+                watchers.set(path, this.projectService.watchFactory.watchFile(
                     this.projectService.host,
-                    fileName,
+                    path,
                     (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
                         switch (eventKind) {
                             case FileWatcherEventKind.Created:
                                 return Debug.fail();
                             case FileWatcherEventKind.Changed:
-                                this.packageJsonCache.addOrUpdate(fileName);
+                                this.packageJsonCache.addOrUpdate(path);
                                 break;
                             case FileWatcherEventKind.Deleted:
-                                this.packageJsonCache.delete(fileName);
-                                watchers.get(fileName)!.close();
-                                watchers.delete(fileName);
+                                this.packageJsonCache.delete(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
                         }
                     },
                     PollingInterval.Low,
