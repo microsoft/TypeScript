@@ -2212,7 +2212,7 @@
         "category": "Error",
         "code": 2611
     },
-    "Property '{0}' will overwrite the base property in '{1}'. Add a 'declare' modifier or an initializer to avoid this.": {
+    "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
         "category": "Error",
         "code": 2612
     },

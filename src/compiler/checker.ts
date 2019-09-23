@@ -29545,7 +29545,7 @@ namespace ts {
                                     || !isIdentifier(propName)
                                     || !strictNullChecks
                                     || !isPropertyInitializedInConstructor(propName, type, constructor)) {
-                                    const errorMessage = Diagnostics.Property_0_will_overwrite_the_base_property_in_1_Add_a_declare_modifier_or_an_initializer_to_avoid_this;
+                                    const errorMessage = Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration;
                                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType));
                                 }
                             }
