@@ -46,10 +46,6 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             const options = context.getCompilerOptions();
             if (node.isDeclarationFile
-                // TODO: Need to test computed proeprties too
-                // [x] = 1 => Object.defineProperty(this, x, ...)
-                // -vs-
-                // [x] = 1 -> this[x] = 1
                 || options.useDefineForClassFields && options.target === ScriptTarget.ESNext) {
                 return node;
             }
