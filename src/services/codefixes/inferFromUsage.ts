@@ -947,22 +947,19 @@ namespace ts.codefix {
 
         function allPropertiesAreAssignableToUsage(type: Type, usage: Usage) {
             if (!usage.properties) return false;
-            let result = true;
-            usage.properties.forEach((propUsage, name) => {
+            return !forEachEntry(usage.properties, (propUsage, name) => {
                 const source = checker.getTypeOfPropertyOfType(type, name as string);
                 if (!source) {
-                    result = false;
-                    return;
+                    return true;
                 }
                 if (propUsage.calls) {
                     const sigs = checker.getSignaturesOfType(source, SignatureKind.Call);
-                    result = result && !!sigs.length && checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
+                    return !sigs.length || !checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    result = result && checker.isTypeAssignableTo(source, combineFromUsage(propUsage));
+                    return !checker.isTypeAssignableTo(source, combineFromUsage(propUsage));
                 }
             });
-            return result;
         }
 
         /**
