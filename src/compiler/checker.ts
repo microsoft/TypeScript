@@ -5839,11 +5839,10 @@ namespace ts {
             if (declaration.kind === SyntaxKind.ExportAssignment) {
                 type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
-            else if (isBinaryExpression(declaration)) {
-                type = getWidenedTypeForAssignmentDeclaration(symbol);
-            }
-            else if (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
+            else if (
+                isBinaryExpression(declaration) ||
+                (isInJSFile(declaration) &&
+                (isCallExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)))) {
                 type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)

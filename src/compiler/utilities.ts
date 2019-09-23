@@ -2076,7 +2076,7 @@ namespace ts {
 
     // TODO: Signed numeric literals?
     /* @internal */
-    export function getElementOrPropertyAccessImmediateRHS(node: PropertyAccessExpression | ElementAccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+    export function getElementOrPropertyAccessArgumentExpressionOrName(node: PropertyAccessExpression | ElementAccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
         if (isPropertyAccessExpression(node)) {
             return node.name;
         }
@@ -2089,7 +2089,7 @@ namespace ts {
 
     /* @internal */
     export function getElementOrPropertyAccessName(node: PropertyAccessExpression | ElementAccessExpression): string | undefined {
-        const name = getElementOrPropertyAccessImmediateRHS(node);
+        const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
         if (name) {
             if (isIdentifier(name)) {
                 return idText(name);
@@ -5308,7 +5308,7 @@ namespace ts {
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return getElementOrPropertyAccessImmediateRHS((expr as BinaryExpression).left as PropertyAccessExpression | ElementAccessExpression);
+                        return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as PropertyAccessExpression | ElementAccessExpression);
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:

@@ -3,7 +3,7 @@
 // @noEmit: true
 // @strict: true
 // @target: es6
-// @filename: file.js
+// @filename: lateBoundClassMemberAssignmentJS.js
 const _sym = Symbol("_sym");
 class MyClass {
     constructor() {
