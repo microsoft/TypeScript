@@ -12827,7 +12827,11 @@ namespace ts {
                     }
                 }
                 if (path) {
-                    reportError(Diagnostics.The_types_of_0_are_incompatible_between_these_types, path);
+                    reportError(path[path.length - 1] === ")"
+                        ? Diagnostics.The_types_returned_by_0_are_incompatible_between_these_types
+                        : Diagnostics.The_types_of_0_are_incompatible_between_these_types,
+                        path
+                    );
                 }
                 else {
                     // Remove the innermost secondary error as it will duplicate the error already reported by `reportRelationError` on entry

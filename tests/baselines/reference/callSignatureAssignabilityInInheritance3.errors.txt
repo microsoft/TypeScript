@@ -27,12 +27,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(100,19): error TS2430: Interface 'I6' incorrectly extends interface 'B'.
-  The types of 'a2(...)' are incompatible between these types.
+  The types returned by 'a2(...)' are incompatible between these types.
     Type 'string[]' is not assignable to type 'T[]'.
       Type 'string' is not assignable to type 'T'.
         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(109,19): error TS2430: Interface 'I7' incorrectly extends interface 'C'.
-  The types of 'a2(...)' are incompatible between these types.
+  The types returned by 'a2(...)' are incompatible between these types.
     Type 'T[]' is not assignable to type 'string[]'.
       Type 'T' is not assignable to type 'string'.
 
@@ -172,7 +172,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
             interface I6 extends B {
                       ~~
 !!! error TS2430: Interface 'I6' incorrectly extends interface 'B'.
-!!! error TS2430:   The types of 'a2(...)' are incompatible between these types.
+!!! error TS2430:   The types returned by 'a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'string[]' is not assignable to type 'T[]'.
 !!! error TS2430:       Type 'string' is not assignable to type 'T'.
 !!! error TS2430:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
@@ -187,7 +187,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
             interface I7 extends C {
                       ~~
 !!! error TS2430: Interface 'I7' incorrectly extends interface 'C'.
-!!! error TS2430:   The types of 'a2(...)' are incompatible between these types.
+!!! error TS2430:   The types returned by 'a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T[]' is not assignable to type 'string[]'.
 !!! error TS2430:       Type 'T' is not assignable to type 'string'.
                 a2: <T>(x: T) => T[]; // error
