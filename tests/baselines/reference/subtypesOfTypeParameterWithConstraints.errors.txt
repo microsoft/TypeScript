@@ -1,39 +1,21 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(9,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(14,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(19,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(24,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(33,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(38,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(43,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
       Type 'V' is not assignable to type 'T'.
         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(55,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(60,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'V' is not assignable to type 'T'.
     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
   Type 'V' is not assignable to type 'U'.
     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(72,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(77,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(85,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(90,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(95,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(100,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(107,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2416: Property 'foo' in type 'D19<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
@@ -42,44 +24,33 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
           Type 'Date' is not assignable to type 'T'.
             'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(112,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(117,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(122,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(129,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(134,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(134,5): error TS2416: Property 'foo' in type 'D23<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'V' is not assignable to type 'T'.
     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
       Type 'Date' is not assignable to type 'T'.
         'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(134,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(139,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(139,5): error TS2416: Property 'foo' in type 'D24<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
   Type 'V' is not assignable to type 'U'.
     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
       Type 'Date' is not assignable to type 'U'.
         'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(139,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(144,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(151,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(156,5): error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(156,5): error TS2416: Property 'foo' in type 'D27<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'Date' is not assignable to type 'T'.
     'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(156,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(161,5): error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(161,5): error TS2416: Property 'foo' in type 'D28<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
   Type 'Date' is not assignable to type 'U'.
     'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(161,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2416: Property 'foo' in type 'D29<T, U, V>' is not assignable to the same property in base type 'C3<V>'.
   Type 'Date' is not assignable to type 'V'.
     'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(166,5): error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts (49 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts (20 errors) ====
     // checking whether other types are subtypes of type parameters with constraints
     
     class C3<T> {
@@ -89,15 +60,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D1<T extends U, U> extends C3<T> {
         [x: string]: T;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D2<T extends U, U> extends C3<U> {
         [x: string]: U;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D3<T extends U, U> extends C3<T> {
@@ -109,15 +76,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D4<T extends U, U> extends C3<U> {
         [x: string]: U;
         foo: U; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     
@@ -127,22 +90,16 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D5<T extends U, U extends V, V> extends C3<T> {
         [x: string]: T;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D6<T extends U, U extends V, V> extends C3<U> {
         [x: string]: U;
         foo: T;
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D7<T extends U, U extends V, V> extends C3<V> {
         [x: string]: V;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // test if U is a subtype of T, U, V
@@ -158,22 +115,16 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 !!! error TS2416:       Type 'V' is not assignable to type 'T'.
 !!! error TS2416:         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D9<T extends U, U extends V, V> extends C3<U> {
         [x: string]: U;
         foo: U; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D10<T extends U, U extends V, V> extends C3<V> {
         [x: string]: V;
         foo: U; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // test if V is a subtype of T, U, V
@@ -187,8 +138,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'T'.
 !!! error TS2416:     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D12<T extends U, U extends V, V> extends C3<U> {
@@ -200,15 +149,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'U'.
 !!! error TS2416:     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D13<T extends U, U extends V, V> extends C3<V> {
         [x: string]: V;
         foo: V; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // Date > V > U > T
@@ -217,29 +162,21 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
         [x: string]: Date;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D15<T extends U, U extends V, V extends Date> extends C3<T> {
         [x: string]: T;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D16<T extends U, U extends V, V extends Date> extends C3<U> {
         [x: string]: U;
         foo: T;
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D17<T extends U, U extends V, V extends Date> extends C3<V> {
         [x: string]: V;
         foo: T;
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // test if U is a subtype of T, U, V, Date
@@ -247,8 +184,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
         [x: string]: Date;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D19<T extends U, U extends V, V extends Date> extends C3<T> {
@@ -264,22 +199,16 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 !!! error TS2416:           Type 'Date' is not assignable to type 'T'.
 !!! error TS2416:             'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D20<T extends U, U extends V, V extends Date> extends C3<U> {
         [x: string]: U;
         foo: U; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D21<T extends U, U extends V, V extends Date> extends C3<V> {
         [x: string]: V;
         foo: U;
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // test if V is a subtype of T, U, V, Date
@@ -287,8 +216,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
         [x: string]: Date;
         foo: T; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D23<T extends U, U extends V, V extends Date> extends C3<T> {
@@ -302,8 +229,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 !!! error TS2416:       Type 'Date' is not assignable to type 'T'.
 !!! error TS2416:         'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D24<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -317,15 +242,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416:     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
 !!! error TS2416:       Type 'Date' is not assignable to type 'U'.
 !!! error TS2416:         'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D25<T extends U, U extends V, V extends Date> extends C3<V> {
         [x: string]: V;
         foo: V; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     // test if Date is a subtype of T, U, V, Date
@@ -333,8 +254,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
     class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
         [x: string]: Date;
         foo: Date; // ok
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<Date>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D27<T extends U, U extends V, V extends Date> extends C3<T> {
@@ -346,8 +265,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D27<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'Date' is not assignable to type 'T'.
 !!! error TS2416:     'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<T>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D28<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -359,8 +276,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D28<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
 !!! error TS2416:   Type 'Date' is not assignable to type 'U'.
 !!! error TS2416:     'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<U>'. Add a 'declare' modifier or an initializer to avoid this.
     }
     
     class D29<T extends U, U extends V, V extends Date> extends C3<V> {
@@ -372,6 +287,4 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D29<T, U, V>' is not assignable to the same property in base type 'C3<V>'.
 !!! error TS2416:   Type 'Date' is not assignable to type 'V'.
 !!! error TS2416:     'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
-        ~~~
-!!! error TS2612: Property 'foo' will overwrite the base property in 'C3<V>'. Add a 'declare' modifier or an initializer to avoid this.
     }

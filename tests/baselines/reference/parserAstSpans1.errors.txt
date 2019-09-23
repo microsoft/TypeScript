@@ -3,14 +3,12 @@ tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(85,16): error TS10
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(94,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(100,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(114,12): error TS2612: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(119,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(122,12): error TS2612: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(125,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts (10 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts (8 errors) ====
     /** i1 is interface with properties*/
     interface i1 {
         /** i1_p1*/
@@ -135,8 +133,6 @@ tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2
         }
         /** c3 p1*/
         public p1: number;
-               ~~
-!!! error TS2612: Property 'p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
         /** c3 f1*/
         public f1() {
         }
@@ -147,8 +143,6 @@ tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2
             return 10;
         }
         public nc_p1: number;
-               ~~~~~
-!!! error TS2612: Property 'nc_p1' will overwrite the base property in 'c2'. Add a 'declare' modifier or an initializer to avoid this.
         public nc_f1() {
         }
         public get nc_prop() {
