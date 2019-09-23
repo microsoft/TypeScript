@@ -9125,7 +9125,7 @@ namespace ts {
             return type;
         }
 
-        function getTypeArguments(type: TypeReference): ReadonlyArray<Type> {
+        function getTypeArguments(type: TypeReference): readonly Type[] {
             if (!type.resolvedTypeArguments) {
                 const node = type.node;
                 const typeArguments = !node ? emptyArray :

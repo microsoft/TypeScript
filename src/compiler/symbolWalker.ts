@@ -11,7 +11,7 @@ namespace ts {
         getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
         getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
-        getTypeArguments: (type: TypeReference) => ReadonlyArray<Type>) {
+        getTypeArguments: (type: TypeReference) => readonly Type[]) {
 
         return getSymbolWalker;
 
