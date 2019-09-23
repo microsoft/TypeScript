@@ -3343,9 +3343,6 @@ namespace ts {
         return resolveConfigFileProjectName(passedInRef.path);
     }
 
-    function getEmitDeclarationOptionName(options: CompilerOptions) {
-        return options.declaration ? "declaration" : "composite";
-    }
     /* @internal */
     /**
      * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
