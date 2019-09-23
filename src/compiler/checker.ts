@@ -5985,7 +5985,9 @@ namespace ts {
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
             const baseConstructorType = getBaseConstructorTypeOfClass(getDeclaredTypeOfClassOrInterface(symbol));
-            return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType : undefined;
+            return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType :
+                baseConstructorType.flags & TypeFlags.Intersection ? find((baseConstructorType as IntersectionType).types, t => !!(t.flags & TypeFlags.TypeVariable)) :
+                undefined;
         }
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
@@ -6263,12 +6265,12 @@ namespace ts {
         }
 
         function isConstructorType(type: Type): boolean {
-            if (isValidBaseType(type) && getSignaturesOfType(type, SignatureKind.Construct).length > 0) {
+            if (getSignaturesOfType(type, SignatureKind.Construct).length > 0) {
                 return true;
             }
             if (type.flags & TypeFlags.TypeVariable) {
                 const constraint = getBaseConstraintOfType(type);
-                return !!constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
+                return !!constraint && isMixinConstructorType(constraint);
             }
             return false;
         }
@@ -6429,9 +6431,16 @@ namespace ts {
             return true;
         }
 
-        // A valid base type is `any`, any non-generic object type or intersection of non-generic
-        // object types.
+        // A valid base type is `any`, an object type or intersection of object types.
         function isValidBaseType(type: Type): type is BaseType {
+            if (type.flags & TypeFlags.TypeParameter) {
+                const constraint = getBaseConstraintOfType(type);
+                if (constraint) {
+                    return isValidBaseType(constraint);
+                }
+            }
+            // TODO: Given that we allow type parmeters here now, is this `!isGenericMappedType(type)` check really needed?
+            // There's no reason a `T` should be allowed while a `Readonly<T>` should not.
             return !!(type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any)) && !isGenericMappedType(type) ||
                 !!(type.flags & TypeFlags.Intersection) && every((<IntersectionType>type).types, isValidBaseType);
         }
