@@ -1,4 +1,8 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyES5.ts ===
+var x: "p" = "p"
+>x : "p"
+>"p" : "p"
+
 class A {
 >A : A
 
@@ -8,6 +12,16 @@ class A {
 
     b
 >b : any
+
+    ["computed"] = 13
+>["computed"] : number
+>"computed" : "computed"
+>13 : 13
+
+    ;[x] = 14
+>[x] : number
+>x : "p"
+>14 : 14
 
     m() { }
 >m : () => void
