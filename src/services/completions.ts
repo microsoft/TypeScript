@@ -56,22 +56,18 @@ namespace ts.Completions {
         skipFilter: boolean;
         origin: SymbolOriginInfoExport;
     }
-    export interface AutoImportSuggestionsCache {
+    export interface ImportSuggestionsForFileCache {
         clear(): void;
         get(fileName: string, checker: TypeChecker, projectVersion?: string): readonly AutoImportSuggestion[] | undefined;
         set(fileName: string, suggestions: readonly AutoImportSuggestion[], projectVersion?: string): void;
-        isEmpty: boolean;
-        key: string | undefined;
+        isEmpty(): boolean;
     }
-    export function createImportSuggestionsCache(): AutoImportSuggestionsCache {
+    export function createImportSuggestionsForFileCache(): ImportSuggestionsForFileCache {
         let cache: readonly AutoImportSuggestion[] | undefined;
         let projectVersion: string | undefined;
         let fileName: string | undefined;
         return {
-            get key() {
-                return fileName;
-            },
-            get isEmpty() {
+            isEmpty() {
                 return !cache;
             },
             clear: () => {

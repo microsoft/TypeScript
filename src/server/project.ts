@@ -236,7 +236,7 @@ namespace ts.server {
         readonly packageJsonCache: PackageJsonCache;
 
         /*@internal*/
-        private importSuggestionsCache = Completions.createImportSuggestionsCache();
+        private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
         /*@internal*/
         private dirtyFilesForSuggestions: Map<true> | undefined;
         /*@internal*/
@@ -863,7 +863,7 @@ namespace ts.server {
         /*@internal*/
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
-            if (!this.importSuggestionsCache.isEmpty) {
+            if (!this.importSuggestionsCache.isEmpty()) {
                 (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile, true);
             }
         }
@@ -1029,7 +1029,7 @@ namespace ts.server {
                 }
             }
 
-            if (!this.importSuggestionsCache.isEmpty) {
+            if (!this.importSuggestionsCache.isEmpty()) {
                 if (this.hasAddedorRemovedFiles || oldProgram && !oldProgram.structureIsReused) {
                     this.importSuggestionsCache.clear();
                 }

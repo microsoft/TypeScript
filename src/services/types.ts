@@ -256,7 +256,7 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
-        getImportSuggestionsCache?(): Completions.AutoImportSuggestionsCache;
+        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
     }
 
     /* @internal */
