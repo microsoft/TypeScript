@@ -11,28 +11,42 @@ namespace ts.Completions {
     }
     export type Log = (message: string) => void;
 
-    const enum SymbolOriginInfoKind { ThisType, SymbolMemberNoExport, SymbolMemberExport, Export, Promise }
-    type SymbolOriginInfo = { kind: SymbolOriginInfoKind.ThisType } | { kind: SymbolOriginInfoKind.Promise } | { kind: SymbolOriginInfoKind.SymbolMemberNoExport } | SymbolOriginInfoExport;
-    interface SymbolOriginInfoExport {
-        kind: SymbolOriginInfoKind.SymbolMemberExport | SymbolOriginInfoKind.Export;
+    const enum SymbolOriginInfoKind {
+        ThisType             = 1 << 0,
+        SymbolMemberNoExport = 1 << 1,
+        SymbolMemberExport   = 1 << 2,
+        Nullable = 1 << 3,
+        Export               = 1 << 4,
+        Promise              = 1 << 4
+    }
+
+    interface SymbolOriginInfo {
+        kind: SymbolOriginInfoKind;
+    }
+
+    interface SymbolOriginInfoExport extends SymbolOriginInfo {
+        kind: SymbolOriginInfoKind;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
     }
     function originIsSymbolMember(origin: SymbolOriginInfo): boolean {
-        return origin.kind === SymbolOriginInfoKind.SymbolMemberExport || origin.kind === SymbolOriginInfoKind.SymbolMemberNoExport;
+        return !!(origin.kind & SymbolOriginInfoKind.SymbolMemberExport || origin.kind & SymbolOriginInfoKind.SymbolMemberNoExport);
     }
     function originIsExport(origin: SymbolOriginInfo): origin is SymbolOriginInfoExport {
-        return origin.kind === SymbolOriginInfoKind.SymbolMemberExport || origin.kind === SymbolOriginInfoKind.Export;
+        return !!(origin.kind & SymbolOriginInfoKind.SymbolMemberExport || origin.kind & SymbolOriginInfoKind.Export);
     }
     function originIsPromise(origin: SymbolOriginInfo): boolean {
-        return origin.kind === SymbolOriginInfoKind.Promise;
+        return !!(origin.kind & SymbolOriginInfoKind.Promise);
+    }
+    function originIsNullableMember(origin: SymbolOriginInfo): boolean {
+        return !!(origin.kind & SymbolOriginInfoKind.Nullable);
     }
 
     /**
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
      */
-    type SymbolOriginInfoMap = (SymbolOriginInfo | undefined)[];
+    type SymbolOriginInfoMap = (SymbolOriginInfo | SymbolOriginInfoExport | undefined)[];
 
     type SymbolSortTextMap = (SortText | undefined)[];
 
@@ -249,14 +263,23 @@ namespace ts.Completions {
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
-        if (origin && origin.kind === SymbolOriginInfoKind.ThisType) {
-            insertText = needsConvertPropertyAccess ? `this[${quote(name, preferences)}]` : `this.${name}`;
+        const insertQuestionDot = origin && originIsNullableMember(origin);
+        const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
+        if (origin && origin.kind & SymbolOriginInfoKind.ThisType) {
+            insertText = needsConvertPropertyAccess
+                ? `this${insertQuestionDot ? "?." : ""}[${quote(name, preferences)}]`
+                : `this${insertQuestionDot ? "?." : "."}${name}`;
         }
         // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
         // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
-        else if ((origin && originIsSymbolMember(origin) || needsConvertPropertyAccess) && propertyAccessToConvert) {
-            insertText = needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]`;
-            const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!;
+        else if ((useBraces || insertQuestionDot) && propertyAccessToConvert) {
+            insertText = useBraces ? needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]` : name;
+            if (insertQuestionDot) {
+                insertText = `?.${insertText}`;
+            }
+
+            const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile) ||
+                findChildOfKind(propertyAccessToConvert, SyntaxKind.QuestionDotToken, sourceFile)!;
             // If the text after the '.' starts with this name, write over it. Else, add new text.
             const end = startsWith(name, propertyAccessToConvert.name.text) ? propertyAccessToConvert.name.end : dot.end;
             replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
@@ -272,7 +295,7 @@ namespace ts.Completions {
         if (origin && originIsPromise(origin) && propertyAccessToConvert) {
             if (insertText === undefined) insertText = name;
             const awaitText = `(await ${propertyAccessToConvert.expression.getText()})`;
-            insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}.${insertText}`;
+            insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
             replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
         }
 
@@ -1003,7 +1026,10 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            addTypeProperties(removeOptionality(typeChecker.getTypeOfSymbolAtLocation(symbol, node), isRightOfQuestionDot, isOptional), !!(node.flags & NodeFlags.AwaitContext));
+                            const type = removeOptionality(typeChecker.getTypeOfSymbolAtLocation(symbol, node), isRightOfQuestionDot, isOptional);
+                            const nonNullType = type.getNonNullableType();
+                            const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
+                            addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
 
                         return;
@@ -1018,11 +1044,14 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                addTypeProperties(removeOptionality(typeChecker.getTypeAtLocation(node), isRightOfQuestionDot, isOptional), !!(node.flags & NodeFlags.AwaitContext));
+                const type = removeOptionality(typeChecker.getTypeAtLocation(node), isRightOfQuestionDot, isOptional);
+                const nonNullType = type.getNonNullableType();
+                const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
+                addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
         }
 
-        function addTypeProperties(type: Type, insertAwait?: boolean): void {
+        function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
             isNewIdentifierLocation = !!type.getStringIndexType();
 
             const propertyAccess = node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent;
@@ -1037,7 +1066,7 @@ namespace ts.Completions {
             else {
                 for (const symbol of type.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                        addPropertySymbol(symbol);
+                        addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                     }
                 }
             }
@@ -1047,14 +1076,14 @@ namespace ts.Completions {
                 if (promiseType) {
                     for (const symbol of promiseType.getApparentProperties()) {
                         if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, promiseType, symbol)) {
-                            addPropertySymbol(symbol, /* insertAwait */ true);
+                            addPropertySymbol(symbol, /* insertAwait */ true, insertQuestionDot);
                         }
                     }
                 }
             }
         }
 
-        function addPropertySymbol(symbol: Symbol, insertAwait?: boolean) {
+        function addPropertySymbol(symbol: Symbol, insertAwait: boolean, insertQuestionDot: boolean) {
             // For a computed property with an accessible name like `Symbol.iterator`,
             // we'll add a completion for the *name* `Symbol` instead of for the property.
             // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
@@ -1068,22 +1097,30 @@ namespace ts.Completions {
                     symbols.push(firstAccessibleSymbol);
                     const moduleSymbol = firstAccessibleSymbol.parent;
                     symbolToOriginInfoMap[getSymbolId(firstAccessibleSymbol)] =
-                        !moduleSymbol || !isExternalModuleSymbol(moduleSymbol) ? { kind: SymbolOriginInfoKind.SymbolMemberNoExport } : { kind: SymbolOriginInfoKind.SymbolMemberExport, moduleSymbol, isDefaultExport: false };
+                        !moduleSymbol || !isExternalModuleSymbol(moduleSymbol)
+                            ? { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberNoExport) }
+                            : { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberExport), moduleSymbol, isDefaultExport: false };
                 }
                 else if (preferences.includeCompletionsWithInsertText) {
-                    addPromiseSymbolOriginInfo(symbol);
+                    addSymbolOriginInfo(symbol);
                     symbols.push(symbol);
                 }
             }
             else {
-                addPromiseSymbolOriginInfo(symbol);
+                addSymbolOriginInfo(symbol);
                 symbols.push(symbol);
             }
 
-            function addPromiseSymbolOriginInfo (symbol: Symbol) {
+            function addSymbolOriginInfo(symbol: Symbol) {
                 if (insertAwait && preferences.includeCompletionsWithInsertText && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
-                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Promise };
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.Promise) };
                 }
+                else if (insertQuestionDot) {
+                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Nullable };
+                }
+            }
+            function getNullableSymbolOriginInfoKind(kind: SymbolOriginInfoKind) {
+                return insertQuestionDot ? kind | SymbolOriginInfoKind.Nullable : kind;
             }
         }
 
