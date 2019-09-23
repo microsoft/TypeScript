@@ -1549,6 +1549,11 @@ namespace ts.server {
         useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
             !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
 
+        /**
+         * This implementation of fileExists checks if the file being requested is
+         * .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that file exists on host
+         */
         fileExists(file: string): boolean {
             // Project references go to source file instead of .d.ts file
             if (this.useSourceOfProjectReferenceRedirect() && this.projectReferenceCallbacks) {
@@ -1558,6 +1563,11 @@ namespace ts.server {
             return super.fileExists(file);
         }
 
+        /**
+         * This implementation of directoryExists checks if the directory being requested is
+         * directory of .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that directory exists on host
+         */
         directoryExists(path: string): boolean {
             if (super.directoryExists(path)) return true;
             if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;

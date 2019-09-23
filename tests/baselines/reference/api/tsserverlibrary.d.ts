@@ -8576,7 +8576,17 @@ declare namespace ts.server {
         private projectErrors;
         private projectReferences;
         protected isInitialLoadPending: () => boolean;
+        /**
+         * This implementation of fileExists checks if the file being requested is
+         * .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that file exists on host
+         */
         fileExists(file: string): boolean;
+        /**
+         * This implementation of directoryExists checks if the directory being requested is
+         * directory of .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that directory exists on host
+         */
         directoryExists(path: string): boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
