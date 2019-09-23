@@ -8,7 +8,7 @@ declare class FailedTestsReporter extends Mocha.reporters.Base {
     reporterOptions: FailedTestsReporter.ReporterOptions;
     reporter?: Mocha.reporters.Base;
     constructor(runner: Mocha.Runner, options?: { reporterOptions?: FailedTestsReporter.ReporterOptions });
-    static writeFailures(file: string, passes: ReadonlyArray<Mocha.Test>, failures: ReadonlyArray<Mocha.Test>, keepFailed: boolean, done: (err?: NodeJS.ErrnoException) => void): void;
+    static writeFailures(file: string, passes: readonly Mocha.Test[], failures: readonly Mocha.Test[], keepFailed: boolean, done: (err?: NodeJS.ErrnoException) => void): void;
     done(failures: number, fn?: (failures: number) => void): void;
 }
 

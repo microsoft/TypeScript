@@ -1035,9 +1035,13 @@
         "category": "Error",
         "code": 1356
     },
-    "Tagged template expressions are not permitted in an optional chain.": {
+    "An enum member name must be followed by a ',', '=', or '}'.": {
         "category": "Error",
         "code": 1357
+    },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
     },
 
     "Duplicate identifier '{0}'.": {
@@ -4647,6 +4651,10 @@
         "category": "Suggestion",
         "code": 80007
     },
+    "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
+        "category": "Suggestion",
+        "code": 80008
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -5127,6 +5135,18 @@
     "Extract to interface": {
         "category": "Message",
         "code": 95090
+    },
+    "Convert to a bigint numeric literal": {
+        "category": "Message",
+        "code": 95091
+    },
+    "Convert all to bigint numeric literals": {
+        "category": "Message",
+        "code": 95092
+    },
+    "Convert 'const' to 'let'": {
+        "category": "Message",
+        "code": 95093
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

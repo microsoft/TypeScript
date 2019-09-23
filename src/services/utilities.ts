@@ -6,7 +6,7 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-declare var Promise: PromiseConstructor;
+declare let Promise: PromiseConstructor;
 
 // These utilities are common to multiple language service features.
 /* @internal */
@@ -353,8 +353,13 @@ namespace ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
+            case SyntaxKind.PropertyAssignment:
+                const {initializer} = node as PropertyAssignment;
+                return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.SpreadAssignment:
                 return ScriptElementKind.memberVariableElement;
             case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
             case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
@@ -507,7 +512,8 @@ namespace ts {
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-            // falls through
+                // falls through
+
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ParenthesizedType:
@@ -963,7 +969,7 @@ namespace ts {
             isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
     }
 
-    export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {
+    export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): readonly Signature[] {
         let type = checker.getTypeAtLocation(called);
         if (isOptionalChain(called.parent)) {
             type = removeOptionality(type, !!called.parent.questionDotToken, /*isOptionalChain*/ true);
@@ -1046,6 +1052,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.EqualsGreaterThanToken:
+                    // falls through
 
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:
@@ -1053,6 +1060,7 @@ namespace ts {
                 case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
+                    // falls through
 
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.ExtendsKeyword:
@@ -1232,7 +1240,7 @@ namespace ts {
         return { span, newText };
     }
 
-    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+    export const typeKeywords: readonly SyntaxKind[] = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
@@ -1309,11 +1317,11 @@ namespace ts {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
-    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
@@ -1832,7 +1840,7 @@ namespace ts {
      * to be on the reference, rather than the declaration, because it's closer to where the
      * user was before extracting it.
      */
-    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, preferLastLocation: boolean): number {
+    export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferLastLocation: boolean): number {
         let delta = 0;
         let lastPos = -1;
         for (const { fileName, textChanges } of edits) {

@@ -252,7 +252,7 @@ namespace collections {
 
         constructor(parent?: Metadata) {
             this._parent = parent;
-            this._map = Object.create(parent ? parent._map : null); // tslint:disable-line:no-null-keyword
+            this._map = Object.create(parent ? parent._map : null); // eslint-disable-line no-null/no-null
         }
 
         public get size(): number {
@@ -299,7 +299,7 @@ namespace collections {
         }
 
         public clear(): void {
-            this._map = Object.create(this._parent ? this._parent._map : null); // tslint:disable-line:no-null-keyword
+            this._map = Object.create(this._parent ? this._parent._map : null); // eslint-disable-line no-null/no-null
             this._size = -1;
             this._version++;
         }

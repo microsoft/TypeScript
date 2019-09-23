@@ -1,0 +1,4 @@
+/built/local/**
+/tests/**
+/lib/**
+/src/lib/*.generated.d.ts

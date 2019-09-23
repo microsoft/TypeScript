@@ -83,14 +83,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -109,14 +109,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -135,14 +135,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -161,14 +161,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -187,14 +187,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });

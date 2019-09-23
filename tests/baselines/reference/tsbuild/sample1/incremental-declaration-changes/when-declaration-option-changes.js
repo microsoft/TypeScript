@@ -2,12 +2,14 @@
 export declare const World = "hello";
 
 
+//// [/src/core/anotherModule.js] file written with same contents
 //// [/src/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
 export declare function multiply(a: number, b: number): number;
 
 
+//// [/src/core/index.js] file written with same contents
 //// [/src/core/tsconfig.json]
 {
     "compilerOptions": {

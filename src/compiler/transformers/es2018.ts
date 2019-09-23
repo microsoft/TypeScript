@@ -223,7 +223,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+        function chunkObjectLiteralElements(elements: readonly ObjectLiteralElementLike[]): Expression[] {
             let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
@@ -1034,9 +1034,7 @@ namespace ts {
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
         if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
-            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
-                              /*typeArguments*/ undefined,
-                              attributesSegments);
+            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return createCall(

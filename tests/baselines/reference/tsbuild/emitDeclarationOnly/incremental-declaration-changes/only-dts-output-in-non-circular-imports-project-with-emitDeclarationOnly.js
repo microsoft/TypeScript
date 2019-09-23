@@ -11,6 +11,10 @@ export interface A {
 //// [/src/lib/a.d.ts.map]
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IAAG,IAAI,SAAW;CAAE;AAElC,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;IAAC,GAAG,EAAE,GAAG,CAAC;CAChB"}
 
+//// [/src/lib/b.d.ts] file written with same contents
+//// [/src/lib/b.d.ts.map] file written with same contents
+//// [/src/lib/c.d.ts] file written with same contents
+//// [/src/lib/c.d.ts.map] file written with same contents
 //// [/src/src/a.ts]
 export class B { prop = "hello"; }
 

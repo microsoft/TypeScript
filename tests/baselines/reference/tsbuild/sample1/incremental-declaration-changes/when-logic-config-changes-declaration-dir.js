@@ -4,6 +4,9 @@ import * as mod from '../core/anotherModule';
 export declare const m: typeof mod;
 
 
+//// [/src/logic/index.js] file written with same contents
+//// [/src/logic/index.js.map] file written with same contents
+//// [/src/logic/index.js.map.baseline.txt] file written with same contents
 //// [/src/logic/tsconfig.json]
 {
     "compilerOptions": {
@@ -71,6 +74,8 @@ export declare const m: typeof mod;
   "version": "FakeTSVersion"
 }
 
+//// [/src/tests/index.d.ts] file written with same contents
+//// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
 {
   "program": {
