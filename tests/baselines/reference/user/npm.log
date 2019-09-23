@@ -1153,6 +1153,8 @@ node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find 
 node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/check-permissions.js(26,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+node_modules/npm/test/tap/check-permissions.js(42,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks'.
