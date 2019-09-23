@@ -307,7 +307,7 @@ namespace ts {
     }
 
     /**
-     * Is a class element is either a static or an instance property declaration with an initializer?
+     * Is a class element either a static or an instance property declaration with an initializer?
      *
      * @param member The class element node.
      * @param isStatic A value indicating whether the member should be a static or instance member.
