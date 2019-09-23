@@ -13041,6 +13041,11 @@ namespace ts {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
+                                    if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration)) {
+                                        // Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
+                                        // since `children` is a SyntaxKind.PropertySignature instead of a SyntaxKind.JsxAttribute.
+                                        errorNode = prop.valueDeclaration.name;
+                                    }
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(errorTarget));
                                 }
                                 else {
