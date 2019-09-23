@@ -895,7 +895,7 @@ namespace ts {
             const members: ClassElement[] = [];
             const constructor = getFirstConstructorWithBody(node);
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
@@ -1907,7 +1907,7 @@ namespace ts {
 
         function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
             if (!some(parametersWithPropertyAssignments)) {
                 return visitFunctionBody(body, visitor, context);
             }

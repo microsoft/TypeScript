@@ -12,7 +12,8 @@ namespace ts.tscWatch {
                 file,
                 fileStamp: host.getModifiedTime(file.path.replace(".ts", ".js")),
                 errors: builderProgram.getSemanticDiagnostics(watch().getSourceFileByPath(file.path as Path)),
-                errorsFromOldState: !!state.semanticDiagnosticsFromOldState && state.semanticDiagnosticsFromOldState.has(file.path)
+                errorsFromOldState: !!state.semanticDiagnosticsFromOldState && state.semanticDiagnosticsFromOldState.has(file.path),
+                dtsStamp: host.getModifiedTime(file.path.replace(".ts", ".d.ts"))
             };
         }
 
@@ -24,20 +25,35 @@ namespace ts.tscWatch {
             return find(stampsAndErrors, info => info.file === file)!;
         }
 
-        function verifyOutputFileStampsAndErrors(
-            file: File,
-            emitExpected: boolean,
-            errorRefershExpected: boolean,
-            beforeChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[],
-            afterChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[]
-        ) {
+        interface VerifyOutputFileStampAndErrors {
+            file: File;
+            jsEmitExpected: boolean;
+            dtsEmitExpected: boolean;
+            errorRefershExpected: boolean;
+            beforeChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[];
+            afterChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[];
+        }
+        function verifyOutputFileStampsAndErrors({
+            file,
+            jsEmitExpected,
+            dtsEmitExpected,
+            errorRefershExpected,
+            beforeChangeFileStampsAndErrors,
+            afterChangeFileStampsAndErrors
+        }: VerifyOutputFileStampAndErrors) {
             const beforeChange = findStampAndErrors(beforeChangeFileStampsAndErrors, file);
             const afterChange = findStampAndErrors(afterChangeFileStampsAndErrors, file);
-            if (emitExpected) {
+            if (jsEmitExpected) {
                 assert.notStrictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Expected emit for file ${file.path}`);
             }
             else {
                 assert.strictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Did not expect new emit for file ${file.path}`);
+            }
+            if (dtsEmitExpected) {
+                assert.notStrictEqual(afterChange.dtsStamp, beforeChange.dtsStamp, `Expected emit for file ${file.path}`);
+            }
+            else {
+                assert.strictEqual(afterChange.dtsStamp, beforeChange.dtsStamp, `Did not expect new emit for file ${file.path}`);
             }
             if (errorRefershExpected) {
                 if (afterChange.errors !== emptyArray || beforeChange.errors !== emptyArray) {
@@ -51,19 +67,22 @@ namespace ts.tscWatch {
             }
         }
 
-        interface VerifyEmitAndErrorUpdates {
-            change: (host: WatchedSystem) => void;
-            getInitialErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
-            getIncrementalErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
-            filesWithNewEmit: readonly File[];
-            filesWithOnlyErrorRefresh: readonly File[];
-            filesNotTouched: readonly File[];
-            configFile?: File;
+        interface VerifyEmitAndErrorUpdatesWorker extends VerifyEmitAndErrorUpdates {
+            configFile: File;
         }
-
-        function verifyEmitAndErrorUpdates({ filesWithNewEmit, filesWithOnlyErrorRefresh, filesNotTouched, configFile = config, change, getInitialErrors, getIncrementalErrors }: VerifyEmitAndErrorUpdates) {
+        function verifyEmitAndErrorUpdatesWorker({
+            fileWithChange,
+            filesWithNewEmit,
+            filesWithOnlyErrorRefresh,
+            filesNotTouched,
+            configFile,
+            change,
+            getInitialErrors,
+            getIncrementalErrors
+        }: VerifyEmitAndErrorUpdatesWorker) {
             const nonLibFiles = [...filesWithNewEmit, ...filesWithOnlyErrorRefresh, ...filesNotTouched];
             const files = [...nonLibFiles, configFile, libFile];
+            const compilerOptions = (JSON.parse(configFile.content).compilerOptions || {}) as CompilerOptions;
             const host = createWatchedSystem(files, { currentDirectory });
             const watch = createWatchOfConfigFile("tsconfig.json", host);
             checkProgramActualFiles(watch(), [...nonLibFiles.map(f => f.path), libFile.path]);
@@ -73,9 +92,77 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, getIncrementalErrors(watch));
             const afterChange = getOutputFileStampsAndErrors(host, watch, nonLibFiles);
-            filesWithNewEmit.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ true, /*errorRefershExpected*/ true, beforeChange, afterChange));
-            filesWithOnlyErrorRefresh.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ false, /*errorRefershExpected*/ true, beforeChange, afterChange));
-            filesNotTouched.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ false, /*errorRefershExpected*/ false, beforeChange, afterChange));
+            filesWithNewEmit.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: !compilerOptions.isolatedModules || fileWithChange === file,
+                dtsEmitExpected: getEmitDeclarations(compilerOptions),
+                errorRefershExpected: true,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+            filesWithOnlyErrorRefresh.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: false,
+                dtsEmitExpected: getEmitDeclarations(compilerOptions) && !file.path.endsWith(".d.ts"),
+                errorRefershExpected: true,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+            filesNotTouched.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: false,
+                dtsEmitExpected: false,
+                errorRefershExpected: false,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+        }
+
+        function changeCompilerOptions(input: VerifyEmitAndErrorUpdates, additionalOptions: CompilerOptions): File {
+            const configFile = input.configFile || config;
+            const content = JSON.parse(configFile.content);
+            content.compilerOptions = { ...content.compilerOptions, ...additionalOptions };
+            return { path: configFile.path, content: JSON.stringify(content) };
+        }
+
+        interface VerifyEmitAndErrorUpdates {
+            change: (host: WatchedSystem) => void;
+            getInitialErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            getIncrementalErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            fileWithChange: File;
+            filesWithNewEmit: readonly File[];
+            filesWithOnlyErrorRefresh: readonly File[];
+            filesNotTouched: readonly File[];
+            configFile?: File;
+        }
+        function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
+            it("with default config", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: input.configFile || config
+                });
+            });
+
+            it("with default config and --declaration", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { declaration: true })
+                });
+            });
+
+            it("config with --isolatedModules", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { isolatedModules: true })
+                });
+            });
+
+            it("config with --isolatedModules and --declaration", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { isolatedModules: true, declaration: true })
+                });
+            });
         }
 
         describe("deep import changes", () => {
@@ -93,6 +180,7 @@ console.log(b.c.d);`
                 addImportedModule(bFile);
                 addImportedModule(cFile);
                 verifyEmitAndErrorUpdates({
+                    fileWithChange: cFile,
                     filesWithNewEmit,
                     filesWithOnlyErrorRefresh,
                     filesNotTouched: emptyArray,
@@ -113,7 +201,7 @@ console.log(b.c.d);`
                 }
             }
 
-            it("updates errors when deep import file changes", () => {
+            describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
                     path: `${currentDirectory}/b.ts`,
                     content: `import {C} from './c';
@@ -132,7 +220,7 @@ export class B
                 verifyDeepImportChange(bFile, cFile);
             });
 
-            it("updates errors when deep import through declaration file changes", () => {
+            describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
                     path: `${currentDirectory}/b.d.ts`,
                     content: `import {C} from './c';
@@ -152,7 +240,7 @@ export class B
             });
         });
 
-        it("updates errors in file not exporting a deep multilevel import that changes", () => {
+        describe("updates errors in file not exporting a deep multilevel import that changes", () => {
             const aFile: File = {
                 path: `${currentDirectory}/a.ts`,
                 content: `export interface Point {
@@ -193,6 +281,7 @@ getPoint().c.x;`
                 content: `import "./d";`
             };
             verifyEmitAndErrorUpdates({
+                fileWithChange: aFile,
                 filesWithNewEmit: [aFile, bFile],
                 filesWithOnlyErrorRefresh: [cFile, dFile],
                 filesNotTouched: [eFile],
@@ -265,6 +354,7 @@ export class Data {
                     filesWithOnlyErrorRefresh.push(lib2Data2);
                 }
                 verifyEmitAndErrorUpdates({
+                    fileWithChange: lib1ToolsInterface,
                     filesWithNewEmit,
                     filesWithOnlyErrorRefresh,
                     filesNotTouched: emptyArray,
@@ -276,11 +366,11 @@ export class Data {
                     ]
                 });
             }
-            it("when there are no circular import and exports", () => {
+            describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(lib2Data);
             });
 
-            it("when there are circular import and exports", () => {
+            describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
                     path: `${currentDirectory}/lib2/data.ts`,
                     content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";

@@ -177,6 +177,7 @@ namespace ts {
     const enum ContextFlags {
         None = 0,
         Signature = 1 << 0,  // Obtaining contextual signature
+        NoConstraints = 1 << 1,  // Don't obtain type variable constraints
     }
 
     const enum AccessFlags {
@@ -819,6 +820,7 @@ namespace ts {
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
         let flowAnalysisDisabled = false;
+        let flowInvocationCount = 0;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -834,8 +836,7 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
-        const flowAssignmentKeys: string[] = [];
-        const flowAssignmentTypes: FlowType[] = [];
+        const flowAssignmentTypes: Type[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -10208,9 +10209,8 @@ namespace ts {
             return undefined;
         }
 
-        function getConstraintDeclaration(type: TypeParameter) {
-            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
-            return decl && getEffectiveConstraintOfTypeParameter(decl);
+        function getConstraintDeclaration(type: TypeParameter): TypeNode | undefined {
+            return mapDefined(filter(type.symbol && type.symbol.declarations, isTypeParameterDeclaration), getEffectiveConstraintOfTypeParameter)[0];
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -16241,9 +16241,9 @@ namespace ts {
          * Return true if type was inferred from an object literal, written as an object type literal, or is the shape of a module
          * with no call or construct signatures.
          */
-        function isObjectTypeWithInferableIndex(type: Type) {
-            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
-                !typeHasCallOrConstructSignatures(type);
+        function isObjectTypeWithInferableIndex(type: Type): boolean {
+            return !!(type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
+                !typeHasCallOrConstructSignatures(type)) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
@@ -16643,6 +16643,13 @@ namespace ts {
                 topLevel: inference.topLevel,
                 isFixed: inference.isFixed
             };
+        }
+
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            const inferences = filter(context.inferences, hasInferenceCandidates);
+            return inferences.length ?
+                createInferenceContextWorker(map(inferences, cloneInferenceInfo), context.signature, context.flags, context.compareTypes) :
+                undefined;
         }
 
         function getMapperFromContext<T extends InferenceContext | undefined>(context: T): TypeMapper | T & undefined {
@@ -17929,12 +17936,6 @@ namespace ts {
                 getInitialTypeOfBindingElement(node);
         }
 
-        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression, reference: Node) {
-            return getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
-                getInitialType(<VariableDeclaration | BindingElement>node) :
-                getAssignedType(node), reference);
-        }
-
         function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
             return node.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node).initializer &&
                 isEmptyArrayLiteral((<VariableDeclaration>node).initializer!) ||
@@ -18221,6 +18222,7 @@ namespace ts {
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
+            flowInvocationCount++;
             const sharedFlowStart = sharedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             sharedFlowCount = sharedFlowStart;
@@ -18253,15 +18255,6 @@ namespace ts {
                 flowDepth++;
                 while (true) {
                     const flags = flow.flags;
-                    if (flags & FlowFlags.Cached) {
-                        const key = getOrSetCacheKey();
-                        if (key) {
-                            const id = getFlowNodeId(flow);
-                            if (flowAssignmentKeys[id] === key) {
-                                return flowAssignmentTypes[id];
-                            }
-                        }
-                    }
                     if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
@@ -18291,15 +18284,6 @@ namespace ts {
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
-                        }
-                        else if (flowLoopCount === flowLoopStart) { // Only cache assignments when not within loop analysis
-                            const key = getOrSetCacheKey();
-                            if (key && !isIncomplete(type)) {
-                                flow.flags |= FlowFlags.Cached;
-                                const id = getFlowNodeId(flow);
-                                flowAssignmentKeys[id] = key;
-                                flowAssignmentTypes[id] = type;
-                            }
                         }
                     }
                     else if (flags & FlowFlags.Condition) {
@@ -18353,6 +18337,27 @@ namespace ts {
                 }
             }
 
+            function getInitialOrAssignedType(flow: FlowAssignment) {
+                const node = flow.node;
+                if (flow.flags & FlowFlags.Cached) {
+                    const cached = flowAssignmentTypes[getNodeId(node)];
+                    if (cached) {
+                        return cached;
+                    }
+                }
+                const startInvocationCount = flowInvocationCount;
+                const type = getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                    getInitialType(<VariableDeclaration | BindingElement>node) :
+                    getAssignedType(node), reference);
+                // We cache the assigned type when getFlowTypeOfReference was recursively invoked in the
+                // resolution of the assigned type and we're not within loop analysis.
+                if (flowInvocationCount !== startInvocationCount && flowLoopCount === flowLoopStart) {
+                    flow.flags |= FlowFlags.Cached;
+                    flowAssignmentTypes[getNodeId(node)] = type;
+                }
+                return type;
+            }
+
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
                 // Assignments only narrow the computed type if the declared type is a union type. Thus, we
@@ -18366,11 +18371,11 @@ namespace ts {
                         if (isEmptyArrayAssignment(node)) {
                             return getEvolvingArrayType(neverType);
                         }
-                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(node, reference));
+                        const assignedType = getBaseTypeOfLiteralType(getInitialOrAssignedType(flow));
                         return isTypeAssignableTo(assignedType, declaredType) ? assignedType : anyArrayType;
                     }
                     if (declaredType.flags & TypeFlags.Union) {
-                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(node, reference));
+                        return getAssignmentReducedType(<UnionType>declaredType, getInitialOrAssignedType(flow));
                     }
                     return declaredType;
                 }
@@ -18540,24 +18545,31 @@ namespace ts {
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let firstAntecedentType: FlowType | undefined;
-                flowLoopNodes[flowLoopCount] = flow;
-                flowLoopKeys[flowLoopCount] = key;
-                flowLoopTypes[flowLoopCount] = antecedentTypes;
                 for (const antecedent of flow.antecedents!) {
-                    flowLoopCount++;
-                    const flowType = getTypeAtFlowNode(antecedent);
-                    flowLoopCount--;
+                    let flowType;
                     if (!firstAntecedentType) {
-                        firstAntecedentType = flowType;
+                        // The first antecedent of a loop junction is always the non-looping control
+                        // flow path that leads to the top.
+                        flowType = firstAntecedentType = getTypeAtFlowNode(antecedent);
+                    }
+                    else {
+                        // All but the first antecedent are the looping control flow paths that lead
+                        // back to the loop junction. We track these on the flow loop stack.
+                        flowLoopNodes[flowLoopCount] = flow;
+                        flowLoopKeys[flowLoopCount] = key;
+                        flowLoopTypes[flowLoopCount] = antecedentTypes;
+                        flowLoopCount++;
+                        flowType = getTypeAtFlowNode(antecedent);
+                        flowLoopCount--;
+                        // If we see a value appear in the cache it is a sign that control flow analysis
+                        // was restarted and completed by checkExpressionCached. We can simply pick up
+                        // the resulting type and bail out.
+                        const cached = cache.get(key);
+                        if (cached) {
+                            return cached;
+                        }
                     }
                     const type = getTypeFromFlowType(flowType);
-                    // If we see a value appear in the cache it is a sign that control flow analysis
-                    // was restarted and completed by checkExpressionCached. We can simply pick up
-                    // the resulting type and bail out.
-                    const cached = cache.get(key);
-                    if (cached) {
-                        return cached;
-                    }
                     pushIfUnique(antecedentTypes, type);
                     // If an antecedent type is not a subset of the declared type, we need to perform
                     // subtype reduction. This happens when a "foreign" type is injected into the control
@@ -18690,7 +18702,7 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
-                if ((type.flags & TypeFlags.Unknown) && (operator === SyntaxKind.EqualsEqualsEqualsToken) && assumeTrue) {
+                if ((type.flags & TypeFlags.Unknown) && assumeTrue && (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
                     if (valueType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                         return valueType;
                     }
@@ -20462,7 +20474,7 @@ namespace ts {
                 getContextualTypeForObjectLiteralMethod(node, contextFlags) :
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
-            if (instantiatedType) {
+            if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
                 const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
                 if (apparentType.flags & TypeFlags.Union) {
                     if (isObjectLiteralExpression(node)) {
@@ -22702,7 +22714,7 @@ namespace ts {
                     const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
                     const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
                     inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
-                    context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(returnContext) : undefined;
+                    context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
                 }
             }
 
@@ -26368,8 +26380,8 @@ namespace ts {
                 const constructSignature = getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ true);
                 const signature = callSignature || constructSignature;
                 if (signature && signature.typeParameters) {
-                    const contextualType = getApparentTypeOfContextualType(<Expression>node);
-                    if (contextualType && !isMixinConstructorType(contextualType)) {
+                    const contextualType = getApparentTypeOfContextualType(<Expression>node, ContextFlags.NoConstraints);
+                    if (contextualType) {
                         const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ false);
                         if (contextualSignature && !contextualSignature.typeParameters) {
                             if (checkMode & CheckMode.SkipGenericFunctions) {
@@ -26942,7 +26954,7 @@ namespace ts {
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
-                        if (isParameterPropertyDeclaration(param) && !isBindingPattern(param.name)) {
+                        if (isParameterPropertyDeclaration(param, member) && !isBindingPattern(param.name)) {
                             addName(instanceNames, param.name, param.name.escapedText, DeclarationMeaning.GetOrSetAccessor);
                         }
                     }
@@ -28706,7 +28718,7 @@ namespace ts {
                         const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
                         const name = local.valueDeclaration && getNameOfDeclaration(local.valueDeclaration);
                         if (parameter && name) {
-                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
+                            if (!isParameterPropertyDeclaration(parameter, parameter.parent) && !parameterIsThisKeyword(parameter) && !isIdentifierThatStartsWithUnderscore(name)) {
                                 addDiagnostic(parameter, UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
@@ -29977,11 +29989,13 @@ namespace ts {
             let nextType: Type | undefined;
             if (methodName !== "throw") {
                 const methodParameterType = methodParameterTypes ? getUnionType(methodParameterTypes) : unknownType;
-                const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                 if (methodName === "next") {
-                    nextType = resolvedMethodParameterType;
+                    // The value of `next(value)` is *not* awaited by async generators
+                    nextType = methodParameterType;
                 }
                 else if (methodName === "return") {
+                    // The value of `return(value)` *is* awaited by async generators
+                    const resolvedMethodParameterType = resolver.resolveIterationType(methodParameterType, errorNode) || anyType;
                     returnTypes = append(returnTypes, resolvedMethodParameterType);
                 }
             }
@@ -30470,11 +30484,10 @@ namespace ts {
                     const constraint = getEffectiveConstraintOfTypeParameter(source);
                     const sourceConstraint = constraint && getTypeFromTypeNode(constraint);
                     const targetConstraint = getConstraintOfTypeParameter(target);
-                    if (sourceConstraint) {
-                        // relax check if later interface augmentation has no constraint
-                        if (!targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
-                            return false;
-                        }
+                    // relax check if later interface augmentation has no constraint, it's more broad and is OK to merge with
+                    // a more constrained interface (this could be generalized to a full heirarchy check, but that's maybe overkill)
+                    if (sourceConstraint && targetConstraint && !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
+                        return false;
                     }
 
                     // If the type parameter node has a default and it is not identical to the default

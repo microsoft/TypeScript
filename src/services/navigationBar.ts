@@ -197,7 +197,7 @@ namespace ts.NavigationBar {
 
                 // Parameter properties are children of the class, not the constructor.
                 for (const param of ctr.parameters) {
-                    if (isParameterPropertyDeclaration(param)) {
+                    if (isParameterPropertyDeclaration(param, ctr)) {
                         addLeafNode(param);
                     }
                 }

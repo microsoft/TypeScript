@@ -3007,11 +3007,11 @@ namespace ts {
 
         /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<true>;
 
-        /* @internal */ getNodeCount(): number;
-        /* @internal */ getIdentifierCount(): number;
-        /* @internal */ getSymbolCount(): number;
-        /* @internal */ getTypeCount(): number;
-        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
+        getNodeCount(): number;
+        getIdentifierCount(): number;
+        getSymbolCount(): number;
+        getTypeCount(): number;
+        getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;

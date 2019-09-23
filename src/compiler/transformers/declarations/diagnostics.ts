@@ -135,7 +135,7 @@ namespace ts {
             return getReturnTypeVisibilityError;
         }
         else if (isParameter(node)) {
-            if (isParameterPropertyDeclaration(node) && hasModifier(node.parent, ModifierFlags.Private)) {
+            if (isParameterPropertyDeclaration(node, node.parent) && hasModifier(node.parent, ModifierFlags.Private)) {
                 return getVariableDeclarationTypeVisibilityError;
             }
             return getParameterDeclarationTypeVisibilityError;
