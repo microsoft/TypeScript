@@ -424,24 +424,19 @@ namespace ts {
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
+
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : createVoidZero();
             if (emitAssignment) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
                 return createAssignment(memberAccess, initializer);
             }
             else {
-                return createObjectDefineProperty(receiver, propertyName, initializer);
+                const name = isComputedPropertyName(propertyName) ? propertyName.expression
+                    : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
+                    : propertyName;
+                const descriptor = createPropertyDescriptor({ value: initializer, configurable: true, writable: true, enumerable: true });
+                return createObjectDefinePropertyCall(receiver, name, descriptor);
             }
-        }
-
-        function createObjectDefineProperty(target: Expression, name: PropertyName, initializer: Expression) {
-            const e = isComputedPropertyName(name) ? name.expression
-                : isIdentifier(name) ? createStringLiteral(unescapeLeadingUnderscores(name.escapedText))
-                : name;
-            return createCall(
-                createPropertyAccess(createIdentifier("Object"), createIdentifier("defineProperty")),
-                /*typeArguments*/ undefined,
-                [target, e, createObjectLiteral([createPropertyAssignment("value", initializer)])]);
         }
 
         function enableSubstitutionForClassAliases() {

@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyES5.ts ===
+class A {
+>A : A
+
+    a = 12
+>a : number
+>12 : 12
+
+    b
+>b : any
+
+    m() { }
+>m : () => void
+}
+

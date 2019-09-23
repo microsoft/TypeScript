@@ -26,7 +26,12 @@ var Lion = /** @class */ (function (_super) {
     __extends(Lion, _super);
     function Lion() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        Object.defineProperty(_this, "sound", { value: 'RAWR!' }); // error here
+        Object.defineProperty(_this, "sound", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 'RAWR!'
+        }); // error here
         return _this;
     }
     return Lion;
