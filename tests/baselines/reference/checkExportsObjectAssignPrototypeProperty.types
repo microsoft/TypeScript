@@ -106,7 +106,7 @@ function Person(name) {
     this.name = name;
 >this.name = name : string
 >this.name : string
->this : Person
+>this : this
 >name : string
 >name : string
 }
@@ -123,7 +123,7 @@ Person.prototype.describe = function () {
 >"Person called " + this.name : string
 >"Person called " : "Person called "
 >this.name : string
->this : Person
+>this : this
 >name : string
 
 };
@@ -204,7 +204,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
         this.rwAccessors = Number(str)
 >this.rwAccessors = Number(str) : number
 >this.rwAccessors : number
->this : Person
+>this : this
 >rwAccessors : number
 >Number(str) : number
 >Number : NumberConstructor

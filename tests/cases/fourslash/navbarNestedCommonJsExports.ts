@@ -29,7 +29,23 @@ verify.navigationBar([
         kind: "script",
         childItems: [
             { text: "a", kind: "const" },
-        ],
+        ]
     },
+    {
+        text: "a",
+        kind: "const",
+        childItems: [
+            { text: "b", kind: "const"},
+        ],
+        indent: 1,
+    },
+    {
+        text: "b",
+        kind: "const",
+        childItems: [
+            { text: "c", kind: "const" },
+        ],
+        indent: 2,
+    }
 ]);
 

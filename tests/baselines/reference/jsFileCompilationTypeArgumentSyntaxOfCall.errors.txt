@@ -1,11 +1,19 @@
-error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-tests/cases/compiler/a.js(1,5): error TS8011: 'type arguments' can only be used in a .ts file.
+tests/cases/compiler/a.jsx(1,5): error TS8011: 'type arguments' can only be used in a .ts file.
+tests/cases/compiler/a.jsx(2,5): error TS8011: 'type arguments' can only be used in a .ts file.
+tests/cases/compiler/a.jsx(3,6): error TS8011: 'type arguments' can only be used in a .ts file.
+tests/cases/compiler/a.jsx(4,6): error TS8011: 'type arguments' can only be used in a .ts file.
 
 
-!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
-!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-==== tests/cases/compiler/a.js (1 errors) ====
+==== tests/cases/compiler/a.jsx (4 errors) ====
     Foo<number>();
         ~~~~~~
+!!! error TS8011: 'type arguments' can only be used in a .ts file.
+    Foo<number>``;
+        ~~~~~~
+!!! error TS8011: 'type arguments' can only be used in a .ts file.
+    <Foo<number>></Foo>;
+         ~~~~~~
+!!! error TS8011: 'type arguments' can only be used in a .ts file.
+    <Foo<number>/>;
+         ~~~~~~
 !!! error TS8011: 'type arguments' can only be used in a .ts file.

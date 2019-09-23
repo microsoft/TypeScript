@@ -22,6 +22,7 @@ Multimap3.prototype = {
 
         return this._map[key + ''];
 >this._map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
+>this : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
 >_map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
 >key : Symbol(key, Decl(bug26885.js, 9, 8))
     }

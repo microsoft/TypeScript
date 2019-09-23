@@ -18,7 +18,7 @@ namespace ts {
     }
 
     export interface ProgramWithSourceTexts extends Program {
-        sourceTexts?: ReadonlyArray<NamedSourceText>;
+        sourceTexts?: readonly NamedSourceText[];
         host: TestCompilerHost;
     }
 
@@ -104,7 +104,7 @@ namespace ts {
         return file;
     }
 
-    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
+    export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -152,7 +152,7 @@ namespace ts {
         return program;
     }
 
-    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
+    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
         if (!newTexts) {
             newTexts = oldProgram.sourceTexts!.slice(0);
         }
@@ -164,7 +164,7 @@ namespace ts {
         return program;
     }
 
-    export function updateProgramText(files: ReadonlyArray<NamedSourceText>, fileName: string, newProgramText: string) {
+    export function updateProgramText(files: readonly NamedSourceText[], fileName: string, newProgramText: string) {
         const file = find(files, f => f.name === fileName)!;
         file.text = file.text.updateProgram(newProgramText);
     }

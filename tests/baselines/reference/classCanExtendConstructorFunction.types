@@ -10,7 +10,7 @@ function Wagon(numberOxen) {
     this.numberOxen = numberOxen
 >this.numberOxen = numberOxen : number
 >this.numberOxen : number
->this : Wagon
+>this : this
 >numberOxen : number
 >numberOxen : number
 }
@@ -72,11 +72,11 @@ Wagon.prototype.speed = function () {
     return this.numberOxen / this.weight()
 >this.numberOxen / this.weight() : number
 >this.numberOxen : number
->this : Wagon
+>this : this
 >numberOxen : number
 >this.weight() : number
 >this.weight : (supplies?: any[]) => number
->this : Wagon
+>this : this
 >weight : (supplies?: any[]) => number
 }
 // ok
@@ -245,27 +245,27 @@ function Soup(flavour) {
 /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
 class Chowder extends Soup {
 >Chowder : Chowder
->Soup : typeof Soup
+>Soup : Soup<{ claim: "ignorant" | "malicious"; }>
 
     log() {
->log : () => any
+>log : () => { claim: "ignorant" | "malicious"; }
 
         return this.flavour
->this.flavour : any
+>this.flavour : { claim: "ignorant" | "malicious"; }
 >this : this
->flavour : any
+>flavour : { claim: "ignorant" | "malicious"; }
     }
 }
 
 var soup = new Soup(1);
->soup : typeof Soup
->new Soup(1) : typeof Soup
+>soup : Soup<number>
+>new Soup(1) : Soup<number>
 >Soup : typeof Soup
 >1 : 1
 
 soup.flavour
 >soup.flavour : number
->soup : typeof Soup
+>soup : Soup<number>
 >flavour : number
 
 var chowder = new Chowder({ claim: "ignorant" });
@@ -277,11 +277,11 @@ var chowder = new Chowder({ claim: "ignorant" });
 >"ignorant" : "ignorant"
 
 chowder.flavour.claim
->chowder.flavour.claim : any
->chowder.flavour : any
+>chowder.flavour.claim : "ignorant" | "malicious"
+>chowder.flavour : { claim: "ignorant" | "malicious"; }
 >chowder : Chowder
->flavour : any
->claim : any
+>flavour : { claim: "ignorant" | "malicious"; }
+>claim : "ignorant" | "malicious"
 
 var errorNoArgs = new Chowder();
 >errorNoArgs : any
