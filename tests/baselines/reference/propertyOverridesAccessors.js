@@ -22,12 +22,12 @@ class A {
 class B extends A {
     constructor() {
         super(...arguments);
-        this.p = 'yep'; // error
+        Object.defineProperty(this, "p", { value: 'yep' }); // error
     }
 }
 class C {
     constructor() {
-        this._secret = 11;
+        Object.defineProperty(this, "_secret", { value: 11 });
     }
     get p() { return this._secret; }
     set p(value) { this._secret = value; }
@@ -35,6 +35,6 @@ class C {
 class D extends C {
     constructor() {
         super(...arguments);
-        this.p = 101; // error
+        Object.defineProperty(this, "p", { value: 101 }); // error
     }
 }

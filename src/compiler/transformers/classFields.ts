@@ -342,7 +342,6 @@ namespace ts {
             //  }
             //
             if (constructor && constructor.body) {
-                // TODO: Need to think about parameter property declarations
                 let parameterPropertyDeclarationCount = 0;
                 for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
                     if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {

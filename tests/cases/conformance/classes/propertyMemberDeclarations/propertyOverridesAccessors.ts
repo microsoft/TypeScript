@@ -1,4 +1,5 @@
 // @target: es2015
+// @legacyClassFields: false
 class A {
     get p() { return 'oh no' }
 }

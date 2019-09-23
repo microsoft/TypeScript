@@ -314,12 +314,12 @@ namespace ts {
      */
     function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
         return isPropertyDeclaration(member)
-            && !!member.initializer === requireInitializer
+            && (!!member.initializer || !requireInitializer)
             && hasStaticModifier(member) === isStatic;
     }
 
     export function isInitializedProperty(member: ClassElement, requireInitializer: boolean): member is PropertyDeclaration {
-        return isPropertyDeclaration(member) && !!member.initializer === requireInitializer;
+        return isPropertyDeclaration(member) && (!!member.initializer || !requireInitializer);
     }
 
 }
