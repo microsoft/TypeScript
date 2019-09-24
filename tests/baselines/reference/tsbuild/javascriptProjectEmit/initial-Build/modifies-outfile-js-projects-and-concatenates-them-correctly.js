@@ -172,19 +172,6 @@ type MyNominal = string & {
 
 ======================================================================
 
-//// [/src/sub-project-2/index.js]
-const variable = {
-    key: /** @type {MyNominal} */('val'),
-};
-
-/**
- * @return {keyof typeof variable}
- */
-function getVar() {
-    return 'key';
-}
-
-
 //// [/src/sub-project-2/sub-project-2.d.ts]
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
@@ -210,7 +197,7 @@ declare namespace variable {
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 var variable = {
-    key: /** @type {MyNominal} */ ('val')
+    key: /** @type {MyNominal} */ ('value')
 };
 /**
  * @return {keyof typeof variable}
@@ -244,7 +231,7 @@ function getVar() {
         },
         {
           "pos": 148,
-          "end": 302,
+          "end": 304,
           "kind": "text"
         }
       ]
@@ -291,9 +278,9 @@ text: (0-148)
  */
 
 ----------------------------------------------------------------------
-text: (148-302)
+text: (148-304)
 var variable = {
-    key: /** @type {MyNominal} */ ('val')
+    key: /** @type {MyNominal} */ ('value')
 };
 /**
  * @return {keyof typeof variable}

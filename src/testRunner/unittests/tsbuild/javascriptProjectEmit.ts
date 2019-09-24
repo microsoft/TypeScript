@@ -230,7 +230,122 @@ namespace ts {
             proj: "javascriptProjectEmit",
             rootNames: ["/"],
             initialBuild: {
-                modifyFs: fs => replaceText(fs, "/src/sub-project-2/index.js", "'value'", "'val'"),
+                modifyFs: noop,
+            },
+            incrementalDtsUnchangedBuild: {
+                modifyFs: fs => replaceText(fs, "/src/sub-project-2/index.js", "'value'", "'val'")
+            },
+            baselineOnly: true
+        });
+    });
+
+    describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects with non-moved json files and emits them correctly", () => {
+        let projFs: vfs.FileSystem;
+        const { time, tick } = getTime();
+        before(() => {
+            projFs = loadProjectFromFiles({
+                "/src/common/obj.json": utils.dedent`
+                    {
+                        "val": 42
+                    }`,
+                "/src/common/index.ts": utils.dedent`
+                    import x = require("./obj.json");
+                    export = x;
+                    `,
+                "/src/common/tsconfig.json": utils.dedent`
+                    {
+                        "extends": "../../tsconfig.base.json",
+                        "compilerOptions": {
+                            "outDir": null
+                            "composite": true
+                        },
+                        "include": ["index.ts", "obj.json"]
+                    }`,
+                "/src/sub-project/index.js": utils.dedent`
+                    import mod from '../common';
+
+                    export const m = mod;
+                    `,
+                "/src/sub-project/tsconfig.json": utils.dedent`
+                    {
+                        "extends": "../../tsconfig.base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "references": [
+                            { "path": "../common" }
+                        ],
+                        "include": ["./index.js"]
+                    }`,
+                "/src/sub-project-2/index.js": utils.dedent`
+                    import { m } from '../sub-project/index';
+
+                    const variable = {
+                        key: m,
+                    };
+
+                    export function getVar() {
+                        return variable;
+                    }
+                    `,
+                "/src/sub-project-2/tsconfig.json": utils.dedent`
+                    {
+                        "extends": "../../tsconfig.base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "references": [
+                            { "path": "../sub-project" }
+                        ],
+                        "include": ["./index.js"]
+                    }`,
+                "/src/tsconfig.json": utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "references": [
+                            { "path": "./sub-project" },
+                            { "path": "./sub-project-2" }
+                        ],
+                        "include": []
+                    }`,
+                "/tsconfig.base.json": utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "skipLibCheck": true,
+                            "rootDir": "./",
+                            "outDir": "out",
+                            "allowJs": true,
+                            "checkJs": true,
+                            "resolveJsonModule": true,
+                            "esModuleInterop": true,
+                            "declaration": true
+                        }
+                    }`,
+                "/tsconfig.json": utils.dedent`{
+                    "compilerOptions": {
+                        "composite": true
+                    },
+                    "references": [
+                        { "path": "./src" }
+                    ],
+                    "include": []
+                }`
+            }, time, symbolLibContent);
+        });
+        after(() => {
+            projFs = undefined!;
+        });
+        verifyTsbuildOutput({
+            scenario: `loads js-based projects with non-moved json files and emits them correctly`,
+            projFs: () => projFs,
+            time,
+            tick,
+            proj: "javascriptProjectEmit",
+            rootNames: ["/"],
+            initialBuild: {
+                modifyFs: noop,
             },
             baselineOnly: true
         });
