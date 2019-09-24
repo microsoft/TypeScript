@@ -4701,7 +4701,6 @@ namespace ts {
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
-                noop(ts);
                 expression = parseMemberExpressionRest(expression, /*allowOptionalChain*/ true);
                 const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
 

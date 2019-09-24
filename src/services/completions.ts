@@ -12,12 +12,14 @@ namespace ts.Completions {
     export type Log = (message: string) => void;
 
     const enum SymbolOriginInfoKind {
-        ThisType             = 1 << 0,
-        SymbolMemberNoExport = 1 << 1,
-        SymbolMemberExport   = 1 << 2,
-        Nullable = 1 << 3,
-        Export               = 1 << 4,
-        Promise              = 1 << 4
+        ThisType            = 1 << 0,
+        SymbolMember        = 1 << 1,
+        Export              = 1 << 2,
+        Promise             = 1 << 3,
+        Nullable            = 1 << 4,
+
+        SymbolMemberNoExport = SymbolMember,
+        SymbolMemberExport   = SymbolMember | Export,
     }
 
     interface SymbolOriginInfo {
@@ -29,15 +31,23 @@ namespace ts.Completions {
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
     }
+
+    function originIsThisType(origin: SymbolOriginInfo): boolean {
+        return !!(origin.kind & SymbolOriginInfoKind.ThisType);
+    }
+
     function originIsSymbolMember(origin: SymbolOriginInfo): boolean {
-        return !!(origin.kind & SymbolOriginInfoKind.SymbolMemberExport || origin.kind & SymbolOriginInfoKind.SymbolMemberNoExport);
+        return !!(origin.kind & SymbolOriginInfoKind.SymbolMember);
     }
+
     function originIsExport(origin: SymbolOriginInfo): origin is SymbolOriginInfoExport {
-        return !!(origin.kind & SymbolOriginInfoKind.SymbolMemberExport || origin.kind & SymbolOriginInfoKind.Export);
+        return !!(origin.kind & SymbolOriginInfoKind.Export);
     }
+
     function originIsPromise(origin: SymbolOriginInfo): boolean {
         return !!(origin.kind & SymbolOriginInfoKind.Promise);
     }
+
     function originIsNullableMember(origin: SymbolOriginInfo): boolean {
         return !!(origin.kind & SymbolOriginInfoKind.Nullable);
     }
@@ -265,7 +275,7 @@ namespace ts.Completions {
         let replacementSpan: TextSpan | undefined;
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
-        if (origin && origin.kind & SymbolOriginInfoKind.ThisType) {
+        if (origin && originIsThisType(origin)) {
             insertText = needsConvertPropertyAccess
                 ? `this${insertQuestionDot ? "?." : ""}[${quote(name, preferences)}]`
                 : `this${insertQuestionDot ? "?." : "."}${name}`;
@@ -274,7 +284,7 @@ namespace ts.Completions {
         // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
         else if ((useBraces || insertQuestionDot) && propertyAccessToConvert) {
             insertText = useBraces ? needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]` : name;
-            if (insertQuestionDot) {
+            if (insertQuestionDot || propertyAccessToConvert.questionDotToken) {
                 insertText = `?.${insertText}`;
             }
 
@@ -794,7 +804,6 @@ namespace ts.Completions {
         let propertyAccessToConvert: PropertyAccessExpression | undefined;
         let isRightOfDot = false;
         let isRightOfQuestionDot = false;
-        let isOptional = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
@@ -813,7 +822,6 @@ namespace ts.Completions {
                 isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
                 switch (parent.kind) {
                     case SyntaxKind.PropertyAccessExpression:
-                        isOptional = isOptionalChain(parent);
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
                         if (node.end === contextToken.pos &&
@@ -922,7 +930,6 @@ namespace ts.Completions {
         }
         else if (isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
-            isNewIdentifierLocation = true;
         }
         else if (isRightOfOpenTag) {
             const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
@@ -1029,7 +1036,7 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            const type = removeOptionality(typeChecker.getTypeOfSymbolAtLocation(symbol, node), isRightOfQuestionDot, isOptional);
+                            const type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
                             const nonNullType = type.getNonNullableType();
                             const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
                             addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
@@ -1047,7 +1054,7 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                const type = removeOptionality(typeChecker.getTypeAtLocation(node), isRightOfQuestionDot, isOptional);
+                const type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 const nonNullType = type.getNonNullableType();
                 const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
                 addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
@@ -1056,6 +1063,9 @@ namespace ts.Completions {
 
         function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
             isNewIdentifierLocation = !!type.getStringIndexType();
+            if (isRightOfQuestionDot && some(type.getCallSignatures())) {
+                isNewIdentifierLocation = true;
+            }
 
             const propertyAccess = node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent;
             if (isUncheckedFile) {
