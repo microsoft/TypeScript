@@ -32,6 +32,7 @@ namespace ts {
         | SyntaxKind.AbstractKeyword
         | SyntaxKind.AnyKeyword
         | SyntaxKind.AsKeyword
+        | SyntaxKind.AssertsKeyword
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
@@ -250,6 +251,7 @@ namespace ts {
         // Contextual keywords
         AbstractKeyword,
         AsKeyword,
+        AssertsKeyword,
         AnyKeyword,
         AsyncKeyword,
         AwaitKeyword,
@@ -361,8 +363,8 @@ namespace ts {
         SemicolonClassElement,
         // Element
         Block,
-        VariableStatement,
         EmptyStatement,
+        VariableStatement,
         ExpressionStatement,
         IfStatement,
         DoStatement,
@@ -512,6 +514,8 @@ namespace ts {
         LastTemplateToken = TemplateTail,
         FirstBinaryOperator = LessThanToken,
         LastBinaryOperator = CaretEqualsToken,
+        FirstStatement = VariableStatement,
+        LastStatement = DebuggerStatement,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocPropertyTag,
@@ -614,9 +618,13 @@ namespace ts {
 
     /* @internal */
     export const enum RelationComparisonResult {
-        Succeeded = 1, // Should be truthy
-        Failed = 2,
-        FailedAndReported = 3
+        Succeeded           = 1 << 0, // Should be truthy
+        Failed              = 1 << 1,
+        Reported            = 1 << 2,
+
+        ReportsUnmeasurable = 1 << 3,
+        ReportsUnreliable   = 1 << 4,
+        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
     }
 
     export interface Node extends TextRange {
@@ -736,6 +744,7 @@ namespace ts {
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
     export type MinusToken = Token<SyntaxKind.MinusToken>;
+    export type AssertsToken = Token<SyntaxKind.AssertsKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1037,6 +1046,7 @@ namespace ts {
         questionToken?: QuestionToken;
         exclamationToken?: ExclamationToken;
         body?: Block | Expression;
+        /* @internal */ endFlowNode?: FlowNode;
     }
 
     export type FunctionLikeDeclaration =
@@ -1180,8 +1190,9 @@ namespace ts {
     export interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
         parent: SignatureDeclaration | JSDocTypeExpression;
+        assertsModifier?: AssertsToken;
         parameterName: Identifier | ThisTypeNode;
-        type: TypeNode;
+        type?: TypeNode;
     }
 
     export interface TypeQueryNode extends TypeNode {
@@ -2570,14 +2581,31 @@ namespace ts {
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
         ArrayMutation  = 1 << 8,  // Potential array mutation
-        Referenced     = 1 << 9,  // Referenced as antecedent once
-        Shared         = 1 << 10, // Referenced as antecedent more than once
-        PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
-        AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        Call           = 1 << 9,  // Potential assertion call
+        Referenced     = 1 << 10, // Referenced as antecedent once
+        Shared         = 1 << 11, // Referenced as antecedent more than once
+        PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
+        AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
         /** @internal */
-        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
+        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
+    }
+
+    export type FlowNode =
+        | AfterFinallyFlow
+        | PreFinallyFlow
+        | FlowStart
+        | FlowLabel
+        | FlowAssignment
+        | FlowCall
+        | FlowCondition
+        | FlowSwitchClause
+        | FlowArrayMutation;
+
+    export interface FlowNodeBase {
+        flags: FlowFlags;
+        id?: number;     // Node id used by flow type cache in checker
     }
 
     export interface FlowLock {
@@ -2593,18 +2621,11 @@ namespace ts {
         lock: FlowLock;
     }
 
-    export type FlowNode =
-        | AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation;
-    export interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;     // Node id used by flow type cache in checker
-    }
-
     // FlowStart represents the start of a control flow. For a function expression or arrow
-    // function, the container property references the function (which in turn has a flowNode
+    // function, the node property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNodeBase {
-        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -2619,10 +2640,15 @@ namespace ts {
         antecedent: FlowNode;
     }
 
+    export interface FlowCall extends FlowNodeBase {
+        node: CallExpression;
+        antecedent: FlowNode;
+    }
+
     // FlowCondition represents a condition that is known to be true or false at the
     // node's location in the control flow.
     export interface FlowCondition extends FlowNodeBase {
-        expression: Expression;
+        node: Expression;
         antecedent: FlowNode;
     }
 
@@ -3289,6 +3315,7 @@ namespace ts {
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
 
+        /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
         /* @internal */ createSignature(
             declaration: SignatureDeclaration,
@@ -3527,25 +3554,45 @@ namespace ts {
 
     export const enum TypePredicateKind {
         This,
-        Identifier
+        Identifier,
+        AssertsThis,
+        AssertsIdentifier
     }
 
     export interface TypePredicateBase {
         kind: TypePredicateKind;
-        type: Type;
+        type: Type | undefined;
     }
 
     export interface ThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.This;
+        parameterName: undefined;
+        parameterIndex: undefined;
+        type: Type;
     }
 
     export interface IdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
+        type: Type;
     }
 
-    export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
+    export interface AssertsThisTypePredicate extends TypePredicateBase {
+        kind: TypePredicateKind.AssertsThis;
+        parameterName: undefined;
+        parameterIndex: undefined;
+        type: Type | undefined;
+    }
+
+    export interface AssertsIdentifierTypePredicate extends TypePredicateBase {
+        kind: TypePredicateKind.AssertsIdentifier;
+        parameterName: string;
+        parameterIndex: number;
+        type: Type | undefined;
+    }
+
+    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -3964,7 +4011,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
+        effectsSignature?: Signature;     // Signature with possible control flow effects
         enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
@@ -3979,6 +4026,7 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        isExhaustive?: boolean;           // Is node an exhaustive switch statement
     }
 
     export const enum TypeFlags {
@@ -4203,7 +4251,7 @@ namespace ts {
     }
 
     // Object type or intersection of object types
-    export type BaseType = ObjectType | IntersectionType;
+    export type BaseType = ObjectType | IntersectionType | TypeVariable; // Also `any` and `object`
 
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];                   // Declared members
@@ -4632,6 +4680,8 @@ namespace ts {
         code: number;
         message: string;
         reportsUnnecessary?: {};
+        /* @internal */
+        elidedInCompatabilityPyramid?: boolean;
     }
 
     /**
