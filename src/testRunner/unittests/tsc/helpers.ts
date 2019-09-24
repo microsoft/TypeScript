@@ -69,7 +69,7 @@ namespace ts {
         }
     }
 
-    function createReportErrorSummary(options: CompilerOptions): ReportEmitErrorSummary | undefined {
+    function createReportErrorSummary(sys: TscCompileSystem, options: CompilerOptions): ReportEmitErrorSummary | undefined {
         return options.pretty ?
             errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
             undefined;
@@ -93,7 +93,7 @@ namespace ts {
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
-            createReportErrorSummary(options)
+            createReportErrorSummary(sys, options)
         );
         baselineBuildInfo([config], sys.vfs, sys.writtenFiles);
         return sys.exit(exitStatus);
@@ -109,7 +109,7 @@ namespace ts {
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
             projectReferences,
             reportDiagnostic,
-            reportErrorSummary: createReportErrorSummary(options),
+            reportErrorSummary: createReportErrorSummary(sys, options),
         });
         baselineBuildInfo([config], sys.vfs, sys.writtenFiles);
         return sys.exit(exitCode);
@@ -131,7 +131,7 @@ namespace ts {
             /*createProgram*/ undefined,
             reportDiagnostic,
             createBuilderStatusReporter(sys, buildOptions.pretty),
-            createReportErrorSummary(buildOptions)
+            createReportErrorSummary(sys, buildOptions)
         );
         fakes.patchSolutionBuilderHost(buildHost, sys);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
