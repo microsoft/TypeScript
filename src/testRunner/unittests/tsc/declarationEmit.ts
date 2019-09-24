@@ -24,7 +24,7 @@ namespace ts {
                     export declare function actionCreatorFactory(prefix?: string | null): ActionCreatorFactory;
                     export default actionCreatorFactory;`;
                 return loadProjectFromFiles({
-                    "/plugin-two/index.d.ts": utils.dedent`
+                    "/src/plugin-two/index.d.ts": utils.dedent`
                         declare const _default: {
                             features: {
                                 featureOne: {
@@ -46,28 +46,28 @@ namespace ts {
                             };
                         };
                         export default _default;`,
-                    "/plugin-two/node_modules/typescript-fsa/package.json": fsaPackageJson,
-                    "/plugin-two/node_modules/typescript-fsa/index.d.ts": fsaIndex,
-                    "/plugin-one/tsconfig.json": utils.dedent`
+                    "/src/plugin-two/node_modules/typescript-fsa/package.json": fsaPackageJson,
+                    "/src/plugin-two/node_modules/typescript-fsa/index.d.ts": fsaIndex,
+                    "/src/plugin-one/tsconfig.json": utils.dedent`
                         {
                             "compilerOptions": {
                                 "target": "es5",
                                 "declaration": true,
                             },
                         }`,
-                    "/plugin-one/index.ts": utils.dedent`
+                    "/src/plugin-one/index.ts": utils.dedent`
                         import pluginTwo from "plugin-two"; // include this to add reference to symlink`,
-                    "/plugin-one/action.ts": utils.dedent`
+                    "/src/plugin-one/action.ts": utils.dedent`
                         import { actionCreatorFactory } from "typescript-fsa"; // Include version of shared lib
                         const action = actionCreatorFactory("somekey");
                         const featureOne = action<{ route: string }>("feature-one");
                         export const actions = { featureOne };`,
-                    "/plugin-one/node_modules/typescript-fsa/package.json": fsaPackageJson,
-                    "/plugin-one/node_modules/typescript-fsa/index.d.ts": fsaIndex,
-                    "/plugin-one/node_modules/plugin-two": new vfs.Symlink("/plugin-two"),
+                    "/src/plugin-one/node_modules/typescript-fsa/package.json": fsaPackageJson,
+                    "/src/plugin-one/node_modules/typescript-fsa/index.d.ts": fsaIndex,
+                    "/src/plugin-one/node_modules/plugin-two": new vfs.Symlink("/src/plugin-two"),
                 });
             },
-            commandLineArgs: ["-p", "plugin-one", "--listFiles"]
+            commandLineArgs: ["-p", "src/plugin-one", "--listFiles"]
         });
     });
 }
