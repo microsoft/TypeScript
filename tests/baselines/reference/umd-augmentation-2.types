@@ -4,9 +4,9 @@
 let v = new Math2d.Vector(3, 2);
 >v : import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
 >new Math2d.Vector(3, 2) : import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
->Math2d.Vector : typeof Math2d.Vector
+>Math2d.Vector : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
 >Math2d : typeof Math2d
->Vector : typeof Math2d.Vector
+>Vector : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
 >3 : 3
 >2 : 2
 

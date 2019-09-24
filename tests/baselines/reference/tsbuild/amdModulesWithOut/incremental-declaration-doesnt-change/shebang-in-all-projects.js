@@ -338,6 +338,9 @@ declare const myVar = 30;
 #!someshebang lib file1
 export const x = 10;console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 #!someshebang lib file0
 var myGlob = 20;

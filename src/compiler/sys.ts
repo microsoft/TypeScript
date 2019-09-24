@@ -380,13 +380,13 @@ namespace ts {
     export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
     /*@internal*/
-    export let sysLog: (s: string) => void = noop;
+    export let sysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
 
     /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
-        getAccessibleSortedChildDirectories(path: string): ReadonlyArray<string>;
+        getAccessibleSortedChildDirectories(path: string): readonly string[];
         directoryExists(dir: string): boolean;
         realpath(s: string): string;
     }
@@ -401,7 +401,7 @@ namespace ts {
         interface ChildDirectoryWatcher extends FileWatcher {
             dirName: string;
         }
-        type ChildWatches = ReadonlyArray<ChildDirectoryWatcher>;
+        type ChildWatches = readonly ChildDirectoryWatcher[];
         interface HostDirectoryWatcher {
             watcher: FileWatcher;
             childWatches: ChildWatches;
@@ -628,7 +628,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         getModifiedTime?(path: string): Date | undefined;
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
@@ -699,7 +699,7 @@ namespace ts {
         readFile(path: string): string | undefined;
         writeFile(path: string, contents: string): void;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, basePaths?: ReadonlyArray<string>, excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
+        readDirectory(path: string, extensions?: readonly string[], basePaths?: readonly string[], excludeEx?: string, includeFileEx?: string, includeDirEx?: string): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         realpath(path: string): string;
@@ -707,6 +707,7 @@ namespace ts {
     };
 
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
+    // eslint-disable-next-line prefer-const
     export let sys: System = (() => {
         // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
         // byte order mark from the specified encoding. Using any other byte order mark does
@@ -720,10 +721,10 @@ namespace ts {
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
             try {
-              _crypto = require("crypto");
+                _crypto = require("crypto");
             }
             catch {
-              _crypto = undefined;
+                _crypto = undefined;
             }
 
             const Buffer: {
@@ -1251,7 +1252,7 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+            function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
                 return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
             }
 
