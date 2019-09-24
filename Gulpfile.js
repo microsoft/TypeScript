@@ -588,6 +588,10 @@ const configureExperimental = () => exec(process.execPath, ["scripts/configurePr
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
+const configureTSCOnly = () => exec(process.execPath, ["scripts/configureTSCBuild.js", "package.json", "src/compiler/core.ts"]);
+task("configure-tsc-only", series(buildScripts, configureNightly));
+task("configure-tsc-only").description = "Runs scripts/configureTSCOnly.ts to prepare a build for build which only has tsc ";
+
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));
 task("publish-nightly").description = "Runs `npm publish --tag next` to create a new nightly build on npm";

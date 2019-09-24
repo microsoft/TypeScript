@@ -104,6 +104,7 @@
     "scripts": {
         "prepare": "gulp build-eslint-rules",
         "pretest": "gulp tests",
+        "postpublish": "gulp configure-tsc-only",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
