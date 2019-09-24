@@ -2529,6 +2529,7 @@ namespace ts {
         const parent = name.parent;
         switch (name.kind) {
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
                 // falls through
