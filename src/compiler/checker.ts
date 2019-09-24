@@ -382,6 +382,7 @@ namespace ts {
             getReturnTypeOfSignature,
             getNullableType,
             getNonNullableType,
+            getTypeArguments,
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
             signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
