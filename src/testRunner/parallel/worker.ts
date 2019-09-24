@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace Harness.Parallel.Worker {
     export function start() {
         function hookUncaughtExceptions() {
@@ -21,7 +19,7 @@ namespace Harness.Parallel.Worker {
         let exceptionsHooked = false;
         hookUncaughtExceptions();
 
-        // tslint:disable-next-line:variable-name - Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
+        // Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
         const Mocha = require("mocha") as typeof import("mocha");
 
         /**
@@ -99,7 +97,6 @@ namespace Harness.Parallel.Worker {
          * @param context The test context (usually the NodeJS `global` object).
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
-            // tslint:disable-next-line:variable-name
             const suites = [rootSuite];
             context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
             context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
@@ -125,7 +122,10 @@ namespace Harness.Parallel.Worker {
             }
 
             function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
-                if (typeof title === "function") fn = title, title = fn.name;
+                if (typeof title === "function") {
+                    fn = title;
+                    title = fn.name;
+                }
                 const test = new Test(title, suites[0].pending ? undefined : fn);
                 suites[0].addTest(test);
                 return test;
@@ -151,24 +151,42 @@ namespace Harness.Parallel.Worker {
                     unitTestSuiteMap.set(suite.title, suite);
                 }
             }
+            if (!unitTestTestMap && unitTestSuite.tests.length) {
+                unitTestTestMap = ts.createMap<Mocha.Test>();
+                for (const test of unitTestSuite.tests) {
+                    unitTestTestMap.set(test.title, test);
+                }
+            }
 
-            if (!unitTestSuiteMap) {
+            if (!unitTestSuiteMap && !unitTestTestMap) {
                 throw new Error(`Asked to run unit test ${task.file}, but no unit tests were discovered!`);
             }
 
-            const suite = unitTestSuiteMap.get(task.file);
-            if (!suite) {
+            let suite = unitTestSuiteMap.get(task.file);
+            const test = unitTestTestMap.get(task.file);
+            if (!suite && !test) {
                 throw new Error(`Unit test with name "${task.file}" was asked to be run, but such a test does not exist!`);
             }
 
             const root = new Suite("", new Mocha.Context());
             root.timeout(globalTimeout || 40_000);
-            root.addSuite(suite);
-            Object.setPrototypeOf(suite.ctx, root.ctx);
+            if (suite) {
+                root.addSuite(suite);
+                Object.setPrototypeOf(suite.ctx, root.ctx);
+            }
+            else if (test) {
+                const newSuite = new Suite("", new Mocha.Context());
+                newSuite.addTest(test);
+                root.addSuite(newSuite);
+                Object.setPrototypeOf(newSuite.ctx, root.ctx);
+                Object.setPrototypeOf(test.ctx, root.ctx);
+                test.parent = newSuite;
+                suite = newSuite;
+            }
 
-            runSuite(task, suite, payload => {
-                suite.parent = unitTestSuite;
-                Object.setPrototypeOf(suite.ctx, unitTestSuite.ctx);
+            runSuite(task, suite!, payload => {
+                suite!.parent = unitTestSuite;
+                Object.setPrototypeOf(suite!.ctx, unitTestSuite.ctx);
                 fn(payload);
             });
         }
@@ -284,6 +302,8 @@ namespace Harness.Parallel.Worker {
         // The root suite for all unit tests.
         let unitTestSuite: Suite;
         let unitTestSuiteMap: ts.Map<Mocha.Suite>;
+        // (Unit) Tests directly within the root suite
+        let unitTestTestMap: ts.Map<Mocha.Test>;
 
         if (runUnitTests) {
             unitTestSuite = new Suite("", new Mocha.Context());
