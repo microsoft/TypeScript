@@ -755,7 +755,7 @@ namespace ts {
             catch {
                 _crypto = undefined;
             }
-            let activeSession: import('inspector').Session | undefined;
+            let activeSession: import("inspector").Session | undefined;
             let profilePath = "./profile.cpuprofile";
 
             const Buffer: {
@@ -880,12 +880,12 @@ namespace ts {
              * See https://nodejs.org/api/inspector.html#inspector_example_usage for details
              */
             function enableCPUProfiler(path: string, cb: () => void) {
-                const inspector: typeof import('inspector') = require('inspector');
+                const inspector: typeof import("inspector") = require("inspector");
                 const session = new inspector.Session();
                 session.connect();
 
-                session.post('Profiler.enable', () => {
-                    session.post('Profiler.start', () => {
+                session.post("Profiler.enable", () => {
+                    session.post("Profiler.start", () => {
                     activeSession = session;
                     profilePath = path;
                     cb();
@@ -895,7 +895,7 @@ namespace ts {
 
             function disableCPUProfiler(cb: () => void) {
                 if (activeSession) {
-                    activeSession.post('Profiler.stop', (err, { profile }) => {
+                    activeSession.post("Profiler.stop", (err, { profile }) => {
                         if (!err) {
                             _fs.writeFileSync(profilePath, JSON.stringify(profile));
                         }
