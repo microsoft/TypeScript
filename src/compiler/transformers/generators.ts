@@ -2871,7 +2871,7 @@ namespace ts {
         function tryEnterOrLeaveBlock(operationIndex: number): void {
             if (blocks) {
                 for (; blockIndex < blockActions!.length && blockOffsets![blockIndex] <= operationIndex; blockIndex++) {
-                    const block = blocks[blockIndex];
+                    const block: CodeBlock = blocks[blockIndex];
                     const blockAction = blockActions![blockIndex];
                     switch (block.kind) {
                         case CodeBlockKind.Exception:

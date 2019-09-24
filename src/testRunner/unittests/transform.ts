@@ -300,6 +300,34 @@ namespace ts {
             });
         });
 
+        // https://github.com/microsoft/TypeScript/issues/33295
+        testBaseline("transformParameterProperty", () => {
+            return transpileModule("", {
+                transformers: {
+                    before: [transformAddParameterProperty],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function transformAddParameterProperty(_context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
+                    return visitNode(sourceFile);
+                };
+                function visitNode(sf: SourceFile) {
+                    // produce `class Foo { constructor(@Dec private x) {} }`;
+                    // The decorator is required to trigger ts.ts transformations.
+                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, [
+                            createParameter(/*decorators*/ [createDecorator(createIdentifier("Dec"))], /*modifiers*/ [createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], createBlock([]))
+                    ]);
+                    return updateSourceFileNode(sf, [classDecl]);
+                }
+            }
+        });
+
         function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
             const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
             const host = new fakes.CompilerHost(fs, opts.compilerOptions);
@@ -389,7 +417,7 @@ class Clazz {
 }
 `, {
                 transformers: {
-                    before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n) || isClassDeclaration(n) || isConstructorDeclaration(n))],
+                    before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n, n.parent) || isClassDeclaration(n) || isConstructorDeclaration(n))],
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES2015,
