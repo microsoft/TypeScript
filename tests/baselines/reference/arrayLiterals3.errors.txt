@@ -8,10 +8,9 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2739: Type '(number[] | string[])[]' is missing the following properties from type 'tup': 0, 1
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
-  Types of property 'pop' are incompatible.
-    Type '() => string | number' is not assignable to type '() => Number'.
-      Type 'string | number' is not assignable to type 'Number'.
-        Type 'string' is not assignable to type 'Number'.
+  The types returned by 'pop()' are incompatible between these types.
+    Type 'string | number' is not assignable to type 'Number'.
+      Type 'string' is not assignable to type 'Number'.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (8 errors) ====
@@ -67,8 +66,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
         ~~
 !!! error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
-!!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '() => string | number' is not assignable to type '() => Number'.
-!!! error TS2322:       Type 'string | number' is not assignable to type 'Number'.
-!!! error TS2322:         Type 'string' is not assignable to type 'Number'.
+!!! error TS2322:   The types returned by 'pop()' are incompatible between these types.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'Number'.
+!!! error TS2322:       Type 'string' is not assignable to type 'Number'.
     

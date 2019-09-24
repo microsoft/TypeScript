@@ -1,14 +1,5 @@
 Exit Code: 1
 Standard output:
-@uifabric/codepen-loader: yarn run vX.X.X
-@uifabric/codepen-loader: $ just-scripts build --production --lint
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ Removing [lib, temp, dist, coverage, lib-commonjs]
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/codepen-loader/tsconfig.json
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module commonjs --outDir "./lib" --project "/office-ui-fabric-react/packages/codepen-loader/tsconfig.json"
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ Running Jest
-@uifabric/codepen-loader: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/codepen-loader/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/codepen-loader:  PASS  src/__tests__/codepenTransform.test.ts
-@uifabric/codepen-loader: Done in ?s.
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op --production --lint
 @uifabric/build: Done in ?s.
@@ -36,9 +27,11 @@ Standard output:
 @uifabric/migration: Done in ?s.
 @uifabric/monaco-editor: yarn run vX.X.X
 @uifabric/monaco-editor: $ just-scripts build --production --lint
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Removing [esm, lib]
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Removing [esm, lib, lib-commonjs]
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
 @uifabric/monaco-editor: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build --production --lint
@@ -91,6 +84,7 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/server.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
+@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
@@ -134,9 +128,9 @@ Standard output:
 @uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
+@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
 @uifabric/utilities:  PASS  src/EventGroup.test.ts
 @uifabric/utilities:  PASS  src/array.test.ts
-@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
 @uifabric/utilities:  PASS  src/math.test.ts
 @uifabric/utilities:  PASS  src/warn/warn.test.ts
 @uifabric/utilities:  PASS  src/dom/dom.test.ts
@@ -206,7 +200,6 @@ Standard output:
 @uifabric/styling:  PASS  src/styles/theme.test.ts
 @uifabric/styling:  PASS  src/styles/scheme.test.ts
 @uifabric/styling:  PASS  src/styles/getGlobalClassNames.test.ts
-@uifabric/styling:  PASS  src/utilities/icons.test.ts
 @uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
 @uifabric/styling: Done in ?s.
 @uifabric/file-type-icons: yarn run vX.X.X
@@ -249,11 +242,7 @@ Standard output:
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 43 packages: "yarn run build --production --lint"
-@uifabric/codepen-loader: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/codepen-loader: Force exiting Jest
-@uifabric/codepen-loader: 
-@uifabric/codepen-loader: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+lerna info Executing command in 42 packages: "yarn run build --production --lint"
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
