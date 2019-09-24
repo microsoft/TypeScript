@@ -98,6 +98,7 @@
         "unittests/tsbuild/emptyFiles.ts",
         "unittests/tsbuild/graphOrdering.ts",
         "unittests/tsbuild/inferredTypeFromTransitiveModule.ts",
+        "unittests/tsbuild/javascriptProjectEmit.ts",
         "unittests/tsbuild/lateBoundSymbol.ts",
         "unittests/tsbuild/missingExtendedFile.ts",
         "unittests/tsbuild/moduleSpecifiers.ts",

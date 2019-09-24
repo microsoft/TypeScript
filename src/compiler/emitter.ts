@@ -144,7 +144,7 @@ namespace ts {
 
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
+        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts));
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
             Extension.Dts
@@ -197,7 +197,7 @@ namespace ts {
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
-        if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+        if (getEmitDeclarations(configFile.options)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             addOutput(dts);
             if (configFile.options.declarationMap) {
@@ -246,7 +246,7 @@ namespace ts {
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-            if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+            if (getEmitDeclarations(configFile.options)) {
                 return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             }
         }
