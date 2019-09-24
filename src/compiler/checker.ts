@@ -15025,15 +15025,12 @@ namespace ts {
                 if (parent.questionDotToken) {
                     // If we have a questionDotToken then we are an OptionalExpression and should remove `null` and
                     // `undefined` from the type and add the optionalType to the result, if needed.
-                    if (isNullableType(type)) {
-                        isOptional = true;
-                        type = getNonNullableType(type);
-                    }
-                    return { isOptional, type };
+                    isOptional = isNullableType(type);
+                    return { isOptional, type: isOptional ? getNonNullableType(type) : type };
                 }
 
                 // If we do not have a questionDotToken, then we are an OptionalChain and we remove the optionalType and
-                // add it back into the result, if needed.
+                // indicate whether we need to add optionalType back into the result.
                 const nonOptionalType = removeOptionalTypeMarker(type);
                 if (nonOptionalType !== type) {
                     isOptional = true;

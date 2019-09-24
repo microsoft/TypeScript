@@ -256,7 +256,11 @@ namespace ts.Completions {
         // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
         else if ((origin && originIsSymbolMember(origin) || needsConvertPropertyAccess) && propertyAccessToConvert) {
             insertText = needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]`;
-            const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!;
+            const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile) ||
+                findChildOfKind(propertyAccessToConvert, SyntaxKind.QuestionDotToken, sourceFile);
+            if (!dot) {
+                return undefined;
+            }
             // If the text after the '.' starts with this name, write over it. Else, add new text.
             const end = startsWith(name, propertyAccessToConvert.name.text) ? propertyAccessToConvert.name.end : dot.end;
             replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);

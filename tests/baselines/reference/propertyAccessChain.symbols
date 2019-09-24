@@ -32,3 +32,39 @@ o3.b?.c;
 >b : Symbol(b, Decl(propertyAccessChain.ts, 6, 19))
 >c : Symbol(c, Decl(propertyAccessChain.ts, 6, 36))
 
+declare const o4: { b?: { c: { d?: { e: string } } } };
+>o4 : Symbol(o4, Decl(propertyAccessChain.ts, 9, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+
+o4.b?.c.d?.e;
+>o4.b?.c.d?.e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+>o4.b?.c.d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>o4.b?.c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>o4.b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>o4 : Symbol(o4, Decl(propertyAccessChain.ts, 9, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 9, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 9, 25))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 9, 30))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 9, 36))
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+>o5 : Symbol(o5, Decl(propertyAccessChain.ts, 12, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+
+o5.b?.().c.d?.e;
+>o5.b?.().c.d?.e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+>o5.b?.().c.d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>o5.b?.().c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>o5.b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>o5 : Symbol(o5, Decl(propertyAccessChain.ts, 12, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 12, 19))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 12, 27))
+>d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
+>e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
+

@@ -10,3 +10,13 @@ o2?.b["c"];
 declare const o3: { b: undefined | { c: string } };
 o3["b"]?.c;
 o3.b?.["c"];
+
+declare const o4: { b?: { c: { d?: { e: string } } } };
+o4.b?.["c"].d?.e;
+o4.b?.["c"].d?.["e"];
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+o5.b?.()["c"].d?.e;
+o5.b?.()["c"].d?.["e"];
+o5["b"]?.()["c"].d?.e;
+o5["b"]?.()["c"].d?.["e"];

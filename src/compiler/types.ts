@@ -530,7 +530,7 @@ namespace ts {
         NestedNamespace    = 1 << 2,  // Namespace declaration
         Synthesized        = 1 << 3,  // Node was synthesized during transformation
         Namespace          = 1 << 4,  // Namespace declaration
-        OptionalChain              = 1 << 5,  // Chained MemberExpression rooted to a pseudo-OptionalExpression
+        OptionalChain      = 1 << 5,  // Chained MemberExpression rooted to a pseudo-OptionalExpression
         ExportContext      = 1 << 6,  // Export context (initialized by binding)
         ContainsThis       = 1 << 7,  // Interface contains references to "this"
         HasImplicitReturn  = 1 << 8,  // If function implicitly returns on one of codepaths (initialized by binding)
@@ -1788,7 +1788,6 @@ namespace ts {
 
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
-        kind: SyntaxKind.PropertyAccessExpression;
     }
 
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
@@ -1810,7 +1809,6 @@ namespace ts {
 
     export interface ElementAccessChain extends ElementAccessExpression {
         _optionalChainBrand: any;
-        kind: SyntaxKind.ElementAccessExpression;
     }
 
     export interface SuperElementAccessExpression extends ElementAccessExpression {
@@ -1830,7 +1828,6 @@ namespace ts {
 
     export interface CallChain extends CallExpression {
         _optionalChainBrand: any;
-        kind: SyntaxKind.CallExpression;
     }
 
     export type OptionalChain =
