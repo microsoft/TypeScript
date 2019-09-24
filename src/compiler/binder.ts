@@ -564,7 +564,7 @@ namespace ts {
                 if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        currentFlow.container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
+                        currentFlow.node = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -581,6 +581,7 @@ namespace ts {
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
                     if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
+                    (<FunctionLikeDeclaration>node).endFlowNode = currentFlow;
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
@@ -671,6 +672,9 @@ namespace ts {
                 bindJSDoc(node);
                 return;
             }
+            if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+                node.flowNode = currentFlow;
+            }
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
                     bindWhileStatement(<WhileStatement>node);
@@ -707,6 +711,9 @@ namespace ts {
                     break;
                 case SyntaxKind.CaseClause:
                     bindCaseClause(<CaseClause>node);
+                    break;
+                case SyntaxKind.ExpressionStatement:
+                    bindExpressionStatement(<ExpressionStatement>node);
                     break;
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
@@ -845,17 +852,11 @@ namespace ts {
         }
 
         function createBranchLabel(): FlowLabel {
-            return {
-                flags: FlowFlags.BranchLabel,
-                antecedents: undefined
-            };
+            return { flags: FlowFlags.BranchLabel, antecedents: undefined };
         }
 
         function createLoopLabel(): FlowLabel {
-            return {
-                flags: FlowFlags.LoopLabel,
-                antecedents: undefined
-            };
+            return { flags: FlowFlags.LoopLabel, antecedents: undefined };
         }
 
         function setFlowNodeReferenced(flow: FlowNode) {
@@ -885,7 +886,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags, expression, antecedent });
+            return flowNodeCreated({ flags, antecedent, node: expression });
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -893,7 +894,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent });
+            return flowNodeCreated({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
@@ -901,10 +902,14 @@ namespace ts {
             return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
         }
 
+        function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return flowNodeCreated({ flags: FlowFlags.Call, antecedent, node });
+        }
+
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            const res: FlowArrayMutation = flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
-            return res;
+            return flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1030,12 +1035,12 @@ namespace ts {
         function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
+            bind(node.expression);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             if (node.kind === SyntaxKind.ForOfStatement) {
                 bind(node.awaitModifier);
             }
-            bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
             if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
@@ -1222,7 +1227,8 @@ namespace ts {
             addAntecedent(postSwitchLabel, currentFlow);
             const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
             // We mark a switch statement as possibly exhaustive if it has no default clause and if all
-            // case clauses have unreachable end points (e.g. they all return).
+            // case clauses have unreachable end points (e.g. they all return). Note, we no longer need
+            // this property in control flow analysis, it's there only for backwards compatibility.
             node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
             if (!hasDefault) {
                 addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
@@ -1279,6 +1285,24 @@ namespace ts {
 
         function popActiveLabel() {
             activeLabels!.pop();
+        }
+
+        function isDottedName(node: Expression): boolean {
+            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+                node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
+                node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+        }
+
+        function bindExpressionStatement(node: ExpressionStatement): void {
+            bind(node.expression);
+            // A top level call expression with a dotted function name and at least one argument
+            // is potentially an assertion and is therefore included in the control flow.
+            if (node.expression.kind === SyntaxKind.CallExpression) {
+                const call = <CallExpression>node.expression;
+                if (isDottedName(call.expression)) {
+                    currentFlow = createFlowCall(currentFlow, call);
+                }
+            }
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {

@@ -1,12 +1,10 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts(70,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
-  Types of property 'a' are incompatible.
-    Type '(x: string) => string' is not assignable to type '{ (x: "a"): number; (x: string): number; }'.
-      Type 'string' is not assignable to type 'number'.
+  The types returned by 'a(...)' are incompatible between these types.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
-  Types of property 'a2' are incompatible.
-    Type '<T>(x: T) => string' is not assignable to type '<T>(x: T) => T'.
-      Type 'string' is not assignable to type 'T'.
-        'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  The types returned by 'a2(...)' are incompatible between these types.
+    Type 'string' is not assignable to type 'T'.
+      'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts (2 errors) ====
@@ -82,9 +80,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface I2 extends Base2 {
                   ~~
 !!! error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
-!!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type '(x: string) => string' is not assignable to type '{ (x: "a"): number; (x: string): number; }'.
-!!! error TS2430:       Type 'string' is not assignable to type 'number'.
+!!! error TS2430:   The types returned by 'a(...)' are incompatible between these types.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
             // N's
             a: (x: string) => string; // error because base returns non-void;
         }
@@ -93,10 +90,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface I3 extends Base2 {
                   ~~
 !!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
-!!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type '<T>(x: T) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2430:       Type 'string' is not assignable to type 'T'.
-!!! error TS2430:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:   The types returned by 'a2(...)' are incompatible between these types.
+!!! error TS2430:     Type 'string' is not assignable to type 'T'.
+!!! error TS2430:       'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
             // N's
             a2: <T>(x: T) => string; // error because base returns non-void;
         }

@@ -165,7 +165,8 @@ namespace ts {
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
             case SyntaxKind.TypePredicate:
-                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                return visitNode(cbNode, (<TypePredicateNode>node).assertsModifier) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
                     visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
@@ -3045,6 +3046,8 @@ namespace ts {
                     return parseParenthesizedType();
                 case SyntaxKind.ImportKeyword:
                     return parseImportType();
+                case SyntaxKind.AssertsKeyword:
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? parseAssertsTypePredicate() : parseTypeReference();
                 default:
                     return parseTypeReference();
             }
@@ -3085,6 +3088,7 @@ namespace ts {
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
+                case SyntaxKind.AssertsKeyword:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;
@@ -3261,6 +3265,7 @@ namespace ts {
             const type = parseType();
             if (typePredicateVariable) {
                 const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
+                node.assertsModifier = undefined;
                 node.parameterName = typePredicateVariable;
                 node.type = type;
                 return finishNode(node);
@@ -3276,6 +3281,14 @@ namespace ts {
                 nextToken();
                 return id;
             }
+        }
+
+        function parseAssertsTypePredicate(): TypeNode {
+            const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
+            node.assertsModifier = parseExpectedToken(SyntaxKind.AssertsKeyword);
+            node.parameterName = token() === SyntaxKind.ThisKeyword ? parseThisTypeNode() : parseIdentifier();
+            node.type = parseOptional(SyntaxKind.IsKeyword) ? parseType() : undefined;
+            return finishNode(node);
         }
 
         function parseType(): TypeNode {

@@ -669,16 +669,26 @@ namespace ts {
     }
 
     export function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
+        return createTypePredicateNodeWithModifier(/*assertsModifier*/ undefined, parameterName, type);
+    }
+
+    export function createTypePredicateNodeWithModifier(assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypePredicate) as TypePredicateNode;
+        node.assertsModifier = assertsModifier;
         node.parameterName = asName(parameterName);
         node.type = type;
         return node;
     }
 
     export function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
-        return node.parameterName !== parameterName
+        return updateTypePredicateNodeWithModifier(node, node.assertsModifier, parameterName, type);
+    }
+
+    export function updateTypePredicateNodeWithModifier(node: TypePredicateNode, assertsModifier: AssertsToken | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined) {
+        return node.assertsModifier !== assertsModifier
+            || node.parameterName !== parameterName
             || node.type !== type
-            ? updateNode(createTypePredicateNode(parameterName, type), node)
+            ? updateNode(createTypePredicateNodeWithModifier(assertsModifier, parameterName, type), node)
             : node;
     }
 

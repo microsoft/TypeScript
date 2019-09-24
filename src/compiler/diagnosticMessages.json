@@ -1044,6 +1044,35 @@
         "code": 1358
     },
 
+    "The types of '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2200
+    },
+    "The types returned by '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2201
+    },
+    "Call signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2203,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Call signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2204,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2205,
+        "elidedInCompatabilityPyramid": true
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

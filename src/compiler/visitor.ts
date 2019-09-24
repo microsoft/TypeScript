@@ -333,7 +333,8 @@ namespace ts {
 
             // Types
             case SyntaxKind.TypePredicate:
-                return updateTypePredicateNode(<TypePredicateNode>node,
+                return updateTypePredicateNodeWithModifier(<TypePredicateNode>node,
+                    visitNode((<TypePredicateNode>node).assertsModifier, visitor),
                     visitNode((<TypePredicateNode>node).parameterName, visitor),
                     visitNode((<TypePredicateNode>node).type, visitor, isTypeNode));
 
