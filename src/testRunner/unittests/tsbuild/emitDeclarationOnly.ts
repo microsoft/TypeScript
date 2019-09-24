@@ -1,9 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/emitDeclarationOnly", time);
+            projFs = loadProjectFromDisk("tests/projects/emitDeclarationOnly");
         });
         after(() => {
             projFs = undefined!;
@@ -13,7 +12,6 @@ namespace ts {
             verifyTscIncrementalEdits({
                 subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
                 fs: () => projFs,
-                tick,
                 scenario: "emitDeclarationOnly",
                 commandLineArgs: ["--b", "/src", "--verbose"],
                 modifyFs: disableMap ?
@@ -31,7 +29,6 @@ namespace ts {
         verifyTscIncrementalEdits({
             subScenario: `only dts output in non circular imports project with emitDeclarationOnly`,
             fs: () => projFs,
-            tick,
             scenario: "emitDeclarationOnly",
             commandLineArgs: ["--b", "/src", "--verbose"],
             modifyFs: fs => {

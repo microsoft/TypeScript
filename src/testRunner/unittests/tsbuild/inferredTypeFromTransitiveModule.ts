@@ -1,9 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule", time);
+            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
         });
         after(() => {
             projFs = undefined!;
@@ -13,7 +12,6 @@ namespace ts {
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "inferred type from transitive module",
             fs: () => projFs,
-            tick,
             commandLineArgs: ["--b", "/src", "--verbose"],
             incrementalScenarios: [{
                 buildKind: BuildKind.IncrementalDtsChange,
@@ -24,7 +22,6 @@ namespace ts {
         verifyTscIncrementalEdits({
             subScenario: "inferred type from transitive module with isolatedModules",
             fs: () => projFs,
-            tick,
             scenario: "inferredTypeFromTransitiveModule",
             commandLineArgs: ["--b", "/src", "--verbose"],
             modifyFs: changeToIsolatedModules,
@@ -38,7 +35,6 @@ namespace ts {
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "reports errors in files affected by change in signature with isolatedModules",
             fs: () => projFs,
-            tick,
             commandLineArgs: ["--b", "/src", "--verbose"],
             modifyFs: fs => {
                 changeToIsolatedModules(fs);

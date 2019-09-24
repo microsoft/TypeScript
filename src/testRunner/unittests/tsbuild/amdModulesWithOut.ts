@@ -1,7 +1,6 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         const enum project { lib, app }
         function relName(path: string) { return path.slice(1); }
         type Sources = [string, readonly string[]];
@@ -25,7 +24,7 @@ namespace ts {
             ]
         ];
         before(() => {
-            outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut", time);
+            outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
         });
         after(() => {
             outFileFs = undefined!;
@@ -46,7 +45,6 @@ namespace ts {
                 scenario: "amdModulesWithOut",
                 subScenario,
                 fs: () => outFileFs,
-                tick,
                 commandLineArgs: ["--b", "/src/app", "--verbose"],
                 baselineSourceMap: true,
                 modifyFs,

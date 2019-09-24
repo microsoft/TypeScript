@@ -1,11 +1,11 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src --verbose
-4:09:00 PM - Projects in this build: 
+4:04:00 PM - Projects in this build: 
     * src/tsconfig.json
 
-4:09:00 PM - Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
+4:04:00 PM - Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
 
-4:09:00 PM - Building project '/src/tsconfig.json'...
+4:04:00 PM - Building project '/src/tsconfig.json'...
 
 exitCode:: 0
 
