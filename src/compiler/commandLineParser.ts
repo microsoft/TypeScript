@@ -142,12 +142,12 @@ namespace ts {
             description: Diagnostics.Show_verbose_diagnostic_information
         },
         {
-            name: "generateCPUProfile",
+            name: "generateCpuProfile",
             type: "string",
             isFilePath: true,
-            paramType: Diagnostics.FILE,
+            paramType: Diagnostics.FILE_OR_DIRECTORY,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Show_verbose_diagnostic_information
+            description: Diagnostics.Generates_a_CPU_profile
         },
         {
             name: "incremental",

@@ -175,8 +175,8 @@ namespace ts {
 
         const commandLine = parseCommandLine(args);
 
-        if (commandLine.options.generateCPUProfile && sys.enableCPUProfiler) {
-            sys.enableCPUProfiler(commandLine.options.generateCPUProfile, () => executeCommandLineWorker(commandLine));
+        if (commandLine.options.generateCpuProfile && sys.enableCPUProfiler) {
+            sys.enableCPUProfiler(commandLine.options.generateCpuProfile, () => executeCommandLineWorker(commandLine));
         }
         else {
             executeCommandLineWorker(commandLine);
@@ -190,8 +190,7 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[]) {
-        const { buildOptions, projects, errors } = parseBuildCommand(args);
+    function performBuildWorker(buildOptions: BuildOptions, projects: string[], errors: Diagnostic[]) {
         // Update to pretty if host supports it
         updateReportDiagnostic(buildOptions);
 
@@ -236,6 +235,16 @@ namespace ts {
         buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
+    }
+
+    function performBuild(args: string[]) {
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
+        if (buildOptions.generateCpuProfile && sys.enableCPUProfiler) {
+            sys.enableCPUProfiler(buildOptions.generateCpuProfile, () => performBuildWorker(buildOptions, projects, errors));
+        }
+        else {
+            performBuildWorker(buildOptions, projects, errors);
+        }
     }
 
     function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {

@@ -4040,6 +4040,10 @@
         "category": "Message",
         "code": 6221
     },
+    "Generates a CPU profile.": {
+        "category": "Message",
+        "code": 6222
+    },
 
     "Projects to reference": {
         "category": "Message",

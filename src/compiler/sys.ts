@@ -667,8 +667,8 @@ namespace ts {
         createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
-        /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): void;
-        /*@internal*/ disableCPUProfiler?(continuation: () => void): void;
+        /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
+        /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -744,8 +744,8 @@ namespace ts {
         const byteOrderMarkIndicator = "\uFEFF";
 
         function getNodeSystem(): System {
-            const _fs = require("fs");
-            const _path = require("path");
+            const _fs: typeof import("fs") = require("fs");
+            const _path: typeof import("path") = require("path");
             const _os = require("os");
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
@@ -880,30 +880,48 @@ namespace ts {
              * See https://nodejs.org/api/inspector.html#inspector_example_usage for details
              */
             function enableCPUProfiler(path: string, cb: () => void) {
+                if (activeSession) {
+                    cb();
+                    return false;
+                }
                 const inspector: typeof import("inspector") = require("inspector");
                 const session = new inspector.Session();
                 session.connect();
 
                 session.post("Profiler.enable", () => {
                     session.post("Profiler.start", () => {
-                    activeSession = session;
-                    profilePath = path;
-                    cb();
+                        activeSession = session;
+                        profilePath = path;
+                        cb();
                     });
                 });
+                return true;
             }
 
             function disableCPUProfiler(cb: () => void) {
                 if (activeSession) {
                     activeSession.post("Profiler.stop", (err, { profile }) => {
                         if (!err) {
+                            try {
+                                if (_fs.statSync(profilePath).isDirectory()) {
+                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString()}.cpuprofile`);
+                                }
+                            }
+                            catch {}
+                            try {
+                                _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
+                            }
+                            catch {}
                             _fs.writeFileSync(profilePath, JSON.stringify(profile));
                         }
                         cb();
                     });
+                    activeSession = undefined;
+                    return true;
                 }
                 else {
                     cb();
+                    return false;
                 }
             }
 

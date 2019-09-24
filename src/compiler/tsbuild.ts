@@ -174,6 +174,7 @@ namespace ts {
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
+        /* @internal */ generateCpuProfile?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
