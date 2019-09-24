@@ -4123,14 +4123,14 @@ namespace ts {
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
                     const decl = first(propertySymbol.declarations);
                     if (hasLateBindableName(decl)) {
-                        if (!isBinaryExpression(decl)) {
-                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
-                        }
-                        else {
+                        if (isBinaryExpression(decl)) {
                             const name = getNameOfDeclaration(decl);
                             if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
                                 trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
                             }
+                        }
+                        else {
+                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
                         }
                     }
                 }

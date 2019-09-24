@@ -2074,7 +2074,10 @@ namespace ts {
         return AssignmentDeclarationKind.None;
     }
 
-    // TODO: Signed numeric literals?
+    /**
+     * Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
+     * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
+     */
     /* @internal */
     export function getElementOrPropertyAccessArgumentExpressionOrName(node: PropertyAccessExpression | ElementAccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
         if (isPropertyAccessExpression(node)) {
