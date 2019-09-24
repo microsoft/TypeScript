@@ -2567,6 +2567,7 @@ declare namespace ts {
         emitDeclarationOnly?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
+        disableSourceOfProjectReferenceRedirect?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -8529,7 +8530,6 @@ declare namespace ts.server {
         getGlobalProjectErrors(): readonly Diagnostic[];
         getAllProjectErrors(): readonly Diagnostic[];
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
-        private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**
          * Returns true if emit was conducted
@@ -8610,11 +8610,25 @@ declare namespace ts.server {
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private projectReferenceCallbacks;
+        private mapOfDeclarationDirectories;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
         protected isInitialLoadPending: () => boolean;
+        /**
+         * This implementation of fileExists checks if the file being requested is
+         * .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that file exists on host
+         */
+        fileExists(file: string): boolean;
+        /**
+         * This implementation of directoryExists checks if the directory being requested is
+         * directory of .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that directory exists on host
+         */
+        directoryExists(path: string): boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.

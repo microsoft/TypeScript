@@ -8713,11 +8713,16 @@ namespace ts {
         return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
 
-    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions) {
+    export interface HostWithIsSourceOfProjectReferenceRedirect {
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    }
+    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions, host: HostWithIsSourceOfProjectReferenceRedirect) {
         // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
         // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
         // '/// <reference no-default-lib="true"/>' directive.
-        return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
+        return (options.skipLibCheck && sourceFile.isDeclarationFile ||
+            options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
+            host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
     }
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {

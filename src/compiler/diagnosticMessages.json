@@ -4036,6 +4036,10 @@
         "category": "Message",
         "code": 6220
     },
+    "Disable use of source files instead of declaration files from referenced projects.": {
+        "category": "Message",
+        "code": 6221
+    },
 
     "Projects to reference": {
         "category": "Message",
