@@ -3990,10 +3990,9 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1277,60):
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1278,42): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>[]): { key: string; text: string; regex: RegExp; negative: boolean; }[]', gave the following error.
     Argument of type '{ key: any; text: string; negative: boolean; }[]' is not assignable to parameter of type 'ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
-      Types of property 'slice' are incompatible.
-        Type '(start?: number, end?: number) => { key: any; text: string; negative: boolean; }[]' is not assignable to type '(start?: number, end?: number) => { key: string; text: string; regex: RegExp; negative: boolean; }[]'.
-          Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type '{ key: string; text: string; regex: RegExp; negative: boolean; }[]'.
-            Property 'regex' is missing in type '{ key: any; text: string; negative: boolean; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
+      The types returned by 'slice(...)' are incompatible between these types.
+        Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type '{ key: string; text: string; regex: RegExp; negative: boolean; }[]'.
+          Property 'regex' is missing in type '{ key: any; text: string; negative: boolean; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
   Overload 2 of 2, '(...items: ({ key: string; text: string; regex: RegExp; negative: boolean; } | ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>)[]): { key: string; text: string; regex: RegExp; negative: boolean; }[]', gave the following error.
     Argument of type '{ key: any; text: string; negative: boolean; }[]' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; } | ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
       Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type 'ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
@@ -5038,22 +5037,18 @@ node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(91,24): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(Promise<CSSMatchedStyles> | Promise<ComputedStyle>)[]' is not assignable to parameter of type 'Iterable<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>>'.
-      Types of property '[Symbol.iterator]' are incompatible.
-        Type '() => IterableIterator<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type '() => Iterator<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any, undefined>'.
-          Type 'IterableIterator<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type 'Iterator<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any, undefined>'.
-            Types of property 'next' are incompatible.
-              Type '(...args: [] | [undefined]) => IteratorResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>, any>' is not assignable to type '(...args: [] | [undefined]) => IteratorResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any>'.
-                Type 'IteratorResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>, any>' is not assignable to type 'IteratorResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any>'.
-                  Type 'IteratorYieldResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type 'IteratorResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any>'.
-                    Type 'IteratorYieldResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type 'IteratorYieldResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>>'.
-                      Type 'Promise<CSSMatchedStyles> | Promise<ComputedStyle>' is not assignable to type 'CSSMatchedStyles | PromiseLike<CSSMatchedStyles>'.
-                        Type 'Promise<ComputedStyle>' is not assignable to type 'CSSMatchedStyles | PromiseLike<CSSMatchedStyles>'.
-                          Type 'Promise<ComputedStyle>' is not assignable to type 'PromiseLike<CSSMatchedStyles>'.
-                            Types of property 'then' are incompatible.
-                              Type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
-                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                                  Types of parameters 'value' and 'value' are incompatible.
-                                    Type 'ComputedStyle' is missing the following properties from type 'CSSMatchedStyles': _cssModel, _node, _nodeStyles, _nodeForStyle, and 22 more.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>, any>' is not assignable to type 'IteratorResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any>'.
+          Type 'IteratorYieldResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type 'IteratorResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>, any>'.
+            Type 'IteratorYieldResult<Promise<CSSMatchedStyles> | Promise<ComputedStyle>>' is not assignable to type 'IteratorYieldResult<CSSMatchedStyles | PromiseLike<CSSMatchedStyles>>'.
+              Type 'Promise<CSSMatchedStyles> | Promise<ComputedStyle>' is not assignable to type 'CSSMatchedStyles | PromiseLike<CSSMatchedStyles>'.
+                Type 'Promise<ComputedStyle>' is not assignable to type 'CSSMatchedStyles | PromiseLike<CSSMatchedStyles>'.
+                  Type 'Promise<ComputedStyle>' is not assignable to type 'PromiseLike<CSSMatchedStyles>'.
+                    Types of property 'then' are incompatible.
+                      Type '<TResult1 = ComputedStyle, TResult2 = never>(onfulfilled?: (value: ComputedStyle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = CSSMatchedStyles, TResult2 = never>(onfulfilled?: (value: CSSMatchedStyles) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                          Types of parameters 'value' and 'value' are incompatible.
+                            Type 'ComputedStyle' is missing the following properties from type 'CSSMatchedStyles': _cssModel, _node, _nodeStyles, _nodeForStyle, and 22 more.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(147,52): error TS2339: Property 'keysArray' does not exist on type 'Map<string, string>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(179,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ComputedStyleWidget.js(200,74): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -5339,22 +5334,18 @@ node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(5
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(82,24): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(Promise<Map<string, string>> | Promise<InlineStyleResult>)[]' is not assignable to parameter of type 'Iterable<Map<string, string> | PromiseLike<Map<string, string>>>'.
-      Types of property '[Symbol.iterator]' are incompatible.
-        Type '() => IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type '() => Iterator<Map<string, string> | PromiseLike<Map<string, string>>, any, undefined>'.
-          Type 'IterableIterator<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'Iterator<Map<string, string> | PromiseLike<Map<string, string>>, any, undefined>'.
-            Types of property 'next' are incompatible.
-              Type '(...args: [] | [undefined]) => IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>' is not assignable to type '(...args: [] | [undefined]) => IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
-                Type 'IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
-                  Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
-                    Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorYieldResult<Map<string, string> | PromiseLike<Map<string, string>>>'.
-                      Type 'Promise<Map<string, string>> | Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                        Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
-                          Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
-                            Types of property 'then' are incompatible.
-                              Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
-                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                                  Types of parameters 'value' and 'value' are incompatible.
-                                    Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<Promise<Map<string, string>> | Promise<InlineStyleResult>, any>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
+          Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorResult<Map<string, string> | PromiseLike<Map<string, string>>, any>'.
+            Type 'IteratorYieldResult<Promise<Map<string, string>> | Promise<InlineStyleResult>>' is not assignable to type 'IteratorYieldResult<Map<string, string> | PromiseLike<Map<string, string>>>'.
+              Type 'Promise<Map<string, string>> | Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
+                Type 'Promise<InlineStyleResult>' is not assignable to type 'Map<string, string> | PromiseLike<Map<string, string>>'.
+                  Type 'Promise<InlineStyleResult>' is not assignable to type 'PromiseLike<Map<string, string>>'.
+                    Types of property 'then' are incompatible.
+                      Type '<TResult1 = InlineStyleResult, TResult2 = never>(onfulfilled?: (value: InlineStyleResult) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<...>' is not assignable to type '<TResult1 = Map<string, string>, TResult2 = never>(onfulfilled?: (value: Map<string, string>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<...>'.
+                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                          Types of parameters 'value' and 'value' are incompatible.
+                            Type 'InlineStyleResult' is missing the following properties from type 'Map<string, string>': clear, delete, forEach, get, and 8 more.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(120,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(164,22): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(179,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -12648,22 +12639,18 @@ node_modules/chrome-devtools-frontend/front_end/ui/View.js(454,38): error TS2339
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(461,44): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(Promise<void> | Promise<ToolbarItem[]>)[]' is not assignable to parameter of type 'Iterable<void | PromiseLike<void>>'.
-      Types of property '[Symbol.iterator]' are incompatible.
-        Type '() => IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type '() => Iterator<void | PromiseLike<void>, any, undefined>'.
-          Type 'IterableIterator<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'Iterator<void | PromiseLike<void>, any, undefined>'.
-            Types of property 'next' are incompatible.
-              Type '(...args: [] | [undefined]) => IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>' is not assignable to type '(...args: [] | [undefined]) => IteratorResult<void | PromiseLike<void>, any>'.
-                Type 'IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
-                  Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
-                    Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorYieldResult<void | PromiseLike<void>>'.
-                      Type 'Promise<void> | Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                        Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
-                          Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
-                            Types of property 'then' are incompatible.
-                              Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-                                Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
-                                  Types of parameters 'value' and 'value' are incompatible.
-                                    Type 'ToolbarItem[]' is not assignable to type 'void'.
+      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+        Type 'IteratorResult<Promise<void> | Promise<ToolbarItem[]>, any>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
+          Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorResult<void | PromiseLike<void>, any>'.
+            Type 'IteratorYieldResult<Promise<void> | Promise<ToolbarItem[]>>' is not assignable to type 'IteratorYieldResult<void | PromiseLike<void>>'.
+              Type 'Promise<void> | Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
+                Type 'Promise<ToolbarItem[]>' is not assignable to type 'void | PromiseLike<void>'.
+                  Type 'Promise<ToolbarItem[]>' is not assignable to type 'PromiseLike<void>'.
+                    Types of property 'then' are incompatible.
+                      Type '<TResult1 = ToolbarItem[], TResult2 = never>(onfulfilled?: (value: ToolbarItem[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+                        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+                          Types of parameters 'value' and 'value' are incompatible.
+                            Type 'ToolbarItem[]' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(495,24): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(496,24): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/View.js(501,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
