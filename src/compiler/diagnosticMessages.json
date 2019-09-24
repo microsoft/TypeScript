@@ -2697,6 +2697,26 @@
         "category": "Error",
         "code": 2773
     },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2774
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

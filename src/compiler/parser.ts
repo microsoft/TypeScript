@@ -4688,6 +4688,7 @@ namespace ts {
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
+                noop(ts);
                 expression = parseMemberExpressionRest(expression, /*allowOptionalChain*/ true);
                 const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
 
@@ -4732,7 +4733,7 @@ namespace ts {
                     const propertyAccess = createNode(SyntaxKind.PropertyAccessExpression, expression.pos) as PropertyAccessExpression;
                     propertyAccess.expression = expression;
                     propertyAccess.questionDotToken = questionDotToken;
-                    propertyAccess.name = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false);
+                    propertyAccess.name = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Identifier_expected);
                     propertyAccess.flags |= NodeFlags.OptionalChain;
                     expression = finishNode(propertyAccess);
                 }
