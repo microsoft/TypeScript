@@ -5,8 +5,6 @@ import assert = require("assert");
 import { execSync } from "child_process";
 const args = process.argv.slice(2);
 
-
-
 /**
  * A minimal description for a parsed package.json object.
  */
@@ -14,13 +12,11 @@ interface PackageJson {
     name: string;
     bin: {};
     main: string;
+    scripts: {
+        prepare: string
+        postpublish: string
+    }
 }
-
-// function exec(path: string, args: string[] = []) {
-//     const cmdLine = ["node", path, ...args].join(" ");
-//     console.log(cmdLine);
-//     execSync(cmdLine);
-// }
 
 function main(): void {
     if (args.length < 1) {
@@ -35,9 +31,13 @@ function main(): void {
 
     // Remove the bin section from the current package
     delete packageJsonValue.bin;
+    // We won't be running eslint which would run before publishing
+    delete packageJsonValue.scripts.prepare;
+    // No infinite loops
+    delete packageJsonValue.scripts.postpublish;
 
     // Set the new name
-    packageJsonValue.name = "@orta/tsc";
+    packageJsonValue.name = "@orta/language-services";
 
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
 
@@ -54,13 +54,21 @@ function main(): void {
         "tsserverlibrary.d.ts"
     ];
 
-    // Get a link to the main dependency JS file, then remove the sibling JS files referenced above
+    // Get a link to the main dependency JS file
     const lib = join(dirname(packageJsonFilePath), packageJsonValue.main);
     const libPath = dirname(lib);
+
+    // Remove the sibling JS large files referenced above
     toRemove.forEach(file => {
         const path = join(libPath, file);
         if (existsSync(path)) unlinkSync(path);
     });
+
+    // Remove VS-specific localization keys
+    execSync("rm -rf loc", { cwd: dirname(packageJsonFilePath) });
+
+    // Remove runnable file reference
+    execSync("rm -rf bin", { cwd: dirname(packageJsonFilePath) });
 
     ///////////////////////////////////
 
@@ -72,11 +80,8 @@ function main(): void {
     const results =ts.transpileModule(source, {
         compilerOptions: { module: ts.ModuleKind.CommonJS }
     });
-    console.log(Object.keys(results));
 
     assert(results.outputText.trim() === "var x = 'string';", `Running typescript with ${packageJsonValue.name} did not return the expected results, got: ${results.outputText}`);
-
-
 }
 
 main();
