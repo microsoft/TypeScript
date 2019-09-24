@@ -14,12 +14,12 @@ namespace Test
 	export class Derived extends getClass<IFace>()
 >Derived : Derived
 >getClass<IFace>() : IFace
->getClass : <T>() => new () => T
+>getClass : <T extends object>() => new () => T
 	{
 	}
 
-	export function getClass<T>() : new() => T
->getClass : <T>() => new () => T
+	export function getClass<T extends object>() : new() => T
+>getClass : <T extends object>() => new () => T
 	{
 		return SomeClass as (new() => T);
 >SomeClass as (new() => T) : new () => T

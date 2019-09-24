@@ -5,7 +5,6 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,16)
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(12,17): error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
-  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(13,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17): error TS2558: Expected 0 type arguments, but got 1.
 
@@ -36,7 +35,6 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17
         var r12 = f(y);
                     ~
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         var r22 = f<number>(y);
                     ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

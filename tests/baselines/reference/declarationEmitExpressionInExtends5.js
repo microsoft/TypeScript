@@ -13,7 +13,7 @@ namespace Test
 	{
 	}
 
-	export function getClass<T>() : new() => T
+	export function getClass<T extends object>() : new() => T
 	{
 		return SomeClass as (new() => T);
 	}
@@ -66,6 +66,6 @@ declare namespace Test {
     const Derived_base: new () => IFace;
     export class Derived extends Derived_base {
     }
-    export function getClass<T>(): new () => T;
+    export function getClass<T extends object>(): new () => T;
     export {};
 }

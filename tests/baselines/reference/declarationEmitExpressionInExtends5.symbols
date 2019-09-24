@@ -20,7 +20,7 @@ namespace Test
 	{
 	}
 
-	export function getClass<T>() : new() => T
+	export function getClass<T extends object>() : new() => T
 >getClass : Symbol(getClass, Decl(declarationEmitExpressionInExtends5.ts, 12, 2))
 >T : Symbol(T, Decl(declarationEmitExpressionInExtends5.ts, 14, 26))
 >T : Symbol(T, Decl(declarationEmitExpressionInExtends5.ts, 14, 26))

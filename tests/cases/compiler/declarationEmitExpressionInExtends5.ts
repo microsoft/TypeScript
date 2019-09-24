@@ -13,7 +13,7 @@ namespace Test
 	{
 	}
 
-	export function getClass<T>() : new() => T
+	export function getClass<T extends object>() : new() => T
 	{
 		return SomeClass as (new() => T);
 	}

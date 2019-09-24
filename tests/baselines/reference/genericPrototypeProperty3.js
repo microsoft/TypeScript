@@ -1,6 +1,6 @@
 //// [genericPrototypeProperty3.ts]
 class BaseEvent {
-    target: {};
+    target: unknown;
 }
 
 class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}

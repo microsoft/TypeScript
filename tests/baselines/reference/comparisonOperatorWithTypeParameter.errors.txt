@@ -30,9 +30,41 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(38,15): error TS2367: This condition will always return 'true' since the types 'V' and 'T' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(39,15): error TS2367: This condition will always return 'false' since the types 'V' and 'T' have no overlap.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(40,15): error TS2367: This condition will always return 'true' since the types 'V' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(43,15): error TS2365: Operator '<' cannot be applied to types 'T' and '{}'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(44,15): error TS2365: Operator '>' cannot be applied to types 'T' and '{}'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(45,15): error TS2365: Operator '<=' cannot be applied to types 'T' and '{}'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(46,15): error TS2365: Operator '>=' cannot be applied to types 'T' and '{}'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(47,15): error TS2367: This condition will always return 'false' since the types 'T' and '{}' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(48,15): error TS2367: This condition will always return 'true' since the types 'T' and '{}' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(49,15): error TS2367: This condition will always return 'false' since the types 'T' and '{}' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(50,15): error TS2367: This condition will always return 'true' since the types 'T' and '{}' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(52,15): error TS2365: Operator '<' cannot be applied to types '{}' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(53,15): error TS2365: Operator '>' cannot be applied to types '{}' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(54,15): error TS2365: Operator '<=' cannot be applied to types '{}' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(55,15): error TS2365: Operator '>=' cannot be applied to types '{}' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(56,15): error TS2367: This condition will always return 'false' since the types '{}' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(57,15): error TS2367: This condition will always return 'true' since the types '{}' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(58,15): error TS2367: This condition will always return 'false' since the types '{}' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(59,15): error TS2367: This condition will always return 'true' since the types '{}' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(61,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(62,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(63,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(64,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'Object'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(65,15): error TS2367: This condition will always return 'false' since the types 'T' and 'Object' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(66,15): error TS2367: This condition will always return 'true' since the types 'T' and 'Object' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(67,15): error TS2367: This condition will always return 'false' since the types 'T' and 'Object' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(68,15): error TS2367: This condition will always return 'true' since the types 'T' and 'Object' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(70,15): error TS2365: Operator '<' cannot be applied to types 'Object' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(71,15): error TS2365: Operator '>' cannot be applied to types 'Object' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(72,15): error TS2365: Operator '<=' cannot be applied to types 'Object' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(73,15): error TS2365: Operator '>=' cannot be applied to types 'Object' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(74,15): error TS2367: This condition will always return 'false' since the types 'Object' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(75,15): error TS2367: This condition will always return 'true' since the types 'Object' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(76,15): error TS2367: This condition will always return 'false' since the types 'Object' and 'T' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(77,15): error TS2367: This condition will always return 'true' since the types 'Object' and 'T' have no overlap.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts (32 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts (64 errors) ====
     var a: {};
     var b: Object;
     
@@ -140,38 +172,102 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     
         // ok
         var re1 = t < a;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and '{}'.
         var re2 = t > a;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and '{}'.
         var re3 = t <= a;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and '{}'.
         var re4 = t >= a;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and '{}'.
         var re5 = t == a;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'T' and '{}' have no overlap.
         var re6 = t != a;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'T' and '{}' have no overlap.
         var re7 = t === a;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'T' and '{}' have no overlap.
         var re8 = t !== a;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'T' and '{}' have no overlap.
     
         var rf1 = a < t;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{}' and 'T'.
         var rf2 = a > t;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{}' and 'T'.
         var rf3 = a <= t;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{}' and 'T'.
         var rf4 = a >= t;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{}' and 'T'.
         var rf5 = a == t;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types '{}' and 'T' have no overlap.
         var rf6 = a != t;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types '{}' and 'T' have no overlap.
         var rf7 = a === t;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types '{}' and 'T' have no overlap.
         var rf8 = a !== t;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types '{}' and 'T' have no overlap.
     
         var rg1 = t < b;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'Object'.
         var rg2 = t > b;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'Object'.
         var rg3 = t <= b;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'Object'.
         var rg4 = t >= b;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'Object'.
         var rg5 = t == b;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'T' and 'Object' have no overlap.
         var rg6 = t != b;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'T' and 'Object' have no overlap.
         var rg7 = t === b;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'T' and 'Object' have no overlap.
         var rg8 = t !== b;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'T' and 'Object' have no overlap.
     
         var rh1 = b < t;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'Object' and 'T'.
         var rh2 = b > t;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'Object' and 'T'.
         var rh3 = b <= t;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'Object' and 'T'.
         var rh4 = b >= t;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'Object' and 'T'.
         var rh5 = b == t;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'Object' and 'T' have no overlap.
         var rh6 = b != t;
+                  ~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'Object' and 'T' have no overlap.
         var rh7 = b === t;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'Object' and 'T' have no overlap.
         var rh8 = b !== t;
+                  ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'Object' and 'T' have no overlap.
     }
