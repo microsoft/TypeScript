@@ -52,16 +52,7 @@ namespace ts {
             filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
     }
 
-    export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
-            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
-            if (firstOption === "build" || firstOption === "b") {
-                return performBuild(args.slice(1));
-            }
-        }
-
-        const commandLine = parseCommandLine(args);
-
+    function executeCommandLineWorker(commandLine: ParsedCommandLine) {
         if (commandLine.options.build) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -171,6 +162,24 @@ namespace ts {
             else {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
+        }
+    }
+
+    export function executeCommandLine(args: string[]): void {
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
+            }
+        }
+
+        const commandLine = parseCommandLine(args);
+
+        if (commandLine.options.generateCPUProfile && sys.enableCPUProfiler) {
+            sys.enableCPUProfiler(commandLine.options.generateCPUProfile, () => executeCommandLineWorker(commandLine));
+        }
+        else {
+            executeCommandLineWorker(commandLine);
         }
     }
 

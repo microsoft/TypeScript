@@ -142,6 +142,14 @@ namespace ts {
             description: Diagnostics.Show_verbose_diagnostic_information
         },
         {
+            name: "generateCPUProfile",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.FILE,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Show_verbose_diagnostic_information
+        },
+        {
             name: "incremental",
             shortName: "i",
             type: "boolean",

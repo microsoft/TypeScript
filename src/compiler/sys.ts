@@ -667,6 +667,8 @@ namespace ts {
         createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): void;
+        /*@internal*/ disableCPUProfiler?(continuation: () => void): void;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -753,6 +755,8 @@ namespace ts {
             catch {
                 _crypto = undefined;
             }
+            let activeSession: import('inspector').Session | undefined;
+            let profilePath = "./profile.cpuprofile";
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -841,8 +845,10 @@ namespace ts {
                     return 0;
                 },
                 exit(exitCode?: number): void {
-                    process.exit(exitCode);
+                    disableCPUProfiler(() => process.exit(exitCode));
                 },
+                enableCPUProfiler,
+                disableCPUProfiler,
                 realpath,
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
@@ -868,6 +874,38 @@ namespace ts {
                 base64encode: input => bufferFrom(input).toString("base64"),
             };
             return nodeSystem;
+
+            /**
+             * Uses the builtin inspector APIs to capture a CPU profile
+             * See https://nodejs.org/api/inspector.html#inspector_example_usage for details
+             */
+            function enableCPUProfiler(path: string, cb: () => void) {
+                const inspector: typeof import('inspector') = require('inspector');
+                const session = new inspector.Session();
+                session.connect();
+
+                session.post('Profiler.enable', () => {
+                    session.post('Profiler.start', () => {
+                    activeSession = session;
+                    profilePath = path;
+                    cb();
+                    });
+                });
+            }
+
+            function disableCPUProfiler(cb: () => void) {
+                if (activeSession) {
+                    activeSession.post('Profiler.stop', (err, { profile }) => {
+                        if (!err) {
+                            _fs.writeFileSync(profilePath, JSON.stringify(profile));
+                        }
+                        cb();
+                    });
+                }
+                else {
+                    cb();
+                }
+            }
 
             function bufferFrom(input: string, encoding?: string): Buffer {
                 // See https://github.com/Microsoft/TypeScript/issues/25652
