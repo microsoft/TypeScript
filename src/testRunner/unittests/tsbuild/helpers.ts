@@ -113,9 +113,11 @@ interface Symbol {
 }
 `;
 
+    /**
+     * Load project from disk into /src folder
+     */
     export function loadProjectFromDisk(
         root: string,
-        time?: vfs.FileSystemOptions["time"],
         libContentToAppend?: string
     ): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
@@ -125,22 +127,22 @@ interface Symbol {
             },
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
-            time
         });
         addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
     }
 
+    /**
+     * All the files must be in /src
+     */
     export function loadProjectFromFiles(
         files: vfs.FileSet,
-        time?: vfs.FileSystemOptions["time"],
         libContentToAppend?: string
     ): vfs.FileSystem {
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files,
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
-            time
         });
         addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
@@ -150,6 +152,26 @@ interface Symbol {
         fs.mkdirSync("/lib");
         fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
         fs.makeReadonly();
+    }
+
+    /**
+     * Gets the FS mountuing existing fs's /src and /lib folder
+     */
+    export function getFsWithTime(baseFs: vfs.FileSystem) {
+        const { time, tick } = getTime();
+        const host = new fakes.System(baseFs) as any as vfs.FileSystemResolverHost;
+        host.getWorkspaceRoot = notImplemented;
+        const resolver = vfs.createResolver(host);
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files: {
+                ["/src"]: new vfs.Mount("/src", resolver),
+                ["/lib"]: new vfs.Mount("/lib", resolver)
+            },
+            cwd: "/",
+            meta: { defaultLibLocation: "/lib" },
+            time
+        });
+        return { fs, time, tick };
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -257,22 +279,24 @@ interface Symbol {
     }
 
     export interface VerifyTsBuildInput extends TscCompile {
-        tick: () => void;
         incrementalScenarios: TscIncremental[];
     }
 
     export function verifyTscIncrementalEdits({
-        subScenario, fs, tick, scenario, commandLineArgs,
+        subScenario, fs, scenario, commandLineArgs,
         baselineSourceMap, modifyFs, baselineReadFileCalls,
         incrementalScenarios
     }: VerifyTsBuildInput) {
         describe(`tsc --b ${scenario}:: ${subScenario}`, () => {
+            let tick: () => void;
             let sys: TscCompileSystem;
             before(() => {
+                let baseFs: vfs.FileSystem;
+                ({ fs: baseFs, tick } = getFsWithTime(fs()));
                 sys = tscCompile({
                     scenario,
                     subScenario,
-                    fs,
+                    fs: () => baseFs.makeReadonly(),
                     commandLineArgs,
                     modifyFs: fs => {
                         if (modifyFs) modifyFs(fs);
@@ -285,6 +309,7 @@ interface Symbol {
             });
             after(() => {
                 sys = undefined!;
+                tick = undefined!;
             });
             describe("initialBuild", () => {
                 verifyTscBaseline(() => sys);

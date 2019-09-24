@@ -1,19 +1,19 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src/tests --verbose
-4:27:00 PM - Projects in this build: 
+4:12:00 PM - Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-4:27:00 PM - Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
+4:12:00 PM - Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
 
-4:27:00 PM - Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/decls/index.d.ts' does not exist
+4:12:00 PM - Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/decls/index.d.ts' does not exist
 
-4:27:00 PM - Building project '/src/logic/tsconfig.json'...
+4:12:00 PM - Building project '/src/logic/tsconfig.json'...
 
-4:27:00 PM - Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/logic'
+4:12:00 PM - Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/logic'
 
-4:27:00 PM - Building project '/src/tests/tsconfig.json'...
+4:12:00 PM - Building project '/src/tests/tsconfig.json'...
 
 exitCode:: 0
 readFiles:: {

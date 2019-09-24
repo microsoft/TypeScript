@@ -56,7 +56,6 @@ namespace ts {
             ]
         ];
         const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as any as [Sources, Sources, Sources];
-        const { time, tick } = getTime();
         let expectedOutputFiles = [
             ...outputFiles[project.first],
             ...outputFiles[project.second],
@@ -72,7 +71,7 @@ namespace ts {
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
         before(() => {
-            outFileFs = loadProjectFromDisk("tests/projects/outfile-concat", time);
+            outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
         });
         after(() => {
             outFileFs = undefined!;
@@ -123,7 +122,6 @@ namespace ts {
             const input: VerifyTsBuildInput = {
                 subScenario,
                 fs: () => outFileFs,
-                tick,
                 scenario: "outfile-concat",
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
                 baselineSourceMap: true,
@@ -191,7 +189,7 @@ namespace ts {
         });
 
         it("verify buildInfo absence results in new build", () => {
-            const fs = outFileFs.shadow();
+            const { fs, tick } = getFsWithTime(outFileFs);
             const expectedOutputs = [
                 ...outputFiles[project.first],
                 ...outputFiles[project.second],
@@ -205,7 +203,11 @@ namespace ts {
             verifyOutputsPresent(fs, expectedOutputs);
             // Delete bundle info
             host.clearDiagnostics();
+
+            tick();
             host.deleteFile(outputFiles[project.first][ext.buildinfo]);
+            tick();
+
             builder = createSolutionBuilder(host);
             builder.build();
             host.assertDiagnosticMessages(
@@ -232,14 +234,16 @@ namespace ts {
         });
 
         it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
-            const fs = outFileFs.shadow();
+            const { fs, tick } = getFsWithTime(outFileFs);
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host);
             builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             host.clearDiagnostics();
+            tick();
             builder = createSolutionBuilder(host);
             changeCompilerVersion(host);
+            tick();
             builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
@@ -253,7 +257,7 @@ namespace ts {
         });
 
         it("rebuilds completely when command line incremental flag changes between non dts changes", () => {
-            const fs = outFileFs.shadow();
+            const { fs, tick } = getFsWithTime(outFileFs);
             // Make non composite third project
             replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
 

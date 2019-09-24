@@ -1,10 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: on demo project", () => {
         let projFs: vfs.FileSystem;
-        const { time } = getTime();
-
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/demo", time);
+            projFs = loadProjectFromDisk("tests/projects/demo");
         });
 
         after(() => {

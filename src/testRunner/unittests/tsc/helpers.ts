@@ -228,7 +228,10 @@ namespace ts {
             describe(input.subScenario, () => {
                 let sys: TscCompileSystem;
                 before(() => {
-                    sys = tscCompile(input);
+                    sys = tscCompile({
+                        ...input,
+                        fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+                    });
                 });
                 after(() => {
                     sys = undefined!;

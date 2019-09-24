@@ -1,14 +1,13 @@
 namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         const testsOutputs = ["/src/tests/index.js", "/src/tests/index.d.ts", "/src/tests/tsconfig.tsbuildinfo"];
         const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts", "/src/logic/tsconfig.tsbuildinfo"];
         const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map", "/src/core/tsconfig.tsbuildinfo"];
         const allExpectedOutputs = [...testsOutputs, ...logicOutputs, ...coreOutputs];
 
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/sample1", time);
+            projFs = loadProjectFromDisk("tests/projects/sample1");
         });
 
         after(() => {
@@ -93,7 +92,7 @@ namespace ts {
             });
 
             it("indicates that it would skip builds during a dry build", () => {
-                const fs = projFs.shadow();
+                const { fs, tick } = getFsWithTime(projFs);
                 const host = fakes.SolutionBuilderHost.create(fs);
 
                 let builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
@@ -160,7 +159,7 @@ namespace ts {
 
         describe("force builds", () => {
             it("always builds under --force", () => {
-                const fs = projFs.shadow();
+                const { fs, time, tick } = getFsWithTime(projFs);
                 const host = fakes.SolutionBuilderHost.create(fs);
 
                 let builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: true, verbose: false });
@@ -187,7 +186,7 @@ namespace ts {
 
         describe("can detect when and what to rebuild", () => {
             function initializeWithBuild(opts?: BuildOptions) {
-                const fs = projFs.shadow();
+                const { fs, tick } = getFsWithTime(projFs);
                 const host = fakes.SolutionBuilderHost.create(fs);
                 let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.build();
@@ -273,7 +272,7 @@ namespace ts {
             });
 
             it("does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version", () => {
-                const fs = projFs.shadow();
+                const { fs, tick } = getFsWithTime(projFs);
                 const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, createAbstractBuilder);
                 let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.build();
@@ -329,7 +328,7 @@ namespace ts {
             });
 
             it("rebuilds when extended config file changes", () => {
-                const fs = projFs.shadow();
+                const { fs, tick } = getFsWithTime(projFs);
                 fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
                 replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
                 const host = fakes.SolutionBuilderHost.create(fs);
@@ -462,7 +461,7 @@ namespace ts {
 
         describe("project invalidation", () => {
             it("invalidates projects correctly", () => {
-                const fs = projFs.shadow();
+                const { fs, time, tick } = getFsWithTime(projFs);
                 const host = fakes.SolutionBuilderHost.create(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
 
@@ -571,7 +570,6 @@ export class cNew {}`);
             verifyTscIncrementalEdits({
                 subScenario: "sample",
                 fs: () => projFs,
-                tick,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 baselineSourceMap: true,
@@ -610,7 +608,6 @@ class someClass { }`),
             verifyTscIncrementalEdits({
                 subScenario: "when declaration option changes",
                 fs: () => projFs,
-                tick,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/core", "--verbose"],
                 modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
@@ -628,7 +625,6 @@ class someClass { }`),
             verifyTscIncrementalEdits({
                 subScenario: "when target option changes",
                 fs: () => projFs,
-                tick,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/core", "--verbose"],
                 modifyFs: fs => {
@@ -655,7 +651,6 @@ class someClass { }`),
             verifyTscIncrementalEdits({
                 subScenario: "when module option changes",
                 fs: () => projFs,
-                tick,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/core", "--verbose"],
                 modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
@@ -673,7 +668,6 @@ class someClass { }`),
             verifyTscIncrementalEdits({
                 subScenario: "when esModuleInterop option changes",
                 fs: () => projFs,
-                tick,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.json", `{

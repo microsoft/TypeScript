@@ -1,25 +1,25 @@
 //// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
 /lib/tsc --b /src/third --verbose
-6:56:00 PM - Projects in this build: 
+4:12:00 PM - Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-6:56:00 PM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+4:12:00 PM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-6:56:00 PM - Building project '/src/first/tsconfig.json'...
+4:12:00 PM - Building project '/src/first/tsconfig.json'...
 
-6:56:00 PM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+4:12:00 PM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-6:56:00 PM - Updating output of project '/src/second/tsconfig.json'...
+4:12:00 PM - Updating output of project '/src/second/tsconfig.json'...
 
-6:56:00 PM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+4:12:00 PM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
 
-6:56:00 PM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+4:12:00 PM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-6:56:00 PM - Updating output of project '/src/third/tsconfig.json'...
+4:12:00 PM - Updating output of project '/src/third/tsconfig.json'...
 
-6:56:00 PM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+4:12:00 PM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: 0
 readFiles:: {
