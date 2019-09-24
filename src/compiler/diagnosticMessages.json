@@ -4003,7 +4003,7 @@
         "category": "Message",
         "code": 6220
     },
-    "Disable using source of project reference redirect files.": {
+    "Disable use of source files instead of declaration files from referenced projects.": {
         "category": "Message",
         "code": 6221
     },

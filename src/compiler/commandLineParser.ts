@@ -776,7 +776,7 @@ namespace ts {
             name: "disableSourceOfProjectReferenceRedirect",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Disable_using_source_of_project_reference_redirect_files
+            description: Diagnostics.Disable_use_of_source_files_instead_of_declaration_files_from_referenced_projects
         },
         {
             name: "noImplicitUseStrict",
