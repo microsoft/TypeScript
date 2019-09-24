@@ -29,4 +29,4 @@ exports["default"] = ConstEnum_1.MyConstEnum;
 "use strict";
 exports.__esModule = true;
 var ConstEnum_1 = require("./ConstEnum");
-exports["default"] = ConstEnum_1.MyConstEnum;
+Object.defineProperty(exports, "default", { enumerable: true, get: () => ConstEnum_1.MyConstEnum });

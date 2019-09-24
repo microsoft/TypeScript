@@ -63,7 +63,12 @@ exports.prerendered3 = renderer_1["default"].createElement("h", null);
 //// [index.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
+      enumerable: true,
+      get: function () {
+        return m[p];
+      }
+    });
 }
 exports.__esModule = true;
 /** @jsx dom */

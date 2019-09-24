@@ -998,8 +998,8 @@ namespace ts {
                         setOriginalNode(
                             setTextRange(
                                 createExpressionStatement(
-                                    createExportExpression(getExportName(specifier), exportedValue)
-                                ),
+                                    createExportExpression(getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    ),
                                 specifier),
                             specifier
                         )
@@ -1310,7 +1310,7 @@ namespace ts {
 
                     case SyntaxKind.NamedImports:
                         for (const importBinding of namedBindings.elements) {
-                            statements = appendExportsOfDeclaration(statements, importBinding);
+                            statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
                         }
 
                         break;
@@ -1420,12 +1420,12 @@ namespace ts {
          * appended.
          * @param decl The declaration to export.
          */
-        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
+        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
             const name = getDeclarationName(decl);
             const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
-                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);
+                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
                 }
             }
             return statements;
@@ -1443,8 +1443,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments Whether to allow comments on the export.
          */
-        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
+        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
             return statements;
         }
 
@@ -1485,8 +1485,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
-        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean) {
-            const statement = setTextRange(createExpressionStatement(createExportExpression(name, value)), location);
+        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+            const statement = setTextRange(createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);
@@ -1502,9 +1502,30 @@ namespace ts {
          * @param value The exported value.
          * @param location The location to use for source maps and comments for the export.
          */
-        function createExportExpression(name: Identifier, value: Expression, location?: TextRange) {
+        function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
             return setTextRange(
-                createAssignment(
+                liveBinding ? createCall(
+                    createPropertyAccess(
+                        createIdentifier("Object"),
+                        "defineProperty"
+                    ),
+                    /*typeArguments*/ undefined,
+                    [
+                        createIdentifier("exports"),
+                        createLiteral(name),
+                        createObjectLiteral([
+                            createPropertyAssignment("enumerable", createLiteral(/*value*/ true)),
+                            createPropertyAssignment("get", createArrowFunction(
+                                /*modifiers*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ [],
+                                /*type*/ undefined,
+                                /*equalsGreaterThanToken*/ undefined,
+                                value
+                            ))
+                        ])
+                    ]
+                ) : createAssignment(
                     createPropertyAccess(
                         createIdentifier("exports"),
                         getSynthesizedClone(name)
@@ -1786,7 +1807,12 @@ namespace ts {
         scoped: true,
         text: `
             function __export(m) {
-                for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+                for (var p in m) if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
+                  enumerable: true,
+                  get: function () {
+                    return m[p];
+                  }
+                });
             }`
     };
 

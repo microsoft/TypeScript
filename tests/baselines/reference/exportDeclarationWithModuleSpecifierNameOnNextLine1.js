@@ -27,7 +27,7 @@ exports.x = "x";
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-exports.x = t1_1.x;
+Object.defineProperty(exports, "x", { enumerable: true, get: () => t1_1.x });
 //// [t3.js]
 "use strict";
 exports.__esModule = true;
@@ -35,9 +35,9 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-exports.a = t1_1.x;
+Object.defineProperty(exports, "a", { enumerable: true, get: () => t1_1.x });
 //// [t5.js]
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-exports.a = t1_1.x;
+Object.defineProperty(exports, "a", { enumerable: true, get: () => t1_1.x });

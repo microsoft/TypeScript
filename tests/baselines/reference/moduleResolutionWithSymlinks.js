@@ -54,7 +54,7 @@ exports.MyClass = MyClass;
 "use strict";
 exports.__esModule = true;
 var library_a_1 = require("library-a");
-exports.MyClass2 = library_a_1.MyClass;
+Object.defineProperty(exports, "MyClass2", { enumerable: true, get: () => library_a_1.MyClass });
 //// [/src/app.js]
 "use strict";
 exports.__esModule = true;

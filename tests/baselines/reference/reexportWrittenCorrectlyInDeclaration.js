@@ -41,9 +41,9 @@ exports.ThingB = ThingB;
 "use strict";
 exports.__esModule = true;
 var ThingA_1 = require("./ThingA");
-exports.ThingA = ThingA_1.ThingA;
+Object.defineProperty(exports, "ThingA", { enumerable: true, get: () => ThingA_1.ThingA });
 var ThingB_1 = require("./ThingB");
-exports.ThingB = ThingB_1.ThingB;
+Object.defineProperty(exports, "ThingB", { enumerable: true, get: () => ThingB_1.ThingB });
 //// [Test.js]
 "use strict";
 exports.__esModule = true;

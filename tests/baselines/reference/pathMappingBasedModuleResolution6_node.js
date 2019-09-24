@@ -15,7 +15,7 @@ export {x} from "../file2";
 "use strict";
 exports.__esModule = true;
 var file2_1 = require("../file2");
-exports.x = file2_1.x;
+Object.defineProperty(exports, "x", { enumerable: true, get: () => file2_1.x });
 //// [file1.js]
 "use strict";
 exports.__esModule = true;

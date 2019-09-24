@@ -26,11 +26,16 @@ var Animals;
 "use strict";
 exports.__esModule = true;
 var c_1 = require("./c");
-exports.Animals = c_1.Animals;
+Object.defineProperty(exports, "Animals", { enumerable: true, get: () => c_1.Animals });
 //// [a.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
+      enumerable: true,
+      get: function () {
+        return m[p];
+      }
+    });
 }
 exports.__esModule = true;
 __export(require("./b"));
