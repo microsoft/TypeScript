@@ -134,9 +134,9 @@ Standard output:
 @uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
+@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
 @uifabric/utilities:  PASS  src/EventGroup.test.ts
 @uifabric/utilities:  PASS  src/array.test.ts
-@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
 @uifabric/utilities:  PASS  src/math.test.ts
 @uifabric/utilities:  PASS  src/warn/warn.test.ts
 @uifabric/utilities:  PASS  src/dom/dom.test.ts

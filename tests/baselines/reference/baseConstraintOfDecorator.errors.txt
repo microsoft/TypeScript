@@ -1,11 +1,10 @@
 tests/cases/compiler/baseConstraintOfDecorator.ts(2,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
   'typeof decoratorFunc' is assignable to the constraint of type 'TFunction', but 'TFunction' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/compiler/baseConstraintOfDecorator.ts(2,40): error TS2507: Type 'TFunction' is not a constructor function type.
-tests/cases/compiler/baseConstraintOfDecorator.ts(12,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
-tests/cases/compiler/baseConstraintOfDecorator.ts(12,40): error TS2507: Type 'TFunction' is not a constructor function type.
+tests/cases/compiler/baseConstraintOfDecorator.ts(12,18): error TS2545: A mixin class must have a constructor with a single rest parameter of type 'any[]'.
 
 
-==== tests/cases/compiler/baseConstraintOfDecorator.ts (4 errors) ====
+==== tests/cases/compiler/baseConstraintOfDecorator.ts (3 errors) ====
     export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
         return class decoratorFunc extends superClass {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,20 +28,12 @@ tests/cases/compiler/baseConstraintOfDecorator.ts(12,40): error TS2507: Type 'TF
     class MyClass { private x; }
     export function classExtender2<TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
         return class decoratorFunc extends superClass {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                           ~~~~~~~~~~
-!!! error TS2507: Type 'TFunction' is not a constructor function type.
-!!! related TS2735 tests/cases/compiler/baseConstraintOfDecorator.ts:11:32: Did you mean for 'TFunction' to be constrained to type 'new (...args: any[]) => MyClass'?
+                     ~~~~~~~~~~~~~
+!!! error TS2545: A mixin class must have a constructor with a single rest parameter of type 'any[]'.
             constructor(...args: any[]) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 super(...args);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 _instanceModifier(this, args);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
         };
-    ~~~~~~
-!!! error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
     }
     
