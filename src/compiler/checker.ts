@@ -524,6 +524,9 @@ namespace ts {
             },
             getApparentType,
             getUnionType,
+            isTypeAssignableTo: (source, target) => {
+                return isTypeAssignableTo(source, target);
+            },
             createAnonymousType,
             createSignature,
             createSymbol,
@@ -33378,8 +33381,8 @@ namespace ts {
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
                 if (prop.modifiers) {
-                    const modifiers = prop.modifiers;
-                    for (const mod of modifiers) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                    for (const mod of prop.modifiers!) { // TODO: GH#19955
                         if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                             grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
                         }
