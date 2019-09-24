@@ -1971,7 +1971,6 @@ namespace ts {
         const notAccessible = () => { typeIsAccessible = false; };
         const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
             trackSymbol: (symbol, declaration, meaning) => {
-                // TODO: GH#18217
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             },
             reportInaccessibleThisError: notAccessible,

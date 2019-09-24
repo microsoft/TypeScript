@@ -18,21 +18,21 @@ namespace ts {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParentPointers(node, node.body);
         }
-        return node.body ? getModuleInstanceStateWorker(node.body, visited) : ModuleInstanceState.Instantiated;
+        return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
+    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
         const nodeId = "" + getNodeId(node);
         if (visited.has(nodeId)) {
             return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
         }
         visited.set(nodeId, undefined);
-        const result = getModuleInstanceStateWorkerWorker(node, visited);
+        const result = getModuleInstanceStateWorker(node, visited);
         visited.set(nodeId, result);
         return result;
     }
 
-    function getModuleInstanceStateWorkerWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -72,7 +72,7 @@ namespace ts {
             case SyntaxKind.ModuleBlock: {
                 let state = ModuleInstanceState.NonInstantiated;
                 forEachChild(node, n => {
-                    const childState = getModuleInstanceStateWorker(n, visited);
+                    const childState = getModuleInstanceStateCached(n, visited);
                     switch (childState) {
                         case ModuleInstanceState.NonInstantiated:
                             // child is non-instantiated - continue searching
@@ -115,7 +115,7 @@ namespace ts {
                         if (!statement.parent) {
                             setParentPointers(p, statement);
                         }
-                        const state = getModuleInstanceStateWorker(statement, visited);
+                        const state = getModuleInstanceStateCached(statement, visited);
                         if (found === undefined || state > found) {
                             found = state;
                         }
