@@ -1094,7 +1094,7 @@ namespace ts {
             : node;
     }
 
-    export function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined) {
+    export function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
         const node = <CallChain>createSynthesizedNode(SyntaxKind.CallExpression);
         node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
@@ -1104,7 +1104,7 @@ namespace ts {
         return node;
     }
 
-    export function updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>) {
+    export function updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
         Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a CallExpression using updateCallChain. Use updateCall instead.");
         return node.expression !== expression
             || node.questionDotToken !== questionDotToken
