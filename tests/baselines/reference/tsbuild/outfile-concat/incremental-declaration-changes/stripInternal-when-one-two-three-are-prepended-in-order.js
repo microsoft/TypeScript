@@ -1,21 +1,21 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src/third --verbose
-4:04:00 PM - Projects in this build: 
+12:04:00 AM - Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-4:04:00 PM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-4:04:00 PM - Building project '/src/first/tsconfig.json'...
+12:04:00 AM - Building project '/src/first/tsconfig.json'...
 
-4:04:00 PM - Project 'src/second/tsconfig.json' is out of date because oldest output 'src/2/second-output.js' is older than newest input 'src/first'
+12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because oldest output 'src/2/second-output.js' is older than newest input 'src/first'
 
-4:04:00 PM - Building project '/src/second/tsconfig.json'...
+12:04:00 AM - Building project '/src/second/tsconfig.json'...
 
-4:04:00 PM - Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/second'
+12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/second'
 
-4:04:00 PM - Building project '/src/third/tsconfig.json'...
+12:04:00 AM - Building project '/src/third/tsconfig.json'...
 
 exitCode:: 0
 readFiles:: {

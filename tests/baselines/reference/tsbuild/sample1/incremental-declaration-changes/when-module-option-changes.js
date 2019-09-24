@@ -1,11 +1,11 @@
 //// [/lib/incremental-declaration-changesOutput.txt]
 /lib/tsc --b /src/core --verbose
-4:04:00 PM - Projects in this build: 
+12:04:00 AM - Projects in this build: 
     * src/core/tsconfig.json
 
-4:04:00 PM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
 
-4:04:00 PM - Building project '/src/core/tsconfig.json'...
+12:04:00 AM - Building project '/src/core/tsconfig.json'...
 
 exitCode:: 0
 

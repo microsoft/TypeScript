@@ -1,21 +1,21 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --b /src/tests --verbose
-4:00:00 PM - Projects in this build: 
+12:00:00 AM - Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-4:00:00 PM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+12:00:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-4:00:00 PM - Building project '/src/core/tsconfig.json'...
+12:00:00 AM - Building project '/src/core/tsconfig.json'...
 
-4:00:00 PM - Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
+12:00:00 AM - Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
 
-4:00:00 PM - Building project '/src/logic/tsconfig.json'...
+12:00:00 AM - Building project '/src/logic/tsconfig.json'...
 
-4:00:00 PM - Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
+12:00:00 AM - Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
 
-4:00:00 PM - Building project '/src/tests/tsconfig.json'...
+12:00:00 AM - Building project '/src/tests/tsconfig.json'...
 
 exitCode:: 0
 readFiles:: {
