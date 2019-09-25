@@ -1,3 +1,17 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/tsconfig.json --verbose
+12:04:00 AM - Projects in this build: 
+    * src/tsconfig.json
+
+12:04:00 AM - Project 'src/tsconfig.json' is out of date because oldest output 'src/src/hkt.js' is older than newest input 'src/src/main.ts'
+
+12:04:00 AM - Building project '/src/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/src/main.js]
 "use strict";
 exports.__esModule = true;
