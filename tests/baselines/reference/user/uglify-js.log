@@ -31,11 +31,10 @@ node_modules/uglify-js/lib/compress.js(1654,38): error TS2339: Property 'parent'
 node_modules/uglify-js/lib/compress.js(1670,39): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1767,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1798,41): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(1920,49): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[number, number, ...never[]]'.
-  Type 'number[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
+node_modules/uglify-js/lib/compress.js(1920,49): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[number, number, ...never[]]'.
+  Type 'any[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
 node_modules/uglify-js/lib/compress.js(2251,59): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2289,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[number, number, ...never[]]'.
-  Type 'any[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
 node_modules/uglify-js/lib/compress.js(2437,34): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3206,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/uglify-js/lib/compress.js(3207,25): error TS2531: Object is possibly 'null'.

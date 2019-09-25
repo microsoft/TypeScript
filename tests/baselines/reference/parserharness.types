@@ -4775,9 +4775,9 @@ module Harness {
 >lines = lines.concat(v.file.lines) : any[]
 >lines : any[]
 >lines.concat(v.file.lines) : any[]
->lines.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>lines.concat : { (...items: any[]): any[]; <U>(...items: (U | ConcatArray<U>)[]): any[]; }
 >lines : any[]
->concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: any[]): any[]; <U>(...items: (U | ConcatArray<U>)[]): any[]; }
 >v.file.lines : string[]
 >v.file : WriterAggregator
 >v : { filename: string; file: WriterAggregator; }
