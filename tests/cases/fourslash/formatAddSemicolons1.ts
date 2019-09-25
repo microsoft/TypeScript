@@ -14,6 +14,8 @@
 ////    ["two"]
 ////    three: string
 ////    m() { }
+////    ;["three"] = {}
+////    ;["four"]
 ////}
 ////enum E {
 ////    C
@@ -39,6 +41,8 @@ class C {
     ["two"];
     three: string;
     m() { }
+    ;["three"] = {}
+        ;["four"];
 }
 enum E {
     C
