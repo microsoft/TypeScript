@@ -1,7 +1,7 @@
 === tests/cases/compiler/arrayConcat2.ts ===
 var a: string[] = [];
 >a : string[]
->[] : undefined[]
+>[] : never[]
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]
@@ -29,4 +29,25 @@ b.concat('hello');
 >b : string[]
 >concat : { (...items: (string | ConcatArray<string>)[]): string[]; <U>(...items: (U | ConcatArray<U>)[]): (string | U)[]; }
 >'hello' : "hello"
+
+// #26378
+
+[""].concat([1]);
+>[""].concat([1]) : (string | number)[]
+>[""].concat : { (...items: (string | ConcatArray<string>)[]): string[]; <U>(...items: (U | ConcatArray<U>)[]): (string | U)[]; }
+>[""] : string[]
+>"" : ""
+>concat : { (...items: (string | ConcatArray<string>)[]): string[]; <U>(...items: (U | ConcatArray<U>)[]): (string | U)[]; }
+>[1] : number[]
+>1 : 1
+
+// #26976
+
+[].concat([""]);
+>[].concat([""]) : string[]
+>[].concat : { (...items: ConcatArray<never>[]): never[]; <U>(...items: (U | ConcatArray<U>)[]): U[]; }
+>[] : never[]
+>concat : { (...items: ConcatArray<never>[]): never[]; <U>(...items: (U | ConcatArray<U>)[]): U[]; }
+>[""] : string[]
+>"" : ""
 
