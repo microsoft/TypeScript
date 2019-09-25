@@ -154,9 +154,79 @@ function f42(x: number) {
     x;  // Unreachable
 }
 
+// Repro from #33582
+
+export interface Component<T extends object = any> {
+	attrName?: string;
+	data: T;
+	dependencies?: string[];
+	el: any;
+	id: string;
+	multiple?: boolean;
+	name: string;
+	schema: unknown;
+	system: any;
+
+	init(data?: T): void;
+	pause(): void;
+	play(): void;
+	remove(): void;
+	tick?(time: number, timeDelta: number): void;
+	update(oldData: T): void;
+	updateSchema?(): void;
+
+	extendSchema(update: unknown): void;
+	flushToDOM(): void;
+}
+
+export interface ComponentConstructor<T extends object> {
+	new (el: unknown, attrValue: string, id: string): T & Component;
+	prototype: T & {
+		name: string;
+		system: unknown;
+		play(): void;
+		pause(): void;
+	};
+}
+
+declare function registerComponent<T extends object>(
+    name: string,
+    component: ComponentDefinition<T>
+): ComponentConstructor<T>;
+
+export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
+
+const Component = registerComponent('test-component', {
+	schema: {
+		myProperty: {
+			default: [],
+			parse() {
+				return [true];
+			}
+		},
+		string: { type: 'string' },
+		num: 0
+	},
+	init() {
+		this.data.num = 0;
+		this.el.setAttribute('custom-attribute', 'custom-value');
+	},
+	update() {},
+	tick() {},
+	remove() {},
+	pause() {},
+	play() {},
+
+	multiply(f: number) {
+		// Reference to system because both were registered with the same name.
+		return f * this.data.num * this.system!.data.counter;
+	}
+});
+
 
 //// [neverReturningFunctions1.js]
 "use strict";
+exports.__esModule = true;
 function fail(message) {
     throw new Error(message);
 }
@@ -305,33 +375,61 @@ function f42(x) {
     }
     x; // Unreachable
 }
+var Component = registerComponent('test-component', {
+    schema: {
+        myProperty: {
+            "default": [],
+            parse: function () {
+                return [true];
+            }
+        },
+        string: { type: 'string' },
+        num: 0
+    },
+    init: function () {
+        this.data.num = 0;
+        this.el.setAttribute('custom-attribute', 'custom-value');
+    },
+    update: function () { },
+    tick: function () { },
+    remove: function () { },
+    pause: function () { },
+    play: function () { },
+    multiply: function (f) {
+        // Reference to system because both were registered with the same name.
+        return f * this.data.num * this.system.data.counter;
+    }
+});
 
 
 //// [neverReturningFunctions1.d.ts]
-declare function fail(message?: string): never;
-declare function f01(x: string | undefined): void;
-declare function f02(x: number): number;
-declare function f03(x: string): void;
-declare function f11(x: string | undefined, fail: (message?: string) => never): void;
-declare function f12(x: number, fail: (message?: string) => never): number;
-declare function f13(x: string, fail: (message?: string) => never): void;
-declare namespace Debug {
-    function fail(message?: string): never;
+export interface Component<T extends object = any> {
+    attrName?: string;
+    data: T;
+    dependencies?: string[];
+    el: any;
+    id: string;
+    multiple?: boolean;
+    name: string;
+    schema: unknown;
+    system: any;
+    init(data?: T): void;
+    pause(): void;
+    play(): void;
+    remove(): void;
+    tick?(time: number, timeDelta: number): void;
+    update(oldData: T): void;
+    updateSchema?(): void;
+    extendSchema(update: unknown): void;
+    flushToDOM(): void;
 }
-declare function f21(x: string | undefined): void;
-declare function f22(x: number): number;
-declare function f23(x: string): void;
-declare function f24(x: string): void;
-declare class Test {
-    fail(message?: string): never;
-    f1(x: string | undefined): void;
-    f2(x: number): number;
-    f3(x: string): void;
+export interface ComponentConstructor<T extends object> {
+    new (el: unknown, attrValue: string, id: string): T & Component;
+    prototype: T & {
+        name: string;
+        system: unknown;
+        play(): void;
+        pause(): void;
+    };
 }
-declare function f30(x: string | number | undefined): void;
-declare function f31(x: {
-    a: string | number;
-}): void;
-declare function f40(x: number): void;
-declare function f41(x: number): void;
-declare function f42(x: number): void;
+export declare type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
