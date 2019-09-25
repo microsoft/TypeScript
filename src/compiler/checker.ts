@@ -4921,8 +4921,8 @@ namespace ts {
                     tracker: {
                         ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning) => {
-                            const acessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
-                            if (acessibleResult.accessibility === SymbolAccessibility.Accessible) {
+                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
+                            if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                                 // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
                                 const chain = lookupSymbolChainWorker(sym, context, meaning);
                                 if (!(sym.flags & SymbolFlags.Property)) {
@@ -4944,7 +4944,8 @@ namespace ts {
                 const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
                 if (exportEquals && symbolTable.size > 1 && exportEquals.flags & SymbolFlags.Alias) {
                     symbolTable = createSymbolTable();
-                    symbolTable.set(InternalSymbolName.ExportEquals, exportEquals); // Remove extraneous elements from root symbol table (they'll be mixed back in when the target of the `export=` is looked up)
+                    // Remove extraneous elements from root symbol table (they'll be mixed back in when the target of the `export=` is looked up)
+                    symbolTable.set(InternalSymbolName.ExportEquals, exportEquals);
                 }
 
                 visitSymbolTable(symbolTable);
@@ -4961,7 +4962,7 @@ namespace ts {
                     return filter([getNameOfDeclaration(statement as DeclarationStatement)], isIdentifierAndNotUndefined);
                 }
 
-                function mergeRedundantStatements(statements: Statement[]) {
+                function flattenExportAssignedNamespace(statements: Statement[]) {
                     const exportAssignment = find(statements, isExportAssignment);
                     const ns = find(statements, isModuleDeclaration);
                     if (ns && exportAssignment && exportAssignment.isExportEquals &&
@@ -4989,6 +4990,10 @@ namespace ts {
                             statements = [...filter(statements, s => s !== ns && s !== exportAssignment), ...results];
                         }
                     }
+                    return statements;
+                }
+
+                function mergeExportDeclarations(statements: Statement[]) {
                     // Pass 2: Combine all `export {}` declarations
                     const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
                     if (length(exports) > 1) {
@@ -5021,6 +5026,10 @@ namespace ts {
                             }
                         }
                     }
+                    return statements;
+                }
+
+                function inlineExportModifiers(statements: Statement[]) {
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
                     const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
                     if (exportDecl) {
@@ -5045,6 +5054,13 @@ namespace ts {
                             exportDecl.exportClause!.elements = createNodeArray(replacements);
                         }
                     }
+                    return statements;
+                }
+
+                function mergeRedundantStatements(statements: Statement[]) {
+                    statements = flattenExportAssignedNamespace(statements);
+                    statements = mergeExportDeclarations(statements);
+                    statements = inlineExportModifiers(statements);
 
                     // Not a cleanup, but as a final step: If there is a mix of `export` and non-`export` declarations, but no `export =` or `export {}` add a `export {};` so
                     // declaration privacy is respected.
@@ -5073,7 +5089,7 @@ namespace ts {
                 }
 
                 function visitSymbolTable(symbolTable: SymbolTable, suppressNewPrivateContext?: boolean, propertyAsAlias?: boolean) {
-                    const oldDeferredList = deferredPrivates;
+                    const oldDeferredPrivates = deferredPrivates;
                     if (!suppressNewPrivateContext) {
                         deferredPrivates = createMap();
                     }
@@ -5088,7 +5104,106 @@ namespace ts {
                             serializeSymbol(symbol, /*isPrivate*/ true, !!propertyAsAlias);
                         });
                     }
-                    deferredPrivates = oldDeferredList;
+                    deferredPrivates = oldDeferredPrivates;
+                }
+
+                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                    // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
+                    // still skip reserializing it if we encounter the merged product later on
+                    const visitedSym = getMergedSymbol(symbol);
+                    if (visitedSymbols.has("" + getSymbolId(visitedSym))) {
+                        return; // Already printed
+                    }
+                    visitedSymbols.set("" + getSymbolId(visitedSym), true);
+                    // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
+                    const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
+                    if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
+                        const oldContext = context;
+                        context = cloneNodeBuilderContext(context);
+                        const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        context = oldContext;
+                        return result;
+                    }
+                }
+
+                // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
+                // or a merge of some number of those.
+                // An interesting challenge is ensuring that when classes merge with namespaces and interfaces, is keeping
+                // each symbol in only one of the representations
+                // Also, synthesizing a default export of some kind
+                // If it's an alias: emit `export default ref`
+                // If it's a property: emit `export default _default` with a `_default` prop
+                // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
+                // These forms can merge, eg (`export default 12; export default interface A {}`)
+                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                    const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
+                    const isDefault = symbol.escapedName === InternalSymbolName.Default;
+                    if (isStringANonContextualKeyword(symbolName) && !isDefault) {
+                        // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
+                        context.encounteredError = true;
+                        // TODO: Issue error via symbol tracker?
+                        return; // If we need to emit a private with a keyword name, we're done for, since something else will try to refer to it by that name
+                    }
+                    const needsPostExportDefault = isDefault && !!(
+                           symbol.flags & SymbolFlags.ExportDoesNotSupportDefaultModifier
+                        || (symbol.flags & SymbolFlags.Function && length(getPropertiesOfType(getTypeOfSymbol(symbol))))
+                    ) && !(symbol.flags & SymbolFlags.Alias); // An alias symbol should preclude needing to make an alias ourselves
+                    if (needsPostExportDefault) {
+                        isPrivate = true;
+                    }
+                    const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
+                    if (symbol.flags & SymbolFlags.Function) {
+                        serializeAsFunctionNamespaceMerge(getTypeOfSymbol(symbol), symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.TypeAlias) {
+                        serializeTypeAlias(symbol, symbolName, modifierFlags);
+                    }
+                    // Need to skip over export= symbols below - json source files get a single `Property` flagged
+                    // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
+                    if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
+                        && symbol.escapedName !== InternalSymbolName.ExportEquals
+                        && !(symbol.flags & SymbolFlags.Prototype)
+                        && !(symbol.flags & SymbolFlags.Class)) {
+                        serializeVariableOrProperty(symbol, symbolName, isPrivate, needsPostExportDefault, propertyAsAlias, modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Enum) {
+                        serializeEnum(symbol, symbolName, modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Class) {
+                        if (symbol.flags & SymbolFlags.Property) {
+                            // Looks like a `module.exports.Sub = class {}` - if we serialize `symbol` as a class, the result will have no members,
+                            // since the classiness is actually from the target of the effective alias the symbol is. yes. A BlockScopedVariable|Class|Property
+                            // _really_ acts like an Alias, and none of a BlockScopedVariable, Class, or Property. This is the travesty of JS binding today.
+                            serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
+                        }
+                        else {
+                            serializeAsClass(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
+                        }
+                    }
+                    if (symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) {
+                        serializeModule(symbol, symbolName, modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Interface) {
+                        serializeInterface(symbol, symbolName, modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Alias) {
+                        serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
+                    }
+                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        serializeMaybeAliasAssignment(symbol);
+                    }
+                    if (symbol.flags & SymbolFlags.ExportStar) {
+                        // synthesize export * from "moduleReference"
+                        // Straightforward - only one thing to do - make an export declaration
+                        for (const node of symbol.declarations) {
+                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
+                            if (!resolvedModule) continue;
+                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                        }
+                    }
+                    if (needsPostExportDefault) {
+                        addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
+                    }
                 }
 
                 function includePrivateSymbol(symbol: Symbol) {
@@ -5096,13 +5211,18 @@ namespace ts {
                     deferredPrivates!.set("" + getSymbolId(symbol), symbol);
                 }
 
-                // Appends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
+                function isExportingScope(enclosingDeclaration: Node) {
+                    return ((isSourceFile(enclosingDeclaration) && (isExternalOrCommonJsModule(enclosingDeclaration) || isJsonSourceFile(enclosingDeclaration))) ||
+                        (isAmbientModule(enclosingDeclaration) && !isGlobalScopeAugmentation(enclosingDeclaration)));
+                }
+
+                // Prepends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
                 // Note: This _mutates_ `node` without using `updateNode` - the assumption being that all nodes should be manufactured fresh by the node builder
                 function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
                     let newModifierFlags: ModifierFlags = ModifierFlags.None;
-                    if (((additionalModifierFlags & ModifierFlags.Export) && enclosingDeclaration &&
-                        ((isSourceFile(enclosingDeclaration) && (isExternalOrCommonJsModule(enclosingDeclaration) || isJsonSourceFile(enclosingDeclaration))) ||
-                        (isAmbientModule(enclosingDeclaration) && !isGlobalScopeAugmentation(enclosingDeclaration)))) &&
+                    if (additionalModifierFlags & ModifierFlags.Export &&
+                        enclosingDeclaration &&
+                        isExportingScope(enclosingDeclaration) &&
                         canHaveExportModifier(node)
                     ) {
                         // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
@@ -5124,6 +5244,129 @@ namespace ts {
                     results.push(node);
                 }
 
+                function serializeTypeAlias(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                    const aliasType = getDeclaredTypeOfTypeAlias(symbol);
+                    const typeParams = getSymbolLinks(symbol).typeParameters;
+                    const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
+                    const jsdocAliasDecl = find(symbol.declarations, isJSDocTypeAlias);
+                    const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
+                    const oldFlags = context.flags;
+                    context.flags |= NodeBuilderFlags.InTypeAlias;
+                    addResult(setSyntheticLeadingComments(
+                        createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
+                        !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
+                    ), modifierFlags);
+                    context.flags = oldFlags;
+                }
+
+                function serializeInterface(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                    const interfaceType = getDeclaredTypeOfClassOrInterface(symbol);
+                    const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                    const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
+                    const baseTypes = getBaseTypes(interfaceType);
+                    const amalgamatedBase = length(baseTypes) ? getIntersectionType(baseTypes) : undefined;
+                    const members = flatMap<Symbol, TypeElement>(getPropertiesOfType(interfaceType), p => serializePropertySymbolForInterface(p, amalgamatedBase));
+                    const callSignatures = serializeSignatures(SignatureKind.Call, interfaceType, amalgamatedBase, SyntaxKind.CallSignature) as CallSignatureDeclaration[];
+                    const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, amalgamatedBase, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
+                    const indexSignatures = serializeIndexSignatures(interfaceType, amalgamatedBase);
+
+                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
+                    addResult(createInterfaceDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        getInternalSymbolName(symbol, symbolName),
+                        typeParamDecls,
+                        heritageClauses,
+                        [...indexSignatures, ...constructSignatures, ...callSignatures, ...members]
+                    ), modifierFlags);
+                }
+
+                function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                    const members = filter(arrayFrom((symbol.exports || emptySymbols).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
+                    // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
+                    const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol ? "real" : "merged");
+                    const realMembers = locationMap.get("real") || emptyArray;
+                    const mergedMembers = locationMap.get("merged") || emptyArray;
+                    // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
+                    // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
+                    // so we don't even have placeholders to fill in.
+                    if (length(realMembers)) {
+                        const localName = getInternalSymbolName(symbol, symbolName);
+                        serializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, /*suppressNewPrivateContext*/ false);
+                    }
+                    if (length(mergedMembers)) {
+                        const localName = getInternalSymbolName(symbol, symbolName);
+                        forEach(mergedMembers, includePrivateSymbol);
+                        const nsBody = createModuleBlock([createExportDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createNamedExports(map(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
+                                const name = unescapeLeadingUnderscores(s.escapedName);
+                                const localName = getInternalSymbolName(s, name);
+                                return createExportSpecifier(name === localName ? undefined : localName, name);
+                            }))
+                        )]);
+                        addResult(createModuleDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createIdentifier(localName),
+                            nsBody,
+                            NodeFlags.Namespace
+                        ), ModifierFlags.None);
+                    }
+                }
+
+                function serializeEnum(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
+                    addResult(createEnumDeclaration(
+                        /*decorators*/ undefined,
+                        createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
+                        getInternalSymbolName(symbol, symbolName),
+                        map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
+                            // TODO: Handle computed names
+                            // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
+                            // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
+                            // _on the declaration_, not on the declaration's symbol...
+                            const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) && getConstantValue(p.declarations[0] as EnumMember);
+                            return createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined : createLiteral(initializedValue));
+                        })
+                    ), modifierFlags);
+                }
+
+                function serializeVariableOrProperty(symbol: Symbol, symbolName: string, isPrivate: boolean, needsPostExportDefault: boolean, propertyAsAlias: boolean | undefined, modifierFlags: ModifierFlags) {
+                    if (propertyAsAlias) {
+                        serializeMaybeAliasAssignment(symbol);
+                    }
+                    else {
+                        const type = getTypeOfSymbol(symbol);
+                        const localName = getInternalSymbolName(symbol, symbolName);
+                        if (!(symbol.flags & SymbolFlags.Function) && isTypeRepresentableAsFunctionNamespaceMerge(type, symbol)) {
+                            // If the type looks like a function declaration + ns could represent it, and it's type is sourced locally, rewrite it into a function declaration + ns
+                            serializeAsFunctionNamespaceMerge(type, symbol, localName, modifierFlags);
+                        }
+                        else {
+                            // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
+                            // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
+                            const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
+                            const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
+                            let textRange: Node | undefined = symbol.declarations && filter(symbol.declarations, d => isVariableDeclaration(d))[0];
+                            if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
+                                textRange = textRange.parent.parent;
+                            }
+                            const statement = setTextRange(createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
+                                createVariableDeclaration(name, serializeTypeForDeclaration(type, symbol))
+                            ], flags)), textRange);
+                            addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
+                            if (name !== localName && !isPrivate) {
+                                // We rename the variable declaration we generate for Property symbols since they may have a name which conflicts with a local declaration. Eg,
+                                // `module.exports.g = g` - we want to make a variable declaration with type `typeof g` (ergo, we must emit `g`)
+                                // and so we can't name the variable declaration `g` (since there's already a local `g`) - so we anonymize the local variable declaration and make
+                                // an export declaration with an alias to the right name
+                                addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(name, localName)])), ModifierFlags.None);
+                            }
+                        }
+                    }
+                }
+
                 function serializeAsFunctionNamespaceMerge(type: Type, symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     const signatures = getSignaturesOfType(type, SignatureKind.Call);
                     for (const sig of signatures) {
@@ -5135,11 +5378,11 @@ namespace ts {
                     // Module symbol emit will take care of module-y members, provided it has exports
                     if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
                         const props = filter(getPropertiesOfType(type), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
-                        serlializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
+                        serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
                     }
                 }
 
-                function serlializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
+                function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
                     if (length(props)) {
                         const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) ? "local" : some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) ? "local" : "remote");
                         const localProps = localVsRemoteMap.get("local") || emptyArray;
@@ -5218,190 +5461,6 @@ namespace ts {
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
-                // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
-                // or a merge of some number of those.
-                // An interesting challenge is ensuring that when classes merge with namespaces and interfaces, is keeping
-                // each symbol in only one of the representations
-                // Also, synthesizing a default export of some kind
-                // If it's an alias: emit `export default ref`
-                // If it's a property: emit `export default _default` with a `_default` prop
-                // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
-                // These forms can merge, eg (`export default 12; export default interface A {}`)
-                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
-                    const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
-                    const isDefault = symbol.escapedName === InternalSymbolName.Default;
-                    if (isStringANonContextualKeyword(symbolName) && !isDefault) {
-                        // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
-                        context.encounteredError = true;
-                        // TODO: Issue error via symbol tracker?
-                        return; // If we need to emit a private with a keyword name, we're done for, since something else will try to refer to it by that name
-                    }
-                    const needsPostExportDefault = isDefault && (
-                           !!(symbol.flags & SymbolFlags.ExportDoesNotSupportDefaultModifier)
-                        || (!!(symbol.flags & SymbolFlags.Function) && !!length(getPropertiesOfType(getTypeOfSymbol(symbol))))
-                    ) && !(symbol.flags & SymbolFlags.Alias); // An alias symbol should preclude needing to make an alias ourselves
-                    if (needsPostExportDefault) {
-                        isPrivate = true;
-                    }
-                    const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
-                    if (symbol.flags & SymbolFlags.Function) {
-                        const type = getTypeOfSymbol(symbol);
-                        serializeAsFunctionNamespaceMerge(type, symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
-                    }
-                    if (symbol.flags & SymbolFlags.TypeAlias) {
-                        const aliasType = getDeclaredTypeOfTypeAlias(symbol);
-                        const typeParams = getSymbolLinks(symbol).typeParameters;
-                        const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
-                        const jsdocAliasDecl = find(symbol.declarations, isJSDocTypeAlias);
-                        const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
-                        const oldFlags = context.flags;
-                        context.flags |= NodeBuilderFlags.InTypeAlias;
-                        addResult(setSyntheticLeadingComments(
-                            createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
-                            !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
-                        ), modifierFlags);
-                        context.flags = oldFlags;
-                    }
-                    // Need to skip over export= symbols below - json source files get a single `Property` flagged
-                    // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
-                    if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
-                        && symbol.escapedName !== InternalSymbolName.ExportEquals
-                        && !(symbol.flags & SymbolFlags.Prototype)
-                        && !(symbol.flags & SymbolFlags.Class)) {
-                        if (propertyAsAlias) {
-                            serializeMaybeAliasAssignment(symbol);
-                        }
-                        else {
-                            const type = getTypeOfSymbol(symbol);
-                            const localName = getInternalSymbolName(symbol, symbolName);
-                            if (!(symbol.flags & SymbolFlags.Function) && isTypeRepresentableAsFunctionNamespaceMerge(type, symbol)) {
-                                // If the type looks like a function declaration + ns could represent it, and it's type is sourced locally, rewrite it into a function declaration + ns
-                                serializeAsFunctionNamespaceMerge(type, symbol, localName, modifierFlags);
-                            }
-                            else {
-                                // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
-                                // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
-                                const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
-                                const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
-                                let textRange: Node | undefined = symbol.declarations && filter(symbol.declarations, d => isVariableDeclaration(d))[0];
-                                if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
-                                    textRange = textRange.parent.parent;
-                                }
-                                const statement = setTextRange(createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                                    createVariableDeclaration(name, serializeTypeForDeclaration(type, symbol))
-                                ], flags)), textRange);
-                                addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
-                                if (name !== localName && !isPrivate) {
-                                    // We rename the variable declaration we generate for Property symbols since they may have a name which conflicts with a local declaration. Eg,
-                                    // `module.exports.g = g` - we want to make a variable declaration with type `typeof g` (ergo, we must emit `g`)
-                                    // and so we can't name the variable declaration `g` (since there's already a local `g`) - so we anonymize the local variable declaration and make
-                                    // an export declaration with an alias to the right name
-                                    addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(name, localName)])), ModifierFlags.None);
-                                }
-                            }
-                        }
-                    }
-                    if (symbol.flags & SymbolFlags.Enum) {
-                        addResult(createEnumDeclaration(
-                            /*decorators*/ undefined,
-                            createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
-                            getInternalSymbolName(symbol, symbolName),
-                            map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
-                                // TODO: Handle computed names
-                                // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
-                                // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
-                                // _on the declaration_, not on the declaration's symbol...
-                                const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) && getConstantValue(p.declarations[0] as EnumMember);
-                                return createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined : createLiteral(initializedValue));
-                            })
-                        ), modifierFlags);
-                    }
-                    if (symbol.flags & SymbolFlags.Class) {
-                        if (symbol.flags & SymbolFlags.Property) {
-                            // Looks like a `module.exports.Sub = class {}` - if we serialze `symbol` as a class, the result will have no members,
-                            // since the classiness is actually from the target of the effective alias the symbol is. yes. A BlockScopedVariable|Class|Property
-                            // _really_ acts like an Alias, and none of a BlockScopedVariable, Class, or Property. This is the travesty of JS binding today.
-                            serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
-                        }
-                        else {
-                            serializeAsClass(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
-                        }
-                    }
-                    if (symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) {
-                        const members = filter(arrayFrom((symbol.exports || emptySymbols).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
-                        // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
-                        const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol ? "real" : "merged");
-                        const realMembers = locationMap.get("real") || emptyArray;
-                        const mergedMembers = locationMap.get("merged") || emptyArray;
-                        // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
-                        // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
-                        // so we don't even have placeholders to fill in.
-                        if (length(realMembers)) {
-                            const localName = getInternalSymbolName(symbol, symbolName);
-                            serlializeAsNamespaceDeclaration(realMembers, localName, modifierFlags, /*suppressNewPrivateContext*/ false);
-                        }
-                        if (length(mergedMembers)) {
-                            const localName = getInternalSymbolName(symbol, symbolName);
-                            forEach(mergedMembers, includePrivateSymbol);
-                            const nsBody = createModuleBlock([createExportDeclaration(
-                                /*decorators*/ undefined,
-                                /*modifiers*/ undefined,
-                                createNamedExports(map(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
-                                    const name = unescapeLeadingUnderscores(s.escapedName);
-                                    const localName = getInternalSymbolName(s, name);
-                                    return createExportSpecifier(name === localName ? undefined : localName, name);
-                                }))
-                            )]);
-                            addResult(createModuleDeclaration(
-                                /*decorators*/ undefined,
-                                /*modifiers*/ undefined,
-                                createIdentifier(localName),
-                                nsBody,
-                                NodeFlags.Namespace
-                            ), ModifierFlags.None);
-                        }
-                    }
-                    if (symbol.flags & SymbolFlags.Interface) {
-                        const interfaceType = getDeclaredTypeOfClassOrInterface(symbol);
-                        const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                        const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
-                        const baseTypes = getBaseTypes(interfaceType);
-                        const amalgamatedBase = length(baseTypes) ? getIntersectionType(baseTypes) : undefined;
-                        const members = flatMap<Symbol, TypeElement>(getPropertiesOfType(interfaceType), p => serializePropertySymbolForInterface(p, amalgamatedBase));
-                        const callSignatures = serializeSignatures(SignatureKind.Call, interfaceType, amalgamatedBase, SyntaxKind.CallSignature) as CallSignatureDeclaration[];
-                        const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, amalgamatedBase, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
-                        const indexSignatures = serializeIndexSignatures(interfaceType, amalgamatedBase);
-
-                        const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
-                        addResult(createInterfaceDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            getInternalSymbolName(symbol, symbolName),
-                            typeParamDecls,
-                            heritageClauses,
-                            [...indexSignatures, ...constructSignatures, ...callSignatures, ...members]
-                        ), modifierFlags);
-                    }
-                    if (symbol.flags & SymbolFlags.Alias) {
-                        serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
-                    }
-                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        serializeMaybeAliasAssignment(symbol);
-                    }
-                    if (symbol.flags & SymbolFlags.ExportStar) {
-                        // synthesize export * from "moduleReference"
-                        // Straightforward - only one thing to do - make an export declaration
-                        for (const node of symbol.declarations) {
-                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
-                            if (!resolvedModule) continue;
-                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
-                        }
-                    }
-                    if (needsPostExportDefault) {
-                        addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
-                    }
-                }
-
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
                     // need to mark the alias `symbol` points
@@ -5426,7 +5485,9 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     createIdentifier(localName),
-                                    isLocalImport ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false) : createExternalModuleReference(createLiteral(getSpecifierForModuleSymbol(symbol, context)))
+                                    isLocalImport
+                                        ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
+                                        : createExternalModuleReference(createLiteral(getSpecifierForModuleSymbol(symbol, context)))
                                 ), isLocalImport ? modifierFlags : ModifierFlags.None);
                                 break;
                             case SyntaxKind.NamespaceExportDeclaration:
@@ -5456,16 +5517,25 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     createImportClause(/*importClause*/ undefined, createNamedImports([
-                                        createImportSpecifier(localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined, createIdentifier(localName))
+                                        createImportSpecifier(
+                                            localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined,
+                                            createIdentifier(localName)
+                                        )
                                     ])),
                                     createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
                                 ), ModifierFlags.None);
                                 break;
                             case SyntaxKind.ExportSpecifier:
-                                // does not use localName because the symbol name in this case refers to the name in the exports table, which we must exactly preserve
+                                // does not use localName because the symbol name in this case refers to the name in the exports table,
+                                // which we must exactly preserve
                                 const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
-                                // targetName is only used when the target is local, as otherwise the target is an alias that points at another file
-                                serializeExportSpecifier(unescapeLeadingUnderscores(symbol.escapedName), specifier ? verbatimTargetName : targetName, specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined);
+                                // targetName is only used when the target is local, as otherwise the target is an alias that points at
+                                // another file
+                                serializeExportSpecifier(
+                                    unescapeLeadingUnderscores(symbol.escapedName),
+                                    specifier ? verbatimTargetName : targetName,
+                                    specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined
+                                );
                                 break;
                             case SyntaxKind.ExportAssignment:
                                 serializeMaybeAliasAssignment(symbol);
@@ -5482,7 +5552,9 @@ namespace ts {
                                 }
                                 break;
                             case SyntaxKind.PropertyAccessExpression:
-                                break; // A PAE alias is _always_ going to exist as an append to a top-level export, where our top level handlign should always be sufficient to encode the export action itself
+                                // A PAE alias is _always_ going to exist as an append to a top-level export, where our top level
+                                // handling should always be sufficient to encode the export action itself
+                                break;
                             default:
                                 return Debug.failBadSyntaxKind(node, "Unhandled alias declaration kind in symbol serializer!");
                         }
@@ -5546,7 +5618,7 @@ namespace ts {
                                 serializeExportSpecifier(name, getInternalSymbolName(target, symbolName(target)));
                             }
                             else {
-                                // serialze as `import _Ref = t.arg.et; export { _Ref as name }`
+                                // serialize as `import _Ref = t.arg.et; export { _Ref as name }`
                                 const varName = getUnusedName(name, symbol);
                                 addResult(createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
@@ -5894,25 +5966,6 @@ namespace ts {
                     }
                     if (reference) {
                         return createExpressionWithTypeArguments(typeArgs, reference);
-                    }
-                }
-
-                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
-                    // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
-                    // still skip reserializing it if we encounter the merged product later on
-                    const visitedSym = getMergedSymbol(symbol);
-                    if (visitedSymbols.has("" + getSymbolId(visitedSym))) {
-                        return; // Already printed
-                    }
-                    visitedSymbols.set("" + getSymbolId(visitedSym), true);
-                    // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
-                    const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
-                    if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
-                        const oldContext = context;
-                        context = cloneNodeBuilderContext(context);
-                        const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
-                        context = oldContext;
-                        return result;
                     }
                 }
 
