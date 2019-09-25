@@ -17276,6 +17276,18 @@ namespace ts {
                 return key = getFlowCacheKey(reference, declaredType, initialType, flowContainer);
             }
 
+            function captureContainingUnion(flow: FlowNode, type: FlowType) {
+                if (flow.flags & (FlowFlags.Assignment | FlowFlags.Condition)) {
+                    if (isIncomplete(type)) {
+                        containingUnion = undefined;
+                        return;
+                    }
+                    if (type.flags & TypeFlags.Union) {
+                        containingUnion = type as UnionType;
+                    }
+                }
+            }
+
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
                 if (flowDepth === 2000) {
                     // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
@@ -17317,12 +17329,6 @@ namespace ts {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
-                        if (isIncomplete(type)) {
-                            containingUnion = undefined;
-                        }
-                        else if (type.flags & TypeFlags.Union) {
-                            containingUnion = type as UnionType;
-                        }
                     }
                     else if (flags & FlowFlags.Call) {
                         type = getTypeAtFlowCall(<FlowCall>flow);
@@ -17333,12 +17339,6 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
-                        if (isIncomplete(type)) {
-                            containingUnion = undefined;
-                        }
-                        else if (type.flags & TypeFlags.Union) {
-                            containingUnion = type as UnionType;
-                        }
                     }
                     else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
@@ -17383,6 +17383,7 @@ namespace ts {
                         sharedFlowTypes[sharedFlowCount] = type;
                         sharedFlowCount++;
                     }
+                    captureContainingUnion(flow, type);
                     flowDepth--;
                     return type;
                 }
