@@ -1,9 +1,10 @@
 namespace ts {
     describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
         let projFs: vfs.FileSystem;
+        const { time, tick } = getTime();
         const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/hello.json"];
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
+            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite", time);
         });
 
         after(() => {
@@ -16,7 +17,7 @@ namespace ts {
         }
 
         function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
             builder.build();
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
@@ -64,10 +65,10 @@ export default hello.hello`);
         });
 
         it("with resolveJsonModule and sourceMap", () => {
-            const { fs, tick } = getFsWithTime(projFs);
+            const fs = projFs.shadow();
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -87,10 +88,10 @@ export default hello.hello`);
         });
 
         it("with resolveJsonModule and without outDir", () => {
-            const { fs, tick } = getFsWithTime(projFs);
+            const fs = projFs.shadow();
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"outDir": "dist",`, "");
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -111,9 +112,10 @@ export default hello.hello`);
     });
 
     describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
+        const { time, tick } = getTime();
         let projFs: vfs.FileSystem;
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/importJsonFromProjectReference");
+            projFs = loadProjectFromDisk("tests/projects/importJsonFromProjectReference", time);
         });
 
         after(() => {
@@ -122,11 +124,11 @@ export default hello.hello`);
 
         it("when importing json module from project reference", () => {
             const expectedOutput = "/src/main/index.js";
-            const { fs, tick } = getFsWithTime(projFs);
+            const fs = projFs.shadow();
             const configFile = "src/tsconfig.json";
             const stringsConfigFile = "src/strings/tsconfig.json";
             const mainConfigFile = "src/main/tsconfig.json";
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(

@@ -17,7 +17,7 @@ namespace ts {
 
         before(() => {
             const fs = new vfs.FileSystem(false);
-            host = fakes.SolutionBuilderHost.create(fs);
+            host = new fakes.SolutionBuilderHost(fs);
             writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
         });
 

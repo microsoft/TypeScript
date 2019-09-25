@@ -55,22 +55,13 @@ namespace ts {
     }
 
     /**
-     * Get locale specific time based on whether we are in test mode
-     */
-    export function getLocaleTimeString(system: System) {
-        return !system.now ?
-            new Date().toLocaleTimeString() :
-            system.now().toLocaleTimeString("en-US", { timeZone: "UTC" });
-    }
-
-    /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] `;
+                let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
                 system.write(output);
             } :
@@ -81,7 +72,7 @@ namespace ts {
                     output += newLine;
                 }
 
-                output += `${getLocaleTimeString(system)} - `;
+                output += `${new Date().toLocaleTimeString()} - `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
 
                 system.write(output);
