@@ -163,12 +163,12 @@ declare function foo<T>(x: T | Promise<T>): void;
 >T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
 >x : Symbol(x, Decl(unionTypeInference.ts, 45, 24))
 >T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(unionTypeInference.ts, 45, 21))
 
 declare let x: false | Promise<true>;
 >x : Symbol(x, Decl(unionTypeInference.ts, 46, 11))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 foo(x);
 >foo : Symbol(foo, Decl(unionTypeInference.ts, 41, 1))
@@ -186,4 +186,93 @@ declare function bar<T>(x: T, y: string | T): T;
 const y = bar(1, 2);
 >y : Symbol(y, Decl(unionTypeInference.ts, 50, 5))
 >bar : Symbol(bar, Decl(unionTypeInference.ts, 47, 7))
+
+// Repro from #32752
+
+const containsPromises: unique symbol = Symbol();
+>containsPromises : Symbol(containsPromises, Decl(unionTypeInference.ts, 54, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+type DeepPromised<T> =
+>DeepPromised : Symbol(DeepPromised, Decl(unionTypeInference.ts, 54, 49))
+>T : Symbol(T, Decl(unionTypeInference.ts, 56, 18))
+
+    { [containsPromises]?: true } &
+>[containsPromises] : Symbol([containsPromises], Decl(unionTypeInference.ts, 57, 5))
+>containsPromises : Symbol(containsPromises, Decl(unionTypeInference.ts, 54, 5))
+
+    { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
+>TKey : Symbol(TKey, Decl(unionTypeInference.ts, 58, 7))
+>T : Symbol(T, Decl(unionTypeInference.ts, 56, 18))
+>T : Symbol(T, Decl(unionTypeInference.ts, 56, 18))
+>TKey : Symbol(TKey, Decl(unionTypeInference.ts, 58, 7))
+>DeepPromised : Symbol(DeepPromised, Decl(unionTypeInference.ts, 54, 49))
+>T : Symbol(T, Decl(unionTypeInference.ts, 56, 18))
+>TKey : Symbol(TKey, Decl(unionTypeInference.ts, 58, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>DeepPromised : Symbol(DeepPromised, Decl(unionTypeInference.ts, 54, 49))
+>T : Symbol(T, Decl(unionTypeInference.ts, 56, 18))
+>TKey : Symbol(TKey, Decl(unionTypeInference.ts, 58, 7))
+
+async function fun<T>(deepPromised: DeepPromised<T>) {
+>fun : Symbol(fun, Decl(unionTypeInference.ts, 58, 92))
+>T : Symbol(T, Decl(unionTypeInference.ts, 60, 19))
+>deepPromised : Symbol(deepPromised, Decl(unionTypeInference.ts, 60, 22))
+>DeepPromised : Symbol(DeepPromised, Decl(unionTypeInference.ts, 54, 49))
+>T : Symbol(T, Decl(unionTypeInference.ts, 60, 19))
+
+    const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
+>deepPromisedWithIndexer : Symbol(deepPromisedWithIndexer, Decl(unionTypeInference.ts, 61, 9))
+>DeepPromised : Symbol(DeepPromised, Decl(unionTypeInference.ts, 54, 49))
+>name : Symbol(name, Decl(unionTypeInference.ts, 61, 51))
+>deepPromised : Symbol(deepPromised, Decl(unionTypeInference.ts, 60, 22))
+
+    for (const value of Object.values(deepPromisedWithIndexer)) {
+>value : Symbol(value, Decl(unionTypeInference.ts, 62, 14))
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>deepPromisedWithIndexer : Symbol(deepPromisedWithIndexer, Decl(unionTypeInference.ts, 61, 9))
+
+        const awaitedValue = await value;
+>awaitedValue : Symbol(awaitedValue, Decl(unionTypeInference.ts, 63, 13))
+>value : Symbol(value, Decl(unionTypeInference.ts, 62, 14))
+
+        if (awaitedValue)
+>awaitedValue : Symbol(awaitedValue, Decl(unionTypeInference.ts, 63, 13))
+
+            await fun(awaitedValue);
+>fun : Symbol(fun, Decl(unionTypeInference.ts, 58, 92))
+>awaitedValue : Symbol(awaitedValue, Decl(unionTypeInference.ts, 63, 13))
+    }
+}
+
+// Repro from #32752
+
+type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 71, 10))
+>K : Symbol(K, Decl(unionTypeInference.ts, 71, 18))
+
+declare function baz<T>(dp: Deep<T>): T;
+>baz : Symbol(baz, Decl(unionTypeInference.ts, 71, 53))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+>dp : Symbol(dp, Decl(unionTypeInference.ts, 73, 24))
+>Deep : Symbol(Deep, Decl(unionTypeInference.ts, 67, 1))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+>T : Symbol(T, Decl(unionTypeInference.ts, 73, 21))
+
+declare let xx: { a: string | undefined };
+>xx : Symbol(xx, Decl(unionTypeInference.ts, 74, 11))
+>a : Symbol(a, Decl(unionTypeInference.ts, 74, 17))
+
+baz(xx);
+>baz : Symbol(baz, Decl(unionTypeInference.ts, 71, 53))
+>xx : Symbol(xx, Decl(unionTypeInference.ts, 74, 11))
 

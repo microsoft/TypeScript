@@ -459,10 +459,6 @@
         "category": "Error",
         "code": 1149
     },
-    "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-        "category": "Error",
-        "code": 1150
-    },
     "'const' declarations must be initialized.": {
         "category": "Error",
         "code": 1155
@@ -1038,6 +1034,39 @@
     "Did you mean to mark this function as 'async'?": {
         "category": "Error",
         "code": 1356
+    },
+    "An enum member name must be followed by a ',', '=', or '}'.": {
+        "category": "Error",
+        "code": 1357
+    },
+
+    "The types of '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2200
+    },
+    "The types returned by '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2201
+    },
+    "Call signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2203,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Call signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2204,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2205,
+        "elidedInCompatabilityPyramid": true
     },
 
     "Duplicate identifier '{0}'.": {
@@ -4007,6 +4036,10 @@
         "category": "Message",
         "code": 6220
     },
+    "Disable use of source files instead of declaration files from referenced projects.": {
+        "category": "Message",
+        "code": 6221
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4647,6 +4680,10 @@
         "category": "Suggestion",
         "code": 80007
     },
+    "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
+        "category": "Suggestion",
+        "code": 80008
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -5115,6 +5152,30 @@
     "Remove all unnecessary uses of 'await'": {
         "category": "Message",
         "code": 95087
+    },
+    "Enable the '--jsx' flag in your configuration file": {
+        "category": "Message",
+        "code": 95088
+    },
+    "Add 'await' to initializers": {
+        "category": "Message",
+        "code": 95089
+    },
+    "Extract to interface": {
+        "category": "Message",
+        "code": 95090
+    },
+    "Convert to a bigint numeric literal": {
+        "category": "Message",
+        "code": 95091
+    },
+    "Convert all to bigint numeric literals": {
+        "category": "Message",
+        "code": 95092
+    },
+    "Convert 'const' to 'let'": {
+        "category": "Message",
+        "code": 95093
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

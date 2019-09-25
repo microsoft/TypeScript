@@ -8197,7 +8197,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식 매개 변수 '{0}'의 형식 인수를 유추할 수 없습니다. 형식 인수를 명시적으로 지정하세요.]]></Val>
+            <Val><![CDATA[사용량에서 형식 매개 변수 '{0}'의 형식 인수를 유추할 수 없습니다. 형식 인수를 명시적으로 지정하세요.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -4,7 +4,7 @@ namespace ts.refactor {
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context);
             if (!info) return emptyArray;
             const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
@@ -12,8 +12,8 @@ namespace ts.refactor {
             return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault);
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.assertDefined(getInfo(context)), t, context.cancellationToken));
+            Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.assertDefined(getInfo(context), "context must have info"), t, context.cancellationToken));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         },
     });
@@ -63,7 +63,7 @@ namespace ts.refactor {
                 }
                 const decl = first(vs.declarationList.declarations);
                 if (!decl.initializer) return undefined;
-                Debug.assert(!wasDefault);
+                Debug.assert(!wasDefault, "Can't have a default flag here");
                 return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
             }
             default:
@@ -78,10 +78,10 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
+            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
         }
         else {
-            const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword));
+            const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
             switch (exportNode.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -92,7 +92,7 @@ namespace ts.refactor {
                     // If 'x' isn't used in this file, `export const x = 0;` --> `export default 0;`
                     if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile)) {
                         // We checked in `getInfo` that an initializer exists.
-                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.assertDefined(first(exportNode.declarationList.declarations).initializer)));
+                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.assertDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
                         break;
                     }
                     // falls through
@@ -104,14 +104,14 @@ namespace ts.refactor {
                     changes.insertNodeAfter(exportingSourceFile, exportNode, createExportDefault(createIdentifier(exportName.text)));
                     break;
                 default:
-                    Debug.assertNever(exportNode);
+                    Debug.assertNever(exportNode, `Unexpected exportNode kind ${(exportNode as ExportToConvert).kind}`);
             }
         }
     }
 
     function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
-        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportName));
+        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
         FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
             const importingSourceFile = ref.getSourceFile();
             if (wasDefault) {
@@ -139,7 +139,7 @@ namespace ts.refactor {
             }
             case SyntaxKind.ImportClause: {
                 const clause = parent as ImportClause;
-                Debug.assert(clause.name === ref);
+                Debug.assert(clause.name === ref, "Import clause name should match provided ref");
                 const spec = makeImportSpecifier(exportName, ref.text);
                 const { namedBindings } = clause;
                 if (!namedBindings) {
@@ -194,7 +194,7 @@ namespace ts.refactor {
                 break;
             }
             default:
-                Debug.assertNever(parent);
+                Debug.assertNever(parent, `Unexpected parent kind ${(parent as Node).kind}`);
         }
 
     }

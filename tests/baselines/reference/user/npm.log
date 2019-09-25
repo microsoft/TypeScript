@@ -584,7 +584,7 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/npm": typeof EventEmitter; }' have no overlap.
+node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/npm": typeof internal.EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.

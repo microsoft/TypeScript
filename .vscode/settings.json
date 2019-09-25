@@ -1,0 +1,12 @@
+{
+    "eslint.validate": [
+        {
+            "language": "typescript",
+            "autoFix": true
+        }
+    ],
+    "eslint.options": {
+        "rulePaths": ["./scripts/eslint/built/rules/"],
+        "ext": [".ts"]
+    }
+}

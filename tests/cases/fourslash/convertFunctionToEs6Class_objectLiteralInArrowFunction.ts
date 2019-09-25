@@ -15,7 +15,7 @@ verify.codeFix({
     constructor() {
     }
     foo() {
-        ({ bar: () => { } });
+        ({ bar: () => { } })
     }
 }
 `,

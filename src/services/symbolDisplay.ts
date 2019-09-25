@@ -603,7 +603,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addSignatureDisplayParts(signature: Signature, allSignatures: ReadonlyArray<Signature>, flags = TypeFormatFlags.None) {
+        function addSignatureDisplayParts(signature: Signature, allSignatures: readonly Signature[], flags = TypeFormatFlags.None) {
             addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
             if (allSignatures.length > 1) {
                 displayParts.push(spacePart());

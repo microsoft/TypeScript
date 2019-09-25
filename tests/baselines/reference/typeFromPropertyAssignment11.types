@@ -36,28 +36,28 @@ Inner.prototype.k;
 >k : any
 
 var inner = new Inner()
->inner : Inner & { m(): void; i: number; }
->new Inner() : Inner & { m(): void; i: number; }
+>inner : Inner
+>new Inner() : Inner
 >Inner : typeof Inner
 
 inner.m()
 >inner.m() : void
 >inner.m : () => void
->inner : Inner & { m(): void; i: number; }
+>inner : Inner
 >m : () => void
 
 inner.i
 >inner.i : number
->inner : Inner & { m(): void; i: number; }
+>inner : Inner
 >i : number
 
 inner.j
 >inner.j : number
->inner : Inner & { m(): void; i: number; }
+>inner : Inner
 >j : number
 
 inner.k
 >inner.k : string
->inner : Inner & { m(): void; i: number; }
+>inner : Inner
 >k : string
 

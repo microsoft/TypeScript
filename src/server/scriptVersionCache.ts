@@ -363,7 +363,7 @@ namespace ts.server {
     }
 
     class LineIndexSnapshot implements IScriptSnapshot {
-        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: ReadonlyArray<TextChange> = emptyArray) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: readonly TextChange[] = emptyArray) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
