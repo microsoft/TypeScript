@@ -13,5 +13,17 @@
 
 this.x = {};
 this.x.y = {};
-this["x"] = {};
-this["x"]["y"] = {};
+this["y"] = {};
+this["y"]["z"] = {};
+
+/** @constructor */
+function F() {
+  this.a = {};
+  this.a.b = {};
+  this["b"] = {};
+  this["b"]["c"] = {};
+}
+
+const f = new F();
+f.a;
+f.b;
