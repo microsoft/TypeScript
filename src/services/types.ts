@@ -684,6 +684,8 @@ namespace ts {
         Ignore = "ignore",
         Insert = "insert",
         Remove = "remove",
+        /*@internal*/
+        RemoveUnconventional = "remove-unconventional"
     }
 
     /* @deprecated - consider using EditorSettings instead */

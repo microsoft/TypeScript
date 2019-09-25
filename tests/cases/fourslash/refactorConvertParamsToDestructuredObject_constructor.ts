@@ -18,7 +18,7 @@ edit.applyRefactor({
     newContent: `class Foo {
     t: string;
     s: string;
-    constructor({ t, s }: { t: string; s: string; }) {
+    constructor({ t, s }: { t: string; s: string }) {
         this.t = t;
         this.s = s;
     }

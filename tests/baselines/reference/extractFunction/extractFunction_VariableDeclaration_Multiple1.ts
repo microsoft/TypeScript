@@ -5,7 +5,7 @@ x; y;
 
 // ==SCOPE::Extract to function in global scope==
 
-const { x, y }: { x: number; y: string; } = /*RENAME*/newFunction();
+const { x, y }: { x: number; y: string } = /*RENAME*/newFunction();
 x; y;
 
 function newFunction() {

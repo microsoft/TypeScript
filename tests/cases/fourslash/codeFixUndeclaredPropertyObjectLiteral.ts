@@ -9,7 +9,7 @@
 
 verify.rangeAfterCodeFix(`
 class A {
-    x: { a: number; b: string; c: any; d: any; e: any; };
+    x: { a: number; b: string; c: any; d: any; e: any };
     
     constructor() {
         let e: any = 10;

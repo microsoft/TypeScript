@@ -12,7 +12,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `const f = function foo({ a, b }: { a: number; b: number; }) {
+    newContent: `const f = function foo({ a, b }: { a: number; b: number }) {
     foo({ a: 1, b: 2 });
 }
 function foo(a: number, b: number) { }

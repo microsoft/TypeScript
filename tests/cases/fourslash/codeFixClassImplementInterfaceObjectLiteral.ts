@@ -18,6 +18,6 @@ verify.codeFix({
     }
 }
 class Person implements IPerson {
-    coordinate: { x: number; y: number; };
+    coordinate: { x: number; y: number };
 }`,
 });

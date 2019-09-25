@@ -19,7 +19,7 @@ edit.applyRefactor({
     actionDescription: "Convert parameters to destructured object",
     newContent: `class C {
     static a: number = 2;
-    constructor({ a, b }: { a: number; b: number; }) { }
+    constructor({ a, b }: { a: number; b: number }) { }
 }
 const newC = new C({ a: 1, b: 2 });
 const b = C.a;

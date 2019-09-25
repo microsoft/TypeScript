@@ -17,7 +17,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `export { foo as default };
-function foo({ a, b }: { a: number; b: number; }) {
+function foo({ a, b }: { a: number; b: number }) {
     return a + b;
 }`
 });

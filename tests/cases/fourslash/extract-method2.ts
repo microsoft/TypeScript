@@ -25,7 +25,7 @@ edit.applyRefactor({
     }
 }
 
-function newFunction(m: number, j: string, k: { x: string; }) {
+function newFunction(m: number, j: string, k: { x: string }) {
     return m + j + k;
 }
 `

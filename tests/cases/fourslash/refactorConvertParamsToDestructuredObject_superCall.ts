@@ -15,7 +15,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `class A { 
-    constructor({ a, b }: { a: string; b: string; }) { }
+    constructor({ a, b }: { a: string; b: string }) { }
 }
 class B extends A { 
     constructor(a: string, b: string, c: string) {

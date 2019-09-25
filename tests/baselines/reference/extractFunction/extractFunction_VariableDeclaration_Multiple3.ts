@@ -6,7 +6,7 @@ x; y; z;
 
 // ==SCOPE::Extract to function in global scope==
 
-var { x, y, z }: { x: number; y: string; z: number; } = /*RENAME*/newFunction();
+var { x, y, z }: { x: number; y: string; z: number } = /*RENAME*/newFunction();
 x; y; z;
 
 function newFunction() {

@@ -14,7 +14,7 @@ verify.codeFix({
 `
 /** @param {Object<string, boolean>} sb
   * @param {Object<number, string>} ns */
-function f(sb: { [s: string]: boolean; }, ns: { [n: number]: string; }) {
+function f(sb: { [s: string]: boolean }, ns: { [n: number]: string }) {
     sb; ns;
 }`,
 });

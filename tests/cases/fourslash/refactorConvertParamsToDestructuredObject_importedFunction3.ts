@@ -14,7 +14,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `function foo({ a, b }: { a: string; b: string; }) { }
+    newContent: `function foo({ a, b }: { a: string; b: string }) { }
 export = foo;`
 });
 
