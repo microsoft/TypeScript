@@ -437,3 +437,205 @@ function f42(x: number) {
 >x : number
 }
 
+// Repro from #33582
+
+export interface Component<T extends object = any> {
+	attrName?: string;
+>attrName : string | undefined
+
+	data: T;
+>data : T
+
+	dependencies?: string[];
+>dependencies : string[] | undefined
+
+	el: any;
+>el : any
+
+	id: string;
+>id : string
+
+	multiple?: boolean;
+>multiple : boolean | undefined
+
+	name: string;
+>name : string
+
+	schema: unknown;
+>schema : unknown
+
+	system: any;
+>system : any
+
+	init(data?: T): void;
+>init : (data?: T | undefined) => void
+>data : T | undefined
+
+	pause(): void;
+>pause : () => void
+
+	play(): void;
+>play : () => void
+
+	remove(): void;
+>remove : () => void
+
+	tick?(time: number, timeDelta: number): void;
+>tick : ((time: number, timeDelta: number) => void) | undefined
+>time : number
+>timeDelta : number
+
+	update(oldData: T): void;
+>update : (oldData: T) => void
+>oldData : T
+
+	updateSchema?(): void;
+>updateSchema : (() => void) | undefined
+
+	extendSchema(update: unknown): void;
+>extendSchema : (update: unknown) => void
+>update : unknown
+
+	flushToDOM(): void;
+>flushToDOM : () => void
+}
+
+export interface ComponentConstructor<T extends object> {
+	new (el: unknown, attrValue: string, id: string): T & Component;
+>el : unknown
+>attrValue : string
+>id : string
+
+	prototype: T & {
+>prototype : T & { name: string; system: unknown; play(): void; pause(): void; }
+
+		name: string;
+>name : string
+
+		system: unknown;
+>system : unknown
+
+		play(): void;
+>play : () => void
+
+		pause(): void;
+>pause : () => void
+
+	};
+}
+
+declare function registerComponent<T extends object>(
+>registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
+
+    name: string,
+>name : string
+
+    component: ComponentDefinition<T>
+>component : ComponentDefinition<T>
+
+): ComponentConstructor<T>;
+
+export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
+>ComponentDefinition : ComponentDefinition<T>
+
+const Component = registerComponent('test-component', {
+>Component : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
+>registerComponent('test-component', {	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}}) : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
+>registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
+>'test-component' : "test-component"
+>{	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}} : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }
+
+	schema: {
+>schema : { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }
+>{		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	} : { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }
+
+		myProperty: {
+>myProperty : { default: never[]; parse(): boolean[]; }
+>{			default: [],			parse() {				return [true];			}		} : { default: never[]; parse(): boolean[]; }
+
+			default: [],
+>default : never[]
+>[] : never[]
+
+			parse() {
+>parse : () => boolean[]
+
+				return [true];
+>[true] : true[]
+>true : true
+			}
+		},
+		string: { type: 'string' },
+>string : { type: string; }
+>{ type: 'string' } : { type: string; }
+>type : string
+>'string' : "string"
+
+		num: 0
+>num : number
+>0 : 0
+
+	},
+	init() {
+>init : () => void
+
+		this.data.num = 0;
+>this.data.num = 0 : 0
+>this.data.num : any
+>this.data : any
+>this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
+>data : any
+>num : any
+>0 : 0
+
+		this.el.setAttribute('custom-attribute', 'custom-value');
+>this.el.setAttribute('custom-attribute', 'custom-value') : any
+>this.el.setAttribute : any
+>this.el : any
+>this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
+>el : any
+>setAttribute : any
+>'custom-attribute' : "custom-attribute"
+>'custom-value' : "custom-value"
+
+	},
+	update() {},
+>update : () => void
+
+	tick() {},
+>tick : () => void
+
+	remove() {},
+>remove : () => void
+
+	pause() {},
+>pause : () => void
+
+	play() {},
+>play : () => void
+
+	multiply(f: number) {
+>multiply : (f: number) => number
+>f : number
+
+		// Reference to system because both were registered with the same name.
+		return f * this.data.num * this.system!.data.counter;
+>f * this.data.num * this.system!.data.counter : number
+>f * this.data.num : number
+>f : number
+>this.data.num : any
+>this.data : any
+>this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
+>data : any
+>num : any
+>this.system!.data.counter : any
+>this.system!.data : any
+>this.system! : any
+>this.system : any
+>this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
+>system : any
+>data : any
+>counter : any
+	}
+});
+

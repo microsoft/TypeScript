@@ -1,3 +1,15 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src --verbose
+12:04:00 AM - Projects in this build: 
+    * src/tsconfig.json
+
+12:04:00 AM - Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
+
+12:04:00 AM - Building project '/src/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/lib/a.d.ts]
 export declare class B {
     prop: string;
