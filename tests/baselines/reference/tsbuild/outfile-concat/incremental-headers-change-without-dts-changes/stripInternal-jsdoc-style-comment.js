@@ -1,3 +1,25 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:08:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:08:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:08:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:08:00 AM - Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+
+12:08:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+12:08:00 AM - Updating output of project '/src/third/tsconfig.json'...
+
+12:08:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}

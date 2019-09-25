@@ -257,6 +257,10 @@ namespace ts {
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        /* @internal */
+        setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
+        /* @internal */
+        useSourceOfProjectReferenceRedirect?(): boolean;
     }
 
     /* @internal */

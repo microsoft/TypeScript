@@ -1,0 +1,364 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts ===
+type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+>ValueOrArray : ValueOrArray<T>
+
+const a0: ValueOrArray<number> = 1;
+>a0 : ValueOrArray<number>
+>1 : 1
+
+const a1: ValueOrArray<number> = [1, [2, 3], [4, [5, [6, 7]]]];
+>a1 : ValueOrArray<number>
+>[1, [2, 3], [4, [5, [6, 7]]]] : (number | (number | (number | number[])[])[])[]
+>1 : 1
+>[2, 3] : number[]
+>2 : 2
+>3 : 3
+>[4, [5, [6, 7]]] : (number | (number | number[])[])[]
+>4 : 4
+>[5, [6, 7]] : (number | number[])[]
+>5 : 5
+>[6, 7] : number[]
+>6 : 6
+>7 : 7
+
+type HypertextNode = string | [string, { [key: string]: unknown }, ...HypertextNode[]];
+>HypertextNode : HypertextNode
+>key : string
+
+const hypertextNode: HypertextNode =
+>hypertextNode : HypertextNode
+
+    ["div", { id: "parent" },
+>["div", { id: "parent" },        ["div", { id: "first-child" }, "I'm the first child"],        ["div", { id: "second-child" }, "I'm the second child"]    ] : [string, { id: string; }, [string, { id: string; }, string], [string, { id: string; }, string]]
+>"div" : "div"
+>{ id: "parent" } : { id: string; }
+>id : string
+>"parent" : "parent"
+
+        ["div", { id: "first-child" }, "I'm the first child"],
+>["div", { id: "first-child" }, "I'm the first child"] : [string, { id: string; }, string]
+>"div" : "div"
+>{ id: "first-child" } : { id: string; }
+>id : string
+>"first-child" : "first-child"
+>"I'm the first child" : "I'm the first child"
+
+        ["div", { id: "second-child" }, "I'm the second child"]
+>["div", { id: "second-child" }, "I'm the second child"] : [string, { id: string; }, string]
+>"div" : "div"
+>{ id: "second-child" } : { id: string; }
+>id : string
+>"second-child" : "second-child"
+>"I'm the second child" : "I'm the second child"
+
+    ];
+
+type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
+>Json : Json
+>null : null
+>key : string
+
+let data: Json = {
+>data : Json
+>{    caption: "Test",    location: { x: 10, y: 20 },    values: [true, [10, 20], null]} : { caption: string; location: { x: number; y: number; }; values: (true | number[] | null)[]; }
+
+    caption: "Test",
+>caption : string
+>"Test" : "Test"
+
+    location: { x: 10, y: 20 },
+>location : { x: number; y: number; }
+>{ x: 10, y: 20 } : { x: number; y: number; }
+>x : number
+>10 : 10
+>y : number
+>20 : 20
+
+    values: [true, [10, 20], null]
+>values : (true | number[] | null)[]
+>[true, [10, 20], null] : (true | number[] | null)[]
+>true : true
+>[10, 20] : number[]
+>10 : 10
+>20 : 20
+>null : null
+
+};
+
+interface Box<T> { value: T };
+>value : T
+
+type T1 = Box<T1>;
+>T1 : T1
+
+type T2 = Box<Box<T2>>;
+>T2 : T2
+
+type T3 = Box<Box<Box<T3>>>;
+>T3 : T3
+
+function f1(t1: T1, t2: T2, t3: T3) {
+>f1 : (t1: T1, t2: T2, t3: T3) => void
+>t1 : T1
+>t2 : T2
+>t3 : T3
+
+    t1 = t2;
+>t1 = t2 : T2
+>t1 : T1
+>t2 : T2
+
+    t1 = t3;
+>t1 = t3 : T3
+>t1 : T1
+>t3 : T3
+
+    t2 = t1;
+>t2 = t1 : T1
+>t2 : T2
+>t1 : T1
+
+    t2 = t3;
+>t2 = t3 : T3
+>t2 : T2
+>t3 : T3
+
+    t3 = t1;
+>t3 = t1 : T1
+>t3 : T3
+>t1 : T1
+
+    t3 = t2;
+>t3 = t2 : T2
+>t3 : T3
+>t2 : T2
+}
+
+type Box1 = Box<Box1> | number;
+>Box1 : Box1
+
+const b10: Box1 = 42;
+>b10 : Box1
+>42 : 42
+
+const b11: Box1 = { value: 42 };
+>b11 : Box1
+>{ value: 42 } : { value: number; }
+>value : number
+>42 : 42
+
+const b12: Box1 = { value: { value: { value: 42 }}};
+>b12 : Box1
+>{ value: { value: { value: 42 }}} : { value: { value: { value: number; }; }; }
+>value : { value: { value: number; }; }
+>{ value: { value: 42 }} : { value: { value: number; }; }
+>value : { value: number; }
+>{ value: 42 } : { value: number; }
+>value : number
+>42 : 42
+
+type Box2 = Box<Box2 | number>;
+>Box2 : Box2
+
+const b20: Box2 = 42;  // Error
+>b20 : Box2
+>42 : 42
+
+const b21: Box2 = { value: 42 };
+>b21 : Box2
+>{ value: 42 } : { value: number; }
+>value : number
+>42 : 42
+
+const b22: Box2 = { value: { value: { value: 42 }}};
+>b22 : Box2
+>{ value: { value: { value: 42 }}} : { value: { value: { value: number; }; }; }
+>value : { value: { value: number; }; }
+>{ value: { value: 42 }} : { value: { value: number; }; }
+>value : { value: number; }
+>{ value: 42 } : { value: number; }
+>value : number
+>42 : 42
+
+type RecArray<T> = Array<T | RecArray<T>>;
+>RecArray : RecArray<T>
+
+declare function flat<T>(a: RecArray<T>): Array<T>;
+>flat : <T>(a: RecArray<T>) => T[]
+>a : RecArray<T>
+
+declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>a : (T | T[])[]
+
+declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>a : (T | (T | T[])[])[]
+
+flat([1, [2, [3]]]);  // number[]
+>flat([1, [2, [3]]]) : number[]
+>flat : <T>(a: RecArray<T>) => T[]
+>[1, [2, [3]]] : (number | (number | number[])[])[]
+>1 : 1
+>[2, [3]] : (number | number[])[]
+>2 : 2
+>[3] : number[]
+>3 : 3
+
+flat([[[0]]]);  // number[]
+>flat([[[0]]]) : number[]
+>flat : <T>(a: RecArray<T>) => T[]
+>[[[0]]] : number[][][]
+>[[0]] : number[][]
+>[0] : number[]
+>0 : 0
+
+flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
+>flat([[[[[[[[[[[4]]]]]]]]]]]) : number[]
+>flat : <T>(a: RecArray<T>) => T[]
+>[[[[[[[[[[[4]]]]]]]]]]] : number[][][][][][][][][][][]
+>[[[[[[[[[[4]]]]]]]]]] : number[][][][][][][][][][]
+>[[[[[[[[[4]]]]]]]]] : number[][][][][][][][][]
+>[[[[[[[[4]]]]]]]] : number[][][][][][][][]
+>[[[[[[[4]]]]]]] : number[][][][][][][]
+>[[[[[[4]]]]]] : number[][][][][][]
+>[[[[[4]]]]] : number[][][][][]
+>[[[[4]]]] : number[][][][]
+>[[[4]]] : number[][][]
+>[[4]] : number[][]
+>[4] : number[]
+>4 : 4
+
+flat([1, 'a', [2]]);  // (string | number)[]
+>flat([1, 'a', [2]]) : (string | number)[]
+>flat : <T>(a: RecArray<T>) => T[]
+>[1, 'a', [2]] : (string | number | number[])[]
+>1 : 1
+>'a' : "a"
+>[2] : number[]
+>2 : 2
+
+flat([1, [2, 'a']]);  // (string | number)[]
+>flat([1, [2, 'a']]) : (string | number)[]
+>flat : <T>(a: RecArray<T>) => T[]
+>[1, [2, 'a']] : (number | (string | number)[])[]
+>1 : 1
+>[2, 'a'] : (string | number)[]
+>2 : 2
+>'a' : "a"
+
+flat([1, ['a']]);  // Error
+>flat([1, ['a']]) : any
+>flat : <T>(a: RecArray<T>) => T[]
+>[1, ['a']] : (number | string[])[]
+>1 : 1
+>['a'] : string[]
+>'a' : "a"
+
+flat1([1, [2, [3]]]);  // (number | number[])[]
+>flat1([1, [2, [3]]]) : (number | number[])[]
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>[1, [2, [3]]] : (number | (number | number[])[])[]
+>1 : 1
+>[2, [3]] : (number | number[])[]
+>2 : 2
+>[3] : number[]
+>3 : 3
+
+flat1([[[0]]]);  // number[][]
+>flat1([[[0]]]) : number[][]
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>[[[0]]] : number[][][]
+>[[0]] : number[][]
+>[0] : number[]
+>0 : 0
+
+flat1([1, 'a', [2]]);  // (string | number)[]
+>flat1([1, 'a', [2]]) : (string | number)[]
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>[1, 'a', [2]] : (string | number | number[])[]
+>1 : 1
+>'a' : "a"
+>[2] : number[]
+>2 : 2
+
+flat1([1, [2, 'a']]);  // (string | number)[]
+>flat1([1, [2, 'a']]) : (string | number)[]
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>[1, [2, 'a']] : (number | (string | number)[])[]
+>1 : 1
+>[2, 'a'] : (string | number)[]
+>2 : 2
+>'a' : "a"
+
+flat1([1, ['a']]);  // Error
+>flat1([1, ['a']]) : any
+>flat1 : <T>(a: (T | T[])[]) => T[]
+>[1, ['a']] : (number | string[])[]
+>1 : 1
+>['a'] : string[]
+>'a' : "a"
+
+flat2([1, [2, [3]]]);  // number[]
+>flat2([1, [2, [3]]]) : number[]
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>[1, [2, [3]]] : (number | (number | number[])[])[]
+>1 : 1
+>[2, [3]] : (number | number[])[]
+>2 : 2
+>[3] : number[]
+>3 : 3
+
+flat2([[[0]]]);  // number[]
+>flat2([[[0]]]) : number[]
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>[[[0]]] : number[][][]
+>[[0]] : number[][]
+>[0] : number[]
+>0 : 0
+
+flat2([1, 'a', [2]]);  // (string | number)[]
+>flat2([1, 'a', [2]]) : (string | number)[]
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>[1, 'a', [2]] : (string | number | number[])[]
+>1 : 1
+>'a' : "a"
+>[2] : number[]
+>2 : 2
+
+flat2([1, [2, 'a']]);  // (string | number)[]
+>flat2([1, [2, 'a']]) : (string | number)[]
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>[1, [2, 'a']] : (number | (string | number)[])[]
+>1 : 1
+>[2, 'a'] : (string | number)[]
+>2 : 2
+>'a' : "a"
+
+flat2([1, ['a']]);  // Error
+>flat2([1, ['a']]) : any
+>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>[1, ['a']] : (number | string[])[]
+>1 : 1
+>['a'] : string[]
+>'a' : "a"
+
+type T10 = T10[];
+>T10 : T10
+
+type T11 = readonly T11[];
+>T11 : readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly any[])[])[])[])[])[])[])[])[])[])[]
+
+type T12 = (T12)[];
+>T12 : T12
+
+type T13 = T13[] | string;
+>T13 : T13
+
+type T14 = T14[] & { x: string };
+>T14 : T14
+>x : string
+
+type T15<X> = X extends string ? T15<X>[] : never;
+>T15 : T15<X>
+

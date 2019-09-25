@@ -1,3 +1,29 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:04:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:04:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+12:04:00 AM - Updating output of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+
+12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);

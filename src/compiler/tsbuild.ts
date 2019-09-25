@@ -316,7 +316,7 @@ namespace ts {
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
-            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            let output = pretty ? `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] ` : `${getLocaleTimeString(system)} - `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
             system.write(output);
         };
@@ -1621,7 +1621,7 @@ namespace ts {
 
         if (!state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
-            const buildInfoPath = getOutputPathForBuildInfo(project.options);
+            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
                 const value = state.readFileWithCache(buildInfoPath);
                 const buildInfo = value && getBuildInfo(value);

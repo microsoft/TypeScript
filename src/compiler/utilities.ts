@@ -975,6 +975,8 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
+        Debug.assert(!isJSDoc(errorNode));
+
         const isMissing = nodeIsMissing(errorNode);
         const pos = isMissing || isJsxText(node)
             ? errorNode.pos
@@ -1007,7 +1009,7 @@ namespace ts {
     }
 
     export function isDeclarationReadonly(declaration: Declaration): boolean {
-        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
     }
 
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -4983,8 +4985,8 @@ namespace ts {
     }
 
     export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
-    export function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration {
-        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor;
+    export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
+        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -8713,11 +8715,16 @@ namespace ts {
         return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
 
-    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions) {
+    export interface HostWithIsSourceOfProjectReferenceRedirect {
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    }
+    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions, host: HostWithIsSourceOfProjectReferenceRedirect) {
         // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
         // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
         // '/// <reference no-default-lib="true"/>' directive.
-        return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
+        return (options.skipLibCheck && sourceFile.isDeclarationFile ||
+            options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
+            host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
     }
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {
