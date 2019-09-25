@@ -17135,7 +17135,7 @@ namespace ts {
                         const symbol = getResolvedSymbol(<Identifier>node);
                         return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     case SyntaxKind.ThisKeyword:
-                        return checkThisExpression(node);
+                        return getExplicitThisType(node);
                     case SyntaxKind.PropertyAccessExpression:
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
                         const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
@@ -18717,6 +18717,20 @@ namespace ts {
                 else if (includeGlobalThis) {
                     return getTypeOfSymbol(globalThisSymbol);
                 }
+            }
+        }
+
+        function getExplicitThisType(node: Expression) {
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+            if (isFunctionLike(container)) {
+                const signature = getSignatureFromDeclaration(container);
+                if (signature.thisParameter) {
+                    return getExplicitTypeOfSymbol(signature.thisParameter);
+                }
+            }
+            if (isClassLike(container.parent)) {
+                const symbol = getSymbolOfNode(container.parent);
+                return hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
             }
         }
 
