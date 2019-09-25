@@ -41,16 +41,22 @@ class Wrap {
 >c.item : Symbol(Conn.item, Decl(conn.js, 5, 20))
 >c : Symbol(c, Decl(usage.js, 8, 16))
 >item : Symbol(Conn.item, Decl(conn.js, 5, 20))
+
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
+>this.another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
+>this : Symbol(Wrap, Decl(usage.js, 0, 0))
+>another : Symbol(Wrap.another, Decl(usage.js, 9, 31))
     }
 }
 
 module.exports = {
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/usage", Decl(usage.js, 0, 0))
->module : Symbol(export=, Decl(usage.js, 11, 1))
->exports : Symbol(export=, Decl(usage.js, 11, 1))
+>module : Symbol(export=, Decl(usage.js, 13, 1))
+>exports : Symbol(export=, Decl(usage.js, 13, 1))
 
     Wrap
->Wrap : Symbol(Wrap, Decl(usage.js, 13, 18))
+>Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))
 
 };
 

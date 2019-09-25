@@ -44,6 +44,14 @@ class Wrap {
 >c.item : number
 >c : import("tests/cases/conformance/jsdoc/declarations/conn")
 >item : number
+
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
+>this.another = "" : ""
+>this.another : string | number
+>this : this
+>another : string | number
+>"" : ""
     }
 }
 

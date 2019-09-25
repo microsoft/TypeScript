@@ -28,6 +28,8 @@ class Wrap {
      */
     constructor(c) {
         this.connItem = c.item;
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
     }
 }
 

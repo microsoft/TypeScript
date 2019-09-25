@@ -24,6 +24,8 @@ class Wrap {
      */
     constructor(c) {
         this.connItem = c.item;
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
     }
 }
 
@@ -54,6 +56,8 @@ var Wrap = /** @class */ (function () {
      */
     function Wrap(c) {
         this.connItem = c.item;
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
     }
     return Wrap;
 }());
@@ -86,4 +90,6 @@ export class Wrap {
      */
     constructor(c: import("./conn"));
     connItem: number;
+    /** @type {import("./conn").Whatever} */
+    another: import("./conn").Whatever;
 }
