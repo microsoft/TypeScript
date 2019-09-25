@@ -755,7 +755,7 @@ namespace ts {
             catch {
                 _crypto = undefined;
             }
-            let activeSession: import("inspector").Session | undefined;
+            let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
             const Buffer: {
@@ -899,24 +899,31 @@ namespace ts {
             }
 
             function disableCPUProfiler(cb: () => void) {
-                if (activeSession) {
+                if (activeSession && activeSession !== "stopping") {
+                    const s = activeSession;
                     activeSession.post("Profiler.stop", (err, { profile }) => {
                         if (!err) {
                             try {
                                 if (_fs.statSync(profilePath).isDirectory()) {
-                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString()}.cpuprofile`);
+                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}.cpuprofile`);
                                 }
                             }
-                            catch {}
+                            catch {
+                                // do nothing and ignore fallible fs operation
+                            }
                             try {
                                 _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
                             }
-                            catch {}
+                            catch {
+                                // do nothing and ignore fallible fs operation
+                            }
                             _fs.writeFileSync(profilePath, JSON.stringify(profile));
                         }
+                        activeSession = undefined;
+                        s.disconnect();
                         cb();
                     });
-                    activeSession = undefined;
+                    activeSession = "stopping";
                     return true;
                 }
                 else {
