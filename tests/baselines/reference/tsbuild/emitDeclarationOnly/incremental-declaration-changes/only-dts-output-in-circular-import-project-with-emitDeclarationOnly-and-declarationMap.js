@@ -1,3 +1,15 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src --verbose
+12:04:00 AM - Projects in this build: 
+    * src/tsconfig.json
+
+12:04:00 AM - Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
+
+12:04:00 AM - Building project '/src/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/lib/a.d.ts]
 import { B } from "./b";
 export interface A {
@@ -9,6 +21,12 @@ export interface A {
 //// [/src/lib/a.d.ts.map]
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;IAAC,GAAG,EAAE,GAAG,CAAC;CAChB"}
 
+//// [/src/lib/b.d.ts] file written with same contents
+//// [/src/lib/b.d.ts.map] file written with same contents
+//// [/src/lib/c.d.ts] file written with same contents
+//// [/src/lib/c.d.ts.map] file written with same contents
+//// [/src/lib/index.d.ts] file written with same contents
+//// [/src/lib/index.d.ts.map] file written with same contents
 //// [/src/src/a.ts]
 import { B } from "./b";
 

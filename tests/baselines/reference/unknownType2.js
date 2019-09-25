@@ -222,6 +222,43 @@ function switchResponseWrong(x: unknown): SomeResponse {
     type End = isTrue<isUnknown<typeof x>>
 }
 
+// Repro from #33483
+
+function f2(x: unknown): string | undefined {
+  if (x !== undefined && typeof x !== 'string') {
+    throw new Error();
+  }
+  return x;
+}
+
+function notNotEquals(u: unknown)  {
+    if (u !== NumberEnum) { }
+    else {
+        const o: object = u;
+    }
+
+    if (u !== NumberEnum.A) { }
+    else {
+        const a: NumberEnum.A = u;
+    }
+    
+
+    if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+    }
+
+    // equivalent to
+    if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+    }
+}
+
+
+
+
+
 
 //// [unknownType2.js]
 "use strict";
@@ -386,5 +423,31 @@ function switchResponseWrong(x) {
             return x; // error
         default:
             throw new Error('Can you repeat the question?');
+    }
+}
+// Repro from #33483
+function f2(x) {
+    if (x !== undefined && typeof x !== 'string') {
+        throw new Error();
+    }
+    return x;
+}
+function notNotEquals(u) {
+    if (u !== NumberEnum) { }
+    else {
+        var o = u;
+    }
+    if (u !== NumberEnum.A) { }
+    else {
+        var a = u;
+    }
+    if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+    else {
+        var aOrB = u;
+    }
+    // equivalent to
+    if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+    else {
+        var aOrB = u;
     }
 }

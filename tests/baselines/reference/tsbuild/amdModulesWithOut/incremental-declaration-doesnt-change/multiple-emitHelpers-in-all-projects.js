@@ -1,3 +1,22 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/app --verbose
+12:04:00 AM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+12:04:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+12:04:00 AM - Building project '/src/lib/tsconfig.json'...
+
+12:04:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+12:04:00 AM - Updating output of project '/src/app/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/module.js]
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -790,6 +809,9 @@ export const x = 10;function forlibfile1Rest() {
 const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 }console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];

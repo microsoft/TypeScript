@@ -25,9 +25,9 @@ namespace ts {
             projFs = undefined!; // Release the contents
         });
 
-        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: readonly string[], expectedFileTraces: readonly string[], ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             modifyDiskLayout(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
             builder.build();

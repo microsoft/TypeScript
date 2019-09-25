@@ -37,6 +37,7 @@ tests/cases/**/*.js
 !tests/cases/docker/*.js/
 tests/cases/**/*.js.map
 *.config
+scripts/eslint/built/
 scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
@@ -60,6 +61,8 @@ internal/
 **/.vs
 **/.vscode
 !**/.vscode/tasks.json
+!**/.vscode/settings.json
+!**/.vscode/extensions.json
 !tests/cases/projects/projectOption/**/node_modules
 !tests/cases/projects/NodeModulesSearch/**/*
 !tests/baselines/reference/project/nodeModules*/**/*
@@ -79,3 +82,13 @@ tests/baselines/reference/dt
 .failed-tests
 TEST-results.xml
 package-lock.json
+tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter
+tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter
+tests/cases/user/TypeScript-React-Native-Starter/TypeScript-React-Native-Starter
+tests/cases/user/TypeScript-Vue-Starter/TypeScript-Vue-Starter
+tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter
+tests/cases/user/create-react-app/create-react-app
+tests/cases/user/webpack/webpack
+tests/cases/user/puppeteer/puppeteer
+tests/cases/user/axios-src/axios-src
+tests/cases/user/prettier/prettier

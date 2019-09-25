@@ -142,10 +142,9 @@ src/language-html/printer-html.js(314,13): error TS2769: No overload matches thi
 src/language-html/printer-html.js(471,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
-      Types of property 'slice' are incompatible.
-        Type '(start?: number | undefined, end?: number | undefined) => { type: string; parts: any; }[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => never[]'.
-          Type '{ type: string; parts: any; }[]' is not assignable to type 'never[]'.
-            Type '{ type: string; parts: any; }' is not assignable to type 'never'.
+      The types returned by 'slice(...)' are incompatible between these types.
+        Type '{ type: string; parts: any; }[]' is not assignable to type 'never[]'.
+          Type '{ type: string; parts: any; }' is not assignable to type 'never'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
 src/language-html/printer-html.js(492,11): error TS2769: No overload matches this call.
@@ -200,11 +199,10 @@ src/language-js/index.js(81,60): error TS2345: Argument of type '{ override: { s
 src/language-js/needs-parens.js(871,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
-      Types of property 'slice' are incompatible.
-        Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
-          Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
-            Type 'string | number' is not assignable to type '(childPath: any) => any'.
-              Type 'string' is not assignable to type '(childPath: any) => any'.
+      The types returned by 'slice(...)' are incompatible between these types.
+        Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
+          Type 'string | number' is not assignable to type '(childPath: any) => any'.
+            Type 'string' is not assignable to type '(childPath: any) => any'.
   Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
       Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
@@ -260,15 +258,14 @@ src/language-js/printer-estree.js(4562,16): error TS2345: Argument of type '{ ty
 src/language-js/printer-estree.js(4610,11): error TS2322: Type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }' is not assignable to type 'string'.
 src/language-js/printer-estree.js(4625,11): error TS2322: Type '{ type: string; parts: any; }' is not assignable to type 'string'.
 src/language-js/printer-estree.js(4637,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(4924,9): error TS2554: Expected 0-2 arguments, but got 3.
-src/language-js/printer-estree.js(6131,7): error TS2769: No overload matches this call.
+src/language-js/printer-estree.js(4931,9): error TS2554: Expected 0-2 arguments, but got 3.
+src/language-js/printer-estree.js(6138,7): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
-      Types of property 'slice' are incompatible.
-        Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
-          Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
-            Type 'string | number' is not assignable to type '(childPath: any) => any'.
-              Type 'string' is not assignable to type '(childPath: any) => any'.
+      The types returned by 'slice(...)' are incompatible between these types.
+        Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
+          Type 'string | number' is not assignable to type '(childPath: any) => any'.
+            Type 'string' is not assignable to type '(childPath: any) => any'.
   Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
       Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
@@ -335,8 +332,6 @@ src/main/options-normalizer.js(36,35): error TS2339: Property 'blue' does not ex
 src/main/options-normalizer.js(54,5): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 src/main/options-normalizer.js(74,16): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.
 src/main/options-normalizer.js(80,39): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.
-src/main/options-normalizer.js(90,44): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type 'SchemaHandlers<any>'.
-  Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
 src/main/options-normalizer.js(99,11): error TS2345: Argument of type '{ name: any; sourceName: any; }' is not assignable to parameter of type 'SchemaHandlers<any>'.
   Object literal may only specify known properties, and 'name' does not exist in type 'SchemaHandlers<any>'.
 src/main/options-normalizer.js(143,13): error TS2769: No overload matches this call.

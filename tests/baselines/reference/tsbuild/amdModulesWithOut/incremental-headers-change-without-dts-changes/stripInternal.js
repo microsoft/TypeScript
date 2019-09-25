@@ -1,3 +1,20 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/app --verbose
+12:08:00 AM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+12:08:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+12:08:00 AM - Building project '/src/lib/tsconfig.json'...
+
+12:08:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+12:08:00 AM - Updating output of project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/module.d.ts]
 declare module "file1" {
     export class normalC {
@@ -2071,6 +2088,7 @@ export namespace normalN {
 /*@internal*/ export const internalConst = 10;
 /*@internal*/ export enum internalEnum { a, b, c }
 
+//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IAClC,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;sBACF,CAAC,EACM,MAAM;KAClC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
 

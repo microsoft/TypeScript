@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): ReadonlyArray<DefinitionInfo> | undefined {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const reference = getReferenceAtPosition(sourceFile, position, program);
         if (reference) {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
@@ -129,7 +129,7 @@ namespace ts.GoToDefinition {
     }
 
     /// Goto type
-    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): ReadonlyArray<DefinitionInfo> | undefined {
+    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
@@ -145,7 +145,7 @@ namespace ts.GoToDefinition {
         return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
     }
 
-    function definitionFromType(type: Type, checker: TypeChecker, node: Node): ReadonlyArray<DefinitionInfo> {
+    function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {
         return flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
             t.symbol && getDefinitionFromSymbol(checker, t.symbol, node));
     }
@@ -254,7 +254,7 @@ namespace ts.GoToDefinition {
                 : undefined;
         }
 
-        function getSignatureDefinition(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
+        function getSignatureDefinition(signatureDeclarations: readonly Declaration[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
             if (!signatureDeclarations) {
                 return undefined;
             }
@@ -302,7 +302,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, typeChecker, decl.symbol, decl);
     }
 
-    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
+    export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
         return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 

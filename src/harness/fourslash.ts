@@ -189,7 +189,7 @@ namespace FourSlash {
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
-        private addMatchedInputFile(referenceFilePath: string, extensions: ReadonlyArray<string> | undefined) {
+        private addMatchedInputFile(referenceFilePath: string, extensions: readonly string[] | undefined) {
             const inputFiles = this.inputFiles;
             const languageServiceAdapterHost = this.languageServiceAdapterHost;
             const didAdd = tryAdd(referenceFilePath);
@@ -396,7 +396,7 @@ namespace FourSlash {
             this.goToPosition(marker.position);
         }
 
-        public goToEachMarker(markers: ReadonlyArray<Marker>, action: (marker: Marker, index: number) => void) {
+        public goToEachMarker(markers: readonly Marker[], action: (marker: Marker, index: number) => void) {
             assert(markers.length);
             for (let i = 0; i < markers.length; i++) {
                 this.goToMarker(markers[i]);
@@ -497,7 +497,7 @@ namespace FourSlash {
             ];
         }
 
-        private getAllDiagnostics(): ReadonlyArray<ts.Diagnostic> {
+        private getAllDiagnostics(): readonly ts.Diagnostic[] {
             return ts.flatMap(this.languageServiceAdapterHost.getFilenames(), fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)) {
                     return [];
@@ -538,7 +538,7 @@ namespace FourSlash {
                 predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)); // TODO: GH#18217
         }
 
-        private printErrorLog(expectErrors: boolean, errors: ReadonlyArray<ts.Diagnostic>): void {
+        private printErrorLog(expectErrors: boolean, errors: readonly ts.Diagnostic[]): void {
             if (expectErrors) {
                 Harness.IO.log("Expected error not found.  Error list is:");
             }
@@ -621,7 +621,7 @@ namespace FourSlash {
                 throw new Error("Expected exactly one output from emit of " + this.activeFile.fileName);
             }
 
-            const evaluation = new Function(`${emit.outputFiles[0].text};\r\nreturn (${expr});`)(); // tslint:disable-line:function-constructor
+            const evaluation = new Function(`${emit.outputFiles[0].text};\r\nreturn (${expr});`)(); // eslint-disable-line no-new-func
             if (evaluation !== value) {
                 this.raiseError(`Expected evaluation of expression "${expr}" to equal "${value}", but got "${evaluation}"`);
             }
@@ -635,7 +635,7 @@ namespace FourSlash {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
-        private getGoToDefinition(): ReadonlyArray<ts.DefinitionInfo> {
+        private getGoToDefinition(): readonly ts.DefinitionInfo[] {
             return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         }
 
@@ -648,12 +648,12 @@ namespace FourSlash {
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs = arg0 as ReadonlyArray<[ArrayOrSingle<string>, ArrayOrSingle<string>]>;
+                const pairs = arg0 as readonly [ArrayOrSingle<string>, ArrayOrSingle<string>][];
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }
@@ -668,7 +668,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -680,14 +680,14 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string>, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             this.goToMarker(startMarkerName);
             this.verifyGoToXWorker(toArray(endMarkerNames), getDefs, startMarkerName);
         }
 
-        private verifyGoToXWorker(endMarkers: ReadonlyArray<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
+        private verifyGoToXWorker(endMarkers: readonly string[], getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
             const defs = getDefs();
-            let definitions: ReadonlyArray<ts.DefinitionInfo>;
+            let definitions: readonly ts.DefinitionInfo[];
             let testName: string;
 
             if (!defs || ts.isArray(defs)) {
@@ -766,7 +766,7 @@ namespace FourSlash {
         private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
             if (!actualCompletions) {
-                if ("exact" in options && options.exact === undefined) return;
+                if (ts.hasProperty(options, "exact") && options.exact === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -774,7 +774,7 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation || false}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
-            if ("isGlobalCompletion" in options && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
+            if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
             }
 
@@ -792,8 +792,8 @@ namespace FourSlash {
                 }
             }
 
-            if ("exact" in options) {
-                ts.Debug.assert(!("includes" in options) && !("excludes" in options));
+            if (ts.hasProperty(options, "exact")) {
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
                 this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
             }
@@ -863,7 +863,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, marker?: ArrayOrSingle<string | Marker>) {
+        private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: readonly FourSlashInterface.ExpectedCompletionEntry[], marker?: ArrayOrSingle<string | Marker>) {
             // First pass: test that names are right. Then we'll test details.
             assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name), marker ? "At marker " + JSON.stringify(marker) : undefined);
 
@@ -957,7 +957,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyDocumentHighlightsRespectFilesList(files: ReadonlyArray<string>): void {
+        private verifyDocumentHighlightsRespectFilesList(files: readonly string[]): void {
             const startFile = this.activeFile.fileName;
             for (const fileName of files) {
                 const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
@@ -968,7 +968,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<FourSlashInterface.ReferenceGroup>): void {
+        public verifyReferenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: readonly FourSlashInterface.ReferenceGroup[]): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1016,9 +1016,9 @@ namespace FourSlash {
         }
 
         // Necessary to have this function since `findReferences` isn't implemented in `client.ts`
-        public verifyGetReferencesForServerTest(expected: ReadonlyArray<ts.ReferenceEntry>): void {
+        public verifyGetReferencesForServerTest(expected: readonly ts.ReferenceEntry[]): void {
             const refs = this.getReferencesAtCaret();
-            assert.deepEqual<ReadonlyArray<ts.ReferenceEntry> | undefined>(refs, expected);
+            assert.deepEqual<readonly ts.ReferenceEntry[] | undefined>(refs, expected);
         }
 
         public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
@@ -1097,21 +1097,21 @@ namespace FourSlash {
             return this.languageService.findReferences(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public getSyntacticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
+        public getSyntacticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
             this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSemanticDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>) {
+        public getSemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
             const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
             this.testDiagnostics(expected, diagnostics, "error");
         }
 
-        public getSuggestionDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>): void {
+        public getSuggestionDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
             this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
         }
 
-        private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
+        private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
             assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => ({
                 message: e.message,
                 category,
@@ -1207,10 +1207,10 @@ namespace FourSlash {
                 const references = this.languageService.findRenameLocations(
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
 
-                const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
+                const sort = (locations: readonly ts.RenameLocation[] | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line no-in-operator
                     const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
                     return {
                         fileName: range.fileName,
@@ -1238,7 +1238,7 @@ namespace FourSlash {
             }
         }
 
-        public verifySignatureHelpPresence(expectPresent: boolean, triggerReason: ts.SignatureHelpTriggerReason | undefined, markers: ReadonlyArray<string | Marker>) {
+        public verifySignatureHelpPresence(expectPresent: boolean, triggerReason: ts.SignatureHelpTriggerReason | undefined, markers: readonly (string | Marker)[]) {
             if (markers.length) {
                 for (const marker of markers) {
                     this.goToMarker(marker);
@@ -1257,7 +1257,7 @@ namespace FourSlash {
             }
         }
 
-        public verifySignatureHelp(optionses: ReadonlyArray<FourSlashInterface.VerifySignatureHelpOptions>) {
+        public verifySignatureHelp(optionses: readonly FourSlashInterface.VerifySignatureHelpOptions[]) {
             for (const options of optionses) {
                 if (options.marker === undefined) {
                     this.verifySignatureHelpWorker(options);
@@ -1316,7 +1316,7 @@ namespace FourSlash {
                 assert.equal(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
 
-            const allKeys: ReadonlyArray<keyof FourSlashInterface.VerifySignatureHelpOptions> = [
+            const allKeys: readonly (keyof FourSlashInterface.VerifySignatureHelpOptions)[] = [
                 "marker",
                 "triggerReason",
                 "overloadsCount",
@@ -1456,7 +1456,7 @@ namespace FourSlash {
             Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
-        private getEmitFiles(): ReadonlyArray<FourSlashFile> {
+        private getEmitFiles(): readonly FourSlashFile[] {
             // Find file to be emitted
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
@@ -1476,7 +1476,7 @@ namespace FourSlash {
             return emitFiles;
         }
 
-        public verifyGetEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+        public verifyGetEmitOutput(expectedOutputFiles: readonly string[]): void {
             const outputFiles = ts.flatMap(this.getEmitFiles(), e => this.languageService.getEmitOutput(e.fileName).outputFiles);
 
             assert.deepEqual(outputFiles.map(f => f.name), expectedOutputFiles);
@@ -1810,7 +1810,7 @@ namespace FourSlash {
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
          */
-        private applyEdits(fileName: string, edits: ReadonlyArray<ts.TextChange>, isFormattingEdit: boolean): number {
+        private applyEdits(fileName: string, edits: readonly ts.TextChange[], isFormattingEdit: boolean): number {
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             const oldContent = this.getFileContent(fileName);
             let runningOffset = 0;
@@ -1975,7 +1975,7 @@ namespace FourSlash {
 
         public verifyRangesInImplementationList(markerName: string) {
             this.goToMarker(markerName);
-            const implementations: ReadonlyArray<ImplementationLocationInformation> = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
+            const implementations: readonly ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             if (!implementations || !implementations.length) {
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
@@ -2387,7 +2387,7 @@ namespace FourSlash {
             ts.Debug.assertEqual(fixWithId!.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
-            assert.deepEqual<ReadonlyArray<{}> | undefined>(commands, expectedCommands);
+            assert.deepEqual<readonly {}[] | undefined>(commands, expectedCommands);
             this.verifyNewContent({ newFileContent }, changes);
         }
 
@@ -2423,7 +2423,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyNewContent({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changes: ReadonlyArray<ts.FileTextChanges>): void {
+        private verifyNewContent({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changes: readonly ts.FileTextChanges[]): void {
             if (newRangeContent !== undefined) {
                 assert(newFileContent === undefined);
                 assert(changes.length === 1, "Affected 0 or more than 1 file, must use 'newFileContent' instead of 'newRangeContent'");
@@ -2453,7 +2453,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyNewContentAfterChange({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changedFiles: ReadonlyArray<string>) {
+        private verifyNewContentAfterChange({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changedFiles: readonly string[]) {
             const assertedChangedFiles = !newFileContent || typeof newFileContent === "string"
                 ? [this.activeFile.fileName]
                 : ts.getOwnKeys(newFileContent);
@@ -2479,7 +2479,7 @@ namespace FourSlash {
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions): ReadonlyArray<ts.CodeFixAction> {
+        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions): readonly ts.CodeFixAction[] {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -2495,7 +2495,7 @@ namespace FourSlash {
             });
         }
 
-        private applyChanges(changes: ReadonlyArray<ts.FileTextChanges>): void {
+        private applyChanges(changes: readonly ts.FileTextChanges[]): void {
             for (const change of changes) {
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
             }
@@ -2653,7 +2653,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyNavigateTo(options: ReadonlyArray<FourSlashInterface.VerifyNavigateToOptions>): void {
+        public verifyNavigateTo(options: readonly FourSlashInterface.VerifyNavigateToOptions[]): void {
             for (const { pattern, expected, fileName } of options) {
                 const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, fileName);
                 this.assertObjectsEqual(items, expected.map((e): ts.NavigateToItem => ({
@@ -2749,7 +2749,7 @@ namespace FourSlash {
             }
         }
 
-        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: ReadonlyArray<string>) {
+        private getDocumentHighlightsAtCurrentPosition(fileNamesToSearch: readonly string[]) {
             const filesToSearch = fileNamesToSearch.map(name => ts.combinePaths(this.basePath, name));
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
@@ -2768,7 +2768,7 @@ namespace FourSlash {
 
         public verifyRangesWithSameTextAreRenameLocations(...texts: string[]) {
             if (texts.length) {
-                texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)!));
+                texts.forEach(text => this.verifyRangesAreRenameLocations(this.rangesByText().get(text)));
             }
             else {
                 this.rangesByText().forEach(ranges => this.verifyRangesAreRenameLocations(ranges));
@@ -2804,7 +2804,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
+        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: readonly string[] = [this.activeFile.fileName]) {
             fileNames = ts.map(fileNames, ts.normalizePath);
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
@@ -2892,7 +2892,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactorsAvailable(names: ReadonlyArray<string>): void {
+        public verifyRefactorsAvailable(names: readonly string[]): void {
             assert.deepEqual(unique(this.getApplicableRefactorsAtSelection(), r => r.name), names);
         }
 
@@ -2997,7 +2997,7 @@ namespace FourSlash {
             this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
         }
 
-        private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }, description: string): void {
+        private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string }, description: string): void {
             for (const { fileName, textChanges } of edits) {
                 const newContent = newFileContents[fileName];
                 if (newContent === undefined) {
@@ -3110,7 +3110,7 @@ namespace FourSlash {
             }
         }
 
-        private tryFindFileWorker(name: string): { readonly file: FourSlashFile | undefined; readonly availableNames: ReadonlyArray<string>; } {
+        private tryFindFileWorker(name: string): { readonly file: FourSlashFile | undefined; readonly availableNames: readonly string[]; } {
             name = ts.normalizePath(name);
             // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
             name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
@@ -3174,10 +3174,10 @@ namespace FourSlash {
         private getApplicableRefactorsAtSelection() {
             return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName);
         }
-        private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
-            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences);
+        private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions): readonly ts.ApplicableRefactorInfo[] {
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences); // eslint-disable-line no-in-operator
         }
-        private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
+        private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): readonly ts.ApplicableRefactorInfo[] {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
         }
 
@@ -3186,7 +3186,7 @@ namespace FourSlash {
         }
     }
 
-    function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: ReadonlyArray<ts.TextChange>): ts.TextRange {
+    function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {
         forEachTextChange(textChanges, change => {
             const update = (p: number): number => updatePosition(p, change.span.start, ts.textSpanEnd(change.span), change.newText);
             pos = update(pos);
@@ -3196,7 +3196,7 @@ namespace FourSlash {
     }
 
     /** Apply each textChange in order, updating future changes to account for the text offset of previous changes. */
-    function forEachTextChange(changes: ReadonlyArray<ts.TextChange>, cb: (change: ts.TextChange) => void): void {
+    function forEachTextChange(changes: readonly ts.TextChange[], cb: (change: ts.TextChange) => void): void {
         // Copy this so we don't ruin someone else's copy
         changes = JSON.parse(JSON.stringify(changes));
         for (let i = 0; i < changes.length; i++) {
@@ -3259,7 +3259,7 @@ ${code}
             const debug = new FourSlashInterface.Debug(state);
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
-            // tslint:disable-next-line:no-eval
+            // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
             f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
@@ -3676,7 +3676,7 @@ ${code}
     }
 
     /** Collects an array of unique outputs. */
-    function unique<T>(inputs: ReadonlyArray<T>, getOutput: (t: T) => string): string[] {
+    function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] {
         const set = ts.createMap<true>();
         for (const input of inputs) {
             const out = getOutput(input);
@@ -3685,7 +3685,7 @@ ${code}
         return ts.arrayFrom(set.keys());
     }
 
-    function toArray<T>(x: ArrayOrSingle<T>): ReadonlyArray<T> {
+    function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {
         return ts.isArray(x) ? x : [x];
     }
 
@@ -3710,7 +3710,7 @@ ${code}
         return s.replace(/\s/g, "");
     }
 
-    function findDuplicatedElement<T>(a: ReadonlyArray<T>, equal: (a: T, b: T) => boolean): T | undefined {
+    function findDuplicatedElement<T>(a: readonly T[], equal: (a: T, b: T) => boolean): T | undefined {
         for (let i = 0; i < a.length; i++) {
             for (let j = i + 1; j < a.length; j++) {
                 if (equal(a[i], a[j])) {
@@ -3794,9 +3794,9 @@ namespace FourSlashInterface {
             this.state.goToMarker(name);
         }
 
-        public eachMarker(markers: ReadonlyArray<string>, action: (marker: FourSlash.Marker, index: number) => void): void;
+        public eachMarker(markers: readonly string[], action: (marker: FourSlash.Marker, index: number) => void): void;
         public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
-        public eachMarker(a: ReadonlyArray<string> | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
+        public eachMarker(a: readonly string[] | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
             const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
             this.state.goToEachMarker(markers, typeof a === "function" ? a : b!);
         }
@@ -3930,7 +3930,7 @@ namespace FourSlashInterface {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
         }
 
-        public refactorsAvailable(names: ReadonlyArray<string>): void {
+        public refactorsAvailable(names: readonly string[]): void {
             this.state.verifyRefactorsAvailable(names);
         }
 
@@ -4047,7 +4047,7 @@ namespace FourSlashInterface {
             this.state.verifyNoReferences(markerNameOrRange);
         }
 
-        public getReferencesForServerTest(expected: ReadonlyArray<ts.ReferenceEntry>) {
+        public getReferencesForServerTest(expected: readonly ts.ReferenceEntry[]) {
             this.state.verifyGetReferencesForServerTest(expected);
         }
 
@@ -4079,7 +4079,7 @@ namespace FourSlashInterface {
             this.state.baselineCurrentFileNameOrDottedNameSpans();
         }
 
-        public getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void {
+        public getEmitOutput(expectedOutputFiles: readonly string[]): void {
             this.state.verifyGetEmitOutput(expectedOutputFiles);
         }
 
@@ -4236,15 +4236,15 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
-        public getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>) {
+        public getSyntacticDiagnostics(expected: readonly Diagnostic[]) {
             this.state.getSyntacticDiagnostics(expected);
         }
 
-        public getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>) {
+        public getSemanticDiagnostics(expected: readonly Diagnostic[]) {
             this.state.getSemanticDiagnostics(expected);
         }
 
-        public getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>) {
+        public getSuggestionDiagnostics(expected: readonly Diagnostic[]) {
             this.state.getSuggestionDiagnostics(expected);
         }
 
@@ -4595,13 +4595,13 @@ namespace FourSlashInterface {
                 sortText: SortText.GlobalsOrKeywords
             });
         }
-        export const keywordsWithUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = res;
-        export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
+        export const keywordsWithUndefined: readonly ExpectedCompletionEntryObject[] = res;
+        export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
-        export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
+        export const typeKeywords: readonly ExpectedCompletionEntryObject[] =
             ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
-        const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
             interfaceEntry("Symbol"),
             typeEntry("PropertyKey"),
             interfaceEntry("PropertyDescriptor"),
@@ -4706,7 +4706,7 @@ namespace FourSlashInterface {
             sortText: SortText.GlobalsOrKeywords
         };
         export const globalTypes = globalTypesPlus([]);
-        export function globalTypesPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+        export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
             return [
                 globalThisEntry,
                 ...globalTypeDecls,
@@ -4715,10 +4715,10 @@ namespace FourSlashInterface {
             ];
         }
 
-        export const typeAssertionKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+        export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] =
             globalTypesPlus([keywordEntry("const")]);
 
-        function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
+        function getInJsKeywords(keywords: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
             return keywords.filter(keyword => {
                 switch (keyword.name) {
                     case "enum":
@@ -4754,19 +4754,19 @@ namespace FourSlashInterface {
             });
         }
 
-        export const classElementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
+        export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
             ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
-        export const constructorParameterKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
+        export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
             ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
                 name,
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
             }));
 
-        export const functionMembers: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const functionMembers: readonly ExpectedCompletionEntryObject[] = [
             methodEntry("apply"),
             methodEntry("call"),
             methodEntry("bind"),
@@ -4776,7 +4776,7 @@ namespace FourSlashInterface {
             propertyEntry("caller"),
         ];
 
-        export const stringMembers: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const stringMembers: readonly ExpectedCompletionEntryObject[] = [
             methodEntry("toString"),
             methodEntry("charAt"),
             methodEntry("charCodeAt"),
@@ -4800,14 +4800,14 @@ namespace FourSlashInterface {
             methodEntry("valueOf"),
         ];
 
-        export const functionMembersWithPrototype: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const functionMembersWithPrototype: readonly ExpectedCompletionEntryObject[] = [
             ...functionMembers.slice(0, 4),
             propertyEntry("prototype"),
             ...functionMembers.slice(4),
         ];
 
         // TODO: Shouldn't propose type keywords in statement position
-        export const statementKeywordsWithTypes: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const statementKeywordsWithTypes: readonly ExpectedCompletionEntryObject[] = [
             "break",
             "case",
             "catch",
@@ -4867,7 +4867,7 @@ namespace FourSlashInterface {
             "bigint",
         ].map(keywordEntry);
 
-        export const statementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = statementKeywordsWithTypes.filter(k => {
+        export const statementKeywords: readonly ExpectedCompletionEntryObject[] = statementKeywordsWithTypes.filter(k => {
             const name = k.name;
             switch (name) {
                 case "false":
@@ -4885,7 +4885,7 @@ namespace FourSlashInterface {
 
         export const statementInJsKeywords = getInJsKeywords(statementKeywords);
 
-        export const globalsVars: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const globalsVars: readonly ExpectedCompletionEntryObject[] = [
             functionEntry("eval"),
             functionEntry("parseInt"),
             functionEntry("parseFloat"),
@@ -4930,7 +4930,7 @@ namespace FourSlashInterface {
             moduleEntry("Intl"),
         ];
 
-        const globalKeywordsInsideFunction: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        const globalKeywordsInsideFunction: readonly ExpectedCompletionEntryObject[] = [
             "break",
             "case",
             "catch",
@@ -4982,7 +4982,7 @@ namespace FourSlashInterface {
             sortText: SortText.GlobalsOrKeywords
         };
         // TODO: many of these are inappropriate to always provide
-        export const globalsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
+        export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] => [
             { name: "arguments", kind: "local var" },
             ...plus,
             globalThisEntry,
@@ -4994,7 +4994,7 @@ namespace FourSlashInterface {
         const globalInJsKeywordsInsideFunction = getInJsKeywords(globalKeywordsInsideFunction);
 
         // TODO: many of these are inappropriate to always provide
-        export const globalsInJsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
+        export const globalsInJsInsideFunction = (plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] => [
             { name: "arguments", kind: "local var" },
             globalThisEntry,
             ...globalsVars,
@@ -5004,7 +5004,7 @@ namespace FourSlashInterface {
         ];
 
         // TODO: many of these are inappropriate to always provide
-        export const globalKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const globalKeywords: readonly ExpectedCompletionEntryObject[] = [
             "break",
             "case",
             "catch",
@@ -5066,7 +5066,7 @@ namespace FourSlashInterface {
 
         export const globalInJsKeywords = getInJsKeywords(globalKeywords);
 
-        export const insideMethodKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const insideMethodKeywords: readonly ExpectedCompletionEntryObject[] = [
             "break",
             "case",
             "catch",
@@ -5114,21 +5114,21 @@ namespace FourSlashInterface {
 
         export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);
 
-        export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const globals: readonly ExpectedCompletionEntryObject[] = [
             globalThisEntry,
             ...globalsVars,
             undefinedVarEntry,
             ...globalKeywords
         ];
 
-        export const globalsInJs: ReadonlyArray<ExpectedCompletionEntryObject> = [
+        export const globalsInJs: readonly ExpectedCompletionEntryObject[] = [
             globalThisEntry,
             ...globalsVars,
             undefinedVarEntry,
             ...globalInJsKeywords
         ];
 
-        export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+        export function globalsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
             return [
                 globalThisEntry,
                 ...globalsVars,
@@ -5137,7 +5137,7 @@ namespace FourSlashInterface {
                 ...globalKeywords];
         }
 
-        export function globalsInJsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+        export function globalsInJsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
             return [
                 globalThisEntry,
                 ...globalsVars,
@@ -5174,7 +5174,7 @@ namespace FourSlashInterface {
         readonly text?: string;
         readonly documentation?: string;
         readonly sourceDisplay?: string;
-        readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
+        readonly tags?: readonly ts.JSDocTagInfo[];
         readonly sortText?: ts.Completions.SortText;
     }
 
@@ -5205,14 +5205,14 @@ namespace FourSlashInterface {
         /** @default false */
         readonly isVariadic?: boolean;
         /** @default ts.emptyArray */
-        readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
+        readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
     }
 
     export interface VerifyNavigateToOptions {
         readonly pattern: string;
         readonly fileName?: string;
-        readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+        readonly expected: readonly ExpectedNavigateToItem[];
     }
 
     export interface ExpectedNavigateToItem {
@@ -5226,7 +5226,7 @@ namespace FourSlashInterface {
         readonly containerKind?: ts.ScriptElementKind;
     }
 
-    export type ArrayOrSingle<T> = T | ReadonlyArray<T>;
+    export type ArrayOrSingle<T> = T | readonly T[];
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
         triggerCharacter?: ts.CompletionsTriggerCharacter;
@@ -5237,7 +5237,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyDocumentHighlightsOptions {
-        filesToSearch?: ReadonlyArray<string>;
+        filesToSearch?: readonly string[];
     }
 
     export type NewFileContent = string | { readonly [filename: string]: string };
@@ -5254,7 +5254,7 @@ namespace FourSlashInterface {
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
         readonly applyChanges?: boolean;
-        readonly commands?: ReadonlyArray<ts.CodeActionCommand>;
+        readonly commands?: readonly ts.CodeActionCommand[];
     }
 
     export interface VerifyCodeFixAvailableOptions {
@@ -5266,13 +5266,13 @@ namespace FourSlashInterface {
         fixId: string;
         fixAllDescription: string;
         newFileContent: NewFileContent;
-        commands: ReadonlyArray<{}>;
+        commands: readonly {}[];
     }
 
     export interface VerifyRefactorOptions {
         name: string;
         actionName: string;
-        refactors: ReadonlyArray<ts.ApplicableRefactorInfo>;
+        refactors: readonly ts.ApplicableRefactorInfo[];
     }
 
     export interface VerifyCompletionActionOptions extends NewContentOptions {
@@ -5301,10 +5301,10 @@ namespace FourSlashInterface {
         readonly preferences?: ts.UserPreferences;
     }
 
-    export type RenameLocationsOptions = ReadonlyArray<RenameLocationOptions> | {
+    export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
-        readonly ranges: ReadonlyArray<RenameLocationOptions>;
+        readonly ranges: readonly RenameLocationOptions[];
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };

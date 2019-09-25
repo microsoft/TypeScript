@@ -1,13 +1,27 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/core --verbose
+12:04:00 AM - Projects in this build: 
+    * src/core/tsconfig.json
+
+12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.d.ts' does not exist
+
+12:04:00 AM - Building project '/src/core/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";
 
 
+//// [/src/core/anotherModule.js] file written with same contents
 //// [/src/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
 export declare function multiply(a: number, b: number): number;
 
 
+//// [/src/core/index.js] file written with same contents
 //// [/src/core/tsconfig.json]
 {
     "compilerOptions": {
