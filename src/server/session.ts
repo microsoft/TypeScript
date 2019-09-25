@@ -300,7 +300,7 @@ namespace ts.server {
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const outputs: T[] = [];
-        combineProjectOutputWorker<undefined>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             /*initialLocation*/ undefined,
@@ -311,7 +311,7 @@ namespace ts.server {
                     }
                 }
             },
-            /*getDefinition*/ undefined);
+        );
         return outputs;
     }
 
@@ -325,7 +325,7 @@ namespace ts.server {
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
@@ -336,7 +336,6 @@ namespace ts.server {
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs;
@@ -355,7 +354,7 @@ namespace ts.server {
     ): readonly ReferencedSymbol[] {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
@@ -385,7 +384,6 @@ namespace ts.server {
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs.filter(o => o.references.length !== 0);
@@ -418,8 +416,7 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>,
-        getDefinition: (() => DocumentPosition | undefined) | undefined,
+        cb: CombineProjectOutputCallback<TLocation>
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -431,8 +428,8 @@ namespace ts.server {
         });
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
-        if (getDefinition) {
-            const memGetDefinition = memoize(getDefinition);
+        if (initialLocation) {
+            const memGetDefinition = memoize(() => getDefinitionLocation(defaultProject, initialLocation!));
             projectService.loadAncestorProjectTree(seenProjects);
             projectService.forEachEnabledProject(project => {
                 if (!addToSeen(seenProjects, project)) return;
