@@ -465,7 +465,7 @@ namespace ts.server {
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
-            seenProjects.set(projectAndLocation.project.projectName, true);
+            addToSeen(seenProjects, projectAndLocation.project);
             const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return undefined;
 
