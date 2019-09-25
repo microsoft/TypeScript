@@ -905,7 +905,7 @@ namespace ts {
                         if (!err) {
                             try {
                                 if (_fs.statSync(profilePath).isDirectory()) {
-                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}.cpuprofile`);
+                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                                 }
                             }
                             catch {
