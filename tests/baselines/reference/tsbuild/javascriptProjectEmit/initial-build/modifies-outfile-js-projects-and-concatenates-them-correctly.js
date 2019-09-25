@@ -1,3 +1,8 @@
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc -b /src
+exitCode:: 0
+
+
 //// [/src/common/common.d.ts]
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
@@ -14,7 +19,7 @@ type Nominal<T, Name> = T & {
 //// [/src/common/common.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "../..",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
       "./nominal.js"
     ],
@@ -65,6 +70,10 @@ type Nominal<T, Name> = T & {
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
 };
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
 type MyNominal = string & {
     [Symbol.species]: "MyNominal";
 };
@@ -78,12 +87,13 @@ type MyNominal = string & {
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
+var c = /** @type {*} */ (null);
 
 
 //// [/src/sub-project/sub-project.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "../..",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
       "./index.js"
     ],
@@ -104,7 +114,7 @@ type MyNominal = string & {
         },
         {
           "pos": 84,
-          "end": 148,
+          "end": 182,
           "kind": "text"
         }
       ]
@@ -126,7 +136,7 @@ type MyNominal = string & {
         },
         {
           "pos": 64,
-          "end": 133,
+          "end": 220,
           "kind": "text"
         }
       ]
@@ -148,10 +158,11 @@ text: (0-84)
  */
 
 ----------------------------------------------------------------------
-text: (84-148)
+text: (84-182)
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
+var c = /** @type {*} */ (null);
 
 ======================================================================
 ======================================================================
@@ -165,7 +176,11 @@ type Nominal<T, Name> = T & {
 };
 
 ----------------------------------------------------------------------
-text: (64-133)
+text: (64-220)
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
 type MyNominal = string & {
     [Symbol.species]: "MyNominal";
 };
@@ -176,6 +191,10 @@ type MyNominal = string & {
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
 };
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
 type MyNominal = string & {
     [Symbol.species]: "MyNominal";
 };
@@ -196,6 +215,7 @@ declare namespace variable {
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
+var c = /** @type {*} */ (null);
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };
@@ -210,7 +230,7 @@ function getVar() {
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "../..",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
       "./index.js"
     ],
@@ -218,20 +238,20 @@ function getVar() {
       "sections": [
         {
           "pos": 0,
-          "end": 148,
+          "end": 182,
           "kind": "prepend",
           "data": "../sub-project/sub-project.js",
           "texts": [
             {
               "pos": 0,
-              "end": 148,
+              "end": 182,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 148,
-          "end": 304,
+          "pos": 182,
+          "end": 338,
           "kind": "text"
         }
       ]
@@ -240,20 +260,20 @@ function getVar() {
       "sections": [
         {
           "pos": 0,
-          "end": 133,
+          "end": 220,
           "kind": "prepend",
           "data": "../sub-project/sub-project.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 133,
+              "end": 220,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 133,
-          "end": 274,
+          "pos": 220,
+          "end": 361,
           "kind": "text"
         }
       ]
@@ -266,9 +286,9 @@ function getVar() {
 ======================================================================
 File:: /src/sub-project-2/sub-project-2.js
 ----------------------------------------------------------------------
-prepend: (0-148):: ../sub-project/sub-project.js texts:: 1
+prepend: (0-182):: ../sub-project/sub-project.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-148)
+text: (0-182)
 /**
  * @template T, Name
  * @typedef {T & {[Symbol.species]: Name}} Nominal
@@ -276,9 +296,10 @@ text: (0-148)
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
+var c = /** @type {*} */ (null);
 
 ----------------------------------------------------------------------
-text: (148-304)
+text: (182-338)
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };
@@ -293,18 +314,22 @@ function getVar() {
 ======================================================================
 File:: /src/sub-project-2/sub-project-2.d.ts
 ----------------------------------------------------------------------
-prepend: (0-133):: ../sub-project/sub-project.d.ts texts:: 1
+prepend: (0-220):: ../sub-project/sub-project.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-133)
+text: (0-220)
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
 };
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
 type MyNominal = string & {
     [Symbol.species]: "MyNominal";
 };
 
 ----------------------------------------------------------------------
-text: (133-274)
+text: (220-361)
 /**
  * @return {keyof typeof variable}
  */

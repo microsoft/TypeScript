@@ -3,69 +3,6 @@
 exitCode:: 0
 
 
-//// [/src/common/common.d.ts]
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-
-//// [/src/common/common.js]
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-
-
-//// [/src/common/common.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "./nominal.js"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 84,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 64,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
-
-//// [/src/common/common.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/common/common.js
-----------------------------------------------------------------------
-text: (0-84)
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-
-======================================================================
-======================================================================
-File:: /src/common/common.d.ts
-----------------------------------------------------------------------
-text: (0-64)
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-======================================================================
-
 //// [/src/sub-project/index.js]
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
@@ -73,19 +10,7 @@ type Nominal<T, Name> = T & {
 const c = /** @type {*} */(undefined);
 
 
-//// [/src/sub-project/sub-project.d.ts]
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
-
-
+//// [/src/sub-project/sub-project.d.ts] file written with same contents
 //// [/src/sub-project/sub-project.js]
 /**
  * @template T, Name
@@ -193,26 +118,6 @@ type MyNominal = string & {
 };
 
 ======================================================================
-
-//// [/src/sub-project-2/sub-project-2.d.ts]
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
-/**
- * @return {keyof typeof variable}
- */
-declare function getVar(): "key";
-declare namespace variable {
-    const key: MyNominal;
-}
-
 
 //// [/src/sub-project-2/sub-project-2.js]
 /**

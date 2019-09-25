@@ -183,13 +183,15 @@ namespace ts {
             fs: () => projFs,
             commandLineArgs: ["-b", "/src"]
         });
-        verifyTsc({
+        verifyTscIncrementalEdits({
             scenario: "javascriptProjectEmit",
             subScenario: `modifies outfile js projects and concatenates them correctly`,
             fs: () => projFs,
             commandLineArgs: ["-b", "/src"],
-            buildKind: BuildKind.IncrementalDtsUnchanged,
-            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsUnchanged,
+                modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            }]
         });
     });
 
