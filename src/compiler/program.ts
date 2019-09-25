@@ -2510,7 +2510,7 @@ namespace ts {
                         }
                         else {
                             forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                if (!fileExtensionIs(fileName, Extension.Dts) && hasTSFileExtension(fileName)) {
+                                if (!fileExtensionIs(fileName, Extension.Dts)) {
                                     const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
                                     mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
                                 }
