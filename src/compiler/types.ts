@@ -3193,6 +3193,7 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
+        getTypeArguments(type: TypeReference): readonly Type[];
 
         // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
         /** Note that the resulting nodes cannot be checked. */
@@ -4027,6 +4028,8 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
+        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;           // Is node an exhaustive switch statement
     }
 
@@ -4274,9 +4277,20 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments?: readonly Type[];  // Type reference type arguments (undefined if none)
+        node?: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
+        /* @internal */
+        mapper?: TypeMapper;
+        /* @internal */
+        resolvedTypeArguments?: readonly Type[];  // Resolved type reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
+    }
+
+    export interface DeferredTypeReference extends TypeReference {
+        /* @internal */
+        node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
+        /* @internal */
+        mapper?: TypeMapper;
     }
 
     /* @internal */

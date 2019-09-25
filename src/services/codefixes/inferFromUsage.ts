@@ -993,8 +993,8 @@ namespace ts.codefix {
             }
             else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
                 // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
-                const genericArgs = (genericType as TypeReference).typeArguments;
-                const usageArgs = (usageType as TypeReference).typeArguments;
+                const genericArgs = checker.getTypeArguments(genericType as TypeReference);
+                const usageArgs = checker.getTypeArguments(usageType as TypeReference);
                 const types = [];
                 if (genericArgs && usageArgs) {
                     for (let i = 0; i < genericArgs.length; i++) {
