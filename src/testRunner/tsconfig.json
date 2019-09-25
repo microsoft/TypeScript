@@ -145,6 +145,8 @@
         "unittests/tsserver/occurences.ts",
         "unittests/tsserver/openFile.ts",
         "unittests/tsserver/projectErrors.ts",
+        "unittests/tsserver/projectReferenceCompileOnSave.ts",
+        "unittests/tsserver/projectReferenceErrors.ts",
         "unittests/tsserver/projectReferences.ts",
         "unittests/tsserver/projects.ts",
         "unittests/tsserver/refactors.ts",

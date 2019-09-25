@@ -333,6 +333,8 @@ task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 const lintFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("lint")); };
 const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lint")); };
+
+/** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
     const ESLINTRC_CI = ".eslintrc.ci.json";
     const isCIEnv = cmdLineOptions.ci || process.env.CI === "true";

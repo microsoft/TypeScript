@@ -1145,7 +1145,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
-        const symbol = isParameterPropertyDeclaration(definition.parent)
+        const symbol = isParameterPropertyDeclaration(definition.parent, definition.parent.parent)
             ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
             : checker.getSymbolAtLocation(definition);
         if (!symbol) return undefined;
@@ -1886,7 +1886,7 @@ namespace ts.FindAllReferences.Core {
         const res = fromRoot(symbol);
         if (res) return res;
 
-        if (symbol.valueDeclaration && isParameterPropertyDeclaration(symbol.valueDeclaration)) {
+        if (symbol.valueDeclaration && isParameterPropertyDeclaration(symbol.valueDeclaration, symbol.valueDeclaration.parent)) {
             // For a parameter property, now try on the other symbol (property if this was a parameter, parameter if this was a property).
             const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
             Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]

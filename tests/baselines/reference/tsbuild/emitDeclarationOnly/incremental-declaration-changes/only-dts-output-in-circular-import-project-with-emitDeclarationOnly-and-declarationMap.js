@@ -9,6 +9,12 @@ export interface A {
 //// [/src/lib/a.d.ts.map]
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;IAAC,GAAG,EAAE,GAAG,CAAC;CAChB"}
 
+//// [/src/lib/b.d.ts] file written with same contents
+//// [/src/lib/b.d.ts.map] file written with same contents
+//// [/src/lib/c.d.ts] file written with same contents
+//// [/src/lib/c.d.ts.map] file written with same contents
+//// [/src/lib/index.d.ts] file written with same contents
+//// [/src/lib/index.d.ts.map] file written with same contents
 //// [/src/src/a.ts]
 import { B } from "./b";
 

@@ -1,0 +1,439 @@
+=== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
+function fail(message?: string): never {
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+
+    throw new Error(message);
+>new Error(message) : Error
+>Error : ErrorConstructor
+>message : string | undefined
+}
+
+function f01(x: string | undefined) {
+>f01 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (x === undefined) fail("undefined argument");
+>x === undefined : boolean
+>x : string | undefined
+>undefined : undefined
+>fail("undefined argument") : never
+>fail : (message?: string | undefined) => never
+>"undefined argument" : "undefined argument"
+
+    x.length;  // string
+>x.length : number
+>x : string
+>length : number
+}
+
+function f02(x: number): number {
+>f02 : (x: number) => number
+>x : number
+
+    if (x >= 0) return x;
+>x >= 0 : boolean
+>x : number
+>0 : 0
+>x : number
+
+    fail("negative number");
+>fail("negative number") : never
+>fail : (message?: string | undefined) => never
+>"negative number" : "negative number"
+
+    x;  // Unreachable
+>x : number
+}
+
+function f03(x: string) {
+>f03 : (x: string) => void
+>x : string
+
+    x;  // string
+>x : string
+
+    fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+    x;  // Unreachable
+>x : string
+}
+
+function f11(x: string | undefined, fail: (message?: string) => never) {
+>f11 : (x: string | undefined, fail: (message?: string | undefined) => never) => void
+>x : string | undefined
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+
+    if (x === undefined) fail("undefined argument");
+>x === undefined : boolean
+>x : string | undefined
+>undefined : undefined
+>fail("undefined argument") : never
+>fail : (message?: string | undefined) => never
+>"undefined argument" : "undefined argument"
+
+    x.length;  // string
+>x.length : number
+>x : string
+>length : number
+}
+
+function f12(x: number, fail: (message?: string) => never): number {
+>f12 : (x: number, fail: (message?: string | undefined) => never) => number
+>x : number
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+
+    if (x >= 0) return x;
+>x >= 0 : boolean
+>x : number
+>0 : 0
+>x : number
+
+    fail("negative number");
+>fail("negative number") : never
+>fail : (message?: string | undefined) => never
+>"negative number" : "negative number"
+
+    x;  // Unreachable
+>x : number
+}
+
+function f13(x: string, fail: (message?: string) => never) {
+>f13 : (x: string, fail: (message?: string | undefined) => never) => void
+>x : string
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+
+    x;  // string
+>x : string
+
+    fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+    x;  // Unreachable
+>x : string
+}
+
+namespace Debug {
+>Debug : typeof Debug
+
+    export declare function fail(message?: string): never;
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+}
+
+function f21(x: string | undefined) {
+>f21 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (x === undefined) Debug.fail("undefined argument");
+>x === undefined : boolean
+>x : string | undefined
+>undefined : undefined
+>Debug.fail("undefined argument") : never
+>Debug.fail : (message?: string | undefined) => never
+>Debug : typeof Debug
+>fail : (message?: string | undefined) => never
+>"undefined argument" : "undefined argument"
+
+    x.length;  // string
+>x.length : number
+>x : string
+>length : number
+}
+
+function f22(x: number): number {
+>f22 : (x: number) => number
+>x : number
+
+    if (x >= 0) return x;
+>x >= 0 : boolean
+>x : number
+>0 : 0
+>x : number
+
+    Debug.fail("negative number");
+>Debug.fail("negative number") : never
+>Debug.fail : (message?: string | undefined) => never
+>Debug : typeof Debug
+>fail : (message?: string | undefined) => never
+>"negative number" : "negative number"
+
+    x;  // Unreachable
+>x : number
+}
+
+function f23(x: string) {
+>f23 : (x: string) => void
+>x : string
+
+    x;  // string
+>x : string
+
+    Debug.fail();
+>Debug.fail() : never
+>Debug.fail : (message?: string | undefined) => never
+>Debug : typeof Debug
+>fail : (message?: string | undefined) => never
+
+    x;  // Unreachable
+>x : string
+}
+
+function f24(x: string) {
+>f24 : (x: string) => void
+>x : string
+
+    x;  // string
+>x : string
+
+    ((Debug).fail)();
+>((Debug).fail)() : never
+>((Debug).fail) : (message?: string | undefined) => never
+>(Debug).fail : (message?: string | undefined) => never
+>(Debug) : typeof Debug
+>Debug : typeof Debug
+>fail : (message?: string | undefined) => never
+
+    x;  // Unreachable
+>x : string
+}
+
+class Test {
+>Test : Test
+
+    fail(message?: string): never {
+>fail : (message?: string | undefined) => never
+>message : string | undefined
+
+        throw new Error(message);
+>new Error(message) : Error
+>Error : ErrorConstructor
+>message : string | undefined
+    }
+    f1(x: string | undefined) {
+>f1 : (x: string | undefined) => void
+>x : string | undefined
+
+        if (x === undefined) this.fail("undefined argument");
+>x === undefined : boolean
+>x : string | undefined
+>undefined : undefined
+>this.fail("undefined argument") : never
+>this.fail : (message?: string | undefined) => never
+>this : this
+>fail : (message?: string | undefined) => never
+>"undefined argument" : "undefined argument"
+
+        x.length;  // string
+>x.length : number
+>x : string
+>length : number
+    }
+    f2(x: number): number {
+>f2 : (x: number) => number
+>x : number
+
+        if (x >= 0) return x;
+>x >= 0 : boolean
+>x : number
+>0 : 0
+>x : number
+
+        this.fail("negative number");
+>this.fail("negative number") : never
+>this.fail : (message?: string | undefined) => never
+>this : this
+>fail : (message?: string | undefined) => never
+>"negative number" : "negative number"
+
+        x;  // Unreachable
+>x : number
+    }
+    f3(x: string) {
+>f3 : (x: string) => void
+>x : string
+
+        x;  // string
+>x : string
+
+        this.fail();
+>this.fail() : never
+>this.fail : (message?: string | undefined) => never
+>this : this
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : string
+    }
+}
+
+function f30(x: string | number | undefined) {
+>f30 : (x: string | number | undefined) => void
+>x : string | number | undefined
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number | undefined
+>"string" : "string"
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : string | number | undefined
+    }
+    else {
+        x;  // number | undefined
+>x : number | undefined
+
+        if (x !== undefined) {
+>x !== undefined : boolean
+>x : number | undefined
+>undefined : undefined
+
+            x;  // number
+>x : number
+
+            fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+            x;  // Unreachable
+>x : string | number | undefined
+        }
+        else {
+            x;  // undefined
+>x : undefined
+
+            fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+            x;  // Unreachable
+>x : string | number | undefined
+        }
+        x;  // Unreachable
+>x : string | number | undefined
+    }
+    x;  // Unreachable
+>x : string | number | undefined
+}
+
+function f31(x: { a: string | number }) {
+>f31 : (x: { a: string | number; }) => void
+>x : { a: string | number; }
+>a : string | number
+
+    if (typeof x.a === "string") {
+>typeof x.a === "string" : boolean
+>typeof x.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x.a : string | number
+>x : { a: string | number; }
+>a : string | number
+>"string" : "string"
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;    // Unreachable
+>x : { a: string | number; }
+
+        x.a;  // Unreachable
+>x.a : string | number
+>x : { a: string | number; }
+>a : string | number
+    }
+    x;    // { a: string | number }
+>x : { a: string | number; }
+
+    x.a;  // number
+>x.a : number
+>x : { a: string | number; }
+>a : number
+}
+
+function f40(x: number) {
+>f40 : (x: number) => void
+>x : number
+
+    try {
+        x;
+>x : number
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : number
+    }
+    finally {
+        x;
+>x : number
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : number
+    }
+    x;  // Unreachable
+>x : number
+}
+
+function f41(x: number) {
+>f41 : (x: number) => void
+>x : number
+
+    try {
+        x;
+>x : number
+    }
+    finally {
+        x;
+>x : number
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : number
+    }
+    x;  // Unreachable
+>x : number
+}
+
+function f42(x: number) {
+>f42 : (x: number) => void
+>x : number
+
+    try {
+        x;
+>x : number
+
+        fail();
+>fail() : never
+>fail : (message?: string | undefined) => never
+
+        x;  // Unreachable
+>x : number
+    }
+    finally {
+        x;
+>x : number
+    }
+    x;  // Unreachable
+>x : number
+}
+

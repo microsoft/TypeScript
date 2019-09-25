@@ -96,7 +96,6 @@ namespace ts {
             tick,
             proj: "moduleSpecifiers",
             rootNames: ["/"],
-            lastProjectOutput: `/src/lib/index.d.ts`,
             initialBuild: {
                 modifyFs: noop,
             },
