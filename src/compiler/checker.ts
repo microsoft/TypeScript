@@ -3077,9 +3077,7 @@ namespace ts {
          * Checks if two symbols, through aliasing and/or merging, refer to the same thing
          */
         function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
-            if (getMergedSymbol(s1) === getMergedSymbol(s2) ||
-                getMergedSymbol(resolveSymbol(s1)) === getMergedSymbol(s2) ||
-                getMergedSymbol(resolveSymbol(s1)) === getMergedSymbol(resolveSymbol(s2))) {
+            if (getMergedSymbol(resolveSymbol(getMergedSymbol(s1))) === getMergedSymbol(resolveSymbol(getMergedSymbol(s2)))) {
                 return s1;
             }
         }
@@ -3827,7 +3825,8 @@ namespace ts {
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                        type.flags & TypeFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        type.flags & TypeFlags.TypeParameter &&
+                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
                         return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
