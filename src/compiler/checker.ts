@@ -382,6 +382,7 @@ namespace ts {
             getReturnTypeOfSignature,
             getNullableType,
             getNonNullableType,
+            getTypeArguments,
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
             signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
@@ -507,6 +508,7 @@ namespace ts {
                 getIndexTypeOfStructuredType,
                 getConstraintOfTypeParameter,
                 getFirstIdentifier,
+                getTypeArguments,
             ),
             getAmbientModules,
             getJsxIntrinsicTagNamesAt,
@@ -3813,11 +3815,17 @@ namespace ts {
                     return createThis();
                 }
 
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
+                }
+
                 const objectFlags = getObjectFlags(type);
 
                 if (objectFlags & ObjectFlags.Reference) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    return typeReferenceToTypeNode(<TypeReference>type);
+                    return (<TypeReference>type).node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(<TypeReference>type);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
@@ -3835,11 +3843,6 @@ namespace ts {
                     return type.symbol
                         ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
                         : createTypeReferenceNode(createIdentifier("?"), /*typeArguments*/ undefined);
-                }
-                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
-                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3915,10 +3918,7 @@ namespace ts {
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const typeId = "" + type.id;
                     const symbol = type.symbol;
-                    let id: string;
                     if (symbol) {
-                        const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                        id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJSConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getDeclaredTypeOfClassOrInterface(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
@@ -3942,25 +3942,7 @@ namespace ts {
                             }
                         }
                         else {
-                            // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
-                            // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.visitedTypes) {
-                                context.visitedTypes = createMap<true>();
-                            }
-                            if (!context.symbolDepth) {
-                                context.symbolDepth = createMap<number>();
-                            }
-
-                            const depth = context.symbolDepth.get(id) || 0;
-                            if (depth > 10) {
-                                return createElidedInformationPlaceholder(context);
-                            }
-                            context.symbolDepth.set(id, depth + 1);
-                            context.visitedTypes.set(typeId, true);
-                            const result = createTypeNodeFromObjectType(type);
-                            context.visitedTypes.delete(typeId);
-                            context.symbolDepth.set(id, depth);
-                            return result;
+                            return visitAndTransformType(type, createTypeNodeFromObjectType);
                         }
                     }
                     else {
@@ -3980,6 +3962,38 @@ namespace ts {
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
+                }
+
+                function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
+                    const typeId = "" + type.id;
+                    const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                    const id = getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? "N" + getNodeId((<TypeReference>type).node!) :
+                        type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
+                        undefined;
+                    // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
+                    // of types allows us to catch circular references to instantiations of the same anonymous type
+                    if (!context.visitedTypes) {
+                        context.visitedTypes = createMap<true>();
+                    }
+                    if (id && !context.symbolDepth) {
+                        context.symbolDepth = createMap<number>();
+                    }
+
+                    let depth: number | undefined;
+                    if (id) {
+                        depth = context.symbolDepth!.get(id) || 0;
+                        if (depth > 10) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        context.symbolDepth!.set(id, depth + 1);
+                    }
+                    context.visitedTypes.set(typeId, true);
+                    const result = transform(type);
+                    context.visitedTypes.delete(typeId);
+                    if (id) {
+                        context.symbolDepth!.set(id, depth!);
+                    }
+                    return result;
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -4018,13 +4032,12 @@ namespace ts {
                 }
 
                 function typeReferenceToTypeNode(type: TypeReference) {
-                    const typeArguments: readonly Type[] = type.typeArguments || emptyArray;
+                    const typeArguments: readonly Type[] = getTypeArguments(type);
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
                             return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
-
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
                         const arrayType = createArrayTypeNode(elementType);
                         return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
@@ -5873,7 +5886,7 @@ namespace ts {
                     // We don't use `isValueSymbolAccessible` below. since that considers alternative containers (like modules)
                     // which we can't write out in a syntactically valid way as an expression
                     if ((t as TypeReference).target && getAccessibleSymbolChain((t as TypeReference).target.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
-                        typeArgs = map((t as TypeReference).typeArguments, t => typeToTypeNodeHelper(t, context));
+                        typeArgs = map(getTypeArguments(t as TypeReference), t => typeToTypeNodeHelper(t, context));
                         reference = symbolToExpression((t as TypeReference).target.symbol, context, SymbolFlags.Type);
                     }
                     else if (t.symbol && getAccessibleSymbolChain(t.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
@@ -7507,7 +7520,7 @@ namespace ts {
             const signatures = getSignaturesOfType(type, SignatureKind.Construct);
             if (signatures.length === 1) {
                 const s = signatures[0];
-                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
+                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getElementTypeOfArrayType(getTypeOfParameter(s.parameters[0])) === anyType;
             }
             return false;
         }
@@ -7620,7 +7633,6 @@ namespace ts {
                 return type.resolvedBaseTypes = emptyArray;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type)!;
-            const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             let baseType: Type;
             const originalBaseType = baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
@@ -7628,7 +7640,7 @@ namespace ts {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgs);
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
@@ -7673,7 +7685,7 @@ namespace ts {
             const outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
             if (outerTypeParameters) {
                 const last = outerTypeParameters.length - 1;
-                const typeArguments = (<TypeReference>type).typeArguments!;
+                const typeArguments = getTypeArguments(<TypeReference>type);
                 return outerTypeParameters[last].symbol !== typeArguments[last].symbol;
             }
             return true;
@@ -7778,7 +7790,7 @@ namespace ts {
                     (<GenericType>type).instantiations = createMap<TypeReference>();
                     (<GenericType>type).instantiations.set(getTypeListId(type.typeParameters), <GenericType>type);
                     (<GenericType>type).target = <GenericType>type;
-                    (<GenericType>type).typeArguments = type.typeParameters;
+                    (<GenericType>type).resolvedTypeArguments = type.typeParameters;
                     type.thisType = createTypeParameter(symbol);
                     type.thisType.isThisType = true;
                     type.thisType.constraint = type;
@@ -8302,7 +8314,7 @@ namespace ts {
         function getTypeWithThisArgument(type: Type, thisArgument?: Type, needApparentType?: boolean): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 const target = (<TypeReference>type).target;
-                const typeArguments = (<TypeReference>type).typeArguments;
+                const typeArguments = getTypeArguments(<TypeReference>type);
                 if (length(target.typeParameters) === length(typeArguments)) {
                     const ref = createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!]));
                     return needApparentType ? getApparentType(ref) : ref;
@@ -8367,9 +8379,9 @@ namespace ts {
         function resolveTypeReferenceMembers(type: TypeReference): void {
             const source = resolveDeclaredMembers(type.target);
             const typeParameters = concatenate(source.typeParameters!, [source.thisType!]);
-            const typeArguments = type.typeArguments && type.typeArguments.length === typeParameters.length ?
-                type.typeArguments : concatenate(type.typeArguments, [type]);
-            resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
+            const typeArguments = getTypeArguments(type);
+            const paddedTypeArguments = typeArguments.length === typeParameters.length ? typeArguments : concatenate(typeArguments, [type]);
+            resolveObjectTypeMembers(type, source, typeParameters, paddedTypeArguments);
         }
 
         function createSignature(
@@ -8420,7 +8432,7 @@ namespace ts {
                 const restParameter = sig.parameters[restIndex];
                 const restType = getTypeOfSymbol(restParameter);
                 if (isTupleType(restType)) {
-                    const elementTypes = restType.typeArguments || emptyArray;
+                    const elementTypes = getTypeArguments(restType);
                     const minLength = restType.target.minLength;
                     const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
                     const restParams = map(elementTypes, (t, i) => {
@@ -10335,7 +10347,7 @@ namespace ts {
                 target.instantiations.set(id, type);
                 type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
                 type.target = target;
-                type.typeArguments = typeArguments;
+                type.resolvedTypeArguments = typeArguments;
             }
             return type;
         }
@@ -10345,18 +10357,43 @@ namespace ts {
             type.symbol = source.symbol;
             type.objectFlags = source.objectFlags;
             type.target = source.target;
-            type.typeArguments = source.typeArguments;
+            type.resolvedTypeArguments = source.resolvedTypeArguments;
             return type;
+        }
+
+        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper): DeferredTypeReference {
+            const aliasSymbol = getAliasSymbolForTypeNode(node);
+            const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
+            const type = <DeferredTypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
+            type.target = target;
+            type.node = node;
+            type.mapper = mapper;
+            type.aliasSymbol = aliasSymbol;
+            type.aliasTypeArguments = mapper ? instantiateTypes(aliasTypeArguments, mapper) : aliasTypeArguments;
+            return type;
+        }
+
+        function getTypeArguments(type: TypeReference): readonly Type[] {
+            if (!type.resolvedTypeArguments) {
+                const node = type.node;
+                const typeArguments = !node ? emptyArray :
+                    node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
+                    node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
+                    map(node.elementTypes, getTypeFromTypeNode);
+                type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
+            }
+            return type.resolvedTypeArguments;
         }
 
         function getTypeReferenceArity(type: TypeReference): number {
             return length(type.target.typeParameters);
         }
 
+
         /**
          * Get type from type-reference that reference to class or interface
          */
-        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgs: Type[] | undefined): Type {
+        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -10381,10 +10418,13 @@ namespace ts {
                         return errorType;
                     }
                 }
+                if (node.kind === SyntaxKind.TypeReference && isAliasedType(node)) {
+                    return createDeferredTypeReference(<GenericType>type, <TypeReferenceNode>node, /*mapper*/ undefined);
+                }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJs));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgumentsFromTypeReferenceNode(node), typeParameters, minTypeArgumentCount, isJs));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
@@ -10407,7 +10447,7 @@ namespace ts {
          * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
-        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type {
+        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -10423,7 +10463,7 @@ namespace ts {
                         typeParameters.length);
                     return errorType;
                 }
-                return getTypeAliasInstantiation(symbol, typeArguments);
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
@@ -10454,19 +10494,16 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
-            const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
             if (symbol === unknownSymbol) {
                 return errorType;
             }
             symbol = getExpandoSymbol(symbol) || symbol;
-
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+                return getTypeFromClassOrInterfaceReference(node, symbol);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
+                return getTypeFromTypeAliasReference(node, symbol);
             }
-
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
@@ -10474,7 +10511,6 @@ namespace ts {
                     res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : getRegularTypeOfLiteralType(res) :
                     errorType;
             }
-
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
                 const jsdocType = getTypeFromJSAlias(node, symbol);
                 if (jsdocType) {
@@ -10486,7 +10522,6 @@ namespace ts {
                     return getTypeOfSymbol(symbol);
                 }
             }
-
             return errorType;
         }
 
@@ -10820,10 +10855,52 @@ namespace ts {
             return createTypeFromGenericGlobalType(readonly ? globalReadonlyArrayType : globalArrayType, [elementType]);
         }
 
-        function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
+        function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
+            const readonly = isReadonlyTypeOperator(node.parent);
+            if (node.kind === SyntaxKind.ArrayType || node.elementTypes.length === 1 && node.elementTypes[0].kind === SyntaxKind.RestType) {
+                return readonly ? globalReadonlyArrayType : globalArrayType;
+            }
+            const lastElement = lastOrUndefined(node.elementTypes);
+            const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
+            const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
+            return getTupleTypeOfArity(node.elementTypes.length, minLength, !!restElement, readonly, /*associatedNames*/ undefined);
+        }
+
+        // Return true when the given node is transitively contained in type constructs that eagerly
+        // resolve their constituent types. We include SyntaxKind.TypeReference because type arguments
+        // of type aliases are eagerly resolved.
+        function isAliasedType(node: Node): boolean {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.TypeReference:
+                case SyntaxKind.UnionType:
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.IndexedAccessType:
+                case SyntaxKind.ConditionalType:
+                case SyntaxKind.TypeOperator:
+                    return isAliasedType(parent);
+                case SyntaxKind.TypeAliasDeclaration:
+                    return true;
+            }
+            return false;
+        }
+
+        function getTypeFromArrayOrTupleTypeNode(node: ArrayTypeNode | TupleTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType), isReadonlyTypeOperator(node.parent));
+                const target = getArrayOrTupleTargetType(node);
+                if (target === emptyGenericType) {
+                    links.resolvedType = emptyObjectType;
+                }
+                else if (isAliasedType(node)) {
+                    links.resolvedType = node.kind === SyntaxKind.TupleType && node.elementTypes.length === 0 ? target :
+                        createDeferredTypeReference(target, node, /*mapper*/ undefined);
+                }
+                else {
+                    const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elementTypes, getTypeFromTypeNode);
+                    links.resolvedType = createTypeReference(target, elementTypes);
+                }
             }
             return links.resolvedType;
         }
@@ -10867,7 +10944,7 @@ namespace ts {
             type.instantiations = createMap<TypeReference>();
             type.instantiations.set(getTypeListId(type.typeParameters), <GenericType>type);
             type.target = <GenericType>type;
-            type.typeArguments = type.typeParameters;
+            type.resolvedTypeArguments = type.typeParameters;
             type.thisType = createTypeParameter();
             type.thisType.isThisType = true;
             type.thisType.constraint = type;
@@ -10901,21 +10978,6 @@ namespace ts {
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
         }
 
-        function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const lastElement = lastOrUndefined(node.elementTypes);
-                const restElement = lastElement && lastElement.kind === SyntaxKind.RestType ? lastElement : undefined;
-                const minLength = findLastIndex(node.elementTypes, n => n.kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
-                const elementTypes = map(node.elementTypes, n => {
-                    const type = getTypeFromTypeNode(n);
-                    return n === restElement && getIndexTypeOfType(type, IndexKind.Number) || type;
-                });
-                links.resolvedType = createTupleType(elementTypes, minLength, !!restElement, isReadonlyTypeOperator(node.parent));
-            }
-            return links.resolvedType;
-        }
-
         function sliceTupleType(type: TupleTypeReference, index: number) {
             const tuple = type.target;
             if (tuple.hasRestElement) {
@@ -10923,7 +10985,7 @@ namespace ts {
                 index = Math.min(index, getTypeReferenceArity(type) - 1);
             }
             return createTupleType(
-                (type.typeArguments || emptyArray).slice(index),
+                getTypeArguments(type).slice(index),
                 Math.max(0, tuple.minLength - index),
                 tuple.hasRestElement,
                 tuple.readonly,
@@ -12433,9 +12495,8 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
-                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
-                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                    return getTypeFromArrayOrTupleTypeNode(<ArrayTypeNode | TupleTypeNode>node);
                 case SyntaxKind.OptionalType:
                     return getTypeFromOptionalTypeNode(<OptionalTypeNode>node);
                 case SyntaxKind.UnionType:
@@ -12447,10 +12508,11 @@ namespace ts {
                 case SyntaxKind.JSDocOptionalType:
                     return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.RestType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode | RestTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
+                case SyntaxKind.RestType:
+                    return getElementTypeOfArrayType(getTypeFromTypeNode((<RestTypeNode>node).type)) || errorType;
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
                 case SyntaxKind.FunctionType:
@@ -12647,17 +12709,17 @@ namespace ts {
             return result;
         }
 
-        function getAnonymousTypeInstantiation(type: AnonymousType, mapper: TypeMapper) {
+        function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper) {
             const target = type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
-            const { symbol } = target;
-            const links = getSymbolLinks(symbol);
+            const node = type.objectFlags & ObjectFlags.Reference ? (<TypeReference>type).node! : type.symbol.declarations[0];
+            const links = getNodeLinks(node);
             let typeParameters = links.outerTypeParameters;
             if (!typeParameters) {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
-                let declaration = symbol.declarations[0];
+                let declaration = node;
                 if (isInJSFile(declaration)) {
                     const paramTag = findAncestor(declaration, isJSDocParameterTag);
                     if (paramTag) {
@@ -12673,7 +12735,7 @@ namespace ts {
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
                 typeParameters = outerTypeParameters || emptyArray;
-                typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
+                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
                     filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
@@ -12686,13 +12748,14 @@ namespace ts {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
-                const typeArguments: Type[] = map(typeParameters, combinedMapper);
+                const typeArguments = map(typeParameters, combineTypeMappers(type.mapper, mapper));
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) : instantiateAnonymousType(target, newMapper);
+                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper) :
+                        target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) :
+                        instantiateAnonymousType(target, newMapper);
                     links.instantiations!.set(id, result);
                 }
                 return result;
@@ -12786,7 +12849,7 @@ namespace ts {
 
         function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
             const minLength = tupleType.target.minLength;
-            const elementTypes = map(tupleType.typeArguments || emptyArray, (_, i) =>
+            const elementTypes = map(getTypeArguments(tupleType), (_, i) =>
                 instantiateMappedTypeTemplate(mappedType, getLiteralType("" + i), i >= minLength, mapper));
             const modifiers = getMappedTypeModifiers(mappedType);
             const newMinLength = modifiers & MappedTypeModifiers.IncludeOptional ? 0 :
@@ -12889,15 +12952,18 @@ namespace ts {
                     // interface, in an object type literal, or in an object literal expression, we may need
                     // to instantiate the type because it might reference a type parameter.
                     return couldContainTypeVariables(type) ?
-                        getAnonymousTypeInstantiation(<AnonymousType>type, mapper) : type;
+                        getObjectTypeInstantiation(<AnonymousType>type, mapper) : type;
                 }
                 if (objectFlags & ObjectFlags.Mapped) {
-                    return getAnonymousTypeInstantiation(<AnonymousType>type, mapper);
+                    return getObjectTypeInstantiation(<AnonymousType>type, mapper);
                 }
                 if (objectFlags & ObjectFlags.Reference) {
-                    const typeArguments = (<TypeReference>type).typeArguments;
-                    const newTypeArguments = instantiateTypes(typeArguments, mapper);
-                    return newTypeArguments !== typeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
+                    if ((<TypeReference>type).node) {
+                        return getObjectTypeInstantiation(<TypeReference>type, mapper);
+                    }
+                    const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
+                    const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
+                    return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                 }
                 return type;
             }
@@ -15013,7 +15079,7 @@ namespace ts {
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
-                        const varianceResult = relateVariances((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances, isIntersectionConstituent);
+                        const varianceResult = relateVariances(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), variances, isIntersectionConstituent);
                         if (varianceResult !== undefined) {
                             return varianceResult;
                         }
@@ -15439,8 +15505,9 @@ namespace ts {
                         }
                         const targetCount = getTypeReferenceArity(target) - 1;
                         const sourceCount = getTypeReferenceArity(source) - (sourceRestType ? 1 : 0);
+                        const sourceTypeArguments = getTypeArguments(<TypeReference>source);
                         for (let i = targetCount; i < sourceCount; i++) {
-                            const related = isRelatedTo((<TypeReference>source).typeArguments![i], targetRestType, reportErrors);
+                            const related = isRelatedTo(sourceTypeArguments[i], targetRestType, reportErrors);
                             if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_incompatible_with_rest_element_type, "" + i);
@@ -15454,9 +15521,11 @@ namespace ts {
                 // We only call this for union target types when we're attempting to do excess property checking - in those cases, we want to get _all possible props_
                 // from the target union, across all members
                 const properties = target.flags & TypeFlags.Union ? getPossiblePropertiesOfUnionType(target as UnionType) : getPropertiesOfType(target);
+                const numericNamesOnly = isTupleType(source) && isTupleType(target);
                 for (const targetProp of excludeProperties(properties, excludedProperties)) {
-                    if (!(targetProp.flags & SymbolFlags.Prototype)) {
-                        const sourceProp = getPropertyOfType(source, targetProp.escapedName);
+                    const name = targetProp.escapedName;
+                    if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length")) {
+                        const sourceProp = getPropertyOfType(source, name);
                         if (sourceProp && sourceProp !== targetProp) {
                             const related = propertyRelatedTo(source, target, sourceProp, targetProp, getTypeOfSymbol, reportErrors, isIntersectionConstituent);
                             if (!related) {
@@ -15866,8 +15935,12 @@ namespace ts {
             return type.flags & TypeFlags.TypeParameter && !getConstraintOfTypeParameter(<TypeParameter>type);
         }
 
+        function isNonDeferredTypeReference(type: Type): type is TypeReference {
+            return !!(getObjectFlags(type) & ObjectFlags.Reference) && !(<TypeReference>type).node;
+        }
+
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
-            return !!(getObjectFlags(type) & ObjectFlags.Reference) && some((<TypeReference>type).typeArguments, t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
+            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
         }
 
         /**
@@ -15876,7 +15949,7 @@ namespace ts {
          */
         function getTypeReferenceId(type: TypeReference, typeParameters: Type[], depth = 0) {
             let result = "" + type.target.id;
-            for (const t of type.typeArguments!) {
+            for (const t of getTypeArguments(type)) {
                 if (isUnconstrainedTypeParameter(t)) {
                     let index = typeParameters.indexOf(t);
                     if (index < 0) {
@@ -16174,7 +16247,7 @@ namespace ts {
         }
 
         function getElementTypeOfArrayType(type: Type): Type | undefined {
-            return isArrayType(type) && (type as TypeReference).typeArguments ? (type as TypeReference).typeArguments![0] : undefined;
+            return isArrayType(type) ? getTypeArguments(type as TypeReference)[0] : undefined;
         }
 
         function isArrayLikeType(type: Type): boolean {
@@ -16184,7 +16257,7 @@ namespace ts {
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
-            const elementType = isArrayType(type) ? (<TypeReference>type).typeArguments![0] : undefined;
+            const elementType = isArrayType(type) ? getTypeArguments(<TypeReference>type)[0] : undefined;
             return elementType === undefinedWideningType || elementType === implicitNeverType;
         }
 
@@ -16282,7 +16355,7 @@ namespace ts {
         }
 
         function getRestTypeOfTupleType(type: TupleTypeReference) {
-            return type.target.hasRestElement ? type.typeArguments![type.target.typeParameters!.length - 1] : undefined;
+            return type.target.hasRestElement ? getTypeArguments(type)[type.target.typeParameters!.length - 1] : undefined;
         }
 
         function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
@@ -16571,7 +16644,7 @@ namespace ts {
                     result = getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
                 }
                 else if (isArrayType(type) || isTupleType(type)) {
-                    result = createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
+                    result = createTypeReference((<TypeReference>type).target, sameMap(getTypeArguments(<TypeReference>type), getWidenedType));
                 }
                 if (result && context === undefined) {
                     type.widened = result;
@@ -16608,7 +16681,7 @@ namespace ts {
                     }
                 }
                 if (isArrayType(type) || isTupleType(type)) {
-                    for (const t of (<TypeReference>type).typeArguments!) {
+                    for (const t of getTypeArguments(<TypeReference>type)) {
                         if (reportWideningErrorsInType(t)) {
                             errorReported = true;
                         }
@@ -16824,7 +16897,7 @@ namespace ts {
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
             return !!(type.flags & TypeFlags.Instantiable ||
-                objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
+                objectFlags & ObjectFlags.Reference && forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & ObjectFlags.Mapped ||
                 type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
@@ -16900,10 +16973,10 @@ namespace ts {
             // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
             // applied to the element type(s).
             if (isArrayType(source)) {
-                return createArrayType(inferReverseMappedType((<TypeReference>source).typeArguments![0], target, constraint), isReadonlyArrayType(source));
+                return createArrayType(inferReverseMappedType(getTypeArguments(<TypeReference>source)[0], target, constraint), isReadonlyArrayType(source));
             }
             if (isTupleType(source)) {
-                const elementTypes = map(source.typeArguments || emptyArray, t => inferReverseMappedType(t, target, constraint));
+                const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
                 const minLength = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                     getTypeReferenceArity(source) - (source.target.hasRestElement ? 1 : 0) : source.target.minLength;
                 return createTupleType(elementTypes, minLength, source.target.hasRestElement, source.target.readonly, source.target.associatedNames);
@@ -17123,7 +17196,7 @@ namespace ts {
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
                     (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
                     // If source and target are references to the same generic type, infer from type arguments
-                    inferFromTypeArguments((<TypeReference>source).typeArguments || emptyArray, (<TypeReference>target).typeArguments || emptyArray, getVariances((<TypeReference>source).target));
+                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
                     contravariant = !contravariant;
@@ -17432,10 +17505,10 @@ namespace ts {
                         const targetRestType = getRestTypeOfTupleType(target);
                         const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
                         for (let i = 0; i < fixedLength; i++) {
-                            inferFromTypes(i < sourceLength ? (<TypeReference>source).typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                            inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
                         }
                         if (targetRestType) {
-                            const types = fixedLength < sourceLength ? (<TypeReference>source).typeArguments!.slice(fixedLength, sourceLength) : [];
+                            const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
                             if (sourceRestType) {
                                 types.push(sourceRestType);
                             }
@@ -20254,7 +20327,7 @@ namespace ts {
         }
 
         function getThisTypeArgument(type: Type): Type | undefined {
-            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalThisType ? (<TypeReference>type).typeArguments![0] : undefined;
+            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalThisType ? getTypeArguments(<TypeReference>type)[0] : undefined;
         }
 
         function getThisTypeFromContextualType(type: Type): Type | undefined {
@@ -23307,7 +23380,7 @@ namespace ts {
                 const spreadArgument = <SpreadElement>args[length - 1];
                 const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
                 if (isTupleType(type)) {
-                    const typeArguments = (<TypeReference>type).typeArguments || emptyArray;
+                    const typeArguments = getTypeArguments(<TypeReference>type);
                     const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
                     const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex));
                     return concatenate(args.slice(0, length - 1), syntheticArgs);
@@ -24847,7 +24920,7 @@ namespace ts {
                 // otherwise would return the type 'undefined').
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
                 const index = pos - paramCount;
-                if (!isTupleType(restType) || restType.target.hasRestElement || index < (restType.typeArguments || emptyArray).length) {
+                if (!isTupleType(restType) || restType.target.hasRestElement || index < getTypeArguments(restType).length) {
                     return getIndexedAccessType(restType, getLiteralType(index));
                 }
             }
@@ -24881,7 +24954,7 @@ namespace ts {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[length - 1]);
                 if (isTupleType(restType)) {
-                    return length + (restType.typeArguments || emptyArray).length - 1;
+                    return length + getTypeArguments(restType).length - 1;
                 }
             }
             return length;
@@ -26619,7 +26692,7 @@ namespace ts {
         function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
             const patternElements = pattern.elements;
             const arity = getTypeReferenceArity(type);
-            const elementTypes = arity ? type.typeArguments!.slice() : [];
+            const elementTypes = arity ? getTypeArguments(type).slice() : [];
             for (let i = arity; i < patternElements.length; i++) {
                 const e = patternElements[i];
                 if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && e.dotDotDotToken)) {
@@ -27643,16 +27716,13 @@ namespace ts {
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
                 grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
             }
+            forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
             if (type !== errorType) {
-                if (node.typeArguments) {
-                    // Do type argument local checks only if referenced type is successfully resolved
-                    forEach(node.typeArguments, checkSourceElement);
-                    if (produceDiagnostics) {
-                        const typeParameters = getTypeParametersForTypeReference(node);
-                        if (typeParameters) {
-                            checkTypeArgumentConstraints(node, typeParameters);
-                        }
+                if (node.typeArguments && produceDiagnostics) {
+                    const typeParameters = getTypeParametersForTypeReference(node);
+                    if (typeParameters) {
+                        checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
                 if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol!.flags & SymbolFlags.EnumMember) {
@@ -27697,7 +27767,7 @@ namespace ts {
                         grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                         break;
                     }
-                    if (!isArrayType(getTypeFromTypeNode(e))) {
+                    if (!isArrayType(getTypeFromTypeNode((<RestTypeNode>e).type))) {
                         error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                     }
                 }
@@ -28191,7 +28261,7 @@ namespace ts {
             }
 
             if (isReferenceToType(promise, getGlobalPromiseType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments![0];
+                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>promise)[0];
             }
 
             const thenFunction = getTypeOfPropertyOfType(promise, "then" as __String)!; // TODO: GH#18217
@@ -30136,7 +30206,7 @@ namespace ts {
             let globalType: Type;
             if (isReferenceToType(type, globalType = resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
                 isReferenceToType(type, globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                const [yieldType] = (type as GenericType).typeArguments!;
+                const [yieldType] = getTypeArguments(type as GenericType);
                 // The "return" and "next" types of `Iterable` and `IterableIterator` are defined by the
                 // iteration types of their `[Symbol.iterator]()` method. The same is true for their async cousins.
                 // While we define these as `any` and `undefined` in our libs by default, a custom lib *could* use
@@ -30149,7 +30219,7 @@ namespace ts {
             // just grab its related type arguments:
             // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
             if (isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
-                const [yieldType, returnType, nextType] = (type as GenericType).typeArguments!;
+                const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
                 return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = createIterationTypes(yieldType, returnType, nextType);
             }
         }
@@ -30237,7 +30307,7 @@ namespace ts {
             // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
             const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
             if (isReferenceToType(type, globalType)) {
-                const [yieldType] = (type as GenericType).typeArguments!;
+                const [yieldType] = getTypeArguments(type as GenericType);
                 // The "return" and "next" types of `IterableIterator` and `AsyncIterableIterator` are defined by the
                 // iteration types of their `next`, `return`, and `throw` methods. While we define these as `any`
                 // and `undefined` in our libs by default, a custom lib *could* use different definitions.
@@ -30249,7 +30319,7 @@ namespace ts {
             }
             if (isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
                 isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
-                const [yieldType, returnType, nextType] = (type as GenericType).typeArguments!;
+                const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
                 return (type as IterableOrIteratorType)[resolver.iteratorCacheKey] = createIterationTypes(yieldType, returnType, nextType);
             }
         }
@@ -30291,11 +30361,11 @@ namespace ts {
             // As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<T>`
             // or `IteratorReturnResult<TReturn>` types, then just grab its type argument.
             if (isReferenceToType(type, getGlobalIteratorYieldResultType(/*reportErrors*/ false))) {
-                const yieldType = (type as GenericType).typeArguments![0];
+                const yieldType = getTypeArguments(type as GenericType)[0];
                 return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = createIterationTypes(yieldType, /*returnType*/ undefined, /*nextType*/ undefined);
             }
             if (isReferenceToType(type, getGlobalIteratorReturnResultType(/*reportErrors*/ false))) {
-                const returnType = (type as GenericType).typeArguments![0];
+                const returnType = getTypeArguments(type as GenericType)[0];
                 return (type as IterableOrIteratorType).iterationTypesOfIteratorResult = createIterationTypes(/*yieldType*/ undefined, returnType, /*nextType*/ undefined);
             }
 
@@ -30931,6 +31001,7 @@ namespace ts {
 
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             if (baseTypeNode) {
+                forEach(baseTypeNode.typeArguments, checkSourceElement);
                 if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
                 }
@@ -30970,12 +31041,9 @@ namespace ts {
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
-                        // that all instantiated base constructor signatures return the same type. We can simply compare the type
-                        // references (as opposed to checking the structure of the types) because elsewhere we have already checked
-                        // that the base type is a class or interface type (and not, for example, an anonymous object type).
-                        // (Javascript constructor functions have this property trivially true since their return type is ignored.)
+                        // that all instantiated base constructor signatures return the same type.
                         const constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode);
-                        if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && getReturnTypeOfSignature(sig) !== baseType)) {
+                        if (forEach(constructors, sig => !isJSConstructor(sig.declaration) && !isTypeIdenticalTo(getReturnTypeOfSignature(sig), baseType))) {
                             error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
                         }
                     }
