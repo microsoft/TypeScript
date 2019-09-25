@@ -1,17 +1,21 @@
 //// [index.js]
+var x = 12;
 module.exports = {
     extends: 'base',
     more: {
         others: ['strs']
-    }
+    },
+    x
 };
 
 //// [index.js]
+var x = 12;
 module.exports = {
     extends: 'base',
     more: {
         others: ['strs']
-    }
+    },
+    x: x
 };
 
 
@@ -21,5 +25,6 @@ declare const _exports: {
     more: {
         others: string[];
     };
+    x: number;
 };
 export = _exports;

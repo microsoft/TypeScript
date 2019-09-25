@@ -1,10 +1,14 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
+var x = 12;
+>x : number
+>12 : 12
+
 module.exports = {
->module.exports = {    extends: 'base',    more: {        others: ['strs']    }} : { extends: string; more: { others: string[]; }; }
->module.exports : { extends: string; more: { others: string[]; }; }
->module : { "tests/cases/conformance/jsdoc/declarations/index": { extends: string; more: { others: string[]; }; }; }
->exports : { extends: string; more: { others: string[]; }; }
->{    extends: 'base',    more: {        others: ['strs']    }} : { extends: string; more: { others: string[]; }; }
+>module.exports = {    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
+>module.exports : { extends: string; more: { others: string[]; }; x: number; }
+>module : { "tests/cases/conformance/jsdoc/declarations/index": { extends: string; more: { others: string[]; }; x: number; }; }
+>exports : { extends: string; more: { others: string[]; }; x: number; }
+>{    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
 
     extends: 'base',
 >extends : string
@@ -18,5 +22,9 @@ module.exports = {
 >others : string[]
 >['strs'] : string[]
 >'strs' : "strs"
-    }
+
+    },
+    x
+>x : number
+
 };
