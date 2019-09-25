@@ -491,8 +491,8 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
-    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[]) {
-        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
+        checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
     export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
@@ -501,7 +501,7 @@ namespace ts.projectSystem {
         return protocolToLocation(str)(start);
     }
 
-    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+    export function protocolToLocation(text: string): (pos: number) => protocol.Location {
         const lineStarts = computeLineStarts(text);
         return pos => {
             const x = computeLineAndCharacterOfPosition(lineStarts, pos);

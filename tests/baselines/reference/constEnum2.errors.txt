@@ -1,6 +1,6 @@
 tests/cases/conformance/constEnums/constEnum2.ts(10,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
 tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
-tests/cases/conformance/constEnums/constEnum2.ts(12,5): error TS1005: ',' expected.
+tests/cases/conformance/constEnums/constEnum2.ts(12,5): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
 tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
 
 
@@ -22,7 +22,7 @@ tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: const enum
 !!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
         g = CONST,
         ~
-!!! error TS1005: ',' expected.
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
             ~~~~~
 !!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
     }

@@ -1,3 +1,23 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/core --verbose
+12:04:00 AM - Projects in this build: 
+    * src/core/tsconfig.json
+
+12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+
+12:04:00 AM - Building project '/src/core/tsconfig.json'...
+
+TSFILE: /src/core/anotherModule.js
+TSFILE: /src/core/index.js
+TSFILE: /src/core/tsconfig.tsbuildinfo
+/lib/lib.d.ts
+/lib/lib.esnext.d.ts
+/src/core/anotherModule.ts
+/src/core/index.ts
+/src/core/some_decl.d.ts
+exitCode:: 0
+
+
 //// [/src/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
