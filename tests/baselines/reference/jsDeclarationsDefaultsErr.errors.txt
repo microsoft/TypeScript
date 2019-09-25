@@ -25,7 +25,7 @@ tests/cases/conformance/jsdoc/declarations/index2.js(4,31): error TS2300: Duplic
      */
     
 ==== tests/cases/conformance/jsdoc/declarations/index3.js (0 errors) ====
-    // merge type alias and variable (beharior is borked, see #32366)
+    // merge type alias and variable (behavior is borked, see #32366)
     const x = 12;
     export {x as default};
     /**

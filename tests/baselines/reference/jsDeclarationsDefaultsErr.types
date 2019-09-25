@@ -28,7 +28,7 @@ export default class C {};
  */
 
 === tests/cases/conformance/jsdoc/declarations/index3.js ===
-// merge type alias and variable (beharior is borked, see #32366)
+// merge type alias and variable (behavior is borked, see #32366)
 const x = 12;
 >x : 12
 >12 : 12

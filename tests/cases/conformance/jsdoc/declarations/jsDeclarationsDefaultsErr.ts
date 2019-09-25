@@ -22,7 +22,7 @@ export default class C {};
  */
 
 // @filename: index3.js
-// merge type alias and variable (beharior is borked, see #32366)
+// merge type alias and variable (behavior is borked, see #32366)
 const x = 12;
 export {x as default};
 /**
