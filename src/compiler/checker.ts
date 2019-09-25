@@ -17317,6 +17317,12 @@ namespace ts {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
+                        if (isIncomplete(type)) {
+                            containingUnion = undefined;
+                        }
+                        else if (type.flags & TypeFlags.Union) {
+                            containingUnion = type as UnionType;
+                        }
                     }
                     else if (flags & FlowFlags.Call) {
                         type = getTypeAtFlowCall(<FlowCall>flow);
@@ -17756,16 +17762,10 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(left, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(left, containingUnion || declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, declaredType)) {
-                            return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
-                        }
-                        if (containingUnion && isMatchingReferenceDiscriminant(left, containingUnion)) {
-                            return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
-                        }
-                        if (containingUnion && isMatchingReferenceDiscriminant(right, containingUnion)) {
+                        if (isMatchingReferenceDiscriminant(right, containingUnion || declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
