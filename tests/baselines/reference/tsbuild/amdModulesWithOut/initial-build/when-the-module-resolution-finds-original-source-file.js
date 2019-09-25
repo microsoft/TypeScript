@@ -1,16 +1,16 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b /src/app --verbose
-4:00:00 PM - Projects in this build: 
+12:00:00 AM - Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-4:00:00 PM - Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.js' does not exist
+12:00:00 AM - Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.js' does not exist
 
-4:00:00 PM - Building project '/src/lib/tsconfig.json'...
+12:00:00 AM - Building project '/src/lib/tsconfig.json'...
 
-4:00:00 PM - Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+12:00:00 AM - Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
 
-4:00:00 PM - Building project '/src/app/tsconfig.json'...
+12:00:00 AM - Building project '/src/app/tsconfig.json'...
 
 exitCode:: 0
 
