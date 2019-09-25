@@ -1697,10 +1697,13 @@ declare namespace ts {
         Shared = 2048,
         PreFinally = 4096,
         AfterFinally = 8192,
+        Present = 16384,
+        Missing = 32768,
         Label = 12,
-        Condition = 96
+        Condition = 96,
+        OptionalChain = 49152
     }
-    export type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation;
+    export type FlowNode = AfterFinallyFlow | PreFinallyFlow | FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowOptionalChain | FlowSwitchClause | FlowArrayMutation;
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
@@ -1730,6 +1733,10 @@ declare namespace ts {
         antecedent: FlowNode;
     }
     export interface FlowCondition extends FlowNodeBase {
+        node: Expression;
+        antecedent: FlowNode;
+    }
+    export interface FlowOptionalChain extends FlowNodeBase {
         node: Expression;
         antecedent: FlowNode;
     }

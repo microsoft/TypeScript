@@ -333,6 +333,10 @@ namespace ts {
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
 
+        // This object is reused for `checkOptionalExpression` return values to avoid frequent GC due to nursery object allocations.
+        // This object represents a pool-size of 1.
+        const pooledOptionalTypeResult: { isOptional: boolean, type: Type } = { isOptional: false, type: undefined! };
+
         // for public members that accept a Node or one of its subtypes, we must guard against
         // synthetic nodes created during transformations by calling `getParseTreeNode`.
         // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -15158,6 +15162,12 @@ namespace ts {
             return wasOptional ? addOptionalTypeMarker(type) : type;
         }
 
+        function createPooledOptionalTypeResult(isOptional: boolean, type: Type) {
+            pooledOptionalTypeResult.isOptional = isOptional;
+            pooledOptionalTypeResult.type = type;
+            return pooledOptionalTypeResult;
+        }
+
         function checkOptionalExpression(
             parent: PropertyAccessExpression | QualifiedName | ElementAccessExpression | CallExpression,
             expression: Expression | QualifiedName,
@@ -15172,7 +15182,7 @@ namespace ts {
                     // If we have a questionDotToken then we are an OptionalExpression and should remove `null` and
                     // `undefined` from the type and add the optionalType to the result, if needed.
                     isOptional = isNullableType(type);
-                    return { isOptional, type: isOptional ? getNonNullableType(type) : type };
+                    return createPooledOptionalTypeResult(isOptional, isOptional ? getNonNullableType(type) : type);
                 }
 
                 // If we do not have a questionDotToken, then we are an OptionalChain and we remove the optionalType and
@@ -15185,7 +15195,7 @@ namespace ts {
             }
 
             type = checkNonNullType(type, expression, nullDiagnostic, undefinedDiagnostic, nullOrUndefinedDiagnostic);
-            return { isOptional, type };
+            return createPooledOptionalTypeResult(isOptional, type);
         }
 
         /**
@@ -17205,7 +17215,7 @@ namespace ts {
                 // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
                 // target expression of an assertion.
                 const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
-                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
+                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkOptionalExpression(node, node.expression).type :
                     undefined;
                 const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
                 const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
@@ -17376,6 +17386,9 @@ namespace ts {
                     }
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
+                    }
+                    else if (flags & FlowFlags.OptionalChain) {
+                        type = getTypeAtFlowOptionalChain(<FlowOptionalChain>flow);
                     }
                     else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
@@ -17581,6 +17594,22 @@ namespace ts {
                 const incomplete = isIncomplete(flowType);
                 const resultType = incomplete && narrowedType.flags & TypeFlags.Never ? silentNeverType : narrowedType;
                 return createFlowType(resultType, incomplete);
+            }
+
+            function getTypeAtFlowOptionalChain(flow: FlowOptionalChain): FlowType {
+                const flowType = getTypeAtFlowNode(flow.antecedent);
+                const type = getTypeFromFlowType(flowType);
+                if (type.flags & TypeFlags.Never) {
+                    return flowType;
+                }
+
+                const assumePresent = (flow.flags & FlowFlags.Present) !== 0;
+                const nonEvolvingType = finalizeEvolvingArrayType(type);
+                const narrowedType = narrowTypeByOptionality(nonEvolvingType, flow.node, assumePresent);
+                if (narrowedType === nonEvolvingType) {
+                    return flowType;
+                }
+                return createFlowType(narrowedType, isIncomplete(flowType));
             }
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
@@ -18123,7 +18152,7 @@ namespace ts {
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
                 if (hasMatchingArgument(callExpression, reference)) {
-                    const signature = getEffectsSignature(callExpression);
+                    const signature = assumeTrue || !isCallChain(callExpression) ? getEffectsSignature(callExpression) : undefined;
                     const predicate = signature && getTypePredicateOfSignature(signature);
                     if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
@@ -18184,6 +18213,19 @@ namespace ts {
                             return narrowType(type, (<PrefixUnaryExpression>expr).operand, !assumeTrue);
                         }
                         break;
+                }
+                return type;
+            }
+
+            function narrowTypeByOptionality(type: Type, expr: Expression, assumePresent: boolean): Type {
+                if (isMatchingReference(reference, expr)) {
+                    return getTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
+                }
+                if (isMatchingReferenceDiscriminant(expr, declaredType)) {
+                    return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
+                }
+                if (containsMatchingReferenceDiscriminant(reference, expr)) {
+                    return declaredType;
                 }
                 return type;
             }

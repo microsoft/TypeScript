@@ -132,6 +132,8 @@ namespace ts {
         let currentReturnTarget: FlowLabel | undefined;
         let currentTrueTarget: FlowLabel | undefined;
         let currentFalseTarget: FlowLabel | undefined;
+        let currentPresentTarget: FlowLabel | undefined;
+        let currentMissingTarget: FlowLabel | undefined;
         let preSwitchCaseFlow: FlowNode | undefined;
         let activeLabels: ActiveLabel[] | undefined;
         let hasExplicitReturn: boolean;
@@ -200,6 +202,8 @@ namespace ts {
             currentReturnTarget = undefined;
             currentTrueTarget = undefined;
             currentFalseTarget = undefined;
+            currentPresentTarget = undefined;
+            currentMissingTarget = undefined;
             activeLabels = undefined!;
             hasExplicitReturn = false;
             emitFlags = NodeFlags.None;
@@ -736,6 +740,10 @@ namespace ts {
                 case SyntaxKind.VariableDeclaration:
                     bindVariableDeclarationFlow(<VariableDeclaration>node);
                     break;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    bindAccessExpressionFlow(<AccessExpression>node);
+                    break;
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
@@ -883,6 +891,14 @@ namespace ts {
                 return unreachableFlow;
             }
             if (!isNarrowingExpression(expression)) {
+                return antecedent;
+            }
+            setFlowNodeReferenced(antecedent);
+            return flowNodeCreated({ flags, antecedent, node: expression });
+        }
+
+        function createFlowOptionalChain(flags: FlowFlags, antecedent: FlowNode, expression: Expression): FlowNode {
+            if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
@@ -1481,21 +1497,78 @@ namespace ts {
             }
         }
 
-        function bindCallExpressionFlow(node: CallExpression) {
-            // If the target of the call expression is a function expression or arrow function we have
-            // an immediately invoked function expression (IIFE). Initialize the flowNode property to
-            // the current control flow (which includes evaluation of the IIFE arguments).
-            let expr: Expression = node.expression;
-            while (expr.kind === SyntaxKind.ParenthesizedExpression) {
-                expr = (<ParenthesizedExpression>expr).expression;
+        function bindOptionalExpression(node: Expression, presentTarget: FlowLabel, missingTarget: FlowLabel) {
+            const savedPresentTarget = currentPresentTarget;
+            const savedMissingTarget = currentMissingTarget;
+            currentPresentTarget = presentTarget;
+            currentMissingTarget = missingTarget;
+            bind(node);
+            currentPresentTarget = savedPresentTarget;
+            currentMissingTarget = savedMissingTarget;
+            if (!isValidOptionalChain(node)) {
+                addAntecedent(presentTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
+                addAntecedent(missingTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
             }
-            if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
-                bindEach(node.typeArguments);
-                bindEach(node.arguments);
-                bind(node.expression);
+        }
+
+        function isOutermostOptionalChain(node: ValidOptionalChain) {
+            return !isOptionalChain(node.parent) || node.parent.expression !== node;
+        }
+
+        function bindOptionalChainFlow(node: ValidOptionalChain) {
+            const postExpressionLabel = isOutermostOptionalChain(node) ? createBranchLabel() : undefined;
+            const presentTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentPresentTarget);
+            const missingTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentMissingTarget);
+            bindOptionalExpression(node.expression, presentTarget, missingTarget);
+            if (!isValidOptionalChain(node.expression)) {
+                currentFlow = finishFlowLabel(presentTarget);
+            }
+            bind(node.questionDotToken);
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    bind(node.name);
+                    break;
+                case SyntaxKind.ElementAccessExpression:
+                    bind(node.argumentExpression);
+                    break;
+                case SyntaxKind.CallExpression:
+                    bindEach(node.typeArguments);
+                    bindEach(node.arguments);
+                    break;
+            }
+            if (postExpressionLabel) {
+                addAntecedent(postExpressionLabel, currentFlow);
+                addAntecedent(postExpressionLabel, finishFlowLabel(missingTarget));
+                currentFlow = finishFlowLabel(postExpressionLabel);
+            }
+        }
+
+        function bindAccessExpressionFlow(node: AccessExpression) {
+            if (isValidOptionalChain(node)) {
+                bindOptionalChainFlow(node);
             }
             else {
                 bindEachChild(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression) {
+            if (isValidOptionalChain(node)) {
+                bindOptionalChainFlow(node);
+            }
+            else {
+                // If the target of the call expression is a function expression or arrow function we have
+                // an immediately invoked function expression (IIFE). Initialize the flowNode property to
+                // the current control flow (which includes evaluation of the IIFE arguments).
+                const expr = skipParentheses(node.expression);
+                if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
+                    bindEach(node.typeArguments);
+                    bindEach(node.arguments);
+                    bind(node.expression);
+                }
+                else {
+                    bindEachChild(node);
+                }
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>node.expression;

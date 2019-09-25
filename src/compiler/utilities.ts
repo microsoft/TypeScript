@@ -7087,6 +7087,24 @@ namespace ts {
         return node.kind === SyntaxKind.GetAccessor;
     }
 
+    /**
+     * Tests whether an OptionalChain is valid. We can parse an invalid optional chain if it contains an
+     * invalid TaggedTemplateChain per the ECMAScript syntax.
+     */
+    /* @internal */
+    export function isValidOptionalChain(node: Expression): node is ValidOptionalChain {
+        while (isOptionalChain(node)) {
+            if (node.questionDotToken) return true;
+            node = node.expression;
+        }
+        return false;
+    }
+
+    /* @internal */
+    export function isOptionalChainRoot(node: ValidOptionalChain): node is OptionalChainRoot {
+        return !!node.questionDotToken;
+    }
+
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times

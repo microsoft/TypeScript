@@ -1801,6 +1801,22 @@ namespace ts {
         _optionalChainBrand: any;
     }
 
+    /* @internal */
+    export interface PropertyAccessChainRoot extends PropertyAccessChain {
+        questionDotToken: QuestionDotToken;
+    }
+
+    /* @internal */
+    export interface ValidPropertyAccessChainLink extends PropertyAccessChain {
+        questionDotToken: undefined;
+        expression: ValidOptionalChain;
+    }
+
+    /* @internal */
+    export type ValidPropertyAccessChain =
+        | PropertyAccessChainRoot
+        | ValidPropertyAccessChainLink;
+
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         expression: SuperExpression;
     }
@@ -1822,6 +1838,22 @@ namespace ts {
         _optionalChainBrand: any;
     }
 
+    /* @internal */
+    export interface ElementAccessChainRoot extends ElementAccessChain {
+        questionDotToken: QuestionDotToken;
+    }
+
+    /* @internal */
+    export interface ValidElementAccessChainLink extends ElementAccessChain {
+        questionDotToken: undefined;
+        expression: ValidOptionalChain;
+    }
+
+    /* @internal */
+    export type ValidElementAccessChain =
+        | ElementAccessChainRoot
+        | ValidElementAccessChainLink;
+
     export interface SuperElementAccessExpression extends ElementAccessExpression {
         expression: SuperExpression;
     }
@@ -1841,10 +1873,40 @@ namespace ts {
         _optionalChainBrand: any;
     }
 
+    /* @internal */
+    export interface CallChainRoot extends CallChain {
+        questionDotToken: QuestionDotToken;
+    }
+
+    /* @internal */
+    export interface ValidCallChainLink extends CallChain {
+        questionDotToken: undefined;
+        expression: ValidOptionalChain;
+    }
+
+    /* @internal */
+    export type ValidCallChain =
+        | CallChainRoot
+        | ValidCallChainLink;
+
     export type OptionalChain =
         | PropertyAccessChain
         | ElementAccessChain
         | CallChain
+        ;
+
+    /* @internal */
+    export type OptionalChainRoot =
+        | PropertyAccessChainRoot
+        | ElementAccessChainRoot
+        | CallChainRoot
+        ;
+
+    /* @internal */
+    export type ValidOptionalChain =
+        | ValidPropertyAccessChain
+        | ValidElementAccessChain
+        | ValidCallChain
         ;
 
     /** @internal */
@@ -2620,10 +2682,14 @@ namespace ts {
         Shared         = 1 << 11, // Referenced as antecedent more than once
         PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
+        Present        = 1 << 14, // Optional Chain known to be neither null nor undefined.
+        Missing        = 1 << 15, // Optional Chain known to be either null or undefined.
         /** @internal */
-        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
+        Cached         = 1 << 16, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
+
         Label = BranchLabel | LoopLabel,
-        Condition = TrueCondition | FalseCondition
+        Condition = TrueCondition | FalseCondition,
+        OptionalChain = Present | Missing,
     }
 
     export type FlowNode =
@@ -2634,6 +2700,7 @@ namespace ts {
         | FlowAssignment
         | FlowCall
         | FlowCondition
+        | FlowOptionalChain
         | FlowSwitchClause
         | FlowArrayMutation;
 
@@ -2682,6 +2749,11 @@ namespace ts {
     // FlowCondition represents a condition that is known to be true or false at the
     // node's location in the control flow.
     export interface FlowCondition extends FlowNodeBase {
+        node: Expression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowOptionalChain extends FlowNodeBase {
         node: Expression;
         antecedent: FlowNode;
     }
