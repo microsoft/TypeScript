@@ -18372,7 +18372,7 @@ namespace ts {
                         const symbol = getResolvedSymbol(<Identifier>node);
                         return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     case SyntaxKind.ThisKeyword:
-                        return checkThisExpression(node);
+                        return getExplicitThisType(node);
                     case SyntaxKind.PropertyAccessExpression:
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
                         const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
@@ -19954,6 +19954,20 @@ namespace ts {
                 else if (includeGlobalThis) {
                     return getTypeOfSymbol(globalThisSymbol);
                 }
+            }
+        }
+
+        function getExplicitThisType(node: Expression) {
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+            if (isFunctionLike(container)) {
+                const signature = getSignatureFromDeclaration(container);
+                if (signature.thisParameter) {
+                    return getExplicitTypeOfSymbol(signature.thisParameter);
+                }
+            }
+            if (isClassLike(container.parent)) {
+                const symbol = getSymbolOfNode(container.parent);
+                return hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
             }
         }
 
@@ -29529,7 +29543,8 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkTruthinessExpression(node.expression);
+            const type = checkTruthinessExpression(node.expression);
+            checkTestingKnownTruthyCallableType(node, type);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -29537,6 +29552,57 @@ namespace ts {
             }
 
             checkSourceElement(node.elseStatement);
+        }
+
+        function checkTestingKnownTruthyCallableType(ifStatement: IfStatement, type: Type) {
+            if (!strictNullChecks) {
+                return;
+            }
+
+            const testedNode = isIdentifier(ifStatement.expression)
+                ? ifStatement.expression
+                : isPropertyAccessExpression(ifStatement.expression)
+                    ? ifStatement.expression.name
+                    : undefined;
+
+            if (!testedNode) {
+                return;
+            }
+
+            const possiblyFalsy = getFalsyFlags(type);
+            if (possiblyFalsy) {
+                return;
+            }
+
+            // While it technically should be invalid for any known-truthy value
+            // to be tested, we de-scope to functions unrefenced in the block as a
+            // heuristic to identify the most common bugs. There are too many
+            // false positives for values sourced from type definitions without
+            // strictNullChecks otherwise.
+            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+            if (callSignatures.length === 0) {
+                return;
+            }
+
+            const testedFunctionSymbol = getSymbolAtLocation(testedNode);
+            if (!testedFunctionSymbol) {
+                return;
+            }
+
+            const functionIsUsedInBody = forEachChild(ifStatement.thenStatement, function check(childNode): boolean | undefined {
+                if (isIdentifier(childNode)) {
+                    const childSymbol = getSymbolAtLocation(childNode);
+                    if (childSymbol && childSymbol.id === testedFunctionSymbol.id) {
+                        return true;
+                    }
+                }
+
+                return forEachChild(childNode, check);
+            });
+
+            if (!functionIsUsedInBody) {
+                error(ifStatement.expression, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+            }
         }
 
         function checkDoStatement(node: DoStatement) {

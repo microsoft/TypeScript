@@ -678,6 +678,8 @@ namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        // For testing
+        /*@internal*/ now?(): Date;
     }
 
     export interface FileWatcher {

@@ -1,16 +1,16 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
-        before(() => {
-            projFs = loadProjectFromFiles({
-                "/src/common/nominal.ts": utils.dedent`
+        verifyTsc({
+            scenario: "moduleSpecifiers",
+            subScenario: `synthesized module specifiers resolve correctly`,
+            fs: () => loadProjectFromFiles({
+                "/src/solution/common/nominal.ts": utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
                     };
                     `,
-                "/src/common/tsconfig.json": utils.dedent`
+                "/src/solution/common/tsconfig.json": utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -18,12 +18,12 @@ namespace ts {
                         },
                         "include": ["nominal.ts"]
                     }`,
-                "/src/sub-project/index.ts": utils.dedent`
+                "/src/solution/sub-project/index.ts": utils.dedent`
                     import { Nominal } from '../common/nominal';
 
                     export type MyNominal = Nominal<string, 'MyNominal'>;
                     `,
-                "/src/sub-project/tsconfig.json": utils.dedent`
+                "/src/solution/sub-project/tsconfig.json": utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -34,7 +34,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/sub-project-2/index.ts": utils.dedent`
+                "/src/solution/sub-project-2/index.ts": utils.dedent`
                     import { MyNominal } from '../sub-project/index';
 
                     const variable = {
@@ -45,7 +45,7 @@ namespace ts {
                         return 'key';
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": utils.dedent`
+                "/src/solution/sub-project-2/tsconfig.json": utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -56,7 +56,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/tsconfig.json": utils.dedent`
+                "/src/solution/tsconfig.json": utils.dedent`
                     {
                         "compilerOptions": {
                             "composite": true
@@ -67,7 +67,7 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/tsconfig.base.json": utils.dedent`
+                "/src/tsconfig.base.json": utils.dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
@@ -75,31 +75,17 @@ namespace ts {
                             "outDir": "lib",
                         }
                     }`,
-                "/tsconfig.json": utils.dedent`{
+                "/src/tsconfig.json": utils.dedent`{
                     "compilerOptions": {
                         "composite": true
                     },
                     "references": [
-                        { "path": "./src" }
+                        { "path": "./solution" }
                     ],
                     "include": []
                 }`
-            }, time, symbolLibContent);
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsbuildOutput({
-            scenario: `synthesized module specifiers resolve correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "moduleSpecifiers",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            baselineOnly: true
+            }, symbolLibContent),
+            commandLineArgs: ["-b", "/src", "--verbose"]
         });
     });
 }

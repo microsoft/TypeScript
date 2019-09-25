@@ -1389,18 +1389,16 @@ namespace ts {
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.originalFileName, currentDirectory);
-                if (resolveModuleNamesWorker) {
-                    const moduleNames = getModuleNames(newSourceFile);
-                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile);
-                    // ensure that module resolution results are still correct
-                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
-                    if (resolutionsChanged) {
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                        newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
-                    }
-                    else {
-                        newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
-                    }
+                const moduleNames = getModuleNames(newSourceFile);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile);
+                // ensure that module resolution results are still correct
+                const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
+                if (resolutionsChanged) {
+                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
+                }
+                else {
+                    newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.

@@ -57,7 +57,7 @@ atob (guessing 'atob')
 (!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
 XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-certificates] completed successfully in  ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/storage-file] completed successfully in ? seconds
@@ -81,7 +81,7 @@ SUCCESS (21)
 @azure/keyvault-secrets (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/eventhubs-checkpointstore-blob (? seconds)
-@azure/keyvault-certificates (? seconds)
+@azure/keyvault-certificates ( ? seconds)
 @azure/storage-blob (? seconds)
 @azure/storage-file (? seconds)
 @azure/storage-queue (? seconds)
