@@ -5,4 +5,4 @@
 ////    return a['hi'];
 ////}
 
-verify.rangeAfterCodeFix("a: { [x: string]: any }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("a: { [x: string]: any; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

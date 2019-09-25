@@ -5,4 +5,4 @@
 ////     app.use('hi')
 //// }
 
-verify.rangeAfterCodeFix("app: { use: (arg0: string) => void }");
+verify.rangeAfterCodeFix("app: { use: (arg0: string) => void; }");

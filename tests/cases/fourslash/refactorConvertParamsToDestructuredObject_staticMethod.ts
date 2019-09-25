@@ -13,7 +13,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `class Foo {
-    static bar({ t, s }: { t: string; s: string }): string {
+    static bar({ t, s }: { t: string; s: string; }): string {
         return s + t;
     }
 }

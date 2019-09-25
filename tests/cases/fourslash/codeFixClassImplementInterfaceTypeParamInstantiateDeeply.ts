@@ -12,6 +12,6 @@ verify.codeFix({
     x: { y: T, z: T[] };
 }
 class C implements I<number> {
-    x: { y: number; z: number[] };
+    x: { y: number; z: number[]; };
 }`,
 });

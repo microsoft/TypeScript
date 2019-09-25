@@ -12,7 +12,7 @@ verify.codeFix({
     description: "Declare method 'foo1'",
     index: 0,
     newRangeContent: `
-    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string }) {
+    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string; }) {
         throw new Error("Method not implemented.");
     }
     `,
@@ -23,10 +23,10 @@ verify.codeFix({
     description: "Declare method 'foo2'",
     index: 0,
     newRangeContent: `
-    foo2(arg0: null, arg1: {}, arg2: { a: number; b: string }) {
+    foo2(arg0: null, arg1: {}, arg2: { a: number; b: string; }) {
         throw new Error("Method not implemented.");
     }
-    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string }) {
+    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string; }) {
         throw new Error("Method not implemented.");
     }
     `,
@@ -37,13 +37,13 @@ verify.codeFix({
     description: "Declare method 'foo3'",
     index: 0,
     newRangeContent: `
-    foo3(arg0: null, arg1: {}, arg2: { a: number; b: string }): number {
+    foo3(arg0: null, arg1: {}, arg2: { a: number; b: string; }): number {
         throw new Error("Method not implemented.");
     }
-    foo2(arg0: null, arg1: {}, arg2: { a: number; b: string }) {
+    foo2(arg0: null, arg1: {}, arg2: { a: number; b: string; }) {
         throw new Error("Method not implemented.");
     }
-    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string }) {
+    foo1(arg0: null, arg1: {}, arg2: { a: number; b: string; }) {
         throw new Error("Method not implemented.");
     }
     `

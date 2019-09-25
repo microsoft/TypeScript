@@ -2027,37 +2027,13 @@ namespace ts {
             || kind === SyntaxKind.ExportAssignment;
     }
 
-    function isMappedTypeNodeType(node: Node) {
-        return node.parent && isMappedTypeNode(node.parent) && node.parent.type === node;
-    }
+    export const syntaxMayBeASICandidate = or(
+        syntaxRequiresTrailingCommaOrSemicolonOrASI,
+        syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI,
+        syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
+        syntaxRequiresTrailingSemicolonOrASI);
 
-    export function nodeMayBeASICandidate(node: Node) {
-        if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind) ||
-            syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.kind) ||
-            syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.kind) ||
-            syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
-            return true;
-        }
-        return isMappedTypeNodeType(node);
-    }
-
-    export function nodeAllowsUnconventionalTrailingSemicolon(node: Node, contextNode: Node, nextTokenKind: SyntaxKind | undefined, sourceFile: SourceFileLike) {
-        if (isMappedTypeNodeType(node)) {
-            return rangeIsOnSingleLine(contextNode, sourceFile as SourceFile);
-        }
-        if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind)) {
-            return nextTokenKind === SyntaxKind.CloseBraceToken && rangeIsOnSingleLine(contextNode, sourceFile as SourceFile);
-        }
-        return false;
-    }
-
-    /**
-     * @param strict Return true for positions that allow semicolons but conventionally
-     * drop them, even in code that largely contains semicolons. Examples include the last
-     * declaration inside the curly braces of single-line object type literals and mapped types,
-     * e.g. `type X = { x: string; }` and `type X<T> = { [K in keyof T]: T[K]; }`.
-     */
-    export function isASICandidate(node: Node, sourceFile: SourceFileLike, strict?: boolean): boolean {
+    export function isASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         const lastToken = node.getLastToken(sourceFile);
         if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
             return false;
@@ -2084,28 +2060,20 @@ namespace ts {
             return false;
         }
 
-        let nextToken = getNextToken();
-        const contextNode = findAncestor(node, or(isObjectTypeDeclaration, isMappedTypeNode));
-        if (contextNode && nodeAllowsUnconventionalTrailingSemicolon(node, contextNode, nextToken && nextToken.kind, sourceFile)) {
-            return !!strict;
-        }
-
         // See comment in parser’s `parseDoStatement`
         if (node.kind === SyntaxKind.DoStatement) {
             return true;
         }
 
+        const topNode = findAncestor(node, ancestor => !ancestor.parent)!;
+        const nextToken = findNextToken(node, topNode, sourceFile);
         if (!nextToken || nextToken.kind === SyntaxKind.CloseBraceToken) {
             return true;
         }
 
-        return !positionsAreOnSameLine(node.getEnd(),
-            nextToken.getStart(sourceFile),
-            sourceFile as SourceFile);
-
-        function getNextToken(): Node | undefined {
-            return nextToken || (nextToken = findNextToken(node, findAncestor(node, ancestor => !ancestor.parent)!, sourceFile));
-        }
+        const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
+        const endLine = sourceFile.getLineAndCharacterOfPosition(nextToken.getStart(sourceFile)).line;
+        return startLine !== endLine;
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {

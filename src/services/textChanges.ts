@@ -836,12 +836,12 @@ namespace ts.textChanges {
             return {
                 ...context.options,
                 // If the user has no semicolon preference defined and the file doesn’t use semicolons,
-                // make the formatter remove them. Otherwise, only remove unconventional semicolons because
+                // make the formatter remove them. Otherwise, ignore semicolons in the formatter because
                 // the writer will insert them by default.
                 semicolons: context.options.semicolons === SemicolonPreference.Remove ||
                 (!context.options.semicolons || context.options.semicolons === SemicolonPreference.Ignore) && !probablyUsesSemicolons(sourceFile)
                     ? SemicolonPreference.Remove
-                    : SemicolonPreference.RemoveUnconventional,
+                    : SemicolonPreference.Ignore,
             };
         }
 

@@ -314,7 +314,6 @@ namespace ts.formatting {
             rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.Space),
             rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteTrivia),
             rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
-            rule("NoUnconventionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.RemoveUnconventional), isUnconventionalSemicolonDeletionContext], RuleAction.DeleteToken),
             rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.TrailingSemicolon),
         ];
 
@@ -791,14 +790,6 @@ namespace ts.formatting {
         return context.contextNode.kind === SyntaxKind.NonNullExpression;
     }
 
-    function isUnconventionalSemicolonDeletionContext(context: FormattingContext): boolean {
-        return nodeAllowsUnconventionalTrailingSemicolon(
-            context.currentTokenParent,
-            context.contextNode,
-            context.nextTokenSpan.kind,
-            context.sourceFile);
-    }
-
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
         let nextTokenKind = context.nextTokenSpan.kind;
         let nextTokenStart = context.nextTokenSpan.pos;
@@ -868,7 +859,7 @@ namespace ts.formatting {
             if (ancestor.end !== context.currentTokenSpan.end) {
                 return "quit";
             }
-            return nodeMayBeASICandidate(ancestor);
+            return syntaxMayBeASICandidate(ancestor.kind);
         });
 
         return !!contextAncestor && isASICandidate(contextAncestor, context.sourceFile);

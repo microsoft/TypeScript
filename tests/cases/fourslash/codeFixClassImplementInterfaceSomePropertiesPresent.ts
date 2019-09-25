@@ -12,5 +12,5 @@
 //// }
 
 verify.rangeAfterCodeFix(`
-z: number & { __iBrand: any };
+z: number & { __iBrand: any; };
 `);

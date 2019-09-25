@@ -19,7 +19,7 @@ edit.applyRefactor({
     /*RENAME*/newFunction(x);
 }
 
-function newFunction(x: { m: number }) {
+function newFunction(x: { m: number; }) {
     x.m = 3;
 }
 `

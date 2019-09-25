@@ -11,7 +11,7 @@
 
 verify.rangeAfterCodeFix(`
 class A {
-    x: { a: number; b: string; c: undefined; d: null; e: any };
+    x: { a: number; b: string; c: undefined; d: null; e: any; };
     
     constructor() {
         let e: any = 10;

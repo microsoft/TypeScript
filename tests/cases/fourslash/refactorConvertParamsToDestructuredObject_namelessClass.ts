@@ -16,7 +16,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `export default class {
-    constructor({ a, b }: { a: string; b: string }) { }
+    constructor({ a, b }: { a: string; b: string; }) { }
 }`
 });
 

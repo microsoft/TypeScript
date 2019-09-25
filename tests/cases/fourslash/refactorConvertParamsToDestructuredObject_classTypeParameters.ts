@@ -14,7 +14,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `class Foo<T> {
-    bar({ t, s }: { t: T; s: T }) {
+    bar({ t, s }: { t: T; s: T; }) {
         return s;
     }
 }

@@ -11,7 +11,7 @@ edit.applyRefactor({
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
     newContent: `const c = class {
-    constructor({ a, b = { x: 1 } }: { a: number; b?: { x: number } }) { }
+    constructor({ a, b = { x: 1 } }: { a: number; b?: { x: number; }; }) { }
 }
 var x = new c({ a: 2 });`
 });

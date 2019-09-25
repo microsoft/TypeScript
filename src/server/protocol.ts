@@ -2960,8 +2960,6 @@ namespace ts.server.protocol {
         Ignore = "ignore",
         Insert = "insert",
         Remove = "remove",
-        /*@internal*/
-        RemoveUnconventional = "remove-unconventional"
     }
 
     export interface EditorSettings {

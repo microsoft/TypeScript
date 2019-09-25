@@ -13,7 +13,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `export function foo({ a, b }: { a: string; b: string }) { }`
+    newContent: `export function foo({ a, b }: { a: string; b: string; }) { }`
 });
 
 goTo.file("a.ts");

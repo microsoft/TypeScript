@@ -46,4 +46,4 @@ enum E {
 type M<T> = { [K in keyof T]: any };
 declare module 'foo' { }
 declare module 'bar';
-type T = { x: string, y: number };`);
+type T = { x: string, y: number; };`);

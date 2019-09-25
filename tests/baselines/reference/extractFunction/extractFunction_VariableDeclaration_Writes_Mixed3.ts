@@ -11,7 +11,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let { x, y }: { x: number; y: number } = /*RENAME*/newFunction();
+    let { x, y }: { x: number; y: number; } = /*RENAME*/newFunction();
     a; x; y;
 
     function newFunction() {

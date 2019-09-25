@@ -30,7 +30,7 @@ verify.codeFix({
  * @param alpha - the other best parameter
  * @param {*} beta - I have no idea how this got here
  */
-function f(x: number, y: { a: string; b: Date }, z: string, alpha, beta: any) {
+function f(x: number, y: { a: string; b: Date; }, z: string, alpha, beta: any) {
     x; y; z; alpha; beta;
 }`,
 });

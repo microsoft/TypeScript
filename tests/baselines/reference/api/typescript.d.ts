@@ -5297,7 +5297,7 @@ declare namespace ts {
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
-        Remove = "remove",
+        Remove = "remove"
     }
     interface EditorOptions {
         BaseIndentSize?: number;

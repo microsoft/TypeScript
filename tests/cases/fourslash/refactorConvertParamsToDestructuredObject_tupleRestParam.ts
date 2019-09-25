@@ -23,7 +23,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `function fn1({ a, b, args }: { a: number; b: number; args: [number, number] }) { }
+    newContent: `function fn1({ a, b, args }: { a: number; b: number; args: [number, number]; }) { }
 fn1({ a: 1, b: 2, args: [3, 4] });`
 });
 
@@ -32,7 +32,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `function fn2({ a, b, args }: { a: number; b: number; args: [number, number, ...string[]] }) { }
+    newContent: `function fn2({ a, b, args }: { a: number; b: number; args: [number, number, ...string[]]; }) { }
 fn2({ a: 1, b: 2, args: [3, 4] });
 fn2({ a: 1, b: 2, args: [3, 4, "a"] });`
 });
@@ -42,7 +42,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `function fn3({ b, c }: { b: boolean; c: [] }) { }
+    newContent: `function fn3({ b, c }: { b: boolean; c: []; }) { }
 fn3({ b: true, c: [] });`
 });
 
@@ -51,7 +51,7 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `function fn4({ a, args = [] }: { a: number; args?: [...string[]] }) { }
+    newContent: `function fn4({ a, args = [] }: { a: number; args?: [...string[]]; }) { }
 fn4({ a: 2 });
 fn4({ a: 1, args: ["two", "three"] });`
 });

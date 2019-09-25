@@ -7,7 +7,7 @@ function /*[#|*/f/*|]*/() {
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f() {
-    let result: { x: number } | { x: string };
+    let result: { x: number; } | { x: string; };
     try {
         await Promise.resolve();
         result = ({ x: 3 });
