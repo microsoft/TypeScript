@@ -69,5 +69,68 @@ namespace ts {
             },
             commandLineArgs: ["-p", "src/plugin-one", "--listFiles"]
         });
+
+        verifyTsc({
+            scenario: "declarationEmit",
+            subScenario: "when pkg references sibling package through indirect symlink",
+            fs: () => loadProjectFromFiles({
+                "/src/pkg1/dist/index.d.ts": utils.dedent`
+                        export * from './types';`,
+                "/src/pkg1/dist/types.d.ts": utils.dedent`
+                        export declare type A = {
+                            id: string;
+                        };
+                        export declare type B = {
+                            id: number;
+                        };
+                        export declare type IdType = A | B;
+                        export declare class MetadataAccessor<T, D extends IdType = IdType> {
+                            readonly key: string;
+                            private constructor();
+                            toString(): string;
+                            static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
+                        }`,
+                "/src/pkg1/package.json": utils.dedent`
+                        {
+                            "name": "@raymondfeng/pkg1",
+                            "version": "1.0.0",
+                            "description": "",
+                            "main": "dist/index.js",
+                            "typings": "dist/index.d.ts"
+                        }`,
+                "/src/pkg2/dist/index.d.ts": utils.dedent`
+                        export * from './types';`,
+                "/src/pkg2/dist/types.d.ts": utils.dedent`
+                        export {MetadataAccessor} from '@raymondfeng/pkg1';`,
+                "/src/pkg2/package.json": utils.dedent`
+                        {
+                            "name": "@raymondfeng/pkg2",
+                            "version": "1.0.0",
+                            "description": "",
+                            "main": "dist/index.js",
+                            "typings": "dist/index.d.ts"
+                        }`,
+                "/src/pkg3/src/index.ts": utils.dedent`
+                        export * from './keys';`,
+                "/src/pkg3/src/keys.ts": utils.dedent`
+                        import {MetadataAccessor} from "@raymondfeng/pkg2";
+                        export const ADMIN = MetadataAccessor.create<boolean>('1');`,
+                "/src/pkg3/tsconfig.json": utils.dedent`
+                        {
+                            "compilerOptions": {
+                              "outDir": "dist",
+                              "rootDir": "src",
+                              "target": "es5",
+                              "module": "commonjs",
+                              "strict": true,
+                              "esModuleInterop": true,
+                              "declaration": true
+                            }
+                        }`,
+                "/src/pkg2/node_modules/@raymondfeng/pkg1": new vfs.Symlink("/src/pkg1"),
+                "/src/pkg3/node_modules/@raymondfeng/pkg2": new vfs.Symlink("/src/pkg2"),
+            }),
+            commandLineArgs: ["-p", "src/pkg3", "--listFiles"]
+        });
     });
 }
