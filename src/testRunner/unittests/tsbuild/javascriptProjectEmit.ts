@@ -1,9 +1,9 @@
 namespace ts {
     describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects and emits them correctly", () => {
-        let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
-        before(() => {
-            projFs = loadProjectFromFiles({
+        verifyTsc({
+            scenario: "javascriptProjectEmit",
+            subScenario: `loads js-based projects and emits them correctly`,
+            fs: () => loadProjectFromFiles({
                 "/src/common/nominal.js": utils.dedent`
                     /**
                      * @template T, Name
@@ -13,7 +13,7 @@ namespace ts {
                     `,
                 "/src/common/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true
                         },
@@ -28,7 +28,7 @@ namespace ts {
                     `,
                 "/src/sub-project/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true
                         },
@@ -53,7 +53,7 @@ namespace ts {
                     `,
                 "/src/sub-project-2/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true
                         },
@@ -73,48 +73,24 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/tsconfig.base.json": utils.dedent`
+                "/src/tsconfig.base.json": utils.dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
                             "rootDir": "./",
-                            "outDir": "lib",
+                            "outDir": "../lib",
                             "allowJs": true,
                             "checkJs": true,
                             "declaration": true
                         }
                     }`,
-                "/tsconfig.json": utils.dedent`{
-                    "compilerOptions": {
-                        "composite": true
-                    },
-                    "references": [
-                        { "path": "./src" }
-                    ],
-                    "include": []
-                }`
-            }, time, symbolLibContent);
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsbuildOutput({
-            scenario: `loads js-based projects and emits them correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "javascriptProjectEmit",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            baselineOnly: true
+            }, symbolLibContent),
+            commandLineArgs: ["-b", "/src"]
         });
     });
 
     describe("unittests:: tsbuild:: javascriptProjectEmit:: loads outfile js projects and concatenates them correctly", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
             projFs = loadProjectFromFiles({
                 "/src/common/nominal.js": utils.dedent`
@@ -125,7 +101,7 @@ namespace ts {
                     `,
                 "/src/common/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "common.js"
@@ -136,10 +112,11 @@ namespace ts {
                     /**
                      * @typedef {Nominal<string, 'MyNominal'>} MyNominal
                      */
+                    const c = /** @type {*} */(null);
                     `,
                 "/src/sub-project/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "sub-project.js"
@@ -163,7 +140,7 @@ namespace ts {
                     `,
                 "/src/sub-project-2/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "sub-project-2.js"
@@ -185,7 +162,7 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/tsconfig.base.json": utils.dedent`
+                "/src/tsconfig.base.json": utils.dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
@@ -195,55 +172,32 @@ namespace ts {
                             "declaration": true
                         }
                     }`,
-                "/tsconfig.json": utils.dedent`{
-                    "compilerOptions": {
-                        "composite": true,
-                        "outFile": "concatenated-nominal-lib.js"
-                    },
-                    "references": [
-                        { "path": "./src", "prepend": true }
-                    ],
-                    "include": []
-                }`
-            }, time, symbolLibContent);
+            }, symbolLibContent);
         });
         after(() => {
             projFs = undefined!;
         });
-        verifyTsbuildOutput({
-            scenario: `loads outfile js projects and concatenates them correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "javascriptProjectEmit",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            baselineOnly: true
+        verifyTsc({
+            scenario: "javascriptProjectEmit",
+            subScenario: `loads outfile js projects and concatenates them correctly`,
+            fs: () => projFs,
+            commandLineArgs: ["-b", "/src"]
         });
-        verifyTsbuildOutput({
-            scenario: `modifies outfile js projects and concatenates them correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "javascriptProjectEmit",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            incrementalDtsUnchangedBuild: {
-                modifyFs: fs => replaceText(fs, "/src/sub-project-2/index.js", "'value'", "'val'")
-            },
-            baselineOnly: true
+        verifyTsc({
+            scenario: "javascriptProjectEmit",
+            subScenario: `modifies outfile js projects and concatenates them correctly`,
+            fs: () => projFs,
+            commandLineArgs: ["-b", "/src"],
+            buildKind: BuildKind.IncrementalDtsUnchanged,
+            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
         });
     });
 
     describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects with non-moved json files and emits them correctly", () => {
-        let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
-        before(() => {
-            projFs = loadProjectFromFiles({
+        verifyTsc({
+            scenario: "javascriptProjectEmit",
+            subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
+            fs: () => loadProjectFromFiles({
                 "/src/common/obj.json": utils.dedent`
                     {
                         "val": 42
@@ -254,7 +208,7 @@ namespace ts {
                     `,
                 "/src/common/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "outDir": null
                             "composite": true
@@ -268,7 +222,7 @@ namespace ts {
                     `,
                 "/src/sub-project/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true
                         },
@@ -290,7 +244,7 @@ namespace ts {
                     `,
                 "/src/sub-project-2/tsconfig.json": utils.dedent`
                     {
-                        "extends": "../../tsconfig.base.json",
+                        "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true
                         },
@@ -310,12 +264,12 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/tsconfig.base.json": utils.dedent`
+                "/src/tsconfig.base.json": utils.dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
                             "rootDir": "./",
-                            "outDir": "out",
+                            "outDir": "../out",
                             "allowJs": true,
                             "checkJs": true,
                             "resolveJsonModule": true,
@@ -323,31 +277,8 @@ namespace ts {
                             "declaration": true
                         }
                     }`,
-                "/tsconfig.json": utils.dedent`{
-                    "compilerOptions": {
-                        "composite": true
-                    },
-                    "references": [
-                        { "path": "./src" }
-                    ],
-                    "include": []
-                }`
-            }, time, symbolLibContent);
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsbuildOutput({
-            scenario: `loads js-based projects with non-moved json files and emits them correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "javascriptProjectEmit",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
-            },
-            baselineOnly: true
+            }, symbolLibContent),
+            commandLineArgs: ["-b", "/src"]
         });
     });
 }

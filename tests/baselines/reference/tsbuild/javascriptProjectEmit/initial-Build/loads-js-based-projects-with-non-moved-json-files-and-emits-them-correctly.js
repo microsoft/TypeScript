@@ -1,9 +1,14 @@
-//// [/out/src/sub-project/index.d.ts]
+//// [/lib/initial-buildOutput.txt]
+/lib/tsc -b /src
+exitCode:: 0
+
+
+//// [/out/sub-project/index.d.ts]
 export const m: typeof mod;
 import mod from "../common";
 
 
-//// [/out/src/sub-project/index.js]
+//// [/out/sub-project/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -13,69 +18,69 @@ var common_1 = __importDefault(require("../common"));
 exports.m = common_1["default"];
 
 
-//// [/out/src/sub-project/tsconfig.tsbuildinfo]
+//// [/out/sub-project/tsconfig.tsbuildinfo]
 {
   "program": {
     "fileInfos": {
-      "../../../lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../../src/common/obj.json": {
+      "../../src/common/obj.json": {
         "version": "-6323167306-export declare const val: number;\r\n",
         "signature": "-6323167306-export declare const val: number;\r\n"
       },
-      "../../../src/common/index.ts": {
+      "../../src/common/index.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
         "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
       },
-      "../../../src/sub-project/index.js": {
+      "../../src/sub-project/index.js": {
         "version": "-14684157955-import mod from '../common';\n\nexport const m = mod;\n",
         "signature": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n"
       }
     },
     "options": {
       "skipLibCheck": true,
-      "rootDir": "../../..",
-      "outDir": "../..",
+      "rootDir": "../../src",
+      "outDir": "..",
       "allowJs": true,
       "checkJs": true,
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
       "composite": true,
-      "configFilePath": "../../../src/sub-project/tsconfig.json"
+      "configFilePath": "../../src/sub-project/tsconfig.json"
     },
     "referencedMap": {
-      "../../../src/common/index.ts": [
-        "../../../src/common/obj.d.ts"
+      "../../src/common/index.ts": [
+        "../../src/common/obj.d.ts"
       ],
-      "../../../src/sub-project/index.js": [
-        "../../../src/common/index.d.ts"
+      "../../src/sub-project/index.js": [
+        "../../src/common/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../../src/common/index.ts": [
-        "../../../src/common/obj.d.ts"
+      "../../src/common/index.ts": [
+        "../../src/common/obj.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../../src/common/index.ts",
-      "../../../src/common/obj.json",
-      "../../../src/sub-project/index.js"
+      "../../lib/lib.d.ts",
+      "../../src/common/index.ts",
+      "../../src/common/obj.json",
+      "../../src/sub-project/index.js"
     ]
   },
   "version": "FakeTSVersion"
 }
 
-//// [/out/src/sub-project-2/index.d.ts]
+//// [/out/sub-project-2/index.d.ts]
 export function getVar(): {
     key: typeof import("../common/obj.json");
 };
 
 
-//// [/out/src/sub-project-2/index.js]
+//// [/out/sub-project-2/index.js]
 "use strict";
 exports.__esModule = true;
 var index_1 = require("../sub-project/index");
@@ -88,71 +93,71 @@ function getVar() {
 exports.getVar = getVar;
 
 
-//// [/out/src/sub-project-2/tsconfig.tsbuildinfo]
+//// [/out/sub-project-2/tsconfig.tsbuildinfo]
 {
   "program": {
     "fileInfos": {
-      "../../../lib/lib.d.ts": {
+      "../../lib/lib.d.ts": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../../src/common/obj.json": {
+      "../../src/common/obj.json": {
         "version": "-6323167306-export declare const val: number;\r\n",
         "signature": "-6323167306-export declare const val: number;\r\n"
       },
-      "../../../src/common/index.ts": {
+      "../../src/common/index.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
         "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
       },
-      "../../../src/sub-project/index.js": {
+      "../../src/sub-project/index.js": {
         "version": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n",
         "signature": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n"
       },
-      "../../../src/sub-project-2/index.js": {
+      "../../src/sub-project-2/index.js": {
         "version": "13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n",
         "signature": "-9206156860-export function getVar(): {\r\n    key: typeof import(\"../common/obj.json\");\r\n};\r\n"
       }
     },
     "options": {
       "skipLibCheck": true,
-      "rootDir": "../../..",
-      "outDir": "../..",
+      "rootDir": "../../src",
+      "outDir": "..",
       "allowJs": true,
       "checkJs": true,
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
       "composite": true,
-      "configFilePath": "../../../src/sub-project-2/tsconfig.json"
+      "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../../../src/common/index.ts": [
-        "../../../src/common/obj.d.ts"
+      "../../src/common/index.ts": [
+        "../../src/common/obj.d.ts"
       ],
-      "../../../src/sub-project-2/index.js": [
+      "../../src/sub-project-2/index.js": [
         "../sub-project/index.d.ts"
       ],
-      "../../../src/sub-project/index.js": [
-        "../../../src/common/index.d.ts"
+      "../../src/sub-project/index.js": [
+        "../../src/common/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../../src/common/index.ts": [
-        "../../../src/common/obj.d.ts"
+      "../../src/common/index.ts": [
+        "../../src/common/obj.d.ts"
       ],
-      "../../../src/sub-project-2/index.js": [
-        "../../../src/common/obj.d.ts"
+      "../../src/sub-project-2/index.js": [
+        "../../src/common/obj.d.ts"
       ],
-      "../../../src/sub-project/index.js": [
-        "../../../src/common/index.d.ts"
+      "../../src/sub-project/index.js": [
+        "../../src/common/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../../src/common/index.ts",
-      "../../../src/common/obj.json",
-      "../../../src/sub-project-2/index.js",
-      "../../../src/sub-project/index.js"
+      "../../lib/lib.d.ts",
+      "../../src/common/index.ts",
+      "../../src/common/obj.json",
+      "../../src/sub-project-2/index.js",
+      "../../src/sub-project/index.js"
     ]
   },
   "version": "FakeTSVersion"
@@ -192,7 +197,7 @@ export declare const val: number;
     },
     "options": {
       "skipLibCheck": true,
-      "rootDir": "../..",
+      "rootDir": "..",
       "outDir": "../..",
       "allowJs": true,
       "checkJs": true,
