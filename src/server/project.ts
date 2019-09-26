@@ -196,6 +196,11 @@ namespace ts.server {
         /*@internal*/
         originalConfiguredProjects: Map<true> | undefined;
 
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
+            return undefined;
+        }
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
@@ -391,6 +396,11 @@ namespace ts.server {
         }
 
         fileExists(file: string): boolean {
+            return this.fileExistsWithCache(file);
+        }
+
+        /* @internal */
+        fileExistsWithCache(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
             const path = this.toPath(file);
@@ -527,8 +537,11 @@ namespace ts.server {
             return this.projectService.getSourceFileLike(fileName, this);
         }
 
-        private shouldEmitFile(scriptInfo: ScriptInfo) {
-            return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
+        /*@internal*/
+        shouldEmitFile(scriptInfo: ScriptInfo | undefined) {
+            return scriptInfo &&
+                !scriptInfo.isDynamicOrHasMixedContent() &&
+                !this.program!.isSourceOfProjectReferenceRedirect(scriptInfo.path);
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -538,7 +551,7 @@ namespace ts.server {
             updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
-                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
         /**
@@ -1223,6 +1236,11 @@ namespace ts.server {
             this.rootFilesMap.delete(info.path);
         }
 
+        /*@internal*/
+        isSourceOfProjectReferenceRedirect(fileName: string) {
+            return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
+        }
+
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
@@ -1475,6 +1493,8 @@ namespace ts.server {
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private projectReferenceCallbacks: ResolvedProjectReferenceCallbacks | undefined;
+        private mapOfDeclarationDirectories: Map<true> | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1520,6 +1540,63 @@ namespace ts.server {
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
+        /* @internal */
+        setResolvedProjectReferenceCallbacks(projectReferenceCallbacks: ResolvedProjectReferenceCallbacks) {
+            this.projectReferenceCallbacks = projectReferenceCallbacks;
+        }
+
+        /* @internal */
+        useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
+            !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
+
+        /**
+         * This implementation of fileExists checks if the file being requested is
+         * .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that file exists on host
+         */
+        fileExists(file: string): boolean {
+            // Project references go to source file instead of .d.ts file
+            if (this.useSourceOfProjectReferenceRedirect() && this.projectReferenceCallbacks) {
+                const source = this.projectReferenceCallbacks.getSourceOfProjectReferenceRedirect(file);
+                if (source) return isString(source) ? super.fileExists(source) : true;
+            }
+            return super.fileExists(file);
+        }
+
+        /**
+         * This implementation of directoryExists checks if the directory being requested is
+         * directory of .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that directory exists on host
+         */
+        directoryExists(path: string): boolean {
+            if (super.directoryExists(path)) return true;
+            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
+
+            if (!this.mapOfDeclarationDirectories) {
+                this.mapOfDeclarationDirectories = createMap();
+                this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
+                    if (!ref) return;
+                    const out = ref.commandLine.options.outFile || ref.commandLine.options.outDir;
+                    if (out) {
+                        this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
+                    }
+                    else {
+                        // Set declaration's in different locations only, if they are next to source the directory present doesnt change
+                        const declarationDir = ref.commandLine.options.declarationDir || ref.commandLine.options.outDir;
+                        if (declarationDir) {
+                            this.mapOfDeclarationDirectories!.set(this.toPath(declarationDir), true);
+                        }
+                    }
+                });
+            }
+            const dirPath = this.toPath(path);
+            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
+            return !!forEachKey(
+                this.mapOfDeclarationDirectories,
+                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
+            );
+        }
+
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -1528,6 +1605,8 @@ namespace ts.server {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
@@ -1568,6 +1647,12 @@ namespace ts.server {
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
             return program && program.forEachResolvedProjectReference(cb);
+        }
+
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
+            const program = this.getCurrentProgram();
+            return program && program.getResolvedProjectReferenceToRedirect(fileName);
         }
 
         /*@internal*/
@@ -1652,6 +1737,8 @@ namespace ts.server {
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.configFileSpecs = undefined;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             super.close();
         }
 

@@ -1,3 +1,51 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:08:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:08:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:08:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:08:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+12:08:00 AM - Updating output of project '/src/second/tsconfig.json'...
+
+12:08:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+
+12:08:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+
+12:08:00 AM - Updating output of project '/src/third/tsconfig.json'...
+
+12:08:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: 0
+readFiles:: {
+ "/src/third/tsconfig.json": 1,
+ "/src/second/tsconfig.json": 1,
+ "/src/first/tsconfig.json": 1,
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/first_part2.ts": 1,
+ "/src/first/first_part3.ts": 1,
+ "/src/first/bin/first-output.d.ts": 1,
+ "/src/2/second-output.tsbuildinfo": 2,
+ "/src/2/second-output.js": 2,
+ "/src/2/second-output.js.map": 2,
+ "/src/2/second-output.d.ts": 2,
+ "/src/2/second-output.d.ts.map": 2,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.js": 1,
+ "/src/first/bin/first-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts.map": 1,
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/third/thirdjs/output/third-output.js": 1,
+ "/src/third/thirdjs/output/third-output.js.map": 1,
+ "/src/third/thirdjs/output/third-output.d.ts": 1,
+ "/src/third/thirdjs/output/third-output.d.ts.map": 1
+} 
+
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);

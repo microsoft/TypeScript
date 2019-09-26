@@ -1,3 +1,42 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:04:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:04:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:04:00 AM - Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+
+12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/first'
+
+12:04:00 AM - Building project '/src/third/tsconfig.json'...
+
+exitCode:: 0
+readFiles:: {
+ "/src/third/tsconfig.json": 1,
+ "/src/first/tsconfig.json": 1,
+ "/src/second/tsconfig.json": 1,
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/first_part2.ts": 1,
+ "/src/first/first_part3.ts": 1,
+ "/src/first/bin/first-output.d.ts": 2,
+ "/src/2/second-output.tsbuildinfo": 1,
+ "/src/2/second-output.d.ts": 1,
+ "/src/third/third_part1.ts": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.js": 1,
+ "/src/2/second-output.js": 1,
+ "/src/first/bin/first-output.js.map": 1,
+ "/src/2/second-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts.map": 1,
+ "/src/2/second-output.d.ts.map": 1,
+ "/src/third/thirdjs/output/third-output.d.ts": 1
+} 
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;

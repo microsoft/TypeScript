@@ -1,3 +1,43 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src/tests --verbose
+12:04:00 AM - Projects in this build: 
+    * src/core/tsconfig.json
+    * src/logic/tsconfig.json
+    * src/tests/tsconfig.json
+
+12:04:00 AM - Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
+
+12:04:00 AM - Building project '/src/core/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+
+12:04:00 AM - Project 'src/logic/tsconfig.json' is out of date because oldest output 'src/logic/index.js' is older than newest input 'src/core'
+
+12:04:00 AM - Building project '/src/logic/tsconfig.json'...
+
+12:04:00 AM - Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
+
+12:04:00 AM - Building project '/src/tests/tsconfig.json'...
+
+exitCode:: 0
+readFiles:: {
+ "/src/tests/tsconfig.json": 1,
+ "/src/core/tsconfig.json": 1,
+ "/src/logic/tsconfig.json": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/index.d.ts": 2,
+ "/src/logic/tsconfig.tsbuildinfo": 1,
+ "/src/logic/index.ts": 1,
+ "/src/core/anotherModule.d.ts": 1,
+ "/src/logic/index.d.ts": 1,
+ "/src/tests/tsconfig.tsbuildinfo": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.d.ts": 1
+} 
+
 //// [/src/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
