@@ -77,12 +77,14 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
+@uifabric/merge-styles:  PASS  src/mergeCssSets.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
 @uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
 @uifabric/merge-styles:  PASS  src/keyframes.test.ts
+@uifabric/merge-styles:  PASS  src/mergeCss.test.ts
+@uifabric/merge-styles:  PASS  src/server.test.ts
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
-@uifabric/merge-styles:  PASS  src/server.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
 @uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
