@@ -28,42 +28,91 @@ d.toString();
 declare const f: undefined | ((x: any) => x is number);
 declare const x: string | number;
 if (f?.(x)) {
-    x; // number
-    f; // TODO: still possibly undefined, should be defined
+    x;
+    f;
+    f(x);
 }
 else {
-    x; // string | number
-    f; // still possibly undefined
+    x;
+    f;
+    f(x);
 }
 x;
 f;
+f(x);
 
 declare const o2: { f(x: any): x is number; } | undefined;
 if (o2?.f(x)) {
-    x; // number
-    o2; // TODO: still possibly undefined, should be defined
+    x;
+    o2.f;
+    o2?.f;
+    o2?.f(x);
 }
 else {
-    x; // string | number
-    o2; // still possibly undefined.
+    x;
+    o2;
+    o2?.f;
+    o2.f;
 }
 x;
 o2;
+o2?.f;
+o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3; // TODO: still possibly undefined, should be defined
+    o3;
+    o3.x;
+    o3?.x;
 }
 else {
     o3;
+    o3?.x;
+    o3.x;
 }
 o3;
+o3?.x;
+o3.x;
 
 declare const o4: { x?: { y: boolean } };
 if (o4.x?.y) {
-    o4.x; // TODO: still possibly undefined, should be defined
+    o4.x;
+    o4.x?.y;
     o4.x.y;
 }
+else {
+    o4.x;
+    o4.x?.y;
+    o4.x.y;
+}
+o4.x;
+o4.x?.y;
+o4.x.y;
+
+declare const o5: { x?: { y: { z?: { w: boolean } } } };
+if (o5.x?.y.z?.w) {
+    o5.x;
+    o5.x.y;
+    o5.x.y.z;
+    o5.x.y.z.w;
+    o5.x.y.z?.w;
+    o5.x?.y.z.w;
+    o5.x?.y.z?.w;
+}
+else {
+    o5.x;
+    o5.x?.y;
+    o5.x?.y.z;
+    o5.x?.y.z?.w;
+    o5.x.y;
+    o5.x.y.z.w;
+}
+o5.x;
+o5.x?.y;
+o5.x?.y.z;
+o5.x?.y.z?.w;
+o5.x.y;
+o5.x.y.z.w;
 
 interface Base {
     f(): this is Derived;
@@ -73,14 +122,19 @@ interface Derived extends Base {
     x: number;
 }
 
-declare const o5: Base | undefined;
-if (o5?.f()) {
-    o5; // Derived
+declare const o6: Base | undefined;
+if (o6?.f()) {
+    o6;
+    o6.f;
 }
 else {
-    o5; // Base | undefined
+    o6;
+    o6?.f;
+    o6.f;
 }
-o5; // Base | undefined
+o6;
+o6?.f;
+o6.f;
 
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
@@ -91,19 +145,19 @@ declare const maybeNever: undefined | (() => never);
 function f01(x: unknown) {
     if (!!true) {
         isString?.(x);
-        x; // string
+        x;
     }
     if (!!true) {
         maybeIsString?.(x);
-        x; // unknown
+        x;
     }
     if (!!true) {
         isDefined(maybeIsString);
         maybeIsString?.(x);
-        x; // TODO: is unknown, should be string
+        x;
     }
     if (!!true) {
         maybeNever?.();
-        x; // unknown
+        x;
     }
 }

@@ -95,24 +95,39 @@ if (f?.(x)) {
 >f : ((x: any) => x is number) | undefined
 >x : string | number
 
-    x; // number
+    x;
 >x : number
 
-    f; // TODO: still possibly undefined, should be defined
->f : ((x: any) => x is number) | undefined
+    f;
+>f : (x: any) => x is number
+
+    f(x);
+>f(x) : boolean
+>f : (x: any) => x is number
+>x : number
 }
 else {
-    x; // string | number
+    x;
 >x : string | number
 
-    f; // still possibly undefined
+    f;
 >f : ((x: any) => x is number) | undefined
+
+    f(x);
+>f(x) : boolean
+>f : ((x: any) => x is number) | undefined
+>x : string | number
 }
 x;
 >x : string | number
 
 f;
 >f : ((x: any) => x is number) | undefined
+
+f(x);
+>f(x) : boolean
+>f : ((x: any) => x is number) | undefined
+>x : string | number
 
 declare const o2: { f(x: any): x is number; } | undefined;
 >o2 : { f(x: any): x is number; } | undefined
@@ -126,24 +141,58 @@ if (o2?.f(x)) {
 >f : ((x: any) => x is number) | undefined
 >x : string | number
 
-    x; // number
+    x;
 >x : number
 
-    o2; // TODO: still possibly undefined, should be defined
->o2 : { f(x: any): x is number; } | undefined
+    o2.f;
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+
+    o2?.f;
+>o2?.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+
+    o2?.f(x);
+>o2?.f(x) : boolean
+>o2?.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+>x : number
 }
 else {
-    x; // string | number
+    x;
 >x : string | number
 
-    o2; // still possibly undefined.
+    o2;
 >o2 : { f(x: any): x is number; } | undefined
+
+    o2?.f;
+>o2?.f : ((x: any) => x is number) | undefined
+>o2 : { f(x: any): x is number; } | undefined
+>f : ((x: any) => x is number) | undefined
+
+    o2.f;
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; } | undefined
+>f : (x: any) => x is number
 }
 x;
 >x : string | number
 
 o2;
 >o2 : { f(x: any): x is number; } | undefined
+
+o2?.f;
+>o2?.f : ((x: any) => x is number) | undefined
+>o2 : { f(x: any): x is number; } | undefined
+>f : ((x: any) => x is number) | undefined
+
+o2.f;
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; } | undefined
+>f : (x: any) => x is number
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 >o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
@@ -159,15 +208,45 @@ if (o3?.x === 1) {
 >x : 1 | 2 | undefined
 >1 : 1
 
-    o3; // TODO: still possibly undefined, should be defined
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+    o3;
+>o3 : { x: 1; y: string; }
+
+    o3.x;
+>o3.x : 1
+>o3 : { x: 1; y: string; }
+>x : 1
+
+    o3?.x;
+>o3?.x : 1
+>o3 : { x: 1; y: string; }
+>x : 1
 }
 else {
     o3;
 >o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+
+    o3?.x;
+>o3?.x : 2 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 2 | undefined
+
+    o3.x;
+>o3.x : 2
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 2
 }
 o3;
 >o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+
+o3?.x;
+>o3?.x : 1 | 2 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | 2 | undefined
+
+o3.x;
+>o3.x : 1 | 2
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | 2
 
 declare const o4: { x?: { y: boolean } };
 >o4 : { x?: { y: boolean; } | undefined; }
@@ -181,18 +260,247 @@ if (o4.x?.y) {
 >x : { y: boolean; } | undefined
 >y : boolean | undefined
 
-    o4.x; // TODO: still possibly undefined, should be defined
+    o4.x;
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+
+    o4.x?.y;
+>o4.x?.y : true
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+>y : true
+
+    o4.x.y;
+>o4.x.y : true
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+>y : true
+}
+else {
+    o4.x;
 >o4.x : { y: boolean; } | undefined
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; } | undefined
 
-    o4.x.y;
->o4.x.y : true
+    o4.x?.y;
+>o4.x?.y : false | undefined
 >o4.x : { y: boolean; } | undefined
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; } | undefined
->y : true
+>y : false | undefined
+
+    o4.x.y;
+>o4.x.y : false
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : false
 }
+o4.x;
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+
+o4.x?.y;
+>o4.x?.y : boolean | undefined
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean | undefined
+
+o4.x.y;
+>o4.x.y : boolean
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean
+
+declare const o5: { x?: { y: { z?: { w: boolean } } } };
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : boolean
+
+if (o5.x?.y.z?.w) {
+>o5.x?.y.z?.w : boolean | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : boolean | undefined
+
+    o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+
+    o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+
+    o5.x.y.z;
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+
+    o5.x.y.z.w;
+>o5.x.y.z.w : true
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x.y.z?.w;
+>o5.x.y.z?.w : true
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x?.y.z.w;
+>o5.x?.y.z.w : true
+>o5.x?.y.z : { w: boolean; }
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x?.y.z?.w;
+>o5.x?.y.z?.w : true
+>o5.x?.y.z : { w: boolean; }
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+}
+else {
+    o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+
+    o5.x?.y;
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+
+    o5.x?.y.z;
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+
+    o5.x?.y.z?.w;
+>o5.x?.y.z?.w : false | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : false | undefined
+
+    o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+
+    o5.x.y.z.w;
+>o5.x.y.z.w : false
+>o5.x.y.z : { w: boolean; } | undefined
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : false
+}
+o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+
+o5.x?.y;
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+
+o5.x?.y.z;
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+
+o5.x?.y.z?.w;
+>o5.x?.y.z?.w : boolean | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : boolean | undefined
+
+o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+
+o5.x.y.z.w;
+>o5.x.y.z.w : boolean
+>o5.x.y.z : { w: boolean; } | undefined
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : boolean
 
 interface Base {
     f(): this is Derived;
@@ -204,24 +512,49 @@ interface Derived extends Base {
 >x : number
 }
 
-declare const o5: Base | undefined;
->o5 : Base | undefined
+declare const o6: Base | undefined;
+>o6 : Base | undefined
 
-if (o5?.f()) {
->o5?.f() : boolean | undefined
->o5?.f : (() => this is Derived) | undefined
->o5 : Base | undefined
+if (o6?.f()) {
+>o6?.f() : boolean | undefined
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
 >f : (() => this is Derived) | undefined
 
-    o5; // Derived
->o5 : Derived
+    o6;
+>o6 : Derived
+
+    o6.f;
+>o6.f : () => this is Derived
+>o6 : Derived
+>f : () => this is Derived
 }
 else {
-    o5; // Base | undefined
->o5 : Base | undefined
+    o6;
+>o6 : Base | undefined
+
+    o6?.f;
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
+>f : (() => this is Derived) | undefined
+
+    o6.f;
+>o6.f : () => this is Derived
+>o6 : Base | undefined
+>f : () => this is Derived
 }
-o5; // Base | undefined
->o5 : Base | undefined
+o6;
+>o6 : Base | undefined
+
+o6?.f;
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
+>f : (() => this is Derived) | undefined
+
+o6.f;
+>o6.f : () => this is Derived
+>o6 : Base | undefined
+>f : () => this is Derived
 
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
@@ -253,7 +586,7 @@ function f01(x: unknown) {
 >isString : (value: unknown) => asserts value is string
 >x : unknown
 
-        x; // string
+        x;
 >x : string
     }
     if (!!true) {
@@ -266,7 +599,7 @@ function f01(x: unknown) {
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
 >x : unknown
 
-        x; // unknown
+        x;
 >x : unknown
     }
     if (!!true) {
@@ -284,7 +617,7 @@ function f01(x: unknown) {
 >maybeIsString : (value: unknown) => asserts value is string
 >x : unknown
 
-        x; // TODO: is unknown, should be string
+        x;
 >x : unknown
     }
     if (!!true) {
@@ -296,7 +629,7 @@ function f01(x: unknown) {
 >maybeNever?.() : undefined
 >maybeNever : (() => never) | undefined
 
-        x; // unknown
+        x;
 >x : unknown
     }
 }

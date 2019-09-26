@@ -879,6 +879,22 @@ namespace ts {
             }
         }
 
+        function findAntecedent(flowNode: FlowNode, flags: FlowFlags) {
+            if (flowNode.flags & flags) {
+                return flowNode;
+            }
+            if (flowNode.flags & FlowFlags.BranchLabel) {
+                const branch = flowNode as FlowLabel;
+                if (branch.antecedents) {
+                    for (const antecedent of branch.antecedents) {
+                        if (antecedent.flags & flags) {
+                            return antecedent;
+                        }
+                    }
+                }
+            }
+        }
+
         function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression | undefined): FlowNode {
             if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
@@ -890,6 +906,15 @@ namespace ts {
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
                 return unreachableFlow;
             }
+
+            if (flags & FlowFlags.TrueCondition) {
+                // If the antecedent is an optional chain, only the Present branch can exist on the `true` condition
+                const presentFlow = findAntecedent(currentFlow, FlowFlags.Present);
+                if (presentFlow) {
+                    antecedent = presentFlow;
+                }
+            }
+
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
             }
@@ -900,6 +925,12 @@ namespace ts {
         function createFlowOptionalChain(flags: FlowFlags, antecedent: FlowNode, expression: Expression): FlowNode {
             if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
+            }
+            if (flags & FlowFlags.Present) {
+                const presentFlow = findAntecedent(currentFlow, FlowFlags.Present);
+                if (presentFlow) {
+                    antecedent = presentFlow;
+                }
             }
             setFlowNodeReferenced(antecedent);
             return flowNodeCreated({ flags, antecedent, node: expression });
@@ -1505,14 +1536,14 @@ namespace ts {
             bind(node);
             currentPresentTarget = savedPresentTarget;
             currentMissingTarget = savedMissingTarget;
-            if (!isValidOptionalChain(node)) {
+            if (!isValidOptionalChain(node) || isOutermostOptionalChain(node)) {
                 addAntecedent(presentTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
                 addAntecedent(missingTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
             }
         }
 
         function isOutermostOptionalChain(node: ValidOptionalChain) {
-            return !isOptionalChain(node.parent) || node.parent.expression !== node;
+            return !isOptionalChain(node.parent) || !!node.parent.questionDotToken || node.parent.expression !== node;
         }
 
         function bindOptionalChainFlow(node: ValidOptionalChain) {
@@ -1520,7 +1551,7 @@ namespace ts {
             const presentTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentPresentTarget);
             const missingTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentMissingTarget);
             bindOptionalExpression(node.expression, presentTarget, missingTarget);
-            if (!isValidOptionalChain(node.expression)) {
+            if (!isValidOptionalChain(node.expression) || node.questionDotToken) {
                 currentFlow = finishFlowLabel(presentTarget);
             }
             bind(node.questionDotToken);
