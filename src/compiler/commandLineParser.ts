@@ -986,7 +986,8 @@ namespace ts {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
         strict: true,
-        esModuleInterop: true
+        esModuleInterop: true,
+        forceConsistentCasingInFileNames: true
     };
 
     let optionNameMapCache: OptionNameMap;
