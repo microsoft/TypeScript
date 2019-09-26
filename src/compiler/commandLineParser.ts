@@ -773,6 +773,12 @@ namespace ts {
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
         {
+            name: "disableSourceOfProjectReferenceRedirect",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_use_of_source_files_instead_of_declaration_files_from_referenced_projects
+        },
+        {
             name: "noImplicitUseStrict",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -866,6 +872,13 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
+        },
+        {
+            name: "useDefineForClassFields",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },
         {
             name: "keyofStringsOnly",

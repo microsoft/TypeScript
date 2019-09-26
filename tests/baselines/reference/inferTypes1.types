@@ -269,19 +269,19 @@ type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
 >T78 : T78<T>
 
 type Foo<T extends string, U extends T> = [T, U];
->Foo : [T, U]
+>Foo : Foo<T, U>
 
 type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
 >Bar : Bar<T>
 
 type T90 = Bar<[string, string]>;  // [string, string]
->T90 : [string, string]
+>T90 : Foo<string, string>
 
 type T91 = Bar<[string, "a"]>;  // [string, "a"]
->T91 : [string, "a"]
+>T91 : Foo<string, "a">
 
 type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
->T92 : [string, "a"]
+>T92 : Foo<string, "a">
 >x : string
 
 type T93 = Bar<["a", string]>;  // never
@@ -371,13 +371,13 @@ const z2: string = ex.obj.nested.attr;
 // Repros from #21631
 
 type A1<T, U extends A1<any, any>> = [T, U];
->A1 : [T, U]
+>A1 : A1<T, U>
 
 type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
 >B1 : B1<S>
 
 type A2<T, U extends void> = [T, U];
->A2 : [T, U]
+>A2 : A2<T, U>
 
 type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
 >B2 : B2<S>

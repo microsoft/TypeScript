@@ -159,7 +159,7 @@ new C();`
                     }
                 });
 
-                const host = session.host;
+                const host = session.testhost;
                 host.checkTimeoutQueueLengthAndRun(1);
 
                 checkErrorMessage(session, "syntaxDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: [] });
@@ -219,7 +219,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithResolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
+                        verifyWatchedFilesAndDirectories(session.testhost, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
                         verifyErrors(session, []);
                     }
 
@@ -227,7 +227,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
+                        verifyWatchedFilesAndDirectories(session.testhost, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
                             createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])

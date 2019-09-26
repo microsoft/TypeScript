@@ -6,13 +6,13 @@
 //     ...   Identifier   TypeAnnotation(opt)
 
 type arrayString = Array<String>
->arrayString : String[]
+>arrayString : arrayString
 
 type someArray = Array<String> | number[];
 >someArray : someArray
 
 type stringOrNumArray = Array<String|Number>;
->stringOrNumArray : (String | Number)[]
+>stringOrNumArray : stringOrNumArray
 
 function a1(...x: (number|string)[]) { }
 >a1 : (...x: (string | number)[]) => void
@@ -27,12 +27,12 @@ function a3(...a: Array<String>) { }
 >a : String[]
 
 function a4(...a: arrayString) { }
->a4 : (...a: String[]) => void
->a : String[]
+>a4 : (...a: arrayString) => void
+>a : arrayString
 
 function a5(...a: stringOrNumArray) { }
->a5 : (...a: (String | Number)[]) => void
->a : (String | Number)[]
+>a5 : (...a: stringOrNumArray) => void
+>a : stringOrNumArray
 
 function a9([a, b, [[c]]]) { }
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void

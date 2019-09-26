@@ -297,41 +297,29 @@ namespace ts {
     }
 
     /**
-     * Gets all property declarations with initializers on either the static or instance side of a class.
+     * Gets all the static or all the instance property declarations of a class
      *
      * @param node The class node.
      * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
      */
-    export function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly PropertyDeclaration[] {
-        return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
+    export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
+        return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
     }
 
     /**
-     * Gets a value indicating whether a class element is a static property declaration with an initializer.
-     *
-     * @param member The class element node.
-     */
-    export function isStaticInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
-        return isInitializedProperty(member) && hasStaticModifier(member);
-    }
-
-    /**
-     * Gets a value indicating whether a class element is an instance property declaration with an initializer.
-     *
-     * @param member The class element node.
-     */
-    export function isInstanceInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
-        return isInitializedProperty(member) && !hasStaticModifier(member);
-    }
-
-    /**
-     * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
+     * Is a class element either a static or an instance property declaration with an initializer?
      *
      * @param member The class element node.
      * @param isStatic A value indicating whether the member should be a static or instance member.
      */
-    export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
-        return member.kind === SyntaxKind.PropertyDeclaration
-            && (<PropertyDeclaration>member).initializer !== undefined;
+    function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
+        return isPropertyDeclaration(member)
+            && (!!member.initializer || !requireInitializer)
+            && hasStaticModifier(member) === isStatic;
     }
+
+    export function isInitializedProperty(member: ClassElement, requireInitializer: boolean): member is PropertyDeclaration {
+        return isPropertyDeclaration(member) && (!!member.initializer || !requireInitializer);
+    }
+
 }

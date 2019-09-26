@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyES5.ts ===
+var x: "p" = "p"
+>x : Symbol(x, Decl(definePropertyES5.ts, 0, 3))
+
+class A {
+>A : Symbol(A, Decl(definePropertyES5.ts, 0, 16))
+
+    a = 12
+>a : Symbol(A.a, Decl(definePropertyES5.ts, 1, 9))
+
+    b
+>b : Symbol(A.b, Decl(definePropertyES5.ts, 2, 10))
+
+    ["computed"] = 13
+>["computed"] : Symbol(A["computed"], Decl(definePropertyES5.ts, 3, 5))
+>"computed" : Symbol(A["computed"], Decl(definePropertyES5.ts, 3, 5))
+
+    ;[x] = 14
+>[x] : Symbol(A[x], Decl(definePropertyES5.ts, 5, 5))
+>x : Symbol(x, Decl(definePropertyES5.ts, 0, 3))
+
+    m() { }
+>m : Symbol(A.m, Decl(definePropertyES5.ts, 5, 13))
+}
+
