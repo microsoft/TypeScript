@@ -38,6 +38,7 @@
 
         "unittests/services/extract/helpers.ts",
         "unittests/tsbuild/helpers.ts",
+        "unittests/tsc/helpers.ts",
         "unittests/tscWatch/helpers.ts",
         "unittests/tsserver/helpers.ts",
 
@@ -98,6 +99,7 @@
         "unittests/tsbuild/emptyFiles.ts",
         "unittests/tsbuild/graphOrdering.ts",
         "unittests/tsbuild/inferredTypeFromTransitiveModule.ts",
+        "unittests/tsbuild/javascriptProjectEmit.ts",
         "unittests/tsbuild/lateBoundSymbol.ts",
         "unittests/tsbuild/missingExtendedFile.ts",
         "unittests/tsbuild/moduleSpecifiers.ts",
@@ -108,6 +110,7 @@
         "unittests/tsbuild/transitiveReferences.ts",
         "unittests/tsbuild/watchEnvironment.ts",
         "unittests/tsbuild/watchMode.ts",
+        "unittests/tsc/declarationEmit.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
         "unittests/tscWatch/emitAndErrorUpdates.ts",

@@ -24,9 +24,7 @@ namespace Harness.Parallel.Host {
         let totalCost = 0;
 
         class RemoteSuite extends Mocha.Suite {
-            suites!: RemoteSuite[];
             suiteMap = ts.createMap<RemoteSuite>();
-            tests!: RemoteTest[];
             constructor(title: string) {
                 super(title);
                 this.pending = false;
@@ -529,10 +527,10 @@ namespace Harness.Parallel.Host {
                 function replaySuite(runner: Mocha.Runner, suite: RemoteSuite) {
                     runner.emit("suite", suite);
                     for (const test of suite.tests) {
-                        replayTest(runner, test);
+                        replayTest(runner, test as RemoteTest);
                     }
                     for (const child of suite.suites) {
-                        replaySuite(runner, child);
+                        replaySuite(runner, child as RemoteSuite);
                     }
                     runner.emit("suite end", suite);
                 }

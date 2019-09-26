@@ -6,7 +6,7 @@ type ObjType1 = { x: number; y: string; z: boolean }
 >z : boolean
 
 type TupleType1 = [ObjType1, number, string]
->TupleType1 : [ObjType1, number, string]
+>TupleType1 : TupleType1
 
 class C1 {
 >C1 : C1

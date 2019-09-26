@@ -44,7 +44,9 @@ namespace ts {
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile) {
+            const options = context.getCompilerOptions();
+            if (node.isDeclarationFile
+                || options.useDefineForClassFields && options.target === ScriptTarget.ESNext) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);
@@ -172,9 +174,9 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addInitializedPropertyStatements(statements, staticProperties, getInternalName(node));
+                addPropertyStatements(statements, staticProperties, getInternalName(node));
             }
 
             return statements;
@@ -196,7 +198,7 @@ namespace ts {
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = isClassDeclaration(getOriginalNode(node));
 
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
@@ -220,7 +222,7 @@ namespace ts {
                     pendingExpressions = savedPendingExpressions;
 
                     if (pendingStatements && some(staticProperties)) {
-                        addInitializedPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
+                        addPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
                     }
                     return classExpression;
                 }
@@ -266,8 +268,8 @@ namespace ts {
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             const constructor = visitNode(getFirstConstructorWithBody(node), visitor, isConstructorDeclaration);
-            const containsPropertyInitializer = forEach(node.members, isInitializedProperty);
-            if (!containsPropertyInitializer) {
+            const containsProperty = forEach(node.members, m => isInitializedProperty(m, /*requireInitializer*/ !context.getCompilerOptions().useDefineForClassFields));
+            if (!containsProperty) {
                 return constructor;
             }
             const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
@@ -292,7 +294,7 @@ namespace ts {
         }
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-            const properties = getInitializedProperties(node, /*isStatic*/ false);
+            const properties = getProperties(node, /*requireInitializer*/ !context.getCompilerOptions().useDefineForClassFields, /*isStatic*/ false);
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
@@ -349,7 +351,7 @@ namespace ts {
                     indexOfFirstStatement += parameterPropertyDeclarationCount;
                 }
             }
-            addInitializedPropertyStatements(statements, properties, createThis());
+            addPropertyStatements(statements, properties, createThis());
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {
@@ -376,7 +378,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addInitializedPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
                 const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
                 setSourceMapRange(statement, moveRangePastModifiers(property));
@@ -414,13 +416,23 @@ namespace ts {
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
+            const emitAssignment = !context.getCompilerOptions().useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
-            const initializer = visitNode(property.initializer, visitor, isExpression);
-            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
-            return createAssignment(memberAccess, initializer);
+            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : createVoidZero();
+            if (emitAssignment) {
+                const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+                return createAssignment(memberAccess, initializer);
+            }
+            else {
+                const name = isComputedPropertyName(propertyName) ? propertyName.expression
+                    : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
+                    : propertyName;
+                const descriptor = createPropertyDescriptor({ value: initializer, configurable: true, writable: true, enumerable: true });
+                return createObjectDefinePropertyCall(receiver, name, descriptor);
+            }
         }
 
         function enableSubstitutionForClassAliases() {

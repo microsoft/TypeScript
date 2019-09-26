@@ -12,10 +12,10 @@ namespace ts.OrganizeImports {
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
         program: Program,
-        _preferences: UserPreferences,
+        preferences: UserPreferences,
     ) {
 
-        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
+        const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
 

@@ -292,7 +292,7 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host!: TestServerHost;
+        public testhost: TestServerHost = this.host as TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -320,7 +320,7 @@ namespace ts.projectSystem {
 
         public clearMessages() {
             clear(this.events);
-            this.host.clearOutput();
+            this.testhost.clearOutput();
         }
     }
 
@@ -721,8 +721,8 @@ namespace ts.projectSystem {
         const events = session.events;
         assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
-        const outputs = session.host.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+        const outputs = session.testhost.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
 
         if (isMostRecent) {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));

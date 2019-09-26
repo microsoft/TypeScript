@@ -42,8 +42,8 @@ let test1: Test1<number>;
 // not generic parameter default
 interface Test2Base<V, T extends Settable<T, V>> { };
 type Test2<V> = Test2Base<V, Identity<V>>;
->Test2 : Test2Base<V, Identity<V>>
+>Test2 : Test2<V>
 
 let test2: Test2<number>;
->test2 : Test2Base<number, Identity<number>>
+>test2 : Test2<number>
 

@@ -1,40 +1,22 @@
 namespace ts {
     describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/lateBoundSymbol", time);
+            projFs = loadProjectFromDisk("tests/projects/lateBoundSymbol");
         });
         after(() => {
             projFs = undefined!; // Release the contents
         });
 
-        verifyTsbuildOutput({
-            scenario: "interface is merged and contains late bound member",
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "lateBoundSymbol",
-            rootNames: ["/src/tsconfig.json"],
-            initialBuild: {
-                modifyFs: noop,
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tsconfig.json", "src/src/hkt.js"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"]
-                ]
-            },
-            incrementalDtsUnchangedBuild: {
+        verifyTscIncrementalEdits({
+            subScenario: "interface is merged and contains late bound member",
+            fs: () => projFs,
+            scenario: "lateBoundSymbol",
+            commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsUnchanged,
                 modifyFs: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tsconfig.json", "src/src/hkt.js", "src/src/main.ts"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"],
-                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tsconfig.json"]
-                ]
-            },
-            baselineOnly: true,
-            verifyDiagnostics: true
+            }]
         });
     });
 }

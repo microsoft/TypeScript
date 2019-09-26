@@ -1,0 +1,24 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts(5,5): error TS2610: Class 'A' defines instance member accessor 'p', but extended class 'B' defines it as instance member property.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts(13,5): error TS2610: Class 'C' defines instance member accessor 'p', but extended class 'D' defines it as instance member property.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts (2 errors) ====
+    class A {
+        get p() { return 'oh no' }
+    }
+    class B extends A {
+        p = 'yep' // error
+        ~
+!!! error TS2610: Class 'A' defines instance member accessor 'p', but extended class 'B' defines it as instance member property.
+    }
+    class C {
+        _secret = 11
+        get p() { return this._secret }
+        set p(value) { this._secret = value }
+    }
+    class D extends C {
+        p = 101 // error
+        ~
+!!! error TS2610: Class 'C' defines instance member accessor 'p', but extended class 'D' defines it as instance member property.
+    }
+    

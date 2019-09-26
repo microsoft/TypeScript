@@ -186,6 +186,18 @@ namespace ts.moduleSpecifiers {
         return result;
     }
 
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    function comparePathsByNumberOfDirectrorySeparators(a: string, b: string) {
+        return compareValues(
+            numberOfDirectorySeparators(a),
+            numberOfDirectorySeparators(b)
+        );
+    }
+
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
@@ -214,7 +226,32 @@ namespace ts.moduleSpecifiers {
             }
         });
         result.push(...targets);
-        return result;
+        if (result.length < 2) return result;
+
+        // Sort by paths closest to importing file Name directory
+        const allFileNames = arrayToMap(result, identity, getCanonicalFileName);
+        const sortedPaths: string[] = [];
+        for (
+            let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
+            allFileNames.size !== 0;
+            directory = getDirectoryPath(directory)
+        ) {
+            const directoryStart = ensureTrailingDirectorySeparator(directory);
+            let pathsInDirectory: string[] | undefined;
+            allFileNames.forEach((canonicalFileName, fileName) => {
+                if (startsWith(canonicalFileName, directoryStart)) {
+                    (pathsInDirectory || (pathsInDirectory = [])).push(fileName);
+                    allFileNames.delete(fileName);
+                }
+            });
+            if (pathsInDirectory) {
+                if (pathsInDirectory.length > 1) {
+                    pathsInDirectory.sort(comparePathsByNumberOfDirectrorySeparators);
+                }
+                sortedPaths.push(...pathsInDirectory);
+            }
+        }
+        return sortedPaths;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
