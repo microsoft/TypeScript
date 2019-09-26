@@ -2,7 +2,7 @@
 const _sym = "my-fake-sym";
 >_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
 
-class MyClass {
+export class MyClass {
 >MyClass : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))
 
     constructor() {

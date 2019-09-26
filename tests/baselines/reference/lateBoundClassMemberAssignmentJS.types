@@ -5,7 +5,7 @@ const _sym = Symbol("_sym");
 >Symbol : SymbolConstructor
 >"_sym" : "_sym"
 
-class MyClass {
+export class MyClass {
 >MyClass : MyClass
 
     constructor() {

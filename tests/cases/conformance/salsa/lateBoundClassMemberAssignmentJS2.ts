@@ -1,11 +1,12 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @emitDeclarationOnly: true
 // @strict: true
 // @target: es6
+// @declaration: true
 // @filename: lateBoundClassMemberAssignmentJS2.js
 const _sym = "my-fake-sym";
-class MyClass {
+export class MyClass {
     constructor() {
         this[_sym] = "ok";
     }

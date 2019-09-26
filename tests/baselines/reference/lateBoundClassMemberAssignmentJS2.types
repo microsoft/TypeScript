@@ -3,7 +3,7 @@ const _sym = "my-fake-sym";
 >_sym : "my-fake-sym"
 >"my-fake-sym" : "my-fake-sym"
 
-class MyClass {
+export class MyClass {
 >MyClass : MyClass
 
     constructor() {
