@@ -23,3 +23,25 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >(): ReadonlyArray<number> => [] : () => readonly number[]
 >[] : undefined[]
 
+// #19535
+
+let [actual] = [""].flatMap(undefined as () => string[] | string[][]);
+>actual : string | string[]
+>[""].flatMap(undefined as () => string[] | string[][]) : (string | string[])[]
+>[""].flatMap : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => Flatten<U>[]
+>[""] : string[]
+>"" : ""
+>flatMap : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => Flatten<U>[]
+>undefined as () => string[] | string[][] : () => string[] | string[][]
+>undefined : undefined
+
+const expected: string | string[] = actual;
+>expected : string | string[]
+>actual : string | string[]
+
+actual = undefined as string | string[];
+>actual = undefined as string | string[] : string | string[]
+>actual : string | string[]
+>undefined as string | string[] : string | string[]
+>undefined : undefined
+

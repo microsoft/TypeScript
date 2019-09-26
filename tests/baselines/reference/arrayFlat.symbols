@@ -1,0 +1,59 @@
+=== tests/cases/compiler/arrayFlat.ts ===
+const expected1: string[][] = [[[""]]].flat();
+>expected1 : Symbol(expected1, Decl(arrayFlat.ts, 0, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+const expected2: string[][][] = [[[""]]].flat(0);
+>expected2 : Symbol(expected2, Decl(arrayFlat.ts, 2, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+const expected3: string[][] = [[[""]]].flat(1);
+>expected3 : Symbol(expected3, Decl(arrayFlat.ts, 3, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+const expected4: string[] = [[[""]]].flat(2);
+>expected4 : Symbol(expected4, Decl(arrayFlat.ts, 4, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+const expected5: string[] = [[[""]]].flat(3);
+>expected5 : Symbol(expected5, Decl(arrayFlat.ts, 5, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+let [actual6] = [[[""]]].flat(undefined as number);
+>actual6 : Symbol(actual6, Decl(arrayFlat.ts, 7, 5))
+>[[[""]]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>undefined : Symbol(undefined)
+
+const expected6: string[][] | string[] | string = actual6;
+>expected6 : Symbol(expected6, Decl(arrayFlat.ts, 8, 5))
+>actual6 : Symbol(actual6, Decl(arrayFlat.ts, 7, 5))
+
+actual6 = undefined as string[][] | string[] | string;
+>actual6 : Symbol(actual6, Decl(arrayFlat.ts, 7, 5))
+>undefined : Symbol(undefined)
+
+// #24579 and #29604
+
+let [actual7] = [[""], [1]].flat();
+>actual7 : Symbol(actual7, Decl(arrayFlat.ts, 13, 5))
+>[[""], [1]].flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+
+const expected7: string | number = actual7;
+>expected7 : Symbol(expected7, Decl(arrayFlat.ts, 14, 5))
+>actual7 : Symbol(actual7, Decl(arrayFlat.ts, 13, 5))
+
+actual7 = undefined as string | number;
+>actual7 : Symbol(actual7, Decl(arrayFlat.ts, 13, 5))
+>undefined : Symbol(undefined)
+
+const f: any extends typeof actual7 ? true : false = false;
+>f : Symbol(f, Decl(arrayFlat.ts, 16, 5))
+>actual7 : Symbol(actual7, Decl(arrayFlat.ts, 13, 5))
+

@@ -21,3 +21,45 @@ b.concat('hello');
 >b : Symbol(b, Decl(arrayConcat2.ts, 5, 3))
 >concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+const expected1: undefined = undefined as Flatten<undefined>;
+>expected1 : Symbol(expected1, Decl(arrayConcat2.ts, 8, 5))
+>undefined : Symbol(undefined)
+>Flatten : Symbol(Flatten, Decl(lib.es5.d.ts, --, --))
+
+// #19535
+
+let [actual2] = (undefined as unknown as string[][]).concat([""]);
+>actual2 : Symbol(actual2, Decl(arrayConcat2.ts, 12, 5))
+>(undefined as unknown as string[][]).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const expected2: string | string[] = actual2;
+>expected2 : Symbol(expected2, Decl(arrayConcat2.ts, 13, 5))
+>actual2 : Symbol(actual2, Decl(arrayConcat2.ts, 12, 5))
+
+actual2 = undefined as unknown as string | string[];
+>actual2 : Symbol(actual2, Decl(arrayConcat2.ts, 12, 5))
+>undefined : Symbol(undefined)
+
+// #26378
+
+let [actual3] = [""].concat([1]);
+>actual3 : Symbol(actual3, Decl(arrayConcat2.ts, 18, 5))
+>[""].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const expected3: string | number = actual3;
+>expected3 : Symbol(expected3, Decl(arrayConcat2.ts, 19, 5))
+>actual3 : Symbol(actual3, Decl(arrayConcat2.ts, 18, 5))
+
+actual3 = undefined as unknown as string | number;
+>actual3 : Symbol(actual3, Decl(arrayConcat2.ts, 18, 5))
+>undefined : Symbol(undefined)
+
+// #26976
+
+[].concat([""]);
+>[].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

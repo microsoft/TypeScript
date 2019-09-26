@@ -18,3 +18,19 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
 
+// #19535
+
+let [actual] = [""].flatMap(undefined as () => string[] | string[][]);
+>actual : Symbol(actual, Decl(arrayFlatMap.ts, 7, 5))
+>[""].flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const expected: string | string[] = actual;
+>expected : Symbol(expected, Decl(arrayFlatMap.ts, 8, 5))
+>actual : Symbol(actual, Decl(arrayFlatMap.ts, 7, 5))
+
+actual = undefined as string | string[];
+>actual : Symbol(actual, Decl(arrayFlatMap.ts, 7, 5))
+>undefined : Symbol(undefined)
+

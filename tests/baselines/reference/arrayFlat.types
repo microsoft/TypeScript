@@ -1,0 +1,107 @@
+=== tests/cases/compiler/arrayFlat.ts ===
+const expected1: string[][] = [[[""]]].flat();
+>expected1 : string[][]
+>[[[""]]].flat() : string[][]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+
+const expected2: string[][][] = [[[""]]].flat(0);
+>expected2 : string[][][]
+>[[[""]]].flat(0) : string[][][]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>0 : 0
+
+const expected3: string[][] = [[[""]]].flat(1);
+>expected3 : string[][]
+>[[[""]]].flat(1) : string[][]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>1 : 1
+
+const expected4: string[] = [[[""]]].flat(2);
+>expected4 : string[]
+>[[[""]]].flat(2) : string[]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>2 : 2
+
+const expected5: string[] = [[[""]]].flat(3);
+>expected5 : string[]
+>[[[""]]].flat(3) : string[]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>3 : 3
+
+let [actual6] = [[[""]]].flat(undefined as number);
+>actual6 : string | string[] | string[][]
+>[[[""]]].flat(undefined as number) : string[] | string[][] | string[][][]
+>[[[""]]].flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>[[[""]]] : string[][][]
+>[[""]] : string[][]
+>[""] : string[]
+>"" : ""
+>flat : { (depth: 4): string[]; (depth: 3): string[]; (depth: 2): string[]; (depth?: 1): string[][]; (depth: 0): string[][][]; (depth: number): string[] | string[][] | string[][][]; }
+>undefined as number : number
+>undefined : undefined
+
+const expected6: string[][] | string[] | string = actual6;
+>expected6 : string | string[] | string[][]
+>actual6 : string | string[] | string[][]
+
+actual6 = undefined as string[][] | string[] | string;
+>actual6 = undefined as string[][] | string[] | string : string | string[] | string[][]
+>actual6 : string | string[] | string[][]
+>undefined as string[][] | string[] | string : string | string[] | string[][]
+>undefined : undefined
+
+// #24579 and #29604
+
+let [actual7] = [[""], [1]].flat();
+>actual7 : string | number
+>[[""], [1]].flat() : (string | number)[]
+>[[""], [1]].flat : { (depth: 4): (string | number)[]; (depth: 3): (string | number)[]; (depth: 2): (string | number)[]; (depth?: 1): (string | number)[]; (depth: 0): (string[] | number[])[]; (depth: number): (string[] | number[])[] | (string | number)[]; }
+>[[""], [1]] : (string[] | number[])[]
+>[""] : string[]
+>"" : ""
+>[1] : number[]
+>1 : 1
+>flat : { (depth: 4): (string | number)[]; (depth: 3): (string | number)[]; (depth: 2): (string | number)[]; (depth?: 1): (string | number)[]; (depth: 0): (string[] | number[])[]; (depth: number): (string[] | number[])[] | (string | number)[]; }
+
+const expected7: string | number = actual7;
+>expected7 : string | number
+>actual7 : string | number
+
+actual7 = undefined as string | number;
+>actual7 = undefined as string | number : string | number
+>actual7 : string | number
+>undefined as string | number : string | number
+>undefined : undefined
+
+const f: any extends typeof actual7 ? true : false = false;
+>f : boolean
+>actual7 : string | number
+>true : true
+>false : false
+>false : false
+

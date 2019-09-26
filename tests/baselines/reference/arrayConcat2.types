@@ -1,7 +1,7 @@
 === tests/cases/compiler/arrayConcat2.ts ===
 var a: string[] = [];
 >a : string[]
->[] : undefined[]
+>[] : never[]
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]
@@ -29,4 +29,67 @@ b.concat('hello');
 >b : string[]
 >concat : { (...items: ConcatArray<string>[]): string[]; <U extends any[]>(...items: U): (string | Flatten<U[number]>)[]; }
 >'hello' : "hello"
+
+const expected1: undefined = undefined as Flatten<undefined>;
+>expected1 : undefined
+>undefined as Flatten<undefined> : undefined
+>undefined : undefined
+
+// #19535
+
+let [actual2] = (undefined as unknown as string[][]).concat([""]);
+>actual2 : string | string[]
+>(undefined as unknown as string[][]).concat([""]) : (string | string[])[]
+>(undefined as unknown as string[][]).concat : { (...items: ConcatArray<string[]>[]): string[][]; <U extends any[]>(...items: U): (string[] | Flatten<U[number]>)[]; }
+>(undefined as unknown as string[][]) : string[][]
+>undefined as unknown as string[][] : string[][]
+>undefined as unknown : unknown
+>undefined : undefined
+>concat : { (...items: ConcatArray<string[]>[]): string[][]; <U extends any[]>(...items: U): (string[] | Flatten<U[number]>)[]; }
+>[""] : string[]
+>"" : ""
+
+const expected2: string | string[] = actual2;
+>expected2 : string | string[]
+>actual2 : string | string[]
+
+actual2 = undefined as unknown as string | string[];
+>actual2 = undefined as unknown as string | string[] : string | string[]
+>actual2 : string | string[]
+>undefined as unknown as string | string[] : string | string[]
+>undefined as unknown : unknown
+>undefined : undefined
+
+// #26378
+
+let [actual3] = [""].concat([1]);
+>actual3 : string | number
+>[""].concat([1]) : (string | number)[]
+>[""].concat : { (...items: ConcatArray<string>[]): string[]; <U extends any[]>(...items: U): (string | Flatten<U[number]>)[]; }
+>[""] : string[]
+>"" : ""
+>concat : { (...items: ConcatArray<string>[]): string[]; <U extends any[]>(...items: U): (string | Flatten<U[number]>)[]; }
+>[1] : number[]
+>1 : 1
+
+const expected3: string | number = actual3;
+>expected3 : string | number
+>actual3 : string | number
+
+actual3 = undefined as unknown as string | number;
+>actual3 = undefined as unknown as string | number : string | number
+>actual3 : string | number
+>undefined as unknown as string | number : string | number
+>undefined as unknown : unknown
+>undefined : undefined
+
+// #26976
+
+[].concat([""]);
+>[].concat([""]) : string[]
+>[].concat : { (...items: ConcatArray<never>[]): never[]; <U extends any[]>(...items: U): Flatten<U[number]>[]; }
+>[] : never[]
+>concat : { (...items: ConcatArray<never>[]): never[]; <U extends any[]>(...items: U): Flatten<U[number]>[]; }
+>[""] : string[]
+>"" : ""
 
