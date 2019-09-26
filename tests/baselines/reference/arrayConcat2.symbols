@@ -21,3 +21,14 @@ b.concat('hello');
 >b : Symbol(b, Decl(arrayConcat2.ts, 5, 3))
 >concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+// #19535
+
+const [x] = (undefined as unknown as string[][]).concat([""]);
+>x : Symbol(x, Decl(arrayConcat2.ts, 10, 7))
+>(undefined as unknown as string[][]).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+x == "";
+>x : Symbol(x, Decl(arrayConcat2.ts, 10, 7))
+

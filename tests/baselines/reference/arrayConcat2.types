@@ -30,3 +30,22 @@ b.concat('hello');
 >concat : { (...items: ConcatArray<string>[]): string[]; <U extends (string | ConcatArray<string>)[]>(...items: U): (string | Flatten<U[number]>)[]; }
 >'hello' : "hello"
 
+// #19535
+
+const [x] = (undefined as unknown as string[][]).concat([""]);
+>x : string | string[]
+>(undefined as unknown as string[][]).concat([""]) : (string | string[])[]
+>(undefined as unknown as string[][]).concat : { (...items: ConcatArray<string[]>[]): string[][]; <U extends (string[] | ConcatArray<string[]>)[]>(...items: U): (string[] | Flatten<U[number]>)[]; }
+>(undefined as unknown as string[][]) : string[][]
+>undefined as unknown as string[][] : string[][]
+>undefined as unknown : unknown
+>undefined : undefined
+>concat : { (...items: ConcatArray<string[]>[]): string[][]; <U extends (string[] | ConcatArray<string[]>)[]>(...items: U): (string[] | Flatten<U[number]>)[]; }
+>[""] : string[]
+>"" : ""
+
+x == "";
+>x == "" : boolean
+>x : string | string[]
+>"" : ""
+
