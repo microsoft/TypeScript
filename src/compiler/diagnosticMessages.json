@@ -2233,6 +2233,19 @@
         "category": "Error",
         "code": 2609
     },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+        "category": "Error",
+        "code": 2610
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+        "category": "Error",
+        "code": 2611
+    },
+    "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
+        "category": "Error",
+        "code": 2612
+    },
+
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -3112,6 +3125,10 @@
         "category": "Error",
         "code": 5047
     },
+    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
+        "category": "Error",
+        "code": 5048
+    },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
@@ -3967,6 +3984,10 @@
         "category": "Message",
         "code": 6201
     },
+        "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
     "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
@@ -4043,6 +4064,10 @@
         "category": "Message",
         "code": 6221
     },
+    "Emit class fields with Define instead of Set.": {
+        "category": "Message",
+        "code": 6222
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4052,10 +4077,7 @@
         "category": "Message",
         "code": 6302
     },
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6202
-    },
+
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -5187,6 +5209,14 @@
     "Convert 'const' to 'let'": {
         "category": "Message",
         "code": 95093
+    },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
