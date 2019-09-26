@@ -6,7 +6,9 @@ namespace ts.formatting {
     export interface FormattingScanner {
         advance(): void;
         isOnToken(): boolean;
+        isOnEOF(): boolean;
         readTokenInfo(n: Node): TokenInfo;
+        readEOFTokenRange(): TextRangeWithKind;
         getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
@@ -38,7 +40,9 @@ namespace ts.formatting {
         const res = cb({
             advance,
             readTokenInfo,
+            readEOFTokenRange,
             isOnToken,
+            isOnEOF,
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
@@ -164,11 +168,11 @@ namespace ts.formatting {
 
             let currentToken = getNextToken(n, expectedScanAction);
 
-            const token: TextRangeWithKind = {
-                pos: scanner.getStartPos(),
-                end: scanner.getTextPos(),
-                kind: currentToken
-            };
+            const token = createTextRangeWithKind(
+                scanner.getStartPos(),
+                scanner.getTextPos(),
+                currentToken,
+            );
 
             // consume trailing trivia
             if (trailingTrivia) {
@@ -179,11 +183,11 @@ namespace ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                const trivia: TextRangeWithTriviaKind = {
-                    pos: scanner.getStartPos(),
-                    end: scanner.getTextPos(),
-                    kind: currentToken
-                };
+                const trivia = createTextRangeWithKind(
+                    scanner.getStartPos(),
+                    scanner.getTextPos(),
+                    currentToken,
+                );
 
                 if (!trailingTrivia) {
                     trailingTrivia = [];
@@ -243,10 +247,20 @@ namespace ts.formatting {
             return token;
         }
 
+        function readEOFTokenRange(): TextRangeWithKind<SyntaxKind.EndOfFileToken> {
+            Debug.assert(isOnEOF());
+            return createTextRangeWithKind(scanner.getStartPos(), scanner.getTextPos(), SyntaxKind.EndOfFileToken);
+        }
+
         function isOnToken(): boolean {
             const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
             const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+        }
+
+        function isOnEOF(): boolean {
+            const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
+            return current === SyntaxKind.EndOfFileToken;
         }
 
         // when containing node in the tree is token

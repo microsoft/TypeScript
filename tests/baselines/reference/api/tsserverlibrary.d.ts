@@ -5298,6 +5298,11 @@ declare namespace ts {
         Block = 1,
         Smart = 2
     }
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove"
+    }
     interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -5350,6 +5355,7 @@ declare namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: SemicolonPreference;
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     interface DefinitionInfo extends DocumentSpan {
@@ -8197,6 +8203,11 @@ declare namespace ts.server.protocol {
         Block = "Block",
         Smart = "Smart"
     }
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove"
+    }
     interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
@@ -8222,6 +8233,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        semicolons?: SemicolonPreference;
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;

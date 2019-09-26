@@ -2956,6 +2956,12 @@ namespace ts.server.protocol {
         Smart = "Smart",
     }
 
+    export enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     export interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
@@ -2982,6 +2988,7 @@ namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        semicolons?: SemicolonPreference;
     }
 
     export interface UserPreferences {
