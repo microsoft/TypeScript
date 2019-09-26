@@ -3,26 +3,26 @@
 /** @typedef {import("./mod1")} C
  * @type {C} */
 var c;
->c : Chunk
+>c : import("tests/cases/conformance/jsdoc/mod1")
 
 c.chunk;
 >c.chunk : number
->c : Chunk
+>c : import("tests/cases/conformance/jsdoc/mod1")
 >chunk : number
 
 const D = require("./mod1");
->D : typeof Chunk
->require("./mod1") : typeof Chunk
+>D : typeof import("tests/cases/conformance/jsdoc/mod1")
+>require("./mod1") : typeof import("tests/cases/conformance/jsdoc/mod1")
 >require : (name: string) => any
 >"./mod1" : "./mod1"
 
 /** @type {D} */
 var d;
->d : Chunk
+>d : import("tests/cases/conformance/jsdoc/mod1")
 
 d.chunk;
 >d.chunk : number
->d : Chunk
+>d : import("tests/cases/conformance/jsdoc/mod1")
 >chunk : number
 
 === tests/cases/conformance/jsdoc/types.d.ts ===

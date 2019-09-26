@@ -1552,6 +1552,14 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
+    export function mapMap<T, U>(map: Map<T>, f: (t: T, key: string) => [string, U]): Map<U>;
+    export function mapMap<T, U>(map: UnderscoreEscapedMap<T>, f: (t: T, key: __String) => [string, U]): Map<U>;
+    export function mapMap<T, U>(map: Map<T> | UnderscoreEscapedMap<T>, f: ((t: T, key: string) => [string, U]) | ((t: T, key: __String) => [string, U])): Map<U> {
+        const result = createMap<U>();
+        map.forEach((t: T, key: string & __String) => result.set(...(f(t, key))));
+        return result;
+    }
+
     export interface MultiMap<T> extends Map<T[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
