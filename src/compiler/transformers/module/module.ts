@@ -72,7 +72,7 @@ namespace ts {
             currentSourceFile = undefined!;
             currentModuleInfo = undefined!;
             needUMDDynamicImportHelper = false;
-            return aggregateTransformFlags(updated);
+            return updated;
         }
 
 

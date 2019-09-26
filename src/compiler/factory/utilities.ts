@@ -174,48 +174,46 @@ namespace ts {
     function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
-            return aggregateTransformFlags(
-                setTextRange(
-                    factory.createObjectDefinePropertyCall(
-                        receiver,
-                        createExpressionForPropertyName(factory, property.name),
-                        factory.createPropertyDescriptor({
-                            enumerable: true,
-                            configurable: true,
-                            get: getAccessor && setTextRange(
-                                setOriginalNode(
-                                    factory.createFunctionExpression(
-                                        getAccessor.modifiers,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        getAccessor.parameters,
-                                        /*type*/ undefined,
-                                        getAccessor.body! // TODO: GH#18217
-                                    ),
-                                    getAccessor
+            return setTextRange(
+                factory.createObjectDefinePropertyCall(
+                    receiver,
+                    createExpressionForPropertyName(factory, property.name),
+                    factory.createPropertyDescriptor({
+                        enumerable: true,
+                        configurable: true,
+                        get: getAccessor && setTextRange(
+                            setOriginalNode(
+                                factory.createFunctionExpression(
+                                    getAccessor.modifiers,
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    /*typeParameters*/ undefined,
+                                    getAccessor.parameters,
+                                    /*type*/ undefined,
+                                    getAccessor.body! // TODO: GH#18217
                                 ),
                                 getAccessor
                             ),
-                            set: setAccessor && setTextRange(
-                                setOriginalNode(
-                                    factory.createFunctionExpression(
-                                        setAccessor.modifiers,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        setAccessor.parameters,
-                                        /*type*/ undefined,
-                                        setAccessor.body! // TODO: GH#18217
-                                    ),
-                                    setAccessor
+                            getAccessor
+                        ),
+                        set: setAccessor && setTextRange(
+                            setOriginalNode(
+                                factory.createFunctionExpression(
+                                    setAccessor.modifiers,
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    /*typeParameters*/ undefined,
+                                    setAccessor.parameters,
+                                    /*type*/ undefined,
+                                    setAccessor.body! // TODO: GH#18217
                                 ),
                                 setAccessor
-                            )
-                        }, !multiLine)
-                    ),
-                    firstAccessor
-                )
+                            ),
+                            setAccessor
+                        )
+                    }, !multiLine)
+                ),
+                firstAccessor
             );
         }
 
@@ -223,61 +221,55 @@ namespace ts {
     }
 
     function createExpressionForPropertyAssignment(factory: NodeFactory, property: PropertyAssignment, receiver: Expression) {
-        return aggregateTransformFlags(
-            setOriginalNode(
-                setTextRange(
-                    factory.createAssignment(
-                        createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
-                        property.initializer
-                    ),
-                    property
+        return setOriginalNode(
+            setTextRange(
+                factory.createAssignment(
+                    createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
+                    property.initializer
                 ),
                 property
-            )
+            ),
+            property
         );
     }
 
     function createExpressionForShorthandPropertyAssignment(factory: NodeFactory, property: ShorthandPropertyAssignment, receiver: Expression) {
-        return aggregateTransformFlags(
-            setOriginalNode(
-                setTextRange(
-                    factory.createAssignment(
-                        createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
-                        getSynthesizedClone(property.name)
-                    ),
-                    /*location*/ property
+        return setOriginalNode(
+            setTextRange(
+                factory.createAssignment(
+                    createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
+                    getSynthesizedClone(property.name)
                 ),
-                /*original*/ property
-            )
+                /*location*/ property
+            ),
+            /*original*/ property
         );
     }
 
     function createExpressionForMethodDeclaration(factory: NodeFactory, method: MethodDeclaration, receiver: Expression) {
-        return aggregateTransformFlags(
-            setOriginalNode(
-                setTextRange(
-                    factory.createAssignment(
-                        createMemberAccessForPropertyName(factory, receiver, method.name, /*location*/ method.name),
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createFunctionExpression(
-                                    method.modifiers,
-                                    method.asteriskToken,
-                                    /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    method.parameters,
-                                    /*type*/ undefined,
-                                    method.body! // TODO: GH#18217
-                                ),
-                                /*location*/ method
+        return setOriginalNode(
+            setTextRange(
+                factory.createAssignment(
+                    createMemberAccessForPropertyName(factory, receiver, method.name, /*location*/ method.name),
+                    setOriginalNode(
+                        setTextRange(
+                            factory.createFunctionExpression(
+                                method.modifiers,
+                                method.asteriskToken,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                method.parameters,
+                                /*type*/ undefined,
+                                method.body! // TODO: GH#18217
                             ),
-                            /*original*/ method
-                        )
-                    ),
-                    /*location*/ method
+                            /*location*/ method
+                        ),
+                        /*original*/ method
+                    )
                 ),
-                /*original*/ method
-            )
+                /*location*/ method
+            ),
+            /*original*/ method
         );
     }
 

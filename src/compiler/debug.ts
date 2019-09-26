@@ -89,17 +89,18 @@ namespace ts {
         /**
          * Formats an enum value as a string for debugging and debug assertions.
          */
-        export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
+        export function formatEnum(value = 0, enumObject: any, isFlags?: boolean, filterEnum?: (enumValue: number, enumName: string) => boolean) {
             const members = getEnumMembers(enumObject);
             if (value === 0) {
-                return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
+                const zeroMembers = members.filter(member => member[0] === 0);
+                return zeroMembers.length > 0 ? zeroMembers[0][1] : "0";
             }
             if (isFlags) {
                 let result = "";
                 let remainingFlags = value;
                 for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
                     const [enumValue, enumName] = members[i];
-                    if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                    if ((!filterEnum || filterEnum(enumValue, enumName)) && enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
                         remainingFlags &= ~enumValue;
                         result = `${enumName}${result ? "|" : ""}${result}`;
                     }
@@ -143,7 +144,7 @@ namespace ts {
         }
 
         export function formatTransformFlags(flags: TransformFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
+            return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true, (_, name) => !/^Assert|Excludes$|PropagatingFlags$/.test(name));
         }
 
         export function formatEmitFlags(flags: EmitFlags | undefined): string {

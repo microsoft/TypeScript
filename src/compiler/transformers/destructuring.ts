@@ -103,13 +103,12 @@ namespace ts {
             expressions.push(value);
         }
 
-        return aggregateTransformFlags(context.factory.inlineExpressions(expressions!)) || context.factory.createOmittedExpression();
+        return context.factory.inlineExpressions(expressions!) || context.factory.createOmittedExpression();
 
         function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of
             //       `emitAssignment` in the old emitter.
             setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
-            aggregateTransformFlags(expression);
             expressions = append(expressions, expression);
         }
 
@@ -222,7 +221,6 @@ namespace ts {
             if (isIdentifier(name)) {
                 setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
             }
-            aggregateTransformFlags(variable);
             declarations.push(variable);
         }
         return declarations;

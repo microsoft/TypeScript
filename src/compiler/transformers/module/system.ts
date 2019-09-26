@@ -135,7 +135,7 @@ namespace ts {
             contextObject = undefined!;
             hoistedStatements = undefined!;
             enclosingBlockScopedContainer = undefined!;
-            return aggregateTransformFlags(updated);
+            return updated;
         }
 
         /**

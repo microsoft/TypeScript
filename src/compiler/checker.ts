@@ -3653,7 +3653,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     context.approximateLength += (<IntrinsicType>type).intrinsicName.length;
-                    return (<IntrinsicType>type).intrinsicName === "true" ? factory.createTrue() : factory.createFalse();
+                    return factory.createLiteralTypeNode((<IntrinsicType>type).intrinsicName === "true" ? factory.createTrue() : factory.createFalse());
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
@@ -3678,7 +3678,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Null) {
                     context.approximateLength += 4;
-                    return factory.createKeywordTypeNode(SyntaxKind.NullKeyword);
+                    return factory.createLiteralTypeNode(factory.createNull());
                 }
                 if (type.flags & TypeFlags.Never) {
                     context.approximateLength += 5;
@@ -3702,7 +3702,7 @@ namespace ts {
                         }
                     }
                     context.approximateLength += 4;
-                    return factory.createThis();
+                    return factory.createThisTypeNode();
                 }
 
                 const objectFlags = getObjectFlags(type);
@@ -4310,11 +4310,11 @@ namespace ts {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                             trackComputedName(node, context.enclosingDeclaration, context);
                         }
-                        const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
-                        const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
-                        if (clone.kind === SyntaxKind.BindingElement) {
-                            (<BindingElement>clone).initializer = undefined;
+                        let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                        if (isBindingElement(visited)) {
+                            visited = factory.updateBindingElement(visited, visited.dotDotDotToken, visited.propertyName, visited.name, /*initializer*/ undefined);
                         }
+                        const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
                         return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
                 }
@@ -6695,7 +6695,6 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.LiteralType:
                     return true;
@@ -11058,6 +11057,9 @@ namespace ts {
         }
 
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
+            if (node.literal.kind === SyntaxKind.NullKeyword) {
+                return nullType;
+            }
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
@@ -11125,6 +11127,7 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword:
                     return undefinedType;
                 case SyntaxKind.NullKeyword:
+                    // Although `NullKeyword` is not currently a valid TypeNode, at one point it was so we return `nullType` here defensively.
                     return nullType;
                 case SyntaxKind.NeverKeyword:
                     return neverType;
@@ -11132,6 +11135,7 @@ namespace ts {
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
+                    // Although `ThisKeyword` is not currently a valid TypeNode, at one point it was so we return the `this` type here defensively.
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
@@ -26904,7 +26908,7 @@ namespace ts {
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
                 }
-                if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);

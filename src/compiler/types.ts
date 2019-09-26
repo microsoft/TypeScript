@@ -1270,6 +1270,8 @@ namespace ts {
         _typeNodeBrand: any;
     }
 
+    // NOTE: `this` in a type position is a `ThisTypeNode`. Either `null`, `true`, or `false` in a type position
+    //       is a `LiteralTypeNode`. This is so that the nodes for expressions and types do not overlap.
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
             | SyntaxKind.UnknownKeyword
@@ -1279,10 +1281,8 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
-            | SyntaxKind.ThisKeyword
             | SyntaxKind.VoidKeyword
             | SyntaxKind.UndefinedKeyword
-            | SyntaxKind.NullKeyword
             | SyntaxKind.NeverKeyword;
     }
 
@@ -1296,6 +1296,7 @@ namespace ts {
     /* @internal */
     export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } };
 
+    // A ThisTypeNode represents the `this` keyword in a type position. This is necessary since ThisKeyword is treated as the `this` expression.
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
@@ -1421,7 +1422,7 @@ namespace ts {
 
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
-        literal: BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
+        literal: NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
 
     export interface StringLiteral extends LiteralExpression {
@@ -1506,21 +1507,21 @@ namespace ts {
         _primaryExpressionBrand: any;
     }
 
-    export interface NullLiteral extends PrimaryExpression, TypeNode {
+    export interface NullLiteral extends PrimaryExpression {
         kind: SyntaxKind.NullKeyword;
     }
 
-    export interface TrueLiteral extends PrimaryExpression, TypeNode {
+    export interface TrueLiteral extends PrimaryExpression {
         kind: SyntaxKind.TrueKeyword;
     }
 
-    export interface FalseLiteral extends PrimaryExpression, TypeNode {
+    export interface FalseLiteral extends PrimaryExpression {
         kind: SyntaxKind.FalseKeyword;
     }
 
     export type BooleanLiteral = TrueLiteral | FalseLiteral;
 
-    export interface ThisExpression extends PrimaryExpression, KeywordTypeNode {
+    export interface ThisExpression extends PrimaryExpression {
         kind: SyntaxKind.ThisKeyword;
     }
 
@@ -5629,7 +5630,7 @@ namespace ts {
         None = 0,
 
         // Facts
-        // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
+        // - Flags used to indicate that a node or subtree contains syntax that may require transformation.
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
@@ -5659,19 +5660,6 @@ namespace ts {
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
         // It is a good reminder of how much room we have left
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
-
-        // Assertions
-        // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
-        AssertTypeScript = ContainsTypeScript,
-        AssertJsx = ContainsJsx,
-        AssertESNext = ContainsESNext,
-        AssertES2019 = ContainsES2019,
-        AssertES2018 = ContainsES2018,
-        AssertES2017 = ContainsES2017,
-        AssertES2016 = ContainsES2016,
-        AssertES2015 = ContainsES2015,
-        AssertGenerator = ContainsGenerator,
-        AssertDestructuringAssignment = ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
@@ -5928,6 +5916,22 @@ namespace ts {
         /* @internal */ getParenthesizerRules(): ParenthesizerRules;
         /* @internal */ getConverters(): NodeConverters;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
+
+        /**
+         * This is used by the parser to skip transform flag aggregation in Declaration files or other contexts.
+         * @returns The previous value.
+         */
+        /* @internal */ setSkipTransformationFlags(value: boolean): boolean;
+        /**
+         * Tracks setting an extraneous node on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
+         * correctly update transform flags after a node has been created.
+         */
+        /* @internal */ trackExtraneousChildNode(parent: Node, child: Node | undefined): void;
+        /**
+         * Tracks setting an extraneous node array on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
+         * correctly update transform flags after a node has been created.
+         */
+        /* @internal */ trackExtraneousChildNodes(parent: Node, children: NodeArray<Node> | undefined): void;
 
         //
         // Literals

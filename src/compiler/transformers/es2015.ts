@@ -330,10 +330,26 @@ namespace ts {
                 && !(<ReturnStatement>node).expression;
         }
 
+        function isOrMayContainReturnCompletion(node: Node) {
+            return node.transformFlags & TransformFlags.ContainsHoistedDeclarationOrCompletion
+                && (isReturnStatement(node)
+                    || isIfStatement(node)
+                    || isWithStatement(node)
+                    || isSwitchStatement(node)
+                    || isCaseBlock(node)
+                    || isCaseClause(node)
+                    || isDefaultClause(node)
+                    || isTryStatement(node)
+                    || isCatchClause(node)
+                    || isLabeledStatement(node)
+                    || isIterationStatement(node, /*lookInLabeledStatements*/ false)
+                    || isBlock(node));
+        }
+
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
-                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
+                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isOrMayContainReturnCompletion(node))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
                 || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
@@ -2330,7 +2346,6 @@ namespace ts {
                 // evaluated on every iteration.
                 const assignment = factory.createAssignment(initializer, boundValue);
                 if (isDestructuringAssignment(assignment)) {
-                    aggregateTransformFlags(assignment);
                     statements.push(factory.createExpressionStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
                 }
                 else {
@@ -2717,13 +2732,11 @@ namespace ts {
                 }
                 else {
                     const clone = convertIterationStatementCore(node, initializerFunction, factory.createBlock(bodyFunction.part, /*multiLine*/ true));
-                    aggregateTransformFlags(clone);
                     loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
                 }
             }
             else {
                 const clone = convertIterationStatementCore(node, initializerFunction, visitNode(node.statement, visitor, isStatement, factory.liftToBlock));
-                aggregateTransformFlags(clone);
                 loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
             }
 

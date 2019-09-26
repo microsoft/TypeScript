@@ -309,8 +309,12 @@ namespace Harness.Parallel.Host {
                 });
                 worker.process.on("exit", (code, _signal) => {
                     if (code !== 0) {
-                        console.error(`Test worker process exited with nonzero exit code! Output:
-    ${worker.accumulatedOutput}`);
+                        if (worker.currentTasks) {
+                            console.error(`Test worker process exited with nonzero exit code while processing '${worker.currentTasks[0].file}'! Output:\n    ${worker.accumulatedOutput}`);
+                        }
+                        else {
+                            console.error(`Test worker process exited with nonzero exit code! Output:\n    ${worker.accumulatedOutput}`);
+                        }
                         return process.exit(2);
                     }
                 });

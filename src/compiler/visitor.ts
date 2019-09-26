@@ -26,7 +26,6 @@ namespace ts {
             return node;
         }
 
-        aggregateTransformFlags(node);
         const visited = visitor(node);
         if (visited === node) {
             return node;
@@ -44,7 +43,6 @@ namespace ts {
         }
 
         Debug.assertNode(visitedNode, test);
-        aggregateTransformFlags(visitedNode!);
         return <T>visitedNode;
     }
 
@@ -110,7 +108,6 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
@@ -124,13 +121,11 @@ namespace ts {
                     if (isArray(visited)) {
                         for (const visitedNode of visited) {
                             Debug.assertNode(visitedNode, test);
-                            aggregateTransformFlags(visitedNode);
                             updated.push(<T>visitedNode);
                         }
                     }
                     else {
                         Debug.assertNode(visited, test);
-                        aggregateTransformFlags(visited);
                         updated.push(<T>visited);
                     }
                 }
@@ -1503,79 +1498,5 @@ namespace ts {
         return isNodeArray(statements)
             ? setTextRange(factory.createNodeArray(insertStatementsAfterStandardPrologue(statements.slice(), declarations)), statements)
             : insertStatementsAfterStandardPrologue(statements, declarations);
-    }
-
-    /**
-     * Aggregates the TransformFlags for a Node and its subtree.
-     */
-    export function aggregateTransformFlags<T extends Node>(node: T): T {
-        aggregateTransformFlagsForNode(node);
-        return node;
-    }
-
-    /**
-     * Aggregates the TransformFlags for a Node and its subtree. The flags for the subtree are
-     * computed first, then the transform flags for the current node are computed from the subtree
-     * flags and the state of the current node. Finally, the transform flags of the node are
-     * returned, excluding any flags that should not be included in its parent node's subtree
-     * flags.
-     */
-    function aggregateTransformFlagsForNode(node: Node): TransformFlags {
-        if (node === undefined) {
-            return TransformFlags.None;
-        }
-        if (node.transformFlags & TransformFlags.HasComputedFlags) {
-            const nodeFlags = node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
-            switch (node.kind) {
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return nodeFlags | ((node as NamedDeclaration).name!.transformFlags & TransformFlags.PropertyNamePropagatingFlags);
-            }
-            return nodeFlags;
-        }
-        const subtreeFlags = aggregateTransformFlagsForSubtree(node);
-        return computeTransformFlagsForNode(node, subtreeFlags);
-    }
-
-    function aggregateTransformFlagsForNodeArray(nodes: NodeArray<Node>): TransformFlags {
-        if (nodes === undefined) {
-            return TransformFlags.None;
-        }
-        let subtreeFlags = TransformFlags.None;
-        let nodeArrayFlags = TransformFlags.None;
-        for (const node of nodes) {
-            subtreeFlags |= aggregateTransformFlagsForNode(node);
-            nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
-        }
-        nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
-        return subtreeFlags;
-    }
-
-    /**
-     * Aggregates the transform flags for the subtree of a node.
-     */
-    function aggregateTransformFlagsForSubtree(node: Node): TransformFlags {
-        // We do not transform ambient declarations or types, so there is no need to
-        // recursively aggregate transform flags.
-        if (hasModifier(node, ModifierFlags.Ambient) || (isTypeNode(node) && node.kind !== SyntaxKind.ExpressionWithTypeArguments)) {
-            return TransformFlags.None;
-        }
-
-        // Aggregate the transform flags of each child.
-        return reduceEachChild(node, TransformFlags.None, aggregateTransformFlagsForChildNode, aggregateTransformFlagsForChildNodes);
-    }
-
-    /**
-     * Aggregates the TransformFlags of a child node with the TransformFlags of its
-     * siblings.
-     */
-    function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, node: Node): TransformFlags {
-        return transformFlags | aggregateTransformFlagsForNode(node);
-    }
-
-    function aggregateTransformFlagsForChildNodes(transformFlags: TransformFlags, nodes: NodeArray<Node>): TransformFlags {
-        return transformFlags | aggregateTransformFlagsForNodeArray(nodes);
     }
 }

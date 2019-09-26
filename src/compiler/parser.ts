@@ -869,10 +869,12 @@ namespace ts {
             parsingContext = 0;
             identifiers = undefined!;
             notParenthesizedArrow = undefined!;
+            factory.setSkipTransformationFlags(/*inDeclarationFile*/ false);
         }
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
             const isDeclarationFile = isDeclarationFileName(fileName);
+            factory.setSkipTransformationFlags(isDeclarationFile);
             if (isDeclarationFile) {
                 contextFlags |= NodeFlags.Ambient;
             }
@@ -906,6 +908,7 @@ namespace ts {
                 fixupParentReferences(sourceFile);
             }
 
+            factory.setSkipTransformationFlags(/*inDeclarationFile*/ false);
             return sourceFile;
 
             function reportPragmaDiagnostic(pos: number, end: number, diagnostic: DiagnosticMessage) {
@@ -2578,9 +2581,7 @@ namespace ts {
 
             const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
             const node = factory.createTypeParameterDeclaration(name, constraint, defaultType);
-            if (expression) {
-                node.expression = expression;
-            }
+            if (expression) factory.trackExtraneousChildNode(node, node.expression = expression);
             return finishNode(node, pos);
         }
 
@@ -2853,7 +2854,7 @@ namespace ts {
                 // Although type literal properties cannot not have initializers, we attempt
                 // to parse an initializer so we can report in the checker that an interface
                 // property or type literal property cannot have an initializer.
-                if (token() === SyntaxKind.EqualsToken) node.initializer = parseInitializer();
+                if (token() === SyntaxKind.EqualsToken) factory.trackExtraneousChildNode(node, node.initializer = parseInitializer());
             }
             parseTypeMemberSemicolon();
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -3045,8 +3046,8 @@ namespace ts {
             if (negative) {
                 nextToken();
             }
-            let expression: BooleanLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword
-                ? parseTokenNode<BooleanLiteral>()
+            let expression: BooleanLiteral | NullLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword || token() === SyntaxKind.NullKeyword
+                ? parseTokenNode<BooleanLiteral | NullLiteral>()
                 : parseLiteralLikeNode(token()) as LiteralExpression;
             if (negative) {
                 expression = finishNode(factory.createPrefix(SyntaxKind.MinusToken, expression), pos);
@@ -3107,11 +3108,11 @@ namespace ts {
                 case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
                     return parseLiteralTypeNode();
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericOrBigIntLiteral) ? parseLiteralTypeNode(/*negative*/ true) : parseTypeReference();
                 case SyntaxKind.VoidKeyword:
-                case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.ThisKeyword: {
                     const thisKeyword = parseThisTypeNode();
@@ -4919,7 +4920,7 @@ namespace ts {
                 node = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer);
                 // Save equals token for error reporting.
                 // TODO(rbuckton): Consider manufacturing this when we need to report an error as it is otherwise not useful.
-                if (equalsToken) node.equalsToken = equalsToken;
+                if (equalsToken) factory.trackExtraneousChildNode(node, node.equalsToken = equalsToken);
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
@@ -4927,10 +4928,12 @@ namespace ts {
                 node = factory.createPropertyAssignment(name, initializer);
             }
             // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
-            if (decorators) node.decorators = decorators;
+            if (decorators) factory.trackExtraneousChildNodes(node, node.decorators = decorators);
+            // TODO(rbuckton): Use this instead...
+            // if (modifiers) factory.trackExtraneousChildNodes(node, node.modifiers = modifiers);
             if (modifiers) node.modifiers = modifiers;
-            if (questionToken) node.questionToken = questionToken;
-            if (exclamationToken) node.exclamationToken = exclamationToken;
+            if (questionToken) factory.trackExtraneousChildNode(node, node.questionToken = questionToken);
+            if (exclamationToken) factory.trackExtraneousChildNode(node, node.exclamationToken = exclamationToken);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5742,7 +5745,7 @@ namespace ts {
             parseSemicolon();
             const node = factory.createVariableStatement(modifiers, declarationList);
             // Decorators are not allowed on a variable statement, so we keep track of them to report them in the grammar checker.
-            if (decorators) node.decorators = decorators;
+            if (decorators) factory.trackExtraneousChildNodes(node, node.decorators = decorators);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5778,8 +5781,8 @@ namespace ts {
                     const body = parseFunctionBlockOrSemicolon(SignatureFlags.None, Diagnostics.or_expected);
                     const node = factory.createConstructorDeclaration(decorators, modifiers, parameters, body);
                     // Attach `typeParameters` and `type` if they exist so that we can report them in the grammar checker.
-                    if (typeParameters) node.typeParameters = typeParameters;
-                    if (type) node.type = type;
+                    if (typeParameters) factory.trackExtraneousChildNodes(node, node.typeParameters = typeParameters);
+                    if (type) factory.trackExtraneousChildNode(node, node.type = type);
                     return withJSDoc(finishNode(node, pos), hasJSDoc);
                 }
             });
@@ -5812,9 +5815,8 @@ namespace ts {
                 body
             );
             // An exclamation token on a method is invalid syntax and will be handled by the grammar checker
-            if (exclamationToken) {
-                node.exclamationToken = exclamationToken;
-            }
+            if (exclamationToken) factory.trackExtraneousChildNode(node, node.exclamationToken = exclamationToken);
+
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5872,8 +5874,8 @@ namespace ts {
                 ? factory.createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body)
                 : factory.createSetAccessorDeclaration(decorators, modifiers, name, parameters, body);
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
-            if (typeParameters) node.typeParameters = typeParameters;
-            if (type && kind === SyntaxKind.SetAccessor) node.type = type;
+            if (typeParameters) factory.trackExtraneousChildNodes(node, node.typeParameters = typeParameters);
+            if (type && kind === SyntaxKind.SetAccessor) factory.trackExtraneousChildNode(node, node.type = type);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6283,8 +6285,8 @@ namespace ts {
             parseSemicolon();
             const node = factory.createNamespaceExportDeclaration(name);
             // NamespaceExportDeclaration nodes cannot have decorators or modifiers, so we attach them here so we can report them in the grammar checker
-            if (decorators) node.decorators = decorators;
-            if (modifiers) node.modifiers = modifiers;
+            if (decorators) factory.trackExtraneousChildNodes(node, node.decorators = decorators);
+            if (modifiers) factory.trackExtraneousChildNodes(node, node.modifiers = modifiers);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6549,6 +6551,7 @@ namespace ts {
         export namespace JSDocParser {
             export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+                factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -6567,7 +6570,7 @@ namespace ts {
             // Parses out a JSDoc type expression.
             export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
                 const pos = getNodePos();
-
+                const saveSkipTransformationFlags = factory.setSkipTransformationFlags(/*value*/ true);
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 const type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
@@ -6576,11 +6579,13 @@ namespace ts {
 
                 const result = factory.createJSDocTypeExpression(type);
                 fixupParentReferences(result);
+                factory.setSkipTransformationFlags(saveSkipTransformationFlags);
                 return finishNode(result, pos);
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState(content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
+                factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
                 const sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content }; // tslint:disable-line no-object-literal-type-assertion
@@ -6591,6 +6596,7 @@ namespace ts {
             }
 
             export function parseJSDocComment(parent: HasJSDoc, start: number, length: number): JSDoc | undefined {
+                const saveSkipTransformationFlags = factory.setSkipTransformationFlags(true);
                 const saveToken = currentToken;
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
@@ -6609,7 +6615,7 @@ namespace ts {
                 currentToken = saveToken;
                 parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
-
+                factory.setSkipTransformationFlags(saveSkipTransformationFlags);
                 return comment;
             }
 

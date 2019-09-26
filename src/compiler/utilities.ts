@@ -3951,6 +3951,14 @@ namespace ts {
         return flags;
     }
 
+    export function getModifierFlagsNoWrite(node: Node): ModifierFlags {
+        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
+            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
+        }
+
+        return getModifierFlagsNoCache(node);
+    }
+
     export function getModifierFlagsNoCache(node: Node): ModifierFlags {
         let flags = modifiersToFlags(node.modifiers);
 
@@ -4693,7 +4701,6 @@ namespace ts {
             || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.UndefinedKeyword
-            || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.NeverKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments
             || kind === SyntaxKind.JSDocAllType
@@ -6020,15 +6027,14 @@ namespace ts {
     }
 
     /* @internal */
-    // TODO(rbuckton): Rename to 'isParameterPropertyModifierKind'
-    export function isParameterPropertyModifier(kind: SyntaxKind): boolean {
+    export function isParameterPropertyModifierKind(kind: SyntaxKind): boolean {
         return !!(modifierToFlag(kind) & ModifierFlags.ParameterPropertyModifier);
     }
 
     /* @internal */
     // TODO(rbuckton): Rename to 'isClassMemberModifierKind'
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+        return isParameterPropertyModifierKind(idToken) || idToken === SyntaxKind.StaticKeyword;
     }
 
     // Functions

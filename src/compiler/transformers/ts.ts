@@ -735,7 +735,6 @@ namespace ts {
                 emitFlags |= EmitFlags.NoTrailingSourceMap;
             }
 
-            aggregateTransformFlags(classDeclaration);
             setTextRange(classDeclaration, node);
             setOriginalNode(classDeclaration, node);
             setEmitFlags(classDeclaration, emitFlags);
@@ -850,7 +849,6 @@ namespace ts {
                 heritageClauses,
                 members
             );
-            aggregateTransformFlags(classExpression);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
 
@@ -886,7 +884,6 @@ namespace ts {
                 transformClassMembers(node)
             );
 
-            aggregateTransformFlags(classExpression);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, node);
 
@@ -907,13 +904,13 @@ namespace ts {
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
                     if (isIdentifier(parameter.name)) {
-                        members.push(aggregateTransformFlags(factory.createPropertyDeclaration(
+                        members.push(factory.createPropertyDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             parameter.name,
                             /*questionOrExclamationToken*/ undefined,
                             /*type*/ undefined,
-                            /*initializer*/ undefined)));
+                            /*initializer*/ undefined));
                     }
                 }
             }
@@ -1501,7 +1498,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                     return factory.createVoidZero();
 
@@ -1541,6 +1537,9 @@ namespace ts {
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
                             return factory.createIdentifier("Boolean");
+
+                        case SyntaxKind.NullKeyword:
+                            return factory.createVoidZero();
 
                         default:
                             return Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
@@ -1602,7 +1601,7 @@ namespace ts {
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
                 }
-                if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const serializedIndividual = serializeTypeNode(typeNode);

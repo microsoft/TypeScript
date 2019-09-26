@@ -1620,7 +1620,7 @@ namespace ts.Completions {
 
         function isConstructorParameterCompletion(node: Node): boolean {
             return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
-                && (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
+                && (isParameterPropertyModifierKind(node.kind) || isDeclarationName(node));
         }
 
         /**
@@ -1823,7 +1823,7 @@ namespace ts.Completions {
                 // - its name of the parameter and not being edited
                 // eg. constructor(a |<- this shouldnt show completion
                 if (!isIdentifier(contextToken) ||
-                    isParameterPropertyModifier(keywordForNode(contextToken)) ||
+                    isParameterPropertyModifierKind(keywordForNode(contextToken)) ||
                     isCurrentlyEditingNode(contextToken)) {
                     return false;
                 }
@@ -2073,7 +2073,7 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.InterfaceElementKeywords:
                     return isInterfaceOrTypeLiteralCompletionKeyword(kind);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
-                    return isParameterPropertyModifier(kind);
+                    return isParameterPropertyModifierKind(kind);
                 case KeywordCompletionFilters.TypeAssertionKeywords:
                     return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword;
                 case KeywordCompletionFilters.TypeKeywords:

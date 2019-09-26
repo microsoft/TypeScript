@@ -18,7 +18,6 @@ namespace ts {
             setTextRange(returnStatement, node);
             const body = factory.createBlock([returnStatement], multiLine);
             setTextRange(body, node);
-            aggregateTransformFlags(body);
             return body;
         }
 
@@ -38,7 +37,6 @@ namespace ts {
             if (getStartsOnNewLine(node)) {
                 setStartsOnNewLine(updated, /*newLine*/ true);
             }
-            aggregateTransformFlags(updated);
             return updated;
         }
 
