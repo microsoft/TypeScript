@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.es5.d.ts(1433,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1423,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../node_modules/@types/node/globals.d.ts(168,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -3991,15 +3991,11 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1269,26):
   Property 'regex' is missing in type '{ key: any; text: string; negative: false; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1270,22): error TS2339: Property 'ConsoleFilter' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1277,60): error TS2339: Property 'ConsoleFilter' does not exist on type '{ new (): Console; prototype: Console; }'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1278,42): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>[]): { key: string; text: string; regex: RegExp; negative: boolean; }[]', gave the following error.
-    Argument of type '{ key: any; text: string; negative: boolean; }[]' is not assignable to parameter of type 'ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
-      The types returned by 'slice(...)' are incompatible between these types.
-        Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type '{ key: string; text: string; regex: RegExp; negative: boolean; }[]'.
-          Property 'regex' is missing in type '{ key: any; text: string; negative: boolean; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
-  Overload 2 of 2, '(...items: ({ key: string; text: string; regex: RegExp; negative: boolean; } | ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>)[]): { key: string; text: string; regex: RegExp; negative: boolean; }[]', gave the following error.
-    Argument of type '{ key: any; text: string; negative: boolean; }[]' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; } | ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
-      Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type 'ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1278,42): error TS2345: Argument of type '{ key: any; text: string; negative: boolean; }[]' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; } | ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
+  Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type 'ConcatArray<{ key: string; text: string; regex: RegExp; negative: boolean; }>'.
+    The types returned by 'slice(...)' are incompatible between these types.
+      Type '{ key: any; text: string; negative: boolean; }[]' is not assignable to type '{ key: string; text: string; regex: RegExp; negative: boolean; }[]'.
+        Property 'regex' is missing in type '{ key: any; text: string; negative: boolean; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1294,28): error TS2339: Property 'ConsoleFilter' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1295,32): error TS2339: Property 'ConsoleFilter' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(1303,30): error TS2555: Expected at least 2 arguments, but got 1.

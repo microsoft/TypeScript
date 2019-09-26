@@ -8,5 +8,5 @@
 ////     b.concat('hi')
 //// }
 
-verify.rangeAfterCodeFix("p: string, a: string, b: string | any[]", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);
+verify.rangeAfterCodeFix("p: string, a: string, b: string | string[]", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);
 

@@ -17,12 +17,12 @@ function g1(headerNames: any) {
     const table = [{cells: headerNames }].concat(t);
 >table : { cells: any; }[]
 >[{cells: headerNames }].concat(t) : { cells: any; }[]
->[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>[{cells: headerNames }].concat : (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]) => { cells: any; }[]
 >[{cells: headerNames }] : { cells: any; }[]
 >{cells: headerNames } : { cells: any; }
 >cells : any
 >headerNames : any
->concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>concat : (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]) => { cells: any; }[]
 >t : { hasLineBreak: boolean; cells: never[]; }[]
 }
 
@@ -42,7 +42,7 @@ function g2(headerNames: any) {
     const table = [{cells: headerNames }]["concat"](t);
 >table : { cells: any; }[]
 >[{cells: headerNames }]["concat"](t) : { cells: any; }[]
->[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
+>[{cells: headerNames }]["concat"] : (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]) => { cells: any; }[]
 >[{cells: headerNames }] : { cells: any; }[]
 >{cells: headerNames } : { cells: any; }
 >cells : any

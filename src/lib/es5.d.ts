@@ -1080,11 +1080,6 @@ interface ReadonlyArray<T> {
      * Combines two or more arrays.
      * @param items Additional items to add to the end of array1.
      */
-    concat(...items: ConcatArray<T>[]): T[];
-    /**
-     * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
-     */
     concat(...items: (T | ConcatArray<T>)[]): T[];
     /**
      * Adds all the elements of an array separated by the specified separator string.
@@ -1210,11 +1205,6 @@ interface Array<T> {
      * @param items New elements of the Array.
      */
     push(...items: T[]): number;
-    /**
-     * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
-     */
-    concat(...items: ConcatArray<T>[]): T[];
     /**
      * Combines two or more arrays.
      * @param items Additional items to add to the end of array1.
