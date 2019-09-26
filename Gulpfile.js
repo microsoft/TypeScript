@@ -588,9 +588,9 @@ const configureExperimental = () => exec(process.execPath, ["scripts/configurePr
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
-const configureTSCOnly = () => exec(process.execPath, ["scripts/configureTSCBuild.js", "package.json", "src/compiler/core.ts"]);
-task("configure-tsc-only", series(buildScripts, configureNightly));
-task("configure-tsc-only").description = "Runs scripts/configureTSCOnly.ts to prepare a build for build which only has tsc ";
+const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
+task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));

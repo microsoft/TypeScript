@@ -37,7 +37,7 @@ function main(): void {
     delete packageJsonValue.scripts.postpublish;
 
     // Set the new name
-    packageJsonValue.name = "@orta/language-services";
+    packageJsonValue.name = "@typescript/language-services";
 
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
 
@@ -74,10 +74,10 @@ function main(): void {
 
     // This section verifies that the build of TypeScript compiles and emits
 
-    const ts = require("../" + lib);
+    const ts = require(lib);
     const source = "let x: string = 'string'";
 
-    const results =ts.transpileModule(source, {
+    const results = ts.transpileModule(source, {
         compilerOptions: { module: ts.ModuleKind.CommonJS }
     });
 
