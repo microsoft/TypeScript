@@ -232,6 +232,6 @@ namespace ts {
         MissingSourceMapFile = "Missing source map file",
         NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root",
         MissingGeneratedFile = "Missing generated file",
-        PackageJsonFile = "package.json"
+        PackageJsonFile = "package.json file for import suggestions"
     }
 }
