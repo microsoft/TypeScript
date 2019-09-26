@@ -832,16 +832,12 @@ namespace ts.textChanges {
             return (options.prefix || "") + noIndent + (options.suffix || "");
         }
 
-        function getFormatCodeSettingsForWriting(context: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
             return {
-                ...context.options,
-                // If the user has no semicolon preference defined and the file doesn’t use semicolons,
-                // make the formatter remove them. Otherwise, ignore semicolons in the formatter because
-                // the writer will insert them by default.
-                semicolons: context.options.semicolons === SemicolonPreference.Remove ||
-                (!context.options.semicolons || context.options.semicolons === SemicolonPreference.Ignore) && !probablyUsesSemicolons(sourceFile)
-                    ? SemicolonPreference.Remove
-                    : SemicolonPreference.Ignore,
+                ...options,
+                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
             };
         }
 

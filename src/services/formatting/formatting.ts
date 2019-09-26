@@ -966,9 +966,8 @@ namespace ts.formatting {
             let trimTrailingWhitespaces = false;
             let lineAction = LineAction.None;
             if (rules) {
-                // Apply rules in reverse order so that higher when higher priority rules (which are first in the array)
-                // create text changes at the same position as lower priority rules, the higher priority text changes
-                // are evaluated last.
+                // Apply rules in reverse order so that higher priority rules (which are first in the array)
+                // win in a conflict with lower priority rules.
                 forEachRight(rules, rule => {
                     lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
                     switch (lineAction) {
@@ -992,7 +991,7 @@ namespace ts.formatting {
                     }
 
                     // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                    trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteTrivia) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                    trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
                 });
             }
             else {
@@ -1172,10 +1171,10 @@ namespace ts.formatting {
         ): LineAction {
             const onLaterLine = currentStartLine !== previousStartLine;
             switch (rule.action) {
-                case RuleAction.Ignore:
+                case RuleAction.StopProcessingSpaceActions:
                     // no action required
                     return LineAction.None;
-                case RuleAction.DeleteTrivia:
+                case RuleAction.DeleteSpace:
                     if (previousRange.end !== currentRange.pos) {
                         // delete characters starting from t1.end up to t2.pos exclusive
                         recordDelete(previousRange.end, currentRange.pos - previousRange.end);
@@ -1185,7 +1184,7 @@ namespace ts.formatting {
                 case RuleAction.DeleteToken:
                     recordDelete(previousRange.pos, previousRange.end - previousRange.pos);
                     break;
-                case RuleAction.NewLine:
+                case RuleAction.InsertNewLine:
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
@@ -1200,7 +1199,7 @@ namespace ts.formatting {
                         return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;
-                case RuleAction.Space:
+                case RuleAction.InsertSpace:
                     // exit early if we on different lines and rule cannot change number of newlines
                     if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return LineAction.None;
@@ -1212,7 +1211,7 @@ namespace ts.formatting {
                         return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
                     break;
-                case RuleAction.TrailingSemicolon:
+                case RuleAction.InsertTrailingSemicolon:
                     recordInsert(previousRange.end, ";");
             }
             return LineAction.None;
