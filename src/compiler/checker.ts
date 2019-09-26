@@ -1178,7 +1178,7 @@ namespace ts {
                 // obtain item referenced by 'export='
                 mainModule = resolveExternalModuleSymbol(mainModule);
                 if (mainModule.flags & SymbolFlags.Namespace) {
-                    // If weâ€™re merging an augmentation to a pattern ambient module, we want to
+                    // If we're merging an augmentation to a pattern ambient module, we want to
                     // perform the merge unidirectionally from the augmentation ('a.foo') to
                     // the pattern ('*.foo'), so that 'getMergedSymbol()' on a.foo gives you
                     // all the exports both from the pattern and from the augmentation, but
@@ -26484,7 +26484,7 @@ namespace ts {
 
                     if (!resultType) {
                         // Types that have a reasonably good chance of being a valid operand type.
-                        // If both types have an awaited type of one of these, weâ€™ll assume the user
+                        // If both types have an awaited type of one of these, we'll assume the user
                         // might be missing an await without doing an exhaustive check that inserting
                         // await(s) will actually be a completely valid binary expression.
                         const closeEnoughKind = TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.AnyOrUnknown;
