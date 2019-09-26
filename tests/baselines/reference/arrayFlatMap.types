@@ -23,3 +23,20 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >(): ReadonlyArray<number> => [] : () => readonly number[]
 >[] : undefined[]
 
+// #19535
+
+const [x] = [""].flatMap(undefined as () => string[] | string[][]);
+>x : string | string[]
+>[""].flatMap(undefined as () => string[] | string[][]) : (string | string[])[]
+>[""].flatMap : <U, This = undefined>(callback: (this: This, value: string, index: number, array: string[]) => U, thisArg?: This) => (U extends readonly (infer V)[] ? V : U)[]
+>[""] : string[]
+>"" : ""
+>flatMap : <U, This = undefined>(callback: (this: This, value: string, index: number, array: string[]) => U, thisArg?: This) => (U extends readonly (infer V)[] ? V : U)[]
+>undefined as () => string[] | string[][] : () => string[] | string[][]
+>undefined : undefined
+
+x == "";
+>x == "" : boolean
+>x : string | string[]
+>"" : ""
+

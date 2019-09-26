@@ -18,3 +18,14 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
 
+// #19535
+
+const [x] = [""].flatMap(undefined as () => string[] | string[][]);
+>x : Symbol(x, Decl(arrayFlatMap.ts, 7, 7))
+>[""].flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+x == "";
+>x : Symbol(x, Decl(arrayFlatMap.ts, 7, 7))
+
