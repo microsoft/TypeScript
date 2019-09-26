@@ -2726,6 +2726,14 @@
         "category": "Error",
         "code": 2774
     },
+    "Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.": {
+        "category": "Error",
+        "code": 2776
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

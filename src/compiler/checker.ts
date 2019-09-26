@@ -23416,6 +23416,15 @@ namespace ts {
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
+            if (node.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.ExpressionStatement &&
+                returnType.flags & (TypeFlags.Void | TypeFlags.Never) && hasTypePredicateOrNeverReturnType(signature)) {
+                if (!isDottedName(node.expression)) {
+                    error(node.expression, Diagnostics.Control_flow_effects_of_calls_to_assertion_and_never_returning_functions_are_reflected_only_when_the_function_expression_is_an_identifier_or_qualified_name);
+                }
+                else if (!getEffectsSignature(node)) {
+                    error(node.expression, Diagnostics.Control_flow_effects_of_calls_to_assertion_and_never_returning_functions_are_reflected_only_when_every_variable_or_property_referenced_in_the_function_expression_is_declared_with_an_explicit_type_annotation);
+                }
+            }
             let jsAssignmentType: Type | undefined;
             if (isInJSFile(node)) {
                 const decl = getDeclarationOfExpando(node);

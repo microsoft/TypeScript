@@ -1287,12 +1287,6 @@ namespace ts {
             activeLabels!.pop();
         }
 
-        function isDottedName(node: Expression): boolean {
-            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
-                node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
-                node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
-        }
-
         function bindExpressionStatement(node: ExpressionStatement): void {
             bind(node.expression);
             // A top level call expression with a dotted function name and at least one argument
