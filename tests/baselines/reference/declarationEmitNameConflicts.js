@@ -167,7 +167,7 @@ export declare module M.P {
     var a: typeof M.f;
     var b: typeof M.C;
     var c: typeof M.N;
-    var g: typeof M.c.g;
+    var g: typeof M.N.g;
     var d: typeof M.d;
 }
 export declare module M.Q {

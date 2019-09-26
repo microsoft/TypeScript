@@ -13,11 +13,26 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration): ModuleInstanceState {
-        return node.body ? getModuleInstanceStateWorker(node.body) : ModuleInstanceState.Instantiated;
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+        if (node.body && !node.body.parent) {
+            // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
+            setParentPointers(node, node.body);
+        }
+        return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateWorker(node: Node): ModuleInstanceState {
+    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
+        const nodeId = "" + getNodeId(node);
+        if (visited.has(nodeId)) {
+            return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
+        }
+        visited.set(nodeId, undefined);
+        const result = getModuleInstanceStateWorker(node, visited);
+        visited.set(nodeId, result);
+        return result;
+    }
+
+    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -37,11 +52,27 @@ namespace ts {
                     return ModuleInstanceState.NonInstantiated;
                 }
                 break;
-            // 4. other uninstantiated module declarations.
+            // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
+            case SyntaxKind.ExportDeclaration:
+                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                    let state = ModuleInstanceState.NonInstantiated;
+                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                        const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
+                        if (specifierState > state) {
+                            state = specifierState;
+                        }
+                        if (state === ModuleInstanceState.Instantiated) {
+                            return state;
+                        }
+                    }
+                    return state;
+                }
+                break;
+            // 5. other uninstantiated module declarations.
             case SyntaxKind.ModuleBlock: {
                 let state = ModuleInstanceState.NonInstantiated;
                 forEachChild(node, n => {
-                    const childState = getModuleInstanceStateWorker(n);
+                    const childState = getModuleInstanceStateCached(n, visited);
                     switch (childState) {
                         case ModuleInstanceState.NonInstantiated:
                             // child is non-instantiated - continue searching
@@ -61,7 +92,7 @@ namespace ts {
                 return state;
             }
             case SyntaxKind.ModuleDeclaration:
-                return getModuleInstanceState(node as ModuleDeclaration);
+                return getModuleInstanceState(node as ModuleDeclaration, visited);
             case SyntaxKind.Identifier:
                 // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
                 // be considered the same as type alias
@@ -70,6 +101,36 @@ namespace ts {
                 }
         }
         return ModuleInstanceState.Instantiated;
+    }
+
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+        const name = specifier.propertyName || specifier.name;
+        let p: Node | undefined = specifier.parent;
+        while (p) {
+            if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
+                const statements = p.statements;
+                let found: ModuleInstanceState | undefined;
+                for (const statement of statements) {
+                    if (nodeHasName(statement, name)) {
+                        if (!statement.parent) {
+                            setParentPointers(p, statement);
+                        }
+                        const state = getModuleInstanceStateCached(statement, visited);
+                        if (found === undefined || state > found) {
+                            found = state;
+                        }
+                        if (found === ModuleInstanceState.Instantiated) {
+                            return found;
+                        }
+                    }
+                }
+                if (found !== undefined) {
+                    return found;
+                }
+            }
+            p = p.parent;
+        }
+        return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
     }
 
     const enum ContainerFlags {
@@ -2561,7 +2622,7 @@ namespace ts {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
@@ -2575,7 +2636,7 @@ namespace ts {
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
-                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
                     // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script

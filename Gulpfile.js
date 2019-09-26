@@ -341,6 +341,8 @@ const eslint = (folder) => async () => {
 
     const args = [
         "node_modules/eslint/bin/eslint",
+        "--cache",
+        "--cache-location", `${folder}/.eslintcache`,
         "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",

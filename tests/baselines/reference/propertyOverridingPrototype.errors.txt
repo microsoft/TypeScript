@@ -1,0 +1,16 @@
+tests/cases/compiler/propertyOverridingPrototype.ts(7,5): error TS2424: Class 'Base' defines instance member function 'foo', but extended class 'Derived' defines it as instance member property.
+
+
+==== tests/cases/compiler/propertyOverridingPrototype.ts (1 errors) ====
+    class Base {
+        foo() {
+        }
+    }
+    
+    class Derived extends Base {
+        foo: () => { };
+        ~~~
+!!! error TS2424: Class 'Base' defines instance member function 'foo', but extended class 'Derived' defines it as instance member property.
+    }
+    
+    
