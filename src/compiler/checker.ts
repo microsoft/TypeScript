@@ -4907,8 +4907,15 @@ namespace ts {
             }
 
             function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext, bundled?: boolean): Statement[] {
-                // TODO: Use `setOriginalNode` on original declarations where possible so these declarations see some kind of declaration mapping
-                // We save this off here so it's not adjusted by well-meaning declaration emit codepaths which want to apply more specific contexts
+                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration);
+                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature);
+
+                // TODO: Use `setOriginalNode` on original declaration names where possible so these declarations see some kind of
+                // declaration mapping
+
+                // We save the enclosing declaration off here so it's not adjusted by well-meaning declaration
+                // emit codepaths which want to apply more specific contexts (so we can still refer to the root real declaration
+                // we're trying to emit from later on)
                 const enclosingDeclaration = context.enclosingDeclaration!;
                 let results: Statement[] = [];
                 const visitedSymbols: Map<true> = createMap();
@@ -5264,11 +5271,11 @@ namespace ts {
                     const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                     const baseTypes = getBaseTypes(interfaceType);
-                    const amalgamatedBase = length(baseTypes) ? getIntersectionType(baseTypes) : undefined;
-                    const members = flatMap<Symbol, TypeElement>(getPropertiesOfType(interfaceType), p => serializePropertySymbolForInterface(p, amalgamatedBase));
-                    const callSignatures = serializeSignatures(SignatureKind.Call, interfaceType, amalgamatedBase, SyntaxKind.CallSignature) as CallSignatureDeclaration[];
-                    const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, amalgamatedBase, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
-                    const indexSignatures = serializeIndexSignatures(interfaceType, amalgamatedBase);
+                    const baseType = length(baseTypes) ? getIntersectionType(baseTypes) : undefined;
+                    const members = flatMap<Symbol, TypeElement>(getPropertiesOfType(interfaceType), p => serializePropertySymbolForInterface(p, baseType));
+                    const callSignatures = serializeSignatures(SignatureKind.Call, interfaceType, baseType, SyntaxKind.CallSignature) as CallSignatureDeclaration[];
+                    const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, baseType, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
+                    const indexSignatures = serializeIndexSignatures(interfaceType, baseType);
 
                     const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
                     addResult(createInterfaceDeclaration(
@@ -5282,7 +5289,7 @@ namespace ts {
                 }
 
                 function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
-                    const members = filter(arrayFrom((symbol.exports || emptySymbols).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
+                    const members = !symbol.exports ? [] : filter(arrayFrom((symbol.exports).values()), p => !((p.flags & SymbolFlags.Prototype) || (p.escapedName === "prototype")));
                     // Split NS members up by declaration - members whose parent symbol is the ns symbol vs those whose is not (but were added in later via merging)
                     const locationMap = arrayToMultiMap(members, m => m.parent && m.parent === symbol ? "real" : "merged");
                     const realMembers = locationMap.get("real") || emptyArray;
@@ -5346,9 +5353,11 @@ namespace ts {
                         else {
                             // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
                             // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
-                            const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined : isConstVariable(symbol) ? NodeFlags.Const : NodeFlags.Let;
+                            const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined
+                                : isConstVariable(symbol) ? NodeFlags.Const
+                                : NodeFlags.Let;
                             const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
-                            let textRange: Node | undefined = symbol.declarations && filter(symbol.declarations, d => isVariableDeclaration(d))[0];
+                            let textRange: Node | undefined = symbol.declarations && find(symbol.declarations, d => isVariableDeclaration(d));
                             if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
                                 textRange = textRange.parent.parent;
                             }
@@ -5357,11 +5366,35 @@ namespace ts {
                             ], flags)), textRange);
                             addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
                             if (name !== localName && !isPrivate) {
-                                // We rename the variable declaration we generate for Property symbols since they may have a name which conflicts with a local declaration. Eg,
-                                // `module.exports.g = g` - we want to make a variable declaration with type `typeof g` (ergo, we must emit `g`)
-                                // and so we can't name the variable declaration `g` (since there's already a local `g`) - so we anonymize the local variable declaration and make
-                                // an export declaration with an alias to the right name
-                                addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([createExportSpecifier(name, localName)])), ModifierFlags.None);
+                                // We rename the variable declaration we generate for Property symbols since they may have a name which
+                                // conflicts with a local declaration. For example, given input:
+                                // ```
+                                // function g() {}
+                                // module.exports.g = g
+                                // ```
+                                // In such a situation, we have a local variable named `g`, and a seperate exported variable named `g`.
+                                // Naively, we would emit
+                                // ```
+                                // function g() {}
+                                // export const g: typeof g;
+                                // ```
+                                // That's obviously incorrect - the `g` in the type annotation needs to refer to the local `g`, but
+                                // the export declaration shadows it.
+                                // To work around that, we instead write
+                                // ```
+                                // function g() {}
+                                // const g_1: typeof g;
+                                // export { g_1 as g };
+                                // ```
+                                // To create an export named `g` that does _not_ shadow the local `g`
+                                addResult(
+                                    createExportDeclaration(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        createNamedExports([createExportSpecifier(name, localName)])
+                                    ),
+                                    ModifierFlags.None
+                                );
                             }
                         }
                     }
@@ -5370,7 +5403,7 @@ namespace ts {
                 function serializeAsFunctionNamespaceMerge(type: Type, symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     const signatures = getSignaturesOfType(type, SignatureKind.Call);
                     for (const sig of signatures) {
-                        // Each overload becomes a seperate function declaration, in order
+                        // Each overload becomes a separate function declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
                         decl.name = createIdentifier(localName);
                         addResult(setTextRange(decl, sig.declaration), modifierFlags);
@@ -5384,9 +5417,12 @@ namespace ts {
 
                 function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
                     if (length(props)) {
-                        const localVsRemoteMap = arrayToMultiMap(props, p => !length(p.declarations) ? "local" : some(p.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)) ? "local" : "remote");
+                        const localVsRemoteMap = arrayToMultiMap(props, p =>
+                            !length(p.declarations) || some(p.declarations, d =>
+                                getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)
+                            ) ? "local" : "remote"
+                        );
                         const localProps = localVsRemoteMap.get("local") || emptyArray;
-                        const remoteProps = localVsRemoteMap.get("remote") || emptyArray;
                         // handle remote props first - we need to make an `import` declaration that points at the module containing each remote
                         // prop in the outermost scope (TODO: a namespace within a namespace would need to be appropriately handled by this)
                         // Example:
@@ -5415,9 +5451,7 @@ namespace ts {
                         const subcontext = { ...context, enclosingDeclaration: fakespace };
                         const oldContext = context;
                         context = subcontext;
-                        forEach(remoteProps, _p => {
-                            // TODO: implement - should be difficult to trigger (see comment above), as only interesting cross-file js merges should make this possible
-                        });
+                        // TODO: implement handling for the localVsRemoteMap.get("remote") - should be difficult to trigger (see comment above), as only interesting cross-file js merges should make this possible
                         visitSymbolTable(createSymbolTable(localProps), suppressNewPrivateContext, /*propertyAsAlias*/ true);
                         context = oldContext;
                         addingDeclare = oldAddingDeclare;
@@ -5442,7 +5476,12 @@ namespace ts {
                     const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
                     const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
-                    const staticMembers = symbol.flags & (SymbolFlags.Function | SymbolFlags.ValueModule) ? [] : flatMap<Symbol, ClassElement>(filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
+                    const staticMembers = symbol.flags & (SymbolFlags.Function | SymbolFlags.ValueModule)
+                        ? []
+                        : flatMap(filter(
+                            getPropertiesOfType(staticType),
+                            p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"
+                        ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
                         // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
@@ -5468,96 +5507,97 @@ namespace ts {
                     const node = getDeclarationOfAliasSymbol(symbol);
                     if (!node) return Debug.fail();
                     const target = getMergedSymbol(getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true));
-                    if (target) {
-                        let verbatimTargetName = unescapeLeadingUnderscores(target.escapedName);
-                        if (verbatimTargetName === InternalSymbolName.ExportEquals && (compilerOptions.esModuleInterop || compilerOptions.allowSyntheticDefaultImports)) {
-                            // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
-                            verbatimTargetName = InternalSymbolName.Default;
-                        }
-                        const targetName = getInternalSymbolName(target, verbatimTargetName);
-                        includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
-                        switch (node.kind) {
-                            case SyntaxKind.ImportEqualsDeclaration:
-                                // Could be a local `import localName = ns.member` or
-                                // an external `import localName = require("whatever")`
-                                const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
-                                addResult(createImportEqualsDeclaration(
-                                    /*decorators*/ undefined,
-                                    /*modifiers*/ undefined,
-                                    createIdentifier(localName),
-                                    isLocalImport
-                                        ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
-                                        : createExternalModuleReference(createLiteral(getSpecifierForModuleSymbol(symbol, context)))
-                                ), isLocalImport ? modifierFlags : ModifierFlags.None);
-                                break;
-                            case SyntaxKind.NamespaceExportDeclaration:
-                                // export as namespace foo
-                                // TODO: Not part of a file's local or export symbol tables
-                                // Is bound into file.symbol.globalExports instead, which we don't currently traverse
-                                addResult(createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
-                                break;
-                            case SyntaxKind.ImportClause:
-                                addResult(createImportDeclaration(
-                                    /*decorators*/ undefined,
-                                    /*modifiers*/ undefined,
-                                    createImportClause(createIdentifier(localName), /*namedBindings*/ undefined),
-                                    createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
-                                ), ModifierFlags.None);
-                                break;
-                            case SyntaxKind.NamespaceImport:
-                                addResult(createImportDeclaration(
-                                    /*decorators*/ undefined,
-                                    /*modifiers*/ undefined,
-                                    createImportClause(/*importClause*/ undefined, createNamespaceImport(createIdentifier(localName))),
-                                    createLiteral(getSpecifierForModuleSymbol(target, context))
-                                ), ModifierFlags.None);
-                                break;
-                            case SyntaxKind.ImportSpecifier:
-                                addResult(createImportDeclaration(
-                                    /*decorators*/ undefined,
-                                    /*modifiers*/ undefined,
-                                    createImportClause(/*importClause*/ undefined, createNamedImports([
-                                        createImportSpecifier(
-                                            localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined,
-                                            createIdentifier(localName)
-                                        )
-                                    ])),
-                                    createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
-                                ), ModifierFlags.None);
-                                break;
-                            case SyntaxKind.ExportSpecifier:
-                                // does not use localName because the symbol name in this case refers to the name in the exports table,
-                                // which we must exactly preserve
-                                const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
-                                // targetName is only used when the target is local, as otherwise the target is an alias that points at
-                                // another file
-                                serializeExportSpecifier(
-                                    unescapeLeadingUnderscores(symbol.escapedName),
-                                    specifier ? verbatimTargetName : targetName,
-                                    specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined
-                                );
-                                break;
-                            case SyntaxKind.ExportAssignment:
+                    if (!target) {
+                        return;
+                    }
+                    let verbatimTargetName = unescapeLeadingUnderscores(target.escapedName);
+                    if (verbatimTargetName === InternalSymbolName.ExportEquals && (compilerOptions.esModuleInterop || compilerOptions.allowSyntheticDefaultImports)) {
+                        // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
+                        verbatimTargetName = InternalSymbolName.Default;
+                    }
+                    const targetName = getInternalSymbolName(target, verbatimTargetName);
+                    includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
+                    switch (node.kind) {
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            // Could be a local `import localName = ns.member` or
+                            // an external `import localName = require("whatever")`
+                            const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
+                            addResult(createImportEqualsDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                createIdentifier(localName),
+                                isLocalImport
+                                    ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
+                                    : createExternalModuleReference(createLiteral(getSpecifierForModuleSymbol(symbol, context)))
+                            ), isLocalImport ? modifierFlags : ModifierFlags.None);
+                            break;
+                        case SyntaxKind.NamespaceExportDeclaration:
+                            // export as namespace foo
+                            // TODO: Not part of a file's local or export symbol tables
+                            // Is bound into file.symbol.globalExports instead, which we don't currently traverse
+                            addResult(createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
+                            break;
+                        case SyntaxKind.ImportClause:
+                            addResult(createImportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                createImportClause(createIdentifier(localName), /*namedBindings*/ undefined),
+                                createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
+                            ), ModifierFlags.None);
+                            break;
+                        case SyntaxKind.NamespaceImport:
+                            addResult(createImportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                createImportClause(/*importClause*/ undefined, createNamespaceImport(createIdentifier(localName))),
+                                createLiteral(getSpecifierForModuleSymbol(target, context))
+                            ), ModifierFlags.None);
+                            break;
+                        case SyntaxKind.ImportSpecifier:
+                            addResult(createImportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                createImportClause(/*importClause*/ undefined, createNamedImports([
+                                    createImportSpecifier(
+                                        localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined,
+                                        createIdentifier(localName)
+                                    )
+                                ])),
+                                createLiteral(getSpecifierForModuleSymbol(target.parent!, context))
+                            ), ModifierFlags.None);
+                            break;
+                        case SyntaxKind.ExportSpecifier:
+                            // does not use localName because the symbol name in this case refers to the name in the exports table,
+                            // which we must exactly preserve
+                            const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
+                            // targetName is only used when the target is local, as otherwise the target is an alias that points at
+                            // another file
+                            serializeExportSpecifier(
+                                unescapeLeadingUnderscores(symbol.escapedName),
+                                specifier ? verbatimTargetName : targetName,
+                                specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined
+                            );
+                            break;
+                        case SyntaxKind.ExportAssignment:
+                            serializeMaybeAliasAssignment(symbol);
+                            break;
+                        case SyntaxKind.BinaryExpression:
+                            // Could be best encoded as though an export specifier or as though an export assignment
+                            // If name is default or export=, do an export assignment
+                            // Otherwise do an export specifier
+                            if (symbol.escapedName === InternalSymbolName.Default || symbol.escapedName === InternalSymbolName.ExportEquals) {
                                 serializeMaybeAliasAssignment(symbol);
-                                break;
-                            case SyntaxKind.BinaryExpression:
-                                // Could be best encoded as though an export specifier or as though an export assignment
-                                // If name is default or export=, do an export assignment
-                                // Otherwise do an export specifier
-                                if (symbol.escapedName === InternalSymbolName.Default || symbol.escapedName === InternalSymbolName.ExportEquals) {
-                                    serializeMaybeAliasAssignment(symbol);
-                                }
-                                else {
-                                    serializeExportSpecifier(localName, targetName);
-                                }
-                                break;
-                            case SyntaxKind.PropertyAccessExpression:
-                                // A PAE alias is _always_ going to exist as an append to a top-level export, where our top level
-                                // handling should always be sufficient to encode the export action itself
-                                break;
-                            default:
-                                return Debug.failBadSyntaxKind(node, "Unhandled alias declaration kind in symbol serializer!");
-                        }
+                            }
+                            else {
+                                serializeExportSpecifier(localName, targetName);
+                            }
+                            break;
+                        case SyntaxKind.PropertyAccessExpression:
+                            // A PAE alias is _always_ going to exist as an append to a top-level export, where our top level
+                            // handling should always be sufficient to encode the export action itself
+                            break;
+                        default:
+                            return Debug.failBadSyntaxKind(node, "Unhandled alias declaration kind in symbol serializer!");
                     }
                 }
 
@@ -5582,12 +5622,10 @@ namespace ts {
                     // ref should refer to either be a locally scoped symbol which we need to emit, or
                     // a reference to another namespace/module which we may need to emit an `import` statement for
                     const aliasDecl = symbol.declarations && getDeclarationOfAliasSymbol(symbol);
-                    // serialize what the alias points to, preserve the declaration's intializer
+                    // serialize what the alias points to, preserve the declaration's initializer
                     const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                     if (target) {
-                        // TODO: Test `class A { member: Q; }; class Q { x: number }; module.exports = class Q { x: A; }` - the alias points at the class expression,
-                        // but when hoisted to a declaration in the containing scope, its name shadows an outer name we need
-                        // Also, in case `target` refers to a namespace member, look at the declaration and serialize the leftmost symbol in it
+                        // In case `target` refers to a namespace member, look at the declaration and serialize the leftmost symbol in it
                         // eg, `namespace A { export class B {} }; exports = A.B;`
                         // Technically, this is all that's required in the case where the assignment is an entity name expression
                         const expr = isExportAssignment ? getExportAssignmentExpression(aliasDecl as ExportAssignment | BinaryExpression) : getPropertyAssignmentAliasLikeExpression(aliasDecl as ShorthandPropertyAssignment | PropertyAssignment | PropertyAccessExpression);
@@ -5597,8 +5635,11 @@ namespace ts {
                             includePrivateSymbol(referenced || target);
                         }
 
-                        // Disable symbol tracker (we already added the alias target above, which will always be reachable except in the class
-                        // expression case, which we'd expressly like to ignore anyway)
+                        // We disable the context's symbol traker for the duration of this name serialization
+                        // as, by virtue of being here, the name is required to print something, and we don't want to
+                        // issue a visibility error on it. Only anonymous classes that an alias points at _would_ issue
+                        // a visibility error here (as they're not visible within any scope), but we want to hoist them
+                        // into the containing scope anyway, so we want to skip the visibility checks.
                         const oldTrack = context.tracker.trackSymbol;
                         context.tracker.trackSymbol = noop;
                         if (isExportAssignment) {
@@ -5707,7 +5748,9 @@ namespace ts {
                                 name,
                                 p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
                                 serializeTypeForDeclaration(getTypeOfSymbol(p), p),
-                                /*initializer*/ undefined // interface members can't have initializers, however class members _can_
+                                // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
+                                // interface members can't have initializers, however class members _can_
+                                /*initializer*/ undefined
                             ), filter(p.declarations, d => isPropertyDeclaration(d) || isAccessor(d) || isVariableDeclaration(d) || isPropertySignature(d) || isBinaryExpression(d) || isPropertyAccessExpression(d))[0]);
                         }
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
@@ -5715,7 +5758,7 @@ namespace ts {
                             const signatures = getSignaturesOfType(type, SignatureKind.Call);
                             const results = [];
                             for (const sig of signatures) {
-                                // Each overload becomes a seperate method declaration, in order
+                                // Each overload becomes a separate method declaration, in order
                                 const decl = signatureToSignatureDeclarationHelper(sig, methodKind, context) as MethodDeclaration;
                                 decl.name = name; // TODO: Clone
                                 if (staticFlag) {
@@ -5733,12 +5776,8 @@ namespace ts {
                     };
                 }
 
-                function serializePropertySymbolForClass(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
-                    return makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration)(p, isStatic, baseType);
-                }
-
                 function serializePropertySymbolForInterface(p: Symbol, baseType: Type | undefined) {
-                    return makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature)(p, /*isStatic*/ false, baseType);
+                    return serializePropertySymbolForInterfaceWorker(p, /*isStatic*/ false, baseType);
                 }
 
                 function getDeclarationWithTypeAnnotation(symbol: Symbol) {
@@ -5888,25 +5927,27 @@ namespace ts {
 
                 function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SyntaxKind) {
                     const signatures = getSignaturesOfType(input, kind);
-                    if (!baseType && every(signatures, s => length(s.parameters) === 0)) {
-                        return []; // No base type, every constructor is empty - elide the extraneous `constructor()`
-                    }
-                    if (baseType) {
-                        // If there is a base type, if every signature in the class is identical to a signature in the baseType, elide all the declarations
-                        const baseSigs = getSignaturesOfType(baseType, SignatureKind.Construct);
-                        if (!length(baseSigs) && every(signatures, s => length(s.parameters) === 0)) {
-                            return []; // Base had no explicit signatures, if all our signatures are also implicit, return an empty list
+                    if (kind === SignatureKind.Construct) {
+                        if (!baseType && every(signatures, s => length(s.parameters) === 0)) {
+                            return []; // No base type, every constructor is empty - elide the extraneous `constructor()`
                         }
-                        if (baseSigs.length === signatures.length) {
-                            let failed = false;
-                            for (let i = 0; i < baseSigs.length; i++) {
-                                if (!compareSignaturesIdentical(signatures[i], baseSigs[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
-                                    failed = true;
-                                    break;
-                                }
+                        if (baseType) {
+                            // If there is a base type, if every signature in the class is identical to a signature in the baseType, elide all the declarations
+                            const baseSigs = getSignaturesOfType(baseType, SignatureKind.Construct);
+                            if (!length(baseSigs) && every(signatures, s => length(s.parameters) === 0)) {
+                                return []; // Base had no explicit signatures, if all our signatures are also implicit, return an empty list
                             }
-                            if (!failed) {
-                                return []; // Every signature was identical - elide constructor list as it is inherited
+                            if (baseSigs.length === signatures.length) {
+                                let failed = false;
+                                for (let i = 0; i < baseSigs.length; i++) {
+                                    if (!compareSignaturesIdentical(signatures[i], baseSigs[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
+                                        failed = true;
+                                        break;
+                                    }
+                                }
+                                if (!failed) {
+                                    return []; // Every signature was identical - elide constructor list as it is inherited
+                                }
                             }
                         }
                     }
