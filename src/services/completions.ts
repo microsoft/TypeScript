@@ -925,10 +925,7 @@ namespace ts.Completions {
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
 
-        if (isRightOfDot) {
-            getTypeScriptMemberSymbols();
-        }
-        else if (isRightOfQuestionDot) {
+        if (isRightOfDot || isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
@@ -1125,13 +1122,16 @@ namespace ts.Completions {
             }
 
             function addSymbolOriginInfo(symbol: Symbol) {
-                if (insertAwait && preferences.includeCompletionsWithInsertText && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
-                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.Promise) };
-                }
-                else if (insertQuestionDot) {
-                    symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Nullable };
+                if (preferences.includeCompletionsWithInsertText) {
+                    if (insertAwait && !symbolToOriginInfoMap[getSymbolId(symbol)]) {
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.Promise) };
+                    }
+                    else if (insertQuestionDot) {
+                        symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.Nullable };
+                    }
                 }
             }
+
             function getNullableSymbolOriginInfoKind(kind: SymbolOriginInfoKind) {
                 return insertQuestionDot ? kind | SymbolOriginInfoKind.Nullable : kind;
             }

@@ -2258,8 +2258,8 @@ namespace ts {
             const shouldEmitDotDot =
                 token.kind !== SyntaxKind.QuestionDotToken &&
                 mayNeedDotDotForPropertyAccess(expression) &&
-                !writer.hasPrecedingComment() &&
-                !writer.hasPrecedingWhitespace();
+                !writer.hasTrailingComment() &&
+                !writer.hasTrailingWhitespace();
 
             if (shouldEmitDotDot) {
                 writePunctuation(".");

@@ -1829,10 +1829,11 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 2))) {
-                            return pos += 2, token = SyntaxKind.QuestionDotToken;
-                        }
                         pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            return token = SyntaxKind.QuestionDotToken;
+                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;

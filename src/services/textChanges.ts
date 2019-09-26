@@ -1051,8 +1051,8 @@ namespace ts.textChanges {
             getColumn,
             getIndent,
             isAtStartOfLine,
-            hasPrecedingComment: () => writer.hasPrecedingComment(),
-            hasPrecedingWhitespace: () => writer.hasPrecedingWhitespace(),
+            hasTrailingComment: () => writer.hasTrailingComment(),
+            hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
             clear
         };
     }

@@ -6073,8 +6073,8 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
-        hasPrecedingComment(): boolean;
-        hasPrecedingWhitespace(): boolean;
+        hasTrailingComment(): boolean;
+        hasTrailingWhitespace(): boolean;
         getTextPosWithWriteLine?(): number;
     }
 
