@@ -1,7 +1,6 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         const enum project { lib, app }
         function relName(path: string) { return path.slice(1); }
         type Sources = [string, readonly string[]];
@@ -25,54 +24,52 @@ namespace ts {
             ]
         ];
         before(() => {
-            outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut", time);
+            outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
         });
         after(() => {
             outFileFs = undefined!;
         });
 
         interface VerifyOutFileScenarioInput {
-            scenario: string;
-            modifyFs: (fs: vfs.FileSystem) => void;
+            subScenario: string;
+            modifyFs?: (fs: vfs.FileSystem) => void;
             modifyAgainFs?: (fs: vfs.FileSystem) => void;
         }
 
         function verifyOutFileScenario({
-            scenario,
+            subScenario,
             modifyFs,
             modifyAgainFs
         }: VerifyOutFileScenarioInput) {
-            verifyTsbuildOutput({
-                scenario,
-                projFs: () => outFileFs,
-                time,
-                tick,
-                proj: "amdModulesWithOut",
-                rootNames: ["/src/app"],
+            verifyTscIncrementalEdits({
+                scenario: "amdModulesWithOut",
+                subScenario,
+                fs: () => outFileFs,
+                commandLineArgs: ["--b", "/src/app", "--verbose"],
                 baselineSourceMap: true,
-                initialBuild: {
-                    modifyFs
-                },
-                incrementalDtsUnchangedBuild: {
-                    modifyFs: fs => appendText(fs, relName(sources[project.lib][source.ts][1]), "console.log(x);")
-                },
-                incrementalHeaderChangedBuild: modifyAgainFs ? {
-                    modifyFs: modifyAgainFs
-                } : undefined,
-                baselineOnly: true
+                modifyFs,
+                incrementalScenarios: [
+                    {
+                        buildKind: BuildKind.IncrementalDtsUnchanged,
+                        modifyFs: fs => appendText(fs, relName(sources[project.lib][source.ts][1]), "console.log(x);")
+                    },
+                    ...(modifyAgainFs ? [{
+                        buildKind: BuildKind.IncrementalHeadersChange,
+                        modifyFs: modifyAgainFs
+                    }] : emptyArray),
+                ]
             });
         }
 
         describe("Prepend output with .tsbuildinfo", () => {
             verifyOutFileScenario({
-                scenario: "modules and globals mixed in amd",
-                modifyFs: noop
+                subScenario: "modules and globals mixed in amd",
             });
 
             // Prologues
             describe("Prologues", () => {
                 verifyOutFileScenario({
-                    scenario: "multiple prologues in all projects",
+                    subScenario: "multiple prologues in all projects",
                     modifyFs: fs => {
                         enableStrict(fs, sources[project.lib][source.config]);
                         addTestPrologue(fs, sources[project.lib][source.ts][0], `"myPrologue"`);
@@ -90,7 +87,7 @@ namespace ts {
             describe("Shebang", () => {
                 // changes declaration because its emitted in .d.ts file
                 verifyOutFileScenario({
-                    scenario: "shebang in all projects",
+                    subScenario: "shebang in all projects",
                     modifyFs: fs => {
                         addShebang(fs, "lib", "file0");
                         addShebang(fs, "lib", "file1");
@@ -102,7 +99,7 @@ namespace ts {
             // emitHelpers
             describe("emitHelpers", () => {
                 verifyOutFileScenario({
-                    scenario: "multiple emitHelpers in all projects",
+                    subScenario: "multiple emitHelpers in all projects",
                     modifyFs: fs => {
                         addSpread(fs, "lib", "file0");
                         addRest(fs, "lib", "file1");
@@ -117,7 +114,7 @@ namespace ts {
             describe("triple slash refs", () => {
                 // changes declaration because its emitted in .d.ts file
                 verifyOutFileScenario({
-                    scenario: "triple slash refs in all projects",
+                    subScenario: "triple slash refs in all projects",
                     modifyFs: fs => {
                         addTripleSlashRef(fs, "lib", "file0");
                         addTripleSlashRef(fs, "app", "file4");
@@ -161,7 +158,7 @@ ${internal} export enum internalEnum { a, b, c }`);
 
                 // Verify initial + incremental edits
                 verifyOutFileScenario({
-                    scenario: "stripInternal",
+                    subScenario: "stripInternal",
                     modifyFs: stripInternalScenario,
                     modifyAgainFs: fs => replaceText(fs, sources[project.lib][source.ts][1], `export const`, `/*@internal*/ export const`),
                 });
@@ -175,26 +172,13 @@ ${internal} export enum internalEnum { a, b, c }`);
                     replaceText(fs, sources[project.app][source.ts][0], "file1", "lib/file1");
                 }
 
-                verifyTsbuildOutput({
-                    scenario: "when the module resolution finds original source file",
-                    projFs: () => outFileFs,
-                    time,
-                    tick,
-                    proj: "amdModulesWithOut",
-                    rootNames: ["/src/app"],
+                verifyTsc({
+                    scenario: "amdModulesWithOut",
+                    subScenario: "when the module resolution finds original source file",
+                    fs: () => outFileFs,
+                    commandLineArgs: ["-b", "/src/app", "--verbose"],
+                    modifyFs,
                     baselineSourceMap: true,
-                    initialBuild: {
-                        modifyFs,
-                        expectedDiagnostics: [
-                            getExpectedDiagnosticForProjectsInBuild("src/lib/tsconfig.json", "src/app/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/lib/tsconfig.json", "src/module.js"],
-                            [Diagnostics.Building_project_0, sources[project.lib][source.config]],
-                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/app/tsconfig.json", "src/app/module.js"],
-                            [Diagnostics.Building_project_0, sources[project.app][source.config]],
-                        ]
-                    },
-                    baselineOnly: true,
-                    verifyDiagnostics: true
                 });
             });
         });

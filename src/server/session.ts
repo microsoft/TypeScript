@@ -448,7 +448,9 @@ namespace ts.server {
 
     function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
         if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
+        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
+            definition :
+            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
     }
 
@@ -477,7 +479,7 @@ namespace ts.server {
                     for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
                 });
             }
-            return originalLocation;
+            return originalLocation === location ? undefined : originalLocation;
         });
         return toDo;
     }
@@ -1037,7 +1039,9 @@ namespace ts.server {
 
         private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEmitOutput(file);
+            return project.shouldEmitFile(project.getScriptInfo(file)) ?
+                project.getLanguageService().getEmitOutput(file) :
+                { emitSkipped: true, outputFiles: [] };
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1672,10 +1676,10 @@ namespace ts.server {
             }
         }
 
-        private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
+        private createCheckList(fileNames: string[]): PendingErrorCheck[] {
             return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.tryGetDefaultProjectForFile(fileName);
+                const project = this.projectService.tryGetDefaultProjectForFile(fileName);
                 return project && { fileName, project };
             });
         }

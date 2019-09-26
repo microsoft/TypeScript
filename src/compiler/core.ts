@@ -1654,7 +1654,7 @@ namespace ts {
      */
     export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
     export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-        if (e) {
+        if (!!e) {
             const args: ((t: T) => T)[] = [];
             for (let i = 0; i < arguments.length; i++) {
                 args[i] = arguments[i];

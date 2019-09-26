@@ -1,3 +1,20 @@
+//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+/lib/tsc --b /src/app --verbose
+12:08:00 AM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+12:08:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+12:08:00 AM - Building project '/src/lib/tsconfig.json'...
+
+12:08:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+12:08:00 AM - Updating output of project '/src/app/tsconfig.json'...
+
+exitCode:: 0
+
+
 //// [/src/app/module.d.ts]
 declare module "file1" {
     export class normalC {
