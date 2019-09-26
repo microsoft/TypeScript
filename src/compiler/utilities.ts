@@ -2606,6 +2606,8 @@ namespace ts {
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
     // module.exports = <EntityNameExpression>
+    // {<Identifier>}
+    // {name: <EntityNameExpression>}
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -2614,12 +2616,28 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node);
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
+            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
+            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
+            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+    }
+
+    function isAliasableExpression(e: Expression) {
+        return isEntityNameExpression(e) || isClassExpression(e);
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
-        const e = isExportAssignment(node) ? node.expression : node.right;
-        return isEntityNameExpression(e) || isClassExpression(e);
+        const e = getExportAssignmentExpression(node);
+        return isAliasableExpression(e);
+    }
+
+    export function getExportAssignmentExpression(node: ExportAssignment | BinaryExpression): Expression {
+        return isExportAssignment(node) ? node.expression : node.right;
+    }
+
+    export function getPropertyAssignmentAliasLikeExpression(node: PropertyAssignment | ShorthandPropertyAssignment | PropertyAccessExpression): Expression {
+        return node.kind === SyntaxKind.ShorthandPropertyAssignment ? node.name : node.kind === SyntaxKind.PropertyAssignment ? node.initializer :
+            (node.parent as BinaryExpression).right;
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -2697,6 +2715,11 @@ namespace ts {
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);
+    }
+
+    export function isStringAKeyword(name: string) {
+        const token = stringToToken(name);
+        return token !== undefined && isKeyword(token);
     }
 
     export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
@@ -3450,11 +3473,17 @@ namespace ts {
         };
     }
 
-    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile, referenceFile?: SourceFile): string {
+    export interface ResolveModuleNameResolutionHost {
+        getCanonicalFileName(p: string): string;
+        getCommonSourceDirectory(): string;
+        getCurrentDirectory(): string;
+    }
+
+    export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -3465,7 +3494,7 @@ namespace ts {
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string, referencePath?: string): string {
+    export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
@@ -5224,6 +5253,17 @@ namespace ts {
         return name && isIdentifier(name) ? name : undefined;
     }
 
+    /** @internal */
+    export function nodeHasName(statement: Node, name: Identifier) {
+        if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
+            return true;
+        }
+        if (isVariableStatement(statement) && some(statement.declarationList.declarations, d => nodeHasName(d, name))) {
+            return true;
+        }
+        return false;
+    }
+
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
@@ -6145,7 +6185,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypeExpression;
     }
 
-    export function isJSDocAllType(node: JSDocAllType): node is JSDocAllType {
+    export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
 
@@ -6760,6 +6800,27 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isScopeMarker(node: Node) {
+        return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    /* @internal */
+    export function hasScopeMarker(statements: readonly Statement[]) {
+        return some(statements, isScopeMarker);
+    }
+
+    /* @internal */
+    export function needsScopeMarker(result: Statement) {
+        return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
+    }
+
+    /* @internal */
+    export function isExternalModuleIndicator(result: Statement) {
+        // Exported top-level member indicates moduleness
+        return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
     }
 
     /* @internal */
