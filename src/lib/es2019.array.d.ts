@@ -11,9 +11,9 @@ interface ReadonlyArray<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U,
         thisArg?: This
-    ): U[]
+    ): (U extends readonly (infer V)[] ? V : U)[];
 
 
     /**
@@ -125,9 +125,9 @@ interface Array<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U,
         thisArg?: This
-    ): U[]
+    ): (U extends readonly (infer V)[] ? V : U)[];
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
