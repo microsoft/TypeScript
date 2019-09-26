@@ -829,9 +829,9 @@ namespace ts.formatting {
             //   foo;
             //   (): void
             // }
-            return !(isPropertySignature(context.currentTokenParent)
-                && !context.currentTokenParent.type
-                && nextTokenKind === SyntaxKind.OpenParenToken);
+            return !isPropertySignature(context.currentTokenParent)
+                || !!context.currentTokenParent.type
+                || nextTokenKind !== SyntaxKind.OpenParenToken;
         }
 
         if (isPropertyDeclaration(context.currentTokenParent)) {
