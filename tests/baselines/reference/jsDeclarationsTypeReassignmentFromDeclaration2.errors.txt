@@ -1,0 +1,14 @@
+tests/cases/conformance/jsdoc/declarations/index.js(1,1): error TS9006: Declaration emit for this file requires using private name 'Item' from module '"tests/cases/conformance/jsdoc/declarations/some-mod"'. An explicit type annotation may unblock declaration emit.
+
+
+==== tests/cases/conformance/jsdoc/declarations/index.js (1 errors) ====
+    const items = require("./some-mod")();
+    ~~~~~
+!!! error TS9006: Declaration emit for this file requires using private name 'Item' from module '"tests/cases/conformance/jsdoc/declarations/some-mod"'. An explicit type annotation may unblock declaration emit.
+    module.exports = items;
+==== tests/cases/conformance/jsdoc/declarations/some-mod.d.ts (0 errors) ====
+    interface Item {
+        x: string;
+    }
+    declare function getItems(): Item[];
+    export = getItems;

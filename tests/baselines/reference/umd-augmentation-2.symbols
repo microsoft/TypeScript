@@ -3,9 +3,9 @@
 /// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);
 >v : Symbol(v, Decl(a.ts, 2, 3))
->Math2d.Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+>Math2d.Vector : Symbol(Math2d.Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
 >Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
->Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
+>Vector : Symbol(Math2d.Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
 
 let magnitude = Math2d.getLength(v);
 >magnitude : Symbol(magnitude, Decl(a.ts, 3, 3))
@@ -18,15 +18,15 @@ let p: Math2d.Point = v.translate(5, 5);
 >p : Symbol(p, Decl(a.ts, 4, 3))
 >Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
 >Point : Symbol(Math2d.Point, Decl(index.d.ts, 0, 27))
->v.translate : Symbol(Vector.translate, Decl(index.d.ts, 10, 35))
+>v.translate : Symbol(Math2d.Vector.translate, Decl(index.d.ts, 10, 35))
 >v : Symbol(v, Decl(a.ts, 2, 3))
->translate : Symbol(Vector.translate, Decl(index.d.ts, 10, 35))
+>translate : Symbol(Math2d.Vector.translate, Decl(index.d.ts, 10, 35))
 
 p = v.reverse();
 >p : Symbol(p, Decl(a.ts, 4, 3))
->v.reverse : Symbol(Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
+>v.reverse : Symbol(Math2d.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
 >v : Symbol(v, Decl(a.ts, 2, 3))
->reverse : Symbol(Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
+>reverse : Symbol(Math2d.Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
 
 var t = p.x;
 >t : Symbol(t, Decl(a.ts, 6, 3))

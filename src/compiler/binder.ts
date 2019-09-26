@@ -13,11 +13,26 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration): ModuleInstanceState {
-        return node.body ? getModuleInstanceStateWorker(node.body) : ModuleInstanceState.Instantiated;
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+        if (node.body && !node.body.parent) {
+            // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
+            setParentPointers(node, node.body);
+        }
+        return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateWorker(node: Node): ModuleInstanceState {
+    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
+        const nodeId = "" + getNodeId(node);
+        if (visited.has(nodeId)) {
+            return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
+        }
+        visited.set(nodeId, undefined);
+        const result = getModuleInstanceStateWorker(node, visited);
+        visited.set(nodeId, result);
+        return result;
+    }
+
+    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -37,11 +52,27 @@ namespace ts {
                     return ModuleInstanceState.NonInstantiated;
                 }
                 break;
-            // 4. other uninstantiated module declarations.
+            // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
+            case SyntaxKind.ExportDeclaration:
+                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                    let state = ModuleInstanceState.NonInstantiated;
+                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                        const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
+                        if (specifierState > state) {
+                            state = specifierState;
+                        }
+                        if (state === ModuleInstanceState.Instantiated) {
+                            return state;
+                        }
+                    }
+                    return state;
+                }
+                break;
+            // 5. other uninstantiated module declarations.
             case SyntaxKind.ModuleBlock: {
                 let state = ModuleInstanceState.NonInstantiated;
                 forEachChild(node, n => {
-                    const childState = getModuleInstanceStateWorker(n);
+                    const childState = getModuleInstanceStateCached(n, visited);
                     switch (childState) {
                         case ModuleInstanceState.NonInstantiated:
                             // child is non-instantiated - continue searching
@@ -61,7 +92,7 @@ namespace ts {
                 return state;
             }
             case SyntaxKind.ModuleDeclaration:
-                return getModuleInstanceState(node as ModuleDeclaration);
+                return getModuleInstanceState(node as ModuleDeclaration, visited);
             case SyntaxKind.Identifier:
                 // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
                 // be considered the same as type alias
@@ -70,6 +101,36 @@ namespace ts {
                 }
         }
         return ModuleInstanceState.Instantiated;
+    }
+
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+        const name = specifier.propertyName || specifier.name;
+        let p: Node | undefined = specifier.parent;
+        while (p) {
+            if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
+                const statements = p.statements;
+                let found: ModuleInstanceState | undefined;
+                for (const statement of statements) {
+                    if (nodeHasName(statement, name)) {
+                        if (!statement.parent) {
+                            setParentPointers(p, statement);
+                        }
+                        const state = getModuleInstanceStateCached(statement, visited);
+                        if (found === undefined || state > found) {
+                            found = state;
+                        }
+                        if (found === ModuleInstanceState.Instantiated) {
+                            return found;
+                        }
+                    }
+                }
+                if (found !== undefined) {
+                    return found;
+                }
+            }
+            p = p.parent;
+        }
+        return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
     }
 
     const enum ContainerFlags {
@@ -564,7 +625,7 @@ namespace ts {
                 if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        currentFlow.container = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
+                        currentFlow.node = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -581,6 +642,7 @@ namespace ts {
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
                     if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
+                    (<FunctionLikeDeclaration>node).endFlowNode = currentFlow;
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
@@ -671,6 +733,9 @@ namespace ts {
                 bindJSDoc(node);
                 return;
             }
+            if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+                node.flowNode = currentFlow;
+            }
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
                     bindWhileStatement(<WhileStatement>node);
@@ -707,6 +772,9 @@ namespace ts {
                     break;
                 case SyntaxKind.CaseClause:
                     bindCaseClause(<CaseClause>node);
+                    break;
+                case SyntaxKind.ExpressionStatement:
+                    bindExpressionStatement(<ExpressionStatement>node);
                     break;
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
@@ -845,17 +913,11 @@ namespace ts {
         }
 
         function createBranchLabel(): FlowLabel {
-            return {
-                flags: FlowFlags.BranchLabel,
-                antecedents: undefined
-            };
+            return { flags: FlowFlags.BranchLabel, antecedents: undefined };
         }
 
         function createLoopLabel(): FlowLabel {
-            return {
-                flags: FlowFlags.LoopLabel,
-                antecedents: undefined
-            };
+            return { flags: FlowFlags.LoopLabel, antecedents: undefined };
         }
 
         function setFlowNodeReferenced(flow: FlowNode) {
@@ -885,7 +947,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags, expression, antecedent });
+            return flowNodeCreated({ flags, antecedent, node: expression });
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -893,7 +955,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent });
+            return flowNodeCreated({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
@@ -901,10 +963,14 @@ namespace ts {
             return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
         }
 
+        function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return flowNodeCreated({ flags: FlowFlags.Call, antecedent, node });
+        }
+
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            const res: FlowArrayMutation = flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
-            return res;
+            return flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1030,12 +1096,12 @@ namespace ts {
         function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
+            bind(node.expression);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             if (node.kind === SyntaxKind.ForOfStatement) {
                 bind(node.awaitModifier);
             }
-            bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
             if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
@@ -1222,7 +1288,8 @@ namespace ts {
             addAntecedent(postSwitchLabel, currentFlow);
             const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
             // We mark a switch statement as possibly exhaustive if it has no default clause and if all
-            // case clauses have unreachable end points (e.g. they all return).
+            // case clauses have unreachable end points (e.g. they all return). Note, we no longer need
+            // this property in control flow analysis, it's there only for backwards compatibility.
             node.possiblyExhaustive = !hasDefault && !postSwitchLabel.antecedents;
             if (!hasDefault) {
                 addAntecedent(postSwitchLabel, createFlowSwitchClause(preSwitchCaseFlow, node, 0, 0));
@@ -1279,6 +1346,24 @@ namespace ts {
 
         function popActiveLabel() {
             activeLabels!.pop();
+        }
+
+        function isDottedName(node: Expression): boolean {
+            return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+                node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
+                node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+        }
+
+        function bindExpressionStatement(node: ExpressionStatement): void {
+            bind(node.expression);
+            // A top level call expression with a dotted function name and at least one argument
+            // is potentially an assertion and is therefore included in the control flow.
+            if (node.expression.kind === SyntaxKind.CallExpression) {
+                const call = <CallExpression>node.expression;
+                if (isDottedName(call.expression)) {
+                    currentFlow = createFlowCall(currentFlow, call);
+                }
+            }
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {
@@ -2537,7 +2622,7 @@ namespace ts {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
@@ -2551,7 +2636,7 @@ namespace ts {
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
-                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
                     // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script

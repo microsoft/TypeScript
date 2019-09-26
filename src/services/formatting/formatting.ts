@@ -2,21 +2,29 @@
 namespace ts.formatting {
     export interface FormatContext {
         readonly options: FormatCodeSettings;
-        readonly getRule: RulesMap;
+        readonly getRules: RulesMap;
     }
 
-    export interface TextRangeWithKind extends TextRange {
-        kind: SyntaxKind;
+    export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
+        kind: T;
     }
 
-    export interface TextRangeWithTriviaKind extends TextRange {
-        kind: TriviaKind;
-    }
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;
         token: TextRangeWithKind;
         trailingTrivia: TextRangeWithTriviaKind[] | undefined;
+    }
+
+    export function createTextRangeWithKind<T extends SyntaxKind>(pos: number, end: number, kind: T): TextRangeWithKind<T> {
+        const textRangeWithKind: TextRangeWithKind<T> = { pos, end, kind };
+        if (Debug.isDebugging) {
+            Object.defineProperty(textRangeWithKind, "__debugKind", {
+                get: () => Debug.formatSyntaxKind(kind),
+            });
+        }
+        return textRangeWithKind;
     }
 
     const enum Constants {
@@ -386,7 +394,7 @@ namespace ts.formatting {
         initialIndentation: number,
         delta: number,
         formattingScanner: FormattingScanner,
-        { options, getRule }: FormatContext,
+        { options, getRules }: FormatContext,
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
@@ -469,7 +477,7 @@ namespace ts.formatting {
             parent: Node,
             parentDynamicIndentation: DynamicIndentation,
             effectiveParentStartLine: number
-        ): { indentation: number, delta: number } {
+        ): { indentation: number, delta: number; } {
             const delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
 
             if (effectiveParentStartLine === startLine) {
@@ -642,6 +650,21 @@ namespace ts.formatting {
                     break;
                 }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
+            }
+
+            if (!node.parent && formattingScanner.isOnEOF()) {
+                const token = formattingScanner.readEOFTokenRange();
+                if (token.end <= node.end && previousRange) {
+                    processPair(
+                        token,
+                        sourceFile.getLineAndCharacterOfPosition(token.pos).line,
+                        node,
+                        previousRange,
+                        previousRangeStartLine,
+                        previousParent,
+                        contextNode,
+                        nodeDynamicIndentation);
+                }
             }
 
             function processChildNode(
@@ -938,37 +961,41 @@ namespace ts.formatting {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
-            const rule = getRule(formattingContext);
+            const rules = getRules(formattingContext);
 
-            let trimTrailingWhitespaces: boolean;
+            let trimTrailingWhitespaces = false;
             let lineAction = LineAction.None;
-            if (rule) {
-                lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
-                switch (lineAction) {
-                    case LineAction.LineRemoved:
-                        // Handle the case where the next line is moved to be the end of this line.
-                        // In this case we don't indent the next line in the next pass.
-                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
-                        }
-                        break;
-                    case LineAction.LineAdded:
-                        // Handle the case where token2 is moved to the new line.
-                        // In this case we indent token2 in the next pass but we set
-                        // sameLineIndent flag to notify the indenter that the indentation is within the line.
-                        if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                            dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
-                        }
-                        break;
-                    default:
-                        Debug.assert(lineAction === LineAction.None);
-                }
+            if (rules) {
+                // Apply rules in reverse order so that higher priority rules (which are first in the array)
+                // win in a conflict with lower priority rules.
+                forEachRight(rules, rule => {
+                    lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
+                    switch (lineAction) {
+                        case LineAction.LineRemoved:
+                            // Handle the case where the next line is moved to be the end of this line.
+                            // In this case we don't indent the next line in the next pass.
+                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
+                            }
+                            break;
+                        case LineAction.LineAdded:
+                            // Handle the case where token2 is moved to the new line.
+                            // In this case we indent token2 in the next pass but we set
+                            // sameLineIndent flag to notify the indenter that the indentation is within the line.
+                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
+                            }
+                            break;
+                        default:
+                            Debug.assert(lineAction === LineAction.None);
+                    }
 
-                // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces = !(rule.action & RuleAction.Delete) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                    // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
+                    trimTrailingWhitespaces = !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                });
             }
             else {
-                trimTrailingWhitespaces = true;
+                trimTrailingWhitespaces = currentItem.kind !== SyntaxKind.EndOfFileToken;
             }
 
             if (currentStartLine !== previousStartLine && trimTrailingWhitespaces) {
@@ -1130,6 +1157,12 @@ namespace ts.formatting {
             }
         }
 
+        function recordInsert(start: number, text: string) {
+            if (text) {
+                edits.push(createTextChangeFromStartLength(start, 0, text));
+            }
+        }
+
         function applyRuleEdits(rule: Rule,
             previousRange: TextRangeWithKind,
             previousStartLine: number,
@@ -1138,17 +1171,20 @@ namespace ts.formatting {
         ): LineAction {
             const onLaterLine = currentStartLine !== previousStartLine;
             switch (rule.action) {
-                case RuleAction.Ignore:
+                case RuleAction.StopProcessingSpaceActions:
                     // no action required
                     return LineAction.None;
-                case RuleAction.Delete:
+                case RuleAction.DeleteSpace:
                     if (previousRange.end !== currentRange.pos) {
                         // delete characters starting from t1.end up to t2.pos exclusive
                         recordDelete(previousRange.end, currentRange.pos - previousRange.end);
                         return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
                     break;
-                case RuleAction.NewLine:
+                case RuleAction.DeleteToken:
+                    recordDelete(previousRange.pos, previousRange.end - previousRange.pos);
+                    break;
+                case RuleAction.InsertNewLine:
                     // exit early if we on different lines and rule cannot change number of newlines
                     // if line1 and line2 are on subsequent lines then no edits are required - ok to exit
                     // if line1 and line2 are separated with more than one newline - ok to exit since we cannot delete extra new lines
@@ -1163,7 +1199,7 @@ namespace ts.formatting {
                         return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;
-                case RuleAction.Space:
+                case RuleAction.InsertSpace:
                     // exit early if we on different lines and rule cannot change number of newlines
                     if (rule.flags !== RuleFlags.CanDeleteNewLines && previousStartLine !== currentStartLine) {
                         return LineAction.None;
@@ -1174,6 +1210,9 @@ namespace ts.formatting {
                         recordReplace(previousRange.end, currentRange.pos - previousRange.end, " ");
                         return onLaterLine ? LineAction.LineRemoved : LineAction.None;
                     }
+                    break;
+                case RuleAction.InsertTrailingSemicolon:
+                    recordInsert(previousRange.end, ";");
             }
             return LineAction.None;
         }
@@ -1271,7 +1310,7 @@ namespace ts.formatting {
         return SyntaxKind.Unknown;
     }
 
-    let internedSizes: { tabSize: number; indentSize: number };
+    let internedSizes: { tabSize: number; indentSize: number; };
     let internedTabsIndentation: string[] | undefined;
     let internedSpacesIndentation: string[] | undefined;
 

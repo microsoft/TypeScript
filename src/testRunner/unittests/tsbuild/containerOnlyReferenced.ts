@@ -19,7 +19,7 @@ namespace ts {
 
         it("verify that subsequent builds after initial build doesnt build anything", () => {
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             createSolutionBuilder(host, ["/src"], { verbose: true }).build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/folder/tsconfig.json", "src/src/folder2/tsconfig.json", "src/src/tsconfig.json", "src/tests/tsconfig.json", "src/tsconfig.json"),
