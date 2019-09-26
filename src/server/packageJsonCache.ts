@@ -4,7 +4,6 @@ namespace ts.server {
         addOrUpdate(fileName: Path): void;
         delete(fileName: Path): void;
         getInDirectory(directory: Path): PackageJsonInfo | undefined;
-        entries(): Iterator<[Path, PackageJsonInfo]>;
         directoryHasPackageJson(directory: Path): Ternary;
         searchDirectoryAndAncestors(directory: Path): void;
     }
@@ -21,7 +20,6 @@ namespace ts.server {
             getInDirectory: directory => {
                 return packageJsons.get(combinePaths(directory, "package.json"));
             },
-            entries: () => packageJsons.entries() as Iterator<[Path, PackageJsonInfo]>,
             directoryHasPackageJson,
             searchDirectoryAndAncestors: directory => {
                 forEachAncestorDirectory(directory, ancestor => {
