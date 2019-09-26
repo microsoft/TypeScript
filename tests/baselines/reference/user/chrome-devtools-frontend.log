@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.es5.d.ts(1433,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1434,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../node_modules/@types/node/globals.d.ts(168,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -4905,8 +4905,8 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(27
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(289,16): error TS2339: Property 'window' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(293,19): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,10): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
+  Overload 1 of 3, '(tagName: "object" | "map" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"object" | "map" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | ... 99 more ... | "wbr"'.
   Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
     Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
   Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
@@ -4915,8 +4915,8 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(31
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(323,20): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,17): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
+  Overload 1 of 3, '(tagName: "object" | "map" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type '"object" | "map" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | ... 99 more ... | "wbr"'.
   Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
     Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
   Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.

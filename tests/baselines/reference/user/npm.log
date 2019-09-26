@@ -106,6 +106,15 @@ node_modules/npm/lib/config.js(84,19): error TS2339: Property 'config' does not 
 node_modules/npm/lib/config.js(85,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(87,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(93,25): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/config.js(105,54): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string', gave the following error.
+    Argument of type '(arr: never[], key: string) => any[]' is not assignable to parameter of type '(previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string'.
+      Types of parameters 'arr' and 'previousValue' are incompatible.
+        Type 'string' is not assignable to type 'never[]'.
+  Overload 2 of 3, '(callbackfn: (previousValue: never[], currentValue: string, currentIndex: number, array: string[]) => never[], initialValue: never[]): never[]', gave the following error.
+    Argument of type '(arr: never[], key: string) => any[]' is not assignable to parameter of type '(previousValue: never[], currentValue: string, currentIndex: number, array: string[]) => never[]'.
+      Type 'any[]' is not assignable to type 'never[]'.
+        Type 'any' is not assignable to type 'never'.
 node_modules/npm/lib/config.js(135,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(136,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(137,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.

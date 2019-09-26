@@ -69,15 +69,15 @@ export default class Operation {
 
                 // Commenting out this line will fix the problem.
                 result = (result || []).concat(innerResult);
->result = (result || []).concat(innerResult) : IValidationError[]
+>result = (result || []).concat(innerResult) : any[]
 >result : IValidationError[] | null
->(result || []).concat(innerResult) : IValidationError[]
->(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>(result || []).concat(innerResult) : any[]
+>(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; <U extends (IValidationError | ConcatArray<IValidationError>)[]>(...items: U): (IValidationError | Flatten<U[number]>)[]; }
 >(result || []) : IValidationError[]
 >result || [] : IValidationError[]
 >result : IValidationError[] | null
 >[] : never[]
->concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
+>concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; <U extends (IValidationError | ConcatArray<IValidationError>)[]>(...items: U): (IValidationError | Flatten<U[number]>)[]; }
 >innerResult : any
             }
         }

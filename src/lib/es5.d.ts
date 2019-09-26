@@ -1085,7 +1085,7 @@ interface ReadonlyArray<T> {
      * Combines two or more arrays.
      * @param items Additional items to add to the end of array1.
      */
-    concat(...items: (T | ConcatArray<T>)[]): T[];
+    concat<U extends (T | ConcatArray<T>)[]>(...items: U): (T | Flatten<U[number]>)[];
     /**
      * Adds all the elements of an array separated by the specified separator string.
      * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1187,6 +1187,7 @@ interface ConcatArray<T> {
     join(separator?: string): string;
     slice(start?: number, end?: number): T[];
 }
+type Flatten<T> = T extends ConcatArray<infer U> ? U : T;
 
 interface Array<T> {
     /**
@@ -1219,7 +1220,7 @@ interface Array<T> {
      * Combines two or more arrays.
      * @param items Additional items to add to the end of array1.
      */
-    concat(...items: (T | ConcatArray<T>)[]): T[];
+    concat<U extends (T | ConcatArray<T>)[]>(...items: U): (T | Flatten<U[number]>)[];
     /**
      * Adds all the elements of an array separated by the specified separator string.
      * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
