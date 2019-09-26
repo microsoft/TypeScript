@@ -29904,7 +29904,6 @@ namespace ts {
         }
 
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: BaseType): void {
-
             // TypeScript 1.0 spec (April 2014): 8.2.3
             // A derived class inherits all members from its base class it doesn't override.
             // Inheritance means that a derived class implicitly contains all non - overridden members of the base class.
@@ -29938,7 +29937,6 @@ namespace ts {
                 // type declaration, derived and base resolve to the same symbol even in the case of generic classes.
                 if (derived === base) {
                     // derived class inherits base without override/redeclaration
-
                     const derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol)!;
 
                     // It is an error to inherit an abstract member without implementing it or being declared abstract.
@@ -29975,14 +29973,53 @@ namespace ts {
                         continue;
                     }
 
-                    if (isPrototypeProperty(base) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
-                        // method is overridden with method or property/accessor is overridden with property/accessor - correct case
-                        continue;
-                    }
-
                     let errorMessage: DiagnosticMessage;
-                    if (isPrototypeProperty(base)) {
-                        if (derived.flags & SymbolFlags.Accessor) {
+                    const basePropertyFlags = base.flags & SymbolFlags.PropertyOrAccessor;
+                    const derivedPropertyFlags = derived.flags & SymbolFlags.PropertyOrAccessor;
+                    if (basePropertyFlags && derivedPropertyFlags) {
+                        // property/accessor is overridden with property/accessor
+                        if (!compilerOptions.useDefineForClassFields
+                            || baseDeclarationFlags & ModifierFlags.Abstract && !(base.valueDeclaration && isPropertyDeclaration(base.valueDeclaration) && base.valueDeclaration.initializer)
+                            || base.valueDeclaration && base.valueDeclaration.parent.kind === SyntaxKind.InterfaceDeclaration
+                            || derived.valueDeclaration && isBinaryExpression(derived.valueDeclaration)) {
+                            // when the base property is abstract or from an interface, base/derived flags don't need to match
+                            // same when the derived property is from an assignment
+                            continue;
+                        }
+                        if (basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property) {
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_property;
+                        }
+                        else if (basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property) {
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+                        }
+                        else {
+                            const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
+                            if (uninitialized
+                                && !(derived.flags & SymbolFlags.Transient)
+                                && !(baseDeclarationFlags & ModifierFlags.Abstract)
+                                && !(derivedDeclarationFlags & ModifierFlags.Abstract)
+                                && !derived.declarations.some(d => d.flags & NodeFlags.Ambient)) {
+                                const constructor = findConstructorDeclaration(getClassLikeDeclarationOfSymbol(type.symbol)!);
+                                const propName = (uninitialized as PropertyDeclaration).name;
+                                if ((uninitialized as PropertyDeclaration).exclamationToken
+                                    || !constructor
+                                    || !isIdentifier(propName)
+                                    || !strictNullChecks
+                                    || !isPropertyInitializedInConstructor(propName, type, constructor)) {
+                                    const errorMessage = Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration;
+                                    error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType));
+                                }
+                            }
+                            // correct case
+                            continue;
+                        }
+                    }
+                    else if (isPrototypeProperty(base)) {
+                        if (isPrototypeProperty(derived)) {
+                            // method is overridden with method -- correct case
+                            continue;
+                        }
+                        else if (derived.flags & SymbolFlags.Accessor) {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                         else {
@@ -30044,6 +30081,9 @@ namespace ts {
             }
             const constructor = findConstructorDeclaration(node);
             for (const member of node.members) {
+                if (getModifierFlags(member) & ModifierFlags.Ambient) {
+                    continue;
+                }
                 if (isInstancePropertyWithoutInitializer(member)) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName)) {
@@ -32970,7 +33010,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (isClassLike(node.parent)) {
+                        else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
