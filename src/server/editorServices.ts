@@ -2765,7 +2765,12 @@ namespace ts.server {
             // Create configured project till project root
             while (true) {
                 // Skip if project is not composite
-                if (!project.isInitialLoadPending() && !project.getCompilerOptions().composite) return;
+                if (!project.isInitialLoadPending() &&
+                    (
+                        !project.getCompilerOptions().composite ||
+                        project.getCompilerOptions().disableSearchSolution
+                    )
+                ) return;
 
                 // Get config file name
                 const configFileName = this.getConfigFileNameForFile({

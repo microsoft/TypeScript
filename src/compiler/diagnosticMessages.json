@@ -4043,6 +4043,10 @@
         "category": "Message",
         "code": 6221
     },
+    "Disable searching solution for this project.": {
+        "category": "Message",
+        "code": 6222
+    },
 
     "Projects to reference": {
         "category": "Message",

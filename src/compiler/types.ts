@@ -4779,6 +4779,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
+        disableSearchSolution?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;

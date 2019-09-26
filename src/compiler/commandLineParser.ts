@@ -779,6 +779,12 @@ namespace ts {
             description: Diagnostics.Disable_use_of_source_files_instead_of_declaration_files_from_referenced_projects
         },
         {
+            name: "disableSearchSolution",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_searching_solution_for_this_project
+        },
+        {
             name: "noImplicitUseStrict",
             type: "boolean",
             affectsSemanticDiagnostics: true,

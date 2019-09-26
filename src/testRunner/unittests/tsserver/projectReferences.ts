@@ -1451,5 +1451,109 @@ ${dependencyTs.content}`);
             checkProjectActualFiles(solutionProject, [solution.path]);
             checkProjectActualFiles(service.configuredProjects.get(servicesConfig.path)!, [servicesFile.path, servicesConfig.path, libFile.path, typesFile.path, programFile.path]);
         });
+
+        it("when disableSearchSolution is true, solution and siblings are not loaded", () => {
+            const solutionLocation = "/user/username/projects/solution";
+            const solution: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: [
+                        { path: "./compiler" },
+                        { path: "./services" },
+                    ]
+                })
+            };
+            const compilerConfig: File = {
+                path: `${solutionLocation}/compiler/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        module: "none",
+                        disableSearchSolution: true
+                    },
+                    files: ["./types.ts", "./program.ts"]
+                })
+            };
+            const typesFile: File = {
+                path: `${solutionLocation}/compiler/types.ts`,
+                content: `
+                namespace ts {
+                    export interface Program {
+                        getSourceFiles(): string[];
+                    }
+                }`
+            };
+            const programFile: File = {
+                path: `${solutionLocation}/compiler/program.ts`,
+                content: `
+                namespace ts {
+                    export const program: Program = {
+                        getSourceFiles: () => [getSourceFile()]
+                    };
+                    function getSourceFile() { return "something"; }
+                }`
+            };
+            const servicesConfig: File = {
+                path: `${solutionLocation}/services/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./services.ts"],
+                    references: [
+                        { path: "../compiler" }
+                    ]
+                })
+            };
+            const servicesFile: File = {
+                path: `${solutionLocation}/services/services.ts`,
+                content: `
+                namespace ts {
+                    const result = program.getSourceFiles();
+                }`
+            };
+
+            const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openClientFile(programFile.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const compilerProject = service.configuredProjects.get(compilerConfig.path)!;
+            checkProjectActualFiles(compilerProject, [libFile.path, typesFile.path, programFile.path, compilerConfig.path]);
+
+            // Find all references
+            const getSourceFilesResponse = session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
+            }).response as protocol.ReferencesResponseBody;
+            assert.deepEqual(getSourceFilesResponse, {
+                refs: [
+                    makeReferenceItem({
+                        file: typesFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles(): string[];`,
+                        isDefinition: true,
+                        isWriteAccess: false,
+                        lineText: `                        getSourceFiles(): string[];`,
+                    }),
+                    makeReferenceItem({
+                        file: programFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles: () => [getSourceFile()]`,
+                        isDefinition: true,
+                        lineText: `                        getSourceFiles: () => [getSourceFile()]`,
+                    }),
+                ],
+                symbolName: "getSourceFiles",
+                symbolStartOffset: protocolLocationFromSubstring(typesFile.content, "getSourceFiles").offset,
+                symbolDisplayString: "(method) ts.Program.getSourceFiles(): string[]"
+            });
+
+            // No new solutions/projects loaded
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+        });
     });
 }
