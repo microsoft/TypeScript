@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+export class Foo {}
+>Foo : Symbol(Foo, Decl(cls.js, 0, 0))
+
+=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+import ns = require("./cls");
+>ns : Symbol(ns, Decl(bar.js, 0, 0))
+
+export = ns; // TS Only
+>ns : Symbol(ns, Decl(bar.js, 0, 0))
+
+=== tests/cases/conformance/jsdoc/declarations/bin.js ===
+import * as ns from "./cls";
+>ns : Symbol(ns, Decl(bin.js, 0, 6))
+
+module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
+>ns : Symbol(ns, Decl(bin.js, 0, 6))
+
+=== tests/cases/conformance/jsdoc/declarations/globalNs.js ===
+export * from "./cls";
+No type information for this code.export as namespace GLO; // TS Only
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+import "./bar";
+No type information for this code.import "./bin";
+No type information for this code.import "./globalNs";
+No type information for this code.
+No type information for this code.

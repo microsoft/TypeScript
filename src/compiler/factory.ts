@@ -484,6 +484,47 @@ namespace ts {
         return node;
     }
 
+    function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+        return createCall(
+            createPropertyAccess(object, asName(methodName)),
+            /*typeArguments*/ undefined,
+            argumentsList
+        );
+    }
+
+    function createGlobalMethodCall(globalObjectName: string, methodName: string, argumentsList: readonly Expression[]) {
+        return createMethodCall(createIdentifier(globalObjectName), methodName, argumentsList);
+    }
+
+    /* @internal */
+    export function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
+        return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+    }
+
+    function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
+        if (expression) {
+            properties.push(createPropertyAssignment(propertyName, expression));
+            return true;
+        }
+        return false;
+    }
+
+    /* @internal */
+    export function createPropertyDescriptor(attributes: PropertyDescriptorAttributes, singleLine?: boolean) {
+        const properties: PropertyAssignment[] = [];
+        tryAddPropertyAssignment(properties, "enumerable", asExpression(attributes.enumerable));
+        tryAddPropertyAssignment(properties, "configurable", asExpression(attributes.configurable));
+
+        let isData = tryAddPropertyAssignment(properties, "writable", asExpression(attributes.writable));
+        isData = tryAddPropertyAssignment(properties, "value", attributes.value) || isData;
+
+        let isAccessor = tryAddPropertyAssignment(properties, "get", attributes.get);
+        isAccessor = tryAddPropertyAssignment(properties, "set", attributes.set) || isAccessor;
+
+        Debug.assert(!(isData && isAccessor), "A PropertyDescriptor may not be both an accessor descriptor and a data descriptor.");
+        return createObjectLiteral(properties, !singleLine);
+    }
+
     export function updateMethod(
         node: MethodDeclaration,
         decorators: readonly Decorator[] | undefined,
@@ -2218,6 +2259,11 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
+    export function createEmptyExports() {
+        return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined);
+    }
+
     export function createNamedExports(elements: readonly ExportSpecifier[]) {
         const node = <NamedExports>createSynthesizedNode(SyntaxKind.NamedExports);
         node.elements = createNodeArray(elements);
@@ -3146,8 +3192,11 @@ namespace ts {
         return isString(name) ? createIdentifier(name) : name;
     }
 
-    function asExpression(value: string | number | Expression) {
-        return isString(value) || typeof value === "number" ? createLiteral(value) : value;
+    function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
+        return typeof value === "string" ? createStringLiteral(value) :
+            typeof value === "number" ? createNumericLiteral(""+value) :
+            typeof value === "boolean" ? value ? createTrue() : createFalse() :
+        value;
     }
 
     function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;

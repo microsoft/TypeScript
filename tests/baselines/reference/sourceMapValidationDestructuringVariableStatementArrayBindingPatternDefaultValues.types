@@ -7,17 +7,17 @@ declare var console: {
 >msg : string
 }
 type Robot = [number, string, string];
->Robot : [number, string, string]
+>Robot : Robot
 
 var robotA: Robot = [1, "mower", "mowing"];
->robotA : [number, string, string]
+>robotA : Robot
 >[1, "mower", "mowing"] : [number, string, string]
 >1 : 1
 >"mower" : "mower"
 >"mowing" : "mowing"
 
 var robotB: Robot = [2, "trimmer", "trimming"];
->robotB : [number, string, string]
+>robotB : Robot
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"
@@ -27,13 +27,13 @@ let [, nameA = "noName"] = robotA;
 > : undefined
 >nameA : string
 >"noName" : "noName"
->robotA : [number, string, string]
+>robotA : Robot
 
 let [numberB = -1] = robotB;
 >numberB : number
 >-1 : -1
 >1 : 1
->robotB : [number, string, string]
+>robotB : Robot
 
 let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
 >numberA2 : number
@@ -43,7 +43,7 @@ let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
 >"noName" : "noName"
 >skillA2 : string
 >"noSkill" : "noSkill"
->robotA : [number, string, string]
+>robotA : Robot
 
 let [numberC2 = -1] = [3, "edging", "Trimming edges"];
 >numberC2 : number
@@ -72,7 +72,7 @@ let [numberA3 = -1, ...robotAInfo] = robotA;
 >-1 : -1
 >1 : 1
 >robotAInfo : [string, string]
->robotA : [number, string, string]
+>robotA : Robot
 
 if (nameA == nameA2) {
 >nameA == nameA2 : boolean

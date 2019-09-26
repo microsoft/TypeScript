@@ -6,4 +6,4 @@
 ////     return result
 //// }
 
-verify.rangeAfterCodeFix("app: { use: (arg0: string) => any; }");
+verify.rangeAfterCodeFix("app: { use: (arg0: string) => any }");

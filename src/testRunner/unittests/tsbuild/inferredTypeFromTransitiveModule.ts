@@ -1,82 +1,51 @@
 namespace ts {
     describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule", time);
+            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
         });
         after(() => {
             projFs = undefined!;
         });
 
-        verifyTsbuildOutput({
-            scenario: "inferred type from transitive module",
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "inferredTypeFromTransitiveModule",
-            rootNames: ["/src"],
-            initialBuild: {
-                modifyFs: noop,
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tsconfig.json", "src/obj/bar.js"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"]
-                ]
-            },
-            incrementalDtsChangedBuild: {
+        verifyTscIncrementalEdits({
+            scenario: "inferredTypeFromTransitiveModule",
+            subScenario: "inferred type from transitive module",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
                 modifyFs: changeBarParam,
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tsconfig.json", "src/obj/bar.js", "src/bar.ts"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"],
-                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tsconfig.json"]
-                ]
-            },
-            baselineOnly: true,
-            verifyDiagnostics: true
+            }],
         });
 
-        verifyTsbuildOutput({
-            scenario: "inferred type from transitive module with isolatedModules",
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "inferredTypeFromTransitiveModule",
-            rootNames: ["/src"],
-            initialBuild: { modifyFs: changeToIsolatedModules },
-            incrementalDtsChangedBuild: { modifyFs: changeBarParam },
-            baselineOnly: true,
+        verifyTscIncrementalEdits({
+            subScenario: "inferred type from transitive module with isolatedModules",
+            fs: () => projFs,
+            scenario: "inferredTypeFromTransitiveModule",
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            modifyFs: changeToIsolatedModules,
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: changeBarParam
+            }]
         });
 
-        it("reports errors in files affected by change in signature", () => {
-            const { fs, host } = tscBuild({
-                fs: projFs.shadow(),
-                tick,
-                rootNames: ["/src"],
-                modifyFs: fs => {
-                    changeToIsolatedModules(fs);
-                    appendText(fs, "/src/lazyIndex.ts", `
+        verifyTscIncrementalEdits({
+            scenario: "inferredTypeFromTransitiveModule",
+            subScenario: "reports errors in files affected by change in signature with isolatedModules",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            modifyFs: fs => {
+                changeToIsolatedModules(fs);
+                appendText(fs, "/src/lazyIndex.ts", `
 import { default as bar } from './bar';
 bar("hello");`);
-                }
-            });
-            host.assertErrors(/*empty*/);
-
-            tick();
-            const { fs: newFs, host: newHost, writtenFiles } = tscBuild({
-                fs: fs.shadow(),
-                tick,
-                rootNames: ["/src"],
+            },
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
                 modifyFs: changeBarParam
-            });
-            // Has errors
-            newHost.assertErrors({
-                message: [Diagnostics.Expected_0_arguments_but_got_1, 0, 1],
-                location: expectedLocationIndexOf(newFs, "/src/lazyIndex.ts", `"hello"`)
-            });
-            // No written files
-            assert.equal(writtenFiles.size, 0);
+            }]
         });
     });
 

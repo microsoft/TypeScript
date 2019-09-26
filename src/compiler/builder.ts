@@ -425,7 +425,7 @@ namespace ts {
                 const options = program.getCompilerOptions();
                 forEach(program.getSourceFiles(), f =>
                     program.isSourceFileDefaultLibrary(f) &&
-                    !skipTypeChecking(f, options) &&
+                    !skipTypeChecking(f, options, program) &&
                     removeSemanticDiagnosticsOf(state, f.path)
                 );
             }

@@ -1,0 +1,280 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// Pretty much all of this should be an error, (since interfaces are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
+
+export interface A {}
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+export interface B {
+>B : Symbol(B, Decl(index.js, 3, 21))
+
+    cat: string;
+>cat : Symbol(B.cat, Decl(index.js, 5, 20))
+}
+
+export interface C<T, U> {
+>C : Symbol(C, Decl(index.js, 7, 1))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    field: T & U;
+>field : Symbol(C.field, Decl(index.js, 9, 26))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    optionalField?: T;
+>optionalField : Symbol(C.optionalField, Decl(index.js, 10, 17))
+>T : Symbol(T, Decl(index.js, 9, 19))
+
+    readonly readonlyField: T & U;
+>readonlyField : Symbol(C.readonlyField, Decl(index.js, 11, 22))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    readonly readonlyOptionalField?: U;
+>readonlyOptionalField : Symbol(C.readonlyOptionalField, Decl(index.js, 12, 34))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    (): number;
+    (x: T): U;
+>x : Symbol(x, Decl(index.js, 15, 5))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    <Q>(x: Q): T & Q;
+>Q : Symbol(Q, Decl(index.js, 16, 5))
+>x : Symbol(x, Decl(index.js, 16, 8))
+>Q : Symbol(Q, Decl(index.js, 16, 5))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>Q : Symbol(Q, Decl(index.js, 16, 5))
+
+    new (): string;
+    new (x: T): U;
+>x : Symbol(x, Decl(index.js, 19, 9))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>U : Symbol(U, Decl(index.js, 9, 21))
+
+    new <Q>(x: Q): T & Q;
+>Q : Symbol(Q, Decl(index.js, 20, 9))
+>x : Symbol(x, Decl(index.js, 20, 12))
+>Q : Symbol(Q, Decl(index.js, 20, 9))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>Q : Symbol(Q, Decl(index.js, 20, 9))
+
+    method<Q = number>(): number;
+>method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+>Q : Symbol(Q, Decl(index.js, 22, 11))
+
+    method<Q>(a: T & Q): Q & number;
+>method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+>Q : Symbol(Q, Decl(index.js, 23, 11))
+>a : Symbol(a, Decl(index.js, 23, 14))
+>T : Symbol(T, Decl(index.js, 9, 19))
+>Q : Symbol(Q, Decl(index.js, 23, 11))
+>Q : Symbol(Q, Decl(index.js, 23, 11))
+
+    method(a?: number): number;
+>method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+>a : Symbol(a, Decl(index.js, 24, 11))
+
+    method(...args: any[]): number;
+>method : Symbol(C.method, Decl(index.js, 20, 25), Decl(index.js, 22, 33), Decl(index.js, 23, 36), Decl(index.js, 24, 31))
+>args : Symbol(args, Decl(index.js, 25, 11))
+
+    optMethod?(): number;
+>optMethod : Symbol(C.optMethod, Decl(index.js, 25, 35))
+}
+
+interface G {}
+>G : Symbol(G, Decl(index.js, 28, 1))
+
+export { G };
+>G : Symbol(G, Decl(index.js, 32, 8))
+
+interface HH {}
+>HH : Symbol(HH, Decl(index.js, 32, 13))
+
+export { HH as H };
+>HH : Symbol(HH, Decl(index.js, 32, 13))
+>H : Symbol(H, Decl(index.js, 36, 8))
+
+export interface I {}
+>I : Symbol(I, Decl(index.js, 36, 19))
+
+export { I as II };
+>I : Symbol(I, Decl(index.js, 36, 19))
+>II : Symbol(II, Decl(index.js, 39, 8))
+
+export { J as JJ };
+>J : Symbol(J, Decl(index.js, 41, 19))
+>JJ : Symbol(JJ, Decl(index.js, 41, 8))
+
+export interface J {}
+>J : Symbol(J, Decl(index.js, 41, 19))
+
+export interface K extends I,J {
+>K : Symbol(K, Decl(index.js, 42, 21))
+>I : Symbol(I, Decl(index.js, 36, 19))
+>J : Symbol(J, Decl(index.js, 41, 19))
+
+    x: string;
+>x : Symbol(K.x, Decl(index.js, 44, 32))
+}
+
+export interface L extends K {
+>L : Symbol(L, Decl(index.js, 46, 1))
+>K : Symbol(K, Decl(index.js, 42, 21))
+
+    y: string;
+>y : Symbol(L.y, Decl(index.js, 48, 30))
+}
+
+export interface M<T> {
+>M : Symbol(M, Decl(index.js, 50, 1))
+>T : Symbol(T, Decl(index.js, 52, 19))
+
+    field: T;
+>field : Symbol(M.field, Decl(index.js, 52, 23))
+>T : Symbol(T, Decl(index.js, 52, 19))
+}
+
+export interface N<U> extends M<U> {
+>N : Symbol(N, Decl(index.js, 54, 1))
+>U : Symbol(U, Decl(index.js, 56, 19))
+>M : Symbol(M, Decl(index.js, 50, 1))
+>U : Symbol(U, Decl(index.js, 56, 19))
+
+    other: U;
+>other : Symbol(N.other, Decl(index.js, 56, 36))
+>U : Symbol(U, Decl(index.js, 56, 19))
+}
+
+export interface O {
+>O : Symbol(O, Decl(index.js, 58, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 61, 5))
+}
+
+export interface P extends O {}
+>P : Symbol(P, Decl(index.js, 62, 1))
+>O : Symbol(O, Decl(index.js, 58, 1))
+
+export interface Q extends O {
+>Q : Symbol(Q, Decl(index.js, 64, 31))
+>O : Symbol(O, Decl(index.js, 58, 1))
+
+    [idx: string]: "ok";
+>idx : Symbol(idx, Decl(index.js, 67, 5))
+}
+
+export interface R extends O {
+>R : Symbol(R, Decl(index.js, 68, 1))
+>O : Symbol(O, Decl(index.js, 58, 1))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 71, 5))
+}
+
+export interface S extends O {
+>S : Symbol(S, Decl(index.js, 72, 1))
+>O : Symbol(O, Decl(index.js, 58, 1))
+
+    [idx: string]: "ok";
+>idx : Symbol(idx, Decl(index.js, 75, 5))
+
+    [idx: number]: never;
+>idx : Symbol(idx, Decl(index.js, 76, 5))
+}
+
+export interface T {
+>T : Symbol(T, Decl(index.js, 77, 1))
+
+    [idx: number]: string;
+>idx : Symbol(idx, Decl(index.js, 80, 5))
+}
+
+export interface U extends T {}
+>U : Symbol(U, Decl(index.js, 81, 1))
+>T : Symbol(T, Decl(index.js, 77, 1))
+
+
+export interface V extends T {
+>V : Symbol(V, Decl(index.js, 83, 31))
+>T : Symbol(T, Decl(index.js, 77, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 87, 5))
+}
+
+export interface W extends T {
+>W : Symbol(W, Decl(index.js, 88, 1))
+>T : Symbol(T, Decl(index.js, 77, 1))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 91, 5))
+}
+
+export interface X extends T {
+>X : Symbol(X, Decl(index.js, 92, 1))
+>T : Symbol(T, Decl(index.js, 77, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 95, 5))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 96, 5))
+}
+
+export interface Y {
+>Y : Symbol(Y, Decl(index.js, 97, 1))
+
+    [idx: string]: {x: number};
+>idx : Symbol(idx, Decl(index.js, 100, 5))
+>x : Symbol(x, Decl(index.js, 100, 20))
+
+    [idx: number]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 101, 5))
+>x : Symbol(x, Decl(index.js, 101, 20))
+>y : Symbol(y, Decl(index.js, 101, 30))
+}
+
+export interface Z extends Y {}
+>Z : Symbol(Z, Decl(index.js, 102, 1))
+>Y : Symbol(Y, Decl(index.js, 97, 1))
+
+export interface AA extends Y {
+>AA : Symbol(AA, Decl(index.js, 104, 31))
+>Y : Symbol(Y, Decl(index.js, 97, 1))
+
+    [idx: string]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 107, 5))
+>x : Symbol(x, Decl(index.js, 107, 20))
+>y : Symbol(y, Decl(index.js, 107, 30))
+}
+
+export interface BB extends Y {
+>BB : Symbol(BB, Decl(index.js, 108, 1))
+>Y : Symbol(Y, Decl(index.js, 97, 1))
+
+    [idx: number]: {x: 0, y: 0};
+>idx : Symbol(idx, Decl(index.js, 111, 5))
+>x : Symbol(x, Decl(index.js, 111, 20))
+>y : Symbol(y, Decl(index.js, 111, 25))
+}
+
+export interface CC extends Y {
+>CC : Symbol(CC, Decl(index.js, 112, 1))
+>Y : Symbol(Y, Decl(index.js, 97, 1))
+
+    [idx: string]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 115, 5))
+>x : Symbol(x, Decl(index.js, 115, 20))
+>y : Symbol(y, Decl(index.js, 115, 30))
+
+    [idx: number]: {x: 0, y: 0};
+>idx : Symbol(idx, Decl(index.js, 116, 5))
+>x : Symbol(x, Decl(index.js, 116, 20))
+>y : Symbol(y, Decl(index.js, 116, 25))
+}
+
