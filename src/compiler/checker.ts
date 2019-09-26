@@ -5829,7 +5829,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     /*dotdotdotToken*/ undefined,
-                                    "index",
+                                    "x",
                                     /*questionToken*/ undefined,
                                     visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols)
                                 )],

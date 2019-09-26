@@ -62,5 +62,5 @@ export const f: (arg0: string, arg1: number) => object;
 export const g: new (arg1: string, arg2: number) => object;
 /** @type {Object.<string, number>} */
 export const h: {
-    [index: string]: number;
+    [x: string]: number;
 };

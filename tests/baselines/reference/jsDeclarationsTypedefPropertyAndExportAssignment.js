@@ -128,7 +128,7 @@ export const taskGroups: {
 };
 /** @type {Object<string, TaskGroup>} */
 export const taskNameToGroup: {
-    [index: string]: TaskGroup;
+    [x: string]: TaskGroup;
 };
 //// [index.d.ts]
 export = MainThreadTasks;
