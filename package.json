@@ -127,7 +127,8 @@
         "crypto": false,
         "buffer": false,
         "@microsoft/typescript-etw": false,
-        "source-map-support": false
+        "source-map-support": false,
+        "inspector": false
     },
     "dependencies": {}
 }

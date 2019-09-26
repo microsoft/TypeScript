@@ -694,6 +694,7 @@ namespace ts {
     declare const process: any;
     declare const global: any;
     declare const __filename: string;
+    declare const __dirname: string;
 
     export function getNodeMajorVersion(): number | undefined {
         if (typeof process === "undefined") {
@@ -744,6 +745,7 @@ namespace ts {
         const byteOrderMarkIndicator = "\uFEFF";
 
         function getNodeSystem(): System {
+            const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
             const _fs: typeof import("fs") = require("fs");
             const _path: typeof import("path") = require("path");
             const _os = require("os");
@@ -885,6 +887,10 @@ namespace ts {
                     return false;
                 }
                 const inspector: typeof import("inspector") = require("inspector");
+                if (!inspector || !inspector.Session) {
+                    cb();
+                    return false;
+                }
                 const session = new inspector.Session();
                 session.connect();
 
@@ -896,6 +902,31 @@ namespace ts {
                     });
                 });
                 return true;
+            }
+
+            /**
+             * Strips non-TS paths from the profile, so users with private projects shouldn't
+             * need to worry about leaking paths by submitting a cpu profile to us
+             */
+            function cleanupPaths(profile: import("inspector").Profiler.Profile) {
+                let externalFileCounter = 0;
+                const remappedPaths = createMap<string>();
+                const normalizedDir = normalizeSlashes(__dirname);
+                // Windows rooted dir names need an extra `/` prepended to be valid file:/// urls
+                const fileUrlRoot = `file://${getRootLength(normalizedDir) === 1 ? "" : "/"}${normalizedDir}`;
+                for (const node of profile.nodes) {
+                    if (node.callFrame.url) {
+                        const url = normalizeSlashes(node.callFrame.url);
+                        if (containsPath(fileUrlRoot, url, useCaseSensitiveFileNames)) {
+                            node.callFrame.url = getRelativePathToDirectoryOrUrl(fileUrlRoot, url, fileUrlRoot, createGetCanonicalFileName(useCaseSensitiveFileNames), /*isAbsolutePathAnUrl*/ true);
+                        }
+                        else if (!nativePattern.test(url)) {
+                            node.callFrame.url = (remappedPaths.has(url) ? remappedPaths : remappedPaths.set(url, `external${externalFileCounter}.js`)).get(url)!;
+                            externalFileCounter++;
+                        }
+                    }
+                }
+                return profile;
             }
 
             function disableCPUProfiler(cb: () => void) {
@@ -917,7 +948,7 @@ namespace ts {
                             catch {
                                 // do nothing and ignore fallible fs operation
                             }
-                            _fs.writeFileSync(profilePath, JSON.stringify(profile));
+                            _fs.writeFileSync(profilePath, JSON.stringify(cleanupPaths(profile)));
                         }
                         activeSession = undefined;
                         s.disconnect();
