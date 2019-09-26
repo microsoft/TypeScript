@@ -21,9 +21,11 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(139,9): error TS
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(141,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(159,5): error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(160,5): error TS2776: Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.
 
 
-==== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts (23 errors) ====
+==== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts (25 errors) ====
     function fail(message?: string): never {
         throw new Error(message);
     }
@@ -223,6 +225,17 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS
         x;  // Unreachable
         ~~
 !!! error TS7027: Unreachable code detected.
+    }
+    
+    function f43() {
+        const fail = (): never => { throw new Error(); };
+        const f = [fail];
+        fail();  // Error
+        ~~~~
+!!! error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
+        f[0]();  // Error
+        ~~~~
+!!! error TS2776: Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.
     }
     
     // Repro from #33582

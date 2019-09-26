@@ -5,9 +5,12 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(121,15): error T
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(122,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(123,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(124,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(129,5): error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(131,5): error TS2776: Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
 
 
-==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (7 errors) ====
+==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (10 errors) ====
     declare function isString(value: unknown): value is string;
     declare function isArrayOfStrings(value: unknown): value is string[];
     
@@ -146,5 +149,22 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(124,15): error T
         set p2(x: asserts this is string);
                   ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    }
+    
+    function f20(x: unknown) {
+        const assert = (value: unknown): asserts value => {}
+        assert(typeof x === "string");  // Error
+        ~~~~~~
+!!! error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
+        const a = [assert];
+        a[0](typeof x === "string");  // Error
+        ~~~~
+!!! error TS2776: Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.
+        const t1 = new Test();
+        t1.assert(typeof x === "string");  // Error
+        ~~~~~~~~~
+!!! error TS2775: Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.
+        const t2: Test = new Test();
+        t2.assert(typeof x === "string");
     }
     
