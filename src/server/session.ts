@@ -344,7 +344,7 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
         const info = infos && firstOrUndefined(infos);
-        return info && { fileName: info.fileName, pos: info.textSpan.start };
+        return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
     function combineProjectOutputForReferences(
@@ -429,15 +429,17 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const memGetDefinition = memoize(() => getDefinitionLocation(defaultProject, initialLocation!));
-            projectService.loadAncestorProjectTree(seenProjects);
-            projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project)) return;
-                const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
-                if (definition) {
-                    toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
-                }
-            });
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            if (defaultDefinition) {
+                projectService.loadAncestorProjectTree(seenProjects);
+                projectService.forEachEnabledProject(project => {
+                    if (!addToSeen(seenProjects, project)) return;
+                    const definition = getDefinitionInProject(defaultDefinition, defaultProject, project);
+                    if (definition) {
+                        toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
+                    }
+                });
+            }
         }
 
         while (toDo && toDo.length) {
