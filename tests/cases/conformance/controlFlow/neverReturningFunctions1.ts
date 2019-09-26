@@ -157,6 +157,13 @@ function f42(x: number) {
     x;  // Unreachable
 }
 
+function f43() {
+    const fail = (): never => { throw new Error(); };
+    const f = [fail];
+    fail();  // Error
+    f[0]();  // Error
+}
+
 // Repro from #33582
 
 export interface Component<T extends object = any> {

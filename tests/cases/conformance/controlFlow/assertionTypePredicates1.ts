@@ -126,3 +126,14 @@ declare class Wat {
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
 }
+
+function f20(x: unknown) {
+    const assert = (value: unknown): asserts value => {}
+    assert(typeof x === "string");  // Error
+    const a = [assert];
+    a[0](typeof x === "string");  // Error
+    const t1 = new Test();
+    t1.assert(typeof x === "string");  // Error
+    const t2: Test = new Test();
+    t2.assert(typeof x === "string");
+}
