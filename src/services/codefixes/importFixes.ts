@@ -284,7 +284,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): readonly (FixAddNewImport | FixUseImportType)[] {
         const isJs = isSourceFileJS(sourceFile);
-        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, host, program.redirectTargetsMap);
+        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
@@ -420,7 +420,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, host, program.redirectTargetsMap, sourceFile, program.getSourceFiles(), /*filterByPackageJson*/ true, moduleSymbol => {
+        forEachExternalModuleToImportFrom(program, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -622,17 +622,16 @@ namespace ts.codefix {
     }
 
     export function forEachExternalModuleToImportFrom(
-        checker: TypeChecker,
+        program: Program,
         host: LanguageServiceHost,
-        redirectTargetsMap: RedirectTargetsMap,
         from: SourceFile,
-        allSourceFiles: readonly SourceFile[],
         filterByPackageJson: boolean,
         cb: (module: Symbol) => void,
     ) {
         let filteredCount = 0;
-        const packageJson = filterByPackageJson && createAutoImportFilter(from, host, redirectTargetsMap);
-        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
+        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
+        const allSourceFiles = program.getSourceFiles();
+        forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined) {
                 if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
                     cb(module);
@@ -707,9 +706,20 @@ namespace ts.codefix {
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
     }
 
-    function createAutoImportFilter(fromFile: SourceFile, host: LanguageServiceHost, redirectTargetsMap: RedirectTargetsMap) {
+    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost) {
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
         const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
+        // Mix in `getProbablySymlinks` from Program when host doesn't have it
+        // in order for non-Project hosts to have a symlinks cache.
+        const moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost = {
+            directoryExists: maybeBind(host, host.directoryExists),
+            fileExists: maybeBind(host, host.fileExists),
+            getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+            readFile: maybeBind(host, host.readFile),
+            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
+        };
+
         let usesNodeCoreModules: boolean | undefined;
         return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
 
@@ -795,9 +805,9 @@ namespace ts.codefix {
                 host.getCompilationSettings(),
                 fromFile.path,
                 importedFileName,
-                host,
+                moduleSpecifierResolutionHost,
                 allSourceFiles,
-                redirectTargetsMap);
+                program.redirectTargetsMap);
 
             if (!specifier) {
                 return undefined;
