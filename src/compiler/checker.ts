@@ -24378,7 +24378,7 @@ namespace ts {
         }
 
         /**
-         * This is a *shallow* check: An expression is side-effect-free if the
+         * This is a *shallow* check: An expression is side-effect-free (SEF) if the
          * evaluation of the expression *itself* cannot produce side effects.
          * For example, x++ / 3 is side-effect free because the / operator
          * does not have side effects.
@@ -24418,6 +24418,12 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     if (isAssignmentOperator((node as BinaryExpression).operatorToken.kind)) {
                         return false;
+                    }
+                    if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken) {
+                        // A comma operator is SEF if either operand is SEF, e.g. the template argument in
+                        // `The coordinates are ${x.toString(), y, z}`
+                        // contains an illegally SEF expression at 'y' (the left side of the outer comma whose right operand is 'z')
+                        return isSideEffectFree((node as BinaryExpression).left) || isSideEffectFree((node as BinaryExpression).right);
                     }
                     return isSideEffectFree((node as BinaryExpression).left) &&
                             isSideEffectFree((node as BinaryExpression).right);
