@@ -26252,7 +26252,7 @@ namespace ts {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
 
-        function checkGrammarNullishCoalesceWithLogicalExpression (node: BinaryExpression) {
+        function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
             const { left, operatorToken, right } = node;
             if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
                 if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
