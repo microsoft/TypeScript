@@ -16,14 +16,17 @@ declare module "foo";
 /*1*/ import /*2*/ * /*3*/ as /*4*/ foo /*5*/ from /*6*/ "foo";
 >foo : any
 
-void D, A, C, foo; // Use the variables to prevent ellision
->void D, A, C, foo : any
->void D, A, C : any
->void D, A : any
+void D, void A, void C, void foo; // Use the variables to prevent ellision
+>void D, void A, void C, void foo : undefined
+>void D, void A, void C : undefined
+>void D, void A : undefined
 >void D : undefined
 >D : any
+>void A : undefined
 >A : any
+>void C : undefined
 >C : any
+>void foo : undefined
 >foo : any
 
 /*1*/ export /*2*/ { /*3*/ A /*4*/, /*5*/ B /*6*/ as /*7*/ C /*8*/ } /*9*/ from /*10*/ "foo";
