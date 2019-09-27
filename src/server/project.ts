@@ -1448,13 +1448,14 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: Path, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
             const toPath = this.toPath.bind(this);
             const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
             const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(fileName), function processDirectory(directory): boolean | undefined {
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
                     case Ternary.Maybe:
