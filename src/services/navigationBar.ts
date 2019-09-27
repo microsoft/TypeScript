@@ -135,11 +135,11 @@ namespace ts.NavigationBar {
     function endNestedNodes(depth: number): void {
         for (let i = 0; i < depth; i++) endNode();
     }
-    function startNestedNodes(targetNode: Node, entityName: BindableNameExpression) {
+    function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
         const names: PropertyNameLiteral[] = [];
         while (!isPropertyNameLiteral(entityName)) {
             const name = getNameOrArgument(entityName);
-            const nameText = getNameOrArgumentText(entityName);
+            const nameText = getElementOrPropertyAccessName(entityName);
             entityName = entityName.expression;
             if (nameText === "prototype") continue;
             names.push(name);
@@ -387,12 +387,12 @@ namespace ts.NavigationBar {
                         const binaryExpression = (node as BinaryExpression);
                         const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
                         const targetFunction = assignmentTarget.expression;
-                        if (isIdentifier(targetFunction) && getNameOrArgumentText(assignmentTarget) !== "prototype" &&
+                        if (isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
                             trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
                             if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                                 addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
                             }
-                            else {
+                            else if (isBindableStaticAccessExpression(assignmentTarget)) {
                                 startNode(binaryExpression, targetFunction);
                                     addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
                                 endNode();

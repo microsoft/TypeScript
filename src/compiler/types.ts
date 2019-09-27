@@ -1837,25 +1837,31 @@ namespace ts {
     }
 
     /** @internal */
-    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
+    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableStaticNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
     /** @internal */
-    export type BindableNameExpression = EntityNameExpression | BindableElementAccessExpression;
-    /** @internal */
-    export type BindableAccessExpression = PropertyAccessEntityNameExpression | BindableElementAccessExpression;
+    export type BindableStaticNameExpression = EntityNameExpression | BindableStaticElementAccessExpression;
     /** @internal */
     export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
         argumentExpression: StringLiteralLike | NumericLiteral;
     };
     /** @internal */
-    export type BindableElementAccessExpression = LiteralLikeElementAccessExpression & {
-        expression: BindableNameExpression;
+    export type BindableStaticElementAccessExpression = LiteralLikeElementAccessExpression & {
+        expression: BindableStaticNameExpression;
     };
     /** @internal */
-    export interface BindableAssignmentExpression extends BinaryExpression {
-        left: BindableNameExpression;
+    export type BindableElementAccessExpression = ElementAccessExpression & {
+        expression: BindableStaticNameExpression;
+    };
+    /** @internal */
+    export type BindableStaticAccessExpression = PropertyAccessEntityNameExpression | BindableStaticElementAccessExpression;
+    /** @internal */
+    export type BindableAccessExpression = PropertyAccessEntityNameExpression | BindableElementAccessExpression;
+    /** @internal */
+    export interface BindableStaticPropertyAssignmentExpression extends BinaryExpression {
+        left: BindableStaticAccessExpression;
     }
     /** @internal */
-    export interface BindablePropertyAssignmentExpression extends BindableAssignmentExpression {
+    export interface BindablePropertyAssignmentExpression extends BinaryExpression {
         left: BindableAccessExpression;
     }
 

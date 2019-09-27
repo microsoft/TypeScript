@@ -7195,7 +7195,7 @@ namespace ts {
             else if (
                 isBinaryExpression(declaration) ||
                 (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || (isPropertyAccessExpression(declaration) || isBindableElementAccessExpression(declaration)) && isBinaryExpression(declaration.parent)))) {
+                (isCallExpression(declaration) || (isPropertyAccessExpression(declaration) || isBindableStaticElementAccessExpression(declaration)) && isBinaryExpression(declaration.parent)))) {
                 type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
