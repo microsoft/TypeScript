@@ -719,7 +719,7 @@ namespace ts.codefix {
                     }
                     break;
 
-                // LogicalOperator
+                // LogicalOperator Or NullishCoalescing
                 case SyntaxKind.BarBarToken:
                 case SyntaxKind.QuestionQuestionToken:
                     if (node === parent.left &&

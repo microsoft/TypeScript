@@ -1514,7 +1514,6 @@ namespace ts {
     export type LogicalOperator
         = SyntaxKind.AmpersandAmpersandToken
         | SyntaxKind.BarBarToken
-        | SyntaxKind.QuestionQuestionToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
@@ -1548,7 +1547,8 @@ namespace ts {
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
     export type AssignmentOperatorOrHigher
-        = LogicalOperatorOrHigher
+        = SyntaxKind.QuestionQuestionToken
+        | LogicalOperatorOrHigher
         | AssignmentOperator
         ;
 
