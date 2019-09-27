@@ -8226,7 +8226,7 @@ namespace ts {
         /**
          * Indicates whether a declaration has a late-bindable dynamic name.
          */
-        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | BinaryExpression {
+        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
             const name = getNameOfDeclaration(node);
             return !!name && isLateBindableName(name);
         }
@@ -8308,14 +8308,14 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration | BinaryExpression) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
                 // In the event we attempt to resolve the late-bound name of this member recursively,
                 // fall back to the early-bound name of this member.
                 links.resolvedSymbol = decl.symbol;
-                const declName = isBinaryExpression(decl) ? (getNameOfDeclaration(decl) as ElementAccessExpression) : decl.name;
+                const declName = isBinaryExpression(decl) ? decl.left : decl.name;
                 const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
                 if (isTypeUsableAsPropertyName(type)) {
                     const memberName = getPropertyNameFromType(type);

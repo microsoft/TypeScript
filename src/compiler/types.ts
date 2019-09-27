@@ -830,9 +830,24 @@ namespace ts {
     }
 
     /* @internal */
+    export interface DynamicNamedBinaryExpression extends BinaryExpression {
+        left: ElementAccessExpression;
+    }
+
+    /* @internal */
     // A declaration that supports late-binding (used in checker)
     export interface LateBoundDeclaration extends DynamicNamedDeclaration {
         name: LateBoundName;
+    }
+
+    /* @internal */
+    export interface LateBoundBinaryExpressionDeclaration extends DynamicNamedBinaryExpression {
+        left: LateBoundElementAccessExpression;
+    }
+
+    /* @internal */
+    export interface LateBoundElementAccessExpression extends ElementAccessExpression {
+        argumentExpression: EntityNameExpression;
     }
 
     export interface DeclarationStatement extends NamedDeclaration, Statement {

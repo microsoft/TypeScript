@@ -2064,7 +2064,7 @@ namespace ts {
             return AssignmentDeclarationKind.None;
         }
         const lhs = expr.left;
-        if (isPropertyAccessExpression(lhs) || isElementAccessExpression(lhs)) {
+        if (isAccessExpression(lhs)) {
             if (isEntityNameExpression(lhs.expression) && getElementOrPropertyAccessName(lhs) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
                     // F.prototype = { ... }
                     return AssignmentDeclarationKind.Prototype;
@@ -2079,7 +2079,7 @@ namespace ts {
      * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
      */
     /* @internal */
-    export function getElementOrPropertyAccessArgumentExpressionOrName(node: PropertyAccessExpression | ElementAccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+    export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
         if (isPropertyAccessExpression(node)) {
             return node.name;
         }
@@ -2091,23 +2091,20 @@ namespace ts {
     }
 
     /* @internal */
-    export function getElementOrPropertyAccessName(node: PropertyAccessExpression | ElementAccessExpression): string | undefined {
+    export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined {
         const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
         if (name) {
             if (isIdentifier(name)) {
                 return idText(name);
             }
-            if (isNumericLiteral(name)) {
-                return "" + (+name.text);
-            }
-            if (isStringLiteralLike(name)) {
+            if (isStringLiteralLike(name) || isNumericLiteral(name)) {
                 return name.text;
             }
         }
         return undefined;
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression | ElementAccessExpression): AssignmentDeclarationKind {
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
@@ -2122,7 +2119,7 @@ namespace ts {
             }
 
             let nextToLast = lhs;
-            while (isPropertyAccessExpression(nextToLast.expression) || isElementAccessExpression(nextToLast.expression)) {
+            while (isAccessExpression(nextToLast.expression)) {
                 nextToLast = nextToLast.expression;
             }
             Debug.assert(isIdentifier(nextToLast.expression));
@@ -2841,7 +2838,7 @@ namespace ts {
      *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
-    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | BinaryExpression {
+    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
         const name = getNameOfDeclaration(declaration);
         return !!name && isDynamicName(name);
     }
@@ -5332,7 +5329,7 @@ namespace ts {
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as PropertyAccessExpression | ElementAccessExpression);
+                        return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as AccessExpression);
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
