@@ -55,7 +55,7 @@ namespace ts.FindAllReferences {
             if (isInJSFile(node)) {
                 const binaryExpression = isBinaryExpression(node.parent) ?
                     node.parent :
-                    isPropertyAccessExpression(node.parent) &&
+                    isAccessExpression(node.parent) &&
                         isBinaryExpression(node.parent.parent) &&
                         node.parent.parent.left === node.parent ?
                         node.parent.parent :

@@ -543,7 +543,7 @@ declare namespace ts {
     }
     export type EntityName = Identifier | QualifiedName;
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
-    export type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern;
+    export type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern;
     export interface Declaration extends Node {
         _declarationBrand: any;
     }
@@ -4228,7 +4228,7 @@ declare namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number): PropertyAccessExpression | ElementAccessExpression;
+    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number): ElementAccessExpression | PropertyAccessExpression;
     /**
      * Adds an EmitHelper to a node.
      */

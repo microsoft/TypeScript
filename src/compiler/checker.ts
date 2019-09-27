@@ -2860,7 +2860,7 @@ namespace ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.Class ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
+            return symbol.flags & SymbolFlags.LateBindingContainer ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
                 symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
                 symbol.exports || emptySymbols;
         }
@@ -4224,7 +4224,15 @@ namespace ts {
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
                     const decl = first(propertySymbol.declarations);
                     if (hasLateBindableName(decl)) {
-                        trackComputedName(decl.name, saveEnclosingDeclaration, context);
+                        if (isBinaryExpression(decl)) {
+                            const name = getNameOfDeclaration(decl);
+                            if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
+                                trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                            }
+                        }
+                        else {
+                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
+                        }
                     }
                 }
                 const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -4440,7 +4448,7 @@ namespace ts {
                     return <BindingName>elideInitializerAndSetEmitFlags(node);
                     function elideInitializerAndSetEmitFlags(node: Node): Node {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
-                            trackComputedName(node, context.enclosingDeclaration, context);
+                            trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
                         const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
@@ -4452,10 +4460,10 @@ namespace ts {
                 }
             }
 
-            function trackComputedName(node: LateBoundName, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
+            function trackComputedName(accessExpression: EntityNameOrEntityNameExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
                 if (!context.tracker.trackSymbol) return;
                 // get symbol of the first identifier of the entityName
-                const firstIdentifier = getFirstIdentifier(node.expression);
+                const firstIdentifier = getFirstIdentifier(accessExpression);
                 const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
                 if (name) {
                     context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
@@ -7182,8 +7190,10 @@ namespace ts {
             if (declaration.kind === SyntaxKind.ExportAssignment) {
                 type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
-            else if (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
+            else if (
+                isBinaryExpression(declaration) ||
+                (isInJSFile(declaration) &&
+                (isCallExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)))) {
                 type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
@@ -8201,9 +8211,12 @@ namespace ts {
          * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
          */
         function isLateBindableName(node: DeclarationName): node is LateBoundName {
-            return isComputedPropertyName(node)
-                && isEntityNameExpression(node.expression)
-                && isTypeUsableAsPropertyName(checkComputedPropertyName(node));
+            if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
+                return false;
+            }
+            const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
+            return isEntityNameExpression(expr)
+                && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
         }
 
         function isLateBoundName(name: __String): boolean {
@@ -8215,7 +8228,7 @@ namespace ts {
         /**
          * Indicates whether a declaration has a late-bindable dynamic name.
          */
-        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration {
+        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
             const name = getNameOfDeclaration(node);
             return !!name && isLateBindableName(name);
         }
@@ -8252,7 +8265,7 @@ namespace ts {
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
          */
-        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
+        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration | BinaryExpression, symbolFlags: SymbolFlags) {
             Debug.assert(!!(getCheckFlags(symbol) & CheckFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
@@ -8297,14 +8310,15 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
                 // In the event we attempt to resolve the late-bound name of this member recursively,
                 // fall back to the early-bound name of this member.
                 links.resolvedSymbol = decl.symbol;
-                const type = checkComputedPropertyName(decl.name);
+                const declName = isBinaryExpression(decl) ? decl.left : decl.name;
+                const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
                 if (isTypeUsableAsPropertyName(type)) {
                     const memberName = getPropertyNameFromType(type);
                     const symbolFlags = decl.symbol.flags;
@@ -8321,9 +8335,9 @@ namespace ts {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
-                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(decl.name);
+                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(declName);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here, name));
-                        error(decl.name || decl, Diagnostics.Duplicate_property_0, name);
+                        error(declName || decl, Diagnostics.Duplicate_property_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
                     lateSymbol.nameType = type;
@@ -8362,6 +8376,20 @@ namespace ts {
                             if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
                             }
+                        }
+                    }
+                }
+                const assignments = symbol.assignmentDeclarationMembers;
+                if (assignments) {
+                    const decls = arrayFrom(assignments.values());
+                    for (const member of decls) {
+                        const assignmentKind = getAssignmentDeclarationKind(member as BinaryExpression | CallExpression);
+                        const isInstanceMember = assignmentKind === AssignmentDeclarationKind.PrototypeProperty
+                            || assignmentKind === AssignmentDeclarationKind.ThisProperty
+                            || assignmentKind === AssignmentDeclarationKind.ObjectDefinePrototypeProperty
+                            || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
+                        if (isStatic === !isInstanceMember && hasLateBindableName(member)) {
+                            lateBindMember(symbol, earlySymbols, lateSymbols, member);
                         }
                     }
                 }

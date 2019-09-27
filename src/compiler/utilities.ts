@@ -2060,19 +2060,51 @@ namespace ts {
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
-            !isPropertyAccessExpression(expr.left)) {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken) {
             return AssignmentDeclarationKind.None;
         }
         const lhs = expr.left;
-        if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
-            // F.prototype = { ... }
-            return AssignmentDeclarationKind.Prototype;
+        if (isAccessExpression(lhs)) {
+            if (isEntityNameExpression(lhs.expression) && getElementOrPropertyAccessName(lhs) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+                    // F.prototype = { ... }
+                    return AssignmentDeclarationKind.Prototype;
+            }
+            return getAssignmentDeclarationPropertyAccessKind(lhs);
         }
-        return getAssignmentDeclarationPropertyAccessKind(lhs);
+        return AssignmentDeclarationKind.None;
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression): AssignmentDeclarationKind {
+    /**
+     * Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
+     * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
+     */
+    /* @internal */
+    export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+        if (isPropertyAccessExpression(node)) {
+            return node.name;
+        }
+        const arg = skipParentheses(node.argumentExpression);
+        if (isNumericLiteral(arg) || isStringLiteralLike(arg)) {
+            return arg;
+        }
+        return node;
+    }
+
+    /* @internal */
+    export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined {
+        const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
+        if (name) {
+            if (isIdentifier(name)) {
+                return idText(name);
+            }
+            if (isStringLiteralLike(name) || isNumericLiteral(name)) {
+                return name.text;
+            }
+        }
+        return undefined;
+    }
+
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
@@ -2087,13 +2119,13 @@ namespace ts {
             }
 
             let nextToLast = lhs;
-            while (isPropertyAccessExpression(nextToLast.expression)) {
+            while (isAccessExpression(nextToLast.expression)) {
                 nextToLast = nextToLast.expression;
             }
             Debug.assert(isIdentifier(nextToLast.expression));
             const id = nextToLast.expression as Identifier;
             if (id.escapedText === "exports" ||
-                id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
+                id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") {
                 // exports.name = expr OR module.exports.name = expr
                 return AssignmentDeclarationKind.ExportsProperty;
             }
@@ -2807,16 +2839,19 @@ namespace ts {
      *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
-    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
+    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
         const name = getNameOfDeclaration(declaration);
         return !!name && isDynamicName(name);
     }
 
     export function isDynamicName(name: DeclarationName): boolean {
-        return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteralLike(name.expression) &&
-            !isSignedNumericLiteral(name.expression) &&
-            !isWellKnownSymbolSyntactically(name.expression);
+        if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
+            return false;
+        }
+        const expr = isElementAccessExpression(name) ? name.argumentExpression : name.expression;
+        return !isStringOrNumericLiteralLike(expr) &&
+            !isSignedNumericLiteral(expr) &&
+            !isWellKnownSymbolSyntactically(expr);
     }
 
     /**
@@ -5299,7 +5334,7 @@ namespace ts {
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
+                        return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as AccessExpression);
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
