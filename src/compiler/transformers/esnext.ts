@@ -32,9 +32,17 @@ namespace ts {
 
         function createNotNullCondition(node: Expression) {
             return createBinary(
-                node,
-                SyntaxKind.ExclamationEqualsToken,
-                createNull()
+                createBinary(
+                    node,
+                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createNull()
+                ),
+                createToken(SyntaxKind.AmpersandAmpersandToken),
+                createBinary(
+                    node,
+                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createVoidZero()
+                )
             );
         }
 
