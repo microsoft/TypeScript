@@ -1255,7 +1255,7 @@ interface Array<T> {
     slice(start?: number, end?: number): T[];
     /**
       * Sorts an array.
-      * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
+      * @param compareFn A function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
       */
     sort(compareFn?: (a: T, b: T) => number): this;
     /**
