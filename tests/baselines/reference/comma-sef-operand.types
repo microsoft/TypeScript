@@ -1,0 +1,20 @@
+=== tests/cases/compiler/comma-sef-operand.ts ===
+declare const obj: any;
+>obj : any
+
+console.log(`${JSON.stringify(obj), undefined, 2}`);
+>console.log(`${JSON.stringify(obj), undefined, 2}`) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>`${JSON.stringify(obj), undefined, 2}` : string
+>JSON.stringify(obj), undefined, 2 : 2
+>JSON.stringify(obj), undefined : undefined
+>JSON.stringify(obj) : string
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>JSON : JSON
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+>obj : any
+>undefined : undefined
+>2 : 2
+

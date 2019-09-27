@@ -1,0 +1,14 @@
+=== tests/cases/compiler/comma-sef-operand.ts ===
+declare const obj: any;
+>obj : Symbol(obj, Decl(comma-sef-operand.ts, 0, 13))
+
+console.log(`${JSON.stringify(obj), undefined, 2}`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(comma-sef-operand.ts, 0, 13))
+>undefined : Symbol(undefined)
+

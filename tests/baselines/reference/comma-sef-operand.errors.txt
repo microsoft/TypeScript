@@ -1,0 +1,9 @@
+tests/cases/compiler/comma-sef-operand.ts(2,16): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== tests/cases/compiler/comma-sef-operand.ts (1 errors) ====
+    declare const obj: any;
+    console.log(`${JSON.stringify(obj), undefined, 2}`);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    
