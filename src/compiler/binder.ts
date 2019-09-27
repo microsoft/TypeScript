@@ -1435,7 +1435,7 @@ namespace ts {
             bindCondition(node.right, trueTarget, falseTarget);
         }
 
-        function bindNullishCollasingExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function bindNullishCoalescingExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             const notNullLabel = createBranchLabel();
             bindCondition(node.left, trueTarget, notNullLabel);
             currentFlow = finishFlowLabel(notNullLabel);
@@ -1476,7 +1476,7 @@ namespace ts {
                     currentFlow = finishFlowLabel(postExpressionLabel);
                 }
                 else if (operator === SyntaxKind.QuestionQuestionToken) {
-                    bindNullishCollasingExpression(node, currentTrueTarget!, currentFalseTarget!);
+                    bindNullishCoalescingExpression(node, currentTrueTarget!, currentFalseTarget!);
                 }
                 else {
                     bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
