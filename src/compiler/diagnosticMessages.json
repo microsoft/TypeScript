@@ -2726,11 +2726,11 @@
         "category": "Error",
         "code": 2774
     },
-    "Control flow effects of calls to assertion and never-returning functions are reflected only when every variable or property referenced in the function expression is declared with an explicit type annotation.": {
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
         "category": "Error",
         "code": 2775
     },
-    "Control flow effects of calls to assertion and never-returning functions are reflected only when the function expression is an identifier or qualified-name.": {
+    "Assertions require the call target to be an identifier or qualified-name.": {
         "category": "Error",
         "code": 2776
     },
