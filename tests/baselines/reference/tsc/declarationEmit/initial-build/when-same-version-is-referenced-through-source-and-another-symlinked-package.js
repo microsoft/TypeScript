@@ -3,7 +3,7 @@
 /lib/lib.d.ts
 /src/plugin-one/node_modules/typescript-fsa/index.d.ts
 /src/plugin-one/action.ts
-/src/plugin-one/node_modules/plugin-two/node_modules/typescript-fsa/index.d.ts -> /src/plugin-one/node_modules/typescript-fsa/index.d.ts
+/src/plugin-one/node_modules/plugin-two/node_modules/typescript-fsa/index.d.ts
 /src/plugin-one/node_modules/plugin-two/index.d.ts
 /src/plugin-one/index.ts
 exitCode:: 0
