@@ -2664,7 +2664,7 @@ namespace ts {
             if (patternAmbientModules) {
                 const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
                 if (pattern) {
-                    // If the module reference matched a pattern ambient module ('*.foo') but thereâ€™s also a
+                    // If the module reference matched a pattern ambient module ('*.foo') but there's also a
                     // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
                     // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
                     // from a.foo.

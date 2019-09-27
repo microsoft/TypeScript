@@ -940,20 +940,39 @@ namespace ts {
             }
         }
 
-        function findAntecedent(flowNode: FlowNode, flags: FlowFlags) {
+        function excludeAntecedents(flowNode: FlowNode, flags: FlowFlags) {
             if (flowNode.flags & flags) {
-                return flowNode;
+                return unreachableFlow;
             }
             if (flowNode.flags & FlowFlags.BranchLabel) {
                 const branch = flowNode as FlowLabel;
                 if (branch.antecedents) {
-                    for (const antecedent of branch.antecedents) {
+                    let antecedents: FlowNode[] | undefined;
+                    for (let i = 0; i < branch.antecedents.length; i++) {
+                        const antecedent = branch.antecedents[i];
                         if (antecedent.flags & flags) {
-                            return antecedent;
+                            if (!antecedents) {
+                                antecedents = branch.antecedents.slice(0, i);
+                            }
                         }
+                        else if (antecedents) {
+                            antecedents.push(antecedent);
+                        }
+                    }
+                    if (antecedents) {
+                        if (antecedents.length === 0) {
+                            return unreachableFlow;
+                        }
+                        if (antecedents.length === 1) {
+                            return antecedents[0];
+                        }
+                        const newBranch = createBranchLabel();
+                        newBranch.antecedents = antecedents;
+                        return newBranch;
                     }
                 }
             }
+            return flowNode;
         }
 
         function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression | undefined): FlowNode {
@@ -967,15 +986,10 @@ namespace ts {
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
                 return unreachableFlow;
             }
-
             if (flags & FlowFlags.TrueCondition) {
-                // If the antecedent is an optional chain, only the Present branch can exist on the `true` condition
-                const presentFlow = findAntecedent(currentFlow, FlowFlags.Present);
-                if (presentFlow) {
-                    antecedent = presentFlow;
-                }
+                // A "Missing" flow node (representing the `null` or `undefined` branch of an optional chain), can never be `true`.
+                antecedent = excludeAntecedents(currentFlow, FlowFlags.Missing);
             }
-
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
             }
@@ -988,10 +1002,8 @@ namespace ts {
                 return antecedent;
             }
             if (flags & FlowFlags.Present) {
-                const presentFlow = findAntecedent(currentFlow, FlowFlags.Present);
-                if (presentFlow) {
-                    antecedent = presentFlow;
-                }
+                // A "Missing" flow node (representing the `null` or `undefined` branch of an optional chain), can never be "Present".
+                antecedent = excludeAntecedents(currentFlow, FlowFlags.Missing);
             }
             setFlowNodeReferenced(antecedent);
             return flowNodeCreated({ flags, antecedent, node: expression });

@@ -309,8 +309,8 @@ namespace ts {
             const writer = createTextWriter("\n");
             writeFlowNode(flowNode, /*isAntecedent*/ false);
 
+            let hasWrittenHeader = false;
             while (deferredFlowNodes.length) {
-                let hasWrittenHeader = false;
                 const deferred = deferredFlowNodes.splice(0, deferredFlowNodes.length);
                 for (const sharedNode of deferred) {
                     if (!hasWrittenHeader) {
@@ -332,7 +332,7 @@ namespace ts {
                     const flowId = `${getFlowId(flowNode)}`;
                     const isShared = sharedNodes.get(flowId);
                     if (isShared === undefined) {
-                        sharedNodes.set(flowId, false)
+                        sharedNodes.set(flowId, false);
                     }
                     else if (isShared === false) {
                         sharedNodes.set(flowId, true);
@@ -393,7 +393,7 @@ namespace ts {
                 if (flags & FlowFlags.Present) return "Present";
                 if (flags & FlowFlags.Missing) return "Missing";
                 if (flags & FlowFlags.Unreachable) return "Unreachable";
-                return Debug.fail();
+                return fail();
             }
 
             function writeHeader(flowNode: FlowNode, isAntecedent: boolean) {
@@ -424,13 +424,13 @@ namespace ts {
                         }
                     }
                     if (!(flowNode.flags & FlowFlags.Referenced)) {
-                        attributes.push("unreferenced")
+                        attributes.push("unreferenced");
                     }
                     if (flowNode.flags & FlowFlags.Cached) {
                         attributes.push("cached");
                     }
                     if (some(attributes)) {
-                        writer.write(`[${attributes.join(', ')}]`);
+                        writer.write(`[${attributes.join(", ")}]`);
                     }
                 }
                 writer.writeLine();
@@ -489,7 +489,7 @@ namespace ts {
                     writeOptionalChain(flowNode as FlowOptionalChain);
                 }
                 else {
-                    Debug.assert(!!(flowNode.flags & FlowFlags.Unreachable));
+                    assert(!!(flowNode.flags & FlowFlags.Unreachable));
                 }
             }
 
