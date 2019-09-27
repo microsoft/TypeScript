@@ -850,7 +850,7 @@ namespace ts {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
                 isElementAccessExpression(expr) &&
-                (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
+                isStringOrNumericLiteralLike(expr.argumentExpression) &&
                 isNarrowableReference(expr.expression);
         }
 

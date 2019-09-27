@@ -7940,7 +7940,7 @@ namespace ts {
         }
 
         function isStringConcatExpression(expr: Node): boolean {
-            if (expr.kind === SyntaxKind.StringLiteral) {
+            if (isStringLiteralLike(expr)) {
                 return true;
             }
             else if (expr.kind === SyntaxKind.BinaryExpression) {
@@ -7957,6 +7957,7 @@ namespace ts {
             switch (expr.kind) {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return true;
                 case SyntaxKind.PrefixUnaryExpression:
                     return (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
@@ -7979,7 +7980,7 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
-                        if (member.initializer && member.initializer.kind === SyntaxKind.StringLiteral) {
+                        if (member.initializer && isStringLiteralLike(member.initializer)) {
                             return links.enumKind = EnumKind.Literal;
                         }
                         if (!isLiteralEnumMember(member)) {
@@ -17949,7 +17950,7 @@ namespace ts {
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+                isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 undefined;
         }
 
@@ -18347,8 +18348,8 @@ namespace ts {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
                 if (clause.kind === SyntaxKind.CaseClause) {
-                    if (clause.expression.kind === SyntaxKind.StringLiteral) {
-                        witnesses.push((clause.expression as StringLiteral).text);
+                    if (isStringLiteralLike(clause.expression)) {
+                        witnesses.push(clause.expression.text);
                         continue;
                     }
                     return emptyArray;
@@ -22915,7 +22916,7 @@ namespace ts {
                 return objectType;
             }
 
-            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
@@ -31631,7 +31632,8 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.StringLiteral:
-                        return (<StringLiteral>expr).text;
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return (<StringLiteralLike>expr).text;
                     case SyntaxKind.NumericLiteral:
                         checkGrammarNumericLiteral(<NumericLiteral>expr);
                         return +(<NumericLiteral>expr).text;
@@ -31684,7 +31686,7 @@ namespace ts {
             return node.kind === SyntaxKind.Identifier ||
                 node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((<PropertyAccessExpression>node).expression) ||
                 node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((<ElementAccessExpression>node).expression) &&
-                    (<ElementAccessExpression>node).argumentExpression.kind === SyntaxKind.StringLiteral;
+                    isStringLiteralLike((<ElementAccessExpression>node).argumentExpression);
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
@@ -31993,7 +31995,7 @@ namespace ts {
         }
 
         function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
-            const symbol = getSymbolOfNode(node);
+            let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
             const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
@@ -32004,6 +32006,7 @@ namespace ts {
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
                 // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
+                symbol = getMergedSymbol(symbol.exportSymbol || symbol);
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
@@ -34206,7 +34209,7 @@ namespace ts {
                                 const name = getHelperName(helper);
                                 const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
                                 if (!symbol) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }
                             }
                         }
@@ -35266,7 +35269,7 @@ namespace ts {
         }
 
         function isStringOrNumberLiteralExpression(expr: Expression) {
-            return expr.kind === SyntaxKind.StringLiteral || expr.kind === SyntaxKind.NumericLiteral ||
+            return isStringOrNumericLiteralLike(expr) ||
                 expr.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }
