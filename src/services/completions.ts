@@ -2086,7 +2086,7 @@ namespace ts.Completions {
         if (name === undefined
             // If the symbol is external module, don't show it in the completion list
             // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-            || symbol.flags & SymbolFlags.Module && startsWithQuote(name)
+            || symbol.flags & SymbolFlags.Module && isSingleOrDoubleQuote(name.charCodeAt(0))
             // If the symbol is the internal name of an ES symbol, it is not a valid entry. Internal names for ES symbols start with "__@"
             || isKnownSymbol(symbol)) {
             return undefined;

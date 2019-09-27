@@ -3239,10 +3239,6 @@ namespace ts {
             charCode === CharacterCodes.backtick;
     }
 
-    export function startsWithQuote(name: string): boolean {
-        return isSingleOrDoubleQuote(name.charCodeAt(0));
-    }
-
     function getReplacement(c: string, offset: number, input: string) {
         if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
             const lookAhead = input.charCodeAt(offset + c.length);
