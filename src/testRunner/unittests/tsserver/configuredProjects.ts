@@ -844,6 +844,68 @@ namespace ts.projectSystem {
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
+
+        it("when multiple projects are open, detects correct default project", () => {
+            //const projectLocation: `/user/username/projects/myproject`;
+            const barConfig: File = {
+                path: `${projectRoot}/bar/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        lib: ["dom", "es2017"]
+                    }
+                })
+            };
+            const barIndex: File = {
+                path: `${projectRoot}/bar/index.ts`,
+                content: `
+export function bar() {
+  console.log("hello world");
+}`
+            };
+            const fooConfig: File = {
+                path: `${projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        lib: ["es2017"]
+                    }
+                })
+            };
+            const fooIndex: File = {
+                path: `${projectRoot}/foo/index.ts`,
+                content: `
+import { bar } from "bar";
+bar();`
+            };
+            const barSymLink: SymLink = {
+                path: `${projectRoot}/foo/node_modules/bar`,
+                symLink: `${projectRoot}/bar`
+            };
+
+            const lib2017: File = {
+                path: `${getDirectoryPath(libFile.path)}/lib.es2017.d.ts`,
+                content: libFile.content
+            };
+            const libDom: File = {
+                path: `${getDirectoryPath(libFile.path)}/lib.dom.d.ts`,
+                content: `
+declare var console: {
+    log(...args: any[]): void;
+};`
+            };
+            const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession([fooIndex, barIndex], session);
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    { file: barIndex, syntax: [], semantic: [], suggestion: [] },
+                    { file: fooIndex, syntax: [], semantic: [], suggestion: [] },
+                ]
+            });
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {
