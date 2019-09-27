@@ -421,7 +421,6 @@ namespace ts.projectSystem {
         });
 
         it("Reports errors correctly when file referenced by inferred project root, is opened right after closing the root file", () => {
-            const projectRoot = "/user/username/projects/myproject";
             const app: File = {
                 path: `${projectRoot}/src/client/app.js`,
                 content: ""

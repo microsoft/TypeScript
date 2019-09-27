@@ -82,7 +82,6 @@ namespace ts.projectSystem {
         });
 
         it("add and then remove a config file in a folder with loose files", () => {
-            const projectRoot = "/user/username/projects/project";
             const configFile: File = {
                 path: `${projectRoot}/tsconfig.json`,
                 content: `{
@@ -440,7 +439,6 @@ namespace ts.projectSystem {
         });
 
         it("open file become a part of configured project if it is referenced from root file", () => {
-            const projectRoot = "/user/username/projects/project";
             const file1 = {
                 path: `${projectRoot}/a/b/f1.ts`,
                 content: "export let x = 5"
@@ -903,13 +901,12 @@ namespace ts.projectSystem {
         });
 
         it("should tolerate invalid include files that start in subDirectory", () => {
-            const projectFolder = "/user/username/projects/myproject";
             const f = {
-                path: `${projectFolder}/src/server/index.ts`,
+                path: `${projectRoot}/src/server/index.ts`,
                 content: "let x = 1"
             };
             const config = {
-                path: `${projectFolder}/src/server/tsconfig.json`,
+                path: `${projectRoot}/src/server/tsconfig.json`,
                 content: JSON.stringify({
                     compiler: {
                         module: "commonjs",

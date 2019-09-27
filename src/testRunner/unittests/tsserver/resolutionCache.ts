@@ -494,9 +494,8 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
-        const projectLocation = "/user/username/projects/myproject";
         const configFile: File = {
-            path: `${projectLocation}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({ compilerOptions: { traceResolution: true } })
         };
 
@@ -603,7 +602,7 @@ namespace ts.projectSystem {
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = arrayToSet([projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            const expectedRecursiveDirectories = arrayToSet([projectRoot, `${projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {
                     return undefined;
@@ -622,11 +621,11 @@ namespace ts.projectSystem {
         describe("from files in same folder", () => {
             function getFiles(fileContent: string) {
                 const file1: File = {
-                    path: `${projectLocation}/src/file1.ts`,
+                    path: `${projectRoot}/src/file1.ts`,
                     content: fileContent
                 };
                 const file2: File = {
-                    path: `${projectLocation}/src/file2.ts`,
+                    path: `${projectRoot}/src/file2.ts`,
                     content: fileContent
                 };
                 return { file1, file2 };
@@ -637,7 +636,7 @@ namespace ts.projectSystem {
                 const module2Name = "../module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectLocation}/src/module1.ts`, `${projectLocation}/module2.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/src/module1.ts`, `${projectRoot}/module2.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -660,12 +659,12 @@ namespace ts.projectSystem {
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/src`];
+                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectLocation}/src/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/src/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -691,19 +690,19 @@ namespace ts.projectSystem {
         describe("from files in different folders", () => {
             function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
                 const file1: File = {
-                    path: `${projectLocation}/product/src/file1.ts`,
+                    path: `${projectRoot}/product/src/file1.ts`,
                     content: fileContent1
                 };
                 const file2: File = {
-                    path: `${projectLocation}/product/src/feature/file2.ts`,
+                    path: `${projectRoot}/product/src/feature/file2.ts`,
                     content: fileContent2
                 };
                 const file3: File = {
-                    path: `${projectLocation}/product/test/src/file3.ts`,
+                    path: `${projectRoot}/product/test/src/file3.ts`,
                     content: fileContent3
                 };
                 const file4: File = {
-                    path: `${projectLocation}/product/test/file4.ts`,
+                    path: `${projectRoot}/product/test/file4.ts`,
                     content: fileContent4
                 };
                 return { file1, file2, file3, file4 };
@@ -721,7 +720,7 @@ namespace ts.projectSystem {
                 const fileContent3 = `import { module1 } from "${module5Name}";import { module2 } from "${module4Name}";`;
                 const fileContent4 = `import { module1 } from "${module6Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
-                const { module1, module2 } = getModules(`${projectLocation}/product/src/module1.ts`, `${projectLocation}/product/module2.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/product/src/module1.ts`, `${projectRoot}/product/module2.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -753,12 +752,12 @@ namespace ts.projectSystem {
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/product`];
+                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/product`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectLocation}/product/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/product/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -768,8 +767,8 @@ namespace ts.projectSystem {
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectRoot}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
@@ -797,7 +796,7 @@ namespace ts.projectSystem {
                 const file4Name = "../test/file4";
                 const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
-                const { module1, module2 } = getModules(`${projectLocation}/product/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/product/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -811,19 +810,19 @@ namespace ts.projectSystem {
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectLocation}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectLocation}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectRoot}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
                 const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path)
-                    .concat(getConfigFilesToWatch(`${projectLocation}/product/src`));
+                    .concat(getConfigFilesToWatch(`${projectRoot}/product/src`));
                 const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
-                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${projectLocation}/product/${nodeModules}`,
-                    `${projectLocation}/${nodeModules}`, `${projectLocation}/product/test/${nodeModules}`,
-                    `${projectLocation}/product/test/src/${nodeModules}`
+                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${projectRoot}/product/${nodeModules}`,
+                    `${projectRoot}/${nodeModules}`, `${projectRoot}/product/test/${nodeModules}`,
+                    `${projectRoot}/product/test/src/${nodeModules}`
                 ]);
                 checkWatches();
 
@@ -852,7 +851,6 @@ namespace ts.projectSystem {
         });
 
         describe("when watching directories for failed lookup locations in amd resolution", () => {
-            const projectRoot = "/user/username/projects/project";
             const nodeFile: File = {
                 path: `${projectRoot}/src/typings/node.d.ts`,
                 content: `
@@ -928,17 +926,16 @@ export const x = 10;`
         });
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
-            const projectPath = "/user/username/projects/project";
             const npmCacheFile: File = {
-                path: `${projectPath}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                 content: JSON.stringify({ something: 10 })
             };
             const file1: File = {
-                path: `${projectPath}/test.ts`,
+                path: `${projectRoot}/test.ts`,
                 content: `import { x } from "somemodule";`
             };
             const file2: File = {
-                path: `${projectPath}/node_modules/somemodule/index.d.ts`,
+                path: `${projectRoot}/node_modules/somemodule/index.d.ts`,
                 content: `export const x = 10;`
             };
             it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
@@ -957,7 +954,7 @@ export const x = 10;`
             });
             it("when watching node_modules as part of wild card directories in config project", () => {
                 const config: File = {
-                    path: `${projectPath}/tsconfig.json`,
+                    path: `${projectRoot}/tsconfig.json`,
                     content: "{}"
                 };
                 const files = [libFile, file1, file2, config];
@@ -976,15 +973,15 @@ export const x = 10;`
 
         describe("avoid unnecessary invalidation", () => {
             it("unnecessary lookup invalidation on save", () => {
-                const expectedNonRelativeDirectories = [`${projectLocation}/node_modules`, `${projectLocation}/src`];
+                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const file1: File = {
-                    path: `${projectLocation}/src/file1.ts`,
+                    path: `${projectRoot}/src/file1.ts`,
                     content: fileContent
                 };
-                const { module1, module2 } = getModules(`${projectLocation}/src/node_modules/module1/index.ts`, `${projectLocation}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${projectRoot}/src/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);

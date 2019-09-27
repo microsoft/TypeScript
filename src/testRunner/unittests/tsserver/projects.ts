@@ -1209,17 +1209,16 @@ var x = 10;`
         });
 
         it("requests are done on file on pendingReload but has svc for previous version", () => {
-            const projectLocation = "/user/username/projects/project";
             const file1: File = {
-                path: `${projectLocation}/src/file1.ts`,
+                path: `${projectRoot}/src/file1.ts`,
                 content: `import { y } from "./file2"; let x = 10;`
             };
             const file2: File = {
-                path: `${projectLocation}/src/file2.ts`,
+                path: `${projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const config: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [file1, file2, libFile, config];
@@ -1309,20 +1308,19 @@ var x = 10;`
         });
 
         it("Orphan source files are handled correctly on watch trigger", () => {
-            const projectLocation = "/user/username/projects/project";
             const file1: File = {
-                path: `${projectLocation}/src/file1.ts`,
+                path: `${projectRoot}/src/file1.ts`,
                 content: `export let x = 10;`
             };
             const file2: File = {
-                path: `${projectLocation}/src/file2.ts`,
+                path: `${projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const configContent1 = JSON.stringify({
                 files: ["src/file1.ts", "src/file2.ts"]
             });
             const config: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${projectRoot}/tsconfig.json`,
                 content: configContent1
             };
             const files = [file1, file2, libFile, config];

@@ -1,8 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and error reporting", () => {
-        const projectLocation = "/user/username/projects/myproject";
-        const dependecyLocation = `${projectLocation}/dependency`;
-        const usageLocation = `${projectLocation}/usage`;
+        const dependecyLocation = `${projectRoot}/dependency`;
+        const usageLocation = `${projectRoot}/usage`;
 
         interface CheckErrorsInFile {
             session: TestSession;
