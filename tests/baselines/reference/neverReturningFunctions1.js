@@ -157,8 +157,9 @@ function f42(x: number) {
 function f43() {
     const fail = (): never => { throw new Error(); };
     const f = [fail];
-    fail();  // Error
-    f[0]();  // Error
+    fail();  // No effect (missing type annotation)
+    f[0]();  // No effect (not a dotted name)
+    f;
 }
 
 // Repro from #33582
@@ -385,8 +386,9 @@ function f42(x) {
 function f43() {
     var fail = function () { throw new Error(); };
     var f = [fail];
-    fail(); // Error
-    f[0](); // Error
+    fail(); // No effect (missing type annotation)
+    f[0](); // No effect (not a dotted name)
+    f;
 }
 var Component = registerComponent('test-component', {
     schema: {
