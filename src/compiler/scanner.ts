@@ -33,7 +33,7 @@ namespace ts {
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
-        reScanQuestionQuestionToken(): SyntaxKind;
+        reScanQuestionToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -903,7 +903,7 @@ namespace ts {
             scanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
-            reScanQuestionQuestionToken,
+            reScanQuestionToken,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -2024,8 +2024,8 @@ namespace ts {
             return token;
         }
 
-        function reScanQuestionQuestionToken(): SyntaxKind {
-            Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionQuestionToken' should only be called on a '??'");
+        function reScanQuestionToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
             pos = tokenPos + 1;
             return token = SyntaxKind.QuestionToken;
         }

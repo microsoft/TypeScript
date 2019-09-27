@@ -26256,10 +26256,10 @@ namespace ts {
             const { left, operatorToken, right } = node;
             if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
                 if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                    error(left, Diagnostics.Operator_0_cannot_immediately_contain_or_be_contained_within_an_1_operation, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
+                    grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
                 }
                 if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                    error(right, Diagnostics.Operator_0_cannot_immediately_contain_or_be_contained_within_an_1_operation, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
+                    grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
                 }
             }
         }

@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(6,6): error TS5076: Operator '||' cannot immediately contain, or be contained within an '??' operation.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(9,1): error TS5076: Operator '||' cannot immediately contain, or be contained within an '??' operation.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(12,6): error TS5076: Operator '&&' cannot immediately contain, or be contained within an '??' operation.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(15,1): error TS5076: Operator '&&' cannot immediately contain, or be contained within an '??' operation.
+tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(6,6): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(9,1): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(12,6): error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
+tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts(15,1): error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
 
 
 ==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts (4 errors) ====
@@ -12,22 +12,22 @@ tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingO
     // should be a syntax error
     a ?? b || c;
          ~~~~~~
-!!! error TS5076: Operator '||' cannot immediately contain, or be contained within an '??' operation.
+!!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
     
     // should be a syntax error
     a || b ?? c;
     ~~~~~~
-!!! error TS5076: Operator '||' cannot immediately contain, or be contained within an '??' operation.
+!!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
     
     // should be a syntax error
     a ?? b && c;
          ~~~~~~
-!!! error TS5076: Operator '&&' cannot immediately contain, or be contained within an '??' operation.
+!!! error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
     
     // should be a syntax error
     a && b ?? c;
     ~~~~~~
-!!! error TS5076: Operator '&&' cannot immediately contain, or be contained within an '??' operation.
+!!! error TS5076: '&&' and '??' operations cannot be mixed without parentheses.
     
     // Valid according to spec
     a ?? (b || c);

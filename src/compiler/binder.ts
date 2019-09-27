@@ -1460,7 +1460,6 @@ namespace ts {
             }
         }
 
-        // TODO(rbuckton): Determine how to hook ?? into flow typing
         function bindBinaryExpressionFlow(node: BinaryExpression) {
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
@@ -2815,7 +2814,7 @@ namespace ts {
             init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
-                return !!getExpandoInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);
+                return !!getExpandoInitializer(isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right : init, isPrototypeAssignment);
             }
             return false;
         }

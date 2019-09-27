@@ -3007,7 +3007,7 @@ namespace ts {
                     return parseJSDocAllType(/*postfixEquals*/ true);
                 case SyntaxKind.QuestionQuestionToken:
                     // If there is '??', consider that is prefix '?' in JSDoc type.
-                    scanner.reScanQuestionQuestionToken();
+                    scanner.reScanQuestionToken();
                     // falls through
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
