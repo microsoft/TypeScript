@@ -31,13 +31,13 @@ const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
 >2 : 2
 >3 : 3
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
->(accu, el) => accu.concat(el) : (accu: [], el: number) => never[]
+>(accu, el) => accu.concat(el) : (accu: [], el: number) => number[]
 >accu : []
 >el : number
->accu.concat(el) : never[]
->accu.concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
+>accu.concat(el) : number[]
+>accu.concat : { (...items: ConcatArray<never>[]): never[]; <U extends any[]>(...items: U): Flatten<U[number]>[]; }
 >accu : []
->concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
+>concat : { (...items: ConcatArray<never>[]): never[]; <U extends any[]>(...items: U): Flatten<U[number]>[]; }
 >el : number
 >[] : never[]
 
@@ -54,9 +54,9 @@ const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
 >acc : number[]
 >e : number
 >acc.concat(e) : number[]
->acc.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>acc.concat : { (...items: ConcatArray<number>[]): number[]; <U extends any[]>(...items: U): (number | Flatten<U[number]>)[]; }
 >acc : number[]
->concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; <U extends any[]>(...items: U): (number | Flatten<U[number]>)[]; }
 >e : number
 >[] : never[]
 
