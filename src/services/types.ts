@@ -17,7 +17,11 @@ namespace ts {
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getLastToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
@@ -703,6 +707,12 @@ namespace ts {
         Smart = 2,
     }
 
+    export enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
@@ -761,6 +771,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: SemicolonPreference;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -784,6 +795,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
+            semicolons: SemicolonPreference.Ignore,
         };
     }
 

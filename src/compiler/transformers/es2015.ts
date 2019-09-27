@@ -1591,17 +1591,22 @@ namespace ts {
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
-            const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
+            let e: Expression;
+            if (context.getCompilerOptions().useDefineForClassFields) {
+                const propertyName = visitNode(member.name, visitor, isPropertyName);
+                const name = isComputedPropertyName(propertyName) ? propertyName.expression
+                    : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
+                    : propertyName;
+                e = createObjectDefinePropertyCall(receiver, name, createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
+            }
+            else {
+                const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
+                e = createAssignment(memberName, memberFunction);
+            }
             setEmitFlags(memberFunction, EmitFlags.NoComments);
             setSourceMapRange(memberFunction, sourceMapRange);
-
-            const statement = setTextRange(
-                createExpressionStatement(
-                    createAssignment(memberName, memberFunction)
-                ),
-                /*location*/ member
-            );
+            const statement = setTextRange(createExpressionStatement(e), /*location*/ member);
 
             setOriginalNode(statement, member);
             setCommentRange(statement, commentRange);

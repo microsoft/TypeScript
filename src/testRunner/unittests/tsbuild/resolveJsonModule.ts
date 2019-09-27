@@ -52,7 +52,12 @@ namespace ts {
 
 export default hello.hello`);
             const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/index.json"];
-            verifyProjectWithResolveJsonModuleWithFs(fs, "/src/tsconfig_withIncludeOfJson.json", allExpectedOutputs);
+            verifyProjectWithResolveJsonModuleWithFs(
+                fs,
+                "/src/tsconfig_withIncludeOfJson.json",
+                allExpectedOutputs,
+                errorDiagnostic([Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files, "/src/dist/src/index.d.ts"])
+            );
         });
 
         it("with resolveJsonModule and files containing json file", () => {

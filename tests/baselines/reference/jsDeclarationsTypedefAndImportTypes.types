@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsdoc/declarations/conn.js ===
+/**
+ * @typedef {string | number} Whatever
+ */
+
+class Conn {
+>Conn : Conn
+
+    constructor() {}
+    item = 3;
+>item : number
+>3 : 3
+
+    method() {}
+>method : () => void
+}
+
+module.exports = Conn;
+>module.exports = Conn : typeof Conn
+>module.exports : typeof Conn
+>module : { "tests/cases/conformance/jsdoc/declarations/conn": typeof Conn; }
+>exports : typeof Conn
+>Conn : typeof Conn
+
+=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+/**
+ * @typedef {import("./conn")} Conn
+ */
+
+class Wrap {
+>Wrap : Wrap
+
+    /**
+     * @param {Conn} c
+     */
+    constructor(c) {
+>c : import("tests/cases/conformance/jsdoc/declarations/conn")
+
+        this.connItem = c.item;
+>this.connItem = c.item : number
+>this.connItem : number
+>this : this
+>connItem : number
+>c.item : number
+>c : import("tests/cases/conformance/jsdoc/declarations/conn")
+>item : number
+
+        /** @type {import("./conn").Whatever} */
+        this.another = "";
+>this.another = "" : ""
+>this.another : string | number
+>this : this
+>another : string | number
+>"" : ""
+    }
+}
+
+module.exports = {
+>module.exports = {    Wrap} : { Wrap: typeof Wrap; }
+>module.exports : { Wrap: typeof Wrap; }
+>module : { "tests/cases/conformance/jsdoc/declarations/usage": { Wrap: typeof Wrap; }; }
+>exports : { Wrap: typeof Wrap; }
+>{    Wrap} : { Wrap: typeof Wrap; }
+
+    Wrap
+>Wrap : typeof Wrap
+
+};
+

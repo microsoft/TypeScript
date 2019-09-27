@@ -329,6 +329,21 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Like `forEach`, but iterates in reverse order.
+     */
+    export function forEachRight<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        if (array) {
+            for (let i = array.length - 1; i >= 0; i--) {
+                const result = callback(array[i], i);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+        return undefined;
+    }
+
     /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
     export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array === undefined) {
@@ -1537,6 +1552,14 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
+    export function mapMap<T, U>(map: Map<T>, f: (t: T, key: string) => [string, U]): Map<U>;
+    export function mapMap<T, U>(map: UnderscoreEscapedMap<T>, f: (t: T, key: __String) => [string, U]): Map<U>;
+    export function mapMap<T, U>(map: Map<T> | UnderscoreEscapedMap<T>, f: ((t: T, key: string) => [string, U]) | ((t: T, key: __String) => [string, U])): Map<U> {
+        const result = createMap<U>();
+        map.forEach((t: T, key: string & __String) => result.set(...(f(t, key))));
+        return result;
+    }
+
     export interface MultiMap<T> extends Map<T[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
@@ -2159,8 +2182,19 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
-        return arg => f(arg) || g(arg);
+    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
+        return arg => {
+            for (const f of fs) {
+                if (f(arg)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    export function not<T extends unknown[]>(fn: (...args: T) => boolean): (...args: T) => boolean {
+        return (...args) => !fn(...args);
     }
 
     export function assertType<T>(_: T): void { }

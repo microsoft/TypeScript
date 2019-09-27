@@ -1,0 +1,15 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty3.ts(6,9): error TS2611: Class 'Animal' defines instance member property 'sound', but extended class 'Lion' defines it as instance member accessor.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty3.ts (1 errors) ====
+    declare class Animal {
+        sound: string
+    }
+    class Lion extends Animal {
+        _sound = 'grrr'
+        get sound() { return this._sound } // error here
+            ~~~~~
+!!! error TS2611: Class 'Animal' defines instance member property 'sound', but extended class 'Lion' defines it as instance member accessor.
+        set sound(val) { this._sound = val }
+    }
+    

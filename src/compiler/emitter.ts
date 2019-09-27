@@ -96,9 +96,7 @@ namespace ts {
                 comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
             const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
             const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
-            // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
-            const isJs = isSourceFileJS(sourceFile);
-            const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
+            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
             const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
         }
@@ -146,7 +144,7 @@ namespace ts {
 
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
+        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts));
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
             Extension.Dts
@@ -199,7 +197,7 @@ namespace ts {
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
-        if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+        if (getEmitDeclarations(configFile.options)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             addOutput(dts);
             if (configFile.options.declarationMap) {
@@ -248,7 +246,7 @@ namespace ts {
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
-            if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+            if (getEmitDeclarations(configFile.options)) {
                 return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
             }
         }
@@ -395,17 +393,16 @@ namespace ts {
             declarationFilePath: string | undefined,
             declarationMapPath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle || !(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
+            if (!sourceFileOrBundle || !declarationFilePath) {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Setup and perform the transformation to retrieve declarations from the input files
-            const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(sourceFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : sourceFiles;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
-                nonJsFiles.forEach(collectLinkedAliases);
+                sourceFiles.forEach(collectLinkedAliases);
             }
             const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
@@ -659,6 +656,7 @@ namespace ts {
         getAllAccessorDeclarations: notImplemented,
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
+        getDeclarationStatementsForSourceFile: notImplemented,
     };
 
     /*@internal*/

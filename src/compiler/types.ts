@@ -3734,6 +3734,7 @@ namespace ts {
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
+        getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     }
 
     export const enum SymbolFlags {
@@ -3815,6 +3816,12 @@ namespace ts {
         ClassMember = Method | Accessor | Property,
 
         /* @internal */
+        ExportSupportsDefaultModifier = Class | Function | Interface,
+
+        /* @internal */
+        ExportDoesNotSupportDefaultModifier = ~ExportSupportsDefaultModifier,
+
+        /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
@@ -3877,6 +3884,7 @@ namespace ts {
         variances?: VarianceFlags[];             // Alias symbol type argument variance cache
         deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
         deferralParent?: Type;              // Source union/intersection of a deferred type
+        cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
     }
 
     /* @internal */
@@ -4870,6 +4878,7 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
+        useDefineForClassFields?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -5573,6 +5582,16 @@ namespace ts {
         readonly redirectTargetsMap: RedirectTargetsMap;
     }
 
+    /* @internal */
+    export interface PropertyDescriptorAttributes {
+        enumerable?: boolean | Expression;
+        configurable?: boolean | Expression;
+        writable?: boolean | Expression;
+        value?: Expression;
+        get?: Expression;
+        set?: Expression;
+    }
+
     export interface TransformationContext {
         /*@internal*/ getEmitResolver(): EmitResolver;
         /*@internal*/ getEmitHost(): EmitHost;
@@ -6016,7 +6035,7 @@ namespace ts {
         // Called when the symbol writer encounters a symbol to write.  Currently only used by the
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
-        trackSymbol?(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        trackSymbol?(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): void;
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
