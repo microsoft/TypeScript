@@ -17205,7 +17205,7 @@ namespace ts {
             if (!(node.flags & NodeFlags.InWithStatement)) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        const symbol = getResolvedSymbol(<Identifier>node);
+                        const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>node));
                         return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
