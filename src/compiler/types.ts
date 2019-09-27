@@ -3068,6 +3068,7 @@ namespace ts {
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
     }
 
     /* @internal */
@@ -5335,6 +5336,7 @@ namespace ts {
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
+        /*@internal*/getSymlinks?(): ReadonlyMap<string>;
     }
 
     /** true if --out otherwise source file name */

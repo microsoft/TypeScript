@@ -7772,6 +7772,36 @@ namespace ts {
         if (pathComponents.length === 0) return "";
         return pathComponents.slice(1).join(directorySeparator);
     }
+
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+        const result = createMap<string>();
+        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
+            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
+                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
+        for (const [resolvedPath, originalPath] of symlinks) {
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
+            result.set(commonOriginal, commonResolved);
+        }
+        return result;
+    }
+
+    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
+        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
+        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
+            !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
+            getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])) {
+            aParts.pop();
+            bParts.pop();
+        }
+        return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
+    }
+
+    // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
+    // ALso, don't assume that an `@foo` directory is linked. More likely the contents of that are linked.
+    function isNodeModulesOrScopedPackageDirectory(s: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        return getCanonicalFileName(s) === "node_modules" || startsWith(s, "@");
+    }
 }
 
 /* @internal */

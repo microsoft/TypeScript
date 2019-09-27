@@ -313,7 +313,7 @@ namespace ts.server {
 
         /*@internal*/
         getProbableSymlinks(files: readonly SourceFile[]): ReadonlyMap<string> {
-            return this.symlinks || (this.symlinks = moduleSpecifiers.discoverProbableSymlinks(
+            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
                 files,
                 this.getCanonicalFileName,
                 this.getCurrentDirectory()));
