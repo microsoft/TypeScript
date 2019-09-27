@@ -21,15 +21,15 @@ mod1.c;
 >c : { x: string; }
 
 mod1.d;
->mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1").d
 >mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
->d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>d : typeof import("tests/cases/conformance/jsdoc/mod1").d
 
 mod1.d.e;
 >mod1.d.e : number
->mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>mod1.d : typeof import("tests/cases/conformance/jsdoc/mod1").d
 >mod1 : typeof import("tests/cases/conformance/jsdoc/mod1")
->d : typeof import("tests/cases/conformance/jsdoc/mod1")."d"
+>d : typeof import("tests/cases/conformance/jsdoc/mod1").d
 >e : number
 
 mod1.default;

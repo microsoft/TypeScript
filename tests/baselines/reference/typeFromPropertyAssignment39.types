@@ -4,8 +4,8 @@ const foo = {};
 >{} : {}
 
 foo["baz"] = {};
->foo["baz"] = {} : typeof foo."baz"
->foo["baz"] : typeof foo."baz"
+>foo["baz"] = {} : typeof foo.baz
+>foo["baz"] : typeof foo.baz
 >foo : typeof foo
 >"baz" : "baz"
 >{} : {}
@@ -13,7 +13,7 @@ foo["baz"] = {};
 foo["baz"]["blah"] = 3;
 >foo["baz"]["blah"] = 3 : 3
 >foo["baz"]["blah"] : number
->foo["baz"] : typeof foo."baz"
+>foo["baz"] : typeof foo.baz
 >foo : typeof foo
 >"baz" : "baz"
 >"blah" : "blah"

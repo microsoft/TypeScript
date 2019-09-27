@@ -1,7 +1,6 @@
 // @allowJs: true
 // @checkJs: true
-// @declaration: true
-// @emitDeclarationOnly: true
+// @noEmit: true
 // @outDir: out
 // @Filename: a.js
 
@@ -19,8 +18,8 @@ Multimap4["prototype"] = {
   }
 };
 
-Multimap4["prototype"]["add-on"] = function() {};
+Multimap4["prototype"]["addon"] = function() {};
 
 const map4 = new Multimap4();
 map4.get("");
-map4["add-on"]();
+map4.addon();
