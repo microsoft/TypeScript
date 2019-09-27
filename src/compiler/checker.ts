@@ -7930,7 +7930,7 @@ namespace ts {
         }
 
         function isStringConcatExpression(expr: Node): boolean {
-            if (expr.kind === SyntaxKind.StringLiteral) {
+            if (isStringLiteralLike(expr)) {
                 return true;
             }
             else if (expr.kind === SyntaxKind.BinaryExpression) {
@@ -7947,6 +7947,7 @@ namespace ts {
             switch (expr.kind) {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return true;
                 case SyntaxKind.PrefixUnaryExpression:
                     return (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
@@ -7969,7 +7970,7 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
-                        if (member.initializer && member.initializer.kind === SyntaxKind.StringLiteral) {
+                        if (member.initializer && isStringLiteralLike(member.initializer)) {
                             return links.enumKind = EnumKind.Literal;
                         }
                         if (!isLiteralEnumMember(member)) {
@@ -17921,7 +17922,7 @@ namespace ts {
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+                isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 undefined;
         }
 
@@ -18319,8 +18320,8 @@ namespace ts {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
                 if (clause.kind === SyntaxKind.CaseClause) {
-                    if (clause.expression.kind === SyntaxKind.StringLiteral) {
-                        witnesses.push((clause.expression as StringLiteral).text);
+                    if (isStringLiteralLike(clause.expression)) {
+                        witnesses.push(clause.expression.text);
                         continue;
                     }
                     return emptyArray;
@@ -22887,7 +22888,7 @@ namespace ts {
                 return objectType;
             }
 
-            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
@@ -31603,7 +31604,8 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.StringLiteral:
-                        return (<StringLiteral>expr).text;
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return (<StringLiteralLike>expr).text;
                     case SyntaxKind.NumericLiteral:
                         checkGrammarNumericLiteral(<NumericLiteral>expr);
                         return +(<NumericLiteral>expr).text;
@@ -31656,7 +31658,7 @@ namespace ts {
             return node.kind === SyntaxKind.Identifier ||
                 node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((<PropertyAccessExpression>node).expression) ||
                 node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((<ElementAccessExpression>node).expression) &&
-                    (<ElementAccessExpression>node).argumentExpression.kind === SyntaxKind.StringLiteral;
+                    isStringLiteralLike((<ElementAccessExpression>node).argumentExpression);
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
@@ -35239,7 +35241,7 @@ namespace ts {
         }
 
         function isStringOrNumberLiteralExpression(expr: Expression) {
-            return expr.kind === SyntaxKind.StringLiteral || expr.kind === SyntaxKind.NumericLiteral ||
+            return isStringOrNumericLiteralLike(expr) ||
                 expr.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }

@@ -1692,7 +1692,6 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
@@ -1715,6 +1714,7 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:
                 return isInExpressionContext(node);
             default:
@@ -2529,6 +2529,7 @@ namespace ts {
         const parent = name.parent;
         switch (name.kind) {
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
                 // falls through
@@ -2556,7 +2557,7 @@ namespace ts {
     }
 
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
-        return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
+        return isStringOrNumericLiteralLike(node) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
             isDeclaration(node.parent.parent);
     }
@@ -3243,20 +3244,22 @@ namespace ts {
     }
 
     /**
-     * Strip off existed single quotes or double quotes from a given string
+     * Strip off existed surrounding single quotes, double quotes, or backticks from a given string
      *
      * @return non-quoted string
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isQuoteOrBacktick(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
     }
 
-    export function startsWithQuote(name: string): boolean {
-        return isSingleOrDoubleQuote(name.charCodeAt(0));
+    function isQuoteOrBacktick(charCode: number) {
+        return charCode === CharacterCodes.singleQuote ||
+            charCode === CharacterCodes.doubleQuote ||
+            charCode === CharacterCodes.backtick;
     }
 
     function getReplacement(c: string, offset: number, input: string) {
