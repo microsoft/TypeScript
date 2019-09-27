@@ -1,7 +1,8 @@
 // @allowJs: true
 // @checkJs: true
 // @strict: true
-// @noEmit: true
+// @emitDeclarationOnly: true
+// @declaration: true
 // @Filename: a.js
 
 const foo = {};
