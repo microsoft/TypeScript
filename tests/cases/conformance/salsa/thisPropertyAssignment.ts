@@ -1,7 +1,8 @@
-// @noEmit: true
 // @checkJs: true
 // @allowJs: true
 // @strict: true
+// @declaration: true
+// @emitDeclarationOnly: true
 // @Filename: a.js
 
 // This test is asserting that a single property/element access

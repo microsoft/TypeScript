@@ -3033,7 +3033,7 @@ namespace ts {
                     return getSymbolOfNode(d.parent);
                 }
                 if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
-                    if (isModuleExportsPropertyAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
+                    if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
                         return getSymbolOfNode(getSourceFileOfNode(d));
                     }
                     checkExpressionCached(d.parent.left.expression);
@@ -31929,7 +31929,7 @@ namespace ts {
                     return node;
                 case SyntaxKind.PropertyAccessExpression:
                     do {
-                        if (isModuleExportsPropertyAccessExpression(node.expression)) {
+                        if (isModuleExportsAccessExpression(node.expression)) {
                             return node.name;
                         }
                         node = node.expression;

@@ -1,7 +1,8 @@
 // @allowJs: true
-// @noEmit: true
 // @strict: true
 // @checkJs: true
+// @declaration: true
+// @emitDeclarationOnly: true
 // @filename: mod1.js
 exports.a = { x: "x" };
 exports["b"] = { x: "x" };
