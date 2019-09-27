@@ -1,5 +1,4 @@
 // Some tests have trailing whitespace
-// tslint:disable trim-trailing-whitespace
 
 namespace ts {
     describe("unittests:: services:: textChanges", () => {
@@ -84,14 +83,14 @@ namespace M
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
                 const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body!.statements.slice(1);
                 const newFunction = createFunctionDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*asteriskToken*/ undefined,
-                        /*name*/ "bar",
-                        /*typeParameters*/ undefined,
-                        /*parameters*/ emptyArray,
-                        /*type*/ createKeywordTypeNode(SyntaxKind.AnyKeyword),
-                        /*body */ createBlock(statements)
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ "bar",
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ emptyArray,
+                    /*type*/ createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                    /*body */ createBlock(statements)
                 );
 
                 changeTracker.insertNodeBefore(sourceFile, /*before*/findChild("M2", sourceFile), newFunction);
@@ -183,12 +182,12 @@ var a = 4; // comment 7
         }
         function createTestClass() {
             return createClassDeclaration(
-                    /*decorators*/ undefined,
+                /*decorators*/ undefined,
                 [
                     createToken(SyntaxKind.PublicKeyword)
                 ],
                 "class1",
-                    /*typeParameters*/ undefined,
+                /*typeParameters*/ undefined,
                 [
                     createHeritageClause(
                         SyntaxKind.ImplementsKeyword,
@@ -199,12 +198,12 @@ var a = 4; // comment 7
                 ],
                 [
                     createProperty(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
                         "property1",
-                            /*questionToken*/ undefined,
+                        /*questionToken*/ undefined,
                         createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-                            /*initializer*/ undefined
+                        /*initializer*/ undefined
                     )
                 ]
             );
@@ -336,8 +335,8 @@ namespace M {
         function createTestSuperCall() {
             const superCall = createCall(
                 createSuper(),
-                    /*typeArguments*/ undefined,
-                    /*argumentsArray*/ emptyArray
+                /*typeArguments*/ undefined,
+                /*argumentsArray*/ emptyArray
             );
             return createStatement(superCall);
         }

@@ -15,7 +15,7 @@ async function countEverything(): Promise<number> {
     const [resultA, resultB] = await Promise.all([
         providerA(),
         providerB(),
-    ]);
+    ] as const);
 
     const dataA: A[] = resultA;
     const dataB: B[] = resultB;
@@ -24,6 +24,7 @@ async function countEverything(): Promise<number> {
     }
     return 0;
 }
+
 
 //// [correctOrderOfPromiseMethod.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

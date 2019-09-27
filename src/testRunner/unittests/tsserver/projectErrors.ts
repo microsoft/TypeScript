@@ -1,11 +1,11 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Project Errors", () => {
-        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
+        function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
             checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
         }
 
-        function checkProjectErrorsWorker(errors: ReadonlyArray<Diagnostic>, expectedErrors: ReadonlyArray<string>): void {
+        function checkProjectErrorsWorker(errors: readonly Diagnostic[], expectedErrors: readonly string[]): void {
             assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
             if (expectedErrors.length) {
                 for (let i = 0; i < errors.length; i++) {
@@ -774,7 +774,7 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName: projectName }
-            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
+            }).response as readonly protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
@@ -788,7 +788,7 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName: projectName }
-            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
+            }).response as readonly protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
 
@@ -815,7 +815,7 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
@@ -833,7 +833,7 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -849,8 +849,8 @@ declare module '@custom/plugin' {
                 // comment`;
             const configFileContentAfterComment = `
                 "compilerOptions": {
-                    "allowJs": true,
-                    "declaration": true
+                    "inlineSourceMap": true,
+                    "mapRoot": "./"
                 }
             }`;
             const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
@@ -873,8 +873,8 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
-            assert.isTrue(diags.length === 2);
+            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            assert.isTrue(diags.length === 3);
 
             configFile.content = configFileContentWithoutCommentLine;
             host.reloadFS([file, configFile]);
@@ -884,11 +884,12 @@ declare module '@custom/plugin' {
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
-            assert.isTrue(diagsAfterEdit.length === 2);
+            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            assert.isTrue(diagsAfterEdit.length === 3);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
             verifyDiagnostic(diags[1], diagsAfterEdit[1]);
+            verifyDiagnostic(diags[2], diagsAfterEdit[2]);
 
             function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
                 assert.equal(beforeEditDiag.message, afterEditDiag.message);

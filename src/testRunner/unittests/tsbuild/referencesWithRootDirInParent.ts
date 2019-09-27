@@ -16,7 +16,7 @@ namespace ts {
                 "/src/dist/main/b.js", "/src/dist/main/b.d.ts"
             ];
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
             builder.build();
             host.assertDiagnosticMessages(/*empty*/);
@@ -34,7 +34,7 @@ namespace ts {
             ];
             const fs = projFs.shadow();
             replaceText(fs, "/src/tsconfig.base.json", `"rootDir": "./src/",`, "");
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -69,7 +69,7 @@ namespace ts {
             fs.writeFileSync("/src/src/other/tsconfig.json", JSON.stringify({
                 compilerOptions: { composite: true, outDir: "../../dist/" },
             }));
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(
@@ -105,7 +105,7 @@ namespace ts {
             fs.writeFileSync("/src/src/other/tsconfig.other.json", JSON.stringify({
                 compilerOptions: { composite: true, outDir: "../../dist/" },
             }));
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main/tsconfig.main.json"], { verbose: true });
             builder.build();
             host.assertDiagnosticMessages(

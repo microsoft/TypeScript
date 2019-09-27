@@ -1,10 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: on demo project", () => {
         let projFs: vfs.FileSystem;
-        const { time } = getTime();
-
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/demo", time);
+            projFs = loadProjectFromDisk("tests/projects/demo");
         });
 
         after(() => {
@@ -49,7 +47,7 @@ namespace ts {
 
         function verifyBuild({ modifyDiskLayout, expectedExitStatus, expectedDiagnostics, expectedOutputs, notExpectedOutputs }: VerifyBuild) {
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             modifyDiskLayout(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.json"], { verbose: true });
             const exitStatus = builder.build();

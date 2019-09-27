@@ -584,7 +584,7 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/npm": typeof EventEmitter; }' have no overlap.
+node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/npm": typeof internal.EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1153,6 +1153,8 @@ node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find 
 node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/check-permissions.js(26,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+node_modules/npm/test/tap/check-permissions.js(42,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks'.

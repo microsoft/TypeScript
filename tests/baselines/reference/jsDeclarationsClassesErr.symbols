@@ -1,0 +1,153 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
+
+export class M<T> {
+>M : Symbol(M, Decl(index.js, 0, 0))
+>T : Symbol(T, Decl(index.js, 3, 15))
+
+    field: T;
+>field : Symbol(M.field, Decl(index.js, 3, 19))
+>T : Symbol(T, Decl(index.js, 3, 15))
+}
+
+export class N<U> extends M<U> {
+>N : Symbol(N, Decl(index.js, 5, 1))
+>U : Symbol(U, Decl(index.js, 7, 15))
+>M : Symbol(M, Decl(index.js, 0, 0))
+>U : Symbol(U, Decl(index.js, 7, 15))
+
+    other: U;
+>other : Symbol(N.other, Decl(index.js, 7, 32))
+>U : Symbol(U, Decl(index.js, 7, 15))
+}
+
+export class O {
+>O : Symbol(O, Decl(index.js, 9, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 12, 5))
+}
+
+export class P extends O {}
+>P : Symbol(P, Decl(index.js, 13, 1))
+>O : Symbol(O, Decl(index.js, 9, 1))
+
+export class Q extends O {
+>Q : Symbol(Q, Decl(index.js, 15, 27))
+>O : Symbol(O, Decl(index.js, 9, 1))
+
+    [idx: string]: "ok";
+>idx : Symbol(idx, Decl(index.js, 18, 5))
+}
+
+export class R extends O {
+>R : Symbol(R, Decl(index.js, 19, 1))
+>O : Symbol(O, Decl(index.js, 9, 1))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 22, 5))
+}
+
+export class S extends O {
+>S : Symbol(S, Decl(index.js, 23, 1))
+>O : Symbol(O, Decl(index.js, 9, 1))
+
+    [idx: string]: "ok";
+>idx : Symbol(idx, Decl(index.js, 26, 5))
+
+    [idx: number]: never;
+>idx : Symbol(idx, Decl(index.js, 27, 5))
+}
+
+export class T {
+>T : Symbol(T, Decl(index.js, 28, 1))
+
+    [idx: number]: string;
+>idx : Symbol(idx, Decl(index.js, 31, 5))
+}
+
+export class U extends T {}
+>U : Symbol(U, Decl(index.js, 32, 1))
+>T : Symbol(T, Decl(index.js, 28, 1))
+
+
+export class V extends T {
+>V : Symbol(V, Decl(index.js, 34, 27))
+>T : Symbol(T, Decl(index.js, 28, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 38, 5))
+}
+
+export class W extends T {
+>W : Symbol(W, Decl(index.js, 39, 1))
+>T : Symbol(T, Decl(index.js, 28, 1))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 42, 5))
+}
+
+export class X extends T {
+>X : Symbol(X, Decl(index.js, 43, 1))
+>T : Symbol(T, Decl(index.js, 28, 1))
+
+    [idx: string]: string;
+>idx : Symbol(idx, Decl(index.js, 46, 5))
+
+    [idx: number]: "ok";
+>idx : Symbol(idx, Decl(index.js, 47, 5))
+}
+
+export class Y {
+>Y : Symbol(Y, Decl(index.js, 48, 1))
+
+    [idx: string]: {x: number};
+>idx : Symbol(idx, Decl(index.js, 51, 5))
+>x : Symbol(x, Decl(index.js, 51, 20))
+
+    [idx: number]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 52, 5))
+>x : Symbol(x, Decl(index.js, 52, 20))
+>y : Symbol(y, Decl(index.js, 52, 30))
+}
+
+export class Z extends Y {}
+>Z : Symbol(Z, Decl(index.js, 53, 1))
+>Y : Symbol(Y, Decl(index.js, 48, 1))
+
+export class AA extends Y {
+>AA : Symbol(AA, Decl(index.js, 55, 27))
+>Y : Symbol(Y, Decl(index.js, 48, 1))
+
+    [idx: string]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 58, 5))
+>x : Symbol(x, Decl(index.js, 58, 20))
+>y : Symbol(y, Decl(index.js, 58, 30))
+}
+
+export class BB extends Y {
+>BB : Symbol(BB, Decl(index.js, 59, 1))
+>Y : Symbol(Y, Decl(index.js, 48, 1))
+
+    [idx: number]: {x: 0, y: 0};
+>idx : Symbol(idx, Decl(index.js, 62, 5))
+>x : Symbol(x, Decl(index.js, 62, 20))
+>y : Symbol(y, Decl(index.js, 62, 25))
+}
+
+export class CC extends Y {
+>CC : Symbol(CC, Decl(index.js, 63, 1))
+>Y : Symbol(Y, Decl(index.js, 48, 1))
+
+    [idx: string]: {x: number, y: number};
+>idx : Symbol(idx, Decl(index.js, 66, 5))
+>x : Symbol(x, Decl(index.js, 66, 20))
+>y : Symbol(y, Decl(index.js, 66, 30))
+
+    [idx: number]: {x: 0, y: 0};
+>idx : Symbol(idx, Decl(index.js, 67, 5))
+>x : Symbol(x, Decl(index.js, 67, 20))
+>y : Symbol(y, Decl(index.js, 67, 25))
+}
+

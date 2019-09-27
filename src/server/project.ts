@@ -75,7 +75,7 @@ namespace ts.server {
 
     /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
-        projectErrors: ReadonlyArray<Diagnostic>;
+        projectErrors: readonly Diagnostic[];
     }
 
     export interface PluginCreateInfo {
@@ -133,7 +133,7 @@ namespace ts.server {
          * Maop does not contain entries for files that do not have unresolved imports
          * This helps in containing the set of files to invalidate
          */
-        cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
+        cachedUnresolvedImportsPerFile = createMap<readonly string[]>();
 
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -195,6 +195,11 @@ namespace ts.server {
 
         /*@internal*/
         originalConfiguredProjects: Map<true> | undefined;
+
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
+            return undefined;
+        }
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
@@ -310,7 +315,7 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+        getProjectReferences(): readonly ProjectReference[] | undefined {
             return undefined;
         }
 
@@ -378,7 +383,7 @@ namespace ts.server {
             return this.projectService.host.useCaseSensitiveFileNames;
         }
 
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth);
         }
 
@@ -391,6 +396,11 @@ namespace ts.server {
         }
 
         fileExists(file: string): boolean {
+            return this.fileExistsWithCache(file);
+        }
+
+        /* @internal */
+        fileExistsWithCache(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
             const path = this.toPath(file);
@@ -497,11 +507,11 @@ namespace ts.server {
         /**
          * Get the errors that dont have any file name associated
          */
-        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+        getGlobalProjectErrors(): readonly Diagnostic[] {
             return emptyArray;
         }
 
-        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+        getAllProjectErrors(): readonly Diagnostic[] {
             return emptyArray;
         }
 
@@ -527,8 +537,11 @@ namespace ts.server {
             return this.projectService.getSourceFileLike(fileName, this);
         }
 
-        private shouldEmitFile(scriptInfo: ScriptInfo) {
-            return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
+        /*@internal*/
+        shouldEmitFile(scriptInfo: ScriptInfo | undefined) {
+            return scriptInfo &&
+                !scriptInfo.isDynamicOrHasMixedContent() &&
+                !this.program!.isSourceOfProjectReferenceRedirect(scriptInfo.path);
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -538,7 +551,7 @@ namespace ts.server {
             updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
-                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
         /**
@@ -714,7 +727,7 @@ namespace ts.server {
             });
         }
 
-        getExcludedFiles(): ReadonlyArray<NormalizedPath> {
+        getExcludedFiles(): readonly NormalizedPath[] {
             return emptyArray;
         }
 
@@ -858,7 +871,7 @@ namespace ts.server {
             const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
             this.hasAddedorRemovedFiles = false;
 
-            const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -1223,6 +1236,11 @@ namespace ts.server {
             this.rootFilesMap.delete(info.path);
         }
 
+        /*@internal*/
+        isSourceOfProjectReferenceRedirect(fileName: string) {
+            return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
+        }
+
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
@@ -1295,6 +1313,7 @@ namespace ts.server {
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 const newLS = pluginModule.create(info);
                 for (const k of Object.keys(this.languageService)) {
+                    // eslint-disable-next-line no-in-operator
                     if (!(k in newLS)) {
                         this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
                         (newLS as any)[k] = (this.languageService as any)[k];
@@ -1324,12 +1343,12 @@ namespace ts.server {
         }
     }
 
-    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): SortedReadonlyArray<string> {
+    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<readonly string[]>): SortedReadonlyArray<string> {
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
         return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
             extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
     }
-    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: ReadonlyArray<string>, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): ReadonlyArray<string> {
+    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: Map<readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
             if (!file.resolvedModules) return emptyArray;
             let unresolvedImports: string[] | undefined;
@@ -1474,6 +1493,8 @@ namespace ts.server {
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private projectReferenceCallbacks: ResolvedProjectReferenceCallbacks | undefined;
+        private mapOfDeclarationDirectories: Map<true> | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1491,7 +1512,7 @@ namespace ts.server {
 
         private projectErrors: Diagnostic[] | undefined;
 
-        private projectReferences: ReadonlyArray<ProjectReference> | undefined;
+        private projectReferences: readonly ProjectReference[] | undefined;
 
         /*@internal*/
         projectOptions?: ProjectOptions | true;
@@ -1519,6 +1540,63 @@ namespace ts.server {
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
+        /* @internal */
+        setResolvedProjectReferenceCallbacks(projectReferenceCallbacks: ResolvedProjectReferenceCallbacks) {
+            this.projectReferenceCallbacks = projectReferenceCallbacks;
+        }
+
+        /* @internal */
+        useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
+            !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
+
+        /**
+         * This implementation of fileExists checks if the file being requested is
+         * .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that file exists on host
+         */
+        fileExists(file: string): boolean {
+            // Project references go to source file instead of .d.ts file
+            if (this.useSourceOfProjectReferenceRedirect() && this.projectReferenceCallbacks) {
+                const source = this.projectReferenceCallbacks.getSourceOfProjectReferenceRedirect(file);
+                if (source) return isString(source) ? super.fileExists(source) : true;
+            }
+            return super.fileExists(file);
+        }
+
+        /**
+         * This implementation of directoryExists checks if the directory being requested is
+         * directory of .d.ts file for the referenced Project.
+         * If it is it returns true irrespective of whether that directory exists on host
+         */
+        directoryExists(path: string): boolean {
+            if (super.directoryExists(path)) return true;
+            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
+
+            if (!this.mapOfDeclarationDirectories) {
+                this.mapOfDeclarationDirectories = createMap();
+                this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
+                    if (!ref) return;
+                    const out = ref.commandLine.options.outFile || ref.commandLine.options.outDir;
+                    if (out) {
+                        this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
+                    }
+                    else {
+                        // Set declaration's in different locations only, if they are next to source the directory present doesnt change
+                        const declarationDir = ref.commandLine.options.declarationDir || ref.commandLine.options.outDir;
+                        if (declarationDir) {
+                            this.mapOfDeclarationDirectories!.set(this.toPath(declarationDir), true);
+                        }
+                    }
+                });
+            }
+            const dirPath = this.toPath(path);
+            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
+            return !!forEachKey(
+                this.mapOfDeclarationDirectories,
+                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
+            );
+        }
+
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -1527,6 +1605,8 @@ namespace ts.server {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
@@ -1555,11 +1635,11 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+        getProjectReferences(): readonly ProjectReference[] | undefined {
             return this.projectReferences;
         }
 
-        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
+        updateReferences(refs: readonly ProjectReference[] | undefined) {
             this.projectReferences = refs;
         }
 
@@ -1567,6 +1647,12 @@ namespace ts.server {
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
             return program && program.forEachResolvedProjectReference(cb);
+        }
+
+        /*@internal*/
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined {
+            const program = this.getCurrentProgram();
+            return program && program.getResolvedProjectReferenceToRedirect(fileName);
         }
 
         /*@internal*/
@@ -1601,14 +1687,14 @@ namespace ts.server {
         /**
          * Get the errors that dont have any file name associated
          */
-        getGlobalProjectErrors(): ReadonlyArray<Diagnostic> {
+        getGlobalProjectErrors(): readonly Diagnostic[] {
             return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
         /**
          * Get all the project errors
          */
-        getAllProjectErrors(): ReadonlyArray<Diagnostic> {
+        getAllProjectErrors(): readonly Diagnostic[] {
             return this.projectErrors || emptyArray;
         }
 
@@ -1651,6 +1737,8 @@ namespace ts.server {
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.configFileSpecs = undefined;
+            this.projectReferenceCallbacks = undefined;
+            this.mapOfDeclarationDirectories = undefined;
             super.close();
         }
 
@@ -1713,7 +1801,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
-        excludedFiles: ReadonlyArray<NormalizedPath> = [];
+        excludedFiles: readonly NormalizedPath[] = [];
         private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /*@internal*/
         constructor(public externalProjectName: string,

@@ -1,8 +1,5 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace Harness.Parallel.Host {
     export function start() {
-        // tslint:disable-next-line:variable-name
         const Mocha = require("mocha") as typeof import("mocha");
         const Base = Mocha.reporters.Base;
         const color = Base.color;
@@ -17,7 +14,6 @@ namespace Harness.Parallel.Host {
         const { statSync, readFileSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-        // tslint:disable-next-line:variable-name
         const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
 
         const perfdataFileNameFragment = ".parallelperf";
@@ -28,9 +24,7 @@ namespace Harness.Parallel.Host {
         let totalCost = 0;
 
         class RemoteSuite extends Mocha.Suite {
-            suites!: RemoteSuite[];
             suiteMap = ts.createMap<RemoteSuite>();
-            tests!: RemoteTest[];
             constructor(title: string) {
                 super(title);
                 this.pending = false;
@@ -51,7 +45,7 @@ namespace Harness.Parallel.Host {
             constructor(info: ErrorInfo | TestInfo) {
                 super(info.name[info.name.length - 1]);
                 this.info = info;
-                this.state = "error" in info ? "failed" : "passed";
+                this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line no-in-operator
                 this.pending = false;
             }
         }
@@ -323,12 +317,15 @@ namespace Harness.Parallel.Host {
                             return process.exit(2);
                         }
                         case "timeout": {
-                            if (worker.timer) clearTimeout(worker.timer);
+                            if (worker.timer) {
+                                // eslint-disable-next-line no-restricted-globals
+                                clearTimeout(worker.timer);
+                            }
                             if (data.payload.duration === "reset") {
                                 worker.timer = undefined;
                             }
                             else {
-                                // tslint:disable-next-line:ban
+                                // eslint-disable-next-line no-restricted-globals
                                 worker.timer = setTimeout(killChild, data.payload.duration, data.payload);
                             }
                             break;
@@ -530,10 +527,10 @@ namespace Harness.Parallel.Host {
                 function replaySuite(runner: Mocha.Runner, suite: RemoteSuite) {
                     runner.emit("suite", suite);
                     for (const test of suite.tests) {
-                        replayTest(runner, test);
+                        replayTest(runner, test as RemoteTest);
                     }
                     for (const child of suite.suites) {
-                        replaySuite(runner, child);
+                        replaySuite(runner, child as RemoteSuite);
                     }
                     runner.emit("suite end", suite);
                 }
@@ -541,7 +538,7 @@ namespace Harness.Parallel.Host {
                 function replayTest(runner: Mocha.Runner, test: RemoteTest) {
                     runner.emit("test", test);
                     if (test.isFailed()) {
-                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error"));
+                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line no-in-operator
                     }
                     else {
                         runner.emit("pass", test);
@@ -592,7 +589,8 @@ namespace Harness.Parallel.Host {
                 consoleReporter.epilogue();
                 if (noColors) Base.useColors = savedUseColors;
 
-                IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+                // eslint-disable-next-line no-null/no-null
+                IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
                 if (xunitReporter) {
                     xunitReporter.done(errorResults.length, failures => process.exit(failures));
@@ -626,6 +624,7 @@ namespace Harness.Parallel.Host {
 
             const perfData = readSavedPerfData(configOption);
             context.describe = addSuite as Mocha.SuiteFunction;
+            context.it = addSuite as Mocha.TestFunction;
 
             function addSuite(title: string) {
                 // Note, sub-suites are not indexed (we assume such granularity is not required)
@@ -650,7 +649,7 @@ namespace Harness.Parallel.Host {
             shimNoopTestInterface(global);
         }
 
-        // tslint:disable-next-line:ban
+        // eslint-disable-next-line no-restricted-globals
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 }

@@ -1,0 +1,25 @@
+{
+    "extends": "../.eslintrc.json",
+    "overrides": [
+        {
+            "files": ["lib/*.d.ts"],
+            "rules": {
+                "@typescript-eslint/interface-name-prefix": "off",
+                "@typescript-eslint/prefer-function-type": "off",
+                "@typescript-eslint/unified-signatures": "off",
+
+                // scripts/eslint/rules
+                "no-keywords": "off",
+
+                // eslint
+                "no-var": "off"
+            }
+        },
+        {
+            "files": ["lib/es2019.array.d.ts"],
+            "rules": {
+                "@typescript-eslint/array-type": "off"
+            }
+        }
+    ]
+}

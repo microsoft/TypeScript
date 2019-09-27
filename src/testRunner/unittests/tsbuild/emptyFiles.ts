@@ -10,7 +10,7 @@ namespace ts {
     describe("unittests:: tsbuild - empty files option in tsconfig", () => {
         it("has empty files diagnostic when files is empty and no references are provided", () => {
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/no-references"], { dry: false, force: false, verbose: false });
 
             host.clearDiagnostics();
@@ -26,7 +26,7 @@ namespace ts {
 
         it("does not have empty files diagnostic when files is empty and references are provided", () => {
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/with-references"], { dry: false, force: false, verbose: false });
 
             host.clearDiagnostics();

@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint"
+    ],
+
+    "unwantedRecommendations": [
+        "ms-vscode.vscode-typescript-tslint-plugin"
+    ]
+}

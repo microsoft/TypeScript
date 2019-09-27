@@ -495,15 +495,17 @@ namespace ts.server {
                     // the default project; if no configured projects, the first external project should
                     // be the default project; otherwise the first inferred project should be the default.
                     let firstExternalProject;
+                    let firstConfiguredProject;
                     for (const project of this.containingProjects) {
                         if (project.projectKind === ProjectKind.Configured) {
-                            return project;
+                            if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) return project;
+                            if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
                         else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
                             firstExternalProject = project;
                         }
                     }
-                    return firstExternalProject || this.containingProjects[0];
+                    return firstConfiguredProject || firstExternalProject || this.containingProjects[0];
             }
         }
 
@@ -595,8 +597,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         /*@internal*/
-        // tslint:disable-next-line:unified-signatures
-        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }
