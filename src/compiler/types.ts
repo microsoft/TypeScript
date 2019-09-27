@@ -4805,6 +4805,7 @@ namespace ts {
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
         /*@internal*/init?: boolean;
