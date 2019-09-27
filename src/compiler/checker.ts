@@ -3682,7 +3682,8 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
-                        getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
+                        getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+                        getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,

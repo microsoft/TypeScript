@@ -715,6 +715,7 @@ namespace ts {
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
+        let symlinks: ReadonlyMap<string> | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -973,7 +974,8 @@ namespace ts {
             getResolvedProjectReferenceByPath,
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
-            emitBuildInfo
+            emitBuildInfo,
+            getProbableSymlinks
         };
 
         verifyCompilerOptions();
@@ -1472,6 +1474,7 @@ namespace ts {
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
+                getProbableSymlinks,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -3357,6 +3360,16 @@ namespace ts {
 
         function isSameFile(file1: string, file2: string) {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
+        function getProbableSymlinks(): ReadonlyMap<string> {
+            if (host.getSymlinks) {
+                return host.getSymlinks();
+            }
+            return symlinks || (symlinks = discoverProbableSymlinks(
+                files,
+                getCanonicalFileName,
+                host.getCurrentDirectory()));
         }
     }
 

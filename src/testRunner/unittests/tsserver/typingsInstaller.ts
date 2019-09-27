@@ -840,6 +840,7 @@ namespace ts.projectSystem {
             const watchedFilesExpected = createMap<number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
+            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);

@@ -128,6 +128,9 @@ namespace ts.server {
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
+
+        /*@internal*/
         /**
          * This is map from files to unresolved imports in it
          * Maop does not contain entries for files that do not have unresolved imports
@@ -235,6 +238,16 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
+        readonly packageJsonCache: PackageJsonCache;
+
+        /*@internal*/
+        private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
+        /*@internal*/
+        private dirtyFilesForSuggestions: Map<true> | undefined;
+        /*@internal*/
+        private symlinks: ReadonlyMap<string> | undefined;
+
+        /*@internal*/
         constructor(
             /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -284,6 +297,7 @@ namespace ts.server {
             }
             this.markAsDirty();
             this.projectService.pendingEnsureProjectForOpenFiles = true;
+            this.packageJsonCache = createPackageJsonCache(this);
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -295,6 +309,14 @@ namespace ts.server {
 
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
+        }
+
+        /*@internal*/
+        getProbableSymlinks(files: readonly SourceFile[]): ReadonlyMap<string> {
+            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
+                files,
+                this.getCanonicalFileName,
+                this.getCurrentDirectory()));
         }
 
         // Method of LanguageServiceHost
@@ -673,6 +695,10 @@ namespace ts.server {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
             }
+            if (this.packageJsonFilesMap) {
+                clearMap(this.packageJsonFilesMap, closeFileWatcher);
+                this.packageJsonFilesMap = undefined;
+            }
             this.clearGeneratedFileWatch();
 
             // signal language service to release source files acquired from document registry
@@ -847,6 +873,14 @@ namespace ts.server {
             (this.updatedFileNames || (this.updatedFileNames = createMap<true>())).set(fileName, true);
         }
 
+        /*@internal*/
+        markFileAsDirty(changedFile: Path) {
+            this.markAsDirty();
+            if (!this.importSuggestionsCache.isEmpty()) {
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile, true);
+            }
+        }
+
         markAsDirty() {
             if (!this.dirty) {
                 this.projectStateVersion++;
@@ -1008,6 +1042,29 @@ namespace ts.server {
                 }
             }
 
+            if (!this.importSuggestionsCache.isEmpty()) {
+                if (this.hasAddedorRemovedFiles || oldProgram && !oldProgram.structureIsReused) {
+                    this.importSuggestionsCache.clear();
+                }
+                else if (this.dirtyFilesForSuggestions && oldProgram && this.program) {
+                    forEachKey(this.dirtyFilesForSuggestions, fileName => {
+                        const oldSourceFile = oldProgram.getSourceFile(fileName);
+                        const sourceFile = this.program!.getSourceFile(fileName);
+                        if (this.sourceFileHasChangedOwnImportSuggestions(oldSourceFile, sourceFile)) {
+                            this.importSuggestionsCache.clear();
+                            return true;
+                        }
+                    });
+                }
+            }
+            if (this.dirtyFilesForSuggestions) {
+                this.dirtyFilesForSuggestions.clear();
+            }
+
+            if (this.hasAddedorRemovedFiles) {
+                this.symlinks = undefined;
+            }
+
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
@@ -1029,6 +1086,54 @@ namespace ts.server {
                 this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
             }
             return hasNewProgram;
+        }
+
+        /*@internal*/
+        private sourceFileHasChangedOwnImportSuggestions(oldSourceFile: SourceFile | undefined, newSourceFile: SourceFile | undefined) {
+            if (!oldSourceFile && !newSourceFile) {
+                return false;
+            }
+            // Probably shouldn’t get this far, but on the off chance the file was added or removed,
+            // we can’t reliably tell anything about it.
+            if (!oldSourceFile || !newSourceFile) {
+                return true;
+            }
+
+            Debug.assertEqual(oldSourceFile.fileName, newSourceFile.fileName);
+            // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
+            // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
+            if (this.getTypeAcquisition().enable && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile)) {
+                return true;
+            }
+
+            // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
+            // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
+            // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
+            if (
+                !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
+                !this.ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
+            ) {
+                return true;
+            }
+            return false;
+        }
+
+        /*@internal*/
+        private ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
+            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
+                return false;
+            }
+            let oldFileStatementIndex = -1;
+            let newFileStatementIndex = -1;
+            for (const ambientModuleName of newSourceFile.ambientModuleNames) {
+                const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
+                oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
+                newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
+                if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
@@ -1340,6 +1445,71 @@ namespace ts.server {
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics() {
             this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
+
+        /*@internal*/
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
+            const result: PackageJsonInfo[] = [];
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        result.push(Debug.assertDefined(packageJsonCache.getInDirectory(directory)));
+                }
+                if (rootPath && rootPath === toPath(directory)) {
+                    return true;
+                }
+            });
+
+            return result;
+        }
+
+        /*@internal*/
+        onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
+        }
+
+        /*@internal*/
+        getImportSuggestionsCache() {
+            return this.importSuggestionsCache;
+        }
+
+        private watchPackageJsonFile(path: Path) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(path)) {
+                watchers.set(path, this.projectService.watchFactory.watchFile(
+                    this.projectService.host,
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    WatchType.PackageJsonFile,
+                ));
+            }
         }
     }
 

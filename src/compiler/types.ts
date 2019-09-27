@@ -3068,6 +3068,7 @@ namespace ts {
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
     }
 
     /* @internal */
@@ -4885,7 +4886,8 @@ namespace ts {
     }
 
     export interface TypeAcquisition {
-        /* @deprecated typingOptions.enableAutoDiscovery
+        /**
+         * @deprecated typingOptions.enableAutoDiscovery
          * Use typeAcquisition.enable instead.
          */
         enableAutoDiscovery?: boolean;
@@ -5335,6 +5337,7 @@ namespace ts {
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
+        /*@internal*/getSymlinks?(): ReadonlyMap<string>;
     }
 
     /** true if --out otherwise source file name */
@@ -6020,11 +6023,13 @@ namespace ts {
         directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
-    /** @internal */
+
     export interface ModuleSpecifierResolutionHost extends GetEffectiveTypeRootsHost {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
+        /* @internal */
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
