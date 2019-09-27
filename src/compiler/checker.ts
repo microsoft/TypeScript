@@ -5766,7 +5766,7 @@ namespace ts {
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
                         const rawName = unescapeLeadingUnderscores(p.escapedName);
                         const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
-                        const firstPropertyLikeDecl = find(p.declarations, d => isPropertyDeclaration(d) || isAccessor(d) || isVariableDeclaration(d) || isPropertySignature(d) || isBinaryExpression(d) || isPropertyAccessExpression(d));
+                        const firstPropertyLikeDecl = find(p.declarations, or(isPropertyDeclaration, isAccessor, isVariableDeclaration, isPropertySignature, isBinaryExpression, isPropertyAccessExpression));
                         if (p.flags & SymbolFlags.Accessor && useAccessors) {
                             const result: AccessorDeclaration[] = [];
                             if (p.flags & SymbolFlags.SetAccessor) {
@@ -5809,7 +5809,7 @@ namespace ts {
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
                                 /*initializer*/ undefined
-                            ), find(p.declarations, d => isPropertyDeclaration(d) || isVariableDeclaration(d)) || firstPropertyLikeDecl);
+                            ), find(p.declarations, or(isPropertyDeclaration, isVariableDeclaration)) || firstPropertyLikeDecl);
                         }
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
