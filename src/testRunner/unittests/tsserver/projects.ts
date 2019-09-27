@@ -1443,36 +1443,17 @@ var x = 10;`
             // Actually trigger the file move
             host.reloadFS(files);
             host.checkTimeoutQueueLength(2);
-            const fileBErrorTimeoutId = host.getNextTimeoutId();
 
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: protocol.CommandTypes.Geterr,
-                arguments: {
-                    files: [fileB.path, fileSubA.path],
-                    delay: 0
-                }
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    { file: fileB, syntax: [], semantic: [], suggestion: [] },
+                    { file: fileSubA },
+                ],
+                existingTimeouts: 2,
+                onErrEvent: () => assert.isFalse(hasErrorMsg())
             });
-            const getErrSeqId = session.getSeq();
-            host.checkTimeoutQueueLength(3);
-
-            session.clearMessages();
-            host.runQueuedTimeoutCallbacks(fileBErrorTimeoutId);
-            checkErrorMessage(session, "syntaxDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "semanticDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            const fileSubAErrorTimeoutId = host.getNextTimeoutId();
-            host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "suggestionDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            host.checkTimeoutQueueLength(3);
-            host.runQueuedTimeoutCallbacks(fileSubAErrorTimeoutId);
-            checkCompleteEvent(session, 1, getErrSeqId);
-            assert.isFalse(hasErrorMsg());
 
             function openFile(file: File) {
                 openFilesForSession([{ file, projectRootPath }], session);

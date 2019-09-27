@@ -149,34 +149,20 @@ namespace ts.projectSystem {
                 }
             });
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file1.path]
-                }
-            });
 
-            host.checkTimeoutQueueLengthAndRun(1);
-            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks();
             const startOffset = file1.content.indexOf('"') + 1;
-            checkErrorMessage(session, "semanticDiag", {
-                file: file1.path,
-                diagnostics: [
-                    createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
-                ],
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [{
+                    file: file1,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                    ],
+                    suggestion: []
+                }]
             });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
 
             const padIndex: File = {
                 path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -213,40 +199,22 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(service, { inferredProjects: 1 });
             session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
             host.checkTimeoutQueueLengthAndRun(2);
 
             checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-            session.clearMessages();
 
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file.path],
-                }
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [{
+                    file,
+                    syntax: [],
+                    semantic: [],
+                    suggestion: [
+                        createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
+                    ]
+                }]
             });
-
-            host.checkTimeoutQueueLengthAndRun(1);
-
-            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "suggestionDiag", {
-                file: file.path,
-                diagnostics: [
-                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
-                ],
-            });
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
         });
 
         it("disable suggestion diagnostics", () => {
@@ -273,31 +241,19 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(service, { inferredProjects: 1 });
             session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
             host.checkTimeoutQueueLengthAndRun(2);
 
             checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-            session.clearMessages();
 
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file.path],
-                }
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [{
+                    file,
+                    syntax: [],
+                    semantic: []
+                }]
             });
-
-            host.checkTimeoutQueueLengthAndRun(1);
-
-            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
-            // No suggestion event, we're done.
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
         });
 
         it("suppressed diagnostic events", () => {
