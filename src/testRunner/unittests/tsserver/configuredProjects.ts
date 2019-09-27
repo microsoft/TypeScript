@@ -846,7 +846,6 @@ namespace ts.projectSystem {
         });
 
         it("when multiple projects are open, detects correct default project", () => {
-            //const projectLocation: `/user/username/projects/myproject`;
             const barConfig: File = {
                 path: `${projectRoot}/bar/tsconfig.json`,
                 content: JSON.stringify({
