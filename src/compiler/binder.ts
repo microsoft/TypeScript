@@ -1440,7 +1440,7 @@ namespace ts {
             bindCondition(node.left, trueTarget, notNullLabel);
             currentFlow = finishFlowLabel(notNullLabel);
             bind(node.operatorToken);
-            bindCondition(node.right, trueTarget, falseTarget!);
+            bindCondition(node.right, trueTarget, falseTarget);
         }
 
         function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
