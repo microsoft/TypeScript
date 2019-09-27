@@ -17219,29 +17219,36 @@ namespace ts {
             }
         }
 
-        function getEffectsSignature(node: CallExpression) {
+        function isNeverReturningCall(node: CallExpression) {
             const links = getNodeLinks(node);
-            let signature = links.effectsSignature;
-            if (signature === undefined) {
-                // A call expression parented by an expression statement is a potential assertion. Other call
-                // expressions are potential type predicate function calls. In order to avoid triggering
-                // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
-                // target expression of an assertion.
-                const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
-                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
-                    undefined;
-                const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
-                const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
-                    some(signatures, hasTypePredicateOrNeverReturnType) ? getResolvedSignature(node) :
-                    undefined;
-                signature = links.effectsSignature = candidate && hasTypePredicateOrNeverReturnType(candidate) ? candidate : unknownSignature;
+            if (links.flags & NodeCheckFlags.NeverReturningCallChecked) {
+                return !!(links.flags & NodeCheckFlags.NeverReturningCall);
             }
-            return signature === unknownSignature ? undefined : signature;
+            const funcType = getTypeOfDottedName(node.expression);
+            const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
+            const result = signatures.length && every(signatures, hasNeverReturnType);
+            links.flags |= NodeCheckFlags.NeverReturningCallChecked | (result ? NodeCheckFlags.NeverReturningCall : 0);
+            return result;
         }
 
-        function hasTypePredicateOrNeverReturnType(signature: Signature) {
-            return !!(getTypePredicateOfSignature(signature) ||
-                signature.declaration && (getReturnTypeFromAnnotation(signature.declaration) || unknownType).flags & TypeFlags.Never);
+        function hasNeverReturnType(signature: Signature) {
+            return !!(signature.declaration && (getReturnTypeFromAnnotation(signature.declaration) || unknownType).flags & TypeFlags.Never);
+        }
+
+        function isTypePredicateCall(node: CallExpression) {
+            const links = getNodeLinks(node);
+            if (links.flags & NodeCheckFlags.TypePredicateCallChecked) {
+                return !!(links.flags & NodeCheckFlags.TypePredicateCall);
+            }
+            const funcType = node.expression.kind !== SyntaxKind.SuperKeyword ? checkExpression(node.expression) : undefined;
+            const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
+            const result = some(signatures, hasTypePredicate);
+            links.flags |= NodeCheckFlags.TypePredicateCallChecked | (result ? NodeCheckFlags.TypePredicateCall : 0);
+            return result;
+        }
+
+        function hasTypePredicate(signature: Signature) {
+            return !!getTypePredicateOfSignature(signature);
         }
 
         function reportFlowControlError(node: Node) {
@@ -17280,8 +17287,7 @@ namespace ts {
                     flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
-                    const signature = getEffectsSignature((<FlowCall>flow).node);
-                    if (signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                    if (isNeverReturningCall((<FlowCall>flow).node)) {
                         return false;
                     }
                     flow = (<FlowCall>flow).antecedent;
@@ -17533,9 +17539,9 @@ namespace ts {
             }
 
             function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
-                const signature = getEffectsSignature(flow.node);
-                if (signature) {
-                    const predicate = getTypePredicateOfSignature(signature);
+                const node = flow.node;
+                if (isTypePredicateCall(node)) {
+                    const predicate = getTypePredicateOfSignature(getResolvedSignature(node));
                     if (predicate && (predicate.kind === TypePredicateKind.AssertsThis || predicate.kind === TypePredicateKind.AssertsIdentifier)) {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
                         const type = getTypeFromFlowType(flowType);
@@ -17544,9 +17550,9 @@ namespace ts {
                             type;
                         return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
                     }
-                    if (getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
-                        return unreachableNeverType;
-                    }
+                }
+                else if (isNeverReturningCall(node)) {
+                    return unreachableNeverType;
                 }
                 return undefined;
             }
@@ -18145,9 +18151,8 @@ namespace ts {
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (hasMatchingArgument(callExpression, reference)) {
-                    const signature = getEffectsSignature(callExpression);
-                    const predicate = signature && getTypePredicateOfSignature(signature);
+                if (hasMatchingArgument(callExpression, reference) && isTypePredicateCall(callExpression)) {
+                    const predicate = getTypePredicateOfSignature(getResolvedSignature(callExpression));
                     if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
                     }
