@@ -2730,7 +2730,7 @@
         "category": "Error",
         "code": 2775
     },
-    "Assertions require the call target to be an identifier or qualified-name.": {
+    "Assertions require the call target to be an identifier or qualified name.": {
         "category": "Error",
         "code": 2776
     },
