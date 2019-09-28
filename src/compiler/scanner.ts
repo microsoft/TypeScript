@@ -821,15 +821,23 @@ namespace ts {
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
-        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-            ch === CharacterCodes.$ || ch === CharacterCodes._ ||
-            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
+        if (ch < CharacterCodes.A) return ch === CharacterCodes.$;
+        if (ch <= CharacterCodes.Z) return true;
+        if (ch < CharacterCodes.a) return ch === CharacterCodes._;
+        if (ch <= CharacterCodes.z) return true;
+
+        return ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
     }
 
     export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
-        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-            ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
-            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
+        if (ch < CharacterCodes._0) return ch === CharacterCodes.$;
+        if (ch <= CharacterCodes._9) return true;
+        if (ch < CharacterCodes.A) return false;
+        if (ch <= CharacterCodes.Z) return true;
+        if (ch < CharacterCodes.a) return ch === CharacterCodes._;
+        if (ch <= CharacterCodes.z) return true;
+
+        return ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
     /* @internal */
