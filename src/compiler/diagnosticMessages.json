@@ -1039,6 +1039,10 @@
         "category": "Error",
         "code": 1357
     },
+    "Did you mean to parenthesize this function type?": {
+        "category": "Error",
+        "code": 1358
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
