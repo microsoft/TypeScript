@@ -328,6 +328,9 @@ namespace ts {
             return writer.getText();
 
             function trackSharedNodesInGraph(flowNode: FlowNode) {
+                if (flowNode.flags & FlowFlags.Start) {
+                    return;
+                }
                 if (flowNode.flags & FlowFlags.Shared) {
                     const flowId = `${getFlowId(flowNode)}`;
                     const isShared = sharedNodes.get(flowId);

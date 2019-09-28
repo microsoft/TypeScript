@@ -26,7 +26,7 @@ d.toString();
 declare const f: undefined | ((x: any) => x is number);
 declare const x: string | number;
 if (f?.(x)) {
-    x;
+    x; // TODO: should be `number`
     f;
     f(x);
 }
@@ -41,7 +41,7 @@ f(x);
 
 declare const o2: { f(x: any): x is number; } | undefined;
 if (o2?.f(x)) {
-    x;
+    x; // TODO: should be `number`
     o2.f;
     o2?.f;
     o2?.f(x);
@@ -59,8 +59,8 @@ o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3;
-    o3.x;
+    o3; // TODO: should be `{ x: y, y: string }`
+    o3.x; // TODO: should not be an error.
     o3?.x;
 }
 else {
@@ -75,8 +75,8 @@ o3.x;
 declare const o4: { x?: { y: boolean } };
 if (o4.x?.y) {
     o4.x;
-    o4.x?.y;
-    o4.x.y;
+    o4.x.y; // TODO: should be `true`
+    o4.x?.y; // TODO: should be `true`
 }
 else {
     o4.x;
@@ -92,18 +92,18 @@ if (o5.x?.y.z?.w) {
     o5.x;
     o5.x.y;
     o5.x.y.z;
-    o5.x.y.z.w;
-    o5.x.y.z?.w;
-    o5.x?.y.z.w;
-    o5.x?.y.z?.w;
+    o5.x.y.z.w; // TODO: should be `true`
+    o5.x.y.z?.w; // TODO: should be `true`
+    o5.x?.y.z.w; // TODO: should be `true`
+    o5.x?.y.z?.w; // TODO: should be `true`
 }
 else {
     o5.x;
     o5.x?.y;
     o5.x?.y.z;
-    o5.x?.y.z?.w;
+    o5.x?.y.z?.w; // TODO: should be `false | undefined`
     o5.x.y;
-    o5.x.y.z.w;
+    o5.x.y.z.w; // TODO: should be `false | undefined`
 }
 o5.x;
 o5.x?.y;
@@ -122,7 +122,7 @@ interface Derived extends Base {
 
 declare const o6: Base | undefined;
 if (o6?.f()) {
-    o6;
+    o6; // TODO: should be `Derived`
     o6.f;
 }
 else {
@@ -177,7 +177,7 @@ var d;
 (_d = o) === null || _d === void 0 ? void 0 : _d.x(d = 1);
 d.toString();
 if ((_e = f) === null || _e === void 0 ? void 0 : _e(x)) {
-    x;
+    x; // TODO: should be `number`
     f;
     f(x);
 }
@@ -190,7 +190,7 @@ x;
 f;
 f(x);
 if ((_f = o2) === null || _f === void 0 ? void 0 : _f.f(x)) {
-    x;
+    x; // TODO: should be `number`
     o2.f;
     (_g = o2) === null || _g === void 0 ? void 0 : _g.f;
     (_h = o2) === null || _h === void 0 ? void 0 : _h.f(x);
@@ -206,8 +206,8 @@ o2;
 (_k = o2) === null || _k === void 0 ? void 0 : _k.f;
 o2.f;
 if (((_l = o3) === null || _l === void 0 ? void 0 : _l.x) === 1) {
-    o3;
-    o3.x;
+    o3; // TODO: should be `{ x: y, y: string }`
+    o3.x; // TODO: should not be an error.
     (_m = o3) === null || _m === void 0 ? void 0 : _m.x;
 }
 else {
@@ -220,8 +220,8 @@ o3;
 o3.x;
 if ((_q = o4.x) === null || _q === void 0 ? void 0 : _q.y) {
     o4.x;
-    (_r = o4.x) === null || _r === void 0 ? void 0 : _r.y;
-    o4.x.y;
+    o4.x.y; // TODO: should be `true`
+    (_r = o4.x) === null || _r === void 0 ? void 0 : _r.y; // TODO: should be `true`
 }
 else {
     o4.x;
@@ -235,18 +235,18 @@ if ((_v = (_u = o5.x) === null || _u === void 0 ? void 0 : _u.y.z) === null || _
     o5.x;
     o5.x.y;
     o5.x.y.z;
-    o5.x.y.z.w;
-    (_w = o5.x.y.z) === null || _w === void 0 ? void 0 : _w.w;
-    (_x = o5.x) === null || _x === void 0 ? void 0 : _x.y.z.w;
-    (_z = (_y = o5.x) === null || _y === void 0 ? void 0 : _y.y.z) === null || _z === void 0 ? void 0 : _z.w;
+    o5.x.y.z.w; // TODO: should be `true`
+    (_w = o5.x.y.z) === null || _w === void 0 ? void 0 : _w.w; // TODO: should be `true`
+    (_x = o5.x) === null || _x === void 0 ? void 0 : _x.y.z.w; // TODO: should be `true`
+    (_z = (_y = o5.x) === null || _y === void 0 ? void 0 : _y.y.z) === null || _z === void 0 ? void 0 : _z.w; // TODO: should be `true`
 }
 else {
     o5.x;
     (_0 = o5.x) === null || _0 === void 0 ? void 0 : _0.y;
     (_1 = o5.x) === null || _1 === void 0 ? void 0 : _1.y.z;
-    (_3 = (_2 = o5.x) === null || _2 === void 0 ? void 0 : _2.y.z) === null || _3 === void 0 ? void 0 : _3.w;
+    (_3 = (_2 = o5.x) === null || _2 === void 0 ? void 0 : _2.y.z) === null || _3 === void 0 ? void 0 : _3.w; // TODO: should be `false | undefined`
     o5.x.y;
-    o5.x.y.z.w;
+    o5.x.y.z.w; // TODO: should be `false | undefined`
 }
 o5.x;
 (_4 = o5.x) === null || _4 === void 0 ? void 0 : _4.y;
@@ -255,7 +255,7 @@ o5.x;
 o5.x.y;
 o5.x.y.z.w;
 if ((_8 = o6) === null || _8 === void 0 ? void 0 : _8.f()) {
-    o6;
+    o6; // TODO: should be `Derived`
     o6.f;
 }
 else {

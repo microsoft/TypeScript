@@ -7139,7 +7139,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function isOptionalChainRoot(node: ValidOptionalChain): node is OptionalChainRoot {
+    export function isOptionalChainRoot(node: OptionalChain): node is OptionalChainRoot {
         return !!node.questionDotToken;
     }
 

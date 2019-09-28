@@ -75,7 +75,7 @@ if (f?.(x)) {
 >f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
 
-    x;
+    x; // TODO: should be `number`
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
 
     f;
@@ -118,7 +118,7 @@ if (o2?.f(x)) {
 >f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
 
-    x;
+    x; // TODO: should be `number`
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
 
     o2.f;
@@ -182,18 +182,18 @@ if (o3?.x === 1) {
 >o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
 
-    o3;
+    o3; // TODO: should be `{ x: y, y: string }`
 >o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
 
-    o3.x;
->o3.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19))
+    o3.x; // TODO: should not be an error.
+>o3.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
 >o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
->x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
 
     o3?.x;
->o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19))
+>o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
 >o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
->x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
 }
 else {
     o3;
@@ -239,15 +239,15 @@ if (o4.x?.y) {
 >o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
 
-    o4.x?.y;
->o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+    o4.x.y; // TODO: should be `true`
+>o4.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
 >o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
 >o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
 >y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
 
-    o4.x.y;
->o4.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+    o4.x?.y; // TODO: should be `true`
+>o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
 >o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
 >o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
@@ -331,7 +331,7 @@ if (o5.x?.y.z?.w) {
 >y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
 >z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 
-    o5.x.y.z.w;
+    o5.x.y.z.w; // TODO: should be `true`
 >o5.x.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -342,7 +342,7 @@ if (o5.x?.y.z?.w) {
 >z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 
-    o5.x.y.z?.w;
+    o5.x.y.z?.w; // TODO: should be `true`
 >o5.x.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -353,7 +353,7 @@ if (o5.x?.y.z?.w) {
 >z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 
-    o5.x?.y.z.w;
+    o5.x?.y.z.w; // TODO: should be `true`
 >o5.x?.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -364,7 +364,7 @@ if (o5.x?.y.z?.w) {
 >z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 
-    o5.x?.y.z?.w;
+    o5.x?.y.z?.w; // TODO: should be `true`
 >o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -397,7 +397,7 @@ else {
 >y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
 >z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 
-    o5.x?.y.z?.w;
+    o5.x?.y.z?.w; // TODO: should be `false | undefined`
 >o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -415,7 +415,7 @@ else {
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
 >y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
 
-    o5.x.y.z.w;
+    o5.x.y.z.w; // TODO: should be `false | undefined`
 >o5.x.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
 >o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
 >o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
@@ -501,7 +501,7 @@ if (o6?.f()) {
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 >f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
 
-    o6;
+    o6; // TODO: should be `Derived`
 >o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
 
     o6.f;

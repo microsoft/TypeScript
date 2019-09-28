@@ -28,7 +28,7 @@ d.toString();
 declare const f: undefined | ((x: any) => x is number);
 declare const x: string | number;
 if (f?.(x)) {
-    x;
+    x; // TODO: should be `number`
     f;
     f(x);
 }
@@ -43,7 +43,7 @@ f(x);
 
 declare const o2: { f(x: any): x is number; } | undefined;
 if (o2?.f(x)) {
-    x;
+    x; // TODO: should be `number`
     o2.f;
     o2?.f;
     o2?.f(x);
@@ -61,8 +61,8 @@ o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3;
-    o3.x;
+    o3; // TODO: should be `{ x: y, y: string }`
+    o3.x; // TODO: should not be an error.
     o3?.x;
 }
 else {
@@ -77,8 +77,8 @@ o3.x;
 declare const o4: { x?: { y: boolean } };
 if (o4.x?.y) {
     o4.x;
-    o4.x?.y;
-    o4.x.y;
+    o4.x.y; // TODO: should be `true`
+    o4.x?.y; // TODO: should be `true`
 }
 else {
     o4.x;
@@ -94,18 +94,18 @@ if (o5.x?.y.z?.w) {
     o5.x;
     o5.x.y;
     o5.x.y.z;
-    o5.x.y.z.w;
-    o5.x.y.z?.w;
-    o5.x?.y.z.w;
-    o5.x?.y.z?.w;
+    o5.x.y.z.w; // TODO: should be `true`
+    o5.x.y.z?.w; // TODO: should be `true`
+    o5.x?.y.z.w; // TODO: should be `true`
+    o5.x?.y.z?.w; // TODO: should be `true`
 }
 else {
     o5.x;
     o5.x?.y;
     o5.x?.y.z;
-    o5.x?.y.z?.w;
+    o5.x?.y.z?.w; // TODO: should be `false | undefined`
     o5.x.y;
-    o5.x.y.z.w;
+    o5.x.y.z.w; // TODO: should be `false | undefined`
 }
 o5.x;
 o5.x?.y;
@@ -124,7 +124,7 @@ interface Derived extends Base {
 
 declare const o6: Base | undefined;
 if (o6?.f()) {
-    o6;
+    o6; // TODO: should be `Derived`
     o6.f;
 }
 else {

@@ -95,8 +95,8 @@ if (f?.(x)) {
 >f : ((x: any) => x is number) | undefined
 >x : string | number
 
-    x;
->x : number
+    x; // TODO: should be `number`
+>x : string | number
 
     f;
 >f : (x: any) => x is number
@@ -104,7 +104,7 @@ if (f?.(x)) {
     f(x);
 >f(x) : boolean
 >f : (x: any) => x is number
->x : number
+>x : string | number
 }
 else {
     x;
@@ -141,8 +141,8 @@ if (o2?.f(x)) {
 >f : ((x: any) => x is number) | undefined
 >x : string | number
 
-    x;
->x : number
+    x; // TODO: should be `number`
+>x : string | number
 
     o2.f;
 >o2.f : (x: any) => x is number
@@ -159,7 +159,7 @@ if (o2?.f(x)) {
 >o2?.f : (x: any) => x is number
 >o2 : { f(x: any): x is number; }
 >f : (x: any) => x is number
->x : number
+>x : string | number
 }
 else {
     x;
@@ -208,18 +208,18 @@ if (o3?.x === 1) {
 >x : 1 | 2 | undefined
 >1 : 1
 
-    o3;
->o3 : { x: 1; y: string; }
+    o3; // TODO: should be `{ x: y, y: string }`
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
 
-    o3.x;
+    o3.x; // TODO: should not be an error.
 >o3.x : 1
->o3 : { x: 1; y: string; }
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
 >x : 1
 
     o3?.x;
->o3?.x : 1
->o3 : { x: 1; y: string; }
->x : 1
+>o3?.x : 1 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | undefined
 }
 else {
     o3;
@@ -265,19 +265,19 @@ if (o4.x?.y) {
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; }
 
-    o4.x?.y;
->o4.x?.y : true
+    o4.x.y; // TODO: should be `true`
+>o4.x.y : boolean
 >o4.x : { y: boolean; }
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; }
->y : true
+>y : boolean
 
-    o4.x.y;
->o4.x.y : true
+    o4.x?.y; // TODO: should be `true`
+>o4.x?.y : boolean
 >o4.x : { y: boolean; }
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; }
->y : true
+>y : boolean
 }
 else {
     o4.x;
@@ -286,18 +286,18 @@ else {
 >x : { y: boolean; } | undefined
 
     o4.x?.y;
->o4.x?.y : false | undefined
+>o4.x?.y : boolean | undefined
 >o4.x : { y: boolean; } | undefined
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; } | undefined
->y : false | undefined
+>y : boolean | undefined
 
     o4.x.y;
->o4.x.y : false
+>o4.x.y : boolean
 >o4.x : { y: boolean; } | undefined
 >o4 : { x?: { y: boolean; } | undefined; }
 >x : { y: boolean; } | undefined
->y : false
+>y : boolean
 }
 o4.x;
 >o4.x : { y: boolean; } | undefined
@@ -357,8 +357,8 @@ if (o5.x?.y.z?.w) {
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; }
 
-    o5.x.y.z.w;
->o5.x.y.z.w : true
+    o5.x.y.z.w; // TODO: should be `true`
+>o5.x.y.z.w : boolean
 >o5.x.y.z : { w: boolean; }
 >o5.x.y : { z?: { w: boolean; } | undefined; }
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; }
@@ -366,10 +366,10 @@ if (o5.x?.y.z?.w) {
 >x : { y: { z?: { w: boolean; } | undefined; }; }
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; }
->w : true
+>w : boolean
 
-    o5.x.y.z?.w;
->o5.x.y.z?.w : true
+    o5.x.y.z?.w; // TODO: should be `true`
+>o5.x.y.z?.w : boolean
 >o5.x.y.z : { w: boolean; }
 >o5.x.y : { z?: { w: boolean; } | undefined; }
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; }
@@ -377,10 +377,10 @@ if (o5.x?.y.z?.w) {
 >x : { y: { z?: { w: boolean; } | undefined; }; }
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; }
->w : true
+>w : boolean
 
-    o5.x?.y.z.w;
->o5.x?.y.z.w : true
+    o5.x?.y.z.w; // TODO: should be `true`
+>o5.x?.y.z.w : boolean
 >o5.x?.y.z : { w: boolean; }
 >o5.x?.y : { z?: { w: boolean; } | undefined; }
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; }
@@ -388,10 +388,10 @@ if (o5.x?.y.z?.w) {
 >x : { y: { z?: { w: boolean; } | undefined; }; }
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; }
->w : true
+>w : boolean
 
-    o5.x?.y.z?.w;
->o5.x?.y.z?.w : true
+    o5.x?.y.z?.w; // TODO: should be `true`
+>o5.x?.y.z?.w : boolean
 >o5.x?.y.z : { w: boolean; }
 >o5.x?.y : { z?: { w: boolean; } | undefined; }
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; }
@@ -399,7 +399,7 @@ if (o5.x?.y.z?.w) {
 >x : { y: { z?: { w: boolean; } | undefined; }; }
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; }
->w : true
+>w : boolean
 }
 else {
     o5.x;
@@ -423,8 +423,8 @@ else {
 >y : { z?: { w: boolean; } | undefined; } | undefined
 >z : { w: boolean; } | undefined
 
-    o5.x?.y.z?.w;
->o5.x?.y.z?.w : false | undefined
+    o5.x?.y.z?.w; // TODO: should be `false | undefined`
+>o5.x?.y.z?.w : boolean | undefined
 >o5.x?.y.z : { w: boolean; } | undefined
 >o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
@@ -432,7 +432,7 @@ else {
 >x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 >y : { z?: { w: boolean; } | undefined; } | undefined
 >z : { w: boolean; } | undefined
->w : false | undefined
+>w : boolean | undefined
 
     o5.x.y;
 >o5.x.y : { z?: { w: boolean; } | undefined; }
@@ -441,8 +441,8 @@ else {
 >x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 >y : { z?: { w: boolean; } | undefined; }
 
-    o5.x.y.z.w;
->o5.x.y.z.w : false
+    o5.x.y.z.w; // TODO: should be `false | undefined`
+>o5.x.y.z.w : boolean
 >o5.x.y.z : { w: boolean; } | undefined
 >o5.x.y : { z?: { w: boolean; } | undefined; }
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
@@ -450,7 +450,7 @@ else {
 >x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; } | undefined
->w : false
+>w : boolean
 }
 o5.x;
 >o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
@@ -521,12 +521,12 @@ if (o6?.f()) {
 >o6 : Base | undefined
 >f : (() => this is Derived) | undefined
 
-    o6;
->o6 : Derived
+    o6; // TODO: should be `Derived`
+>o6 : Base
 
     o6.f;
 >o6.f : () => this is Derived
->o6 : Derived
+>o6 : Base
 >f : () => this is Derived
 }
 else {

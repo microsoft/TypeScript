@@ -193,8 +193,6 @@ namespace ts {
         let currentReturnTarget: FlowLabel | undefined;
         let currentTrueTarget: FlowLabel | undefined;
         let currentFalseTarget: FlowLabel | undefined;
-        let currentPresentTarget: FlowLabel | undefined;
-        let currentMissingTarget: FlowLabel | undefined;
         let preSwitchCaseFlow: FlowNode | undefined;
         let activeLabels: ActiveLabel[] | undefined;
         let hasExplicitReturn: boolean;
@@ -263,8 +261,6 @@ namespace ts {
             currentReturnTarget = undefined;
             currentTrueTarget = undefined;
             currentFalseTarget = undefined;
-            currentPresentTarget = undefined;
-            currentMissingTarget = undefined;
             activeLabels = undefined!;
             hasExplicitReturn = false;
             emitFlags = NodeFlags.None;
@@ -940,41 +936,6 @@ namespace ts {
             }
         }
 
-        function excludeAntecedents(flowNode: FlowNode, flags: FlowFlags) {
-            if (flowNode.flags & flags) {
-                return unreachableFlow;
-            }
-            if (flowNode.flags & FlowFlags.BranchLabel) {
-                const branch = flowNode as FlowLabel;
-                if (branch.antecedents) {
-                    let antecedents: FlowNode[] | undefined;
-                    for (let i = 0; i < branch.antecedents.length; i++) {
-                        const antecedent = branch.antecedents[i];
-                        if (antecedent.flags & flags) {
-                            if (!antecedents) {
-                                antecedents = branch.antecedents.slice(0, i);
-                            }
-                        }
-                        else if (antecedents) {
-                            antecedents.push(antecedent);
-                        }
-                    }
-                    if (antecedents) {
-                        if (antecedents.length === 0) {
-                            return unreachableFlow;
-                        }
-                        if (antecedents.length === 1) {
-                            return antecedents[0];
-                        }
-                        const newBranch = createBranchLabel();
-                        newBranch.antecedents = antecedents;
-                        return newBranch;
-                    }
-                }
-            }
-            return flowNode;
-        }
-
         function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression | undefined): FlowNode {
             if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
@@ -985,10 +946,6 @@ namespace ts {
             if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
                 return unreachableFlow;
-            }
-            if (flags & FlowFlags.TrueCondition) {
-                // A "Missing" flow node (representing the `null` or `undefined` branch of an optional chain), can never be `true`.
-                antecedent = excludeAntecedents(currentFlow, FlowFlags.Missing);
             }
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
@@ -1001,9 +958,8 @@ namespace ts {
             if (antecedent.flags & FlowFlags.Unreachable) {
                 return antecedent;
             }
-            if (flags & FlowFlags.Present) {
-                // A "Missing" flow node (representing the `null` or `undefined` branch of an optional chain), can never be "Present".
-                antecedent = excludeAntecedents(currentFlow, FlowFlags.Missing);
+            if (!isNarrowingExpression(expression)) {
+                return antecedent;
             }
             setFlowNodeReferenced(antecedent);
             return flowNodeCreated({ flags, antecedent, node: expression });
@@ -1074,22 +1030,27 @@ namespace ts {
         }
 
         function isTopLevelLogicalExpression(node: Node): boolean {
-            while (node.parent.kind === SyntaxKind.ParenthesizedExpression ||
-                node.parent.kind === SyntaxKind.PrefixUnaryExpression &&
-                (<PrefixUnaryExpression>node.parent).operator === SyntaxKind.ExclamationToken) {
+            while (isParenthesizedExpression(node.parent) ||
+                isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.ExclamationToken) {
                 node = node.parent;
             }
-            return !isStatementCondition(node) && !isLogicalExpression(node.parent);
+            return !isStatementCondition(node) &&
+                !isLogicalExpression(node.parent) &&
+                !(isOptionalChain(node.parent) && node.parent.expression === node);
+        }
+
+        function doWithConditionalBranches<T>(action: (value: T) => void, value: T, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const savedTrueTarget = currentTrueTarget;
+            const savedFalseTarget = currentFalseTarget;
+            currentTrueTarget = trueTarget;
+            currentFalseTarget = falseTarget;
+            action(value);
+            currentTrueTarget = savedTrueTarget;
+            currentFalseTarget = savedFalseTarget;
         }
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            const saveTrueTarget = currentTrueTarget;
-            const saveFalseTarget = currentFalseTarget;
-            currentTrueTarget = trueTarget;
-            currentFalseTarget = falseTarget;
-            bind(node);
-            currentTrueTarget = saveTrueTarget;
-            currentFalseTarget = saveFalseTarget;
+            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
             if (!node || !isLogicalExpression(node)) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
@@ -1601,32 +1562,19 @@ namespace ts {
             }
         }
 
-        function bindOptionalExpression(node: Expression, presentTarget: FlowLabel, missingTarget: FlowLabel) {
-            const savedPresentTarget = currentPresentTarget;
-            const savedMissingTarget = currentMissingTarget;
-            currentPresentTarget = presentTarget;
-            currentMissingTarget = missingTarget;
-            bind(node);
-            currentPresentTarget = savedPresentTarget;
-            currentMissingTarget = savedMissingTarget;
-            if (!isValidOptionalChain(node) || isOutermostOptionalChain(node)) {
-                addAntecedent(presentTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
-                addAntecedent(missingTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
+        function isOutermostOptionalChain(node: OptionalChain) {
+            return !isOptionalChain(node.parent) || isOptionalChainRoot(node.parent) || node !== node.parent.expression;
+        }
+
+        function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
+            if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
+                addAntecedent(trueTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
+                addAntecedent(falseTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
             }
         }
 
-        function isOutermostOptionalChain(node: ValidOptionalChain) {
-            return !isOptionalChain(node.parent) || !!node.parent.questionDotToken || node.parent.expression !== node;
-        }
-
-        function bindOptionalChainFlow(node: ValidOptionalChain) {
-            const postExpressionLabel = isOutermostOptionalChain(node) ? createBranchLabel() : undefined;
-            const presentTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentPresentTarget);
-            const missingTarget = postExpressionLabel ? createBranchLabel() : Debug.assertDefined(currentMissingTarget);
-            bindOptionalExpression(node.expression, presentTarget, missingTarget);
-            if (!isValidOptionalChain(node.expression) || node.questionDotToken) {
-                currentFlow = finishFlowLabel(presentTarget);
-            }
+        function bindOptionalChainRest(node: OptionalChain) {
             bind(node.questionDotToken);
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
@@ -1640,10 +1588,40 @@ namespace ts {
                     bindEach(node.arguments);
                     break;
             }
-            if (postExpressionLabel) {
-                addAntecedent(postExpressionLabel, currentFlow);
-                addAntecedent(postExpressionLabel, finishFlowLabel(missingTarget));
+        }
+
+        function bindOptionalChain(node: ValidOptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            // For an optional chain, we emulate the behavior of a logical expression:
+            //
+            // a?.b         -> a && a.b
+            // a?.b.c       -> a && a.b.c
+            // a?.b?.c      -> a && a.b && a.b.c
+            // a?.[x = 1]   -> a && a[x = 1]
+            //
+            // To do this we descend through the chain until we reach the root of a chain (the expression with a `?.`)
+            // and build it's CFA graph as if it were the first condition (`a && ...`). Then we bind the rest
+            // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
+            // chain node. We then treat the entire node as the right side of the expression.
+            const preChainLabel = node.questionDotToken ? createBranchLabel() : undefined;
+            bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
+            if (preChainLabel) {
+                currentFlow = finishFlowLabel(preChainLabel);
+            }
+            doWithConditionalBranches(bindOptionalChainRest, node, trueTarget, falseTarget);
+            if (isOutermostOptionalChain(node)) {
+                addAntecedent(trueTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
+                addAntecedent(falseTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
+            }
+        }
+
+        function bindOptionalChainFlow(node: ValidOptionalChain) {
+            if (isTopLevelLogicalExpression(node)) {
+                const postExpressionLabel = createBranchLabel();
+                bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
                 currentFlow = finishFlowLabel(postExpressionLabel);
+            }
+            else {
+                bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
             }
         }
 
