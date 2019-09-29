@@ -284,8 +284,7 @@ namespace ts {
                 FlowFlags.ArrayMutation |
                 FlowFlags.Call |
                 FlowFlags.PreFinally |
-                FlowFlags.AfterFinally |
-                FlowFlags.OptionalChain;
+                FlowFlags.AfterFinally;
 
             type hasAntecedent =
                 | FlowAssignment
@@ -295,7 +294,6 @@ namespace ts {
                 | FlowCall
                 | PreFinallyFlow
                 | AfterFinallyFlow
-                | FlowOptionalChain
                 ;
 
             const flowNodes: FlowNode[] = [];
@@ -393,8 +391,6 @@ namespace ts {
                 if (flags & FlowFlags.Call) return "Call";
                 if (flags & FlowFlags.PreFinally) return "PreFinally";
                 if (flags & FlowFlags.AfterFinally) return "AfterFinally";
-                if (flags & FlowFlags.Present) return "Present";
-                if (flags & FlowFlags.Missing) return "Missing";
                 if (flags & FlowFlags.Unreachable) return "Unreachable";
                 return fail();
             }
@@ -488,9 +484,6 @@ namespace ts {
                 else if (flowNode.flags & FlowFlags.AfterFinally) {
                     writeAfterFinally(flowNode as AfterFinallyFlow);
                 }
-                else if (flowNode.flags & FlowFlags.OptionalChain) {
-                    writeOptionalChain(flowNode as FlowOptionalChain);
-                }
                 else {
                     assert(!!(flowNode.flags & FlowFlags.Unreachable));
                 }
@@ -536,11 +529,6 @@ namespace ts {
             }
 
             function writeAfterFinally(flowNode: AfterFinallyFlow) {
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writeOptionalChain(flowNode: FlowOptionalChain) {
-                writeNode(flowNode.node);
                 writeAntecedent(flowNode.antecedent);
             }
         }

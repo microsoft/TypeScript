@@ -18794,9 +18794,6 @@ namespace ts {
                     else if (flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
-                    else if (flags & FlowFlags.OptionalChain) {
-                        type = getTypeAtFlowOptionalChain(<FlowOptionalChain>flow);
-                    }
                     else if (flags & FlowFlags.SwitchClause) {
                         type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
                     }
@@ -19001,22 +18998,6 @@ namespace ts {
                 const incomplete = isIncomplete(flowType);
                 const resultType = incomplete && narrowedType.flags & TypeFlags.Never ? silentNeverType : narrowedType;
                 return createFlowType(resultType, incomplete);
-            }
-
-            function getTypeAtFlowOptionalChain(flow: FlowOptionalChain): FlowType {
-                const flowType = getTypeAtFlowNode(flow.antecedent);
-                const type = getTypeFromFlowType(flowType);
-                if (type.flags & TypeFlags.Never) {
-                    return flowType;
-                }
-
-                const assumePresent = (flow.flags & FlowFlags.Present) !== 0;
-                const nonEvolvingType = finalizeEvolvingArrayType(type);
-                const narrowedType = narrowTypeByOptionality(nonEvolvingType, flow.node, assumePresent);
-                if (narrowedType === nonEvolvingType) {
-                    return flowType;
-                }
-                return createFlowType(narrowedType, isIncomplete(flowType));
             }
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
@@ -19602,6 +19583,10 @@ namespace ts {
             // Narrow the given type based on the given expression having the assumed boolean value. The returned type
             // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
+                // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
+                if (isOptionalChainRoot(expr.parent)) {
+                    return narrowTypeByOptionality(type, expr, assumeTrue);
+                }
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.ThisKeyword:

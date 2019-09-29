@@ -7139,8 +7139,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function isOptionalChainRoot(node: OptionalChain): node is OptionalChainRoot {
-        return !!node.questionDotToken;
+    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
+        return isOptionalChain(node) && !!node.questionDotToken;
     }
 
     /** True if has jsdoc nodes attached to it. */

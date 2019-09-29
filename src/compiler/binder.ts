@@ -945,18 +945,9 @@ namespace ts {
             }
             if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
-                return unreachableFlow;
-            }
-            if (!isNarrowingExpression(expression)) {
-                return antecedent;
-            }
-            setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags, antecedent, node: expression });
-        }
-
-        function createFlowOptionalChain(flags: FlowFlags, antecedent: FlowNode, expression: Expression): FlowNode {
-            if (antecedent.flags & FlowFlags.Unreachable) {
-                return antecedent;
+                if (!isOptionalChainRoot(expression.parent)) {
+                    return unreachableFlow;
+                }
             }
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
@@ -1569,8 +1560,8 @@ namespace ts {
         function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
             if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
-                addAntecedent(trueTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
-                addAntecedent(falseTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
@@ -1609,8 +1600,8 @@ namespace ts {
             }
             doWithConditionalBranches(bindOptionalChainRest, node, trueTarget, falseTarget);
             if (isOutermostOptionalChain(node)) {
-                addAntecedent(trueTarget, createFlowOptionalChain(FlowFlags.Present, currentFlow, node));
-                addAntecedent(falseTarget, createFlowOptionalChain(FlowFlags.Missing, currentFlow, node));
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
