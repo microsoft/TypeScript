@@ -7125,19 +7125,6 @@ namespace ts {
         return node.kind === SyntaxKind.GetAccessor;
     }
 
-    /**
-     * Tests whether an OptionalChain is valid. We can parse an invalid optional chain if it contains an
-     * invalid TaggedTemplateChain per the ECMAScript syntax.
-     */
-    /* @internal */
-    export function isValidOptionalChain(node: Expression): node is ValidOptionalChain {
-        while (isOptionalChain(node)) {
-            if (node.questionDotToken) return true;
-            node = node.expression;
-        }
-        return false;
-    }
-
     /* @internal */
     export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
         return isOptionalChain(node) && !!node.questionDotToken;

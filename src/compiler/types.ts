@@ -1806,17 +1806,6 @@ namespace ts {
         questionDotToken: QuestionDotToken;
     }
 
-    /* @internal */
-    export interface ValidPropertyAccessChainLink extends PropertyAccessChain {
-        questionDotToken: undefined;
-        expression: ValidOptionalChain;
-    }
-
-    /* @internal */
-    export type ValidPropertyAccessChain =
-        | PropertyAccessChainRoot
-        | ValidPropertyAccessChainLink;
-
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         expression: SuperExpression;
     }
@@ -1843,17 +1832,6 @@ namespace ts {
         questionDotToken: QuestionDotToken;
     }
 
-    /* @internal */
-    export interface ValidElementAccessChainLink extends ElementAccessChain {
-        questionDotToken: undefined;
-        expression: ValidOptionalChain;
-    }
-
-    /* @internal */
-    export type ValidElementAccessChain =
-        | ElementAccessChainRoot
-        | ValidElementAccessChainLink;
-
     export interface SuperElementAccessExpression extends ElementAccessExpression {
         expression: SuperExpression;
     }
@@ -1878,17 +1856,6 @@ namespace ts {
         questionDotToken: QuestionDotToken;
     }
 
-    /* @internal */
-    export interface ValidCallChainLink extends CallChain {
-        questionDotToken: undefined;
-        expression: ValidOptionalChain;
-    }
-
-    /* @internal */
-    export type ValidCallChain =
-        | CallChainRoot
-        | ValidCallChainLink;
-
     export type OptionalChain =
         | PropertyAccessChain
         | ElementAccessChain
@@ -1900,13 +1867,6 @@ namespace ts {
         | PropertyAccessChainRoot
         | ElementAccessChainRoot
         | CallChainRoot
-        ;
-
-    /* @internal */
-    export type ValidOptionalChain =
-        | ValidPropertyAccessChain
-        | ValidElementAccessChain
-        | ValidCallChain
         ;
 
     /** @internal */

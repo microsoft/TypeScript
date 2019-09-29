@@ -1581,7 +1581,7 @@ namespace ts {
             }
         }
 
-        function bindOptionalChain(node: ValidOptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function bindOptionalChain(node: OptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             // For an optional chain, we emulate the behavior of a logical expression:
             //
             // a?.b         -> a && a.b
@@ -1605,7 +1605,7 @@ namespace ts {
             }
         }
 
-        function bindOptionalChainFlow(node: ValidOptionalChain) {
+        function bindOptionalChainFlow(node: OptionalChain) {
             if (isTopLevelLogicalExpression(node)) {
                 const postExpressionLabel = createBranchLabel();
                 bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
@@ -1617,7 +1617,7 @@ namespace ts {
         }
 
         function bindAccessExpressionFlow(node: AccessExpression) {
-            if (isValidOptionalChain(node)) {
+            if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }
             else {
@@ -1626,7 +1626,7 @@ namespace ts {
         }
 
         function bindCallExpressionFlow(node: CallExpression) {
-            if (isValidOptionalChain(node)) {
+            if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }
             else {
