@@ -4028,6 +4028,8 @@ namespace ts {
         AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
+        EffectsSignatureChecked             = 0x04000000,  // Node checked for assertion or never-returning signature
+        HasEffectsSignature                 = 0x08000000,  // Node has assertion or never-returning signature
     }
 
     /* @internal */
@@ -4038,7 +4040,6 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        effectsSignature?: Signature;     // Signature with possible control flow effects
         enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference

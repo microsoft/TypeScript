@@ -18580,10 +18580,9 @@ namespace ts {
             }
         }
 
-        function getEffectsSignature(node: CallExpression) {
+        function hasEffectsSignature(node: CallExpression) {
             const links = getNodeLinks(node);
-            let signature = links.effectsSignature;
-            if (signature === undefined) {
+            if (!(links.flags & NodeCheckFlags.EffectsSignatureChecked)) {
                 // A call expression parented by an expression statement is a potential assertion. Other call
                 // expressions are potential type predicate function calls. In order to avoid triggering
                 // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
@@ -18592,12 +18591,9 @@ namespace ts {
                     node.expression.kind !== SyntaxKind.SuperKeyword ? checkNonNullExpression(node.expression) :
                     undefined;
                 const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
-                const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
-                    some(signatures, hasTypePredicateOrNeverReturnType) ? getResolvedSignature(node) :
-                    undefined;
-                signature = links.effectsSignature = candidate && hasTypePredicateOrNeverReturnType(candidate) ? candidate : unknownSignature;
+                links.flags |= NodeCheckFlags.EffectsSignatureChecked | (some(signatures, hasTypePredicateOrNeverReturnType) ? NodeCheckFlags.HasEffectsSignature : 0);
             }
-            return signature === unknownSignature ? undefined : signature;
+            return !!(links.flags & NodeCheckFlags.HasEffectsSignature);
         }
 
         function hasTypePredicateOrNeverReturnType(signature: Signature) {
@@ -18641,8 +18637,8 @@ namespace ts {
                     flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
-                    const signature = getEffectsSignature((<FlowCall>flow).node);
-                    if (signature && getReturnTypeOfSignature(signature).flags & TypeFlags.Never) {
+                    const node = (<FlowCall>flow).node;
+                    if (hasEffectsSignature(node) && getReturnTypeOfSignature(getResolvedSignature(node)).flags & TypeFlags.Never) {
                         return false;
                     }
                     flow = (<FlowCall>flow).antecedent;
@@ -18894,8 +18890,8 @@ namespace ts {
             }
 
             function getTypeAtFlowCall(flow: FlowCall): FlowType | undefined {
-                const signature = getEffectsSignature(flow.node);
-                if (signature) {
+                if (hasEffectsSignature(flow.node)) {
+                    const signature = getResolvedSignature(flow.node);
                     const predicate = getTypePredicateOfSignature(signature);
                     if (predicate && (predicate.kind === TypePredicateKind.AssertsThis || predicate.kind === TypePredicateKind.AssertsIdentifier)) {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
@@ -19506,9 +19502,8 @@ namespace ts {
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (hasMatchingArgument(callExpression, reference)) {
-                    const signature = getEffectsSignature(callExpression);
-                    const predicate = signature && getTypePredicateOfSignature(signature);
+                if (hasMatchingArgument(callExpression, reference) && hasEffectsSignature(callExpression)) {
+                    const predicate = getTypePredicateOfSignature(getResolvedSignature(callExpression));
                     if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
                     }
