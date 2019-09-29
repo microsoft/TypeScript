@@ -3291,6 +3291,7 @@ namespace ts {
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
         /* @internal */ getNonOptionalType(type: Type): Type;
+        /* @internal */ isNullableType(type: Type): boolean;
         getTypeArguments(type: TypeReference): readonly Type[];
 
         // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.

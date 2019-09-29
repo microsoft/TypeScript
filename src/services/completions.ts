@@ -1033,10 +1033,13 @@ namespace ts.Completions {
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
-                            const type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
-                            const nonNullType = type.getNonNullableType();
-                            const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
-                            addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+                            let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
+                            let insertQuestionDot = false;
+                            if (type.isNullableType()) {
+                                insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
+                                type = type.getNonNullableType();
+                            }
+                            addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
 
                         return;
@@ -1051,10 +1054,13 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
-                const type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
-                const nonNullType = type.getNonNullableType();
-                const insertQuestionDot = isRightOfDot && !isRightOfQuestionDot && type !== nonNullType;
-                addTypeProperties(nonNullType, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+                let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
+                let insertQuestionDot = false;
+                if (type.isNullableType()) {
+                    insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
+                    type = type.getNonNullableType();
+                }
+                addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
         }
 

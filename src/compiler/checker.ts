@@ -384,6 +384,7 @@ namespace ts {
             getParameterType: getTypeAtPosition,
             getPromisedTypeOfPromise,
             getReturnTypeOfSignature,
+            isNullableType,
             getNullableType,
             getNonNullableType,
             getNonOptionalType: removeOptionalTypeMarker,
