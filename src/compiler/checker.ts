@@ -16092,6 +16092,21 @@ namespace ts {
             return result;
         }
 
+        function isSimpleFunctionType(type: Type) {
+            const signature = getSingleCallSignature(type);
+            return signature && signature.parameters.length <= 2 && !signature.thisParameter &&
+                !signature.hasRestParameter && !getTypePredicateOfSignature(signature);
+        }
+
+        function getFunctionTypeId(type: ResolvedType): string {
+            const signature = type.callSignatures[0];
+            let result = "" + signature.minArgumentCount;
+            for (const p of signature.parameters) {
+                result += "@" + getTypeOfSymbol(p).id + p.escapedName;
+            }
+            return result + ":" + getReturnTypeOfSignature(signature).id;
+        }
+
         /**
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
@@ -16105,6 +16120,9 @@ namespace ts {
             if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
                 const typeParameters: Type[] = [];
                 return getTypeReferenceId(<TypeReference>source, typeParameters) + "," + getTypeReferenceId(<TypeReference>target, typeParameters);
+            }
+            if (isSimpleFunctionType(source) && isSimpleFunctionType(target)) {
+                return getFunctionTypeId(<ResolvedType>source) + "," + getFunctionTypeId(<ResolvedType>target);
             }
             return source.id + "," + target.id;
         }
