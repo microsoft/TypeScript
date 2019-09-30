@@ -2,7 +2,7 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            hoistVariableDeclaration
+            hoistVariableDeclaration,
         } = context;
 
         return chainBundle(transformSourceFile);
@@ -28,7 +28,12 @@ namespace ts {
                         Debug.assertNotNode(updated, isSyntheticReference);
                         return updated;
                     }
-                    // falls through
+                    return visitEachChild(node, visitor, context);
+                case SyntaxKind.BinaryExpression:
+                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                        return transformNullishCoalescingExpression(<BinaryExpression>node);
+                    }
+                    return visitEachChild(node, visitor, context);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -171,6 +176,40 @@ namespace ts {
                 rightExpression
             );
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
+        }
+
+        function createNotNullCondition(node: Expression) {
+            return createBinary(
+                createBinary(
+                    node,
+                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createNull()
+                ),
+                createToken(SyntaxKind.AmpersandAmpersandToken),
+                createBinary(
+                    node,
+                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createVoidZero()
+                )
+            );
+        }
+
+        function transformNullishCoalescingExpression(node: BinaryExpression) {
+            const expressions: Expression[] = [];
+            let left = visitNode(node.left, visitor, isExpression);
+            if (!isIdentifier(left)) {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                expressions.push(createAssignment(temp, left));
+                left = temp;
+            }
+            expressions.push(
+                createParen(
+                    createConditional(
+                        createNotNullCondition(left),
+                        left,
+                        visitNode(node.right, visitor, isExpression)))
+                );
+            return inlineExpressions(expressions);
         }
     }
 }

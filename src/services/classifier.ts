@@ -391,6 +391,7 @@ namespace ts {
             case SyntaxKind.PercentEqualsToken:
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
+            case SyntaxKind.QuestionQuestionToken:
                 return true;
             default:
                 return false;

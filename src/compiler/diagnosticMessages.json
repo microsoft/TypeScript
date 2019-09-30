@@ -3273,6 +3273,10 @@
         "category": "Error",
         "code": 5075
     },
+    "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
+        "category": "Error",
+        "code": 5076
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

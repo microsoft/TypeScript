@@ -3248,6 +3248,10 @@ namespace ts {
         return createBinary(left, SyntaxKind.BarBarToken, right);
     }
 
+    export function createNullishCoalesce(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.QuestionQuestionToken, right);
+    }
+
     export function createLogicalNot(operand: Expression) {
         return createPrefix(SyntaxKind.ExclamationToken, operand);
     }
@@ -4593,7 +4597,7 @@ namespace ts {
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
-        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 4) {
+        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 3) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
             return true;

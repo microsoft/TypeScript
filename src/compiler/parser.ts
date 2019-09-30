@@ -3009,6 +3009,10 @@ namespace ts {
                     return parseJSDocAllType(/*postfixEquals*/ false);
                 case SyntaxKind.AsteriskEqualsToken:
                     return parseJSDocAllType(/*postfixEquals*/ true);
+                case SyntaxKind.QuestionQuestionToken:
+                    // If there is '??', consider that is prefix '?' in JSDoc type.
+                    scanner.reScanQuestionToken();
+                    // falls through
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
@@ -4800,6 +4804,7 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsEqualsToken:   // foo<x> !==
                 case SyntaxKind.AmpersandAmpersandToken:        // foo<x> &&
                 case SyntaxKind.BarBarToken:                    // foo<x> ||
+                case SyntaxKind.QuestionQuestionToken:          // foo<x> ??
                 case SyntaxKind.CaretToken:                     // foo<x> ^
                 case SyntaxKind.AmpersandToken:                 // foo<x> &
                 case SyntaxKind.BarToken:                       // foo<x> |
