@@ -2743,25 +2743,33 @@
         "category": "Error",
         "code": 2774
     },
-    "The operand of an increment or decrement operator may not be an optional property access.": {
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
         "category": "Error",
         "code": 2775
     },
-    "The target of an object rest assignment may not be an optional property access.": {
+    "Assertions require the call target to be an identifier or qualified name.": {
         "category": "Error",
         "code": 2776
     },
-    "The left-hand side of an assignment expression may not be an optional property access.": {
+    "The operand of an increment or decrement operator may not be an optional property access.": {
         "category": "Error",
         "code": 2777
     },
-    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+    "The target of an object rest assignment may not be an optional property access.": {
         "category": "Error",
         "code": 2778
     },
-    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+    "The left-hand side of an assignment expression may not be an optional property access.": {
         "category": "Error",
         "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

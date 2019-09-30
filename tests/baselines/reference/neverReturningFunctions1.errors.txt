@@ -225,6 +225,14 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS
 !!! error TS7027: Unreachable code detected.
     }
     
+    function f43() {
+        const fail = (): never => { throw new Error(); };
+        const f = [fail];
+        fail();  // No effect (missing type annotation)
+        f[0]();  // No effect (not a dotted name)
+        f;
+    }
+    
     // Repro from #33582
     
     export interface Component<T extends object = any> {

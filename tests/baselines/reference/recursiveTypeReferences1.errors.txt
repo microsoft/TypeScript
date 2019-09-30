@@ -2,9 +2,18 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeRefe
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(60,7): error TS2322: Type 'number' is not assignable to type 'string | RecArray<string>'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(66,8): error TS2322: Type 'number' is not assignable to type 'string | string[]'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(72,8): error TS2322: Type 'number' is not assignable to type 'string | (string | string[])[]'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(102,10): error TS2304: Cannot find name 'html'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(104,12): error TS2304: Cannot find name 'html'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(105,7): error TS2304: Cannot find name 'html'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(106,52): error TS2304: Cannot find name 'frag'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(116,11): error TS2304: Cannot find name 'concat'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(116,24): error TS2304: Cannot find name 'concat'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(117,11): error TS2304: Cannot find name 'concat'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(122,11): error TS2304: Cannot find name 'concat'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts(127,3): error TS2304: Cannot find name 'assert'.
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts (4 errors) ====
+==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts (13 errors) ====
     type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
     
     const a0: ValueOrArray<number> = 1;
@@ -92,4 +101,72 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeRefe
     type T13 = T13[] | string;
     type T14 = T14[] & { x: string };
     type T15<X> = X extends string ? T15<X>[] : never;
+    
+    type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+    type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+    
+    declare function foo1<T>(a: ValueOrArray1<T>): T;
+    declare let ra1: ValueOrArray2<string>;
+    
+    let x1 = foo1(ra1);  // Boom!
+    
+    type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+    type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+    
+    declare function foo2<T>(a: ValueOrArray1<T>): T;
+    declare let ra2: ValueOrArray2<string>;
+    
+    let x2 = foo2(ra2);  // Boom!
+    
+    // Repro from #33617 (errors are expected)
+    
+    type Tree = [HTMLHeadingElement, Tree][];
+    
+    function parse(node: Tree, index: number[] = []): HTMLUListElement {
+      return html('ul', node.map(([el, children], i) => {
+             ~~~~
+!!! error TS2304: Cannot find name 'html'.
+        const idx = [...index, i + 1];
+        return html('li', [
+               ~~~~
+!!! error TS2304: Cannot find name 'html'.
+          html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+          ~~~~
+!!! error TS2304: Cannot find name 'html'.
+          children.length > 0 ? parse(children, idx) : frag()
+                                                       ~~~~
+!!! error TS2304: Cannot find name 'frag'.
+        ]);
+      }));
+    }
+    
+    function cons(hs: HTMLHeadingElement[]): Tree {
+      return hs
+        .reduce<HTMLHeadingElement[][]>((hss, h) => {
+          const hs = hss.pop()!;
+          return hs.length === 0 || level(h) > level(hs[0])
+            ? concat(hss, [concat(hs, [h])])
+              ~~~~~~
+!!! error TS2304: Cannot find name 'concat'.
+                           ~~~~~~
+!!! error TS2304: Cannot find name 'concat'.
+            : concat(hss, [hs, [h]]);
+              ~~~~~~
+!!! error TS2304: Cannot find name 'concat'.
+        }, [[]])
+        .reduce<Tree>((node, hs) =>
+          hs.length === 0
+            ? node
+            : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+              ~~~~~~
+!!! error TS2304: Cannot find name 'concat'.
+        , []);
+    }
+    
+    function level(h: HTMLHeadingElement): number {
+      assert(isFinite(+h.tagName[1]));
+      ~~~~~~
+!!! error TS2304: Cannot find name 'assert'.
+      return +h.tagName[1];
+    }
     

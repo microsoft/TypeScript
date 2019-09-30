@@ -4924,8 +4924,8 @@ namespace ts {
             }
 
             function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext, bundled?: boolean): Statement[] {
-                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration);
-                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature);
+                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration, /*useAcessors*/ true);
+                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature, /*useAcessors*/ false);
 
                 // TODO: Use `setOriginalNode` on original declaration names where possible so these declarations see some kind of
                 // declaration mapping
@@ -5742,7 +5742,23 @@ namespace ts {
                     questionOrExclamationToken: QuestionToken | undefined,
                     type: TypeNode | undefined,
                     initializer: Expression | undefined
-                ) => T, methodKind: SyntaxKind): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]) {
+                ) => T, methodKind: SyntaxKind, useAccessors: true): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]);
+                function makeSerializePropertySymbol<T extends Node>(createProperty: (
+                    decorators: readonly Decorator[] | undefined,
+                    modifiers: readonly Modifier[] | undefined,
+                    name: string | PropertyName,
+                    questionOrExclamationToken: QuestionToken | undefined,
+                    type: TypeNode | undefined,
+                    initializer: Expression | undefined
+                ) => T, methodKind: SyntaxKind, useAccessors: false): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]);
+                function makeSerializePropertySymbol<T extends Node>(createProperty: (
+                    decorators: readonly Decorator[] | undefined,
+                    modifiers: readonly Modifier[] | undefined,
+                    name: string | PropertyName,
+                    questionOrExclamationToken: QuestionToken | undefined,
+                    type: TypeNode | undefined,
+                    initializer: Expression | undefined
+                ) => T, methodKind: SyntaxKind, useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
                     return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
                         if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                             // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
@@ -5758,7 +5774,40 @@ namespace ts {
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
                         const rawName = unescapeLeadingUnderscores(p.escapedName);
                         const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
-                        if (p.flags & (SymbolFlags.Property | SymbolFlags.Accessor | SymbolFlags.Variable)) {
+                        const firstPropertyLikeDecl = find(p.declarations, or(isPropertyDeclaration, isAccessor, isVariableDeclaration, isPropertySignature, isBinaryExpression, isPropertyAccessExpression));
+                        if (p.flags & SymbolFlags.Accessor && useAccessors) {
+                            const result: AccessorDeclaration[] = [];
+                            if (p.flags & SymbolFlags.SetAccessor) {
+                                result.push(setTextRange(createSetAccessor(
+                                    /*decorators*/ undefined,
+                                    createModifiersFromModifierFlags(staticFlag),
+                                    name,
+                                    [createParameter(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        /*dotDotDotToken*/ undefined,
+                                        "arg",
+                                        /*questionToken*/ undefined,
+                                        serializeTypeForDeclaration(getTypeOfSymbol(p), p)
+                                    )],
+                                    /*body*/ undefined
+                                ), find(p.declarations, isSetAccessor) || firstPropertyLikeDecl));
+                            }
+                            if (p.flags & SymbolFlags.GetAccessor) {
+                                result.push(setTextRange(createGetAccessor(
+                                    /*decorators*/ undefined,
+                                    createModifiersFromModifierFlags(staticFlag),
+                                    name,
+                                    [],
+                                    serializeTypeForDeclaration(getTypeOfSymbol(p), p),
+                                    /*body*/ undefined
+                                ), find(p.declarations, isGetAccessor) || firstPropertyLikeDecl));
+                            }
+                            return result;
+                        }
+                        // This is an else/if as accessors and properties can't merge in TS, but might in JS
+                        // If this happens, we assume the accessor takes priority, as it imposes more constraints
+                        else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable)) {
                             return setTextRange(createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
@@ -5768,7 +5817,7 @@ namespace ts {
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
                                 /*initializer*/ undefined
-                            ), filter(p.declarations, d => isPropertyDeclaration(d) || isAccessor(d) || isVariableDeclaration(d) || isPropertySignature(d) || isBinaryExpression(d) || isPropertyAccessExpression(d))[0]);
+                            ), find(p.declarations, or(isPropertyDeclaration, isVariableDeclaration)) || firstPropertyLikeDecl);
                         }
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
@@ -7348,7 +7397,7 @@ namespace ts {
                             }
                         }
                         else {
-                            Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                            Debug.assert(!!getter, "there must exist a getter as we are current checking either setter or getter in this function");
                             errorOrSuggestion(noImplicitAny, getter!, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
                         }
                         return anyType;
@@ -17085,7 +17134,7 @@ namespace ts {
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
             return !!(type.flags & TypeFlags.Instantiable ||
-                objectFlags & ObjectFlags.Reference && forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables) ||
+                objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & ObjectFlags.Mapped ||
                 type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
@@ -17382,7 +17431,8 @@ namespace ts {
                     }
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
-                    (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
+                    (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target)) &&
+                    !((<TypeReference>source).node && (<TypeReference>target).node)) {
                     // If source and target are references to the same generic type, infer from type arguments
                     inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
                 }
@@ -17663,6 +17713,12 @@ namespace ts {
             }
 
             function inferFromObjectTypesWorker(source: Type, target: Type) {
+                if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
+                    (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
+                    // If source and target are references to the same generic type, infer from type arguments
+                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
+                    return;
+                }
                 if (isGenericMappedType(source) && isGenericMappedType(target)) {
                     // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
                     // from S to T and from X to Y.
@@ -18616,30 +18672,38 @@ namespace ts {
                 getEffectiveTypeAnnotationNode(declaration as VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature));
         }
 
-        function getExplicitTypeOfSymbol(symbol: Symbol) {
-            return symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule) ||
-                symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property) && isDeclarationWithExplicitTypeAnnotation(symbol.valueDeclaration) ?
-                getTypeOfSymbol(symbol) : undefined;
+        function getExplicitTypeOfSymbol(symbol: Symbol, diagnostic?: Diagnostic) {
+            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.ValueModule)) {
+                return getTypeOfSymbol(symbol);
+            }
+            if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
+                if (isDeclarationWithExplicitTypeAnnotation(symbol.valueDeclaration)) {
+                    return getTypeOfSymbol(symbol);
+                }
+                if (diagnostic && symbol.valueDeclaration) {
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(symbol.valueDeclaration, Diagnostics._0_is_declared_here, symbolToString(symbol)));
+                }
+            }
         }
 
         // We require the dotted function name in an assertion expression to be comprised of identifiers
         // that reference function, method, class or value module symbols; or variable, property or
         // parameter symbols with declarations that have explicit type annotations. Such references are
         // resolvable with no possibility of triggering circularities in control flow analysis.
-        function getTypeOfDottedName(node: Expression): Type | undefined {
+        function getTypeOfDottedName(node: Expression, diagnostic: Diagnostic | undefined): Type | undefined {
             if (!(node.flags & NodeFlags.InWithStatement)) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        const symbol = getResolvedSymbol(<Identifier>node);
-                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                        const symbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>node));
+                        return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol, diagnostic);
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
                     case SyntaxKind.PropertyAccessExpression:
-                        const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression);
+                        const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression, diagnostic);
                         const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
-                        return prop && getExplicitTypeOfSymbol(prop);
+                        return prop && getExplicitTypeOfSymbol(prop, diagnostic);
                     case SyntaxKind.ParenthesizedExpression:
-                        return getTypeOfDottedName((<ParenthesizedExpression>node).expression);
+                        return getTypeOfDottedName((<ParenthesizedExpression>node).expression, diagnostic);
                 }
             }
         }
@@ -18652,7 +18716,7 @@ namespace ts {
                 // expressions are potential type predicate function calls. In order to avoid triggering
                 // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
                 // target expression of an assertion.
-                const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression) :
+                const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression, /*diagnostic*/ undefined) :
                     node.expression.kind !== SyntaxKind.SuperKeyword ? checkOptionalExpression(node, node.expression).type :
                     undefined;
                 const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
@@ -24859,6 +24923,16 @@ namespace ts {
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
+            }
+            if (node.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.ExpressionStatement &&
+                returnType.flags & TypeFlags.Void && getTypePredicateOfSignature(signature)) {
+                if (!isDottedName(node.expression)) {
+                    error(node.expression, Diagnostics.Assertions_require_the_call_target_to_be_an_identifier_or_qualified_name);
+                }
+                else if (!getEffectsSignature(node)) {
+                    const diagnostic = error(node.expression, Diagnostics.Assertions_require_every_name_in_the_call_target_to_be_declared_with_an_explicit_type_annotation);
+                    getTypeOfDottedName(node.expression, diagnostic);
+                }
             }
 
             if (isInJSFile(node)) {

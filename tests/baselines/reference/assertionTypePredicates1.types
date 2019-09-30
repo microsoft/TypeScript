@@ -436,3 +436,66 @@ declare class Wat {
 >x : void
 }
 
+function f20(x: unknown) {
+>f20 : (x: unknown) => void
+>x : unknown
+
+    const assert = (value: unknown): asserts value => {}
+>assert : (value: unknown) => asserts value
+>(value: unknown): asserts value => {} : (value: unknown) => asserts value
+>value : unknown
+
+    assert(typeof x === "string");  // Error
+>assert(typeof x === "string") : void
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const a = [assert];
+>a : ((value: unknown) => asserts value)[]
+>[assert] : ((value: unknown) => asserts value)[]
+>assert : (value: unknown) => asserts value
+
+    a[0](typeof x === "string");  // Error
+>a[0](typeof x === "string") : void
+>a[0] : (value: unknown) => asserts value
+>a : ((value: unknown) => asserts value)[]
+>0 : 0
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t1 = new Test();
+>t1 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t1.assert(typeof x === "string");  // Error
+>t1.assert(typeof x === "string") : void
+>t1.assert : (value: unknown) => asserts value
+>t1 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t2: Test = new Test();
+>t2 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t2.assert(typeof x === "string");
+>t2.assert(typeof x === "string") : void
+>t2.assert : (value: unknown) => asserts value
+>t2 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+}
+
