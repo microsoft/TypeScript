@@ -797,6 +797,10 @@ namespace ts {
                 case SyntaxKind.VariableDeclaration:
                     bindVariableDeclarationFlow(<VariableDeclaration>node);
                     break;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    bindAccessExpressionFlow(<AccessExpression>node);
+                    break;
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
@@ -941,7 +945,9 @@ namespace ts {
             }
             if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
-                return unreachableFlow;
+                if (!isOptionalChainRoot(expression.parent)) {
+                    return unreachableFlow;
+                }
             }
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
@@ -1015,23 +1021,28 @@ namespace ts {
         }
 
         function isTopLevelLogicalExpression(node: Node): boolean {
-            while (node.parent.kind === SyntaxKind.ParenthesizedExpression ||
-                node.parent.kind === SyntaxKind.PrefixUnaryExpression &&
-                (<PrefixUnaryExpression>node.parent).operator === SyntaxKind.ExclamationToken) {
+            while (isParenthesizedExpression(node.parent) ||
+                isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.ExclamationToken) {
                 node = node.parent;
             }
-            return !isStatementCondition(node) && !isLogicalExpression(node.parent);
+            return !isStatementCondition(node) &&
+                !isLogicalExpression(node.parent) &&
+                !(isOptionalChain(node.parent) && node.parent.expression === node);
+        }
+
+        function doWithConditionalBranches<T>(action: (value: T) => void, value: T, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const savedTrueTarget = currentTrueTarget;
+            const savedFalseTarget = currentFalseTarget;
+            currentTrueTarget = trueTarget;
+            currentFalseTarget = falseTarget;
+            action(value);
+            currentTrueTarget = savedTrueTarget;
+            currentFalseTarget = savedFalseTarget;
         }
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            const saveTrueTarget = currentTrueTarget;
-            const saveFalseTarget = currentFalseTarget;
-            currentTrueTarget = trueTarget;
-            currentFalseTarget = falseTarget;
-            bind(node);
-            currentTrueTarget = saveTrueTarget;
-            currentFalseTarget = saveFalseTarget;
-            if (!node || !isLogicalExpression(node)) {
+            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
+            if (!node || !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
@@ -1536,21 +1547,95 @@ namespace ts {
             }
         }
 
-        function bindCallExpressionFlow(node: CallExpression) {
-            // If the target of the call expression is a function expression or arrow function we have
-            // an immediately invoked function expression (IIFE). Initialize the flowNode property to
-            // the current control flow (which includes evaluation of the IIFE arguments).
-            let expr: Expression = node.expression;
-            while (expr.kind === SyntaxKind.ParenthesizedExpression) {
-                expr = (<ParenthesizedExpression>expr).expression;
+        function isOutermostOptionalChain(node: OptionalChain) {
+            return !isOptionalChain(node.parent) || isOptionalChainRoot(node.parent) || node !== node.parent.expression;
+        }
+
+        function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
+            if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
-            if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
-                bindEach(node.typeArguments);
-                bindEach(node.arguments);
-                bind(node.expression);
+        }
+
+        function bindOptionalChainRest(node: OptionalChain) {
+            bind(node.questionDotToken);
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    bind(node.name);
+                    break;
+                case SyntaxKind.ElementAccessExpression:
+                    bind(node.argumentExpression);
+                    break;
+                case SyntaxKind.CallExpression:
+                    bindEach(node.typeArguments);
+                    bindEach(node.arguments);
+                    break;
+            }
+        }
+
+        function bindOptionalChain(node: OptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            // For an optional chain, we emulate the behavior of a logical expression:
+            //
+            // a?.b         -> a && a.b
+            // a?.b.c       -> a && a.b.c
+            // a?.b?.c      -> a && a.b && a.b.c
+            // a?.[x = 1]   -> a && a[x = 1]
+            //
+            // To do this we descend through the chain until we reach the root of a chain (the expression with a `?.`)
+            // and build it's CFA graph as if it were the first condition (`a && ...`). Then we bind the rest
+            // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
+            // chain node. We then treat the entire node as the right side of the expression.
+            const preChainLabel = node.questionDotToken ? createBranchLabel() : undefined;
+            bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
+            if (preChainLabel) {
+                currentFlow = finishFlowLabel(preChainLabel);
+            }
+            doWithConditionalBranches(bindOptionalChainRest, node, trueTarget, falseTarget);
+            if (isOutermostOptionalChain(node)) {
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
+            }
+        }
+
+        function bindOptionalChainFlow(node: OptionalChain) {
+            if (isTopLevelLogicalExpression(node)) {
+                const postExpressionLabel = createBranchLabel();
+                bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
+                currentFlow = finishFlowLabel(postExpressionLabel);
+            }
+            else {
+                bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
+            }
+        }
+
+        function bindAccessExpressionFlow(node: AccessExpression) {
+            if (isOptionalChain(node)) {
+                bindOptionalChainFlow(node);
             }
             else {
                 bindEachChild(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression) {
+            if (isOptionalChain(node)) {
+                bindOptionalChainFlow(node);
+            }
+            else {
+                // If the target of the call expression is a function expression or arrow function we have
+                // an immediately invoked function expression (IIFE). Initialize the flowNode property to
+                // the current control flow (which includes evaluation of the IIFE arguments).
+                const expr = skipParentheses(node.expression);
+                if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
+                    bindEach(node.typeArguments);
+                    bindEach(node.arguments);
+                    bind(node.expression);
+                }
+                else {
+                    bindEachChild(node);
+                }
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>node.expression;
@@ -3297,6 +3382,10 @@ namespace ts {
         const callee = skipOuterExpressions(node.expression);
         const expression = node.expression;
 
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
+
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3692,6 +3781,10 @@ namespace ts {
     function computePropertyAccess(node: PropertyAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
 
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
+
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -3706,6 +3799,10 @@ namespace ts {
 
     function computeElementAccess(node: ElementAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
+
+        if (node.flags & NodeFlags.OptionalChain) {
+            transformFlags |= TransformFlags.ContainsESNext;
+        }
 
         // If an ElementAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.

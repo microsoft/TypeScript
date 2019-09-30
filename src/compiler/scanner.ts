@@ -184,6 +184,7 @@ namespace ts {
         "&&": SyntaxKind.AmpersandAmpersandToken,
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
+        "?.": SyntaxKind.QuestionDotToken,
         ":": SyntaxKind.ColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
@@ -1829,6 +1830,10 @@ namespace ts {
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            return token = SyntaxKind.QuestionDotToken;
+                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;

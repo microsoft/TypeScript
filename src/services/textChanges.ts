@@ -1061,6 +1061,8 @@ namespace ts.textChanges {
             getColumn,
             getIndent,
             isAtStartOfLine,
+            hasTrailingComment: () => writer.hasTrailingComment(),
+            hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
             clear
         };
     }

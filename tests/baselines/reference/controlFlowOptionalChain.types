@@ -1,0 +1,636 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts ===
+// assignments in shortcutting chain
+declare const o: undefined | {
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
+
+    [key: string]: any;
+>key : string
+
+    [key: number]: any;
+>key : number
+
+    (...args: any[]): any;
+>args : any[]
+
+};
+
+let a: number;
+>a : number
+
+o?.[a = 1];
+>o?.[a = 1] : any
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
+>a = 1 : 1
+>a : number
+>1 : 1
+
+a.toString();
+>a.toString() : string
+>a.toString : (radix?: number | undefined) => string
+>a : number
+>toString : (radix?: number | undefined) => string
+
+let b: number;
+>b : number
+
+o?.x[b = 1];
+>o?.x[b = 1] : any
+>o?.x : any
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
+>x : any
+>b = 1 : 1
+>b : number
+>1 : 1
+
+b.toString();
+>b.toString() : string
+>b.toString : (radix?: number | undefined) => string
+>b : number
+>toString : (radix?: number | undefined) => string
+
+let c: number;
+>c : number
+
+o?.(c = 1)
+>o?.(c = 1) : any
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
+>c = 1 : 1
+>c : number
+>1 : 1
+
+c.toString();
+>c.toString() : string
+>c.toString : (radix?: number | undefined) => string
+>c : number
+>toString : (radix?: number | undefined) => string
+
+let d: number;
+>d : number
+
+o?.x(d = 1);
+>o?.x(d = 1) : any
+>o?.x : any
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
+>x : any
+>d = 1 : 1
+>d : number
+>1 : 1
+
+d.toString();
+>d.toString() : string
+>d.toString : (radix?: number | undefined) => string
+>d : number
+>toString : (radix?: number | undefined) => string
+
+// type predicates
+declare const f: undefined | ((x: any) => x is number);
+>f : ((x: any) => x is number) | undefined
+>x : any
+
+declare const x: string | number;
+>x : string | number
+
+if (f?.(x)) {
+>f?.(x) : boolean | undefined
+>f : ((x: any) => x is number) | undefined
+>x : string | number
+
+    x; // number
+>x : number
+
+    f; // (x: any) => x is number
+>f : (x: any) => x is number
+
+    f(x);
+>f(x) : boolean
+>f : (x: any) => x is number
+>x : number
+}
+else {
+    x;
+>x : string | number
+
+    f;
+>f : ((x: any) => x is number) | undefined
+
+    f(x);
+>f(x) : boolean
+>f : ((x: any) => x is number) | undefined
+>x : string | number
+}
+x;
+>x : string | number
+
+f;
+>f : ((x: any) => x is number) | undefined
+
+f(x);
+>f(x) : boolean
+>f : ((x: any) => x is number) | undefined
+>x : string | number
+
+declare const o2: { f(x: any): x is number; } | undefined;
+>o2 : { f(x: any): x is number; } | undefined
+>f : (x: any) => x is number
+>x : any
+
+if (o2?.f(x)) {
+>o2?.f(x) : boolean | undefined
+>o2?.f : ((x: any) => x is number) | undefined
+>o2 : { f(x: any): x is number; } | undefined
+>f : ((x: any) => x is number) | undefined
+>x : string | number
+
+    x; // number
+>x : number
+
+    o2.f; // (x: any) => x is number
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+
+    o2?.f;
+>o2?.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+
+    o2?.f(x);
+>o2?.f(x) : boolean
+>o2?.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; }
+>f : (x: any) => x is number
+>x : number
+}
+else {
+    x;
+>x : string | number
+
+    o2;
+>o2 : { f(x: any): x is number; } | undefined
+
+    o2?.f;
+>o2?.f : ((x: any) => x is number) | undefined
+>o2 : { f(x: any): x is number; } | undefined
+>f : ((x: any) => x is number) | undefined
+
+    o2.f;
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; } | undefined
+>f : (x: any) => x is number
+}
+x;
+>x : string | number
+
+o2;
+>o2 : { f(x: any): x is number; } | undefined
+
+o2?.f;
+>o2?.f : ((x: any) => x is number) | undefined
+>o2 : { f(x: any): x is number; } | undefined
+>f : ((x: any) => x is number) | undefined
+
+o2.f;
+>o2.f : (x: any) => x is number
+>o2 : { f(x: any): x is number; } | undefined
+>f : (x: any) => x is number
+
+declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1
+>y : string
+>x : 2
+>y : number
+
+if (o3?.x === 1) {
+>o3?.x === 1 : boolean
+>o3?.x : 1 | 2 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | 2 | undefined
+>1 : 1
+
+    o3; // TODO: should be `{ x: y, y: string }`
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+
+    o3.x; // TODO: should not be an error.
+>o3.x : 1
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1
+
+    o3?.x;
+>o3?.x : 1 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | undefined
+}
+else {
+    o3;
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+
+    o3?.x;
+>o3?.x : 2 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 2 | undefined
+
+    o3.x;
+>o3.x : 2
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 2
+}
+o3;
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+
+o3?.x;
+>o3?.x : 1 | 2 | undefined
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | 2 | undefined
+
+o3.x;
+>o3.x : 1 | 2
+>o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>x : 1 | 2
+
+declare const o4: { x?: { y: boolean } };
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean
+
+if (o4.x?.y) {
+>o4.x?.y : boolean | undefined
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean | undefined
+
+    o4.x; // { y: boolean }
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+
+    o4.x.y; // true
+>o4.x.y : true
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+>y : true
+
+    o4.x?.y; // true
+>o4.x?.y : true
+>o4.x : { y: boolean; }
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; }
+>y : true
+}
+else {
+    o4.x;
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+
+    o4.x?.y;
+>o4.x?.y : boolean | undefined
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean | undefined
+
+    o4.x.y;
+>o4.x.y : boolean
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean
+}
+o4.x;
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+
+o4.x?.y;
+>o4.x?.y : boolean | undefined
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean | undefined
+
+o4.x.y;
+>o4.x.y : boolean
+>o4.x : { y: boolean; } | undefined
+>o4 : { x?: { y: boolean; } | undefined; }
+>x : { y: boolean; } | undefined
+>y : boolean
+
+declare const o5: { x?: { y: { z?: { w: boolean } } } };
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : boolean
+
+if (o5.x?.y.z?.w) {
+>o5.x?.y.z?.w : boolean | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : boolean | undefined
+
+    o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+
+    o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+
+    o5.x.y.z;
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+
+    o5.x.y.z.w; // true
+>o5.x.y.z.w : true
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x.y.z?.w; // true
+>o5.x.y.z?.w : true
+>o5.x.y.z : { w: boolean; }
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x?.y.z.w; // true
+>o5.x?.y.z.w : true
+>o5.x?.y.z : { w: boolean; }
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+
+    o5.x?.y.z?.w; // true
+>o5.x?.y.z?.w : true
+>o5.x?.y.z : { w: boolean; }
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; }
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; }
+>w : true
+}
+else {
+    o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+
+    o5.x?.y;
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+
+    o5.x?.y.z;
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+
+    o5.x?.y.z?.w;
+>o5.x?.y.z?.w : boolean | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : boolean | undefined
+
+    o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+
+    o5.x.y.z.w;
+>o5.x.y.z.w : boolean
+>o5.x.y.z : { w: boolean; } | undefined
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : boolean
+}
+o5.x;
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+
+o5.x?.y;
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+
+o5.x?.y.z;
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+
+o5.x?.y.z?.w;
+>o5.x?.y.z?.w : boolean | undefined
+>o5.x?.y.z : { w: boolean; } | undefined
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>z : { w: boolean; } | undefined
+>w : boolean | undefined
+
+o5.x.y;
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+
+o5.x.y.z.w;
+>o5.x.y.z.w : boolean
+>o5.x.y.z : { w: boolean; } | undefined
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
+>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>y : { z?: { w: boolean; } | undefined; }
+>z : { w: boolean; } | undefined
+>w : boolean
+
+interface Base {
+    f(): this is Derived;
+>f : () => this is Derived
+}
+
+interface Derived extends Base {
+    x: number;
+>x : number
+}
+
+declare const o6: Base | undefined;
+>o6 : Base | undefined
+
+if (o6?.f()) {
+>o6?.f() : boolean | undefined
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
+>f : (() => this is Derived) | undefined
+
+    o6; // Derived
+>o6 : Derived
+
+    o6.f;
+>o6.f : () => this is Derived
+>o6 : Derived
+>f : () => this is Derived
+}
+else {
+    o6;
+>o6 : Base | undefined
+
+    o6?.f;
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
+>f : (() => this is Derived) | undefined
+
+    o6.f;
+>o6.f : () => this is Derived
+>o6 : Base | undefined
+>f : () => this is Derived
+}
+o6;
+>o6 : Base | undefined
+
+o6?.f;
+>o6?.f : (() => this is Derived) | undefined
+>o6 : Base | undefined
+>f : (() => this is Derived) | undefined
+
+o6.f;
+>o6.f : () => this is Derived
+>o6 : Base | undefined
+>f : () => this is Derived
+
+// asserts
+declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
+>isDefined : <T>(value: T) => asserts value is NonNullable<T>
+>value : T
+
+declare const isString: (value: unknown) => asserts value is string;
+>isString : (value: unknown) => asserts value is string
+>value : unknown
+
+declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
+>value : unknown
+
+declare const maybeNever: undefined | (() => never);
+>maybeNever : (() => never) | undefined
+
+function f01(x: unknown) {
+>f01 : (x: unknown) => void
+>x : unknown
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        isString?.(x);
+>isString?.(x) : void
+>isString : (value: unknown) => asserts value is string
+>x : unknown
+
+        x;
+>x : string
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        maybeIsString?.(x);
+>maybeIsString?.(x) : void | undefined
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
+>x : unknown
+
+        x;
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        isDefined(maybeIsString);
+>isDefined(maybeIsString) : void
+>isDefined : <T>(value: T) => asserts value is NonNullable<T>
+>maybeIsString : ((value: unknown) => asserts value is string) | undefined
+
+        maybeIsString?.(x);
+>maybeIsString?.(x) : void
+>maybeIsString : (value: unknown) => asserts value is string
+>x : unknown
+
+        x;
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        maybeNever?.();
+>maybeNever?.() : undefined
+>maybeNever : (() => never) | undefined
+
+        x;
+>x : unknown
+    }
+}
+

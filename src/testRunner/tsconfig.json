@@ -76,6 +76,7 @@
         "unittests/evaluation/awaiter.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",
+        "unittests/evaluation/optionalCall.ts",
         "unittests/evaluation/objectRest.ts",
         "unittests/services/cancellableLanguageServiceOperations.ts",
         "unittests/services/colorization.ts",

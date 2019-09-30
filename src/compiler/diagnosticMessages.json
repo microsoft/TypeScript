@@ -1039,6 +1039,10 @@
         "category": "Error",
         "code": 1357
     },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2747,6 +2751,27 @@
         "category": "Error",
         "code": 2776
     },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

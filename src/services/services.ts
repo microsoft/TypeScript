@@ -409,8 +409,14 @@ namespace ts {
         getBaseTypes(): BaseType[] | undefined {
             return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
         }
+        isNullableType(): boolean {
+            return this.checker.isNullableType(this);
+        }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
+        }
+        getNonOptionalType(): Type {
+            return this.checker.getNonOptionalType(this);
         }
         getConstraint(): Type | undefined {
             return this.checker.getBaseConstraintOfType(this);

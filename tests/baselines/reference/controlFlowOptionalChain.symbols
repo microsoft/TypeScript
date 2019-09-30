@@ -1,0 +1,602 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts ===
+// assignments in shortcutting chain
+declare const o: undefined | {
+>o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
+
+    [key: string]: any;
+>key : Symbol(key, Decl(controlFlowOptionalChain.ts, 2, 5))
+
+    [key: number]: any;
+>key : Symbol(key, Decl(controlFlowOptionalChain.ts, 3, 5))
+
+    (...args: any[]): any;
+>args : Symbol(args, Decl(controlFlowOptionalChain.ts, 4, 5))
+
+};
+
+let a: number;
+>a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
+
+o?.[a = 1];
+>o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
+>a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
+
+a.toString();
+>a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+let b: number;
+>b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
+
+o?.x[b = 1];
+>o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
+>b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
+
+b.toString();
+>b.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+let c: number;
+>c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
+
+o?.(c = 1)
+>o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
+>c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
+
+c.toString();
+>c.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+let d: number;
+>d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
+
+o?.x(d = 1);
+>o : Symbol(o, Decl(controlFlowOptionalChain.ts, 1, 13))
+>d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
+
+d.toString();
+>d.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+// type predicates
+declare const f: undefined | ((x: any) => x is number);
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 24, 31))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 24, 31))
+
+declare const x: string | number;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+if (f?.(x)) {
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    x; // number
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    f; // (x: any) => x is number
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+
+    f(x);
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+}
+else {
+    x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    f;
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+
+    f(x);
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+}
+x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+f;
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+
+f(x);
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 24, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+declare const o2: { f(x: any): x is number; } | undefined;
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 40, 22))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 40, 22))
+
+if (o2?.f(x)) {
+>o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    x; // number
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    o2.f; // (x: any) => x is number
+>o2.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+
+    o2?.f;
+>o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+
+    o2?.f(x);
+>o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+}
+else {
+    x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+    o2;
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+
+    o2?.f;
+>o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+
+    o2.f;
+>o2.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+}
+x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 25, 13))
+
+o2;
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+
+o2?.f;
+>o2?.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+
+o2.f;
+>o2.f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+>o2 : Symbol(o2, Decl(controlFlowOptionalChain.ts, 40, 13))
+>f : Symbol(f, Decl(controlFlowOptionalChain.ts, 40, 19))
+
+declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 58, 25))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 41))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 58, 47))
+
+if (o3?.x === 1) {
+>o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+
+    o3; // TODO: should be `{ x: y, y: string }`
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+
+    o3.x; // TODO: should not be an error.
+>o3.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+
+    o3?.x;
+>o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+}
+else {
+    o3;
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+
+    o3?.x;
+>o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+
+    o3.x;
+>o3.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+}
+o3;
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+
+o3?.x;
+>o3?.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+
+o3.x;
+>o3.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+>o3 : Symbol(o3, Decl(controlFlowOptionalChain.ts, 58, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 58, 19), Decl(controlFlowOptionalChain.ts, 58, 41))
+
+declare const o4: { x?: { y: boolean } };
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+if (o4.x?.y) {
+>o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+    o4.x; // { y: boolean }
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+
+    o4.x.y; // true
+>o4.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+    o4.x?.y; // true
+>o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+}
+else {
+    o4.x;
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+
+    o4.x?.y;
+>o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+    o4.x.y;
+>o4.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+}
+o4.x;
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+
+o4.x?.y;
+>o4.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+o4.x.y;
+>o4.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+>o4.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>o4 : Symbol(o4, Decl(controlFlowOptionalChain.ts, 73, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 73, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 73, 25))
+
+declare const o5: { x?: { y: { z?: { w: boolean } } } };
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+if (o5.x?.y.z?.w) {
+>o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+    o5.x;
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+
+    o5.x.y;
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+
+    o5.x.y.z;
+>o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+
+    o5.x.y.z.w; // true
+>o5.x.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+    o5.x.y.z?.w; // true
+>o5.x.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+    o5.x?.y.z.w; // true
+>o5.x?.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+    o5.x?.y.z?.w; // true
+>o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+}
+else {
+    o5.x;
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+
+    o5.x?.y;
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+
+    o5.x?.y.z;
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+
+    o5.x?.y.z?.w;
+>o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+    o5.x.y;
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+
+    o5.x.y.z.w;
+>o5.x.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+}
+o5.x;
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+
+o5.x?.y;
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+
+o5.x?.y.z;
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+
+o5.x?.y.z?.w;
+>o5.x?.y.z?.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x?.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x?.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+o5.x.y;
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+
+o5.x.y.z.w;
+>o5.x.y.z.w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+>o5.x.y.z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>o5.x.y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>o5.x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>o5 : Symbol(o5, Decl(controlFlowOptionalChain.ts, 88, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 88, 19))
+>y : Symbol(y, Decl(controlFlowOptionalChain.ts, 88, 25))
+>z : Symbol(z, Decl(controlFlowOptionalChain.ts, 88, 30))
+>w : Symbol(w, Decl(controlFlowOptionalChain.ts, 88, 36))
+
+interface Base {
+>Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
+
+    f(): this is Derived;
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>Derived : Symbol(Derived, Decl(controlFlowOptionalChain.ts, 115, 1))
+}
+
+interface Derived extends Base {
+>Derived : Symbol(Derived, Decl(controlFlowOptionalChain.ts, 115, 1))
+>Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
+
+    x: number;
+>x : Symbol(Derived.x, Decl(controlFlowOptionalChain.ts, 117, 32))
+}
+
+declare const o6: Base | undefined;
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>Base : Symbol(Base, Decl(controlFlowOptionalChain.ts, 111, 11))
+
+if (o6?.f()) {
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+
+    o6; // Derived
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+
+    o6.f;
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+}
+else {
+    o6;
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+
+    o6?.f;
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+
+    o6.f;
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+}
+o6;
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+
+o6?.f;
+>o6?.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+
+o6.f;
+>o6.f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+>o6 : Symbol(o6, Decl(controlFlowOptionalChain.ts, 121, 13))
+>f : Symbol(Base.f, Decl(controlFlowOptionalChain.ts, 113, 16))
+
+// asserts
+declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
+>isDefined : Symbol(isDefined, Decl(controlFlowOptionalChain.ts, 136, 13))
+>T : Symbol(T, Decl(controlFlowOptionalChain.ts, 136, 26))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 136, 29))
+>T : Symbol(T, Decl(controlFlowOptionalChain.ts, 136, 26))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 136, 29))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(controlFlowOptionalChain.ts, 136, 26))
+
+declare const isString: (value: unknown) => asserts value is string;
+>isString : Symbol(isString, Decl(controlFlowOptionalChain.ts, 137, 13))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 137, 25))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 137, 25))
+
+declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
+>maybeIsString : Symbol(maybeIsString, Decl(controlFlowOptionalChain.ts, 138, 13))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 138, 43))
+>value : Symbol(value, Decl(controlFlowOptionalChain.ts, 138, 43))
+
+declare const maybeNever: undefined | (() => never);
+>maybeNever : Symbol(maybeNever, Decl(controlFlowOptionalChain.ts, 139, 13))
+
+function f01(x: unknown) {
+>f01 : Symbol(f01, Decl(controlFlowOptionalChain.ts, 139, 52))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+
+    if (!!true) {
+        isString?.(x);
+>isString : Symbol(isString, Decl(controlFlowOptionalChain.ts, 137, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+
+        x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+    }
+    if (!!true) {
+        maybeIsString?.(x);
+>maybeIsString : Symbol(maybeIsString, Decl(controlFlowOptionalChain.ts, 138, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+
+        x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+    }
+    if (!!true) {
+        isDefined(maybeIsString);
+>isDefined : Symbol(isDefined, Decl(controlFlowOptionalChain.ts, 136, 13))
+>maybeIsString : Symbol(maybeIsString, Decl(controlFlowOptionalChain.ts, 138, 13))
+
+        maybeIsString?.(x);
+>maybeIsString : Symbol(maybeIsString, Decl(controlFlowOptionalChain.ts, 138, 13))
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+
+        x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+    }
+    if (!!true) {
+        maybeNever?.();
+>maybeNever : Symbol(maybeNever, Decl(controlFlowOptionalChain.ts, 139, 13))
+
+        x;
+>x : Symbol(x, Decl(controlFlowOptionalChain.ts, 141, 13))
+    }
+}
+
