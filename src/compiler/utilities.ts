@@ -2903,7 +2903,7 @@ namespace ts {
      *    Symbol.name
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
-    export function isWellKnownSymbolSyntactically(node: Expression): node is WellKnownSymbolExpression {
+    export function isWellKnownSymbolSyntactically(node: Node): node is WellKnownSymbolExpression {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
