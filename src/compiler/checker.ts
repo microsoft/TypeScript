@@ -3041,7 +3041,7 @@ namespace ts {
                     return getSymbolOfNode(d.parent);
                 }
                 if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
-                    if (isModuleExportsPropertyAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
+                    if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
                         return getSymbolOfNode(getSourceFileOfNode(d));
                     }
                     checkExpressionCached(d.parent.left.expression);
@@ -4877,6 +4877,15 @@ namespace ts {
                 }
             }
 
+            function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
+                const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context);
+                if (fromNameType) {
+                    return fromNameType;
+                }
+                const rawName = unescapeLeadingUnderscores(symbol.escapedName);
+                return createPropertyNameNodeForIdentifierOrLiteral(rawName);
+            }
+
             // See getNameForSymbolFromNameType for a stringy equivalent
             function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext) {
                 const nameType = symbol.nameType;
@@ -4889,12 +4898,16 @@ namespace ts {
                         if (isNumericLiteralName(name) && startsWith(name, "-")) {
                             return createComputedPropertyName(createLiteral(+name));
                         }
-                        return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name) as StringLiteral | NumericLiteral;
+                        return createPropertyNameNodeForIdentifierOrLiteral(name);
                     }
                     if (nameType.flags & TypeFlags.UniqueESSymbol) {
                         return createComputedPropertyName(symbolToExpression((<UniqueESSymbolType>nameType).symbol, context, SymbolFlags.Value));
                     }
                 }
+            }
+
+            function createPropertyNameNodeForIdentifierOrLiteral(name: string) {
+                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name) as StringLiteral | NumericLiteral;
             }
 
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
@@ -5772,8 +5785,7 @@ namespace ts {
                             return [];
                         }
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
-                        const rawName = unescapeLeadingUnderscores(p.escapedName);
-                        const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
+                        const name = getPropertyNameNodeForSymbol(p, context);
                         const firstPropertyLikeDecl = find(p.declarations, or(isPropertyDeclaration, isAccessor, isVariableDeclaration, isPropertySignature, isBinaryExpression, isPropertyAccessExpression));
                         if (p.flags & SymbolFlags.Accessor && useAccessors) {
                             const result: AccessorDeclaration[] = [];
@@ -6869,13 +6881,15 @@ namespace ts {
             let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
                 const expression = (isBinaryExpression(declaration) || isCallExpression(declaration)) ? declaration :
-                    isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
+                    isAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                     undefined;
                 if (!expression) {
                     continue; // Non-assignment declaration merged in (eg, an Identifier to mark the thing as a namespace) - skip over it and pull type info from elsewhere
                 }
 
-                const kind = isPropertyAccessExpression(expression) ? getAssignmentDeclarationPropertyAccessKind(expression) : getAssignmentDeclarationKind(expression);
+                const kind = isAccessExpression(expression)
+                    ? getAssignmentDeclarationPropertyAccessKind(expression)
+                    : getAssignmentDeclarationKind(expression);
                 if (kind === AssignmentDeclarationKind.ThisProperty) {
                     if (isDeclarationInConstructor(expression)) {
                         definedInConstructor = true;
@@ -7250,12 +7264,15 @@ namespace ts {
             else if (
                 isBinaryExpression(declaration) ||
                 (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)))) {
+                (isCallExpression(declaration) || (isPropertyAccessExpression(declaration) || isBindableStaticElementAccessExpression(declaration)) && isBinaryExpression(declaration.parent)))) {
                 type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
                 || isPropertyAccessExpression(declaration)
+                || isElementAccessExpression(declaration)
                 || isIdentifier(declaration)
+                || isStringLiteralLike(declaration)
+                || isNumericLiteral(declaration)
                 || isClassDeclaration(declaration)
                 || isFunctionDeclaration(declaration)
                 || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
@@ -7436,7 +7453,8 @@ namespace ts {
                 return anyType;
             }
             else if (declaration.kind === SyntaxKind.BinaryExpression ||
-                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    (declaration.kind === SyntaxKind.PropertyAccessExpression || declaration.kind === SyntaxKind.ElementAccessExpression) &&
+                    declaration.parent.kind === SyntaxKind.BinaryExpression) {
                 return getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
@@ -32134,7 +32152,7 @@ namespace ts {
                     return node;
                 case SyntaxKind.PropertyAccessExpression:
                     do {
-                        if (isModuleExportsPropertyAccessExpression(node.expression)) {
+                        if (isModuleExportsAccessExpression(node.expression)) {
                             return node.name;
                         }
                         node = node.expression;

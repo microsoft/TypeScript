@@ -1875,7 +1875,7 @@ namespace ts {
                 decl = name;
             }
 
-            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
+            if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
                 return undefined;
             }
         }
@@ -1887,7 +1887,7 @@ namespace ts {
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
+        return isBinaryExpression(decl) || isAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
@@ -1907,18 +1907,23 @@ namespace ts {
     }
 
     function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
-        return forEach(node.properties, p => isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === "value" && p.initializer && getExpandoInitializer(p.initializer, isPrototypeAssignment));
+        return forEach(node.properties, p =>
+            isPropertyAssignment(p) &&
+            isIdentifier(p.name) &&
+            p.name.escapedText === "value" &&
+            p.initializer &&
+            getExpandoInitializer(p.initializer, isPrototypeAssignment));
     }
 
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedExpandoInitializer(node: Node | undefined) {
+    export function getAssignedExpandoInitializer(node: Node | undefined): Expression | undefined {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
-                getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+                getDefaultedExpandoInitializer(node.parent.left, node.parent.right, isPrototypeAssignment);
         }
         if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
             const result = hasExpandoValueProperty(node.arguments[2], node.arguments[1].text === "prototype");
@@ -1961,9 +1966,9 @@ namespace ts {
      * The second Lhs is required to be the same as the first except that it may be prefixed with
      * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
      */
-    function getDefaultedExpandoInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
+    function getDefaultedExpandoInitializer(name: Expression, initializer: Expression, isPrototypeAssignment: boolean) {
         const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
+        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
             return e;
         }
     }
@@ -1998,19 +2003,20 @@ namespace ts {
      * my.app = self.my.app || class { }
      */
     function isSameEntityName(name: Expression, initializer: Expression): boolean {
-        if (isIdentifier(name) && isIdentifier(initializer)) {
-            return name.escapedText === initializer.escapedText;
+        if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
+            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
         }
-        if (isIdentifier(name) && isPropertyAccessExpression(initializer)) {
-            return (initializer.expression.kind as SyntaxKind.ThisKeyword === SyntaxKind.ThisKeyword ||
+        if (isIdentifier(name) && (isLiteralLikeAccess(initializer))) {
+            return (initializer.expression.kind === SyntaxKind.ThisKeyword ||
                 isIdentifier(initializer.expression) &&
-                (initializer.expression.escapedText === "window" as __String ||
-                    initializer.expression.escapedText === "self" as __String ||
-                    initializer.expression.escapedText === "global" as __String)) &&
-                isSameEntityName(name, initializer.name);
+                (initializer.expression.escapedText === "window" ||
+                    initializer.expression.escapedText === "self" ||
+                    initializer.expression.escapedText === "global")) &&
+                isSameEntityName(name, getNameOrArgument(initializer));
         }
-        if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
-            return name.name.escapedText === initializer.name.escapedText && isSameEntityName(name.expression, initializer.expression);
+        if (isLiteralLikeAccess(name) && isLiteralLikeAccess(initializer)) {
+            return getElementOrPropertyAccessName(name) === getElementOrPropertyAccessName(initializer)
+                && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
     }
@@ -2026,8 +2032,11 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
-    export function isModuleExportsPropertyAccessExpression(node: Node) {
-        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name.escapedText === "exports";
+    export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
+        return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
+            && isIdentifier(node.expression)
+            && node.expression.escapedText === "module"
+            && getElementOrPropertyAccessName(node) === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -2044,7 +2053,38 @@ namespace ts {
             idText(expr.expression.expression) === "Object" &&
             idText(expr.expression.name) === "defineProperty" &&
             isStringOrNumericLiteralLike(expr.arguments[1]) &&
-            isEntityNameExpression(expr.arguments[0]);
+            isBindableStaticNameExpression(expr.arguments[0]);
+    }
+
+    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
+        return isLiteralLikeElementAccess(node)
+            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
+                isEntityNameExpression(node.expression) ||
+                isBindableStaticElementAccessExpression(node.expression, /*excludeThisKeyword*/ true));
+    }
+
+    export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
+        return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
+    }
+
+    export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
+        return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
+    }
+
+    export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
+        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+        || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    }
+
+    export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
+        return isEntityNameExpression(node) || isBindableStaticAccessExpression(node, excludeThisKeyword);
+    }
+
+    export function getNameOrArgument(expr: PropertyAccessExpression | LiteralLikeElementAccessExpression) {
+        if (isPropertyAccessExpression(expr)) {
+            return expr.name;
+        }
+        return expr.argumentExpression;
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
@@ -2053,26 +2093,22 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
+            if (isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
-            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+            if (isBindableStaticAccessExpression(entityName) && getElementOrPropertyAccessName(entityName) === "prototype") {
                 return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken) {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        const lhs = expr.left;
-        if (isAccessExpression(lhs)) {
-            if (isEntityNameExpression(lhs.expression) && getElementOrPropertyAccessName(lhs) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
-                    // F.prototype = { ... }
-                    return AssignmentDeclarationKind.Prototype;
-            }
-            return getAssignmentDeclarationPropertyAccessKind(lhs);
+        if (isBindableStaticNameExpression(expr.left.expression) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+            // F.prototype = { ... }
+            return AssignmentDeclarationKind.Prototype;
         }
-        return AssignmentDeclarationKind.None;
+        return getAssignmentDeclarationPropertyAccessKind(expr.left);
     }
 
     /**
@@ -2092,6 +2128,8 @@ namespace ts {
     }
 
     /* @internal */
+    export function getElementOrPropertyAccessName(node: LiteralLikeElementAccessExpression | PropertyAccessExpression): string;
+    export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined;
     export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined {
         const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
         if (name) {
@@ -2109,22 +2147,21 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isModuleExportsPropertyAccessExpression(lhs)) {
+        else if (isModuleExportsAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
-        else if (isEntityNameExpression(lhs.expression)) {
+        else if (isBindableStaticNameExpression(lhs.expression, /*excludeThisKeyword*/ true)) {
             if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return AssignmentDeclarationKind.PrototypeProperty;
             }
 
             let nextToLast = lhs;
-            while (isAccessExpression(nextToLast.expression)) {
-                nextToLast = nextToLast.expression;
+            while (!isIdentifier(nextToLast.expression)) {
+                nextToLast = nextToLast.expression as Exclude<BindableStaticNameExpression, Identifier>;
             }
-            Debug.assert(isIdentifier(nextToLast.expression));
-            const id = nextToLast.expression as Identifier;
+            const id = nextToLast.expression;
             if (id.escapedText === "exports" ||
                 id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") {
                 // exports.name = expr OR module.exports.name = expr
@@ -2148,9 +2185,10 @@ namespace ts {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
-    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
         return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
+            (!isElementAccessExpression(expr) || isLiteralLikeElementAccess(expr)) &&
             !!getJSDocTypeTag(expr.parent);
     }
 
@@ -4147,8 +4185,8 @@ namespace ts {
         return undefined;
     }
 
-    export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
-        return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
+    export function isPrototypeAccess(node: Node): node is BindableStaticAccessExpression {
+        return isBindableStaticAccessExpression(node) && getElementOrPropertyAccessName(node) === "prototype";
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
@@ -5378,6 +5416,11 @@ namespace ts {
                 const { expression } = declaration as ExportAssignment;
                 return isIdentifier(expression) ? expression : undefined;
             }
+            case SyntaxKind.ElementAccessExpression:
+                const expr = declaration as ElementAccessExpression;
+                if (isBindableStaticElementAccessExpression(expr)) {
+                    return expr.argumentExpression;
+                }
         }
         return (declaration as NamedDeclaration).name;
     }
@@ -5399,8 +5442,8 @@ namespace ts {
             if (isIdentifier(node.parent.left)) {
                 return node.parent.left;
             }
-            else if (isPropertyAccessExpression(node.parent.left)) {
-                return node.parent.left.name;
+            else if (isAccessExpression(node.parent.left)) {
+                return getElementOrPropertyAccessArgumentExpressionOrName(node.parent.left);
             }
         }
         else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
