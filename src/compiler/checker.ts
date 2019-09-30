@@ -20940,7 +20940,7 @@ namespace ts {
                         if (!decl) {
                             return false;
                         }
-                        const lhs = binaryExpression.left as PropertyAccessExpression;
+                        const lhs = cast(binaryExpression.left, isAccessExpression);
                         const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
                         if (overallAnnotation) {
                             return getTypeFromTypeNode(overallAnnotation);
@@ -20951,8 +20951,11 @@ namespace ts {
                             if (parentSymbol) {
                                 const annotated = getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
                                 if (annotated) {
-                                    const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), lhs.name.escapedText);
-                                    return type || false;
+                                    const nameStr = getElementOrPropertyAccessName(lhs);
+                                    if (nameStr !== undefined) {
+                                        const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), nameStr);
+                                        return type || false;
+                                    }
                                 }
                                 return false;
                             }
@@ -20972,12 +20975,13 @@ namespace ts {
                         }
                     }
                     if (kind === AssignmentDeclarationKind.ModuleExports) return false;
-                    const thisAccess = binaryExpression.left as PropertyAccessExpression;
+                    const thisAccess = cast(binaryExpression.left, isAccessExpression);
                     if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                         return false;
                     }
                     const thisType = checkThisExpression(thisAccess.expression);
-                    return thisType && getTypeOfPropertyOfContextualType(thisType, thisAccess.name.escapedText) || false;
+                    const nameStr = getElementOrPropertyAccessName(thisAccess);
+                    return nameStr !== undefined && thisType && getTypeOfPropertyOfContextualType(thisType, nameStr) || false;
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:

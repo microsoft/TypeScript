@@ -2128,17 +2128,20 @@ namespace ts {
     }
 
     /* @internal */
-    export function getElementOrPropertyAccessName(node: LiteralLikeElementAccessExpression | PropertyAccessExpression): string;
-    export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined;
-    export function getElementOrPropertyAccessName(node: AccessExpression): string | undefined {
+    export function getElementOrPropertyAccessName(node: LiteralLikeElementAccessExpression | PropertyAccessExpression): __String;
+    export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined;
+    export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined {
         const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
         if (name) {
             if (isIdentifier(name)) {
-                return idText(name);
+                return name.escapedText;
             }
             if (isStringLiteralLike(name) || isNumericLiteral(name)) {
-                return name.text;
+                return escapeLeadingUnderscores(name.text);
             }
+        }
+        if (isElementAccessExpression(node) && isWellKnownSymbolSyntactically(node.argumentExpression)) {
+            return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>node.argumentExpression).name));
         }
         return undefined;
     }
