@@ -826,7 +826,7 @@ namespace ts {
         | ComputedPropertyName
         | ElementAccessExpression
         | BindingPattern
-        | WellKnownSymbolExpression;
+        | EntityNameExpression;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
