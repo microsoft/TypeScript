@@ -9,16 +9,16 @@ declare var module: any, exports: any;
 
 === tests/cases/conformance/salsa/index.js ===
 const A = require("./other");
->A : typeof A
->require("./other") : typeof A
+>A : typeof import("tests/cases/conformance/salsa/other")
+>require("./other") : typeof import("tests/cases/conformance/salsa/other")
 >require : (id: string) => any
 >"./other" : "./other"
 
 const a = new A().id;
 >a : number
 >new A().id : number
->new A() : A
->A : typeof A
+>new A() : import("tests/cases/conformance/salsa/other")
+>A : typeof import("tests/cases/conformance/salsa/other")
 >id : number
 
 const B = function() { this.id = 1; }
