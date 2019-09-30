@@ -2068,7 +2068,9 @@ namespace ts {
     }
 
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
-        return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
+        return isElementAccessExpression(node) && (
+            isStringOrNumericLiteralLike(node.argumentExpression) ||
+            isWellKnownSymbolSyntactically(node.argumentExpression));
     }
 
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
@@ -2901,7 +2903,7 @@ namespace ts {
      *    Symbol.name
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
-    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
+    export function isWellKnownSymbolSyntactically(node: Expression): node is WellKnownSymbolExpression {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 

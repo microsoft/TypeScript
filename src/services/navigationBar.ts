@@ -136,7 +136,7 @@ namespace ts.NavigationBar {
         for (let i = 0; i < depth; i++) endNode();
     }
     function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
-        const names: PropertyNameLiteral[] = [];
+        const names: (PropertyNameLiteral | WellKnownSymbolExpression)[] = [];
         while (!isPropertyNameLiteral(entityName)) {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
@@ -334,7 +334,7 @@ namespace ts.NavigationBar {
                             assignmentTarget;
 
                         let depth = 0;
-                        let className: PropertyNameLiteral;
+                        let className: PropertyNameLiteral | WellKnownSymbolExpression;
                         // If we see a prototype assignment, start tracking the target as a class
                         // This is only done for simple classes not nested assignments.
                         if (isIdentifier(prototypeAccess.expression)) {
