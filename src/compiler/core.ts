@@ -1159,7 +1159,7 @@ namespace ts {
         }
     }
 
-    function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: Comparer<T>) {
+    export function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: Comparer<T>) {
         // sort indices by value then position
         indices.sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y));
     }

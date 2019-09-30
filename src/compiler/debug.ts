@@ -266,6 +266,11 @@ namespace ts {
                 }
             }
 
+            Object.defineProperties(objectAllocator.getFlowNodeConstructor().prototype, {
+                __debugFlowFlags: { get(this: FlowNode) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
+                __debugToString: { value(this: FlowNode) { return `\n${formatControlFlowGraph(this)}\n`; } }
+            });
+
             isDebugInfoEnabled = true;
         }
 
@@ -276,7 +281,67 @@ namespace ts {
             console.log(formatControlFlowGraph(flowNode));
         }
 
+        let nextDebugFlowId = -1;
+
+        function getDebugFlowNodeId(f: FlowNode) {
+            if (!f.id) {
+                f.id = nextDebugFlowId;
+                nextDebugFlowId--;
+            }
+            return f.id;
+        }
+
         export function formatControlFlowGraph(flowNode: FlowNode) {
+            const enum BoxCharacter {
+                lr = "─",
+                ud = "│",
+                dr = "╭",
+                dl = "╮",
+                ul = "╯",
+                ur = "╰",
+                udr = "├",
+                udl = "┤",
+                dlr = "┬",
+                ulr = "┴",
+                udlr = "┼",
+            }
+
+            const enum Connection {
+                Up = 1 << 0,
+                Down = 1 << 1,
+                Left = 1 << 2,
+                Right = 1 << 3,
+
+                UpDown = Up | Down,
+                LeftRight = Left | Right,
+                UpLeft = Up | Left,
+                UpRight = Up | Right,
+                DownLeft = Down | Left,
+                DownRight = Down | Right,
+                UpDownLeft = UpDown | Left,
+                UpDownRight = UpDown | Right,
+                UpLeftRight = Up | LeftRight,
+                DownLeftRight = Down | LeftRight,
+                UpDownLeftRight = UpDown | LeftRight,
+
+                NoChildren = 1 << 4,
+            }
+
+            interface FlowGraphNode {
+                id: number;
+                flowNode: FlowNode;
+                edges: FlowGraphEdge[];
+                text: string;
+                lane: number;
+                endLane: number;
+                level: number;
+            }
+
+            interface FlowGraphEdge {
+                source: FlowGraphNode;
+                target: FlowGraphNode;
+            }
+
             const hasAntecedentFlags =
                 FlowFlags.Assignment |
                 FlowFlags.Condition |
@@ -286,97 +351,143 @@ namespace ts {
                 FlowFlags.PreFinally |
                 FlowFlags.AfterFinally;
 
-            type hasAntecedent =
-                | FlowAssignment
-                | FlowCondition
-                | FlowSwitchClause
-                | FlowArrayMutation
-                | FlowCall
-                | PreFinallyFlow
-                | AfterFinallyFlow
-                ;
+            const hasNodeFlags =
+                FlowFlags.Start |
+                FlowFlags.Assignment |
+                FlowFlags.Call |
+                FlowFlags.Condition |
+                FlowFlags.ArrayMutation;
 
-            const flowNodes: FlowNode[] = [];
-            const sharedNodes = createMap<boolean>();
-            const sharedIdMap = createMap<number>();
-            let nextSharedId = 1;
-            trackSharedNodesInGraph(flowNode);
-
-            const deferredFlowNodes: FlowNode[] = [];
-            const writtenFlowNodes: FlowNode[] = [];
-            const writer = createTextWriter("\n");
-            writeFlowNode(flowNode, /*isAntecedent*/ false);
-
-            let hasWrittenHeader = false;
-            while (deferredFlowNodes.length) {
-                const deferred = deferredFlowNodes.splice(0, deferredFlowNodes.length);
-                for (const sharedNode of deferred) {
-                    if (!hasWrittenHeader) {
-                        writer.writeLine();
-                        writer.rawWrite("...");
-                        writer.writeLine();
-                        hasWrittenHeader = true;
-                    }
-                    if (pushIfUnique(writtenFlowNodes, sharedNode)) {
-                        writeFlowNode(sharedNode, /*isAntecedent*/ false);
-                    }
-                }
+            const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+            const nodes: FlowGraphNode[] = [];
+            const edges: FlowGraphEdge[] = [];
+            const root = buildGraphNode(flowNode);
+            for (const node of nodes) {
+                computeLevel(node);
             }
 
-            return writer.getText();
+            const height = computeHeight(root);
+            const columnWidths = computeColumnWidths(height);
+            computeLanes(root, 0);
+            return renderGraph();
 
-            function trackSharedNodesInGraph(flowNode: FlowNode) {
-                if (flowNode.flags & FlowFlags.Start) {
-                    return;
-                }
-                if (flowNode.flags & FlowFlags.Shared) {
-                    const flowId = `${getFlowId(flowNode)}`;
-                    const isShared = sharedNodes.get(flowId);
-                    if (isShared === undefined) {
-                        sharedNodes.set(flowId, false);
-                    }
-                    else if (isShared === false) {
-                        sharedNodes.set(flowId, true);
-                    }
-                }
-                if (flowNode.flags & FlowFlags.Label) {
-                    forEach((flowNode as FlowLabel).antecedents, trackSharedNodesInGraph);
-                }
-                else if (flowNode.flags & hasAntecedentFlags) {
-                    trackSharedNodesInGraph((flowNode as hasAntecedent).antecedent);
-                }
+            function isFlowSwitchClause(f: FlowNode): f is FlowSwitchClause {
+                return !!(f.flags & FlowFlags.SwitchClause);
             }
 
-            function getText(node: Node) {
-                return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
+            function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedents: FlowNode[] } {
+                return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedents;
             }
 
-            function writeLines(writer: EmitTextWriter, text: string, prefix = ""): void {
-                const lines = text.split(/\r\n?|\n/g);
-                const indentation = guessIndentation(lines);
-                for (const lineText of lines) {
-                    const line = indentation ? lineText.slice(indentation) : lineText;
-                    if (line.length) {
-                        writer.write(prefix + line);
-                        writer.writeLine();
+            function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode }> {
+                return !!(f.flags & hasAntecedentFlags);
+            }
+
+            function hasNode(f: FlowNode): f is Extract<FlowNode, { node?: Node }> {
+                return !!(f.flags & hasNodeFlags);
+            }
+
+            function getChildren(node: FlowGraphNode) {
+                const children: FlowGraphNode[] = [];
+                for (const edge of node.edges) {
+                    if (edge.source === node) {
+                        children.push(edge.target);
                     }
                 }
+                return children;
             }
 
-            function writeNode(node: Node | undefined) {
-                if (!node) return;
-                writer.increaseIndent();
-                writeLines(writer, getText(node), "> ");
-                writer.decreaseIndent();
-            }
-
-            function getFlowId(flowNode: FlowNode) {
-                let index = flowNodes.indexOf(flowNode);
-                if (index === -1) {
-                    index = flowNodes.length;
-                    flowNodes.push(flowNode);
+            function getParents(node: FlowGraphNode) {
+                const parents: FlowGraphNode[] = [];
+                for (const edge of node.edges) {
+                    if (edge.target === node) {
+                        parents.push(edge.source);
+                    }
                 }
-                return index;
+                return parents;
+            }
+
+            function buildGraphNode(flowNode: FlowNode) {
+                const id = getDebugFlowNodeId(flowNode);
+                let graphNode = links[id];
+                if (!graphNode) {
+                    links[id] = graphNode = { id, flowNode, edges: [], text: renderFlowNode(flowNode), lane: -1, endLane: -1, level: -1 };
+                    nodes.push(graphNode);
+                    if (!(flowNode.flags & FlowFlags.PreFinally)) {
+                        if (hasAntecedents(flowNode)) {
+                            // sort antecedents so that shallower trees come first.
+                            const antecedents = flowNode.antecedents;
+                            const heights = antecedents.map(measureHeight);
+                            const indices = antecedents.map((_, i) => i);
+                            stableSortIndices(heights, indices, (a, b) => b - a);
+                            for (const antecedent of indices.map(i => antecedents[i])) {
+                                buildGraphEdge(graphNode, antecedent);
+                            }
+                        }
+                        else if (hasAntecedent(flowNode)) {
+                            buildGraphEdge(graphNode, flowNode.antecedent);
+                        }
+                    }
+                }
+                return graphNode;
+            }
+
+            function buildGraphEdge(source: FlowGraphNode, antecedent: FlowNode) {
+                const target = buildGraphNode(antecedent);
+                const edge: FlowGraphEdge = { source, target };
+                edges.push(edge);
+                source.edges.push(edge);
+                target.edges.push(edge);
+            }
+
+            function computeLevel(node: FlowGraphNode): number {
+                if (node.level !== -1) {
+                    return node.level;
+                }
+                let level = 0;
+                for (const parent of getParents(node)) {
+                    level = Math.max(level, computeLevel(parent) + 1);
+                }
+                return node.level = level;
+            }
+
+            function measureHeight(flowNode: FlowNode): number {
+                return hasAntecedents(flowNode) ? flowNode.antecedents.reduce((x, n) => Math.max(x, measureHeight(n)), 0) + 1 :
+                    hasAntecedent(flowNode) ? measureHeight(flowNode.antecedent) + 1 :
+                    1;
+            }
+
+            function computeHeight(node: FlowGraphNode): number {
+                let height = 0;
+                for (const child of getChildren(node)) {
+                    height = Math.max(height, computeHeight(child));
+                }
+                return height + 1;
+            }
+
+            function computeColumnWidths(height: number) {
+                const columns: number[] = fill(Array(height), 0);
+                for (const node of nodes) {
+                    columns[node.level] = Math.max(columns[node.level], node.text.length);
+                }
+                return columns;
+            }
+
+            function computeLanes(node: FlowGraphNode, lane: number) {
+                if (node.lane === -1) {
+                    node.lane = lane;
+                    node.endLane = lane;
+                    const children = getChildren(node);
+                    for (let i = 0; i < children.length; i++) {
+                        if (i > 0) lane++;
+                        const child = children[i];
+                        computeLanes(child, lane);
+                        if (child.endLane > node.endLane) {
+                            lane = child.endLane;
+                        }
+                    }
+                    node.endLane = lane;
+                }
             }
 
             function getHeader(flags: FlowFlags) {
@@ -392,144 +503,151 @@ namespace ts {
                 if (flags & FlowFlags.PreFinally) return "PreFinally";
                 if (flags & FlowFlags.AfterFinally) return "AfterFinally";
                 if (flags & FlowFlags.Unreachable) return "Unreachable";
-                return fail();
+                throw new Error();
             }
 
-            function writeHeader(flowNode: FlowNode, isAntecedent: boolean) {
-                writer.write("- ");
-                const flowId = `${getFlowId(flowNode)}`;
-                if (sharedNodes.get(flowId)) {
-                    let sharedId = sharedIdMap.get(flowId);
-                    if (!sharedId) {
-                        sharedIdMap.set(flowId, sharedId = nextSharedId);
-                        nextSharedId++;
+            function getNodeText(node: Node) {
+                const sourceFile = getSourceFileOfNode(node);
+                return getSourceTextOfNodeFromSourceFile(sourceFile, node, /*includeTrivia*/ false);
+            }
+
+            function renderFlowNode(flowNode: FlowNode) {
+                let text = getHeader(flowNode.flags);
+                if (hasNode(flowNode)) {
+                    if (flowNode.node) {
+                        text += ` (${getNodeText(flowNode.node)})`;
                     }
-                    writer.write(`(#${sharedId}) `);
                 }
-                writer.write(getHeader(flowNode.flags));
-                if (isAntecedent && sharedNodes.get(flowId)) {
-                    writer.write("...");
-                }
-                else {
-                    const attributes: string[] = [];
-                    if (flowNode.flags & FlowFlags.PreFinally) {
-                        if ((flowNode as PreFinallyFlow).lock.locked) {
-                            attributes.push("locked");
+                else if (isFlowSwitchClause(flowNode)) {
+                    const clauses: string[] = [];
+                    for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
+                        const clause = flowNode.switchStatement.caseBlock.clauses[i];
+                        if (isDefaultClause(clause)) {
+                            clauses.push("default");
+                        }
+                        else {
+                            clauses.push(getNodeText(clause.expression));
                         }
                     }
-                    else if (flowNode.flags & FlowFlags.AfterFinally) {
-                        if ((flowNode as AfterFinallyFlow).locked) {
-                            attributes.push("locked");
+                    text += ` (${clauses.join(", ")})`;
+                }
+                return text;
+            }
+
+            function renderGraph() {
+                const columnCount = columnWidths.length;
+                const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
+                const lanes: string[] = fill(Array(laneCount), "");
+                const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
+                const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));
+
+                // build connectors
+                for (const node of nodes) {
+                    grid[node.level][node.lane] = node;
+                    const children = getChildren(node);
+                    for (let i = 0; i < children.length; i++) {
+                        const child = children[i];
+                        let connector: Connection = Connection.Right;
+                        if (child.lane === node.lane) connector |= Connection.Left;
+                        if (i > 0) connector |= Connection.Up;
+                        if (i < children.length - 1) connector |= Connection.Down;
+                        connectors[node.level][child.lane] |= connector;
+                    }
+                    if (children.length === 0) {
+                        connectors[node.level][node.lane] |= Connection.NoChildren;
+                    }
+                    const parents = getParents(node);
+                    for (let i = 0; i < parents.length; i++) {
+                        const parent = parents[i];
+                        let connector: Connection = Connection.Left;
+                        if (i > 0) connector |= Connection.Up;
+                        if (i < parents.length - 1) connector |= Connection.Down;
+                        connectors[node.level - 1][parent.lane] |= connector;
+                    }
+                }
+
+                // fill in missing connectors
+                for (let column = 0; column < columnCount; column++) {
+                    for (let lane = 0; lane < laneCount; lane++) {
+                        const left = column > 0 ? connectors[column - 1][lane] : 0;
+                        const above = lane > 0 ? connectors[column][lane - 1] : 0;
+                        let connector = connectors[column][lane];
+                        if (!connector) {
+                            if (left & Connection.Right) connector |= Connection.LeftRight;
+                            if (above & Connection.Down) connector |= Connection.UpDown;
+                            connectors[column][lane] = connector;
                         }
                     }
-                    if (!(flowNode.flags & FlowFlags.Referenced)) {
-                        attributes.push("unreferenced");
-                    }
-                    if (flowNode.flags & FlowFlags.Cached) {
-                        attributes.push("cached");
-                    }
-                    if (some(attributes)) {
-                        writer.write(`[${attributes.join(", ")}]`);
+                }
+
+                for (let column = 0; column < columnCount; column++) {
+                    for (let lane = 0; lane < lanes.length; lane++) {
+                        const connector = connectors[column][lane];
+                        const fill = connector & Connection.Left ? BoxCharacter.lr : " ";
+                        const node = grid[column][lane];
+                        if (!node) {
+                            if (column < columnCount - 1) {
+                                writeLane(lane, repeat(fill, columnWidths[column] + 1));
+                            }
+                        }
+                        else {
+                            writeLane(lane, node.text);
+                            if (column < columnCount - 1) {
+                                writeLane(lane, " ");
+                                writeLane(lane, repeat(fill, columnWidths[column] - node.text.length));
+                            }
+                        }
+                        writeLane(lane, getBoxCharacter(connector));
+                        writeLane(lane, connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr : " ");
                     }
                 }
-                writer.writeLine();
+
+                return lanes.join("\n");
+
+                function writeLane(lane: number, text: string) {
+                    lanes[lane] += text;
+                }
             }
 
-            function writeAntecedent(antecedent: FlowNode) {
-                writer.increaseIndent();
-                writeFlowNode(antecedent, /*isAntecedent*/ true);
-                writer.decreaseIndent();
+            function getBoxCharacter(connector: Connection) {
+                switch (connector) {
+                    case Connection.UpDown: return BoxCharacter.ud;
+                    case Connection.LeftRight: return BoxCharacter.lr;
+                    case Connection.UpLeft: return BoxCharacter.ul;
+                    case Connection.UpRight: return BoxCharacter.ur;
+                    case Connection.DownLeft: return BoxCharacter.dl;
+                    case Connection.DownRight: return BoxCharacter.dr;
+                    case Connection.UpDownLeft: return BoxCharacter.udl;
+                    case Connection.UpDownRight: return BoxCharacter.udr;
+                    case Connection.UpLeftRight: return BoxCharacter.ulr;
+                    case Connection.DownLeftRight: return BoxCharacter.dlr;
+                    case Connection.UpDownLeftRight: return BoxCharacter.udlr;
+                }
+                return " ";
             }
 
-            function writeAntecedents(antecedents: FlowNode[] | undefined) {
-                if (antecedents) {
-                    writer.increaseIndent();
-                    for (const antecedent of antecedents) {
-                        writeFlowNode(antecedent, /*isAntecedent*/ true);
-                    }
-                    writer.decreaseIndent();
-                }
-            }
-
-            function writeFlowNode(flowNode: FlowNode, isAntecedent: boolean) {
-                writeHeader(flowNode, isAntecedent);
-                const flowId = `${getFlowId(flowNode)}`;
-                if (sharedNodes.get(flowId) && isAntecedent) {
-                    pushIfUnique(deferredFlowNodes, flowNode);
-                }
-                else if (flowNode.flags & FlowFlags.Start) {
-                    writeStart(flowNode as FlowStart);
-                }
-                else if (flowNode.flags & FlowFlags.Label) {
-                    writeLabel(flowNode as FlowLabel);
-                }
-                else if (flowNode.flags & FlowFlags.Assignment) {
-                    writeAssignment(flowNode as FlowAssignment);
-                }
-                else if (flowNode.flags & FlowFlags.Condition) {
-                    writeCondition(flowNode as FlowCondition);
-                }
-                else if (flowNode.flags & FlowFlags.SwitchClause) {
-                    writeSwitchClause(flowNode as FlowSwitchClause);
-                }
-                else if (flowNode.flags & FlowFlags.ArrayMutation) {
-                    writeArrayMutation(flowNode as FlowArrayMutation);
-                }
-                else if (flowNode.flags & FlowFlags.Call) {
-                    writeCall(flowNode as FlowCall);
-                }
-                else if (flowNode.flags & FlowFlags.PreFinally) {
-                    writePreFinally(flowNode as PreFinallyFlow);
-                }
-                else if (flowNode.flags & FlowFlags.AfterFinally) {
-                    writeAfterFinally(flowNode as AfterFinallyFlow);
+            function fill<T>(array: T[], value: T) {
+                if (array.fill) {
+                    array.fill(value);
                 }
                 else {
-                    assert(!!(flowNode.flags & FlowFlags.Unreachable));
+                    for (let i = 0; i < array.length; i++) {
+                        array[i] = value;
+                    }
                 }
+                return array;
             }
 
-            function writeStart(flowNode: FlowStart) {
-                writeNode(flowNode.node);
-            }
-
-            function writeLabel(flowNode: FlowLabel) {
-                writeAntecedents(flowNode.antecedents);
-            }
-
-            function writeAssignment(flowNode: FlowAssignment) {
-                writeNode(flowNode.node);
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writeCondition(flowNode: FlowCondition) {
-                writeNode(flowNode.node);
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writeSwitchClause(flowNode: FlowSwitchClause) {
-                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
-                    writeNode(flowNode.switchStatement.caseBlock.clauses[i]);
+            function repeat(ch: string, length: number) {
+                if (ch.repeat) {
+                    return length > 0 ? ch.repeat(length) : "";
                 }
-                writeAntecedent(flowNode.antecedent);
-            }
 
-            function writeArrayMutation(flowNode: FlowArrayMutation) {
-                writeNode(flowNode.node);
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writeCall(flowNode: FlowCall) {
-                writeNode(flowNode.node);
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writePreFinally(flowNode: PreFinallyFlow) {
-                writeAntecedent(flowNode.antecedent);
-            }
-
-            function writeAfterFinally(flowNode: AfterFinallyFlow) {
-                writeAntecedent(flowNode.antecedent);
+                let s = "";
+                while (s.length < length) {
+                    s += ch;
+                }
+                return s;
             }
         }
     }
