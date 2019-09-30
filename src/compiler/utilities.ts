@@ -1104,7 +1104,7 @@ namespace ts {
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
-            // falls through
+                // falls through
 
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
@@ -1305,7 +1305,7 @@ namespace ts {
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
         return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
-                isPropertySignature(node) && hasReadonlyModifier(node);
+            isPropertySignature(node) && hasReadonlyModifier(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1437,7 +1437,7 @@ namespace ts {
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                // falls through
+                    // falls through
 
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -1497,7 +1497,7 @@ namespace ts {
                     if (!stopOnFunctions) {
                         continue;
                     }
-                // falls through
+                    // falls through
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -1709,7 +1709,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
-            // falls through
+                // falls through
 
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
@@ -1975,7 +1975,7 @@ namespace ts {
     export function isDefaultedExpandoInitializer(node: BinaryExpression) {
         const name = isVariableDeclaration(node.parent) ? node.parent.name :
             isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken ? node.parent.left :
-                undefined;
+            undefined;
         return name && getExpandoInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
     }
 
@@ -2368,13 +2368,13 @@ namespace ts {
         // var x = function(name) { return name.length; }
         else if (parent.parent &&
             (getSingleVariableOfVariableStatement(parent.parent) === node ||
-                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
+            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
             return parent.parent;
         }
         else if (parent.parent && parent.parent.parent &&
             (getSingleVariableOfVariableStatement(parent.parent.parent) ||
-                getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
-                getSourceOfDefaultedAssignment(parent.parent.parent))) {
+            getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
+            getSourceOfDefaultedAssignment(parent.parent.parent))) {
             return parent.parent.parent;
         }
     }
@@ -2602,7 +2602,7 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
-            // falls through
+                // falls through
 
             case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
@@ -2737,7 +2737,7 @@ namespace ts {
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
             isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray :
-                emptyArray;
+            emptyArray;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
@@ -2829,7 +2829,7 @@ namespace ts {
                 if (node.asteriskToken) {
                     flags |= FunctionFlags.Generator;
                 }
-            // falls through
+                // falls through
 
             case SyntaxKind.ArrowFunction:
                 if (hasModifier(node, ModifierFlags.Async)) {
@@ -3311,8 +3311,8 @@ namespace ts {
     export function escapeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
         const escapedCharsRegExp =
             quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
-                quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
-                    doubleQuoteEscapedCharsRegExp;
+            quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
+            doubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getReplacement);
     }
 
@@ -4525,7 +4525,7 @@ namespace ts {
             const checkFlags = (<TransientSymbol>s).checkFlags;
             const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
                 checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
-                    ModifierFlags.Protected;
+                ModifierFlags.Protected;
             const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
             return accessModifier | staticModifier;
         }
@@ -5618,7 +5618,7 @@ namespace ts {
     export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
         return node.constraint ? node.constraint :
             isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint :
-                undefined;
+            undefined;
     }
 }
 
@@ -7262,7 +7262,7 @@ namespace ts {
         }
     }
 
-    function Signature() { }
+    function Signature() {}
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
@@ -7476,7 +7476,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"], target?: CompilerOptions["target"] }) {
+    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -8933,14 +8933,14 @@ namespace ts {
         // using Uint16 instead of Uint32 so combining steps can use bitwise operators
         const segments = new Uint16Array((bitsNeeded >>> 4) + (bitsNeeded & 15 ? 1 : 0));
         // Add the digits, one at a time
-        for (let i = endIndex - 1, bitOffset = 0; i >= startIndex; i-- , bitOffset += log2Base) {
+        for (let i = endIndex - 1, bitOffset = 0; i >= startIndex; i--, bitOffset += log2Base) {
             const segment = bitOffset >>> 4;
             const digitChar = stringValue.charCodeAt(i);
             // Find character range: 0-9 < A-F < a-f
             const digit = digitChar <= CharacterCodes._9
                 ? digitChar - CharacterCodes._0
                 : 10 + digitChar -
-                (digitChar <= CharacterCodes.F ? CharacterCodes.A : CharacterCodes.a);
+                    (digitChar <= CharacterCodes.F ? CharacterCodes.A : CharacterCodes.a);
             const shiftedDigit = digit << (bitOffset & 15);
             segments[segment] |= shiftedDigit;
             const residual = shiftedDigit >>> 16;
@@ -8968,7 +8968,7 @@ namespace ts {
         return base10Value;
     }
 
-    export function pseudoBigIntToString({ negative, base10Value }: PseudoBigInt): string {
+    export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
         return (negative && base10Value !== "0" ? "-" : "") + base10Value;
     }
 }
