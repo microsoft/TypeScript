@@ -104,7 +104,6 @@
     "scripts": {
         "prepare": "gulp build-eslint-rules",
         "pretest": "gulp tests",
-        "postpublish": "gulp create-language-services-build",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
