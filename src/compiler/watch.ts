@@ -131,11 +131,7 @@ namespace ts {
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
         if (program.getCompilerOptions().listFiles) {
             forEach(program.getSourceFiles(), file => {
-                writeFileName(
-                    !file.redirectInfo ?
-                        file.fileName :
-                        `${file.fileName} -> ${file.redirectInfo.redirectTarget.fileName}`
-                );
+                writeFileName(file.fileName);
             });
         }
     }
