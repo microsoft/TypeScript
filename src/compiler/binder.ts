@@ -2791,9 +2791,38 @@ namespace ts {
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            const isMethod = isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration)!);
-            const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
-            const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
+            let includes = SymbolFlags.None;
+            let excludes = SymbolFlags.None;
+            // Method-like
+            if (isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration)!)) {
+                includes = SymbolFlags.Method;
+                excludes = SymbolFlags.MethodExcludes;
+            }
+            // Maybe accessor-like
+            else if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
+                if (some(declaration.arguments[2].properties, p => {
+                    const id = getNameOfDeclaration(p);
+                    return !!id && isIdentifier(id) && idText(id) === "set";
+                })) {
+                    // We mix in `SymbolFLags.Property` so in the checker `getTypeOfVariableParameterOrProperty` is used for this
+                    // symbol, instead of `getTypeOfAccessor` (which will assert as there is no real accessor declaration)
+                    includes |= SymbolFlags.SetAccessor | SymbolFlags.Property;
+                    excludes |= SymbolFlags.SetAccessorExcludes;
+                }
+                if (some(declaration.arguments[2].properties, p => {
+                    const id = getNameOfDeclaration(p);
+                    return !!id && isIdentifier(id) && idText(id) === "get";
+                })) {
+                    includes |= SymbolFlags.GetAccessor | SymbolFlags.Property;
+                    excludes |= SymbolFlags.GetAccessorExcludes;
+                }
+            }
+
+            if (includes === SymbolFlags.None) {
+                includes = SymbolFlags.Property;
+                excludes = SymbolFlags.PropertyExcludes;
+            }
+
             declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 

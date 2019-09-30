@@ -4916,8 +4916,8 @@ namespace ts {
             }
 
             function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext, bundled?: boolean): Statement[] {
-                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration);
-                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature);
+                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration, /*useAcessors*/ true);
+                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature, /*useAcessors*/ false);
 
                 // TODO: Use `setOriginalNode` on original declaration names where possible so these declarations see some kind of
                 // declaration mapping
@@ -5734,7 +5734,23 @@ namespace ts {
                     questionOrExclamationToken: QuestionToken | undefined,
                     type: TypeNode | undefined,
                     initializer: Expression | undefined
-                ) => T, methodKind: SyntaxKind): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]) {
+                ) => T, methodKind: SyntaxKind, useAccessors: true): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]);
+                function makeSerializePropertySymbol<T extends Node>(createProperty: (
+                    decorators: readonly Decorator[] | undefined,
+                    modifiers: readonly Modifier[] | undefined,
+                    name: string | PropertyName,
+                    questionOrExclamationToken: QuestionToken | undefined,
+                    type: TypeNode | undefined,
+                    initializer: Expression | undefined
+                ) => T, methodKind: SyntaxKind, useAccessors: false): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]);
+                function makeSerializePropertySymbol<T extends Node>(createProperty: (
+                    decorators: readonly Decorator[] | undefined,
+                    modifiers: readonly Modifier[] | undefined,
+                    name: string | PropertyName,
+                    questionOrExclamationToken: QuestionToken | undefined,
+                    type: TypeNode | undefined,
+                    initializer: Expression | undefined
+                ) => T, methodKind: SyntaxKind, useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
                     return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
                         if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                             // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
@@ -5750,7 +5766,40 @@ namespace ts {
                         const staticFlag = isStatic ? ModifierFlags.Static : 0;
                         const rawName = unescapeLeadingUnderscores(p.escapedName);
                         const name = getPropertyNameNodeForSymbolFromNameType(p, context) || createIdentifier(rawName);
-                        if (p.flags & (SymbolFlags.Property | SymbolFlags.Accessor | SymbolFlags.Variable)) {
+                        const firstPropertyLikeDecl = find(p.declarations, or(isPropertyDeclaration, isAccessor, isVariableDeclaration, isPropertySignature, isBinaryExpression, isPropertyAccessExpression));
+                        if (p.flags & SymbolFlags.Accessor && useAccessors) {
+                            const result: AccessorDeclaration[] = [];
+                            if (p.flags & SymbolFlags.SetAccessor) {
+                                result.push(setTextRange(createSetAccessor(
+                                    /*decorators*/ undefined,
+                                    createModifiersFromModifierFlags(staticFlag),
+                                    name,
+                                    [createParameter(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        /*dotDotDotToken*/ undefined,
+                                        "arg",
+                                        /*questionToken*/ undefined,
+                                        serializeTypeForDeclaration(getTypeOfSymbol(p), p)
+                                    )],
+                                    /*body*/ undefined
+                                ), find(p.declarations, isSetAccessor) || firstPropertyLikeDecl));
+                            }
+                            if (p.flags & SymbolFlags.GetAccessor) {
+                                result.push(setTextRange(createGetAccessor(
+                                    /*decorators*/ undefined,
+                                    createModifiersFromModifierFlags(staticFlag),
+                                    name,
+                                    [],
+                                    serializeTypeForDeclaration(getTypeOfSymbol(p), p),
+                                    /*body*/ undefined
+                                ), find(p.declarations, isGetAccessor) || firstPropertyLikeDecl));
+                            }
+                            return result;
+                        }
+                        // This is an else/if as accessors and properties can't merge in TS, but might in JS
+                        // If this happens, we assume the accessor takes priority, as it imposes more constraints
+                        else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable)) {
                             return setTextRange(createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
@@ -5760,7 +5809,7 @@ namespace ts {
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
                                 /*initializer*/ undefined
-                            ), filter(p.declarations, d => isPropertyDeclaration(d) || isAccessor(d) || isVariableDeclaration(d) || isPropertySignature(d) || isBinaryExpression(d) || isPropertyAccessExpression(d))[0]);
+                            ), find(p.declarations, or(isPropertyDeclaration, isVariableDeclaration)) || firstPropertyLikeDecl);
                         }
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
@@ -7340,7 +7389,7 @@ namespace ts {
                             }
                         }
                         else {
-                            Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                            Debug.assert(!!getter, "there must exist a getter as we are current checking either setter or getter in this function");
                             errorOrSuggestion(noImplicitAny, getter!, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
                         }
                         return anyType;

@@ -184,8 +184,16 @@ export class Point2D {
      * @param {number} y
      */
     constructor(x: number, y: number);
-    x: number;
-    y: number;
+    /**
+     * @param {number} x
+     */
+    set x(arg: number);
+    get x(): number;
+    /**
+     * @param {number} y
+     */
+    set y(arg: number);
+    get y(): number;
     __proto__: typeof Vec;
 }
 //// [referencer.d.ts]
