@@ -48,7 +48,8 @@ class DeclarationsWalker {
         }
         if (s.name === "Array" || s.name === "ReadOnlyArray") {
             // we should process type argument instead
-            return this.processType((<any>type).typeArguments[0]);
+            const typeArgs = this.typeChecker.getTypeArguments(type as ts.TypeReference);
+            return this.processType(typeArgs[0]);
         }
         else {
             const declarations = s.getDeclarations();
