@@ -55,6 +55,15 @@ Multimap4["prototype"]["addon"] = function() {};
 >"addon" : "addon"
 >function() {} : () => void
 
+Multimap4["prototype"]["__underscores__"] = function() {};
+>Multimap4["prototype"]["__underscores__"] = function() {} : () => void
+>Multimap4["prototype"]["__underscores__"] : any
+>Multimap4["prototype"] : { get(key: string): number; }
+>Multimap4 : typeof Multimap4
+>"prototype" : "prototype"
+>"__underscores__" : "__underscores__"
+>function() {} : () => void
+
 const map4 = new Multimap4();
 >map4 : Multimap4
 >new Multimap4() : Multimap4
@@ -78,4 +87,10 @@ map4.addon();
 >map4.addon : () => void
 >map4 : Multimap4
 >addon : () => void
+
+map4.__underscores__();
+>map4.__underscores__() : void
+>map4.__underscores__ : () => void
+>map4 : Multimap4
+>__underscores__ : () => void
 
