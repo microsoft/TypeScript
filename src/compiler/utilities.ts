@@ -5415,8 +5415,8 @@ namespace ts {
             if (isIdentifier(node.parent.left)) {
                 return node.parent.left;
             }
-            else if (isPropertyAccessExpression(node.parent.left)) {
-                return node.parent.left.name;
+            else if (isAccessExpression(node.parent.left)) {
+                return getElementOrPropertyAccessArgumentExpressionOrName(node.parent.left);
             }
         }
         else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
