@@ -792,11 +792,6 @@ namespace ts {
         }
     }
 
-    class FlowNodeObject implements FlowNodeBase {
-        id = 0;
-        constructor(public flags: FlowFlags) { }
-    }
-
     function getServicesObjectAllocator(): ObjectAllocator {
         return {
             getNodeConstructor: () => NodeObject,
@@ -808,7 +803,6 @@ namespace ts {
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
             getSourceMapSourceConstructor: () => SourceMapSourceObject,
-            getFlowNodeConstructor: () => FlowNodeObject
         };
     }
 

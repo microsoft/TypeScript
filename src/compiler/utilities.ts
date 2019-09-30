@@ -7249,7 +7249,6 @@ namespace ts {
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
-        getFlowNodeConstructor(): new (flags: FlowFlags) => FlowNodeBase;
     }
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
@@ -7289,11 +7288,6 @@ namespace ts {
         this.skipTrivia = skipTrivia || (pos => pos);
     }
 
-    function FlowNode(this: FlowNodeBase, flags: FlowFlags) {
-        this.flags = flags;
-        this.id = 0;
-    }
-
     // eslint-disable-next-line prefer-const
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
@@ -7304,7 +7298,6 @@ namespace ts {
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature,
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
-        getFlowNodeConstructor: () => <any>FlowNode,
     };
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
