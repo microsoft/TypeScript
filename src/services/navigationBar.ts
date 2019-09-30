@@ -665,7 +665,9 @@ namespace ts.NavigationBar {
         }
 
         if (name) {
-            const text = isIdentifier(name) ? name.text : nodeText(name);
+            const text = isIdentifier(name) ? name.text
+                : isElementAccessExpression(name) ? `[${nodeText(name.argumentExpression)}]`
+                : nodeText(name);
             if (text.length > 0) {
                 return cleanText(text);
             }

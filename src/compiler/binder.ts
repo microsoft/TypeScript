@@ -866,7 +866,7 @@ namespace ts {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
                 isElementAccessExpression(expr) &&
-                (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
+                isStringOrNumericLiteralLike(expr.argumentExpression) &&
                 isNarrowableReference(expr.expression);
         }
 
@@ -1079,7 +1079,7 @@ namespace ts {
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
-            if (!node || !isLogicalExpression(node)) {
+            if (!node || !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
@@ -2748,7 +2748,12 @@ namespace ts {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        if (hasDynamicName(node)) {
+                            bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol);
+                        }
+                        else {
+                            declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        }
                         addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                     }
                     break;
@@ -2762,7 +2767,12 @@ namespace ts {
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
-                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    if (hasDynamicName(node)) {
+                        bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol);
+                    }
+                    else {
+                        declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    }
                     break;
                 case SyntaxKind.SourceFile:
                     // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script
@@ -2776,6 +2786,18 @@ namespace ts {
 
                 default:
                     Debug.failBadSyntaxKind(thisContainer);
+            }
+        }
+
+        function bindDynamicallyNamedThisPropertyAssignment(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol) {
+            bindAnonymousDeclaration(node, SymbolFlags.Property, InternalSymbolName.Computed);
+            addLateBoundAssignmentDeclarationToSymbol(node, symbol);
+        }
+
+        function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
+            if (symbol) {
+                const members = symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = createMap());
+                members.set("" + getNodeId(node), node);
             }
         }
 
@@ -2848,7 +2870,14 @@ namespace ts {
                 bindExportsPropertyAssignment(node);
             }
             else {
-                bindStaticPropertyAssignment(lhs);
+                if (hasDynamicName(node)) {
+                    bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
+                    const sym = bindPotentiallyMissingNamespaces(parentSymbol, lhs.expression, isTopLevelNamespaceAssignment(lhs), /*isPrototype*/ false, /*containerIsClass*/ false);
+                    addLateBoundAssignmentDeclarationToSymbol(node, sym);
+                }
+                else {
+                    bindStaticPropertyAssignment(lhs);
+                }
             }
         }
 

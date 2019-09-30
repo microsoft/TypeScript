@@ -2868,7 +2868,7 @@ namespace ts {
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.Class ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
+            return symbol.flags & SymbolFlags.LateBindingContainer ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
                 symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
                 symbol.exports || emptySymbols;
         }
@@ -3690,7 +3690,8 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
-                        getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
+                        getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+                        getProbableSymlinks: maybeBind(host, host.getProbableSymlinks),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
@@ -4231,7 +4232,15 @@ namespace ts {
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
                     const decl = first(propertySymbol.declarations);
                     if (hasLateBindableName(decl)) {
-                        trackComputedName(decl.name, saveEnclosingDeclaration, context);
+                        if (isBinaryExpression(decl)) {
+                            const name = getNameOfDeclaration(decl);
+                            if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
+                                trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                            }
+                        }
+                        else {
+                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
+                        }
                     }
                 }
                 const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -4447,7 +4456,7 @@ namespace ts {
                     return <BindingName>elideInitializerAndSetEmitFlags(node);
                     function elideInitializerAndSetEmitFlags(node: Node): Node {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
-                            trackComputedName(node, context.enclosingDeclaration, context);
+                            trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
                         const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
@@ -4459,10 +4468,10 @@ namespace ts {
                 }
             }
 
-            function trackComputedName(node: LateBoundName, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
+            function trackComputedName(accessExpression: EntityNameOrEntityNameExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
                 if (!context.tracker.trackSymbol) return;
                 // get symbol of the first identifier of the entityName
-                const firstIdentifier = getFirstIdentifier(node.expression);
+                const firstIdentifier = getFirstIdentifier(accessExpression);
                 const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
                 if (name) {
                     context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
@@ -7189,8 +7198,10 @@ namespace ts {
             if (declaration.kind === SyntaxKind.ExportAssignment) {
                 type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
-            else if (isInJSFile(declaration) &&
-                (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
+            else if (
+                isBinaryExpression(declaration) ||
+                (isInJSFile(declaration) &&
+                (isCallExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent)))) {
                 type = getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
@@ -7938,7 +7949,7 @@ namespace ts {
         }
 
         function isStringConcatExpression(expr: Node): boolean {
-            if (expr.kind === SyntaxKind.StringLiteral) {
+            if (isStringLiteralLike(expr)) {
                 return true;
             }
             else if (expr.kind === SyntaxKind.BinaryExpression) {
@@ -7955,6 +7966,7 @@ namespace ts {
             switch (expr.kind) {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return true;
                 case SyntaxKind.PrefixUnaryExpression:
                     return (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
@@ -7977,7 +7989,7 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
-                        if (member.initializer && member.initializer.kind === SyntaxKind.StringLiteral) {
+                        if (member.initializer && isStringLiteralLike(member.initializer)) {
                             return links.enumKind = EnumKind.Literal;
                         }
                         if (!isLiteralEnumMember(member)) {
@@ -8207,9 +8219,12 @@ namespace ts {
          * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
          */
         function isLateBindableName(node: DeclarationName): node is LateBoundName {
-            return isComputedPropertyName(node)
-                && isEntityNameExpression(node.expression)
-                && isTypeUsableAsPropertyName(checkComputedPropertyName(node));
+            if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
+                return false;
+            }
+            const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
+            return isEntityNameExpression(expr)
+                && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
         }
 
         function isLateBoundName(name: __String): boolean {
@@ -8221,7 +8236,7 @@ namespace ts {
         /**
          * Indicates whether a declaration has a late-bindable dynamic name.
          */
-        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration {
+        function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
             const name = getNameOfDeclaration(node);
             return !!name && isLateBindableName(name);
         }
@@ -8258,7 +8273,7 @@ namespace ts {
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
          */
-        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
+        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration | BinaryExpression, symbolFlags: SymbolFlags) {
             Debug.assert(!!(getCheckFlags(symbol) & CheckFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
@@ -8303,14 +8318,15 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
                 // In the event we attempt to resolve the late-bound name of this member recursively,
                 // fall back to the early-bound name of this member.
                 links.resolvedSymbol = decl.symbol;
-                const type = checkComputedPropertyName(decl.name);
+                const declName = isBinaryExpression(decl) ? decl.left : decl.name;
+                const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
                 if (isTypeUsableAsPropertyName(type)) {
                     const memberName = getPropertyNameFromType(type);
                     const symbolFlags = decl.symbol.flags;
@@ -8327,9 +8343,9 @@ namespace ts {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
-                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(decl.name);
+                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(declName);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here, name));
-                        error(decl.name || decl, Diagnostics.Duplicate_property_0, name);
+                        error(declName || decl, Diagnostics.Duplicate_property_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
                     lateSymbol.nameType = type;
@@ -8368,6 +8384,20 @@ namespace ts {
                             if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
                             }
+                        }
+                    }
+                }
+                const assignments = symbol.assignmentDeclarationMembers;
+                if (assignments) {
+                    const decls = arrayFrom(assignments.values());
+                    for (const member of decls) {
+                        const assignmentKind = getAssignmentDeclarationKind(member as BinaryExpression | CallExpression);
+                        const isInstanceMember = assignmentKind === AssignmentDeclarationKind.PrototypeProperty
+                            || assignmentKind === AssignmentDeclarationKind.ThisProperty
+                            || assignmentKind === AssignmentDeclarationKind.ObjectDefinePrototypeProperty
+                            || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
+                        if (isStatic === !isInstanceMember && hasLateBindableName(member)) {
+                            lateBindMember(symbol, earlySymbols, lateSymbols, member);
                         }
                     }
                 }
@@ -17985,7 +18015,7 @@ namespace ts {
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+                isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 undefined;
         }
 
@@ -18383,8 +18413,8 @@ namespace ts {
             const witnesses: (string | undefined)[] = [];
             for (const clause of switchStatement.caseBlock.clauses) {
                 if (clause.kind === SyntaxKind.CaseClause) {
-                    if (clause.expression.kind === SyntaxKind.StringLiteral) {
-                        witnesses.push((clause.expression as StringLiteral).text);
+                    if (isStringLiteralLike(clause.expression)) {
+                        witnesses.push(clause.expression.text);
                         continue;
                     }
                     return emptyArray;
@@ -22968,7 +22998,7 @@ namespace ts {
                 return objectType;
             }
 
-            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
@@ -31709,7 +31739,8 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.StringLiteral:
-                        return (<StringLiteral>expr).text;
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return (<StringLiteralLike>expr).text;
                     case SyntaxKind.NumericLiteral:
                         checkGrammarNumericLiteral(<NumericLiteral>expr);
                         return +(<NumericLiteral>expr).text;
@@ -31762,7 +31793,7 @@ namespace ts {
             return node.kind === SyntaxKind.Identifier ||
                 node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((<PropertyAccessExpression>node).expression) ||
                 node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((<ElementAccessExpression>node).expression) &&
-                    (<ElementAccessExpression>node).argumentExpression.kind === SyntaxKind.StringLiteral;
+                    isStringLiteralLike((<ElementAccessExpression>node).argumentExpression);
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
@@ -32071,7 +32102,7 @@ namespace ts {
         }
 
         function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
-            const symbol = getSymbolOfNode(node);
+            let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
             const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
@@ -32082,6 +32113,7 @@ namespace ts {
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
                 // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
+                symbol = getMergedSymbol(symbol.exportSymbol || symbol);
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
@@ -34284,7 +34316,7 @@ namespace ts {
                                 const name = getHelperName(helper);
                                 const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
                                 if (!symbol) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }
                             }
                         }
@@ -35351,7 +35383,7 @@ namespace ts {
         }
 
         function isStringOrNumberLiteralExpression(expr: Expression) {
-            return expr.kind === SyntaxKind.StringLiteral || expr.kind === SyntaxKind.NumericLiteral ||
+            return isStringOrNumericLiteralLike(expr) ||
                 expr.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusToken &&
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }

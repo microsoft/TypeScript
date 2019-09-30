@@ -576,7 +576,7 @@ namespace ts.server {
 
         markContainingProjectsAsDirty() {
             for (const p of this.containingProjects) {
-                p.markAsDirty();
+                p.markFileAsDirty(this.path);
             }
         }
 

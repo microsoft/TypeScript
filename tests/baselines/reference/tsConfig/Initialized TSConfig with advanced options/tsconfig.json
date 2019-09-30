@@ -63,6 +63,7 @@
     /* Advanced Options */
     "noErrorTruncation": true,                /* Do not truncate error messages. */
     "declarationDir": "lib",                  /* Output directory for generated declaration files. */
-    "skipLibCheck": true                      /* Skip type checking of declaration files. */
+    "skipLibCheck": true,                     /* Skip type checking of declaration files. */
+    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   }
 }

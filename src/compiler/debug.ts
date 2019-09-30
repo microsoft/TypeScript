@@ -303,7 +303,7 @@ namespace ts {
                 udl = "┤",
                 dlr = "┬",
                 ulr = "┴",
-                udlr = "┼",
+                udlr = "╫",
             }
 
             const enum Connection {
@@ -415,12 +415,8 @@ namespace ts {
                     nodes.push(graphNode);
                     if (!(flowNode.flags & FlowFlags.PreFinally)) {
                         if (hasAntecedents(flowNode)) {
-                            // sort antecedents so that shallower trees come first.
-                            const antecedents = flowNode.antecedents;
-                            const heights = antecedents.map(measureHeight);
-                            const indices = antecedents.map((_, i) => i);
-                            stableSortIndices(heights, indices, (a, b) => b - a);
-                            for (const antecedent of indices.map(i => antecedents[i])) {
+
+                            for (const antecedent of flowNode.antecedents) {
                                 buildGraphEdge(graphNode, antecedent);
                             }
                         }
@@ -449,12 +445,6 @@ namespace ts {
                     level = Math.max(level, computeLevel(parent) + 1);
                 }
                 return node.level = level;
-            }
-
-            function measureHeight(flowNode: FlowNode): number {
-                return hasAntecedents(flowNode) ? flowNode.antecedents.reduce((x, n) => Math.max(x, measureHeight(n)), 0) + 1 :
-                    hasAntecedent(flowNode) ? measureHeight(flowNode.antecedent) + 1 :
-                    1;
             }
 
             function computeHeight(node: FlowGraphNode): number {
