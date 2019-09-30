@@ -344,6 +344,9 @@ namespace ts {
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
                 }
+                if (isWellKnownSymbolSyntactically(name)) {
+                    return getPropertyNameForKnownSymbolName(idText(name.name));
+                }
                 return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
             }
             switch (node.kind) {

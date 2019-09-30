@@ -820,7 +820,14 @@ namespace ts {
 
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
 
-    export type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern;
+    export type DeclarationName =
+        | Identifier
+        | StringLiteralLike
+        | NumericLiteral
+        | ComputedPropertyName
+        | ElementAccessExpression
+        | BindingPattern
+        | EntityNameExpression;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -1887,12 +1894,16 @@ namespace ts {
         ;
 
     /** @internal */
+    export interface WellKnownSymbolExpression extends PropertyAccessExpression {
+        expression: Identifier & { escapedText: "Symbol" };
+    }
+    /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableStaticNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
     /** @internal */
     export type BindableStaticNameExpression = EntityNameExpression | BindableStaticElementAccessExpression;
     /** @internal */
     export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
-        argumentExpression: StringLiteralLike | NumericLiteral;
+        argumentExpression: StringLiteralLike | NumericLiteral | WellKnownSymbolExpression;
     };
     /** @internal */
     export type BindableStaticElementAccessExpression = LiteralLikeElementAccessExpression & {
