@@ -2966,7 +2966,7 @@ namespace ts {
             }
             else {
                 const symbol = lookupSymbolForPropertyAccess(node.expression);
-                return symbol && symbol.exports && symbol.exports.get(escapeLeadingUnderscores(getElementOrPropertyAccessName(node)));
+                return symbol && symbol.exports && symbol.exports.get(getElementOrPropertyAccessName(node));
             }
         }
 
@@ -2979,7 +2979,7 @@ namespace ts {
             }
             else {
                 const s = forEachIdentifierInEntityName(e.expression, parent, action);
-                return action(getNameOrArgument(e), s && s.exports && s.exports.get(escapeLeadingUnderscores(getElementOrPropertyAccessName(e))), s);
+                return action(getNameOrArgument(e), s && s.exports && s.exports.get(getElementOrPropertyAccessName(e)), s);
             }
         }
 
