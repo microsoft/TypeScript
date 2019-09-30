@@ -437,6 +437,34 @@ function f42(x: number) {
 >x : number
 }
 
+function f43() {
+>f43 : () => void
+
+    const fail = (): never => { throw new Error(); };
+>fail : () => never
+>(): never => { throw new Error(); } : () => never
+>new Error() : Error
+>Error : ErrorConstructor
+
+    const f = [fail];
+>f : (() => never)[]
+>[fail] : (() => never)[]
+>fail : () => never
+
+    fail();  // No effect (missing type annotation)
+>fail() : never
+>fail : () => never
+
+    f[0]();  // No effect (not a dotted name)
+>f[0]() : never
+>f[0] : () => never
+>f : (() => never)[]
+>0 : 0
+
+    f;
+>f : (() => never)[]
+}
+
 // Repro from #33582
 
 export interface Component<T extends object = any> {

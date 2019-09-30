@@ -80,3 +80,53 @@ type T12 = (T12)[];
 type T13 = T13[] | string;
 type T14 = T14[] & { x: string };
 type T15<X> = X extends string ? T15<X>[] : never;
+
+type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+
+declare function foo1<T>(a: ValueOrArray1<T>): T;
+declare let ra1: ValueOrArray2<string>;
+
+let x1 = foo1(ra1);  // Boom!
+
+type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+
+declare function foo2<T>(a: ValueOrArray1<T>): T;
+declare let ra2: ValueOrArray2<string>;
+
+let x2 = foo2(ra2);  // Boom!
+
+// Repro from #33617 (errors are expected)
+
+type Tree = [HTMLHeadingElement, Tree][];
+
+function parse(node: Tree, index: number[] = []): HTMLUListElement {
+  return html('ul', node.map(([el, children], i) => {
+    const idx = [...index, i + 1];
+    return html('li', [
+      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+      children.length > 0 ? parse(children, idx) : frag()
+    ]);
+  }));
+}
+
+function cons(hs: HTMLHeadingElement[]): Tree {
+  return hs
+    .reduce<HTMLHeadingElement[][]>((hss, h) => {
+      const hs = hss.pop()!;
+      return hs.length === 0 || level(h) > level(hs[0])
+        ? concat(hss, [concat(hs, [h])])
+        : concat(hss, [hs, [h]]);
+    }, [[]])
+    .reduce<Tree>((node, hs) =>
+      hs.length === 0
+        ? node
+        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+    , []);
+}
+
+function level(h: HTMLHeadingElement): number {
+  assert(isFinite(+h.tagName[1]));
+  return +h.tagName[1];
+}

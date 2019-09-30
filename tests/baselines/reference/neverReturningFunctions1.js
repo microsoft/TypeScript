@@ -154,6 +154,14 @@ function f42(x: number) {
     x;  // Unreachable
 }
 
+function f43() {
+    const fail = (): never => { throw new Error(); };
+    const f = [fail];
+    fail();  // No effect (missing type annotation)
+    f[0]();  // No effect (not a dotted name)
+    f;
+}
+
 // Repro from #33582
 
 export interface Component<T extends object = any> {
@@ -374,6 +382,13 @@ function f42(x) {
         x;
     }
     x; // Unreachable
+}
+function f43() {
+    var fail = function () { throw new Error(); };
+    var f = [fail];
+    fail(); // No effect (missing type annotation)
+    f[0](); // No effect (not a dotted name)
+    f;
 }
 var Component = registerComponent('test-component', {
     schema: {

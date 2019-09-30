@@ -79,9 +79,66 @@ type T13 = T13[] | string;
 type T14 = T14[] & { x: string };
 type T15<X> = X extends string ? T15<X>[] : never;
 
+type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+
+declare function foo1<T>(a: ValueOrArray1<T>): T;
+declare let ra1: ValueOrArray2<string>;
+
+let x1 = foo1(ra1);  // Boom!
+
+type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+
+declare function foo2<T>(a: ValueOrArray1<T>): T;
+declare let ra2: ValueOrArray2<string>;
+
+let x2 = foo2(ra2);  // Boom!
+
+// Repro from #33617 (errors are expected)
+
+type Tree = [HTMLHeadingElement, Tree][];
+
+function parse(node: Tree, index: number[] = []): HTMLUListElement {
+  return html('ul', node.map(([el, children], i) => {
+    const idx = [...index, i + 1];
+    return html('li', [
+      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+      children.length > 0 ? parse(children, idx) : frag()
+    ]);
+  }));
+}
+
+function cons(hs: HTMLHeadingElement[]): Tree {
+  return hs
+    .reduce<HTMLHeadingElement[][]>((hss, h) => {
+      const hs = hss.pop()!;
+      return hs.length === 0 || level(h) > level(hs[0])
+        ? concat(hss, [concat(hs, [h])])
+        : concat(hss, [hs, [h]]);
+    }, [[]])
+    .reduce<Tree>((node, hs) =>
+      hs.length === 0
+        ? node
+        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+    , []);
+}
+
+function level(h: HTMLHeadingElement): number {
+  assert(isFinite(+h.tagName[1]));
+  return +h.tagName[1];
+}
+
 
 //// [recursiveTypeReferences1.js]
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var a0 = 1;
 var a1 = [1, [2, 3], [4, [5, [6, 7]]]];
 var hypertextNode = ["div", { id: "parent" },
@@ -124,6 +181,37 @@ flat2([[[0]]]); // number[]
 flat2([1, 'a', [2]]); // (string | number)[]
 flat2([1, [2, 'a']]); // (string | number)[]
 flat2([1, ['a']]); // Error
+var x1 = foo1(ra1); // Boom!
+var x2 = foo2(ra2); // Boom!
+function parse(node, index) {
+    if (index === void 0) { index = []; }
+    return html('ul', node.map(function (_a, i) {
+        var el = _a[0], children = _a[1];
+        var idx = __spreadArrays(index, [i + 1]);
+        return html('li', [
+            html('a', { href: "#" + el.id, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
+            children.length > 0 ? parse(children, idx) : frag()
+        ]);
+    }));
+}
+function cons(hs) {
+    return hs
+        .reduce(function (hss, h) {
+        var hs = hss.pop();
+        return hs.length === 0 || level(h) > level(hs[0])
+            ? concat(hss, [concat(hs, [h])])
+            : concat(hss, [hs, [h]]);
+    }, [[]])
+        .reduce(function (node, hs) {
+        return hs.length === 0
+            ? node
+            : concat(node, [[hs.shift(), cons(hs)]]);
+    }, []);
+}
+function level(h) {
+    assert(isFinite(+h.tagName[1]));
+    return +h.tagName[1];
+}
 
 
 //// [recursiveTypeReferences1.d.ts]
@@ -165,3 +253,17 @@ declare type T14 = T14[] & {
     x: string;
 };
 declare type T15<X> = X extends string ? T15<X>[] : never;
+declare type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+declare type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+declare function foo1<T>(a: ValueOrArray1<T>): T;
+declare let ra1: ValueOrArray2<string>;
+declare let x1: string;
+declare type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+declare type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+declare function foo2<T>(a: ValueOrArray1<T>): T;
+declare let ra2: ValueOrArray2<string>;
+declare let x2: string;
+declare type Tree = [HTMLHeadingElement, Tree][];
+declare function parse(node: Tree, index?: number[]): HTMLUListElement;
+declare function cons(hs: HTMLHeadingElement[]): Tree;
+declare function level(h: HTMLHeadingElement): number;

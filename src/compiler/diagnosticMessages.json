@@ -2739,6 +2739,14 @@
         "category": "Error",
         "code": 2774
     },
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Assertions require the call target to be an identifier or qualified name.": {
+        "category": "Error",
+        "code": 2776
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

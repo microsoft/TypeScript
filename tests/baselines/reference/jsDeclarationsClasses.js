@@ -480,17 +480,21 @@ export class E<T, U> {
     static staticReadonlyField: string;
     static staticInitializedField: number;
     /**
-     * @return {string}
+     * @param {string} _p
      */
-    static s1: string;
+    static set s1(arg: string);
     /**
      * @return {string}
      */
-    static readonly s2: string;
+    static get s1(): string;
+    /**
+     * @return {string}
+     */
+    static get s2(): string;
     /**
      * @param {string} _p
      */
-    static s3: string;
+    static set s3(arg: string);
     /**
      * @param {T} a
      * @param {U} b
@@ -507,17 +511,21 @@ export class E<T, U> {
     readonlyField: T & U;
     initializedField: number;
     /**
-     * @return {U}
+     * @param {U} _p
      */
-    f1: U;
+    set f1(arg: U);
     /**
      * @return {U}
      */
-    readonly f2: U;
+    get f1(): U;
+    /**
+     * @return {U}
+     */
+    get f2(): U;
     /**
      * @param {U} _p
      */
-    f3: U;
+    set f3(arg: U);
 }
 /**
  * @template T,U

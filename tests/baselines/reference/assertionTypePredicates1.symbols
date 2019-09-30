@@ -357,3 +357,46 @@ declare class Wat {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 123, 11))
 }
 
+function f20(x: unknown) {
+>f20 : Symbol(f20, Decl(assertionTypePredicates1.ts, 124, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 126, 13))
+
+    const assert = (value: unknown): asserts value => {}
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 127, 9))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 127, 20))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 127, 20))
+
+    assert(typeof x === "string");  // Error
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 127, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 126, 13))
+
+    const a = [assert];
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 129, 9))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 127, 9))
+
+    a[0](typeof x === "string");  // Error
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 129, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 126, 13))
+
+    const t1 = new Test();
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 131, 9))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 76, 1))
+
+    t1.assert(typeof x === "string");  // Error
+>t1.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 78, 12))
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 131, 9))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 78, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 126, 13))
+
+    const t2: Test = new Test();
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 133, 9))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 76, 1))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 76, 1))
+
+    t2.assert(typeof x === "string");
+>t2.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 78, 12))
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 133, 9))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 78, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 126, 13))
+}
+
