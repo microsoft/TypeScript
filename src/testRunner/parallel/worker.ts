@@ -305,7 +305,7 @@ namespace Harness.Parallel.Worker {
         // (Unit) Tests directly within the root suite
         let unitTestTestMap: ts.Map<Mocha.Test>;
 
-        if (runUnitTests) {
+        if (runUnitTests!) {
             unitTestSuite = new Suite("", new Mocha.Context());
             unitTestSuite.timeout(globalTimeout || 40_000);
             shimTestInterface(unitTestSuite, global);
