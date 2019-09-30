@@ -1015,7 +1015,8 @@ namespace ts {
                 else {
                     return node.kind === SyntaxKind.BinaryExpression && (
                         (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken);
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
                 }
             }
         }
@@ -1440,14 +1441,6 @@ namespace ts {
             bindCondition(node.right, trueTarget, falseTarget);
         }
 
-        function bindNullishCoalescingExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            const notNullLabel = createBranchLabel();
-            bindCondition(node.left, trueTarget, notNullLabel);
-            currentFlow = finishFlowLabel(notNullLabel);
-            bind(node.operatorToken);
-            bindCondition(node.right, trueTarget, falseTarget);
-        }
-
         function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
             if (node.operator === SyntaxKind.ExclamationToken) {
                 const saveTrueTarget = currentTrueTarget;
@@ -1479,9 +1472,6 @@ namespace ts {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
                     currentFlow = finishFlowLabel(postExpressionLabel);
-                }
-                else if (operator === SyntaxKind.QuestionQuestionToken) {
-                    bindNullishCoalescingExpression(node, currentTrueTarget!, currentFalseTarget!);
                 }
                 else {
                     bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);

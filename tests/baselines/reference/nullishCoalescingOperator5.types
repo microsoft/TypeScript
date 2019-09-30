@@ -20,7 +20,7 @@ a ?? b || c;
 a || b ?? c;
 >a || b ?? c : string | undefined
 >a || b : string | undefined
->a : string
+>a : string | undefined
 >b : string | undefined
 >c : string | undefined
 

@@ -1,17 +1,12 @@
 tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts(3,18): error TS2533: Object is possibly 'null' or 'undefined'.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts(3,22): error TS2339: Property 'toFixed' does not exist on type '"" | 0'.
-  Property 'toFixed' does not exist on type '""'.
 
 
-==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts (2 errors) ====
+==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts (1 errors) ====
     declare const f11: 1 | 0 | '' | null | undefined;
     
     let g11 = f11 ?? f11.toFixed()
                      ~~~
 !!! error TS2533: Object is possibly 'null' or 'undefined'.
-                         ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type '"" | 0'.
-!!! error TS2339:   Property 'toFixed' does not exist on type '""'.
     
     
     

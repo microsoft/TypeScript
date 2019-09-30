@@ -9,7 +9,7 @@ let g11 = f11 ?? f11.toFixed()
 >f11 : "" | 0 | 1 | null | undefined
 >f11.toFixed() : any
 >f11.toFixed : any
->f11 : "" | 0 | null | undefined
+>f11 : null | undefined
 >toFixed : any
 
 
