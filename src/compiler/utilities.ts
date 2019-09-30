@@ -4110,6 +4110,12 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
     }
 
+    export function isDottedName(node: Expression): boolean {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+            node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
+            node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+    }
+
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }

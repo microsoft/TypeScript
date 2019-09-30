@@ -385,196 +385,217 @@ function f42(x: number) {
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 143, 13))
 }
 
+function f43() {
+>f43 : Symbol(f43, Decl(neverReturningFunctions1.ts, 153, 1))
+
+    const fail = (): never => { throw new Error(); };
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    const f = [fail];
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+
+    fail();  // No effect (missing type annotation)
+>fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
+
+    f[0]();  // No effect (not a dotted name)
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+
+    f;
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
+}
+
 // Repro from #33582
 
 export interface Component<T extends object = any> {
->Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 153, 1))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 157, 27))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
 
 	attrName?: string;
->attrName : Symbol(Component.attrName, Decl(neverReturningFunctions1.ts, 157, 52))
+>attrName : Symbol(Component.attrName, Decl(neverReturningFunctions1.ts, 165, 52))
 
 	data: T;
->data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 158, 19))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 157, 27))
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
 
 	dependencies?: string[];
->dependencies : Symbol(Component.dependencies, Decl(neverReturningFunctions1.ts, 159, 9))
+>dependencies : Symbol(Component.dependencies, Decl(neverReturningFunctions1.ts, 167, 9))
 
 	el: any;
->el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 160, 25))
+>el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
 
 	id: string;
->id : Symbol(Component.id, Decl(neverReturningFunctions1.ts, 161, 9))
+>id : Symbol(Component.id, Decl(neverReturningFunctions1.ts, 169, 9))
 
 	multiple?: boolean;
->multiple : Symbol(Component.multiple, Decl(neverReturningFunctions1.ts, 162, 12))
+>multiple : Symbol(Component.multiple, Decl(neverReturningFunctions1.ts, 170, 12))
 
 	name: string;
->name : Symbol(Component.name, Decl(neverReturningFunctions1.ts, 163, 20))
+>name : Symbol(Component.name, Decl(neverReturningFunctions1.ts, 171, 20))
 
 	schema: unknown;
->schema : Symbol(Component.schema, Decl(neverReturningFunctions1.ts, 164, 14))
+>schema : Symbol(Component.schema, Decl(neverReturningFunctions1.ts, 172, 14))
 
 	system: any;
->system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 165, 17))
+>system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
 
 	init(data?: T): void;
->init : Symbol(Component.init, Decl(neverReturningFunctions1.ts, 166, 13))
->data : Symbol(data, Decl(neverReturningFunctions1.ts, 168, 6))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 157, 27))
+>init : Symbol(Component.init, Decl(neverReturningFunctions1.ts, 174, 13))
+>data : Symbol(data, Decl(neverReturningFunctions1.ts, 176, 6))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
 
 	pause(): void;
->pause : Symbol(Component.pause, Decl(neverReturningFunctions1.ts, 168, 22))
+>pause : Symbol(Component.pause, Decl(neverReturningFunctions1.ts, 176, 22))
 
 	play(): void;
->play : Symbol(Component.play, Decl(neverReturningFunctions1.ts, 169, 15))
+>play : Symbol(Component.play, Decl(neverReturningFunctions1.ts, 177, 15))
 
 	remove(): void;
->remove : Symbol(Component.remove, Decl(neverReturningFunctions1.ts, 170, 14))
+>remove : Symbol(Component.remove, Decl(neverReturningFunctions1.ts, 178, 14))
 
 	tick?(time: number, timeDelta: number): void;
->tick : Symbol(Component.tick, Decl(neverReturningFunctions1.ts, 171, 16))
->time : Symbol(time, Decl(neverReturningFunctions1.ts, 172, 7))
->timeDelta : Symbol(timeDelta, Decl(neverReturningFunctions1.ts, 172, 20))
+>tick : Symbol(Component.tick, Decl(neverReturningFunctions1.ts, 179, 16))
+>time : Symbol(time, Decl(neverReturningFunctions1.ts, 180, 7))
+>timeDelta : Symbol(timeDelta, Decl(neverReturningFunctions1.ts, 180, 20))
 
 	update(oldData: T): void;
->update : Symbol(Component.update, Decl(neverReturningFunctions1.ts, 172, 46))
->oldData : Symbol(oldData, Decl(neverReturningFunctions1.ts, 173, 8))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 157, 27))
+>update : Symbol(Component.update, Decl(neverReturningFunctions1.ts, 180, 46))
+>oldData : Symbol(oldData, Decl(neverReturningFunctions1.ts, 181, 8))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 165, 27))
 
 	updateSchema?(): void;
->updateSchema : Symbol(Component.updateSchema, Decl(neverReturningFunctions1.ts, 173, 26))
+>updateSchema : Symbol(Component.updateSchema, Decl(neverReturningFunctions1.ts, 181, 26))
 
 	extendSchema(update: unknown): void;
->extendSchema : Symbol(Component.extendSchema, Decl(neverReturningFunctions1.ts, 174, 23))
->update : Symbol(update, Decl(neverReturningFunctions1.ts, 176, 14))
+>extendSchema : Symbol(Component.extendSchema, Decl(neverReturningFunctions1.ts, 182, 23))
+>update : Symbol(update, Decl(neverReturningFunctions1.ts, 184, 14))
 
 	flushToDOM(): void;
->flushToDOM : Symbol(Component.flushToDOM, Decl(neverReturningFunctions1.ts, 176, 37))
+>flushToDOM : Symbol(Component.flushToDOM, Decl(neverReturningFunctions1.ts, 184, 37))
 }
 
 export interface ComponentConstructor<T extends object> {
->ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 178, 1))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 180, 38))
+>ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 186, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
 
 	new (el: unknown, attrValue: string, id: string): T & Component;
->el : Symbol(el, Decl(neverReturningFunctions1.ts, 181, 6))
->attrValue : Symbol(attrValue, Decl(neverReturningFunctions1.ts, 181, 18))
->id : Symbol(id, Decl(neverReturningFunctions1.ts, 181, 37))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 180, 38))
->Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 153, 1))
+>el : Symbol(el, Decl(neverReturningFunctions1.ts, 189, 6))
+>attrValue : Symbol(attrValue, Decl(neverReturningFunctions1.ts, 189, 18))
+>id : Symbol(id, Decl(neverReturningFunctions1.ts, 189, 37))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
 
 	prototype: T & {
->prototype : Symbol(ComponentConstructor.prototype, Decl(neverReturningFunctions1.ts, 181, 65))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 180, 38))
+>prototype : Symbol(ComponentConstructor.prototype, Decl(neverReturningFunctions1.ts, 189, 65))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 188, 38))
 
 		name: string;
->name : Symbol(name, Decl(neverReturningFunctions1.ts, 182, 17))
+>name : Symbol(name, Decl(neverReturningFunctions1.ts, 190, 17))
 
 		system: unknown;
->system : Symbol(system, Decl(neverReturningFunctions1.ts, 183, 15))
+>system : Symbol(system, Decl(neverReturningFunctions1.ts, 191, 15))
 
 		play(): void;
->play : Symbol(play, Decl(neverReturningFunctions1.ts, 184, 18))
+>play : Symbol(play, Decl(neverReturningFunctions1.ts, 192, 18))
 
 		pause(): void;
->pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 185, 15))
+>pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 193, 15))
 
 	};
 }
 
 declare function registerComponent<T extends object>(
->registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 188, 1))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 190, 35))
+>registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 196, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
 
     name: string,
->name : Symbol(name, Decl(neverReturningFunctions1.ts, 190, 53))
+>name : Symbol(name, Decl(neverReturningFunctions1.ts, 198, 53))
 
     component: ComponentDefinition<T>
->component : Symbol(component, Decl(neverReturningFunctions1.ts, 191, 17))
->ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 193, 27))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 190, 35))
+>component : Symbol(component, Decl(neverReturningFunctions1.ts, 199, 17))
+>ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 201, 27))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
 
 ): ComponentConstructor<T>;
->ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 178, 1))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 190, 35))
+>ComponentConstructor : Symbol(ComponentConstructor, Decl(neverReturningFunctions1.ts, 186, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 198, 35))
 
 export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
->ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 193, 27))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 195, 32))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 195, 32))
+>ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 201, 27))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 153, 1))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
 >ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(neverReturningFunctions1.ts, 195, 32))
->Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 153, 1))
+>T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
 
 const Component = registerComponent('test-component', {
->Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 153, 1), Decl(neverReturningFunctions1.ts, 197, 5))
->registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 188, 1))
+>Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1), Decl(neverReturningFunctions1.ts, 205, 5))
+>registerComponent : Symbol(registerComponent, Decl(neverReturningFunctions1.ts, 196, 1))
 
 	schema: {
->schema : Symbol(schema, Decl(neverReturningFunctions1.ts, 197, 55))
+>schema : Symbol(schema, Decl(neverReturningFunctions1.ts, 205, 55))
 
 		myProperty: {
->myProperty : Symbol(myProperty, Decl(neverReturningFunctions1.ts, 198, 10))
+>myProperty : Symbol(myProperty, Decl(neverReturningFunctions1.ts, 206, 10))
 
 			default: [],
->default : Symbol(default, Decl(neverReturningFunctions1.ts, 199, 15))
+>default : Symbol(default, Decl(neverReturningFunctions1.ts, 207, 15))
 
 			parse() {
->parse : Symbol(parse, Decl(neverReturningFunctions1.ts, 200, 15))
+>parse : Symbol(parse, Decl(neverReturningFunctions1.ts, 208, 15))
 
 				return [true];
 			}
 		},
 		string: { type: 'string' },
->string : Symbol(string, Decl(neverReturningFunctions1.ts, 204, 4))
->type : Symbol(type, Decl(neverReturningFunctions1.ts, 205, 11))
+>string : Symbol(string, Decl(neverReturningFunctions1.ts, 212, 4))
+>type : Symbol(type, Decl(neverReturningFunctions1.ts, 213, 11))
 
 		num: 0
->num : Symbol(num, Decl(neverReturningFunctions1.ts, 205, 29))
+>num : Symbol(num, Decl(neverReturningFunctions1.ts, 213, 29))
 
 	},
 	init() {
->init : Symbol(init, Decl(neverReturningFunctions1.ts, 207, 3))
+>init : Symbol(init, Decl(neverReturningFunctions1.ts, 215, 3))
 
 		this.data.num = 0;
->this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 158, 19))
->data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 158, 19))
+>this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
 
 		this.el.setAttribute('custom-attribute', 'custom-value');
->this.el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 160, 25))
->el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 160, 25))
+>this.el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
+>el : Symbol(Component.el, Decl(neverReturningFunctions1.ts, 168, 25))
 
 	},
 	update() {},
->update : Symbol(update, Decl(neverReturningFunctions1.ts, 211, 3))
+>update : Symbol(update, Decl(neverReturningFunctions1.ts, 219, 3))
 
 	tick() {},
->tick : Symbol(tick, Decl(neverReturningFunctions1.ts, 212, 13))
+>tick : Symbol(tick, Decl(neverReturningFunctions1.ts, 220, 13))
 
 	remove() {},
->remove : Symbol(remove, Decl(neverReturningFunctions1.ts, 213, 11))
+>remove : Symbol(remove, Decl(neverReturningFunctions1.ts, 221, 11))
 
 	pause() {},
->pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 214, 13))
+>pause : Symbol(pause, Decl(neverReturningFunctions1.ts, 222, 13))
 
 	play() {},
->play : Symbol(play, Decl(neverReturningFunctions1.ts, 215, 12))
+>play : Symbol(play, Decl(neverReturningFunctions1.ts, 223, 12))
 
 	multiply(f: number) {
->multiply : Symbol(multiply, Decl(neverReturningFunctions1.ts, 216, 11))
->f : Symbol(f, Decl(neverReturningFunctions1.ts, 218, 10))
+>multiply : Symbol(multiply, Decl(neverReturningFunctions1.ts, 224, 11))
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 226, 10))
 
 		// Reference to system because both were registered with the same name.
 		return f * this.data.num * this.system!.data.counter;
->f : Symbol(f, Decl(neverReturningFunctions1.ts, 218, 10))
->this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 158, 19))
->data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 158, 19))
->this.system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 165, 17))
->system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 165, 17))
+>f : Symbol(f, Decl(neverReturningFunctions1.ts, 226, 10))
+>this.data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>data : Symbol(Component.data, Decl(neverReturningFunctions1.ts, 166, 19))
+>this.system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
+>system : Symbol(Component.system, Decl(neverReturningFunctions1.ts, 173, 17))
 	}
 });
 
