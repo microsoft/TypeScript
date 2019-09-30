@@ -3072,7 +3072,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -3116,6 +3115,18 @@
     "Private or protected member '{0}' cannot be accessed on a type parameter.": {
         "category": "Error",
         "code": 4105
+    },
+    "Parameter '{0}' of accessor has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.": {
+        "category": "Error",
+        "code": 4108
     },
 
     "The current host does not support the '{0}' option.": {
