@@ -89,7 +89,7 @@ namespace ts {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         // import("mod");
                         recordModuleName();
                         return true;
@@ -224,13 +224,14 @@ namespace ts {
             return false;
         }
 
-        function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
+        function tryConsumeRequireCall(skipCurrentToken: boolean, allowTemplateLiterals = false): boolean {
             let token = skipCurrentToken ? nextToken() : scanner.getToken();
             if (token === SyntaxKind.RequireKeyword) {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral ||
+                        allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         //  require("mod");
                         recordModuleName();
                     }
@@ -249,7 +250,7 @@ namespace ts {
                 }
 
                 token = nextToken();
-                if (token === SyntaxKind.StringLiteral) {
+                if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     // looks like define ("modname", ... - skip string literal and comma
                     token = nextToken();
                     if (token === SyntaxKind.CommaToken) {
@@ -271,7 +272,7 @@ namespace ts {
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         recordModuleName();
                     }
 
@@ -313,7 +314,10 @@ namespace ts {
                 if (tryConsumeDeclare() ||
                     tryConsumeImport() ||
                     tryConsumeExport() ||
-                    (detectJavaScriptImports && (tryConsumeRequireCall(/*skipCurrentToken*/ false) || tryConsumeDefine()))) {
+                    (detectJavaScriptImports && (
+                        tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
+                        tryConsumeDefine()
+                    ))) {
                     continue;
                 }
                 else {
