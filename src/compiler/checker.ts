@@ -6824,13 +6824,13 @@ namespace ts {
             let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
                 const expression = (isBinaryExpression(declaration) || isCallExpression(declaration)) ? declaration :
-                    (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration)) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
+                    isAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                     undefined;
                 if (!expression) {
                     continue; // Non-assignment declaration merged in (eg, an Identifier to mark the thing as a namespace) - skip over it and pull type info from elsewhere
                 }
 
-                const kind = (isPropertyAccessExpression(expression) || isElementAccessExpression(expression))
+                const kind = isAccessExpression(expression)
                     ? getAssignmentDeclarationPropertyAccessKind(expression)
                     : getAssignmentDeclarationKind(expression);
                 if (kind === AssignmentDeclarationKind.ThisProperty) {
