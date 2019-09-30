@@ -8,3 +8,4 @@ for (let i = 0; i <= 10; ++i) {
 >_a : Symbol(_a, Decl(variableDeclarationWithTrailingComment.ts, 1, 5))
 >_b : Symbol(_b, Decl(variableDeclarationWithTrailingComment.ts, 1, 9))
 }
+

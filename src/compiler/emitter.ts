@@ -3038,7 +3038,8 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            const nameEnd = node.name.end;
+            emitInitializer(node.initializer, node.type ? node.type.end : node.initializer ? nameEnd == node.initializer.end ? -1 : nameEnd : nameEnd, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
