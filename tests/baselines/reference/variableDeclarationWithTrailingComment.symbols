@@ -1,0 +1,10 @@
+=== tests/cases/compiler/variableDeclarationWithTrailingComment.ts ===
+for (let i = 0; i <= 10; ++i) {
+>i : Symbol(i, Decl(variableDeclarationWithTrailingComment.ts, 0, 8))
+>i : Symbol(i, Decl(variableDeclarationWithTrailingComment.ts, 0, 8))
+>i : Symbol(i, Decl(variableDeclarationWithTrailingComment.ts, 0, 8))
+
+  let _a, _b; /// 123
+>_a : Symbol(_a, Decl(variableDeclarationWithTrailingComment.ts, 1, 5))
+>_b : Symbol(_b, Decl(variableDeclarationWithTrailingComment.ts, 1, 9))
+}
