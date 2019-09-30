@@ -1,0 +1,230 @@
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(10,1): error TS2454: Variable 'a' is used before being assigned.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(62,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(68,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(72,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(83,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(87,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(104,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(111,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(153,9): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (22 errors) ====
+    // assignments in shortcutting chain
+    declare const o: undefined | {
+        [key: string]: any;
+        [key: number]: any;
+        (...args: any[]): any;
+    };
+    
+    let a: number;
+    o?.[a = 1];
+    a.toString();
+    ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    let b: number;
+    o?.x[b = 1];
+    b.toString();
+    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    let c: number;
+    o?.(c = 1)
+    c.toString();
+    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    
+    let d: number;
+    o?.x(d = 1);
+    d.toString();
+    ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    
+    // type predicates
+    declare const f: undefined | ((x: any) => x is number);
+    declare const x: string | number;
+    if (f?.(x)) {
+        x; // number
+        f; // (x: any) => x is number
+        f(x);
+    }
+    else {
+        x;
+        f;
+        f(x);
+        ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    }
+    x;
+    f;
+    f(x);
+    ~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    
+    declare const o2: { f(x: any): x is number; } | undefined;
+    if (o2?.f(x)) {
+        x; // number
+        o2.f; // (x: any) => x is number
+        o2?.f;
+        o2?.f(x);
+    }
+    else {
+        x;
+        o2;
+        o2?.f;
+        o2.f;
+        ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    x;
+    o2;
+    o2?.f;
+    o2.f;
+    ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
+    if (o3?.x === 1) {
+        o3; // TODO: should be `{ x: y, y: string }`
+        o3.x; // TODO: should not be an error.
+        ~~
+!!! error TS2532: Object is possibly 'undefined'.
+        o3?.x;
+    }
+    else {
+        o3;
+        o3?.x;
+        o3.x;
+        ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    o3;
+    o3?.x;
+    o3.x;
+    ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    declare const o4: { x?: { y: boolean } };
+    if (o4.x?.y) {
+        o4.x; // { y: boolean }
+        o4.x.y; // true
+        o4.x?.y; // true
+    }
+    else {
+        o4.x;
+        o4.x?.y;
+        o4.x.y;
+        ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    o4.x;
+    o4.x?.y;
+    o4.x.y;
+    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    declare const o5: { x?: { y: { z?: { w: boolean } } } };
+    if (o5.x?.y.z?.w) {
+        o5.x;
+        o5.x.y;
+        o5.x.y.z;
+        o5.x.y.z.w; // true
+        o5.x.y.z?.w; // true
+        o5.x?.y.z.w; // true
+        o5.x?.y.z?.w; // true
+    }
+    else {
+        o5.x;
+        o5.x?.y;
+        o5.x?.y.z;
+        o5.x?.y.z?.w;
+        o5.x.y;
+        ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        o5.x.y.z.w;
+        ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        ~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    o5.x;
+    o5.x?.y;
+    o5.x?.y.z;
+    o5.x?.y.z?.w;
+    o5.x.y;
+    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    o5.x.y.z.w;
+    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    ~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    interface Base {
+        f(): this is Derived;
+    }
+    
+    interface Derived extends Base {
+        x: number;
+    }
+    
+    declare const o6: Base | undefined;
+    if (o6?.f()) {
+        o6; // Derived
+        o6.f;
+    }
+    else {
+        o6;
+        o6?.f;
+        o6.f;
+        ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    o6;
+    o6?.f;
+    o6.f;
+    ~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    // asserts
+    declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
+    declare const isString: (value: unknown) => asserts value is string;
+    declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
+    declare const maybeNever: undefined | (() => never);
+    
+    function f01(x: unknown) {
+        if (!!true) {
+            isString?.(x);
+            x;
+        }
+        if (!!true) {
+            maybeIsString?.(x);
+            x;
+        }
+        if (!!true) {
+            isDefined(maybeIsString);
+            maybeIsString?.(x);
+            ~~~~~~~~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+            x;
+        }
+        if (!!true) {
+            maybeNever?.();
+            x;
+        }
+    }
+    

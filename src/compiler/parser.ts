@@ -212,17 +212,21 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<PropertyAccessExpression>node).questionDotToken) ||
                     visitNode(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
+                    visitNode(cbNode, (<ElementAccessExpression>node).questionDotToken) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
+                    visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
+                    visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||
                     visitNodes(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertionExpression:
@@ -4247,7 +4251,8 @@ namespace ts {
             }
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
-            // CallExpression.  As such, we need to consume the rest of it here to be complete.
+            // CallExpression or OptionalExpression.  As such, we need to consume the rest
+            // of it here to be complete.
             return parseCallExpressionRest(expression);
         }
 
@@ -4300,7 +4305,7 @@ namespace ts {
             // Because CallExpression and MemberExpression are left recursive, we need to bottom out
             // of the recursion immediately.  So we parse out a primary expression to start with.
             const expression = parsePrimaryExpression();
-            return parseMemberExpressionRest(expression);
+            return parseMemberExpressionRest(expression, /*allowOptionalChain*/ true);
         }
 
         function parseSuperExpression(): MemberExpression {
@@ -4594,18 +4599,70 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
+        function nextTokenIsIdentifierOrKeywordOrOpenBracketOrTemplate() {
+            nextToken();
+            return tokenIsIdentifierOrKeyword(token())
+                || token() === SyntaxKind.OpenBracketToken
+                || isTemplateStartOfTaggedTemplate();
+        }
+
+        function isStartOfOptionalPropertyOrElementAccessChain() {
+            return token() === SyntaxKind.QuestionDotToken
+                && lookAhead(nextTokenIsIdentifierOrKeywordOrOpenBracketOrTemplate);
+        }
+
+        function parsePropertyAccessExpressionRest(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
+            const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+            propertyAccess.expression = expression;
+            propertyAccess.questionDotToken = questionDotToken;
+            propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                propertyAccess.flags |= NodeFlags.OptionalChain;
+            }
+            return finishNode(propertyAccess);
+        }
+
+        function parseElementAccessExpressionRest(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
+            const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+            indexedAccess.expression = expression;
+            indexedAccess.questionDotToken = questionDotToken;
+
+            if (token() === SyntaxKind.CloseBracketToken) {
+                indexedAccess.argumentExpression = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.An_element_access_expression_should_take_an_argument);
+            }
+            else {
+                const argument = allowInAnd(parseExpression);
+                if (isStringOrNumericLiteralLike(argument)) {
+                    argument.text = internIdentifier(argument.text);
+                }
+                indexedAccess.argumentExpression = argument;
+            }
+
+            parseExpected(SyntaxKind.CloseBracketToken);
+            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                indexedAccess.flags |= NodeFlags.OptionalChain;
+            }
+            return finishNode(indexedAccess);
+        }
+
+        function parseMemberExpressionRest(expression: LeftHandSideExpression, allowOptionalChain: boolean): MemberExpression {
             while (true) {
-                const dotToken = parseOptionalToken(SyntaxKind.DotToken);
-                if (dotToken) {
-                    const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
-                    propertyAccess.expression = expression;
-                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
-                    expression = finishNode(propertyAccess);
+                let questionDotToken: QuestionDotToken | undefined;
+                let isPropertyAccess = false;
+                if (allowOptionalChain && isStartOfOptionalPropertyOrElementAccessChain()) {
+                    questionDotToken = parseExpectedToken(SyntaxKind.QuestionDotToken);
+                    isPropertyAccess = tokenIsIdentifierOrKeyword(token());
+                }
+                else {
+                    isPropertyAccess = parseOptional(SyntaxKind.DotToken);
+                }
+
+                if (isPropertyAccess) {
+                    expression = parsePropertyAccessExpressionRest(expression, questionDotToken);
                     continue;
                 }
 
-                if (token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                if (!questionDotToken && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
                     nextToken();
                     const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
                     nonNullExpression.expression = expression;
@@ -4614,28 +4671,13 @@ namespace ts {
                 }
 
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
-                if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
-                    const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
-                    indexedAccess.expression = expression;
-
-                    if (token() === SyntaxKind.CloseBracketToken) {
-                        indexedAccess.argumentExpression = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.An_element_access_expression_should_take_an_argument);
-                    }
-                    else {
-                        const argument = allowInAnd(parseExpression);
-                        if (isStringOrNumericLiteralLike(argument)) {
-                            argument.text = internIdentifier(argument.text);
-                        }
-                        indexedAccess.argumentExpression = argument;
-                    }
-
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    expression = finishNode(indexedAccess);
+                if ((questionDotToken || !inDecoratorContext()) && parseOptional(SyntaxKind.OpenBracketToken)) {
+                    expression = parseElementAccessExpressionRest(expression, questionDotToken);
                     continue;
                 }
 
                 if (isTemplateStartOfTaggedTemplate()) {
-                    expression = parseTaggedTemplateRest(expression, /*typeArguments*/ undefined);
+                    expression = parseTaggedTemplateRest(expression, questionDotToken, /*typeArguments*/ undefined);
                     continue;
                 }
 
@@ -4647,19 +4689,25 @@ namespace ts {
             return token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead;
         }
 
-        function parseTaggedTemplateRest(tag: LeftHandSideExpression, typeArguments: NodeArray<TypeNode> | undefined) {
+        function parseTaggedTemplateRest(tag: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, typeArguments: NodeArray<TypeNode> | undefined) {
             const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, tag.pos);
             tagExpression.tag = tag;
+            tagExpression.questionDotToken = questionDotToken;
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
                 : parseTemplateExpression();
+            if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
+                tagExpression.flags |= NodeFlags.OptionalChain;
+            }
             return finishNode(tagExpression);
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
-                expression = parseMemberExpressionRest(expression);
+                expression = parseMemberExpressionRest(expression, /*allowOptionalChain*/ true);
+                const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
+
                 // handle 'foo<<T>()'
                 if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
@@ -4667,32 +4715,47 @@ namespace ts {
                     // part of an arithmetic expression.  Break out so we consume it higher in the
                     // stack.
                     const typeArguments = tryParse(parseTypeArgumentsInExpression);
-                    if (!typeArguments) {
-                        return expression;
-                    }
+                    if (typeArguments) {
+                        if (isTemplateStartOfTaggedTemplate()) {
+                            expression = parseTaggedTemplateRest(expression, questionDotToken, typeArguments);
+                            continue;
+                        }
 
-                    if (isTemplateStartOfTaggedTemplate()) {
-                        expression = parseTaggedTemplateRest(expression, typeArguments);
+                        const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                        callExpr.expression = expression;
+                        callExpr.questionDotToken = questionDotToken;
+                        callExpr.typeArguments = typeArguments;
+                        callExpr.arguments = parseArgumentList();
+                        if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                            callExpr.flags |= NodeFlags.OptionalChain;
+                        }
+                        expression = finishNode(callExpr);
                         continue;
                     }
-
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.typeArguments = typeArguments;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
                 }
                 else if (token() === SyntaxKind.OpenParenToken) {
                     const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
+                    callExpr.questionDotToken = questionDotToken;
                     callExpr.arguments = parseArgumentList();
+                    if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                        callExpr.flags |= NodeFlags.OptionalChain;
+                    }
                     expression = finishNode(callExpr);
                     continue;
                 }
-
-                return expression;
+                if (questionDotToken) {
+                    // We failed to parse anything, so report a missing identifier here.
+                    const propertyAccess = createNode(SyntaxKind.PropertyAccessExpression, expression.pos) as PropertyAccessExpression;
+                    propertyAccess.expression = expression;
+                    propertyAccess.questionDotToken = questionDotToken;
+                    propertyAccess.name = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Identifier_expected);
+                    propertyAccess.flags |= NodeFlags.OptionalChain;
+                    expression = finishNode(propertyAccess);
+                }
+                break;
             }
+            return expression;
         }
 
         function parseArgumentList() {
@@ -4962,12 +5025,12 @@ namespace ts {
             let expression: MemberExpression = parsePrimaryExpression();
             let typeArguments;
             while (true) {
-                expression = parseMemberExpressionRest(expression);
+                expression = parseMemberExpressionRest(expression, /*allowOptionalChain*/ false);
                 typeArguments = tryParse(parseTypeArgumentsInExpression);
                 if (isTemplateStartOfTaggedTemplate()) {
                     Debug.assert(!!typeArguments,
                         "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
-                    expression = parseTaggedTemplateRest(expression, typeArguments);
+                    expression = parseTaggedTemplateRest(expression, /*optionalChain*/ undefined, typeArguments);
                     typeArguments = undefined;
                 }
                 break;

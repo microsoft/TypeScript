@@ -3249,9 +3249,10 @@ namespace ts {
 
                 const substitute = createLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
+                    const originalNode = getOriginalNode(node, isAccessExpression);
+                    const propertyName = isPropertyAccessExpression(originalNode)
+                        ? declarationNameToString(originalNode.name)
+                        : getTextOfNode(originalNode.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }

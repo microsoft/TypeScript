@@ -52,16 +52,7 @@ namespace ts {
             filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
     }
 
-    export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
-            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
-            if (firstOption === "build" || firstOption === "b") {
-                return performBuild(args.slice(1));
-            }
-        }
-
-        const commandLine = parseCommandLine(args);
-
+    function executeCommandLineWorker(commandLine: ParsedCommandLine) {
         if (commandLine.options.build) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -174,6 +165,24 @@ namespace ts {
         }
     }
 
+    export function executeCommandLine(args: string[]): void {
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
+            }
+        }
+
+        const commandLine = parseCommandLine(args);
+
+        if (commandLine.options.generateCpuProfile && sys.enableCPUProfiler) {
+            sys.enableCPUProfiler(commandLine.options.generateCpuProfile, () => executeCommandLineWorker(commandLine));
+        }
+        else {
+            executeCommandLineWorker(commandLine);
+        }
+    }
+
     function reportWatchModeWithoutSysSupport() {
         if (!sys.watchFile || !sys.watchDirectory) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
@@ -181,8 +190,7 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[]) {
-        const { buildOptions, projects, errors } = parseBuildCommand(args);
+    function performBuildWorker(buildOptions: BuildOptions, projects: string[], errors: Diagnostic[]) {
         // Update to pretty if host supports it
         updateReportDiagnostic(buildOptions);
 
@@ -227,6 +235,16 @@ namespace ts {
         buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
+    }
+
+    function performBuild(args: string[]) {
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
+        if (buildOptions.generateCpuProfile && sys.enableCPUProfiler) {
+            sys.enableCPUProfiler(buildOptions.generateCpuProfile, () => performBuildWorker(buildOptions, projects, errors));
+        }
+        else {
+            performBuildWorker(buildOptions, projects, errors);
+        }
     }
 
     function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {

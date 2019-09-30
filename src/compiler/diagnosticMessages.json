@@ -1039,6 +1039,10 @@
         "category": "Error",
         "code": 1357
     },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2739,6 +2743,35 @@
         "category": "Error",
         "code": 2774
     },
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Assertions require the call target to be an identifier or qualified name.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3039,7 +3072,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -3083,6 +3115,18 @@
     "Private or protected member '{0}' cannot be accessed on a type parameter.": {
         "category": "Error",
         "code": 4105
+    },
+    "Parameter '{0}' of accessor has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.": {
+        "category": "Error",
+        "code": 4108
     },
 
     "The current host does not support the '{0}' option.": {
@@ -4071,6 +4115,10 @@
     "Emit class fields with Define instead of Set.": {
         "category": "Message",
         "code": 6222
+    },
+    "Generates a CPU profile.": {
+        "category": "Message",
+        "code": 6223
     },
 
     "Projects to reference": {

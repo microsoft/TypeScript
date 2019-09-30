@@ -590,6 +590,10 @@ const configureExperimental = () => exec(process.execPath, ["scripts/configurePr
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
+const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
+task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
+
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));
 task("publish-nightly").description = "Runs `npm publish --tag next` to create a new nightly build on npm";

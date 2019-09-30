@@ -187,6 +187,14 @@ namespace ts {
                 assertNode)
             : noop;
 
+        export const assertNotNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node | undefined, test: ((node: Node | undefined) => boolean) | undefined, message?: string): void => assert(
+                test === undefined || !test(node),
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
+                assertNode)
+            : noop;
+
         export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(
                 test === undefined || node === undefined || test(node),
@@ -260,5 +268,6 @@ namespace ts {
 
             isDebugInfoEnabled = true;
         }
+
     }
 }

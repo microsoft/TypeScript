@@ -362,3 +362,249 @@ type T14 = T14[] & { x: string };
 type T15<X> = X extends string ? T15<X>[] : never;
 >T15 : T15<X>
 
+type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+>ValueOrArray1 : ValueOrArray1<T>
+
+type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+>ValueOrArray2 : ValueOrArray2<T>
+
+declare function foo1<T>(a: ValueOrArray1<T>): T;
+>foo1 : <T>(a: ValueOrArray1<T>) => T
+>a : ValueOrArray1<T>
+
+declare let ra1: ValueOrArray2<string>;
+>ra1 : ValueOrArray2<string>
+
+let x1 = foo1(ra1);  // Boom!
+>x1 : string
+>foo1(ra1) : string
+>foo1 : <T>(a: ValueOrArray1<T>) => T
+>ra1 : ValueOrArray2<string>
+
+type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+>NumberOrArray1 : NumberOrArray1<T>
+
+type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+>NumberOrArray2 : NumberOrArray2<T>
+
+declare function foo2<T>(a: ValueOrArray1<T>): T;
+>foo2 : <T>(a: ValueOrArray1<T>) => T
+>a : ValueOrArray1<T>
+
+declare let ra2: ValueOrArray2<string>;
+>ra2 : ValueOrArray2<string>
+
+let x2 = foo2(ra2);  // Boom!
+>x2 : string
+>foo2(ra2) : string
+>foo2 : <T>(a: ValueOrArray1<T>) => T
+>ra2 : ValueOrArray2<string>
+
+// Repro from #33617 (errors are expected)
+
+type Tree = [HTMLHeadingElement, Tree][];
+>Tree : Tree
+
+function parse(node: Tree, index: number[] = []): HTMLUListElement {
+>parse : (node: Tree, index?: number[]) => HTMLUListElement
+>node : Tree
+>index : number[]
+>[] : never[]
+
+  return html('ul', node.map(([el, children], i) => {
+>html('ul', node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  })) : any
+>html : any
+>'ul' : "ul"
+>node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  }) : any[]
+>node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+>node : Tree
+>map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+>([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
+>el : HTMLHeadingElement
+>children : Tree
+>i : number
+
+    const idx = [...index, i + 1];
+>idx : number[]
+>[...index, i + 1] : number[]
+>...index : number
+>index : number[]
+>i + 1 : number
+>i : number
+>1 : 1
+
+    return html('li', [
+>html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]) : any
+>html : any
+>'li' : "li"
+>[      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ] : any[]
+
+      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),
+>html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!) : any
+>html : any
+>'a' : "a"
+>{ href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') } : { href: string; rel: string; 'data-index': string; }
+>href : string
+>`#${el.id}` : string
+>el.id : string
+>el : HTMLHeadingElement
+>id : string
+>rel : string
+>'noopener' : "noopener"
+>'data-index' : string
+>idx.join('.') : string
+>idx.join : (separator?: string | undefined) => string
+>idx : number[]
+>join : (separator?: string | undefined) => string
+>'.' : "."
+>el.textContent! : string
+>el.textContent : string | null
+>el : HTMLHeadingElement
+>textContent : string | null
+
+      children.length > 0 ? parse(children, idx) : frag()
+>children.length > 0 ? parse(children, idx) : frag() : any
+>children.length > 0 : boolean
+>children.length : number
+>children : Tree
+>length : number
+>0 : 0
+>parse(children, idx) : HTMLUListElement
+>parse : (node: Tree, index?: number[]) => HTMLUListElement
+>children : Tree
+>idx : number[]
+>frag() : any
+>frag : any
+
+    ]);
+  }));
+}
+
+function cons(hs: HTMLHeadingElement[]): Tree {
+>cons : (hs: HTMLHeadingElement[]) => Tree
+>hs : HTMLHeadingElement[]
+
+  return hs
+>hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce<Tree>((node, hs) =>      hs.length === 0        ? node        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])    , []) : Tree
+>hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce : { (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[]): HTMLHeadingElement[]; (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[], initialValue: HTMLHeadingElement[]): HTMLHeadingElement[]; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => U, initialValue: U): U; }
+>hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]]) : HTMLHeadingElement[][]
+>hs    .reduce : { (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement): HTMLHeadingElement; (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement, initialValue: HTMLHeadingElement): HTMLHeadingElement; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => U, initialValue: U): U; }
+>hs : HTMLHeadingElement[]
+
+    .reduce<HTMLHeadingElement[][]>((hss, h) => {
+>reduce : { (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement): HTMLHeadingElement; (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement, initialValue: HTMLHeadingElement): HTMLHeadingElement; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => U, initialValue: U): U; }
+>(hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    } : (hss: HTMLHeadingElement[][], h: HTMLHeadingElement) => any
+>hss : HTMLHeadingElement[][]
+>h : HTMLHeadingElement
+
+      const hs = hss.pop()!;
+>hs : HTMLHeadingElement[]
+>hss.pop()! : HTMLHeadingElement[]
+>hss.pop() : HTMLHeadingElement[] | undefined
+>hss.pop : () => HTMLHeadingElement[] | undefined
+>hss : HTMLHeadingElement[][]
+>pop : () => HTMLHeadingElement[] | undefined
+
+      return hs.length === 0 || level(h) > level(hs[0])
+>hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]) : any
+>hs.length === 0 || level(h) > level(hs[0]) : boolean
+>hs.length === 0 : boolean
+>hs.length : number
+>hs : HTMLHeadingElement[]
+>length : number
+>0 : 0
+>level(h) > level(hs[0]) : boolean
+>level(h) : number
+>level : (h: HTMLHeadingElement) => number
+>h : HTMLHeadingElement
+>level(hs[0]) : number
+>level : (h: HTMLHeadingElement) => number
+>hs[0] : HTMLHeadingElement
+>hs : HTMLHeadingElement[]
+>0 : 0
+
+        ? concat(hss, [concat(hs, [h])])
+>concat(hss, [concat(hs, [h])]) : any
+>concat : any
+>hss : HTMLHeadingElement[][]
+>[concat(hs, [h])] : any[]
+>concat(hs, [h]) : any
+>concat : any
+>hs : HTMLHeadingElement[]
+>[h] : HTMLHeadingElement[]
+>h : HTMLHeadingElement
+
+        : concat(hss, [hs, [h]]);
+>concat(hss, [hs, [h]]) : any
+>concat : any
+>hss : HTMLHeadingElement[][]
+>[hs, [h]] : HTMLHeadingElement[][]
+>hs : HTMLHeadingElement[]
+>[h] : HTMLHeadingElement[]
+>h : HTMLHeadingElement
+
+    }, [[]])
+>[[]] : never[][]
+>[] : never[]
+
+    .reduce<Tree>((node, hs) =>
+>reduce : { (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[]): HTMLHeadingElement[]; (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[], initialValue: HTMLHeadingElement[]): HTMLHeadingElement[]; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => U, initialValue: U): U; }
+>(node, hs) =>      hs.length === 0        ? node        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]]) : (node: Tree, hs: HTMLHeadingElement[]) => any
+>node : Tree
+>hs : HTMLHeadingElement[]
+
+      hs.length === 0
+>hs.length === 0        ? node        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]]) : any
+>hs.length === 0 : boolean
+>hs.length : number
+>hs : HTMLHeadingElement[]
+>length : number
+>0 : 0
+
+        ? node
+>node : Tree
+
+        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])
+>concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]]) : any
+>concat : any
+>node : Tree
+>[[hs.shift()!, cons(hs)]] : (HTMLHeadingElement | Tree)[][]
+>[hs.shift()!, cons(hs)] : (HTMLHeadingElement | Tree)[]
+>hs.shift()! : HTMLHeadingElement
+>hs.shift() : HTMLHeadingElement | undefined
+>hs.shift : () => HTMLHeadingElement | undefined
+>hs : HTMLHeadingElement[]
+>shift : () => HTMLHeadingElement | undefined
+>cons(hs) : Tree
+>cons : (hs: HTMLHeadingElement[]) => Tree
+>hs : HTMLHeadingElement[]
+
+    , []);
+>[] : never[]
+}
+
+function level(h: HTMLHeadingElement): number {
+>level : (h: HTMLHeadingElement) => number
+>h : HTMLHeadingElement
+
+  assert(isFinite(+h.tagName[1]));
+>assert(isFinite(+h.tagName[1])) : any
+>assert : any
+>isFinite(+h.tagName[1]) : boolean
+>isFinite : (number: number) => boolean
+>+h.tagName[1] : number
+>h.tagName[1] : string
+>h.tagName : string
+>h : HTMLHeadingElement
+>tagName : string
+>1 : 1
+
+  return +h.tagName[1];
+>+h.tagName[1] : number
+>h.tagName[1] : string
+>h.tagName : string
+>h : HTMLHeadingElement
+>tagName : string
+>1 : 1
+}
+

@@ -267,7 +267,7 @@ namespace ts {
             isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
-    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral): boolean {
+    export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral | NoSubstitutionTemplateLiteral): boolean {
         switch (node.parent.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -956,6 +956,12 @@ namespace ts {
         }
     }
 
+    export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
+        return isOptionalExpression ? type.getNonNullableType() :
+            isOptionalChain ? type.getNonOptionalType() :
+            type;
+    }
+
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
         const info = getPossibleTypeArgumentsInfo(token, sourceFile);
         return info !== undefined && (isPartOfTypeNode(info.called) ||
@@ -964,7 +970,11 @@ namespace ts {
     }
 
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): readonly Signature[] {
-        const type = checker.getTypeAtLocation(called);
+        let type = checker.getTypeAtLocation(called);
+        if (isOptionalChain(called.parent)) {
+            type = removeOptionality(type, !!called.parent.questionDotToken, /*isOptionalChain*/ true);
+        }
+
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
         return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
     }
@@ -993,6 +1003,9 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    if (token && token.kind === SyntaxKind.QuestionDotToken) {
+                        token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    }
                     if (!token || !isIdentifier(token)) return undefined;
                     if (!remainingLessThanTokens) {
                         return isDeclarationName(token) ? undefined : { called: token, nTypeArguments };
@@ -1493,6 +1506,8 @@ namespace ts {
             getColumn: () => 0,
             getLine: () => 0,
             isAtStartOfLine: () => false,
+            hasTrailingWhitespace: () => false,
+            hasTrailingComment: () => false,
             rawWrite: notImplemented,
             getIndent: () => indent,
             increaseIndent: () => { indent++; },
@@ -2104,5 +2119,146 @@ namespace ts {
 
         // If even 2/5 places have a semicolon, the user probably wants semicolons
         return withSemicolon / withoutSemicolon > 1 / nStatementsToObserve;
+    }
+
+    export function tryGetDirectories(host: Pick<LanguageServiceHost, "getDirectories">, directoryName: string): string[] {
+        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
+    }
+
+    export function tryReadDirectory(host: Pick<LanguageServiceHost, "readDirectory">, path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[]): readonly string[] {
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
+    }
+
+    export function tryFileExists(host: Pick<LanguageServiceHost, "fileExists">, path: string): boolean {
+        return tryIOAndConsumeErrors(host, host.fileExists, path);
+    }
+
+    export function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
+        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
+    }
+
+    export function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
+        try { return cb(); }
+        catch { return undefined; }
+    }
+
+    export function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
+        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
+    }
+
+    export function findPackageJsons(startDirectory: string, host: Pick<LanguageServiceHost, "fileExists">, stopDirectory?: string): string[] {
+        const paths: string[] = [];
+        forEachAncestorDirectory(startDirectory, ancestor => {
+            if (ancestor === stopDirectory) {
+                return true;
+            }
+            const currentConfigPath = combinePaths(ancestor, "package.json");
+            if (tryFileExists(host, currentConfigPath)) {
+                paths.push(currentConfigPath);
+            }
+        });
+        return paths;
+    }
+
+    export function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
+        let packageJson: string | undefined;
+        forEachAncestorDirectory(directory, ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        });
+        return packageJson;
+    }
+
+    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
+        if (!host.fileExists) {
+            return [];
+        }
+
+        const packageJsons: PackageJsonInfo[] = [];
+        forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
+            const packageJsonFileName = combinePaths(ancestor, "package.json");
+            if (host.fileExists!(packageJsonFileName)) {
+                const info = createPackageJsonInfo(packageJsonFileName, host);
+                if (info) {
+                    packageJsons.push(info);
+                }
+            }
+        });
+
+        return packageJsons;
+    }
+
+    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | undefined {
+        if (!host.readFile) {
+            return undefined;
+        }
+
+        type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
+        const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
+        const stringContent = host.readFile(fileName);
+        const content = stringContent && tryParseJson(stringContent) as PackageJsonRaw;
+        if (!content) {
+            return undefined;
+        }
+
+        const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
+        for (const key of dependencyKeys) {
+            const dependencies = content[key];
+            if (!dependencies) {
+                continue;
+            }
+            const dependencyMap = createMap<string>();
+            for (const packageName in dependencies) {
+                dependencyMap.set(packageName, dependencies[packageName]);
+            }
+            info[key] = dependencyMap;
+        }
+
+        const dependencyGroups = [
+            [PackageJsonDependencyGroup.Dependencies, info.dependencies],
+            [PackageJsonDependencyGroup.DevDependencies, info.devDependencies],
+            [PackageJsonDependencyGroup.OptionalDependencies, info.optionalDependencies],
+            [PackageJsonDependencyGroup.PeerDependencies, info.peerDependencies],
+        ] as const;
+
+        return {
+            ...info,
+            fileName,
+            get,
+            has(dependencyName, inGroups) {
+                return !!get(dependencyName, inGroups);
+            },
+        };
+
+        function get(dependencyName: string, inGroups = PackageJsonDependencyGroup.All) {
+            for (const [group, deps] of dependencyGroups) {
+                if (deps && (inGroups & group)) {
+                    const dep = deps.get(dependencyName);
+                    if (dep !== undefined) {
+                        return dep;
+                    }
+                }
+            }
+        }
+    }
+
+    function tryParseJson(text: string) {
+        try {
+            return JSON.parse(text);
+        }
+        catch {
+            return undefined;
+        }
+    }
+
+    export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
+        return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
+    }
+
+    export function isInsideNodeModules(fileOrDirectory: string): boolean {
+        return contains(getPathComponents(fileOrDirectory), "node_modules");
     }
 }
