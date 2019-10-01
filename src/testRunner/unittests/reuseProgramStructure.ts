@@ -126,6 +126,7 @@ namespace ts {
             getSourceFile: fileName => files.get(fileName),
             getDefaultLibFileName: () => "lib.d.ts",
             writeFile: notImplemented,
+            writeFileAsync: notImplemented,
             getCurrentDirectory: () => "",
             getDirectories: () => [],
             getCanonicalFileName,

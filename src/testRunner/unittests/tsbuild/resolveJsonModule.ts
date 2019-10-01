@@ -10,15 +10,15 @@ namespace ts {
             projFs = undefined!; // Release the contents
         });
 
-        function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
+        async function verifyProjectWithResolveJsonModuleAsync(configFile: string, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const fs = projFs.shadow();
-            verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
+            await verifyProjectWithResolveJsonModuleWithFsAsync(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
         }
 
-        function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
+        async function verifyProjectWithResolveJsonModuleWithFsAsync(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: readonly string[], ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
             if (!expectedDiagnosticMessages.length) {
                 // Check for outputs. Not an exhaustive list
@@ -27,7 +27,7 @@ namespace ts {
         }
 
         it("with resolveJsonModule and include only", () => {
-            verifyProjectWithResolveJsonModule(
+            verifyProjectWithResolveJsonModuleAsync(
                 "/src/tsconfig_withInclude.json",
                 {
                     message: [
@@ -41,10 +41,10 @@ namespace ts {
         });
 
         it("with resolveJsonModule and include of *.json along with other include", () => {
-            verifyProjectWithResolveJsonModule("/src/tsconfig_withIncludeOfJson.json");
+            verifyProjectWithResolveJsonModuleAsync("/src/tsconfig_withIncludeOfJson.json");
         });
 
-        it("with resolveJsonModule and include of *.json along with other include and file name matches ts file", () => {
+        it("with resolveJsonModule and include of *.json along with other include and file name matches ts file", async () => {
             const fs = projFs.shadow();
             fs.rimrafSync("/src/src/hello.json");
             fs.writeFileSync("/src/src/index.json", JSON.stringify({ hello: "world" }));
@@ -52,7 +52,7 @@ namespace ts {
 
 export default hello.hello`);
             const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/index.json"];
-            verifyProjectWithResolveJsonModuleWithFs(
+            await verifyProjectWithResolveJsonModuleWithFsAsync(
                 fs,
                 "/src/tsconfig_withIncludeOfJson.json",
                 allExpectedOutputs,
@@ -61,20 +61,20 @@ export default hello.hello`);
         });
 
         it("with resolveJsonModule and files containing json file", () => {
-            verifyProjectWithResolveJsonModule("/src/tsconfig_withFiles.json");
+            verifyProjectWithResolveJsonModuleAsync("/src/tsconfig_withFiles.json");
         });
 
         it("with resolveJsonModule and include and files", () => {
-            verifyProjectWithResolveJsonModule("/src/tsconfig_withIncludeAndFiles.json");
+            verifyProjectWithResolveJsonModuleAsync("/src/tsconfig_withIncludeAndFiles.json");
         });
 
-        it("with resolveJsonModule and sourceMap", () => {
+        it("with resolveJsonModule and sourceMap", async () => {
             const { fs, tick } = getFsWithTime(projFs);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/dist/src/index.js"],
@@ -84,20 +84,20 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/dist/src/index.js"]
             );
         });
 
-        it("with resolveJsonModule and without outDir", () => {
+        it("with resolveJsonModule and without outDir", async () => {
             const { fs, tick } = getFsWithTime(projFs);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"outDir": "dist",`, "");
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/src/index.js"],
@@ -107,7 +107,7 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/src/index.js"]
@@ -125,7 +125,7 @@ export default hello.hello`);
             projFs = undefined!; // Release the contents
         });
 
-        it("when importing json module from project reference", () => {
+        it("when importing json module from project reference", async () => {
             const expectedOutput = "/src/main/index.js";
             const { fs, tick } = getFsWithTime(projFs);
             const configFile = "src/tsconfig.json";
@@ -133,7 +133,7 @@ export default hello.hello`);
             const mainConfigFile = "src/main/tsconfig.json";
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, stringsConfigFile, "src/strings/tsconfig.tsbuildinfo"],
@@ -145,7 +145,7 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, stringsConfigFile, "src/strings/foo.json", "src/strings/tsconfig.tsbuildinfo"],

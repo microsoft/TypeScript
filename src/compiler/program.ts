@@ -96,7 +96,7 @@ namespace ts {
             if (existingDirectories.has(directoryPath)) {
                 return true;
             }
-            if (system.directoryExists(directoryPath)) {
+            if ((compilerHost.directoryExists || system.directoryExists)(directoryPath)) {
                 existingDirectories.set(directoryPath, true);
                 return true;
             }
@@ -107,45 +107,71 @@ namespace ts {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 const parentDirectory = getDirectoryPath(directoryPath);
                 ensureDirectoriesExist(parentDirectory);
-                if (compilerHost.createDirectory) {
-                    compilerHost.createDirectory(directoryPath);
-                }
-                else {
-                    system.createDirectory(directoryPath);
-                }
+                (compilerHost.createDirectory || system.createDirectory)(directoryPath);
             }
         }
 
         let outputFingerprints: Map<OutputFingerprint>;
 
-        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
+        function hasFingerprint(fileName: string, hash: string, byteOrderMark: boolean, mtime: Date) {
+            const fingerprint = outputFingerprints && outputFingerprints.get(fileName);
+            // If output has not been changed, and the file has no external modification
+            return fingerprint &&
+                fingerprint.byteOrderMark === byteOrderMark &&
+                fingerprint.hash === hash &&
+                fingerprint.mtime.getTime() === mtime.getTime();
+        }
+
+        function setFingerprint(fileName: string, hash: string, byteOrderMark: boolean, mtime: Date) {
             if (!outputFingerprints) {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
 
-            const hash = system.createHash!(data); // TODO: GH#18217
-            const mtimeBefore = system.getModifiedTime!(fileName); // TODO: GH#18217
-
-            if (mtimeBefore) {
-                const fingerprint = outputFingerprints.get(fileName);
-                // If output has not been changed, and the file has no external modification
-                if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
-                    fingerprint.hash === hash &&
-                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                    return;
-                }
-            }
-
-            system.writeFile(fileName, data, writeByteOrderMark);
-
-            const mtimeAfter = system.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
-
             outputFingerprints.set(fileName, {
                 hash,
-                byteOrderMark: writeByteOrderMark,
-                mtime: mtimeAfter
+                byteOrderMark,
+                mtime,
             });
+        }
+
+        function writeFileIfUpdated(writeFileCallback: WriteFileCallback, fileName: string, data: string, writeByteOrderMark: boolean) {
+            if (!system.createHash || !system.getModifiedTime) {
+                writeFileCallback(fileName, data, writeByteOrderMark);
+                return;
+            }
+
+            const hash = system.createHash(data);
+
+            const mtimeBefore = system.getModifiedTime(fileName);
+            if (mtimeBefore && hasFingerprint(fileName, hash, writeByteOrderMark, mtimeBefore)) {
+                return;
+            }
+
+            writeFileCallback(fileName, data, writeByteOrderMark);
+
+            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
+
+            setFingerprint(fileName, hash, writeByteOrderMark, mtimeAfter);
+        }
+
+        async function writeFileIfUpdatedAsync(writeFileAsyncCallback: WriteFileAsyncCallback, fileName: string, data: string, writeByteOrderMark: boolean) {
+            if (!system.createHash || !system.getModifiedTime) {
+                await writeFileAsyncCallback(fileName, data, writeByteOrderMark);
+                return;
+            }
+
+            const hash = system.createHash(data);
+
+            const mtimeBefore = system.getModifiedTime(fileName);
+            if (mtimeBefore && hasFingerprint(fileName, hash, writeByteOrderMark, mtimeBefore)) {
+                return;
+            }
+
+            await writeFileAsyncCallback(fileName, data, writeByteOrderMark);
+
+            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
+
+            setFingerprint(fileName, hash, writeByteOrderMark, mtimeAfter);
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -153,8 +179,8 @@ namespace ts {
                 performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
-                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                if (isWatchSet(options)) {
+                    writeFileIfUpdated(system.writeFile, fileName, data, writeByteOrderMark);
                 }
                 else {
                     system.writeFile(fileName, data, writeByteOrderMark);
@@ -162,6 +188,26 @@ namespace ts {
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
+                }
+            }
+        }
+
+        async function writeFileAsync(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
+            try {
+                // Performance marks don't make sense around an await.
+                // CONSIDER: these directory operations could be async (limited experimentation suggests it doesn't help).
+                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+
+                if (isWatchSet(options)) {
+                    await writeFileIfUpdatedAsync(system.writeFileAsync, fileName, data, writeByteOrderMark);
+                }
+                else {
+                    await system.writeFileAsync(fileName, data, writeByteOrderMark);
+                }
             }
             catch (e) {
                 if (onError) {
@@ -181,6 +227,7 @@ namespace ts {
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile,
+            writeFileAsync,
             getCurrentDirectory: memoize(() => system.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getCanonicalFileName,
@@ -206,6 +253,7 @@ namespace ts {
         directoryExists?(directory: string): boolean;
         createDirectory?(directory: string): void;
         writeFile?: WriteFileCallback;
+        writeFileAsync?: WriteFileAsyncCallback;
     }
 
     /*@internal*/
@@ -219,6 +267,7 @@ namespace ts {
         const originalDirectoryExists = host.directoryExists;
         const originalCreateDirectory = host.createDirectory;
         const originalWriteFile = host.writeFile;
+        const originalWriteFileAsync = host.writeFileAsync;
         const readFileCache = createMap<string | false>();
         const fileExistsCache = createMap<boolean>();
         const directoryExistsCache = createMap<boolean>();
@@ -287,6 +336,25 @@ namespace ts {
                 originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
             };
         }
+        if (originalWriteFileAsync) {
+            host.writeFileAsync = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
+                const key = toPath(fileName);
+                fileExistsCache.delete(key);
+
+                const value = readFileCache.get(key);
+                if (value !== undefined && value !== data) {
+                    readFileCache.delete(key);
+                    sourceFileCache.delete(key);
+                }
+                else if (getSourceFileWithCache) {
+                    const sourceFile = sourceFileCache.get(key);
+                    if (sourceFile && sourceFile.text !== data) {
+                        sourceFileCache.delete(key);
+                    }
+                }
+                return originalWriteFileAsync.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
+            };
+        }
 
         // directoryExists
         if (originalDirectoryExists && originalCreateDirectory) {
@@ -311,6 +379,7 @@ namespace ts {
             originalDirectoryExists,
             originalCreateDirectory,
             originalWriteFile,
+            originalWriteFileAsync,
             getSourceFileWithCache,
             readFileWithCache
         };

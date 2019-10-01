@@ -975,6 +975,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
+        async writeFileAsync(path: string, content: string): Promise<void> {
+            this.writeFile(path, content);
+        }
+
         write(message: string) {
             this.output.push(message);
         }

@@ -1459,6 +1459,9 @@ namespace ts {
     /** Does nothing. */
     export function noop(_?: {} | null | undefined): void { }
 
+    /** Does nothing. */
+    export function noopAsync(_?: {} | null | undefined): Promise<void> { return Promise.resolve(); }
+
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
 

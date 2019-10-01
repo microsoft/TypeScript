@@ -76,6 +76,7 @@ namespace ts {
                     outputText = text;
                 }
             },
+            writeFileAsync: noopAsync,
             getDefaultLibFileName: () => "lib.d.ts",
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,

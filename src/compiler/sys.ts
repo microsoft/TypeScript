@@ -534,11 +534,10 @@ namespace ts {
     }
 
     /**
-     * patch writefile to create folder before writing the file
+     * patch writeFile to create folder before writing the file
      */
     /*@internal*/
     export function patchWriteFileEnsuringDirectory(sys: System) {
-        // patch writefile to create folder before writing the file
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (path, data, writeBom) => {
             const directoryPath = getDirectoryPath(normalizeSlashes(path));
@@ -546,6 +545,22 @@ namespace ts {
                 recursiveCreateDirectory(directoryPath, sys);
             }
             originalWriteFile.call(sys, path, data, writeBom);
+        };
+    }
+
+    /**
+     * patch writefile to create folder before writing the file
+     */
+    /*@internal*/
+    export function patchWriteFileAsyncEnsuringDirectory(sys: System) {
+        // patch writeFileAsync to create folder before writing the file
+        const originalWriteFileAsync = sys.writeFileAsync;
+        sys.writeFileAsync = (path, data, writeBom) => {
+            const directoryPath = getDirectoryPath(normalizeSlashes(path));
+            if (directoryPath && !sys.directoryExists(directoryPath)) {
+                recursiveCreateDirectory(directoryPath, sys);
+            }
+            return originalWriteFileAsync.call(sys, path, data, writeBom);
         };
     }
 
@@ -641,6 +656,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        writeFileAsync(path: string, data: string, writeByteOrderMark?: boolean): Promise<void>;
 
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
@@ -797,6 +813,7 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
+                writeFileAsync,
                 watchFile: getWatchFile(),
                 watchDirectory: getWatchDirectory(),
                 resolvePath: path => _path.resolve(path),
@@ -1350,6 +1367,64 @@ namespace ts {
                 }
             }
 
+            async function writeFileAsync(fileName: string, data: string, writeByteOrderMark?: boolean): Promise<void> { // TODO (acasey): shim promise
+                // If a BOM is required, emit one
+                if (writeByteOrderMark) {
+                    data = byteOrderMarkIndicator + data;
+                }
+
+                let fd: number | undefined;
+
+                try {
+                    fd = await openAsync(fileName, "w");
+                    await writeAsync(fd, data, /*position*/ undefined, "utf8"); // TODO (acasey): just use fs.writeFile?
+                }
+                finally {
+                    if (fd !== undefined) {
+                        await closeAsync(fd);
+                    }
+                }
+            }
+
+            function openAsync(path: string, mode: string | number) {
+                return new Promise<number>((resolve, reject) => {
+                    _fs.open(path, mode, (err, fd) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve(fd);
+                        }
+                    });
+                });
+            }
+
+            function writeAsync(fd: number, data:string, position: number | undefined, encoding: string) {
+                return new Promise<void>((resolve, reject) => {
+                    _fs.write(fd, data, position, encoding, err => {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve();
+                        }
+                    });
+                });
+            }
+
+            function closeAsync(fd: number) {
+                return new Promise<void>((resolve, reject) => {
+                    _fs.close(fd, err => {
+                        if (err) {
+                            reject(err);
+                        }
+                        else {
+                            resolve();
+                        }
+                    });
+                });
+            }
+
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
@@ -1471,14 +1546,8 @@ namespace ts {
                     // encoding is automatically handled by the implementation in ChakraHost
                     return ChakraHost.readFile(path);
                 },
-                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
-                    // If a BOM is required, emit one
-                    if (writeByteOrderMark) {
-                        data = byteOrderMarkIndicator + data;
-                    }
-
-                    ChakraHost.writeFile(path, data);
-                },
+                writeFile,
+                writeFileAsync: async (path: string, data: string, writeByteOrderMark?: boolean) => writeFile(path, data, writeByteOrderMark),
                 resolvePath: ChakraHost.resolvePath,
                 fileExists: ChakraHost.fileExists,
                 deleteFile: ChakraHost.deleteFile,
@@ -1497,6 +1566,15 @@ namespace ts {
                 exit: ChakraHost.quit,
                 realpath
             };
+
+            function writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
+                // If a BOM is required, emit one
+                if (writeByteOrderMark) {
+                    data = byteOrderMarkIndicator + data;
+                }
+
+                ChakraHost.writeFile(path, data);
+            }
         }
 
         let sys: System | undefined;
@@ -1511,6 +1589,7 @@ namespace ts {
         if (sys) {
             // patch writefile to create folder before writing the file
             patchWriteFileEnsuringDirectory(sys);
+            patchWriteFileAsyncEnsuringDirectory(sys);
         }
         return sys!;
     })();

@@ -696,6 +696,8 @@ namespace Harness.LanguageService {
 
         writeFile = ts.noop;
 
+        writeFileAsync = ts.noopAsync;
+
         resolvePath(path: string): string {
             return path;
         }

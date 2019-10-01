@@ -3695,6 +3695,12 @@ namespace ts {
         }, sourceFiles);
     }
 
+    export function writeFileAsync(host: { writeFileAsync: WriteFileAsyncCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[]): Promise<void> {
+        return host.writeFileAsync(fileName, data, writeByteOrderMark, hostErrorMessage => {
+            diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
+        }, sourceFiles);
+    }
+
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }

@@ -3063,6 +3063,15 @@ namespace ts {
         sourceFiles?: readonly SourceFile[],
     ) => void;
 
+    /*@internal*/
+    export type WriteFileAsyncCallback = (
+        fileName: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        onError?: (message: string) => void,
+        sourceFiles?: readonly SourceFile[],
+    ) => Promise<void>;
+
     export class OperationCanceledException { }
 
     export interface CancellationToken {
@@ -5431,6 +5440,7 @@ namespace ts {
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
+        /*@internal*/ writeFileAsync: WriteFileAsyncCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

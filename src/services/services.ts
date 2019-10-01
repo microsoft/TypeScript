@@ -1235,6 +1235,7 @@ namespace ts {
                 getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
+                writeFileAsync: noopAsync,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
                 readFile,

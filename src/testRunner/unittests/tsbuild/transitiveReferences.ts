@@ -25,12 +25,12 @@ namespace ts {
             projFs = undefined!; // Release the contents
         });
 
-        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: readonly string[], expectedFileTraces: readonly string[], ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+        async function verifyBuildAsync(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: readonly string[], expectedFileTraces: readonly string[], ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             modifyDiskLayout(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
-            builder.build();
+            await builder.buildAsync();
             host.assertDiagnosticMessages(...expectedDiagnostics);
             verifyOutputsPresent(fs, allExpectedOutputs);
             assert.deepEqual(host.traces, expectedFileTraces);
@@ -49,15 +49,15 @@ export const b = new A();`);
             }));
         }
 
-        it("verify that it builds correctly", () => {
-            verifyBuild(noop, allExpectedOutputs, expectedFileTraces);
+        it("verify that it builds correctly", async () => {
+            await verifyBuildAsync(noop, allExpectedOutputs, expectedFileTraces);
         });
 
-        it("verify that it builds correctly when the referenced project uses different module resolution", () => {
-            verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, expectedFileTraces);
+        it("verify that it builds correctly when the referenced project uses different module resolution", async () => {
+            await verifyBuildAsync(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, expectedFileTraces);
         });
 
-        it("verify that it build reports error about module not found with node resolution with external module name", () => {
+        it("verify that it build reports error about module not found with node resolution with external module name", async () => {
             // Error in b build only a
             const allExpectedOutputs = ["/src/a.js", "/src/a.d.ts"];
             const expectedFileTraces = [
@@ -66,7 +66,7 @@ export const b = new A();`);
                 "/lib/lib.d.ts",
                 "/src/b.ts"
             ];
-            verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
+            await verifyBuildAsync(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                 allExpectedOutputs,
                 expectedFileTraces,
                 {

@@ -16,6 +16,7 @@ namespace ts {
                     fileExists: (fileName) => fileMap.has(fileName),
                     readFile: (fileName) => fileMap.has(fileName) ? fileMap.get(fileName)!.text : undefined,
                     writeFile: (fileName, text) => outputs.set(fileName, text),
+                    writeFileAsync: (fileName, text) => outputs.set(fileName, text) && Promise.resolve(),
                 };
 
                 const program = createProgram(arrayFrom(fileMap.keys()), { newLine: NewLineKind.LineFeed, ...options }, host);

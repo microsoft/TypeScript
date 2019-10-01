@@ -281,6 +281,7 @@ namespace ts {
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile,
+            writeFileAsync,
             getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
@@ -313,6 +314,20 @@ namespace ts {
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
+                }
+            }
+        }
+
+        async function writeFileAsync(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
+            try {
+                // Performance marks don't make sense around an await.
+                // CONSIDER: directoryExists and createDirectory could also be made async.
+                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+                await host.writeFileAsync!(fileName, text, writeByteOrderMark);
             }
             catch (e) {
                 if (onError) {
@@ -359,6 +374,7 @@ namespace ts {
             trace: s => system.write(s + system.newLine),
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
+            writeFileAsync: (path, data, writeByteOrderMark) => system.writeFileAsync(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
             createHash: maybeBind(system, system.createHash),
             createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
@@ -561,6 +577,7 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently asserted
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        writeFileAsync?(path: string, data: string, writeByteOrderMark?: boolean): Promise<void>;
         onCachedDirectoryStructureHostCreate?(host: CachedDirectoryStructureHost): void;
     }
 

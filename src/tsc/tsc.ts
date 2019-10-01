@@ -226,7 +226,7 @@ namespace ts {
             updateCreateProgram(buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
-            builder.build();
+            builder.buildAsync().then(sys.exit); // TODO (acasey): catch?
             return;
         }
 
@@ -234,7 +234,7 @@ namespace ts {
         updateCreateProgram(buildHost);
         buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-        return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
+        return buildOptions.clean ? sys.exit(builder.clean()) : builder.buildAsync().then(sys.exit); // TODO (acasey): catch?
     }
 
     function performBuild(args: string[]) {

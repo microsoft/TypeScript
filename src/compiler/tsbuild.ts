@@ -251,6 +251,7 @@ namespace ts {
          * writeFileCallback
          */
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        writeFileAsync?(path: string, data: string, writeByteOrderMark?: boolean): Promise<void>;
 
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
@@ -296,9 +297,9 @@ namespace ts {
     }
 
     export interface SolutionBuilder<T extends BuilderProgram> {
-        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
+        buildAsync(project?: string, cancellationToken?: CancellationToken): Promise<ExitStatus>;
         clean(project?: string): ExitStatus;
-        buildReferences(project: string, cancellationToken?: CancellationToken): ExitStatus;
+        buildReferencesAsync(project: string, cancellationToken?: CancellationToken): Promise<ExitStatus>;
         cleanReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
@@ -308,7 +309,7 @@ namespace ts {
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
-        /*@internal*/ buildNextInvalidatedProject(): void;
+        /*@internal*/ buildNextInvalidatedProjectAsync(): Promise<void>;
         /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
     }
 
@@ -369,6 +370,7 @@ namespace ts {
         originalDirectoryExists: CompilerHost["directoryExists"];
         originalCreateDirectory: CompilerHost["createDirectory"];
         originalWriteFile: CompilerHost["writeFile"] | undefined;
+        originalWriteFileAsync: CompilerHost["writeFileAsync"] | undefined;
         originalReadFileWithCache: CompilerHost["readFile"];
         originalGetSourceFile: CompilerHost["getSourceFile"];
     }
@@ -671,7 +673,7 @@ namespace ts {
 
         const {
             originalReadFile, originalFileExists, originalDirectoryExists,
-            originalCreateDirectory, originalWriteFile,
+            originalCreateDirectory, originalWriteFile, originalWriteFileAsync,
             getSourceFileWithCache, readFileWithCache
         } = changeCompilerHostLikeToUseCache(
             host,
@@ -687,6 +689,7 @@ namespace ts {
             originalDirectoryExists,
             originalCreateDirectory,
             originalWriteFile,
+            originalWriteFileAsync,
             originalReadFileWithCache,
             originalGetSourceFile,
         };
@@ -702,6 +705,7 @@ namespace ts {
         host.directoryExists = cache.originalDirectoryExists;
         host.createDirectory = cache.originalCreateDirectory;
         host.writeFile = cache.originalWriteFile;
+        host.writeFileAsync = cache.originalWriteFileAsync;
         compilerHost.getSourceFile = cache.originalGetSourceFile;
         state.readFileWithCache = cache.originalReadFileWithCache;
         extendedConfigCache.clear();
@@ -760,7 +764,7 @@ namespace ts {
         /**
          *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
          */
-        done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): ExitStatus;
+        doneAsync(cancellationToken?: CancellationToken, writeFileAsync?: WriteFileAsyncCallback, customTransformers?: CustomTransformers): Promise<ExitStatus>;
         getCompilerOptions(): CompilerOptions;
         getCurrentDirectory(): string;
     }
@@ -776,17 +780,17 @@ namespace ts {
          * Emitting with this builder program without the api provided for this project
          * can result in build system going into invalid state as files written reflect the state of the project
          */
-        getBuilderProgram(): T | undefined;
-        getProgram(): Program | undefined;
-        getSourceFile(fileName: string): SourceFile | undefined;
-        getSourceFiles(): readonly SourceFile[];
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getConfigFileParsingDiagnostics(): readonly Diagnostic[];
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getAllDependencies(sourceFile: SourceFile): readonly string[];
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
+        getBuilderProgramAsync(): Promise<T | undefined>;
+        getProgramAsync(): Promise<Program | undefined>;
+        getSourceFileAsync(fileName: string): Promise<SourceFile | undefined>;
+        getSourceFilesAsync(): Promise<readonly SourceFile[]>;
+        getOptionsDiagnosticsAsync(cancellationToken?: CancellationToken): Promise<readonly Diagnostic[]>;
+        getGlobalDiagnosticsAsync(cancellationToken?: CancellationToken): Promise<readonly Diagnostic[]>;
+        getConfigFileParsingDiagnosticsAsync(): Promise<readonly Diagnostic[]>;
+        getSyntacticDiagnosticsAsync(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Promise<readonly Diagnostic[]>;
+        getAllDependenciesAsync(sourceFile: SourceFile): Promise<readonly string[]>;
+        getSemanticDiagnosticsAsync(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Promise<readonly Diagnostic[]>;
+        getSemanticDiagnosticsOfNextAffectedFileAsync(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): Promise<AffectedFileResult<readonly Diagnostic[]>>;
         /*
          * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
          * emit in build system is responsible in updating status of the project
@@ -795,14 +799,14 @@ namespace ts {
          * (if that emit of that source file is required it would be emitted again when making sure invalidated project is completed)
          * This emit is not considered actual emit (and hence uptodate status is not reflected if
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
+        emitAsync(targetSourceFile?: SourceFile, writeFileAsync?: WriteFileAsyncCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): Promise<EmitResult | undefined>;
         // TODO(shkamat):: investigate later if we can emit even when there are declaration diagnostics
         // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
 
     export interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
-        emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
+        emitAsync(writeFileAsync?: WriteFileAsyncCallback, customTransformers?: CustomTransformers): Promise<EmitResult | BuildInvalidedProject<T> | undefined>;
     }
 
     export type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
@@ -837,7 +841,7 @@ namespace ts {
                 updateOutputTimestamps(state, config, projectPath);
                 updateOutputFileStampsPending = false;
             },
-            done: () => {
+            doneAsync: async () => {
                 if (updateOutputFileStampsPending) {
                     updateOutputTimestamps(state, config, projectPath);
                 }
@@ -879,60 +883,60 @@ namespace ts {
                 buildOrder,
                 getCompilerOptions: () => config.options,
                 getCurrentDirectory: () => state.currentDirectory,
-                getBuilderProgram: () => withProgramOrUndefined(identity),
-                getProgram: () =>
-                    withProgramOrUndefined(
+                getBuilderProgramAsync: () => withProgramOrUndefinedAsync(identity),
+                getProgramAsync: () =>
+                    withProgramOrUndefinedAsync(
                         program => program.getProgramOrUndefined()
                     ),
-                getSourceFile: fileName =>
-                    withProgramOrUndefined(
+                getSourceFileAsync: fileName =>
+                    withProgramOrUndefinedAsync(
                         program => program.getSourceFile(fileName)
                     ),
-                getSourceFiles: () =>
-                    withProgramOrEmptyArray(
+                getSourceFilesAsync: () =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getSourceFiles()
                     ),
-                getOptionsDiagnostics: cancellationToken =>
-                    withProgramOrEmptyArray(
+                getOptionsDiagnosticsAsync: cancellationToken =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getOptionsDiagnostics(cancellationToken)
                     ),
-                getGlobalDiagnostics: cancellationToken =>
-                    withProgramOrEmptyArray(
+                getGlobalDiagnosticsAsync: cancellationToken =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getGlobalDiagnostics(cancellationToken)
                     ),
-                getConfigFileParsingDiagnostics: () =>
-                    withProgramOrEmptyArray(
+                getConfigFileParsingDiagnosticsAsync: () =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getConfigFileParsingDiagnostics()
                     ),
-                getSyntacticDiagnostics: (sourceFile, cancellationToken) =>
-                    withProgramOrEmptyArray(
+                getSyntacticDiagnosticsAsync: (sourceFile, cancellationToken) =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getSyntacticDiagnostics(sourceFile, cancellationToken)
                     ),
-                getAllDependencies: sourceFile =>
-                    withProgramOrEmptyArray(
+                getAllDependenciesAsync: sourceFile =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getAllDependencies(sourceFile)
                     ),
-                getSemanticDiagnostics: (sourceFile, cancellationToken) =>
-                    withProgramOrEmptyArray(
+                getSemanticDiagnosticsAsync: (sourceFile, cancellationToken) =>
+                    withProgramOrEmptyArrayAsync(
                         program => program.getSemanticDiagnostics(sourceFile, cancellationToken)
                     ),
-                getSemanticDiagnosticsOfNextAffectedFile: (cancellationToken, ignoreSourceFile) =>
-                    withProgramOrUndefined(
+                getSemanticDiagnosticsOfNextAffectedFileAsync: (cancellationToken, ignoreSourceFile) =>
+                    withProgramOrUndefinedAsync(
                         program =>
                             ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile) &&
                             (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile)
                     ),
-                emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
+                emitAsync: async (targetSourceFile, writeFileAsync, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
                     if (targetSourceFile || emitOnlyDtsFiles) {
-                        return withProgramOrUndefined(
-                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+                        return await withProgramOrUndefinedAsync(
+                            program => program.emit(targetSourceFile, writeFileAsync, cancellationToken, emitOnlyDtsFiles, customTransformers)
                         );
                     }
-                    executeSteps(Step.SemanticDiagnostics, cancellationToken);
+                    await executeStepsAsync(Step.SemanticDiagnostics, cancellationToken);
                     if (step !== Step.Emit) return undefined;
-                    return emit(writeFile, cancellationToken, customTransformers);
+                    return await emitAsync(writeFileAsync, cancellationToken, customTransformers);
                 },
-                done
+                doneAsync,
             } :
             {
                 kind,
@@ -941,25 +945,25 @@ namespace ts {
                 buildOrder,
                 getCompilerOptions: () => config.options,
                 getCurrentDirectory: () => state.currentDirectory,
-                emit: (writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined) => {
+                emitAsync: async (writeFileAsync: WriteFileAsyncCallback | undefined, customTransformers: CustomTransformers | undefined) => {
                     if (step !== Step.EmitBundle) return invalidatedProjectOfBundle;
-                    return emitBundle(writeFile, customTransformers);
+                    return await emitBundleAsync(writeFileAsync, customTransformers);
                 },
-                done,
+                doneAsync,
             };
 
-        function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
-            executeSteps(Step.Done, cancellationToken, writeFile, customTransformers);
+        async function doneAsync(cancellationToken?: CancellationToken, writeFileAsync?: WriteFileAsyncCallback, customTransformers?: CustomTransformers) {
+            await executeStepsAsync(Step.Done, cancellationToken, writeFileAsync, customTransformers);
             return doneInvalidatedProject(state, projectPath);
         }
 
-        function withProgramOrUndefined<U>(action: (program: T) => U | undefined): U | undefined {
-            executeSteps(Step.CreateProgram);
+        async function withProgramOrUndefinedAsync<U>(action: (program: T) => U | undefined): Promise<U | undefined> {
+            await executeStepsAsync(Step.CreateProgram);
             return program && action(program);
         }
 
-        function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
-            return withProgramOrUndefined(action) || emptyArray;
+        async function withProgramOrEmptyArrayAsync<U>(action: (program: T) => readonly U[]): Promise<readonly U[]> {
+            return await withProgramOrUndefinedAsync(action) || emptyArray;
         }
 
         function createProgram() {
@@ -1038,7 +1042,7 @@ namespace ts {
             );
         }
 
-        function emit(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitResult {
+        async function emitAsync(writeFileAsyncCallback?: WriteFileAsyncCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): Promise<EmitResult> {
             Debug.assertDefined(program);
             Debug.assert(step === Step.Emit);
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
@@ -1074,6 +1078,8 @@ namespace ts {
                 };
             }
 
+            performance.mark("beforeFileWrite");
+
             // Actual Emit
             const { host, compilerHost } = state;
             let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
@@ -1081,25 +1087,31 @@ namespace ts {
             let anyDtsChanged = false;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = createMap() as FileMap<string>;
-            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                let priorChangeTime: Date | undefined;
-                if (!anyDtsChanged && isDeclarationFile(name)) {
-                    // Check for unchanged .d.ts files
-                    if (host.fileExists(name) && state.readFileWithCache(name) === text) {
-                        priorChangeTime = host.getModifiedTime(name);
-                    }
-                    else {
-                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                        anyDtsChanged = true;
-                    }
-                }
 
-                emittedOutputs.set(toPath(state, name), name);
-                writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
-                if (priorChangeTime !== undefined) {
-                    newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-                }
-            });
+            for (const chunk of makeChunks(outputFiles, /*chunkSize*/32)) {
+                await Promise.all(chunk.map(async ({ name, text, writeByteOrderMark }) => {
+                    let priorChangeTime: Date | undefined;
+                    if (!anyDtsChanged && isDeclarationFile(name)) {
+                        // Check for unchanged .d.ts files
+                        if (host.fileExists(name) && state.readFileWithCache(name) === text) {
+                            priorChangeTime = host.getModifiedTime(name);
+                        }
+                        else {
+                            resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                            anyDtsChanged = true;
+                        }
+                    }
+
+                    emittedOutputs.set(toPath(state, name), name);
+                    await writeFileAsync(writeFileAsyncCallback ? { writeFileAsync: writeFileAsyncCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+                    if (priorChangeTime !== undefined) {
+                        newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
+                    }
+                }));
+            }
+
+            performance.mark("afterFileWrite");
+            performance.measure("File Write", "beforeFileWrite", "afterFileWrite");
 
             finishEmit(
                 emitterDiagnostics,
@@ -1110,6 +1122,14 @@ namespace ts {
                 resultFlags
             );
             return emitResult;
+        }
+
+        function makeChunks<T>(array: readonly T[], chunkSize: number): readonly T[][] {
+            const chunks = [];
+            for (let i = 0; i < array.length; i += chunkSize) {
+                chunks.push(array.slice(i, i + chunkSize));
+            }
+            return chunks;
         }
 
         function finishEmit(
@@ -1156,7 +1176,7 @@ namespace ts {
             return emitDiagnostics;
         }
 
-        function emitBundle(writeFileCallback?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined {
+        async function emitBundleAsync(writeFileAsyncCallback?: WriteFileAsyncCallback, customTransformers?: CustomTransformers): Promise<EmitResult | BuildInvalidedProject<T> | undefined> {
             Debug.assert(kind === InvalidatedProjectKind.UpdateBundle);
             if (state.options.dry) {
                 reportStatus(state, Diagnostics.A_non_dry_build_would_update_output_of_project_0, project);
@@ -1198,10 +1218,14 @@ namespace ts {
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = createMap() as FileMap<string>;
-            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                emittedOutputs.set(toPath(state, name), name);
-                writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
-            });
+
+            for (const chunk of makeChunks(outputFiles, /*chunkSize*/32)) {
+                await Promise.all(
+                    chunk.map(({ name, text, writeByteOrderMark }) => {
+                        emittedOutputs.set(toPath(state, name), name);
+                        return writeFileAsync(writeFileAsyncCallback ? { writeFileAsync: writeFileAsyncCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+                    }));
+            }
 
             const emitDiagnostics = finishEmit(
                 emitterDiagnostics,
@@ -1214,7 +1238,7 @@ namespace ts {
             return { emitSkipped: false, diagnostics: emitDiagnostics };
         }
 
-        function executeSteps(till: Step, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
+        async function executeStepsAsync(till: Step, cancellationToken?: CancellationToken, writeFileAsync?: WriteFileAsyncCallback, customTransformers?: CustomTransformers) {
             while (step <= till && step < Step.Done) {
                 const currentStep = step;
                 switch (step) {
@@ -1231,15 +1255,15 @@ namespace ts {
                         break;
 
                     case Step.Emit:
-                        emit(writeFile, cancellationToken, customTransformers);
+                        await emitAsync(writeFileAsync, cancellationToken, customTransformers);
                         break;
 
                     case Step.EmitBundle:
-                        emitBundle(writeFile, customTransformers);
+                        await emitBundleAsync(writeFileAsync, customTransformers);
                         break;
 
                     case Step.BuildInvalidatedProjectOfBundle:
-                        Debug.assertDefined(invalidatedProjectOfBundle).done(cancellationToken);
+                        await Debug.assertDefined(invalidatedProjectOfBundle).doneAsync(cancellationToken);
                         step = Step.Done;
                         break;
 
@@ -1780,7 +1804,7 @@ namespace ts {
         }
     }
 
-    function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, onlyReferences?: boolean): ExitStatus {
+    async function buildAsync(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, onlyReferences?: boolean): Promise<ExitStatus> {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -1793,7 +1817,7 @@ namespace ts {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
             reportQueue = false;
-            invalidatedProject.done(cancellationToken);
+            await invalidatedProject.doneAsync(cancellationToken);
             if (state.diagnostics.has(invalidatedProject.projectPath)) {
                 errorProjects++;
             }
@@ -1884,10 +1908,10 @@ namespace ts {
         if (state.timerToBuildInvalidatedProject) {
             hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
         }
-        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, 250, state);
+        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(state => buildNextInvalidatedProjectAsync(state).then(() => {}), 250, state); // TODO (acasey): await?
     }
 
-    function buildNextInvalidatedProject(state: SolutionBuilderState) {
+    async function buildNextInvalidatedProjectAsync(state: SolutionBuilderState) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
@@ -1897,7 +1921,7 @@ namespace ts {
         const buildOrder = getBuildOrder(state);
         const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
-            invalidatedProject.done();
+            await invalidatedProject.doneAsync();
             if (state.projectPendingBuild.size) {
                 // Schedule next project for build
                 if (state.watch && !state.timerToBuildInvalidatedProject) {
@@ -2033,9 +2057,9 @@ namespace ts {
     function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilder<T> {
         const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options);
         return {
-            build: (project, cancellationToken) => build(state, project, cancellationToken),
+            buildAsync: (project, cancellationToken) => buildAsync(state, project, cancellationToken),
             clean: project => clean(state, project),
-            buildReferences: (project, cancellationToken) => build(state, project, cancellationToken, /*onlyReferences*/ true),
+            buildReferencesAsync: (project, cancellationToken) => buildAsync(state, project, cancellationToken, /*onlyReferences*/ true),
             cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
             getNextInvalidatedProject: cancellationToken => {
                 setupInitialBuild(state, cancellationToken);
@@ -2048,7 +2072,7 @@ namespace ts {
                 return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
-            buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),
+            buildNextInvalidatedProjectAsync: () => buildNextInvalidatedProjectAsync(state),
             getAllParsedConfigs: () => arrayFrom(mapDefinedIterator(
                 state.configFileCache.values(),
                 config => isParsedCommandLine(config) ? config : undefined

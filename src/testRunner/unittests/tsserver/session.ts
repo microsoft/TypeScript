@@ -10,6 +10,7 @@ namespace ts.server {
         write(s): void { lastWrittenToHost = s; },
         readFile: returnUndefined,
         writeFile: noop,
+        writeFileAsync: noopAsync,
         resolvePath(): string { return undefined!; }, // TODO: GH#18217
         fileExists: () => false,
         directoryExists: () => false,

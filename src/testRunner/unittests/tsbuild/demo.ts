@@ -45,20 +45,20 @@ namespace ts {
             notExpectedOutputs: readonly string[];
         }
 
-        function verifyBuild({ modifyDiskLayout, expectedExitStatus, expectedDiagnostics, expectedOutputs, notExpectedOutputs }: VerifyBuild) {
+        async function verifyBuildAsync({ modifyDiskLayout, expectedExitStatus, expectedDiagnostics, expectedOutputs, notExpectedOutputs }: VerifyBuild) {
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             modifyDiskLayout(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.json"], { verbose: true });
-            const exitStatus = builder.build();
+            const exitStatus = await builder.buildAsync();
             assert.equal(exitStatus, expectedExitStatus);
             host.assertDiagnosticMessages(...expectedDiagnostics(fs));
             verifyOutputsPresent(fs, expectedOutputs);
             verifyOutputsAbsent(fs, notExpectedOutputs);
         }
 
-        it("in master branch with everything setup correctly, reports no error", () => {
-            verifyBuild({
+        it("in master branch with everything setup correctly, reports no error", async () => {
+            await verifyBuildAsync({
                 modifyDiskLayout: noop,
                 expectedExitStatus: ExitStatus.Success,
                 expectedDiagnostics: () => [
@@ -75,8 +75,8 @@ namespace ts {
             });
         });
 
-        it("in circular branch reports the error about it by stopping build", () => {
-            verifyBuild({
+        it("in circular branch reports the error about it by stopping build", async () => {
+            await verifyBuildAsync({
                 modifyDiskLayout: fs => replaceText(
                     fs,
                     "/src/core/tsconfig.json",
@@ -106,8 +106,8 @@ namespace ts {
             });
         });
 
-        it("in bad-ref branch reports the error about files not in rootDir at the import location", () => {
-            verifyBuild({
+        it("in bad-ref branch reports the error about files not in rootDir at the import location", async () => {
+            await verifyBuildAsync({
                 modifyDiskLayout: fs => prependText(
                     fs,
                     "/src/core/utilities.ts",

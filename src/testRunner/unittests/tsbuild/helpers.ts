@@ -293,10 +293,10 @@ interface Symbol {
         describe(`tsc --b ${scenario}:: ${subScenario}`, () => {
             let tick: () => void;
             let sys: TscCompileSystem;
-            before(() => {
+            before(async () => {
                 let baseFs: vfs.FileSystem;
                 ({ fs: baseFs, tick } = getFsWithTime(fs()));
-                sys = tscCompile({
+                sys = await tscCompileAsync({
                     scenario,
                     subScenario,
                     fs: () => baseFs.makeReadonly(),
@@ -321,10 +321,10 @@ interface Symbol {
             for (const { buildKind, modifyFs, subScenario: incrementalSubScenario } of incrementalScenarios) {
                 describe(incrementalSubScenario || buildKind, () => {
                     let newSys: TscCompileSystem;
-                    before(() => {
+                    before(async () => {
                         Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
                         tick();
-                        newSys = tscCompile({
+                        newSys = await tscCompileAsync({
                             scenario,
                             subScenario: incrementalSubScenario || subScenario,
                             buildKind,
@@ -343,8 +343,8 @@ interface Symbol {
                         newSys = undefined!;
                     });
                     verifyTscBaseline(() => newSys);
-                    it(`Verify emit output file text is same when built clean`, () => {
-                        const sys = tscCompile({
+                    it(`Verify emit output file text is same when built clean`, async () => {
+                        const sys = await tscCompileAsync({
                             scenario,
                             subScenario,
                             fs: () => newSys.vfs,
