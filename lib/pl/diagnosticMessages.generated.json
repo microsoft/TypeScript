@@ -278,7 +278,7 @@
   "Computed_property_names_are_not_allowed_in_enums_1164": "Obliczone nazwy właściwości nie są dozwolone w wyliczeniach.",
   "Computed_values_are_not_permitted_in_an_enum_with_string_valued_members_2553": "Obliczone wartości nie są dozwolone w wyliczeniu ze składowymi o wartości ciągu.",
   "Concatenate_and_emit_output_to_single_file_6001": "Połącz i wyemituj dane wyjściowe do pojedynczego pliku.",
-  "Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_librar_4090": "Znaleziono sprzeczne definicje dla „{0}” w „{1}” i „{2}”. Rozważ zainstalowanie konkretnej wersji tej biblioteki, aby rozwiązać problem.",
+  "Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_librar_4090": "Znaleziono definicje będące w konflikcie dla „{0}” w „{1}” i „{2}”. Rozważ zainstalowanie konkretnej wersji tej biblioteki, aby rozwiązać problem.",
   "Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type_7013": "Dla sygnatury konstrukcji bez adnotacji zwracanego typu niejawnie określono zwracany typ „any”.",
   "Constructor_implementation_is_missing_2390": "Brak implementacji konstruktora.",
   "Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration_2673": "Konstruktor klasy „{0}” jest prywatny i dostępny tylko w ramach deklaracji klasy.",
