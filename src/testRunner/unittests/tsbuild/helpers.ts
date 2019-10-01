@@ -228,7 +228,7 @@ interface Symbol {
             if (section.kind !== BundleFileSectionKind.Prepend) {
                 writeTextOfSection(section.pos, section.end);
             }
-            else {
+            else if (section.texts.length > 0) {
                 Debug.assert(section.pos === first(section.texts).pos);
                 Debug.assert(section.end === last(section.texts).end);
                 for (const text of section.texts) {
@@ -236,6 +236,9 @@ interface Symbol {
                     writeSectionHeader(text);
                     writeTextOfSection(text.pos, text.end);
                 }
+            }
+            else {
+                Debug.assert(section.pos === section.end);
             }
         }
         baselineRecorder.WriteLine("======================================================================");
