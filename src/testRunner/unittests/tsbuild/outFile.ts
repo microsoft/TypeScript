@@ -682,6 +682,40 @@ ${internal} enum internalEnum { a, b, c }`);
                     ignoreDtsUnchanged: true,
                     baselineOnly: true
                 });
+
+                verifyOutFileScenario({
+                    subScenario: "stripInternal when prepend is completely internal",
+                    baselineOnly: true,
+                    ignoreDtsChanged: true,
+                    ignoreDtsUnchanged: true,
+                    modifyFs: fs => {
+                        fs.writeFileSync(sources[project.first][source.ts][part.one], "/* @internal */ const A = 1;");
+                        fs.writeFileSync(sources[project.third][source.ts][part.one], "const B = 2;");
+                        fs.writeFileSync(sources[project.first][source.config], JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                declaration: true,
+                                declarationMap: true,
+                                skipDefaultLibCheck: true,
+                                sourceMap: true,
+                                outFile: "./bin/first-output.js"
+                            },
+                            files: [sources[project.first][source.ts][part.one]]
+                        }));
+                        fs.writeFileSync(sources[project.third][source.config], JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                declaration: true,
+                                declarationMap: false,
+                                stripInternal: true,
+                                sourceMap: true,
+                                outFile: "./thirdjs/output/third-output.js"
+                            },
+                            references: [{ path: "../first", prepend: true }],
+                            files: [sources[project.third][source.ts][part.one]]
+                        }));
+                    }
+                });
             });
 
             describe("empty source files", () => {

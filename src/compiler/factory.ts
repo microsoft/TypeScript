@@ -2896,7 +2896,10 @@ namespace ts {
                     (texts || (texts = [])).push(prependNode);
                     break;
                 case BundleFileSectionKind.Internal:
-                    if (stripInternal) break;
+                    if (stripInternal) {
+                        if (!texts) texts = [];
+                        break;
+                    }
                     // falls through
 
                 case BundleFileSectionKind.Text:
