@@ -545,6 +545,9 @@ namespace ts {
         return resolutions;
     }
 
+    /* @internal */
+    export const inferredTypesContainingFile = "__inferred type names__.ts";
+
     interface DiagnosticCache<T extends Diagnostic> {
         perFile?: Map<T[]>;
         allDiagnostics?: Diagnostic[];
@@ -875,7 +878,7 @@ namespace ts {
             if (typeReferences.length) {
                 // This containingFilename needs to match with the one used in managed-side
                 const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
-                const containingFilename = combinePaths(containingDirectory, "__inferred type names__.ts");
+                const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
