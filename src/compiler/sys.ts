@@ -682,6 +682,7 @@ namespace ts {
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         // For testing
         /*@internal*/ now?(): Date;
+        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
     }
 
     export interface FileWatcher {
@@ -876,6 +877,15 @@ namespace ts {
                 bufferFrom,
                 base64decode: input => bufferFrom(input, "base64").toString("utf8"),
                 base64encode: input => bufferFrom(input).toString("base64"),
+                require: (baseDir, moduleName) => {
+                    try {
+                        const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
+                        return { module: require(modulePath), modulePath, error: undefined };
+                    }
+                    catch (error) {
+                        return { module: undefined, modulePath: undefined, error };
+                    }
+                }
             };
             return nodeSystem;
 
@@ -1022,6 +1032,7 @@ namespace ts {
                     return watchDirectoryUsingFsWatch;
                 }
 
+                // defer watchDirectoryRecursively as it depends on `ts.createMap()` which may not be usable yet.
                 const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ?
                     createWatchDirectoryUsing(fsWatchFile) :
                     tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?

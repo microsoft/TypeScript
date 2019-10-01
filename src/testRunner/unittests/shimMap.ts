@@ -1,5 +1,5 @@
 namespace ts {
-    describe("unittests:: shimMap", () => {
+    describe("unittests:: createMapShim", () => {
 
         function testMapIterationAddedValues(map: Map<string>, useForEach: boolean): string {
             let resultString = "";
@@ -93,15 +93,15 @@ namespace ts {
             const nativeMapIteratorResult = testMapIterationAddedValues(nativeMap, /* useForEach */ false);
             assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
-            // Then, test the shimMap.
-            let localShimMap = new (shimMap())<string>();
+            // Then, test the map shim.
+            const MapShim = createMapShim(); // tslint:disable-line variable-name
+            let localShimMap = new MapShim<string>();
             const shimMapForEachResult = testMapIterationAddedValues(localShimMap, /* useForEach */ true);
             assert.equal(shimMapForEachResult, expectedResult, "shimMap-forEach");
 
-            localShimMap = new (shimMap())<string>();
+            localShimMap = new MapShim<string>();
             const shimMapIteratorResult = testMapIterationAddedValues(localShimMap, /* useForEach */ false);
             assert.equal(shimMapIteratorResult, expectedResult, "shimMap-iterator");
-
         });
     });
 }
