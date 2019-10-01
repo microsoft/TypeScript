@@ -1043,6 +1043,10 @@
         "category": "Error",
         "code": 1358
     },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
