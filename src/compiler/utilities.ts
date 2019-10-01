@@ -2060,7 +2060,7 @@ namespace ts {
             idText(expr.expression.expression) === "Object" &&
             idText(expr.expression.name) === "defineProperty" &&
             isStringOrNumericLiteralLike(expr.arguments[1]) &&
-            isBindableStaticNameExpression(expr.arguments[0]);
+            isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
     }
 
     export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
