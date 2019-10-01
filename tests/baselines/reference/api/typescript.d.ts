@@ -32,20 +32,50 @@ declare namespace ts {
         " __sortedArrayBrand": any;
     }
     /** ES6 Map interface, only read methods included. */
-    interface ReadonlyMap<T> {
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
+    interface ReadonlyESMap<K, V> {
+        get(key: K): V | undefined;
+        has(key: K): boolean;
+        forEach(action: (value: V, key: K) => void): void;
         readonly size: number;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
+        keys(): Iterator<K>;
+        values(): Iterator<V>;
+        entries(): Iterator<[K, V]>;
     }
     /** ES6 Map interface. */
-    interface Map<T> extends ReadonlyMap<T> {
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
+    interface ESMap<K, V> extends ReadonlyESMap<K, V> {
+        set(key: K, value: V): this;
+        delete(key: K): boolean;
         clear(): void;
+    }
+    /** ES6 Map interface, only read methods included. */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+    /** ES6 Map interface. */
+    interface Map<T> extends ESMap<string, T>, ReadonlyMap<T> {
+    }
+    interface ReadonlySet<T> {
+        readonly size: number;
+        has(value: T): boolean;
+        forEach(action: (value: T, key: T) => void): void;
+        keys(): Iterator<T>;
+        values(): Iterator<T>;
+        entries(): Iterator<[T, T]>;
+    }
+    interface Set<T> extends ReadonlySet<T> {
+        add(value: T): this;
+        delete(value: T): boolean;
+        clear(): void;
+    }
+    interface WeakMap<K extends object, V> {
+        get(key: K): V | undefined;
+        has(key: K): boolean;
+        set(key: K, value: V): this;
+        delete(key: K): boolean;
+    }
+    interface WeakSet<T extends object> {
+        has(key: T): boolean;
+        add(key: T): this;
+        delete(key: T): boolean;
     }
     /** ES6 Iterator type. */
     interface Iterator<T> {

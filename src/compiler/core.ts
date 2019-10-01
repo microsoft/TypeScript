@@ -5,13 +5,17 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
 
     /** Create a new map. */
-    export function createMap<T>(): Map<T> {
-        return new Map<T>();
+    export function createMap<T>(): Map<T>;
+    export function createMap<K, V>(): ESMap<K, V>;
+    export function createMap<K, V>(): ESMap<K, V> {
+        return new Map<K, V>();
     }
 
     /** Create a new map from an array of entries. */
-    export function createMapFromEntries<T>(entries: [string, T][]): Map<T> {
-        const map = createMap<T>();
+    export function createMapFromEntries<T>(entries: readonly [string, T][]): Map<T>;
+    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): ESMap<K, V>;
+    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): ESMap<K, V> {
+        const map = createMap<K, V>();
         for (const [key, value] of entries) {
             map.set(key, value);
         }
@@ -20,7 +24,7 @@ namespace ts {
 
     /** Create a new map from a template object is provided, the map will copy entries from it. */
     export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
-        const map: Map<T> = new Map<T>();
+        const map: Map<T> = new Map<string, T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -31,6 +35,18 @@ namespace ts {
         }
 
         return map;
+    }
+
+    export function createSet<T>(): Set<T> {
+        return new Set<T>();
+    }
+
+    export function createSetFromValues<T>(values: readonly T[]): Set<T> {
+        const set = createSet<T>();
+        for (const value of values) {
+            set.add(value);
+        }
+        return set;
     }
 
     export function length(array: readonly any[] | undefined): number {
@@ -1587,7 +1603,7 @@ namespace ts {
      * Case-sensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `ẞ` (German sharp capital s)).
+     * lowercase (such as `áºž` (German sharp capital s)).
      */
     export function equateStringsCaseInsensitive(a: string, b: string) {
         return a === b
@@ -1645,7 +1661,7 @@ namespace ts {
      * Case-insensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `áºž` (German sharp capital s)).
+     * lowercase (such as `Ã¡ÂºÅ¾` (German sharp capital s)).
      */
     export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;
@@ -1717,7 +1733,7 @@ namespace ts {
             //
             // For case insensitive comparisons we always map both strings to their
             // upper-case form as some unicode characters do not properly round-trip to
-            // lowercase (such as `áºž` (German sharp capital s)).
+            // lowercase (such as `Ã¡ÂºÅ¾` (German sharp capital s)).
             return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
 
             function compareDictionaryOrder(a: string, b: string) {

@@ -24,7 +24,7 @@ namespace ts {
 
     /** Create a new escaped identifier map. */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<T>() as UnderscoreEscapedMap<T>;
+        return new Map<string, T>() as UnderscoreEscapedMap<T>;
     }
 
     export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
