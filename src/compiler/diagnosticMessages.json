@@ -1043,14 +1043,6 @@
         "category": "Error",
         "code": 1358
     },
-    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
-        "category": "Error",
-        "code": 1359
-    },
-    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
-        "category": "Error",
-        "code": 1360
-    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2256,6 +2248,14 @@
     "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
         "category": "Error",
         "code": 2612
+    },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 2613
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 2614
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
