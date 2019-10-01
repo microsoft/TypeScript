@@ -246,6 +246,7 @@ node_modules/lodash/core.js(3424,41): error TS2769: No overload matches this cal
 node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+node_modules/lodash/core.js(3814,33): error TS2339: Property '__chain__' does not exist on type 'lodash'.
 node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
