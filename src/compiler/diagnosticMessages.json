@@ -1043,6 +1043,14 @@
         "category": "Error",
         "code": 1358
     },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 1359
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 1360
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
