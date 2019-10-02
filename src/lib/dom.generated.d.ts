@@ -19083,7 +19083,7 @@ declare namespace WebAssembly {
     
     var Instance: {
         prototype: Instance;
-        new(module: Module, importObject?: any): Instance;
+        new(module: Module, importObject?: Imports): Instance;
     };
     
     interface LinkError {
