@@ -97,3 +97,12 @@ o5["b"]?.()["c"].d?.["e"];
 >"b" : Symbol(b, Decl(elementAccessChain.ts, 15, 19))
 >d : Symbol(d, Decl(elementAccessChain.ts, 15, 32))
 
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : Symbol(o6, Decl(elementAccessChain.ts, 22, 13))
+>T : Symbol(T, Decl(elementAccessChain.ts, 22, 19))
+>x : Symbol(x, Decl(elementAccessChain.ts, 22, 41))
+
+o6<number>()?.["x"];
+>o6 : Symbol(o6, Decl(elementAccessChain.ts, 22, 13))
+

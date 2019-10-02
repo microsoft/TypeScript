@@ -130,3 +130,14 @@ o5["b"]?.()["c"].d?.["e"];
 >d : { e: string; } | undefined
 >"e" : "e"
 
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : <T>() => { x: number; } | undefined
+>x : number
+
+o6<number>()?.["x"];
+>o6<number>()?.["x"] : number | undefined
+>o6<number>() : { x: number; } | undefined
+>o6 : <T>() => { x: number; } | undefined
+>"x" : "x"
+

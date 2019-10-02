@@ -148,3 +148,11 @@ const v: number | undefined = o4?.(incr);
 >o4 : Symbol(o4, Decl(callChain.ts, 30, 13))
 >incr : Symbol(incr, Decl(callChain.ts, 30, 57))
 
+// GH#33744
+declare const o5: <T>() => undefined | (() => void);
+>o5 : Symbol(o5, Decl(callChain.ts, 35, 13))
+>T : Symbol(T, Decl(callChain.ts, 35, 19))
+
+o5<number>()?.();
+>o5 : Symbol(o5, Decl(callChain.ts, 35, 13))
+

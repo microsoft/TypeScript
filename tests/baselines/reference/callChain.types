@@ -255,3 +255,12 @@ const v: number | undefined = o4?.(incr);
 >o4 : (<T>(f: (a: T) => T) => T) | undefined
 >incr : (x: number) => number
 
+// GH#33744
+declare const o5: <T>() => undefined | (() => void);
+>o5 : <T>() => (() => void) | undefined
+
+o5<number>()?.();
+>o5<number>()?.() : void | undefined
+>o5<number>() : (() => void) | undefined
+>o5 : <T>() => (() => void) | undefined
+
