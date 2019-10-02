@@ -68,6 +68,10 @@ namespace ts {
         isClass(): this is InterfaceType;
     }
 
+    export interface TypeReference {
+        typeArguments?: readonly Type[];
+    }
+
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
         getTypeParameters(): TypeParameter[] | undefined;

@@ -452,6 +452,15 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        /**
+         * This polyfills `referenceType.typeArguments` for API consumers
+         */
+        get typeArguments() {
+            if (getObjectFlags(this) & ObjectFlags.Reference) {
+                return this.checker.getTypeArguments(this as Type as TypeReference);
+            }
+            return undefined;
+        }
     }
 
     class SignatureObject implements Signature {
