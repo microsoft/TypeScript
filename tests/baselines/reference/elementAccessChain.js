@@ -20,10 +20,13 @@ o5.b?.()["c"].d?.["e"];
 o5["b"]?.()["c"].d?.e;
 o5["b"]?.()["c"].d?.["e"];
 
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+o6<number>()?.["x"];
 
 //// [elementAccessChain.js]
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
 (_a = o1) === null || _a === void 0 ? void 0 : _a["b"];
 (_b = o2) === null || _b === void 0 ? void 0 : _b["b"].c;
 (_c = o2) === null || _c === void 0 ? void 0 : _c.b["c"];
@@ -35,3 +38,4 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
 (_q = (_p = (_o = o5).b) === null || _p === void 0 ? void 0 : _p.call(_o)["c"].d) === null || _q === void 0 ? void 0 : _q["e"];
 (_t = (_s = (_r = o5)["b"]) === null || _s === void 0 ? void 0 : _s.call(_r)["c"].d) === null || _t === void 0 ? void 0 : _t.e;
 (_w = (_v = (_u = o5)["b"]) === null || _v === void 0 ? void 0 : _v.call(_u)["c"].d) === null || _w === void 0 ? void 0 : _w["e"];
+(_x = o6()) === null || _x === void 0 ? void 0 : _x["x"];

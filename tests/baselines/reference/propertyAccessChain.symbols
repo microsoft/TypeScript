@@ -68,3 +68,14 @@ o5.b?.().c.d?.e;
 >d : Symbol(d, Decl(propertyAccessChain.ts, 12, 32))
 >e : Symbol(e, Decl(propertyAccessChain.ts, 12, 38))
 
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : Symbol(o6, Decl(propertyAccessChain.ts, 16, 13))
+>T : Symbol(T, Decl(propertyAccessChain.ts, 16, 19))
+>x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+
+o6<number>()?.x;
+>o6<number>()?.x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+>o6 : Symbol(o6, Decl(propertyAccessChain.ts, 16, 13))
+>x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
+

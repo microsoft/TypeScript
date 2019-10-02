@@ -33,3 +33,7 @@ o3["b"]?.(1, ...[2, 3], 4).c;
 declare const o4: undefined | (<T>(f: (a: T) => T) => T);
 declare function incr(x: number): number;
 const v: number | undefined = o4?.(incr);
+
+// GH#33744
+declare const o5: <T>() => undefined | (() => void);
+o5<number>()?.();
