@@ -2472,7 +2472,7 @@ declare var OffscreenCanvas: {
     new(width: number, height: number): OffscreenCanvas;
 };
 
-interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
+interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
     readonly canvas: OffscreenCanvas;
     commit(): void;
 }
@@ -3102,7 +3102,7 @@ interface TextDecoderCommon {
     readonly ignoreBOM: boolean;
 }
 
-interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+interface TextDecoderStream extends TextDecoderCommon, GenericTransformStream {
 }
 
 declare var TextDecoderStream: {
@@ -3134,7 +3134,7 @@ interface TextEncoderCommon {
     readonly encoding: string;
 }
 
-interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+interface TextEncoderStream extends TextEncoderCommon, GenericTransformStream {
 }
 
 declare var TextEncoderStream: {
@@ -3385,7 +3385,7 @@ interface WEBGL_lose_context {
     restoreContext(): void;
 }
 
-interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
+interface WebGL2RenderingContext extends WebGLRenderingContextBase, WebGL2RenderingContextBase, WebGL2RenderingContextOverloads {
 }
 
 declare var WebGL2RenderingContext: {
@@ -5375,7 +5375,7 @@ interface WorkerGlobalScopeEventMap {
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WindowConsole, WindowOrWorkerGlobalScope, WorkerUtils {
+interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
     readonly isSecureContext: boolean;
     readonly location: WorkerLocation;
@@ -5414,7 +5414,7 @@ declare var WorkerLocation: {
 };
 
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorBeacon, NavigatorConcurrentHardware, NavigatorID, NavigatorOnLine, NavigatorStorage {
+interface WorkerNavigator extends NavigatorID, NavigatorOnLine, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorStorage {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
@@ -5620,11 +5620,11 @@ declare namespace WebAssembly {
     
     var Global: {
         prototype: Global;
-        new(descriptor: GlobalDescriptor, v?: any): Global;
+        new(descriptor: GlobalDescriptor, value?: any): Global;
     };
     
     interface Instance {
-        readonly exports: Exports;
+        readonly exports: any;
     }
     
     var Instance: {
@@ -5648,9 +5648,9 @@ declare namespace WebAssembly {
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
-        customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
-        exports(moduleObject: Module): ModuleExportDescriptor[];
-        imports(moduleObject: Module): ModuleImportDescriptor[];
+        customSections(module: Module, sectionName: string): ArrayBuffer[];
+        exports(module: Module): ModuleExportDescriptor[];
+        imports(module: Module): ModuleImportDescriptor[];
     };
     
     interface Table {
@@ -5667,7 +5667,7 @@ declare namespace WebAssembly {
     
     interface GlobalDescriptor {
         mutable?: boolean;
-        value: ValueType;
+        value: string;
     }
     
     interface MemoryDescriptor {
@@ -5699,17 +5699,9 @@ declare namespace WebAssembly {
     
     type ImportExportKind = "function" | "table" | "memory" | "global";
     type TableKind = "anyfunc";
-    type ValueType = "i32" | "i64" | "f32" | "f64";
-    type ExportValue = Function | Global | Memory | Table;
-    type Exports = Record<string, ExportValue>;
-    type ImportValue = ExportValue | number;
-    type ModuleImports = Record<string, ImportValue>;
-    type Imports = Record<string, ModuleImports>;
     function compile(bytes: BufferSource): Promise<Module>;
-    function compileStreaming(source: Response | Promise<Response>): Promise<Module>;
-    function instantiate(bytes: BufferSource, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
-    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
-    function instantiateStreaming(response: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(bytes: BufferSource, importObject?: any): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(moduleObject: Module, importObject?: any): Promise<Instance>;
     function validate(bytes: BufferSource): boolean;
 }
 
@@ -5883,7 +5875,7 @@ type RequestRedirect = "follow" | "error" | "manual";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
 type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
-type VisibilityState = "hidden" | "visible";
+type VisibilityState = "hidden" | "visible" | "prerender";
 type WebGLPowerPreference = "default" | "low-power" | "high-performance";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";

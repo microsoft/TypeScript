@@ -20,14 +20,14 @@ and limitations under the License.
 
 declare namespace Intl {
     interface PluralRulesOptions {
-        localeMatcher?: "lookup" | "best fit";
-        type?: "cardinal" | "ordinal";
+        localeMatcher?: 'lookup' | 'best fit';
+        type?: 'cardinal' | 'ordinal';
     }
 
     interface ResolvedPluralRulesOptions {
         locale: string;
         pluralCategories: string[];
-        type: "cardinal" | "ordinal";
+        type: 'cardinal' | 'ordinal';
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;

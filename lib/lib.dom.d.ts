@@ -2750,7 +2750,7 @@ interface CSSStyleDeclaration {
     alignContent: string;
     alignItems: string;
     alignSelf: string;
-    alignmentBaseline: string;
+    alignmentBaseline: string | null;
     animation: string;
     animationDelay: string;
     animationDirection: string;
@@ -2760,83 +2760,65 @@ interface CSSStyleDeclaration {
     animationName: string;
     animationPlayState: string;
     animationTimingFunction: string;
-    backfaceVisibility: string;
-    background: string;
-    backgroundAttachment: string;
-    backgroundClip: string;
-    backgroundColor: string;
-    backgroundImage: string;
-    backgroundOrigin: string;
-    backgroundPosition: string;
-    backgroundPositionX: string;
-    backgroundPositionY: string;
-    backgroundRepeat: string;
-    backgroundSize: string;
-    baselineShift: string;
-    blockSize: string;
-    border: string;
-    borderBlockEnd: string;
-    borderBlockEndColor: string;
-    borderBlockEndStyle: string;
-    borderBlockEndWidth: string;
-    borderBlockStart: string;
-    borderBlockStartColor: string;
-    borderBlockStartStyle: string;
-    borderBlockStartWidth: string;
-    borderBottom: string;
-    borderBottomColor: string;
-    borderBottomLeftRadius: string;
-    borderBottomRightRadius: string;
-    borderBottomStyle: string;
-    borderBottomWidth: string;
-    borderCollapse: string;
-    borderColor: string;
-    borderImage: string;
-    borderImageOutset: string;
-    borderImageRepeat: string;
-    borderImageSlice: string;
-    borderImageSource: string;
-    borderImageWidth: string;
-    borderInlineEnd: string;
-    borderInlineEndColor: string;
-    borderInlineEndStyle: string;
-    borderInlineEndWidth: string;
-    borderInlineStart: string;
-    borderInlineStartColor: string;
-    borderInlineStartStyle: string;
-    borderInlineStartWidth: string;
-    borderLeft: string;
-    borderLeftColor: string;
-    borderLeftStyle: string;
-    borderLeftWidth: string;
-    borderRadius: string;
-    borderRight: string;
-    borderRightColor: string;
-    borderRightStyle: string;
-    borderRightWidth: string;
-    borderSpacing: string;
-    borderStyle: string;
-    borderTop: string;
-    borderTopColor: string;
-    borderTopLeftRadius: string;
-    borderTopRightRadius: string;
-    borderTopStyle: string;
-    borderTopWidth: string;
-    borderWidth: string;
-    bottom: string;
-    boxShadow: string;
+    backfaceVisibility: string | null;
+    background: string | null;
+    backgroundAttachment: string | null;
+    backgroundClip: string | null;
+    backgroundColor: string | null;
+    backgroundImage: string | null;
+    backgroundOrigin: string | null;
+    backgroundPosition: string | null;
+    backgroundPositionX: string | null;
+    backgroundPositionY: string | null;
+    backgroundRepeat: string | null;
+    backgroundSize: string | null;
+    baselineShift: string | null;
+    border: string | null;
+    borderBottom: string | null;
+    borderBottomColor: string | null;
+    borderBottomLeftRadius: string | null;
+    borderBottomRightRadius: string | null;
+    borderBottomStyle: string | null;
+    borderBottomWidth: string | null;
+    borderCollapse: string | null;
+    borderColor: string | null;
+    borderImage: string | null;
+    borderImageOutset: string | null;
+    borderImageRepeat: string | null;
+    borderImageSlice: string | null;
+    borderImageSource: string | null;
+    borderImageWidth: string | null;
+    borderLeft: string | null;
+    borderLeftColor: string | null;
+    borderLeftStyle: string | null;
+    borderLeftWidth: string | null;
+    borderRadius: string | null;
+    borderRight: string | null;
+    borderRightColor: string | null;
+    borderRightStyle: string | null;
+    borderRightWidth: string | null;
+    borderSpacing: string | null;
+    borderStyle: string | null;
+    borderTop: string | null;
+    borderTopColor: string | null;
+    borderTopLeftRadius: string | null;
+    borderTopRightRadius: string | null;
+    borderTopStyle: string | null;
+    borderTopWidth: string | null;
+    borderWidth: string | null;
+    bottom: string | null;
+    boxShadow: string | null;
     boxSizing: string;
-    breakAfter: string;
-    breakBefore: string;
-    breakInside: string;
-    captionSide: string;
+    breakAfter: string | null;
+    breakBefore: string | null;
+    breakInside: string | null;
+    captionSide: string | null;
     caretColor: string;
-    clear: string;
+    clear: string | null;
     clip: string;
     clipPath: string;
     clipRule: string;
     color: string | null;
-    colorInterpolation: string;
     colorInterpolationFilters: string;
     columnCount: string;
     columnFill: string;
@@ -2848,29 +2830,28 @@ interface CSSStyleDeclaration {
     columnSpan: string;
     columnWidth: string;
     columns: string;
-    content: string;
-    counterIncrement: string;
-    counterReset: string;
+    content: string | null;
+    counterIncrement: string | null;
+    counterReset: string | null;
     cssFloat: string | null;
     cssText: string;
     cursor: string;
     direction: string;
-    display: string;
-    dominantBaseline: string;
-    emptyCells: string;
+    display: string | null;
+    dominantBaseline: string | null;
+    emptyCells: string | null;
     enableBackground: string | null;
-    fill: string;
-    fillOpacity: string;
-    fillRule: string;
+    fill: string | null;
+    fillOpacity: string | null;
+    fillRule: string | null;
     filter: string;
-    flex: string;
-    flexBasis: string;
-    flexDirection: string;
-    flexFlow: string;
-    flexGrow: string;
-    flexShrink: string;
-    flexWrap: string;
-    float: string;
+    flex: string | null;
+    flexBasis: string | null;
+    flexDirection: string | null;
+    flexFlow: string | null;
+    flexGrow: string | null;
+    flexShrink: string | null;
+    flexWrap: string | null;
     floodColor: string;
     floodOpacity: string;
     font: string;
@@ -2892,30 +2873,29 @@ interface CSSStyleDeclaration {
     gap: string;
     glyphOrientationHorizontal: string | null;
     glyphOrientationVertical: string;
-    grid: string;
-    gridArea: string;
-    gridAutoColumns: string;
-    gridAutoFlow: string;
-    gridAutoRows: string;
-    gridColumn: string;
-    gridColumnEnd: string;
+    grid: string | null;
+    gridArea: string | null;
+    gridAutoColumns: string | null;
+    gridAutoFlow: string | null;
+    gridAutoRows: string | null;
+    gridColumn: string | null;
+    gridColumnEnd: string | null;
     gridColumnGap: string;
-    gridColumnStart: string;
+    gridColumnStart: string | null;
     gridGap: string;
-    gridRow: string;
-    gridRowEnd: string;
+    gridRow: string | null;
+    gridRowEnd: string | null;
     gridRowGap: string;
-    gridRowStart: string;
-    gridTemplate: string;
-    gridTemplateAreas: string;
-    gridTemplateColumns: string;
-    gridTemplateRows: string;
-    height: string;
+    gridRowStart: string | null;
+    gridTemplate: string | null;
+    gridTemplateAreas: string | null;
+    gridTemplateColumns: string | null;
+    gridTemplateRows: string | null;
+    height: string | null;
     hyphens: string;
     imageOrientation: string;
     imageRendering: string;
     imeMode: string | null;
-    inlineSize: string;
     justifyContent: string;
     justifyItems: string;
     justifySelf: string;
@@ -2925,29 +2905,25 @@ interface CSSStyleDeclaration {
     layoutGridLine: string | null;
     layoutGridMode: string | null;
     layoutGridType: string | null;
-    left: string;
+    left: string | null;
     readonly length: number;
     letterSpacing: string;
     lightingColor: string;
     lineBreak: string;
-    lineHeight: string;
-    listStyle: string;
-    listStyleImage: string;
-    listStylePosition: string;
-    listStyleType: string;
-    margin: string;
-    marginBlockEnd: string;
-    marginBlockStart: string;
-    marginBottom: string;
-    marginInlineEnd: string;
-    marginInlineStart: string;
-    marginLeft: string;
-    marginRight: string;
-    marginTop: string;
-    marker: string;
-    markerEnd: string;
-    markerMid: string;
-    markerStart: string;
+    lineHeight: string | null;
+    listStyle: string | null;
+    listStyleImage: string | null;
+    listStylePosition: string | null;
+    listStyleType: string | null;
+    margin: string | null;
+    marginBottom: string | null;
+    marginLeft: string | null;
+    marginRight: string | null;
+    marginTop: string | null;
+    marker: string | null;
+    markerEnd: string | null;
+    markerMid: string | null;
+    markerStart: string | null;
     mask: string;
     maskComposite: string;
     maskImage: string;
@@ -2955,14 +2931,10 @@ interface CSSStyleDeclaration {
     maskRepeat: string;
     maskSize: string;
     maskType: string;
-    maxBlockSize: string;
-    maxHeight: string;
-    maxInlineSize: string;
-    maxWidth: string;
-    minBlockSize: string;
-    minHeight: string;
-    minInlineSize: string;
-    minWidth: string;
+    maxHeight: string | null;
+    maxWidth: string | null;
+    minHeight: string | null;
+    minWidth: string | null;
     msContentZoomChaining: string | null;
     msContentZoomLimit: string | null;
     msContentZoomLimitMax: any;
@@ -3013,8 +2985,8 @@ interface CSSStyleDeclaration {
     objectFit: string;
     objectPosition: string;
     opacity: string | null;
-    order: string;
-    orphans: string;
+    order: string | null;
+    orphans: string | null;
     outline: string;
     outlineColor: string;
     outlineOffset: string;
@@ -3025,51 +2997,45 @@ interface CSSStyleDeclaration {
     overflowWrap: string;
     overflowX: string;
     overflowY: string;
-    padding: string;
-    paddingBlockEnd: string;
-    paddingBlockStart: string;
-    paddingBottom: string;
-    paddingInlineEnd: string;
-    paddingInlineStart: string;
-    paddingLeft: string;
-    paddingRight: string;
-    paddingTop: string;
-    pageBreakAfter: string;
-    pageBreakBefore: string;
-    pageBreakInside: string;
-    paintOrder: string;
+    padding: string | null;
+    paddingBottom: string | null;
+    paddingLeft: string | null;
+    paddingRight: string | null;
+    paddingTop: string | null;
+    pageBreakAfter: string | null;
+    pageBreakBefore: string | null;
+    pageBreakInside: string | null;
     readonly parentRule: CSSRule;
     penAction: string | null;
-    perspective: string;
-    perspectiveOrigin: string;
+    perspective: string | null;
+    perspectiveOrigin: string | null;
     placeContent: string;
     placeItems: string;
     placeSelf: string;
     pointerEvents: string | null;
-    position: string;
-    quotes: string;
+    position: string | null;
+    quotes: string | null;
     resize: string;
-    right: string;
-    rotate: string;
+    right: string | null;
+    rotate: string | null;
     rowGap: string;
     rubyAlign: string | null;
     rubyOverhang: string | null;
     rubyPosition: string | null;
-    scale: string;
+    scale: string | null;
     scrollBehavior: string;
-    shapeRendering: string;
     stopColor: string | null;
     stopOpacity: string | null;
-    stroke: string;
-    strokeDasharray: string;
-    strokeDashoffset: string;
-    strokeLinecap: string;
-    strokeLinejoin: string;
-    strokeMiterlimit: string;
-    strokeOpacity: string;
-    strokeWidth: string;
+    stroke: string | null;
+    strokeDasharray: string | null;
+    strokeDashoffset: string | null;
+    strokeLinecap: string | null;
+    strokeLinejoin: string | null;
+    strokeMiterlimit: string | null;
+    strokeOpacity: string | null;
+    strokeWidth: string | null;
     tabSize: string;
-    tableLayout: string;
+    tableLayout: string | null;
     textAlign: string;
     textAlignLast: string;
     textAnchor: string | null;
@@ -3088,26 +3054,25 @@ interface CSSStyleDeclaration {
     textKashidaSpace: string | null;
     textOrientation: string;
     textOverflow: string;
-    textRendering: string;
     textShadow: string;
     textTransform: string;
     textUnderlinePosition: string;
-    top: string;
+    top: string | null;
     touchAction: string;
     transform: string;
     transformBox: string;
     transformOrigin: string;
-    transformStyle: string;
+    transformStyle: string | null;
     transition: string;
     transitionDelay: string;
     transitionDuration: string;
     transitionProperty: string;
     transitionTimingFunction: string;
-    translate: string;
+    translate: string | null;
     unicodeBidi: string;
     userSelect: string;
-    verticalAlign: string;
-    visibility: string;
+    verticalAlign: string | null;
+    visibility: string | null;
     /** @deprecated */
     webkitAlignContent: string;
     /** @deprecated */
@@ -3263,14 +3228,14 @@ interface CSSStyleDeclaration {
     webkitUserSelect: string | null;
     webkitWritingMode: string | null;
     whiteSpace: string;
-    widows: string;
-    width: string;
+    widows: string | null;
+    width: string | null;
     willChange: string;
     wordBreak: string;
     wordSpacing: string;
     wordWrap: string;
     writingMode: string;
-    zIndex: string;
+    zIndex: string | null;
     zoom: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
@@ -3480,7 +3445,7 @@ interface CanvasRect {
 }
 
 /** The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element. It is used for drawing shapes, text, images, and other objects. */
-interface CanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform, CanvasUserInterface {
+interface CanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasUserInterface, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
     readonly canvas: HTMLCanvasElement;
 }
 
@@ -3562,7 +3527,7 @@ declare var ChannelSplitterNode: {
 };
 
 /** The CharacterData abstract interface represents a Node object that contains characters. This is an abstract interface, meaning there aren't any object of type CharacterData: it is implemented by other interfaces, like Text, Comment, or ProcessingInstruction which aren't abstract. */
-interface CharacterData extends Node, ChildNode, NonDocumentTypeChildNode {
+interface CharacterData extends Node, NonDocumentTypeChildNode, ChildNode {
     data: string;
     readonly length: number;
     appendData(data: string): void;
@@ -4504,7 +4469,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndEleme
 }
 
 /** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. */
-interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShadowRoot, GlobalEventHandlers, NonElementParentNode, ParentNode, XPathEvaluatorBase {
+interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, ParentNode, XPathEvaluatorBase, GlobalEventHandlers, DocumentAndElementEventHandlers {
     /**
      * Sets or gets the URL for the current document.
      */
@@ -5195,7 +5160,7 @@ interface ElementEventMap {
 }
 
 /** Element is the most general base class from which all objects in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element. */
-interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTypeChildNode, ParentNode, Slotable {
+interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode, Slotable, InnerHTML, Animatable {
     readonly assignedSlot: HTMLSlotElement | null;
     readonly attributes: NamedNodeMap;
     /**
@@ -5269,8 +5234,8 @@ interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTyp
     getAttributeNames(): string[];
     getAttributeNode(name: string): Attr | null;
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr | null;
-    getBoundingClientRect(): DOMRect;
-    getClientRects(): DOMRectList;
+    getBoundingClientRect(): ClientRect | DOMRect;
+    getClientRects(): ClientRectList | DOMRectList;
     /**
      * Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes.
      */
@@ -6690,7 +6655,7 @@ interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventM
 }
 
 /** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. */
-interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
+interface HTMLElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, ElementContentEditable, HTMLOrSVGElement, ElementCSSInlineStyle {
     accessKey: string;
     readonly accessKeyLabel: string;
     autocapitalize: string;
@@ -9827,11 +9792,11 @@ declare var IntersectionObserver: {
 
 /** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. */
 interface IntersectionObserverEntry {
-    readonly boundingClientRect: DOMRectReadOnly;
+    readonly boundingClientRect: ClientRect | DOMRect;
     readonly intersectionRatio: number;
-    readonly intersectionRect: DOMRectReadOnly;
+    readonly intersectionRect: ClientRect | DOMRect;
     readonly isIntersecting: boolean;
-    readonly rootBounds: DOMRectReadOnly | null;
+    readonly rootBounds: ClientRect | DOMRect | null;
     readonly target: Element;
     readonly time: number;
 }
@@ -10872,7 +10837,7 @@ declare var NavigationPreloadManager: {
 };
 
 /** The state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities. */
-interface Navigator extends MSFileSaver, MSNavigatorDoNotTrack, NavigatorAutomationInformation, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorContentUtils, NavigatorCookies, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorPlugins, NavigatorStorage {
+interface Navigator extends NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorContentUtils, NavigatorCookies, NavigatorPlugins, NavigatorConcurrentHardware, NavigatorStorage, NavigatorAutomationInformation, MSFileSaver, MSNavigatorDoNotTrack, NavigatorBeacon {
     readonly activeVRDisplays: ReadonlyArray<VRDisplay>;
     readonly clipboard: Clipboard;
     readonly credentials: CredentialsContainer;
@@ -11411,7 +11376,7 @@ declare var OffscreenCanvas: {
     new(width: number, height: number): OffscreenCanvas;
 };
 
-interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
+interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
     readonly canvas: OffscreenCanvas;
     commit(): void;
 }
@@ -12643,8 +12608,8 @@ interface Range extends AbstractRange {
     deleteContents(): void;
     detach(): void;
     extractContents(): DocumentFragment;
-    getBoundingClientRect(): DOMRect;
-    getClientRects(): DOMRectList;
+    getBoundingClientRect(): ClientRect | DOMRect;
+    getClientRects(): ClientRectList | DOMRectList;
     insertNode(node: Node): void;
     /**
      * Returns whether range intersects node.
@@ -13168,7 +13133,7 @@ interface SVGElementEventMap extends ElementEventMap, GlobalEventHandlersEventMa
 }
 
 /** All of the SVG DOM interfaces that correspond directly to elements in the SVG language derive from the SVGElement interface. */
-interface SVGElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, GlobalEventHandlers, HTMLOrSVGElement, SVGElementInstance {
+interface SVGElement extends Element, GlobalEventHandlers, DocumentAndElementEventHandlers, SVGElementInstance, HTMLOrSVGElement, ElementCSSInlineStyle {
     /** @deprecated */
     readonly className: any;
     readonly ownerSVGElement: SVGSVGElement | null;
@@ -14378,7 +14343,7 @@ declare var SVGPathSegMovetoRel: {
 };
 
 /** Corresponds to the <pattern> element. */
-interface SVGPatternElement extends SVGElement, SVGFitToViewBox, SVGTests, SVGURIReference {
+interface SVGPatternElement extends SVGElement, SVGTests, SVGFitToViewBox, SVGURIReference {
     readonly height: SVGAnimatedLength;
     readonly patternContentUnits: SVGAnimatedEnumeration;
     readonly patternTransform: SVGAnimatedTransformList;
@@ -15679,7 +15644,7 @@ interface TextDecoderCommon {
     readonly ignoreBOM: boolean;
 }
 
-interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+interface TextDecoderStream extends TextDecoderCommon, GenericTransformStream {
 }
 
 declare var TextDecoderStream: {
@@ -15711,7 +15676,7 @@ interface TextEncoderCommon {
     readonly encoding: string;
 }
 
-interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+interface TextEncoderStream extends TextEncoderCommon, GenericTransformStream {
 }
 
 declare var TextEncoderStream: {
@@ -16479,7 +16444,7 @@ declare var WebAuthnAssertion: {
     new(): WebAuthnAssertion;
 };
 
-interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
+interface WebGL2RenderingContext extends WebGLRenderingContextBase, WebGL2RenderingContextBase, WebGL2RenderingContextOverloads {
 }
 
 declare var WebGL2RenderingContext: {
@@ -18532,7 +18497,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
 }
 
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
-interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, IDBEnvironment, WindowBase64, WindowConsole, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage, WindowTimers {
+interface Window extends EventTarget, WindowTimers, WindowSessionStorage, WindowLocalStorage, WindowConsole, GlobalEventHandlers, IDBEnvironment, WindowBase64, AnimationFrameProvider, WindowOrWorkerGlobalScope, WindowEventHandlers {
     readonly applicationCache: ApplicationCache;
     readonly caches: CacheStorage;
     readonly clientInformation: Navigator;
@@ -19094,11 +19059,11 @@ declare namespace WebAssembly {
     
     var Global: {
         prototype: Global;
-        new(descriptor: GlobalDescriptor, v?: any): Global;
+        new(descriptor: GlobalDescriptor, value?: any): Global;
     };
     
     interface Instance {
-        readonly exports: Exports;
+        readonly exports: any;
     }
     
     var Instance: {
@@ -19130,9 +19095,9 @@ declare namespace WebAssembly {
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
-        customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
-        exports(moduleObject: Module): ModuleExportDescriptor[];
-        imports(moduleObject: Module): ModuleImportDescriptor[];
+        customSections(module: Module, sectionName: string): ArrayBuffer[];
+        exports(module: Module): ModuleExportDescriptor[];
+        imports(module: Module): ModuleImportDescriptor[];
     };
     
     interface RuntimeError {
@@ -19157,7 +19122,7 @@ declare namespace WebAssembly {
     
     interface GlobalDescriptor {
         mutable?: boolean;
-        value: ValueType;
+        value: string;
     }
     
     interface MemoryDescriptor {
@@ -19189,17 +19154,9 @@ declare namespace WebAssembly {
     
     type ImportExportKind = "function" | "table" | "memory" | "global";
     type TableKind = "anyfunc";
-    type ValueType = "i32" | "i64" | "f32" | "f64";
-    type ExportValue = Function | Global | Memory | Table;
-    type Exports = Record<string, ExportValue>;
-    type ImportValue = ExportValue | number;
-    type ModuleImports = Record<string, ImportValue>;
-    type Imports = Record<string, ModuleImports>;
     function compile(bytes: BufferSource): Promise<Module>;
-    function compileStreaming(source: Response | Promise<Response>): Promise<Module>;
-    function instantiate(bytes: BufferSource, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
-    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
-    function instantiateStreaming(response: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(bytes: BufferSource, importObject?: any): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(moduleObject: Module, importObject?: any): Promise<Instance>;
     function validate(bytes: BufferSource): boolean;
 }
 
@@ -20159,7 +20116,7 @@ type Transport = "usb" | "nfc" | "ble";
 type UserVerificationRequirement = "required" | "preferred" | "discouraged";
 type VRDisplayEventReason = "mounted" | "navigation" | "requested" | "unmounted";
 type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
-type VisibilityState = "hidden" | "visible";
+type VisibilityState = "hidden" | "visible" | "prerender";
 type WebGLPowerPreference = "default" | "low-power" | "high-performance";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
