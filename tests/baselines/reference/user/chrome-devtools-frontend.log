@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.es5.d.ts(1421,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1433,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../node_modules/@types/node/globals.d.ts(234,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -3006,6 +3006,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68409,16): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,25): error TS2339: Property 'width' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
@@ -3664,8 +3665,7 @@ node_modules/chrome-devtools-frontend/front_end/common/Settings.js(542,18): erro
 node_modules/chrome-devtools-frontend/front_end/common/Throttler.js(97,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/common/Throttler.js(102,5): error TS2322: Type 'Timeout' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Throttler.js(113,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/common/UIString.js(32,1): error TS2322: Type 'typeof Common | {}' is not assignable to type 'typeof Common'.
-  Type '{}' is missing the following properties from type 'typeof Common': Object, EventTarget, Event, ParsedURL, and 39 more.
+node_modules/chrome-devtools-frontend/front_end/common/UIString.js(32,1): error TS2740: Type '{}' is missing the following properties from type 'typeof Common': Object, EventTarget, Event, ParsedURL, and 39 more.
 node_modules/chrome-devtools-frontend/front_end/common/UIString.js(40,17): error TS2339: Property 'vsprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/common/UIString.js(62,36): error TS2339: Property 'tokenizeFormatString' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/common/UIString.js(62,87): error TS2339: Property 'standardFormatters' does not exist on type 'StringConstructor'.
@@ -3866,10 +3866,9 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(133,9)
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(147,27): error TS2740: Type 'Element' is missing the following properties from type 'Icon': createdCallback, _descriptor, _spriteSheet, _iconType, and 117 more.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(177,67): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(179,61): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(209,41): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(213,28): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(214,31): error TS2345: Argument of type '{ key: any; text: string; negative: false; }' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
-  Property 'regex' is missing in type '{ key: any; text: string; negative: false; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(214,31): error TS2345: Argument of type '{ key: any; text: any; negative: false; }' is not assignable to parameter of type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
+  Property 'regex' is missing in type '{ key: any; text: any; negative: false; }' but required in type '{ key: string; text: string; regex: RegExp; negative: boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(214,45): error TS2339: Property 'ConsoleFilter' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(216,25): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(226,9): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
@@ -6631,8 +6630,8 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.j
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(85,39): error TS2551: Property '_logItemCategoriesMap' does not exist on type 'typeof PaintProfilerView'. Did you mean '_initLogItemCategories'?
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(86,44): error TS2551: Property '_logItemCategoriesMap' does not exist on type 'typeof PaintProfilerView'. Did you mean '_initLogItemCategories'?
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(128,35): error TS2551: Property '_logItemCategoriesMap' does not exist on type 'typeof PaintProfilerView'. Did you mean '_initLogItemCategories'?
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(129,5): error TS2322: Type '{}' is not assignable to type '{ [x: string]: PaintProfilerCategory; }'.
-  Index signature is missing in type '{}'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(129,5): error TS2322: Type '{ 'Clear': PaintProfilerCategory; 'DrawPaint': PaintProfilerCategory; 'DrawData': PaintProfilerCategory; 'SetMatrix': PaintProfilerCategory; ... 31 more ...; 'DrawTextOnPath': PaintProfilerCategory; }' is not assignable to type '{ [x: string]: PaintProfilerCategory; }'.
+  Index signature is missing in type '{ 'Clear': PaintProfilerCategory; 'DrawPaint': PaintProfilerCategory; 'DrawData': PaintProfilerCategory; 'SetMatrix': PaintProfilerCategory; ... 31 more ...; 'DrawTextOnPath': PaintProfilerCategory; }'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(158,24): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/PaintProfilerView.js(244,26): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ [x: string]: number; }'.
   Index signature is missing in type '{}'.
@@ -8756,8 +8755,8 @@ node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(4
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(42,60): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(77,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(114,37): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(124,40): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ [x: string]: boolean; }'.
-  Index signature is missing in type '{}'.
+node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(124,40): error TS2345: Argument of type '{ '0': boolean; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+  Index signature is missing in type '{ '0': boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(130,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBModel.js(41,12): error TS2339: Property 'registerStorageDispatcher' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBModel.js(43,35): error TS2339: Property 'indexedDBAgent' does not exist on type 'Target'.
@@ -9458,8 +9457,8 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1060,13): 
   Type '{}' has no call signatures.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1084,19): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1089,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1101,35): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ [x: string]: string; }'.
-  Index signature is missing in type '{}'.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1101,35): error TS2345: Argument of type '{ 'User-Agent': string; 'Cache-Control': string; }' is not assignable to parameter of type '{ [x: string]: string; }'.
+  Index signature is missing in type '{ 'User-Agent': string; 'Cache-Control': string; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1115,24): error TS2694: Namespace 'Protocol' has no exported member 'NetworkAgent'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1116,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1117,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
