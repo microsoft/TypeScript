@@ -8,5 +8,6 @@
     "eslint.options": {
         "rulePaths": ["./scripts/eslint/built/rules/"],
         "ext": [".ts"]
-    }
+    },
+    "typescript.tsdk": "lib"
 }
