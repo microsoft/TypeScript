@@ -220,6 +220,10 @@ namespace Harness.LanguageService {
             return !!this.typesRegistry && this.typesRegistry.has(name);
         }
 
+        getGlobalTypingsCacheLocation() {
+            return "/Library/Caches/typescript";
+        }
+
         installPackage = ts.notImplemented;
 
         getCompilationSettings() { return this.settings; }
