@@ -16,10 +16,6 @@ namespace ts {
             hoistVariableDeclaration
         } = context;
 
-        const {
-            getConverters: converters,
-        } = factory;
-
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -375,7 +371,7 @@ namespace ts {
             const variables = getInitializedVariables(node);
             if (variables.length === 0) {
                 if (hasReceiver) {
-                    return visitNode(converters().convertToAssignmentElementTarget(node.declarations[0].name), visitor, isExpression);
+                    return visitNode(factory.converters.convertToAssignmentElementTarget(node.declarations[0].name), visitor, isExpression);
                 }
                 return undefined;
             }
@@ -403,7 +399,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration) {
             const converted = setSourceMapRange(
                 factory.createAssignment(
-                    converters().convertToAssignmentElementTarget(node.name),
+                    factory.converters.convertToAssignmentElementTarget(node.name),
                     node.initializer!
                 ),
                 node
@@ -510,7 +506,7 @@ namespace ts {
 
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
-                    const block = converters().convertToFunctionBlock(expression);
+                    const block = factory.converters.convertToFunctionBlock(expression);
                     result = factory.updateBlock(block, setTextRange(factory.createNodeArray(concatenate(declarations, block.statements)), block.statements));
                 }
                 else {
@@ -531,7 +527,7 @@ namespace ts {
                 return factory.updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
             }
             else {
-                return converters().convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
+                return factory.converters.convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
             }
         }
 

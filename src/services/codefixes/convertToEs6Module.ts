@@ -483,7 +483,7 @@ namespace ts.codefix {
             getSynthesizedDeepClones(fn.typeParameters),
             getSynthesizedDeepClones(fn.parameters),
             getSynthesizedDeepClone(fn.type),
-            factory.getConverters().convertToFunctionBlock(getSynthesizedDeepClone(fn.body!)));
+            factory.converters.convertToFunctionBlock(getSynthesizedDeepClone(fn.body!)));
     }
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: ReadonlyArray<Modifier>, cls: ClassExpression): ClassDeclaration {

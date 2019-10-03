@@ -6958,7 +6958,7 @@ namespace ts {
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier) {
-                    return finishNode(factory.createJSDocTag(tagName), start);
+                    return finishNode(factory.createJSDocUnknownTag(tagName), start);
                 }
 
                 function addTag(tag: JSDocTag | undefined): void {

@@ -192,7 +192,7 @@ namespace ts {
         const updated = visitNode(node, visitor, isConciseBody);
         const declarations = endLexicalEnvironment();
         if (some(declarations)) {
-            const block = factory.getConverters().convertToFunctionBlock(updated);
+            const block = factory.converters.convertToFunctionBlock(updated);
             const statements = mergeLexicalEnvironment(block.statements, declarations);
             return factory.updateBlock(block, statements);
         }

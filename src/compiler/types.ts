@@ -5913,8 +5913,8 @@ namespace ts {
     }
 
     export interface NodeFactory {
-        /* @internal */ getParenthesizerRules(): ParenthesizerRules;
-        /* @internal */ getConverters(): NodeConverters;
+        /* @internal */ readonly parenthesizer: ParenthesizerRules;
+        /* @internal */ readonly converters: NodeConverters;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         /**
@@ -6037,7 +6037,6 @@ namespace ts {
         updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
         createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-        /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // tslint:disable-line unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
@@ -6305,7 +6304,7 @@ namespace ts {
         /* @internal */ createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag;
         /* @internal */ createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag;
         /* @internal */ createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag;
-        /* @internal */ createJSDocTag(tagName: Identifier): JSDocTag;
+        /* @internal */ createJSDocUnknownTag(tagName: Identifier): JSDocUnknownTag;
         /* @internal */ createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
 
         //
@@ -6388,6 +6387,44 @@ namespace ts {
         updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
 
         //
+        // Common operators
+        //
+
+        createComma(left: Expression, right: Expression): BinaryExpression;
+        createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
+        createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
+        createLogicalOr(left: Expression, right: Expression): BinaryExpression;
+        createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
+        createBitwiseOr(left: Expression, right: Expression): BinaryExpression;
+        createBitwiseXor(left: Expression, right: Expression): BinaryExpression;
+        createBitwiseAnd(left: Expression, right: Expression): BinaryExpression;
+        createStrictEquality(left: Expression, right: Expression): BinaryExpression;
+        createStrictInequality(left: Expression, right: Expression): BinaryExpression;
+        createEquality(left: Expression, right: Expression): BinaryExpression;
+        createInequality(left: Expression, right: Expression): BinaryExpression;
+        createLessThan(left: Expression, right: Expression): BinaryExpression;
+        createLessThanEquals(left: Expression, right: Expression): BinaryExpression;
+        createGreaterThan(left: Expression, right: Expression): BinaryExpression;
+        createGreaterThanEquals(left: Expression, right: Expression): BinaryExpression;
+        createLeftShift(left: Expression, right: Expression): BinaryExpression;
+        createRightShift(left: Expression, right: Expression): BinaryExpression;
+        createUnsignedRightShift(left: Expression, right: Expression): BinaryExpression;
+        createAdd(left: Expression, right: Expression): BinaryExpression;
+        createSubtract(left: Expression, right: Expression): BinaryExpression;
+        createMultiply(left: Expression, right: Expression): BinaryExpression;
+        createDivide(left: Expression, right: Expression): BinaryExpression;
+        createModulo(left: Expression, right: Expression): BinaryExpression;
+        createExponent(left: Expression, right: Expression): BinaryExpression;
+        createPrefixPlus(operand: Expression): PrefixUnaryExpression;
+        createPrefixMinus(operand: Expression): PrefixUnaryExpression;
+        createPrefixIncrement(operand: Expression): PrefixUnaryExpression;
+        createPrefixDecrement(operand: Expression): PrefixUnaryExpression;
+        createBitwiseNot(operand: Expression): PrefixUnaryExpression;
+        createLogicalNot(operand: Expression): PrefixUnaryExpression;
+        createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
+        createPostfixDecrement(operand: Expression): PostfixUnaryExpression;
+
+        //
         // Compound Nodes
         //
 
@@ -6395,21 +6432,13 @@ namespace ts {
         createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
         createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-        createComma(left: Expression, right: Expression): Expression;
-        createLessThan(left: Expression, right: Expression): Expression;
-        createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
-        createAssignment(left: Expression, right: Expression): BinaryExpression;
-        createStrictEquality(left: Expression, right: Expression): BinaryExpression;
-        createStrictInequality(left: Expression, right: Expression): BinaryExpression;
-        createAdd(left: Expression, right: Expression): BinaryExpression;
-        createSubtract(left: Expression, right: Expression): BinaryExpression;
-        createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
-        createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
-        createLogicalOr(left: Expression, right: Expression): BinaryExpression;
-        createLogicalNot(operand: Expression): PrefixUnaryExpression;
+
+
         createVoidZero(): VoidExpression;
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
+
+        /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
         /* @internal */ createTypeCheck(value: Expression, tag: TypeOfTag): Expression;
         /* @internal */ createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]): CallExpression;
         /* @internal */ createGlobalMethodCall(globalObjectName: string, globalMethodName: string, argumentsList: readonly Expression[]): CallExpression;
@@ -6490,8 +6519,7 @@ namespace ts {
         // Utilities
         //
 
-        // TODO(rbuckton): Rename to `restoreOuterExpressions`.
-        recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
+        restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
         /* @internal */ restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement | undefined, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement;
         /* @internal */ createUseStrictPrologue(): PrologueDirective;
         /**

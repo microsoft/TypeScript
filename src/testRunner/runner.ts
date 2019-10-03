@@ -225,6 +225,12 @@ function handleTestConfig() {
 }
 
 function beginTests() {
+    ts.Debug.loggingHost = {
+        log(_level: ts.LogLevel, s: string) {
+            console.log(s || "");
+        }
+    };
+
     if (ts.Debug.isDebugging) {
         ts.Debug.enableDebugInfo();
     }

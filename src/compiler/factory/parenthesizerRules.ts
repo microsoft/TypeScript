@@ -339,7 +339,7 @@ namespace ts {
                         emittedExpression.typeArguments,
                         emittedExpression.arguments
                     );
-                    return factory.recreateOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
+                    return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
                 }
             }
 

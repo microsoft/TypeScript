@@ -1,8 +1,61 @@
 /* @internal */
 namespace ts {
+    export enum LogLevel {
+        Off,
+        Error,
+        Warning,
+        Info,
+        Verbose
+    }
+
+    export interface LoggingHost {
+        log(level: LogLevel, s: string): void;
+    }
+
+    export interface DeprecationOptions {
+        message?: string;
+        error?: boolean;
+        since?: string;
+        until?: string;
+    }
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
+        export let currentLogLevel = LogLevel.Warning;
         export let isDebugging = false;
+        export let loggingHost: LoggingHost | undefined;
+
+        export function shouldLog(level: LogLevel): boolean {
+            return currentLogLevel <= level;
+        }
+
+        function logMessage(level: LogLevel, s: string): void {
+            if (loggingHost && shouldLog(level)) {
+                loggingHost.log(level, s);
+            }
+        }
+
+        export function log(s: string): void {
+            logMessage(LogLevel.Info, s);
+        }
+
+        export namespace log {
+            export function error(s: string): void {
+                logMessage(LogLevel.Error, s);
+            }
+
+            export function warn(s: string): void {
+                logMessage(LogLevel.Warning, s);
+            }
+
+            export function log(s: string): void {
+                logMessage(LogLevel.Info, s);
+            }
+
+            export function trace(s: string): void {
+                logMessage(LogLevel.Verbose, s);
+            }
+        }
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -68,12 +121,13 @@ namespace ts {
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: AnyFunction) {
+        export function getFunctionName(func: AnyFunction): string {
             if (typeof func !== "function") {
                 return "";
             }
             else if (func.hasOwnProperty("name")) {
-                return (<any>func).name;
+                const name = (<any>func).name || "";
+                return "" + name;
             }
             else {
                 const text = Function.prototype.toString.call(func);
@@ -257,6 +311,65 @@ namespace ts {
             }
 
             isDebugInfoEnabled = true;
+        }
+
+        export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
+        export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
+        export function createDeprecation(name: string, options: DeprecationOptions = {}) {
+            let formattedMessage = options.error ? "DeprecationError: " : "DeprecationWarning: ";
+            formattedMessage += `'${name}' ${options.since ? `has been deprecated since ${options.since}` : "is deprecated"}`;
+            formattedMessage += options.error ? " and can no longer be used." : options.until ? ` and will no longer be usable after ${options.until}.` : ".";
+            formattedMessage += options.message ? ` ${formatStringFromArgs(options.message, [name], 0)}` : "";
+            let hasWrittenDeprecation = false;
+            return handleDeprecation;
+
+            function handleDeprecation(): void {
+                if (options.error) return fail(formattedMessage, handleDeprecation);
+                if (hasWrittenDeprecation) return;
+                hasWrittenDeprecation = true;
+                log.warn(formattedMessage);
+            }
+        }
+
+        function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
+            return function (this: unknown) {
+                deprecation();
+                return func.apply(this, arguments);
+            } as F;
+        }
+
+        function wrapAccessor(deprecation: () => void, desc: PropertyDescriptor) {
+            const newDesc: PropertyDescriptor = { enumerable: desc.enumerable, configurable: desc.configurable };
+            if (desc.get) newDesc.get = wrapFunction(deprecation, desc.get);
+            if (desc.set) newDesc.set = wrapFunction(deprecation, desc.set);
+            return newDesc;
+        }
+
+        function wrapValue(deprecation: () => void, desc: PropertyDescriptor) {
+            const newDesc: PropertyDescriptor = { enumerable: desc.enumerable, configurable: desc.configurable };
+            let value = desc.value;
+            newDesc.get = () => { deprecation(); return value; };
+            if (desc.writable) newDesc.set = _value => { deprecation(); value = _value; };
+            return newDesc;
+        }
+
+        export function deprecateProperties<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(ns: T, keys: K[], options?: DeprecationOptions) {
+            for (const key of keys) {
+                deprecateProperty(ns, key, options);
+            }
+        }
+
+        export function deprecateProperty<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(ns: T, key: K, options?: DeprecationOptions) {
+            const desc = Object.getOwnPropertyDescriptor(ns, key);
+            if (!desc) return;
+            const deprecation = createDeprecation(key, options);
+            const newDesc = desc.get || desc.set ? wrapAccessor(deprecation, desc) : wrapValue(deprecation, desc);
+            Object.defineProperty(ns, key, newDesc);
+        }
+
+        export function deprecateFunction<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
+            const deprecation = createDeprecation(getFunctionName(func), options);
+            return wrapFunction(deprecation, func);
         }
     }
 }

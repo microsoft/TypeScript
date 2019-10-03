@@ -14,7 +14,6 @@ namespace ts {
             hoistVariableDeclaration
         } = context;
 
-        const converters = factory.getConverters;
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -830,7 +829,7 @@ namespace ts {
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
-                const block = converters().convertToFunctionBlock(body, /*multiLine*/ true);
+                const block = factory.converters.convertToFunctionBlock(body, /*multiLine*/ true);
                 insertStatementsAfterStandardPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
                 return factory.updateBlock(block, setTextRange(factory.createNodeArray(statements), block.statements));

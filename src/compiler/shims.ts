@@ -18,8 +18,8 @@ namespace ts {
 /* @internal */
 namespace ts {
     // Shims
-    export const Map: MapConstructor = requireShim("./mapShim.js", "createMapShim"); // tslint:disable-line variable-name
-    export const Promise: PromiseConstructor = requireShim("./promiseShim.js", "createPromiseShim"); // tslint:disable-line variable-name
+    export const Map: MapConstructor = tryGetNativeMap() || requireShim("./mapShim.js", "createMapShim"); // tslint:disable-line variable-name
+    export const Promise: PromiseConstructor = tryGetNativePromise() || requireShim("./promiseShim.js", "createPromiseShim"); // tslint:disable-line variable-name
 
     function requireShim<K extends string, C>(shimPath: string, shimFactory: K) {
         type ShimModule = Record<K, () => C>;

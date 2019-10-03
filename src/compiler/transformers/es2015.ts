@@ -3691,11 +3691,11 @@ namespace ts {
 
             // Recreate any outer parentheses or partially-emitted expressions to preserve source map
             // and comment locations.
-            return factory.recreateOuterExpressions(node.expression,
-                factory.recreateOuterExpressions(variable.initializer,
-                    factory.recreateOuterExpressions(aliasAssignment && aliasAssignment.right,
+            return factory.restoreOuterExpressions(node.expression,
+                factory.restoreOuterExpressions(variable.initializer,
+                    factory.restoreOuterExpressions(aliasAssignment && aliasAssignment.right,
                         factory.updateCall(call,
-                            factory.recreateOuterExpressions(call.expression,
+                            factory.restoreOuterExpressions(call.expression,
                                 factory.updateFunctionExpression(
                                     func,
                                     /*modifiers*/ undefined,

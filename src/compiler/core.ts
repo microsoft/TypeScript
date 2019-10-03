@@ -35,16 +35,16 @@ namespace ts {
         entries(): Iterator<[string, T]>;
     }
 
-    export interface MapConstructor {
-        // tslint:disable-next-line:callable-types
-        new <T>(): Map<T>;
-    }
-
     /** ES6 Map interface. */
     export interface Map<T> extends ReadonlyMap<T> {
         set(key: string, value: T): this;
         delete(key: string): boolean;
         clear(): void;
+    }
+
+    export interface MapConstructor {
+        // tslint:disable-next-line:callable-types
+        new <T>(): Map<T>;
     }
 
     /** ES6 Iterator type. */

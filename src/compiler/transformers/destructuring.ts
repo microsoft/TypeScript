@@ -494,7 +494,7 @@ namespace ts {
     }
 
     function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
-        return factory.createArrayLiteral(map(elements, factory.getConverters().convertToArrayAssignmentElement));
+        return factory.createArrayLiteral(map(elements, factory.converters.convertToArrayAssignmentElement));
     }
 
     function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
@@ -503,7 +503,7 @@ namespace ts {
     }
 
     function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
-        return factory.createObjectLiteral(map(elements, factory.getConverters().convertToObjectAssignmentElement));
+        return factory.createObjectLiteral(map(elements, factory.converters.convertToObjectAssignmentElement));
     }
 
     function makeBindingElement(factory: NodeFactory, name: Identifier) {

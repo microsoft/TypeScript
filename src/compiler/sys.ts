@@ -921,17 +921,17 @@ namespace ts {
                     tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?
                         createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
-                const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
+                const watchDirectoryRecursively = memoize(() => createRecursiveDirectoryWatcher({
                     useCaseSensitiveFileNames,
                     directoryExists,
                     getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory,
                     realpath
-                });
+                }));
 
                 return (directoryName, callback, recursive) => {
                     if (recursive) {
-                        return watchDirectoryRecursively(directoryName, callback);
+                        return watchDirectoryRecursively()(directoryName, callback);
                     }
                     return watchDirectory(directoryName, callback);
                 };

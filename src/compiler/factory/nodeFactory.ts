@@ -8,9 +8,10 @@ namespace ts {
         //                 this and determine if it worthwhile to keep this optimization.
         let skipTransformationFlags = false;
 
-        // Defer loading the parenthesizer and node converters until they are requestd
-        const parenthesizer = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
-        const getConverters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
+        // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
+        const lazyParenthesizer = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
+        const lazyConverters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
+        const lazyFactory = memoize(() => createLazyFactoryMembers(factory, asExpression));
 
         // Add tree state observers to base methods.
         const createNode = observeResult(baseFactory.createBaseNode, treeStateObserver && treeStateObserver.onCreateNode);
@@ -25,8 +26,8 @@ namespace ts {
         const reuse = observeResult(reuseWorker, treeStateObserver && treeStateObserver.onReuseNode);
 
         const factory: NodeFactory = {
-            getParenthesizerRules: parenthesizer,
-            getConverters,
+            get parenthesizer() { return lazyParenthesizer(); },
+            get converters() { return lazyConverters(); },
             setSkipTransformationFlags: value => {
                 const oldValue = skipTransformationFlags;
                 skipTransformationFlags = value;
@@ -50,8 +51,8 @@ namespace ts {
             createFileLevelUniqueName,
             getGeneratedNameForNode,
             createToken,
-            createSuper: createSuperExpression,
-            createThis: createThisExpression,
+            createSuper,
+            createThis,
             createNull,
             createTrue,
             createFalse,
@@ -87,7 +88,6 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
-            createSignatureDeclaration,
             createKeywordTypeNode,
             createTypePredicateNode,
             updateTypePredicateNode,
@@ -335,7 +335,7 @@ namespace ts {
             createJSDocCallbackTag,
             createJSDocClassTag,
             createJSDocEnumTag,
-            createJSDocTag: createJSDocUnknownTag,
+            createJSDocUnknownTag: createJSDocUnknownTag,
             createJSDocComment,
             createJsxElement,
             updateJsxElement,
@@ -387,49 +387,71 @@ namespace ts {
             createBundle,
             updateBundle,
 
-            // TODO(rbuckton): Move these to a different object or possibly remove them?
-            createImmediatelyInvokedFunctionExpression,
-            createImmediatelyInvokedArrowFunction,
-            createComma,
-            createLessThan,
-            createAssignment,
-            createStrictEquality,
-            createStrictInequality,
-            createAdd,
-            createSubtract,
-            createPostfixIncrement,
-            createLogicalAnd,
-            createLogicalOr,
-            createLogicalNot,
-            createVoidZero,
-            createExportDefault,
-            createExternalModuleExport,
-            createTypeCheck,
-            createMethodCall,
-            createGlobalMethodCall,
-            createFunctionBindCall,
-            createFunctionCallCall,
-            createFunctionApplyCall,
-            createArraySliceCall: createArraySlice,
-            createArrayConcatCall: createArrayConcat,
-            createObjectDefinePropertyCall,
-            createPropertyDescriptor,
-            createCallBinding,
-            inlineExpressions,
-            getInternalName,
-            getLocalName,
-            getExportName,
-            getDeclarationName,
-            getNamespaceMemberName,
-            getExternalModuleOrNamespaceExportName,
-            recreateOuterExpressions,
-            restoreEnclosingLabel,
-            createUseStrictPrologue,
-            copyPrologue,
-            copyStandardPrologue,
-            copyCustomPrologue,
-            ensureUseStrict,
-            liftToBlock
+            // Lazily load factory methods for common operator factories and utilities
+            get createSignatureDeclaration() { return lazyFactory().createSignatureDeclaration; },
+            get createComma() { return lazyFactory().createComma; },
+            get createAssignment() { return lazyFactory().createAssignment; },
+            get createLogicalOr() { return lazyFactory().createLogicalOr; },
+            get createLogicalAnd() { return lazyFactory().createLogicalAnd; },
+            get createBitwiseOr() { return lazyFactory().createBitwiseOr; },
+            get createBitwiseXor() { return lazyFactory().createBitwiseXor; },
+            get createBitwiseAnd() { return lazyFactory().createBitwiseAnd; },
+            get createStrictEquality() { return lazyFactory().createStrictEquality; },
+            get createStrictInequality() { return lazyFactory().createStrictInequality; },
+            get createEquality() { return lazyFactory().createEquality; },
+            get createInequality() { return lazyFactory().createInequality; },
+            get createLessThan() { return lazyFactory().createLessThan; },
+            get createLessThanEquals() { return lazyFactory().createLessThanEquals; },
+            get createGreaterThan() { return lazyFactory().createGreaterThan; },
+            get createGreaterThanEquals() { return lazyFactory().createGreaterThanEquals; },
+            get createLeftShift() { return lazyFactory().createLeftShift; },
+            get createRightShift() { return lazyFactory().createRightShift; },
+            get createUnsignedRightShift() { return lazyFactory().createUnsignedRightShift; },
+            get createAdd() { return lazyFactory().createAdd; },
+            get createSubtract() { return lazyFactory().createSubtract; },
+            get createMultiply() { return lazyFactory().createMultiply; },
+            get createDivide() { return lazyFactory().createDivide; },
+            get createModulo() { return lazyFactory().createModulo; },
+            get createExponent() { return lazyFactory().createExponent; },
+            get createPrefixPlus() { return lazyFactory().createPrefixPlus; },
+            get createPrefixMinus() { return lazyFactory().createPrefixMinus; },
+            get createPrefixIncrement() { return lazyFactory().createPrefixIncrement; },
+            get createPrefixDecrement() { return lazyFactory().createPrefixDecrement; },
+            get createBitwiseNot() { return lazyFactory().createBitwiseNot; },
+            get createLogicalNot() { return lazyFactory().createLogicalNot; },
+            get createPostfixIncrement() { return lazyFactory().createPostfixIncrement; },
+            get createPostfixDecrement() { return lazyFactory().createPostfixDecrement; },
+            get createImmediatelyInvokedFunctionExpression() { return lazyFactory().createImmediatelyInvokedFunctionExpression; },
+            get createImmediatelyInvokedArrowFunction() { return lazyFactory().createImmediatelyInvokedArrowFunction; },
+            get createVoidZero() { return lazyFactory().createVoidZero; },
+            get createExportDefault() { return lazyFactory().createExportDefault; },
+            get createExternalModuleExport() { return lazyFactory().createExternalModuleExport; },
+            get createTypeCheck() { return lazyFactory().createTypeCheck; },
+            get createMethodCall() { return lazyFactory().createMethodCall; },
+            get createGlobalMethodCall() { return lazyFactory().createGlobalMethodCall; },
+            get createFunctionBindCall() { return lazyFactory().createFunctionBindCall; },
+            get createFunctionCallCall() { return lazyFactory().createFunctionCallCall; },
+            get createFunctionApplyCall() { return lazyFactory().createFunctionApplyCall; },
+            get createArraySliceCall() { return lazyFactory().createArraySliceCall; },
+            get createArrayConcatCall() { return lazyFactory().createArrayConcatCall; },
+            get createObjectDefinePropertyCall() { return lazyFactory().createObjectDefinePropertyCall; },
+            get createPropertyDescriptor() { return lazyFactory().createPropertyDescriptor; },
+            get createCallBinding() { return lazyFactory().createCallBinding; },
+            get inlineExpressions() { return lazyFactory().inlineExpressions; },
+            get getInternalName() { return lazyFactory().getInternalName; },
+            get getLocalName() { return lazyFactory().getLocalName; },
+            get getExportName() { return lazyFactory().getExportName; },
+            get getDeclarationName() { return lazyFactory().getDeclarationName; },
+            get getNamespaceMemberName() { return lazyFactory().getNamespaceMemberName; },
+            get getExternalModuleOrNamespaceExportName() { return lazyFactory().getExternalModuleOrNamespaceExportName; },
+            get restoreOuterExpressions() { return lazyFactory().recreateOuterExpressions; },
+            get restoreEnclosingLabel() { return lazyFactory().restoreEnclosingLabel; },
+            get createUseStrictPrologue() { return lazyFactory().createUseStrictPrologue; },
+            get copyPrologue() { return lazyFactory().copyPrologue; },
+            get copyStandardPrologue() { return lazyFactory().copyStandardPrologue; },
+            get copyCustomPrologue() { return lazyFactory().copyCustomPrologue; },
+            get ensureUseStrict() { return lazyFactory().ensureUseStrict; },
+            get liftToBlock() { return lazyFactory().liftToBlock; },
         };
 
         return factory;
@@ -877,12 +899,12 @@ namespace ts {
         //
 
         // @api
-        function createSuperExpression() {
+        function createSuper() {
             return createToken(SyntaxKind.SuperKeyword) as SuperExpression;
         }
 
         // @api
-        function createThisExpression() {
+        function createThis() {
             return createToken(SyntaxKind.ThisKeyword) as ThisExpression;
         }
 
@@ -950,7 +972,7 @@ namespace ts {
         // @api
         function createComputedPropertyName(expression: Expression) {
             const node = createBaseNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfComputedPropertyName(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionOfComputedPropertyName(expression));
             if (!skipTransformationFlags) {
                 markES2015(node);
                 markComputedPropertyName(node);
@@ -1010,7 +1032,7 @@ namespace ts {
                 modifiers,
                 name,
                 type,
-                initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
+                initializer && lazyParenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
             );
             setChild(node, node.dotDotDotToken = dotDotDotToken);
             setChild(node, node.questionToken = questionToken);
@@ -1052,7 +1074,7 @@ namespace ts {
         // @api
         function createDecorator(expression: Expression) {
             const node = createBaseNode<Decorator>(SyntaxKind.Decorator);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
             if (!skipTransformationFlags) {
                 markTypeScript(node);
                 markTypeScriptClassSyntax(node);
@@ -1457,50 +1479,6 @@ namespace ts {
                 : reuse(node);
         }
 
-        // Route signature creation to the appropriate factory method. Used by the NodeBuilder in the checker.
-        // @api
-        function createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
-        function createSignatureDeclaration(kind: SignatureDeclaration["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): SignatureDeclaration {
-            switch (kind) {
-                case SyntaxKind.CallSignature:
-                    return createCallSignature(typeParameters, parameters, type);
-                case SyntaxKind.ConstructSignature:
-                    return createConstructSignature(typeParameters, parameters, type);
-                case SyntaxKind.MethodSignature:
-                    // NOTE: This creates an *invalid* method signature since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return createMethodSignature(/*modifiers*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type);
-                case SyntaxKind.MethodDeclaration:
-                    // NOTE: This creates an *invalid* method declaration since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return createMethodDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
-                case SyntaxKind.Constructor:
-                    return createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, /*body*/ undefined);
-                case SyntaxKind.GetAccessor:
-                    // NOTE: This creates an *invalid* get accessor since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return createGetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, type, /*body*/ undefined);
-                case SyntaxKind.SetAccessor:
-                    // NOTE: This creates an *invalid* set accessor since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return createSetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, /*body*/ undefined);
-                case SyntaxKind.IndexSignature:
-                    return createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, type);
-                case SyntaxKind.JSDocFunctionType:
-                    return createJSDocFunctionType(parameters, type);
-                case SyntaxKind.FunctionType:
-                    return createFunctionTypeNode(typeParameters, parameters, type);
-                case SyntaxKind.ConstructorType:
-                    return createConstructorTypeNode(typeParameters, parameters, type);
-                case SyntaxKind.FunctionDeclaration:
-                    return createFunctionDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
-                case SyntaxKind.FunctionExpression:
-                    // NOTE: This creates an *invalid* function expression since `body` is `undefined`, but this is preserved to support existing behavior.
-                    return createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined!);
-                case SyntaxKind.ArrowFunction:
-                    // NOTE: This creates an *invalid* arrow function since `body` is `undefined`, but this is preserved to support existing behavior.
-                    return createArrowFunction(/*modifiers*/ undefined, typeParameters, parameters, type, /*equalsGreaterThanToken*/ undefined, /*body*/ undefined!);
-                default:
-                    return Debug.assertNever(kind);
-            }
-        }
-
         // @api
         function createIndexSignature(
             decorators: readonly Decorator[] | undefined,
@@ -1571,7 +1549,7 @@ namespace ts {
         function createTypeReferenceNode(typeName: string | EntityName, typeArguments: readonly TypeNode[] | undefined) {
             const node = createBaseNode<TypeReferenceNode>(SyntaxKind.TypeReference);
             setChild(node, node.typeName = asName(typeName));
-            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
+            setChildren(node, node.typeArguments = typeArguments && lazyParenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1693,7 +1671,7 @@ namespace ts {
         // @api
         function createArrayTypeNode(elementType: TypeNode) {
             const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
-            setChild(node, node.elementType = parenthesizer().parenthesizeElementTypeOfArrayType(elementType));
+            setChild(node, node.elementType = lazyParenthesizer().parenthesizeElementTypeOfArrayType(elementType));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1727,7 +1705,7 @@ namespace ts {
         // @api
         function createOptionalTypeNode(type: TypeNode) {
             const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
-            setChild(node, node.type = parenthesizer().parenthesizeElementTypeOfArrayType(type));
+            setChild(node, node.type = lazyParenthesizer().parenthesizeElementTypeOfArrayType(type));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1760,7 +1738,7 @@ namespace ts {
 
         function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]) {
             const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
-            setChildren(node, node.types = parenthesizer().parenthesizeConstituentTypesOfUnionOrIntersectionType(createNodeArray(types)));
+            setChildren(node, node.types = lazyParenthesizer().parenthesizeConstituentTypesOfUnionOrIntersectionType(createNodeArray(types)));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1796,8 +1774,8 @@ namespace ts {
         // @api
         function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
             const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
-            setChild(node, node.checkType = parenthesizer().parenthesizeMemberOfConditionalType(checkType));
-            setChild(node, node.extendsType = parenthesizer().parenthesizeMemberOfConditionalType(extendsType));
+            setChild(node, node.checkType = lazyParenthesizer().parenthesizeMemberOfConditionalType(checkType));
+            setChild(node, node.extendsType = lazyParenthesizer().parenthesizeMemberOfConditionalType(extendsType));
             setChild(node, node.trueType = trueType);
             setChild(node, node.falseType = falseType);
             if (!skipTransformationFlags) {
@@ -1838,7 +1816,7 @@ namespace ts {
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             setChild(node, node.argument = argument);
             setChild(node, node.qualifier = qualifier);
-            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
+            setChildren(node, node.typeArguments = typeArguments && lazyParenthesizer().parenthesizeTypeArguments(createNodeArray(typeArguments)));
             node.isTypeOf = isTypeOf;
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
@@ -1886,7 +1864,7 @@ namespace ts {
         function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
             const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
-            setChild(node, node.type = parenthesizer().parenthesizeMemberOfElementType(type));
+            setChild(node, node.type = lazyParenthesizer().parenthesizeMemberOfElementType(type));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1903,7 +1881,7 @@ namespace ts {
         // @api
         function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
             const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
-            setChild(node, node.objectType = parenthesizer().parenthesizeMemberOfElementType(objectType));
+            setChild(node, node.objectType = lazyParenthesizer().parenthesizeMemberOfElementType(objectType));
             setChild(node, node.indexType = indexType);
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
@@ -2038,7 +2016,7 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseNode<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            setChildren(node, node.elements = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements)));
+            setChildren(node, node.elements = lazyParenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements)));
             if (multiLine) node.multiLine = true;
             return finish(node);
         }
@@ -2068,7 +2046,7 @@ namespace ts {
         // @api
         function createPropertyAccessExpression(expression: Expression, name: string | Identifier) {
             const node = createBaseNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.name = asName(name));
             if (!skipTransformationFlags) {
                 // super method calls require a lexical 'this'
@@ -2092,7 +2070,7 @@ namespace ts {
         // @api
         function createElementAccessExpression(expression: Expression, index: number | Expression) {
             const node = createBaseNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.argumentExpression = asExpression(index));
             if (!skipTransformationFlags) {
                 // super method calls require a lexical 'this'
@@ -2116,9 +2094,9 @@ namespace ts {
         // @api
         function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
             const node = createBaseNode<CallExpression>(SyntaxKind.CallExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
-            setChildren(node, node.arguments = parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
+            setChildren(node, node.arguments = lazyParenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
             if (!skipTransformationFlags) {
                 if (typeArguments) {
                     markTypeScript(node);
@@ -2145,9 +2123,9 @@ namespace ts {
         // @api
         function createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
             const node = createBaseNode<NewExpression>(SyntaxKind.NewExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfNew(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionOfNew(expression));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
-            setChildren(node, node.arguments = argumentsArray ? parenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)) : undefined);
+            setChildren(node, node.arguments = argumentsArray ? lazyParenthesizer().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)) : undefined);
             if (!skipTransformationFlags) {
                 if (typeArguments) {
                     markTypeScript(node);
@@ -2168,7 +2146,7 @@ namespace ts {
         // @api
         function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
             const node = createBaseNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
-            setChild(node, node.tag = parenthesizer().parenthesizeLeftSideOfAccess(tag));
+            setChild(node, node.tag = lazyParenthesizer().parenthesizeLeftSideOfAccess(tag));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.template = template);
             if (!skipTransformationFlags) {
@@ -2192,7 +2170,7 @@ namespace ts {
         // @api
         function createTypeAssertion(type: TypeNode, expression: Expression) {
             const node = createBaseNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(expression));
             setChild(node, node.type = type);
             if (!skipTransformationFlags) {
                 markTypeScript(node);
@@ -2301,7 +2279,7 @@ namespace ts {
                 typeParameters,
                 parameters,
                 type,
-                parenthesizer().parenthesizeConciseBodyOfArrowFunction(body)
+                lazyParenthesizer().parenthesizeConciseBodyOfArrowFunction(body)
             );
             setChild(node, node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken));
             if (!skipTransformationFlags) {
@@ -2355,7 +2333,7 @@ namespace ts {
         // @api
         function createDeleteExpression(expression: Expression) {
             const node = createBaseNode<DeleteExpression>(SyntaxKind.DeleteExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(expression));
             return finish(node);
         }
 
@@ -2369,7 +2347,7 @@ namespace ts {
         // @api
         function createTypeOfExpression(expression: Expression) {
             const node = createBaseNode<TypeOfExpression>(SyntaxKind.TypeOfExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(expression));
             return finish(node);
         }
 
@@ -2383,7 +2361,7 @@ namespace ts {
         // @api
         function createVoidExpression(expression: Expression) {
             const node = createBaseNode<VoidExpression>(SyntaxKind.VoidExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(expression));
             return finish(node);
         }
 
@@ -2397,7 +2375,7 @@ namespace ts {
         // @api
         function createAwaitExpression(expression: Expression) {
             const node = createBaseNode<AwaitExpression>(SyntaxKind.AwaitExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeOperandOfPrefixUnary(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(expression));
             if (!skipTransformationFlags) {
                 markES2017(node);
                 markES2018(node);
@@ -2416,7 +2394,7 @@ namespace ts {
         function createPrefixUnaryExpression(operator: PrefixUnaryOperator, operand: Expression) {
             const node = createBaseNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
             node.operator = operator;
-            setChild(node, node.operand = parenthesizer().parenthesizeOperandOfPrefixUnary(operand));
+            setChild(node, node.operand = lazyParenthesizer().parenthesizeOperandOfPrefixUnary(operand));
             return finish(node);
         }
 
@@ -2431,7 +2409,7 @@ namespace ts {
         function createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator) {
             const node = createBaseNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
-            setChild(node, node.operand = parenthesizer().parenthesizeOperandOfPostfixUnary(operand));
+            setChild(node, node.operand = lazyParenthesizer().parenthesizeOperandOfPostfixUnary(operand));
             return finish(node);
         }
 
@@ -2447,9 +2425,9 @@ namespace ts {
             const node = createBaseNode<BinaryExpression>(SyntaxKind.BinaryExpression);
             const operatorToken = asToken(operator);
             const operatorKind = operatorToken.kind;
-            setChild(node, node.left = parenthesizer().parenthesizeLeftSideOfBinary(operatorKind, left));
+            setChild(node, node.left = lazyParenthesizer().parenthesizeLeftSideOfBinary(operatorKind, left));
             setChild(node, node.operatorToken = operatorToken);
-            setChild(node, node.right = parenthesizer().parenthesizeRightSideOfBinary(operatorKind, node.left, right));
+            setChild(node, node.right = lazyParenthesizer().parenthesizeRightSideOfBinary(operatorKind, node.left, right));
             if (!skipTransformationFlags) {
                 if (operatorKind === SyntaxKind.EqualsToken) {
                     if (node.left.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -2480,11 +2458,11 @@ namespace ts {
         // @api
         function createConditionalExpression(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression) {
             const node = createBaseNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
-            setChild(node, node.condition = parenthesizer().parenthesizeConditionOfConditionalExpression(condition));
+            setChild(node, node.condition = lazyParenthesizer().parenthesizeConditionOfConditionalExpression(condition));
             setChild(node, node.questionToken = questionToken);
-            setChild(node, node.whenTrue = parenthesizer().parenthesizeBranchOfConditionalExpression(whenTrue));
+            setChild(node, node.whenTrue = lazyParenthesizer().parenthesizeBranchOfConditionalExpression(whenTrue));
             setChild(node, node.colonToken = colonToken);
-            setChild(node, node.whenFalse = parenthesizer().parenthesizeBranchOfConditionalExpression(whenFalse));
+            setChild(node, node.whenFalse = lazyParenthesizer().parenthesizeBranchOfConditionalExpression(whenFalse));
             return finish(node);
         }
 
@@ -2615,7 +2593,7 @@ namespace ts {
         // @api
         function createSpreadElement(expression: Expression) {
             const node = createBaseNode<SpreadElement>(SyntaxKind.SpreadElement);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionForDisallowedComma(expression));
             if (!skipTransformationFlags) {
                 markES2015(node);
                 markRestOrSpread(node);
@@ -2682,8 +2660,8 @@ namespace ts {
         // @api
         function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
             const node = createBaseNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
-            setChildren(node, node.typeArguments = typeArguments && parenthesizer().parenthesizeTypeArguments(typeArguments));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChildren(node, node.typeArguments = typeArguments && lazyParenthesizer().parenthesizeTypeArguments(typeArguments));
             if (!skipTransformationFlags) {
                 markES2015(node);
             }
@@ -2720,7 +2698,7 @@ namespace ts {
         // @api
         function createNonNullExpression(expression: Expression) {
             const node = createBaseNode<NonNullExpression>(SyntaxKind.NonNullExpression);
-            setChild(node, node.expression = parenthesizer().parenthesizeLeftSideOfAccess(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeLeftSideOfAccess(expression));
             if (!skipTransformationFlags) {
                 markTypeScript(node);
             }
@@ -2838,7 +2816,7 @@ namespace ts {
         // @api
         function createExpressionStatement(expression: Expression): ExpressionStatement {
             const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionOfExpressionStatement(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionOfExpressionStatement(expression));
             return finish(node);
         }
 
@@ -3033,7 +3011,7 @@ namespace ts {
         // @api
         function createSwitchStatement(expression: Expression, caseBlock: CaseBlock): SwitchStatement {
             const node = createBaseNode<SwitchStatement>(SyntaxKind.SwitchStatement);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionForDisallowedComma(expression));
             setChild(node, node.caseBlock = caseBlock);
             return finish(node);
         }
@@ -3107,7 +3085,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name,
                 type,
-                initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
+                initializer && lazyParenthesizer().parenthesizeExpressionForDisallowedComma(initializer)
             );
             setChild(node, node.exclamationToken = exclamationToken);
             return finish(node);
@@ -3623,8 +3601,8 @@ namespace ts {
             );
             node.isExportEquals = isExportEquals;
             setChild(node, node.expression = isExportEquals
-                ? parenthesizer().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
-                : parenthesizer().parenthesizeExpressionOfExportDefault(expression));
+                ? lazyParenthesizer().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
+                : lazyParenthesizer().parenthesizeExpressionOfExportDefault(expression));
             return finish(node);
         }
 
@@ -4157,7 +4135,7 @@ namespace ts {
         // @api
         function createCaseClause(expression: Expression, statements: readonly Statement[]) {
             const node = createBaseNode<CaseClause>(SyntaxKind.CaseClause);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionForDisallowedComma(expression));
             setChildren(node, node.statements = createNodeArray(statements));
             return finish(node);
         }
@@ -4245,7 +4223,7 @@ namespace ts {
             const node = createBaseNode<PropertyAssignment>(SyntaxKind.PropertyAssignment);
             setChild(node, node.name = asName(name));
             setChild(node, node.questionToken = undefined);
-            setChild(node, node.initializer = parenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
+            setChild(node, node.initializer = lazyParenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
             return finish(node);
         }
 
@@ -4274,7 +4252,7 @@ namespace ts {
                 name
             );
             setChild(node, node.objectAssignmentInitializer = objectAssignmentInitializer !== undefined
-                ? parenthesizer().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer)
+                ? lazyParenthesizer().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer)
                 : undefined);
             if (!skipTransformationFlags) {
                 markES2015(node);
@@ -4302,7 +4280,7 @@ namespace ts {
         // @api
         function createSpreadAssignment(expression: Expression) {
             const node = createBaseNode<SpreadAssignment>(SyntaxKind.SpreadAssignment);
-            setChild(node, node.expression = parenthesizer().parenthesizeExpressionForDisallowedComma(expression));
+            setChild(node, node.expression = lazyParenthesizer().parenthesizeExpressionForDisallowedComma(expression));
             if (!skipTransformationFlags) {
                 markES2018(node);
                 markObjectRestOrSpread(node);
@@ -4325,7 +4303,7 @@ namespace ts {
         function createEnumMember(name: string | PropertyName, initializer?: Expression) {
             const node = createBaseNode<EnumMember>(SyntaxKind.EnumMember);
             setChild(node, node.name = asName(name));
-            setChild(node, node.initializer = initializer && parenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
+            setChild(node, node.initializer = initializer && lazyParenthesizer().parenthesizeExpressionForDisallowedComma(initializer));
             if (!skipTransformationFlags) {
                 markTypeScript(node);
             }
@@ -4517,24 +4495,213 @@ namespace ts {
                 : reuse(node);
         }
 
-        //
-        // Compound Nodes
-        //
+        function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
+        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
+        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined {
+            return array ? createNodeArray(array) : undefined;
+        }
 
-        // TODO(rbuckton): Consider removing these from NodeFactory and putting them somewhere else.
+        function asName<T extends Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
+            return typeof name === "string" ? createIdentifier(name) :
+                name;
+        }
+
+        function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
+            return typeof value === "string" ? createStringLiteral(value) :
+                typeof value === "number" ? createNumericLiteral(value) :
+                typeof value === "boolean" ? value ? createTrue() : createFalse() :
+                value;
+        }
+
+        function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
+            return typeof value === "number" ? createToken(value) : value;
+        }
+
+        function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
+        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
+        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
+            return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+        }
+
+        function setChildWorker(parent: Node, child: Node | undefined): void {
+            if (!skipTransformationFlags) {
+                if (child) {
+                    parent.transformFlags |= propagateChildFlags(child);
+                }
+            }
+        }
+
+        function setChildrenWorker(parent: Node, children: NodeArray<Node> | undefined): void {
+            if (!skipTransformationFlags) {
+                if (children) {
+                    parent.transformFlags |= propagateChildrenFlags(children);
+                }
+            }
+        }
+
+        function finishWorker<T extends Node>(node: T) {
+            if (!skipTransformationFlags) {
+                node.transformFlags |= TransformFlags.HasComputedFlags;
+            }
+            return node;
+        }
+
+        function updateWorker<T extends Node>(updated: T, original: T) {
+            return updateNode(updated, original);
+        }
+
+        function reuseWorker<T extends Node>(node: T) {
+            return node;
+        }
+    }
+
+    function createLazyFactoryMembers(
+        factory: NodeFactory,
+        asExpression: <T extends Expression | undefined>(value: string | number | boolean | T) => T | StringLiteral | NumericLiteral | BooleanLiteral,
+    ) {
+        // lazy initializaton of common operator factories
+        let lazyBinaryFactories: ((left: Expression, right: Expression) => BinaryExpression)[] | undefined;
+        let lazyPrefixUnaryFactories: ((operand: Expression) => PrefixUnaryExpression)[] | undefined;
+        let lazyPostfixUnaryFactories: ((operand: Expression) => PostfixUnaryExpression)[] | undefined;
+
+        return {
+            get createComma() { return getBinaryFactory(SyntaxKind.CommaToken); },
+            get createAssignment() { return getBinaryFactory(SyntaxKind.EqualsToken) as NodeFactory["createAssignment"]; },
+            get createLogicalOr() { return getBinaryFactory(SyntaxKind.BarBarToken); },
+            get createLogicalAnd() { return getBinaryFactory(SyntaxKind.AmpersandAmpersandToken); },
+            get createBitwiseOr() { return getBinaryFactory(SyntaxKind.BarToken); },
+            get createBitwiseXor() { return getBinaryFactory(SyntaxKind.CaretToken); },
+            get createBitwiseAnd() { return getBinaryFactory(SyntaxKind.AmpersandToken); },
+            get createStrictEquality() { return getBinaryFactory(SyntaxKind.EqualsEqualsEqualsToken); },
+            get createStrictInequality() { return getBinaryFactory(SyntaxKind.ExclamationEqualsEqualsToken); },
+            get createEquality() { return getBinaryFactory(SyntaxKind.EqualsEqualsToken); },
+            get createInequality() { return getBinaryFactory(SyntaxKind.ExclamationEqualsToken); },
+            get createLessThan() { return getBinaryFactory(SyntaxKind.LessThanToken); },
+            get createLessThanEquals() { return getBinaryFactory(SyntaxKind.LessThanEqualsToken); },
+            get createGreaterThan() { return getBinaryFactory(SyntaxKind.GreaterThanToken); },
+            get createGreaterThanEquals() { return getBinaryFactory(SyntaxKind.GreaterThanEqualsToken); },
+            get createLeftShift() { return getBinaryFactory(SyntaxKind.LessThanLessThanToken); },
+            get createRightShift() { return getBinaryFactory(SyntaxKind.GreaterThanGreaterThanToken); },
+            get createUnsignedRightShift() { return getBinaryFactory(SyntaxKind.GreaterThanGreaterThanGreaterThanToken); },
+            get createAdd() { return getBinaryFactory(SyntaxKind.PlusToken); },
+            get createSubtract() { return getBinaryFactory(SyntaxKind.MinusToken); },
+            get createMultiply() { return getBinaryFactory(SyntaxKind.AsteriskToken); },
+            get createDivide() { return getBinaryFactory(SyntaxKind.SlashToken); },
+            get createModulo() { return getBinaryFactory(SyntaxKind.PercentToken); },
+            get createExponent() { return getBinaryFactory(SyntaxKind.AsteriskAsteriskToken); },
+            get createPrefixPlus() { return getPrefixUnaryFactory(SyntaxKind.PlusToken); },
+            get createPrefixMinus() { return getPrefixUnaryFactory(SyntaxKind.MinusToken); },
+            get createPrefixIncrement() { return getPrefixUnaryFactory(SyntaxKind.PlusPlusToken); },
+            get createPrefixDecrement() { return getPrefixUnaryFactory(SyntaxKind.MinusMinusToken); },
+            get createBitwiseNot() { return getPrefixUnaryFactory(SyntaxKind.TildeToken); },
+            get createLogicalNot() { return getPrefixUnaryFactory(SyntaxKind.ExclamationToken); },
+            get createPostfixIncrement() { return getPostfixUnaryFactory(SyntaxKind.PlusPlusToken); },
+            get createPostfixDecrement() { return getPostfixUnaryFactory(SyntaxKind.MinusMinusToken); },
+
+            createSignatureDeclaration,
+            createImmediatelyInvokedFunctionExpression,
+            createImmediatelyInvokedArrowFunction,
+            createVoidZero,
+            createExportDefault,
+            createExternalModuleExport,
+            createTypeCheck,
+            createMethodCall,
+            createGlobalMethodCall,
+            createFunctionBindCall,
+            createFunctionCallCall,
+            createFunctionApplyCall,
+            createArraySliceCall,
+            createArrayConcatCall,
+            createObjectDefinePropertyCall,
+            createPropertyDescriptor,
+            createCallBinding,
+            inlineExpressions,
+            getInternalName,
+            getLocalName,
+            getExportName,
+            getDeclarationName,
+            getNamespaceMemberName,
+            getExternalModuleOrNamespaceExportName,
+            recreateOuterExpressions,
+            restoreEnclosingLabel,
+            createUseStrictPrologue,
+            copyPrologue,
+            copyStandardPrologue,
+            copyCustomPrologue,
+            ensureUseStrict,
+            liftToBlock,
+        };
+
+        function getBinaryFactory(operator: BinaryOperator) {
+            const factories = lazyBinaryFactories || [];
+            return factories[operator] || (factories[operator] = (left, right) => factory.createBinary(left, operator, right));
+        }
+
+        function getPrefixUnaryFactory(operator: PrefixUnaryOperator) {
+            const factories = lazyPrefixUnaryFactories || [];
+            return factories[operator] || (factories[operator] = operand => factory.createPrefix(operator, operand));
+        }
+
+        function getPostfixUnaryFactory(operator: PostfixUnaryOperator) {
+            const factories = lazyPostfixUnaryFactories || [];
+            return factories[operator] || (factories[operator] = operand => factory.createPostfix(operand, operator));
+        }
+
+        // Route signature creation to the appropriate factory method. Used by the NodeBuilder in the checker.
+        function createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
+        function createSignatureDeclaration(kind: SignatureDeclaration["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): SignatureDeclaration {
+            switch (kind) {
+                case SyntaxKind.CallSignature:
+                    return factory.createCallSignature(typeParameters, parameters, type);
+                case SyntaxKind.ConstructSignature:
+                    return factory.createConstructSignature(typeParameters, parameters, type);
+                case SyntaxKind.MethodSignature:
+                    // NOTE: This creates an *invalid* method signature since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createMethodSignature(/*modifiers*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type);
+                case SyntaxKind.MethodDeclaration:
+                    // NOTE: This creates an *invalid* method declaration since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createMethodDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
+                case SyntaxKind.Constructor:
+                    return factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, /*body*/ undefined);
+                case SyntaxKind.GetAccessor:
+                    // NOTE: This creates an *invalid* get accessor since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createGetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, type, /*body*/ undefined);
+                case SyntaxKind.SetAccessor:
+                    // NOTE: This creates an *invalid* set accessor since `name` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createSetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, /*body*/ undefined);
+                case SyntaxKind.IndexSignature:
+                    return factory.createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, type);
+                case SyntaxKind.JSDocFunctionType:
+                    return factory.createJSDocFunctionType(parameters, type);
+                case SyntaxKind.FunctionType:
+                    return factory.createFunctionTypeNode(typeParameters, parameters, type);
+                case SyntaxKind.ConstructorType:
+                    return factory.createConstructorTypeNode(typeParameters, parameters, type);
+                case SyntaxKind.FunctionDeclaration:
+                    return factory.createFunctionDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
+                case SyntaxKind.FunctionExpression:
+                    // NOTE: This creates an *invalid* function expression since `body` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined!);
+                case SyntaxKind.ArrowFunction:
+                    // NOTE: This creates an *invalid* arrow function since `body` is `undefined`, but this is preserved to support existing behavior.
+                    return factory.createArrowFunction(/*modifiers*/ undefined, typeParameters, parameters, type, /*equalsGreaterThanToken*/ undefined, /*body*/ undefined!);
+                default:
+                    return Debug.assertNever(kind);
+            }
+        }
 
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return createCallExpression(
-                createFunctionExpression(
+            return factory.createCall(
+                factory.createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
-                    createBlock(statements, /*multiLine*/ true)
+                    factory.createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
@@ -4544,73 +4711,26 @@ namespace ts {
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return createCallExpression(
-                createArrowFunction(
+            return factory.createCall(
+                factory.createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    createBlock(statements, /*multiLine*/ true)
+                    factory.createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
             );
         }
 
-
-        function createComma(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.CommaToken, right);
-        }
-
-        function createLessThan(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.LessThanToken, right);
-        }
-
-        function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
-        function createAssignment(left: Expression, right: Expression): BinaryExpression;
-        function createAssignment(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.EqualsToken, right);
-        }
-
-        function createStrictEquality(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.EqualsEqualsEqualsToken, right);
-        }
-
-        function createStrictInequality(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
-        }
-
-        function createAdd(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.PlusToken, right);
-        }
-
-        function createSubtract(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.MinusToken, right);
-        }
-
-        function createPostfixIncrement(operand: Expression) {
-            return createPostfixUnaryExpression(operand, SyntaxKind.PlusPlusToken);
-        }
-
-        function createLogicalAnd(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.AmpersandAmpersandToken, right);
-        }
-
-        function createLogicalOr(left: Expression, right: Expression) {
-            return createBinaryExpression(left, SyntaxKind.BarBarToken, right);
-        }
-
-        function createLogicalNot(operand: Expression) {
-            return createPrefixUnaryExpression(SyntaxKind.ExclamationToken, operand);
-        }
-
         function createVoidZero() {
-            return createVoidExpression(createNumericLiteral("0"));
+            return factory.createVoid(factory.createNumericLiteral("0"));
         }
 
         function createExportDefault(expression: Expression) {
-            return createExportAssignment(
+            return factory.createExportAssignment(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
@@ -4618,11 +4738,11 @@ namespace ts {
         }
 
         function createExternalModuleExport(exportName: Identifier) {
-            return createExportDeclaration(
+            return factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createNamedExports([
-                    createExportSpecifier(/*propertyName*/ undefined, exportName)
+                factory.createNamedExports([
+                    factory.createExportSpecifier(/*propertyName*/ undefined, exportName)
                 ])
             );
         }
@@ -4633,13 +4753,13 @@ namespace ts {
 
         function createTypeCheck(value: Expression, tag: TypeOfTag) {
             return tag === "undefined"
-                ? createStrictEquality(value, createVoidZero())
-                : createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
+                ? factory.createStrictEquality(value, createVoidZero())
+                : factory.createStrictEquality(factory.createTypeOf(value), factory.createStringLiteral(tag));
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
-            return createCallExpression(
-                createPropertyAccessExpression(object, asName(methodName)),
+            return factory.createCall(
+                factory.createPropertyAccess(object, methodName),
                 /*typeArguments*/ undefined,
                 argumentsList
             );
@@ -4658,14 +4778,14 @@ namespace ts {
         }
 
         function createGlobalMethodCall(globalObjectName: string, methodName: string, argumentsList: readonly Expression[]) {
-            return createMethodCall(createIdentifier(globalObjectName), methodName, argumentsList);
+            return createMethodCall(factory.createIdentifier(globalObjectName), methodName, argumentsList);
         }
 
-        function createArraySlice(array: Expression, start?: number | Expression) {
+        function createArraySliceCall(array: Expression, start?: number | Expression) {
             return createMethodCall(array, "slice", start === undefined ? [] : [asExpression(start)]);
         }
 
-        function createArrayConcat(array: Expression, argumentsList: readonly Expression[]) {
+        function createArrayConcatCall(array: Expression, argumentsList: readonly Expression[]) {
             return createMethodCall(array, "concat", argumentsList);
         }
 
@@ -4675,7 +4795,7 @@ namespace ts {
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
             if (expression) {
-                properties.push(createPropertyAssignment(propertyName, expression));
+                properties.push(factory.createPropertyAssignment(propertyName, expression));
                 return true;
             }
             return false;
@@ -4693,16 +4813,16 @@ namespace ts {
             isAccessor = tryAddPropertyAssignment(properties, "set", attributes.set) || isAccessor;
 
             Debug.assert(!(isData && isAccessor), "A PropertyDescriptor may not be both an accessor descriptor and a data descriptor.");
-            return createObjectLiteralExpression(properties, !singleLine);
+            return factory.createObjectLiteral(properties, !singleLine);
         }
 
         function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
             switch (outerExpression.kind) {
-                case SyntaxKind.ParenthesizedExpression: return updateParenthesizedExpression(outerExpression, expression);
-                case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
-                case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
-                case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
-                case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
+                case SyntaxKind.ParenthesizedExpression: return factory.updateParen(outerExpression, expression);
+                case SyntaxKind.TypeAssertionExpression: return factory.updateTypeAssertion(outerExpression, outerExpression.type, expression);
+                case SyntaxKind.AsExpression: return factory.updateAsExpression(outerExpression, expression, outerExpression.type);
+                case SyntaxKind.NonNullExpression: return factory.updateNonNullExpression(outerExpression, expression);
+                case SyntaxKind.PartiallyEmittedExpression: return factory.updatePartiallyEmittedExpression(outerExpression, expression);
             }
         }
 
@@ -4743,7 +4863,7 @@ namespace ts {
             if (!outermostLabeledStatement) {
                 return node;
             }
-            const updated = updateLabeledStatement(
+            const updated = factory.updateLabel(
                 outermostLabeledStatement,
                 outermostLabeledStatement.label,
                 outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
@@ -4784,26 +4904,26 @@ namespace ts {
             let thisArg: Expression;
             let target: LeftHandSideExpression;
             if (isSuperProperty(callee)) {
-                thisArg = createThisExpression();
+                thisArg = factory.createThis();
                 target = callee;
             }
             else if (callee.kind === SyntaxKind.SuperKeyword) {
-                thisArg = createThisExpression();
+                thisArg = factory.createThis();
                 target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
-                    ? setTextRange(createIdentifier("_super"), callee)
+                    ? setTextRange(factory.createIdentifier("_super"), callee)
                     : <PrimaryExpression>callee;
             }
             else if (getEmitFlags(callee) & EmitFlags.HelperName) {
                 thisArg = createVoidZero();
-                target = parenthesizer().parenthesizeLeftSideOfAccess(callee);
+                target = factory.parenthesizer.parenthesizeLeftSideOfAccess(callee);
             }
             else if (isPropertyAccessExpression(callee)) {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                    thisArg = createTempVariable(recordTempVariable);
-                    target = createPropertyAccessExpression(
+                    thisArg = factory.createTempVariable(recordTempVariable);
+                    target = factory.createPropertyAccess(
                         setTextRange(
-                            createAssignment(
+                            factory.createAssignment(
                                 thisArg,
                                 callee.expression
                             ),
@@ -4821,10 +4941,10 @@ namespace ts {
             else if (isElementAccessExpression(callee)) {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                    thisArg = createTempVariable(recordTempVariable);
-                    target = createElementAccessExpression(
+                    thisArg = factory.createTempVariable(recordTempVariable);
+                    target = factory.createElementAccess(
                         setTextRange(
-                            createAssignment(
+                            factory.createAssignment(
                                 thisArg,
                                 callee.expression
                             ),
@@ -4842,7 +4962,7 @@ namespace ts {
             else {
                 // for `a()` target is `a` and thisArg is `void 0`
                 thisArg = createVoidZero();
-                target = parenthesizer().parenthesizeLeftSideOfAccess(expression);
+                target = factory.parenthesizer.parenthesizeLeftSideOfAccess(expression);
             }
 
             return { target, thisArg };
@@ -4852,8 +4972,8 @@ namespace ts {
             // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
             // stack size exceeded" errors.
             return expressions.length > 10
-                ? createCommaListExpression(expressions)
-                : reduceLeft(expressions, createComma)!;
+                ? factory.createCommaList(expressions)
+                : reduceLeft(expressions, factory.createComma)!;
         }
 
         function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
@@ -4866,7 +4986,7 @@ namespace ts {
                 if (emitFlags) setEmitFlags(name, emitFlags);
                 return name;
             }
-            return getGeneratedNameForNode(node);
+            return factory.getGeneratedNameForNode(node);
         }
 
         /**
@@ -4932,7 +5052,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
-            const qualifiedName = createPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
+            const qualifiedName = factory.createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
             setTextRange(qualifiedName, name);
             let emitFlags: EmitFlags = 0;
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
@@ -4976,7 +5096,7 @@ namespace ts {
         }
 
         function createUseStrictPrologue() {
-            return startOnNewLine(createExpressionStatement(createStringLiteral("use strict"))) as PrologueDirective;
+            return startOnNewLine(factory.createExpressionStatement(factory.createStringLiteral("use strict"))) as PrologueDirective;
         }
 
         /**
@@ -5042,7 +5162,7 @@ namespace ts {
             const foundUseStrict = findUseStrictPrologue(statements);
 
             if (!foundUseStrict) {
-                return setTextRange(createNodeArray<Statement>([createUseStrictPrologue(), ...statements]), statements);
+                return setTextRange(factory.createNodeArray<Statement>([createUseStrictPrologue(), ...statements]), statements);
             }
 
             return statements;
@@ -5055,66 +5175,7 @@ namespace ts {
          */
         function liftToBlock(nodes: readonly Node[]): Statement {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
-            return <Statement>singleOrUndefined(nodes) || createBlock(<readonly Statement[]>nodes);
-        }
-
-        function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
-        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
-        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined {
-            return array ? createNodeArray(array) : undefined;
-        }
-
-        function asName<T extends Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
-            return typeof name === "string" ? createIdentifier(name) :
-                name;
-        }
-
-        function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
-            return typeof value === "string" ? createStringLiteral(value) :
-                typeof value === "number" ? createNumericLiteral(value) :
-                typeof value === "boolean" ? value ? createTrue() : createFalse() :
-                value;
-        }
-
-        function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
-            return typeof value === "number" ? createToken(value) : value;
-        }
-
-        function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
-        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
-        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
-            return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
-        }
-
-        function setChildWorker(parent: Node, child: Node | undefined): void {
-            if (!skipTransformationFlags) {
-                if (child) {
-                    parent.transformFlags |= propagateChildFlags(child);
-                }
-            }
-        }
-
-        function setChildrenWorker(parent: Node, children: NodeArray<Node> | undefined): void {
-            if (!skipTransformationFlags) {
-                if (children) {
-                    parent.transformFlags |= propagateChildrenFlags(children);
-                }
-            }
-        }
-
-        function finishWorker<T extends Node>(node: T) {
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.HasComputedFlags;
-            }
-            return node;
-        }
-
-        function updateWorker<T extends Node>(updated: T, original: T) {
-            return updateNode(updated, original);
-        }
-
-        function reuseWorker<T extends Node>(node: T) {
-            return node;
+            return <Statement>singleOrUndefined(nodes) || factory.createBlock(<readonly Statement[]>nodes);
         }
     }
 

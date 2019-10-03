@@ -1,6 +1,5 @@
 /*@internal*/
 namespace ts {
-    type MatchingKeys<T, TMatch, K extends keyof T = keyof T> = K extends (T[K] extends TMatch ? K : never) ? K : never;
     type TryExcludeVoid<T> = [T] extends [void] ? void : Exclude<T, void>;
     type Replace<T, Match, Replace> = T extends Match ? Replace : T;
     type Promised<T> = T extends PromiseLike<infer U> ? U : T;
