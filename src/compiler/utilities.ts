@@ -5913,6 +5913,14 @@ namespace ts {
                 || kind === SyntaxKind.CallExpression);
     }
 
+    /**
+     * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
+     */
+    /* @internal */
+    export function isOptionalExpression(node: Node): node is Expression & { parent: OptionalChainRoot } {
+        return isOptionalChainRoot(node.parent) && node === node.parent.expression;
+    }
+
     export function isNewExpression(node: Node): node is NewExpression {
         return node.kind === SyntaxKind.NewExpression;
     }

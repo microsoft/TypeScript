@@ -4265,6 +4265,10 @@ namespace ts {
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
         widened?: Type; // Cached widened form of the type
+        /* @internal */
+        optionalTypeOfType?: Type;       // A cached copy of the type unioned with the optionalType marker.
+        /* @internal */
+        nonOptionalTypeOfType?: Type;    // A cached copy of the type with the optionalType marker removed.
     }
 
     /* @internal */
