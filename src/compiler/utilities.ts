@@ -2174,9 +2174,11 @@ namespace ts {
                 nextToLast = nextToLast.expression as Exclude<BindableStaticNameExpression, Identifier>;
             }
             const id = nextToLast.expression;
-            if (id.escapedText === "exports" ||
-                id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") {
-                // exports.name = expr OR module.exports.name = expr
+            if ((id.escapedText === "exports" ||
+                id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") &&
+                // ExportsProperty does not support late binding; it must have a static name
+                isBindableStaticAccessExpression(lhs)) {
+                // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
             // F.G...x = expr
