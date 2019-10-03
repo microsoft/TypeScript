@@ -160,6 +160,8 @@ You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
 gulp runtests --tests=2dArrays --inspect=true
 ```
 
+You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
+
 ## Adding a Test
 
 To add a new test case, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
