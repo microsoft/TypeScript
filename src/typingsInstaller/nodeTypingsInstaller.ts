@@ -66,8 +66,9 @@ namespace ts.server.typingsInstaller {
     }
 
     const typesRegistryPackageName = "types-registry";
-    function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
+    const definitelyTypedTypesRegistryPackageName = "@definitelytyped/types-registry";
+    function getTypesRegistryFileLocation(globalTypingsCacheLocation: string, packageName: string): string {
+        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${packageName}/index.json`);
     }
 
     interface ExecSyncOptions {
@@ -105,28 +106,45 @@ namespace ts.server.typingsInstaller {
             ({ execSync: this.nodeExecSync } = require("child_process"));
 
             this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
+            const packageName = this.installTypesRegistry(globalTypingsCacheLocation);
+            this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation, packageName), this.installTypingHost, this.log);
+        }
 
-            try {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
-                }
-                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
+        private installTypesRegistry(globalTypingsCacheLocation: string) {
+            let result: typeof typesRegistryPackageName | typeof definitelyTypedTypesRegistryPackageName | "UPDATE FAILED" =
+                this.installTypesRegistryFromPackageName(definitelyTypedTypesRegistryPackageName, globalTypingsCacheLocation);
+            if (result === "UPDATE FAILED") {
+                result = this.installTypesRegistryFromPackageName(typesRegistryPackageName, globalTypingsCacheLocation);
+                if (result === "UPDATE FAILED") {
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`Error updating ${typesRegistryPackageName} package`);
+                    }
+                    // store error info to report it later when it is known that server is already listening to events from typings installer
+                    this.delayedInitializationError = {
+                        kind: "event::initializationFailed",
+                        message: result
+                    };
+                    return "types-registry";
                 }
             }
-            catch (e) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(<Error>e).message}`);
-                }
-                // store error info to report it later when it is known that server is already listening to events from typings installer
-                this.delayedInitializationError = {
-                    kind: "event::initializationFailed",
-                    message: (<Error>e).message
-                };
-            }
+            return result;
+        }
 
-            this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
+        private installTypesRegistryFromPackageName(packageName: typeof typesRegistryPackageName | typeof definitelyTypedTypesRegistryPackageName, globalTypingsCacheLocation: string) {
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Updating ${packageName} npm package...`);
+            }
+            const registry = packageName === typesRegistryPackageName ? "" : "--registry=https://npm.pkg.github.com";
+            const failed = this.execSyncAndLog(`${this.npmPath} install ${registry} --ignore-scripts ${packageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
+            if (failed) {
+                return "UPDATE FAILED";
+            }
+            else {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Updated ${packageName} npm package`);
+                }
+                return packageName;
+            }
         }
 
         listen() {
