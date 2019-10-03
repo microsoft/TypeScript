@@ -23593,7 +23593,20 @@ namespace ts {
                 // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
                 const thisArgumentNode = getThisArgumentOfCall(node);
-                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                let thisArgumentType: Type;
+                if (thisArgumentNode) {
+                    thisArgumentType = checkExpression(thisArgumentNode);
+                    if (isOptionalChainRoot(thisArgumentNode.parent)) {
+                        thisArgumentType = getNonNullableType(thisArgumentType);
+                    }
+                    else if (isOptionalChain(thisArgumentNode.parent)) {
+                        thisArgumentType = removeOptionalTypeMarker(thisArgumentType);
+                    }
+                }
+                else {
+                    thisArgumentType = voidType;
+                }
+
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
