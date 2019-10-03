@@ -4077,7 +4077,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Funkcja nie zawiera końcowej instrukcji „return”, a zwracany typ nie obejmuje wartości „undefined”.]]></Val>
+            <Val><![CDATA[Funkcja nie zawiera końcowej instrukcji return, a zwracany typ nie obejmuje wartości „undefined”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
