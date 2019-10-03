@@ -948,7 +948,7 @@ namespace ts {
             }
             if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
-                if (!isOptionalChainRoot(expression.parent)) {
+                if (!isOptionalExpression(expression)) {
                     return unreachableFlow;
                 }
             }

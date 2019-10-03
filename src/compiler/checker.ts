@@ -333,10 +333,6 @@ namespace ts {
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
 
-        // This object is reused for `checkOptionalExpression` return values to avoid frequent GC due to nursery object allocations.
-        // This object represents a pool-size of 1.
-        const pooledOptionalTypeResult: { isOptional: boolean, type: Type } = { isOptional: false, type: undefined! };
-
         // for public members that accept a Node or one of its subtypes, we must guard against
         // synthetic nodes created during transformations by calling `getParseTreeNode`.
         // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -10265,7 +10261,7 @@ namespace ts {
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (signature.isOptionalCall) {
-                    type = propagateOptionalTypeMarker(type, /*wasOptional*/ true);
+                    type = addOptionalTypeMarker(type);
                 }
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
@@ -16677,51 +16673,50 @@ namespace ts {
         }
 
         function addOptionalTypeMarker(type: Type) {
-            return strictNullChecks ? getUnionType([type, optionalType]) : type;
+            if (strictNullChecks) {
+                if (isTypeAny(type)) return type;
+                if (type.optionalTypeOfType) {
+                    // The type aleady has an optional type cache.
+                    return type.optionalTypeOfType;
+                }
+                if (type.flags & TypeFlags.Union && type.nonOptionalTypeOfType) {
+                    // The type *is* the type produced by marking a type with the optional type.
+                    return type;
+                }
+                type.optionalTypeOfType = getUnionType([type, optionalType]);
+                type.optionalTypeOfType.nonOptionalTypeOfType = type;
+                return type.optionalTypeOfType;
+            }
+            return type;
         }
 
         function removeOptionalTypeMarker(type: Type): Type {
-            return strictNullChecks ? filterType(type, t => t !== optionalType) : type;
+            if (strictNullChecks) {
+                if (type.flags & TypeFlags.Union && type.nonOptionalTypeOfType) {
+                    return type.nonOptionalTypeOfType;
+                }
+                return filterType(type, t => t !== optionalType);
+            }
+            return type;
         }
 
         function propagateOptionalTypeMarker(type: Type, wasOptional: boolean) {
             return wasOptional ? addOptionalTypeMarker(type) : type;
         }
 
-        function createPooledOptionalTypeResult(isOptional: boolean, type: Type) {
-            pooledOptionalTypeResult.isOptional = isOptional;
-            pooledOptionalTypeResult.type = type;
-            return pooledOptionalTypeResult;
-        }
-
         function checkOptionalExpression(
-            parent: PropertyAccessExpression | QualifiedName | ElementAccessExpression | CallExpression,
-            expression: Expression | QualifiedName,
+            expression: Expression,
             nullDiagnostic?: DiagnosticMessage,
             undefinedDiagnostic?: DiagnosticMessage,
             nullOrUndefinedDiagnostic?: DiagnosticMessage,
         ) {
-            let isOptional = false;
-            let type = checkExpression(expression);
-            if (isOptionalChain(parent)) {
-                if (parent.questionDotToken) {
-                    // If we have a questionDotToken then we are an OptionalExpression and should remove `null` and
-                    // `undefined` from the type and add the optionalType to the result, if needed.
-                    isOptional = isNullableType(type);
-                    return createPooledOptionalTypeResult(isOptional, isOptional ? getNonNullableType(type) : type);
-                }
-
-                // If we do not have a questionDotToken, then we are an OptionalChain and we remove the optionalType and
-                // indicate whether we need to add optionalType back into the result.
-                const nonOptionalType = removeOptionalTypeMarker(type);
-                if (nonOptionalType !== type) {
-                    isOptional = true;
-                    type = nonOptionalType;
-                }
-            }
-
-            type = checkNonNullType(type, expression, nullDiagnostic, undefinedDiagnostic, nullOrUndefinedDiagnostic);
-            return createPooledOptionalTypeResult(isOptional, type);
+            const exprType = checkExpression(expression);
+            const nonOptionalType =
+                isOptionalExpression(expression) ? getNonNullableType(exprType) : // 'a' in 'a?.b.c'
+                isOptionalChain(expression) ? removeOptionalTypeMarker(exprType) : // 'a?.b' in 'a?.b.c'
+                exprType;
+            const nonNullType = checkNonNullType(nonOptionalType, expression, nullDiagnostic, undefinedDiagnostic, nullOrUndefinedDiagnostic);
+            return exprType !== nonOptionalType ? addOptionalTypeMarker(nonNullType) : nonNullType;
         }
 
         /**
@@ -18756,7 +18751,8 @@ namespace ts {
                 // circularities in control flow analysis, we use getTypeOfDottedName when resolving the call
                 // target expression of an assertion.
                 const funcType = node.parent.kind === SyntaxKind.ExpressionStatement ? getTypeOfDottedName(node.expression, /*diagnostic*/ undefined) :
-                    node.expression.kind !== SyntaxKind.SuperKeyword ? checkOptionalExpression(node, node.expression).type :
+                    node.expression.kind !== SyntaxKind.SuperKeyword ? isOptionalChain(node) ? removeOptionalTypeMarker(checkOptionalExpression(node.expression)) :
+                    checkNonNullExpression(node.expression) :
                     undefined;
                 const signatures = getSignaturesOfType(funcType && getApparentType(funcType) || unknownType, SignatureKind.Call);
                 const candidate = signatures.length === 1 && !signatures[0].typeParameters ? signatures[0] :
@@ -19718,7 +19714,7 @@ namespace ts {
             // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
-                if (isOptionalChainRoot(expr.parent) ||
+                if (isOptionalExpression(expr) ||
                     isBinaryExpression(expr.parent) && expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken && expr.parent.left === expr) {
                     return narrowTypeByOptionality(type, expr, assumeTrue);
                 }
@@ -22672,11 +22668,18 @@ namespace ts {
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
+            return isPropertyAccessChain(node) ? checkPropertyAccessChain(node) :
+                checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name);
+        }
+
+        function checkPropertyAccessChain(node: PropertyAccessChain) {
+            const optionalType = checkOptionalExpression(node.expression);
+            const nonOptionalType = removeOptionalTypeMarker(optionalType);
+            return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, nonOptionalType, node.name), nonOptionalType !== optionalType);
         }
 
         function checkQualifiedName(node: QualifiedName) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullExpression(node.left), node.right);
         }
 
         function isMethodAccessForCall(node: Node) {
@@ -22686,8 +22689,7 @@ namespace ts {
             return isCallOrNewExpression(node.parent) && node.parent.expression === node;
         }
 
-        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const { isOptional, type: leftType } = checkOptionalExpression(node, left);
+        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier) {
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const assignmentKind = getAssignmentTargetKind(node);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
@@ -22741,7 +22743,7 @@ namespace ts {
                 }
                 propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
-            return propagateOptionalTypeMarker(getFlowTypeOfAccessExpression(node, prop, propType, right), isOptional);
+            return getFlowTypeOfAccessExpression(node, prop, propType, right);
         }
 
         function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node) {
@@ -23098,7 +23100,17 @@ namespace ts {
         }
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
-            const { isOptional, type: exprType } = checkOptionalExpression(node, node.expression);
+            return isElementAccessChain(node) ? checkElementAccessChain(node) :
+                checkElementAccessExpression(node, checkNonNullExpression(node.expression));
+        }
+
+        function checkElementAccessChain(node: ElementAccessChain): Type {
+            const optionalType = checkOptionalExpression(node.expression);
+            const nonOptionalType = removeOptionalTypeMarker(optionalType);
+            return propagateOptionalTypeMarker(checkElementAccessExpression(node, nonOptionalType), nonOptionalType !== optionalType);
+        }
+
+        function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type): Type {
             const objectType = getAssignmentTargetKind(node) !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(exprType) : exprType;
             const indexExpression = node.argumentExpression;
             const indexType = checkExpression(indexExpression);
@@ -23117,7 +23129,7 @@ namespace ts {
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
                 AccessFlags.None;
             const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, accessFlags) || errorType;
-            return propagateOptionalTypeMarker(checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, indexedAccessType.symbol, indexedAccessType, indexExpression), node), isOptional);
+            return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, indexedAccessType.symbol, indexedAccessType, indexExpression), node);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -24284,34 +24296,53 @@ namespace ts {
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                const superType = checkSuperExpression(node.expression);
-                if (isTypeAny(superType)) {
-                    for (const arg of node.arguments) {
-                        checkExpression(arg); // Still visit arguments so they get marked for visibility, etc
-                    }
-                    return anySignature;
-                }
-                if (superType !== errorType) {
-                    // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
-                    // with the type arguments specified in the extends clause.
-                    const baseTypeNode = getEffectiveBaseTypeNode(getContainingClass(node)!);
-                    if (baseTypeNode) {
-                        const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments, baseTypeNode);
-                        return resolveCall(node, baseConstructors, candidatesOutArray, checkMode, /*isOptional*/ false);
-                    }
-                }
-                return resolveUntypedCall(node);
+            if (isOptionalChain(node)) {
+                return resolveCallChain(node, candidatesOutArray, checkMode);
             }
-
-            const { isOptional, type: funcType } = checkOptionalExpression(
-                node,
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                return resolveSuperCall(node as SuperCall, candidatesOutArray, checkMode);
+            }
+            const funcType = checkNonNullExpression(
                 node.expression,
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_null,
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined,
                 Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined
             );
+            return resolveCallExpressionWorker(node, funcType, candidatesOutArray, checkMode, /*isOptionalCall*/ false);
+        }
 
+        function resolveCallChain(node: CallChain, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode) {
+            const optionalType = checkOptionalExpression(
+                node.expression,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_null,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_undefined,
+                Diagnostics.Cannot_invoke_an_object_which_is_possibly_null_or_undefined
+            );
+            const nonOptionalType = removeOptionalTypeMarker(optionalType);
+            return resolveCallExpressionWorker(node, nonOptionalType, candidatesOutArray, checkMode, nonOptionalType !== optionalType);
+        }
+
+        function resolveSuperCall(node: SuperCall, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode) {
+            const superType = checkSuperExpression(node.expression);
+            if (isTypeAny(superType)) {
+                for (const arg of node.arguments) {
+                    checkExpression(arg); // Still visit arguments so they get marked for visibility, etc
+                }
+                return anySignature;
+            }
+            if (superType !== errorType) {
+                // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
+                // with the type arguments specified in the extends clause.
+                const baseTypeNode = getEffectiveBaseTypeNode(getContainingClass(node)!);
+                if (baseTypeNode) {
+                    const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments, baseTypeNode);
+                    return resolveCall(node, baseConstructors, candidatesOutArray, checkMode, /*isOptional*/ false);
+                }
+            }
+            return resolveUntypedCall(node);
+        }
+
+        function resolveCallExpressionWorker(node: CallExpression, funcType: Type, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, isOptionalCall: boolean): Signature {
             if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
@@ -24381,7 +24412,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, isOptional);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, isOptionalCall);
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
@@ -27265,6 +27296,20 @@ namespace ts {
             }
         }
 
+        function getReturnTypeOfSingleNonGenericCallSignatureOfCallChain(node: CallChain) {
+            const optionalType = checkOptionalExpression(node.expression);
+            const nonOptionalType = removeOptionalTypeMarker(optionalType);
+            const returnType = getReturnTypeOfSingleNonGenericCallSignature(nonOptionalType);
+            return returnType && propagateOptionalTypeMarker(returnType, nonOptionalType !== optionalType);
+        }
+
+        function getReturnTypeOfSingleNonGenericCallSignature(funcType: Type) {
+            const signature = getSingleCallSignature(funcType);
+            if (signature && !signature.typeParameters) {
+                return getReturnTypeOfSignature(signature);
+            }
+        }
+
         /**
          * Returns the type of an expression. Unlike checkExpression, this function is simply concerned
          * with computing the type and may not fully check all contained sub-expressions for errors.
@@ -27276,10 +27321,11 @@ namespace ts {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-                const { isOptional, type: funcType } = checkOptionalExpression(expr, expr.expression);
-                const signature = getSingleCallSignature(funcType);
-                if (signature && !signature.typeParameters) {
-                    return propagateOptionalTypeMarker(getReturnTypeOfSignature(signature), isOptional);
+                const type = isCallChain(expr) ?
+                    getReturnTypeOfSingleNonGenericCallSignatureOfCallChain(expr) :
+                    getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
+                if (type) {
+                    return type;
                 }
             }
             else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
