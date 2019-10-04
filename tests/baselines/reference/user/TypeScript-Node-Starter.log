@@ -1,8 +1,12 @@
 Exit Code: 1
 Standard output:
-src/controllers/user.ts(95,5): error TS2345: Argument of type '{ email: any; password: any; }' is not assignable to parameter of type 'Partial<Document>'.
-  Object literal may only specify known properties, and 'email' does not exist in type 'Partial<Document>'.
-src/controllers/user.ts(105,16): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(136,25): error TS2339: Property 'tokens' does not exist on type 'User'.
+src/controllers/api.ts(22,28): error TS2339: Property 'tokens' does not exist on type 'User'.
+src/controllers/api.ts(24,27): error TS2339: Property 'facebook' does not exist on type 'User'.
+src/controllers/user.ts(145,28): error TS2339: Property 'id' does not exist on type 'User'.
+src/controllers/user.ts(181,28): error TS2339: Property 'id' does not exist on type 'User'.
+src/controllers/user.ts(197,33): error TS2339: Property 'id' does not exist on type 'User'.
+src/controllers/user.ts(211,28): error TS2339: Property 'id' does not exist on type 'User'.
 
 
 
