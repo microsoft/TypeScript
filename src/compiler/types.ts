@@ -3443,8 +3443,7 @@ namespace ts {
             resolvedReturnType: Type,
             typePredicate: TypePredicate | undefined,
             minArgumentCount: number,
-            hasRestParameter: boolean,
-            hasLiteralTypes: boolean,
+            flags: SignatureFlags
         ): Signature;
         /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
         /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
@@ -4659,7 +4658,24 @@ namespace ts {
         Construct,
     }
 
+    /* @internal */
+    export const enum SignatureFlags {
+        None = 0,
+        HasRestParameter = 1 << 0,
+        HasLiteralTypes = 1 << 1,
+        IsOptionalCall = 1 << 2,
+
+        // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
+        // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
+        // instantiating the return type.
+        PropagatingFlags = HasRestParameter | HasLiteralTypes,
+    }
+
     export interface Signature {
+        /* @internal */
+        flags: SignatureFlags;
+        /* @internal */
+        checker: TypeChecker;
         declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
         typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: readonly Symbol[];               // Parameters
@@ -4676,10 +4692,6 @@ namespace ts {
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
-        hasRestParameter: boolean;          // True if last parameter is rest parameter
-        /* @internal */
-        hasLiteralTypes: boolean;           // True if specialized
-        /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */
         mapper?: TypeMapper;                // Instantiation mapper
@@ -4693,8 +4705,6 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
-        /* @internal */
-        isOptionalCall?: boolean;
     }
 
     export const enum IndexKind {

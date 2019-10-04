@@ -464,6 +464,7 @@ namespace ts {
     }
 
     class SignatureObject implements Signature {
+        flags: SignatureFlags;
         checker: TypeChecker;
         declaration!: SignatureDeclaration;
         typeParameters?: TypeParameter[];
@@ -473,8 +474,6 @@ namespace ts {
         resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount!: number;
         minArgumentCount!: number;
-        hasRestParameter!: boolean;
-        hasLiteralTypes!: boolean;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
@@ -484,9 +483,11 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         jsDocTags?: JSDocTagInfo[];
 
-        constructor(checker: TypeChecker) {
+        constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
+            this.flags = flags;
         }
+
         getDeclaration(): SignatureDeclaration {
             return this.declaration;
         }

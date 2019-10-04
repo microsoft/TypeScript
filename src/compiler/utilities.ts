@@ -5917,8 +5917,8 @@ namespace ts {
      * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
      */
     /* @internal */
-    export function isOptionalExpression(node: Node): node is Expression & { parent: OptionalChainRoot } {
-        return isOptionalChainRoot(node.parent) && node === node.parent.expression;
+    export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+        return isOptionalChainRoot(node.parent) && node.parent.expression === node;
     }
 
     export function isNewExpression(node: Node): node is NewExpression {
@@ -7320,7 +7320,7 @@ namespace ts {
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
-        getSignatureConstructor(): new (checker: TypeChecker) => Signature;
+        getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
@@ -7341,7 +7341,12 @@ namespace ts {
         }
     }
 
-    function Signature() {}
+    function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
+        this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
+    }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
