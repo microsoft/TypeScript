@@ -61,8 +61,8 @@ o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3; // TODO: should be `{ x: y, y: string }`
-    o3.x; // TODO: should not be an error.
+    o3;
+    o3.x;
     o3?.x;
 }
 else {
