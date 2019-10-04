@@ -147,7 +147,7 @@ namespace Harness.Parallel.Host {
                 }
 
                 cursor.hide();
-                readline.moveCursor(process.stdout, -process.stdout.columns!, -this._lineCount);
+                readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
                 let lineCount = 0;
                 const numProgressBars = this._progressBars.length;
                 for (let i = 0; i < numProgressBars; i++) {
@@ -156,7 +156,7 @@ namespace Harness.Parallel.Host {
                         process.stdout.write(this._progressBars[i].text + os.EOL);
                     }
                     else {
-                        readline.moveCursor(process.stdout, -process.stdout.columns!, +1);
+                        readline.moveCursor(process.stdout, -process.stdout.columns, +1);
                     }
 
                     lineCount++;
