@@ -4099,7 +4099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Falta la instrucción return final en la función y el tipo de valor devuelto no incluye 'undefined'.]]></Val>
+            <Val><![CDATA[Falta la instrucción "return" final en la función y el tipo de valor devuelto no incluye 'undefined'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4207,7 +4207,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generic type instantiation is excessively deep and possibly infinite.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La creación de instancias de tipo genérico es excesivamente profunda y posiblemente infinita.]]></Val>
+            <Val><![CDATA[La creación de una instancia de tipo genérico es excesivamente profunda y posiblemente infinita.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
