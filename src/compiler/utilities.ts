@@ -2176,7 +2176,7 @@ namespace ts {
             const id = nextToLast.expression;
             if ((id.escapedText === "exports" ||
                 id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") &&
-                // ExportsProperty does not support late binding; it must have a static name
+                // ExportsProperty does not support binding with computed names
                 isBindableStaticAccessExpression(lhs)) {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
