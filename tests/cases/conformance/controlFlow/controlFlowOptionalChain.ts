@@ -161,3 +161,80 @@ function f01(x: unknown) {
         x;
     }
 }
+
+type Thing = { foo: number, bar(): number };
+
+function f10(o: Thing | undefined, value: number) {
+    if (o?.foo === value) {
+        o;
+        o.foo;
+    }
+    if (o?.["foo"] === value) {
+        o;
+        o["foo"];
+    }
+    if (o?.bar() === value) {
+        o;
+        o.bar;
+    }
+}
+
+function f11(o: Thing | null, value: number) {
+    if (o?.foo === value) {
+        o;
+        o.foo;
+    }
+    if (o?.["foo"] === value) {
+        o;
+        o["foo"];
+    }
+    if (o?.bar() === value) {
+        o;
+        o.bar;
+    }
+}
+
+function f12(o: Thing | undefined, value: number | undefined) {
+    if (o?.foo === value) {
+        o;
+        o.foo;  // Error
+    }
+    if (o?.["foo"] === value) {
+        o;
+        o["foo"];  // Error
+    }
+    if (o?.bar() === value) {
+        o;
+        o.bar;  // Error
+    }
+}
+
+function f13(o: Thing | undefined) {
+    if (o?.foo !== undefined) {
+        o;
+        o.foo;
+    }
+    if (o?.["foo"] !== undefined) {
+        o;
+        o["foo"];
+    }
+    if (o?.bar() !== undefined) {
+        o;
+        o.bar;
+    }
+}
+
+function f14(o: Thing | null) {
+    if (o?.foo !== undefined) {
+        o;
+        o.foo;
+    }
+    if (o?.["foo"] !== undefined) {
+        o;
+        o["foo"];
+    }
+    if (o?.bar() !== undefined) {
+        o;
+        o.bar;
+    }
+}
