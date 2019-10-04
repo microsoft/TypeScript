@@ -634,3 +634,273 @@ function f01(x: unknown) {
     }
 }
 
+type Thing = { foo: number, bar(): number };
+>Thing : Thing
+>foo : number
+>bar : () => number
+
+function f10(o: Thing | undefined, value: number) {
+>f10 : (o: Thing | undefined, value: number) => void
+>o : Thing | undefined
+>value : number
+
+    if (o?.foo === value) {
+>o?.foo === value : boolean
+>o?.foo : number | undefined
+>o : Thing | undefined
+>foo : number | undefined
+>value : number
+
+        o;
+>o : Thing
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (o?.["foo"] === value) {
+>o?.["foo"] === value : boolean
+>o?.["foo"] : number | undefined
+>o : Thing | undefined
+>"foo" : "foo"
+>value : number
+
+        o;
+>o : Thing
+
+        o["foo"];
+>o["foo"] : number
+>o : Thing
+>"foo" : "foo"
+    }
+    if (o?.bar() === value) {
+>o?.bar() === value : boolean
+>o?.bar() : number | undefined
+>o?.bar : (() => number) | undefined
+>o : Thing | undefined
+>bar : (() => number) | undefined
+>value : number
+
+        o;
+>o : Thing
+
+        o.bar;
+>o.bar : () => number
+>o : Thing
+>bar : () => number
+    }
+}
+
+function f11(o: Thing | null, value: number) {
+>f11 : (o: Thing | null, value: number) => void
+>o : Thing | null
+>null : null
+>value : number
+
+    if (o?.foo === value) {
+>o?.foo === value : boolean
+>o?.foo : number | undefined
+>o : Thing | null
+>foo : number | undefined
+>value : number
+
+        o;
+>o : Thing
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (o?.["foo"] === value) {
+>o?.["foo"] === value : boolean
+>o?.["foo"] : number | undefined
+>o : Thing | null
+>"foo" : "foo"
+>value : number
+
+        o;
+>o : Thing
+
+        o["foo"];
+>o["foo"] : number
+>o : Thing
+>"foo" : "foo"
+    }
+    if (o?.bar() === value) {
+>o?.bar() === value : boolean
+>o?.bar() : number | undefined
+>o?.bar : (() => number) | undefined
+>o : Thing | null
+>bar : (() => number) | undefined
+>value : number
+
+        o;
+>o : Thing
+
+        o.bar;
+>o.bar : () => number
+>o : Thing
+>bar : () => number
+    }
+}
+
+function f12(o: Thing | undefined, value: number | undefined) {
+>f12 : (o: Thing | undefined, value: number | undefined) => void
+>o : Thing | undefined
+>value : number | undefined
+
+    if (o?.foo === value) {
+>o?.foo === value : boolean
+>o?.foo : number | undefined
+>o : Thing | undefined
+>foo : number | undefined
+>value : number | undefined
+
+        o;
+>o : Thing | undefined
+
+        o.foo;  // Error
+>o.foo : number
+>o : Thing | undefined
+>foo : number
+    }
+    if (o?.["foo"] === value) {
+>o?.["foo"] === value : boolean
+>o?.["foo"] : number | undefined
+>o : Thing | undefined
+>"foo" : "foo"
+>value : number | undefined
+
+        o;
+>o : Thing | undefined
+
+        o["foo"];  // Error
+>o["foo"] : number
+>o : Thing | undefined
+>"foo" : "foo"
+    }
+    if (o?.bar() === value) {
+>o?.bar() === value : boolean
+>o?.bar() : number | undefined
+>o?.bar : (() => number) | undefined
+>o : Thing | undefined
+>bar : (() => number) | undefined
+>value : number | undefined
+
+        o;
+>o : Thing | undefined
+
+        o.bar;  // Error
+>o.bar : () => number
+>o : Thing | undefined
+>bar : () => number
+    }
+}
+
+function f13(o: Thing | undefined) {
+>f13 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    if (o?.foo !== undefined) {
+>o?.foo !== undefined : boolean
+>o?.foo : number | undefined
+>o : Thing | undefined
+>foo : number | undefined
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (o?.["foo"] !== undefined) {
+>o?.["foo"] !== undefined : boolean
+>o?.["foo"] : number | undefined
+>o : Thing | undefined
+>"foo" : "foo"
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o["foo"];
+>o["foo"] : number
+>o : Thing
+>"foo" : "foo"
+    }
+    if (o?.bar() !== undefined) {
+>o?.bar() !== undefined : boolean
+>o?.bar() : number | undefined
+>o?.bar : (() => number) | undefined
+>o : Thing | undefined
+>bar : (() => number) | undefined
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o.bar;
+>o.bar : () => number
+>o : Thing
+>bar : () => number
+    }
+}
+
+function f14(o: Thing | null) {
+>f14 : (o: Thing | null) => void
+>o : Thing | null
+>null : null
+
+    if (o?.foo !== undefined) {
+>o?.foo !== undefined : boolean
+>o?.foo : number | undefined
+>o : Thing | null
+>foo : number | undefined
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (o?.["foo"] !== undefined) {
+>o?.["foo"] !== undefined : boolean
+>o?.["foo"] : number | undefined
+>o : Thing | null
+>"foo" : "foo"
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o["foo"];
+>o["foo"] : number
+>o : Thing
+>"foo" : "foo"
+    }
+    if (o?.bar() !== undefined) {
+>o?.bar() !== undefined : boolean
+>o?.bar() : number | undefined
+>o?.bar : (() => number) | undefined
+>o : Thing | null
+>bar : (() => number) | undefined
+>undefined : undefined
+
+        o;
+>o : Thing
+
+        o.bar;
+>o.bar : () => number
+>o : Thing
+>bar : () => number
+    }
+}
+
