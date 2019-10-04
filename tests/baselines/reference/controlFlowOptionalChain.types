@@ -208,18 +208,18 @@ if (o3?.x === 1) {
 >x : 1 | 2 | undefined
 >1 : 1
 
-    o3; // TODO: should be `{ x: y, y: string }`
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+    o3;
+>o3 : { x: 1; y: string; }
 
-    o3.x; // TODO: should not be an error.
+    o3.x;
 >o3.x : 1
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 1; y: string; }
 >x : 1
 
     o3?.x;
->o3?.x : 1 | undefined
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
->x : 1 | undefined
+>o3?.x : 1
+>o3 : { x: 1; y: string; }
+>x : 1
 }
 else {
     o3;

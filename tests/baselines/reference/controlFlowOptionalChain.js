@@ -59,8 +59,8 @@ o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3; // TODO: should be `{ x: y, y: string }`
-    o3.x; // TODO: should not be an error.
+    o3;
+    o3.x;
     o3?.x;
 }
 else {
@@ -206,8 +206,8 @@ o2;
 (_k = o2) === null || _k === void 0 ? void 0 : _k.f;
 o2.f;
 if (((_l = o3) === null || _l === void 0 ? void 0 : _l.x) === 1) {
-    o3; // TODO: should be `{ x: y, y: string }`
-    o3.x; // TODO: should not be an error.
+    o3;
+    o3.x;
     (_m = o3) === null || _m === void 0 ? void 0 : _m.x;
 }
 else {
