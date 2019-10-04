@@ -10253,6 +10253,7 @@ namespace ts {
                         break;
                 }
             }
+            // tslint:disable no-unnecessary-type-assertion
             return links.resolvedType!; // TODO: GH#18217
         }
 
@@ -32948,6 +32949,7 @@ namespace ts {
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
                 if (prop.modifiers) {
+                    // tslint:disable no-unnecessary-type-assertion
                     for (const mod of prop.modifiers!) { // TODO: GH#19955
                         if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                             grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
