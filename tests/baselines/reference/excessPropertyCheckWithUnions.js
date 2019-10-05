@@ -89,6 +89,46 @@ const obj: Union = {
 };
 
 
+// Repro from #33732
+
+interface I1 {
+    prop1: string;
+}
+
+interface I2 {
+    prop2: string;
+}
+
+interface I3 extends Record<string, string> {
+
+}
+
+type Properties =
+    | { [key: string]: never }
+    | I1
+    | I2
+    | I3
+    ;
+
+
+declare const prop1: string;
+declare const prop2: string | undefined;
+
+function F1(_arg: { props: Properties }) { }
+F1({
+    props: {
+        prop1,
+        prop2,
+    },
+});
+
+function F2(_props: Properties) { }
+F2({
+    prop1,
+    prop2,
+});
+
+
 //// [excessPropertyCheckWithUnions.js]
 "use strict";
 var __assign = (this && this.__assign) || function () {
@@ -144,3 +184,15 @@ var obj = {
     // should have error here
     href: 'foo'
 };
+function F1(_arg) { }
+F1({
+    props: {
+        prop1: prop1,
+        prop2: prop2
+    }
+});
+function F2(_props) { }
+F2({
+    prop1: prop1,
+    prop2: prop2
+});
