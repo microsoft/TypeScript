@@ -10,7 +10,7 @@ type StdRecursiveIteration<T extends any[], I extends I.Iteration = I.IterationO
     I.Pos<I> extends T.Length<T> // this form of recursion is preferred
     ? 1                          // because it will let the user know if                   
     : 0                          // the instantiation depth has been hit
-];                               // (but error is swallowed by type atm)
+];                               // (but error is sometimes swallowed (?))
 
 checks([
     check<StdRecursiveIteration<[
