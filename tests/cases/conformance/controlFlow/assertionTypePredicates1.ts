@@ -37,6 +37,14 @@ function f01(x: unknown) {
         assertDefined(x);
         x;  // string
     }
+    if (!!true) {
+        assert(false);
+        x;  // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x;  // Unreachable
+    }
 }
 
 function f02(x: string | undefined) {
@@ -77,6 +85,10 @@ function f10(x: string | undefined) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test {
@@ -107,6 +119,10 @@ class Test {
         }
         this.assertIsTest2();
         this.z;
+    }
+    baz(x: number) {
+        this.assert(false);
+        x;  // Unreachable
     }
 }
 
