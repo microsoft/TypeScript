@@ -6,7 +6,6 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(35,5): error TS2
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(62,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(68,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(72,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(83,5): error TS2532: Object is possibly 'undefined'.
@@ -20,9 +19,21 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(153,9): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(208,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(211,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(214,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(217,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(220,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(223,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(238,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(241,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(244,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(271,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(274,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (22 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (33 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -99,10 +110,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(153,9): error TS
     
     declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
     if (o3?.x === 1) {
-        o3; // TODO: should be `{ x: y, y: string }`
-        o3.x; // TODO: should not be an error.
-        ~~
-!!! error TS2532: Object is possibly 'undefined'.
+        o3;
+        o3.x;
         o3?.x;
     }
     else {
@@ -225,6 +234,200 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(153,9): error TS
         if (!!true) {
             maybeNever?.();
             x;
+        }
+    }
+    
+    type Thing = { foo: string | number, bar(): number, baz: object };
+    
+    function f10(o: Thing | undefined, value: number) {
+        if (o?.foo === value) {
+            o.foo;
+        }
+        if (o?.["foo"] === value) {
+            o["foo"];
+        }
+        if (o?.bar() === value) {
+            o.bar;
+        }
+        if (o?.foo == value) {
+            o.foo;
+        }
+        if (o?.["foo"] == value) {
+            o["foo"];
+        }
+        if (o?.bar() == value) {
+            o.bar;
+        }
+    }
+    
+    function f11(o: Thing | null, value: number) {
+        if (o?.foo === value) {
+            o.foo;
+        }
+        if (o?.["foo"] === value) {
+            o["foo"];
+        }
+        if (o?.bar() === value) {
+            o.bar;
+        }
+        if (o?.foo == value) {
+            o.foo;
+        }
+        if (o?.["foo"] == value) {
+            o["foo"];
+        }
+        if (o?.bar() == value) {
+            o.bar;
+        }
+    }
+    
+    function f12(o: Thing | undefined, value: number | undefined) {
+        if (o?.foo === value) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.["foo"] === value) {
+            o["foo"];  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.bar() === value) {
+            o.bar;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.foo == value) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.["foo"] == value) {
+            o["foo"];  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.bar() == value) {
+            o.bar;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    
+    function f12a(o: Thing | undefined, value: number | null) {
+        if (o?.foo === value) {
+            o.foo;
+        }
+        if (o?.["foo"] === value) {
+            o["foo"];
+        }
+        if (o?.bar() === value) {
+            o.bar;
+        }
+        if (o?.foo == value) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.["foo"] == value) {
+            o["foo"];  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.bar() == value) {
+            o.bar;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    
+    function f13(o: Thing | undefined) {
+        if (o?.foo !== undefined) {
+            o.foo;
+        }
+        if (o?.["foo"] !== undefined) {
+            o["foo"];
+        }
+        if (o?.bar() !== undefined) {
+            o.bar;
+        }
+        if (o?.foo != undefined) {
+            o.foo;
+        }
+        if (o?.["foo"] != undefined) {
+            o["foo"];
+        }
+        if (o?.bar() != undefined) {
+            o.bar;
+        }
+    }
+    
+    function f13a(o: Thing | undefined) {
+        if (o?.foo !== null) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.["foo"] !== null) {
+            o["foo"];  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.bar() !== null) {
+            o.bar;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.foo != null) {
+            o.foo;
+        }
+        if (o?.["foo"] != null) {
+            o["foo"];
+        }
+        if (o?.bar() != null) {
+            o.bar;
+        }
+    }
+    
+    function f14(o: Thing | null) {
+        if (o?.foo !== undefined) {
+            o.foo;
+        }
+        if (o?.["foo"] !== undefined) {
+            o["foo"];
+        }
+        if (o?.bar() !== undefined) {
+            o.bar;
+        }
+    }
+    
+    function f20(o: Thing | undefined) {
+        if (typeof o?.foo === "number") {
+            o.foo;
+        }
+        if (typeof o?.["foo"] === "number") {
+            o["foo"];
+        }
+        if (typeof o?.bar() === "number") {
+            o.bar;
+        }
+        if (o?.baz instanceof Error) {
+            o.baz;
+        }
+    }
+    
+    function f21(o: Thing | null) {
+        if (typeof o?.foo === "number") {
+            o.foo;
+        }
+        if (typeof o?.["foo"] === "number") {
+            o["foo"];
+        }
+        if (typeof o?.bar() === "number") {
+            o.bar;
+        }
+        if (o?.baz instanceof Error) {
+            o.baz;
         }
     }
     
