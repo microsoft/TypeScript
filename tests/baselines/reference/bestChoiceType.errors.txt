@@ -1,0 +1,36 @@
+tests/cases/compiler/bestChoiceType.ts(3,23): error TS2349: This expression is not callable.
+  Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+tests/cases/compiler/bestChoiceType.ts(10,15): error TS2349: This expression is not callable.
+  Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+tests/cases/compiler/bestChoiceType.ts(16,15): error TS2349: This expression is not callable.
+  Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+
+
+==== tests/cases/compiler/bestChoiceType.ts (3 errors) ====
+    // Repro from #10041
+    
+    (''.match(/ /) || []).map(s => s.toLowerCase());
+                          ~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+    
+    // Similar cases
+    
+    function f1() {
+        let x = ''.match(/ /);
+        let y = x || [];
+        let z = y.map(s => s.toLowerCase());
+                  ~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+    }
+    
+    function f2() {
+        let x = ''.match(/ /);
+        let y = x ? x : [];
+        let z = y.map(s => s.toLowerCase());
+                  ~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type '(<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; index?: U | undefined; input?: U | undefined; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
+    }
+    

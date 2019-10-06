@@ -1,9 +1,9 @@
 === tests/cases/compiler/initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
 > : undefined
->a : string
+>a : any
 >'' : ""
->''.match('') || [] : RegExpMatchArray
+>''.match('') || [] : RegExpMatchArray | undefined[]
 >''.match('') : RegExpMatchArray
 >''.match : (regexp: string | RegExp) => RegExpMatchArray
 >'' : ""
@@ -14,6 +14,6 @@ const [, a = ''] = ''.match('') || [];
 a.toFixed()
 >a.toFixed() : any
 >a.toFixed : any
->a : string
+>a : any
 >toFixed : any
 

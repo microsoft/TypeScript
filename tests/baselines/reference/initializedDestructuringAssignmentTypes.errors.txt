@@ -1,9 +1,9 @@
-tests/cases/compiler/initializedDestructuringAssignmentTypes.ts(3,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+tests/cases/compiler/initializedDestructuringAssignmentTypes.ts(1,7): error TS2461: Type 'RegExpMatchArray | undefined[]' is not an array type.
 
 
 ==== tests/cases/compiler/initializedDestructuringAssignmentTypes.ts (1 errors) ====
     const [, a = ''] = ''.match('') || [];
+          ~~~~~~~~~~
+!!! error TS2461: Type 'RegExpMatchArray | undefined[]' is not an array type.
     
     a.toFixed()
-      ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string'.

@@ -1,12 +1,29 @@
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'readonly B[]'.
   Property 'b' is missing in type 'A' but required in type 'B'.
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(15,1): error TS2322: Type 'C<A>' is not assignable to type 'readonly A[]'.
+  The types returned by 'map(...)' are incompatible between these types.
+    Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
+      Type 'U[] | { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+        Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+          Types of property 'length' are incompatible.
+            Type 'U' is not assignable to type 'number'.
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(16,1): error TS2322: Type 'C<B>' is not assignable to type 'readonly A[]'.
+  The types returned by 'map(...)' are incompatible between these types.
+    Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
+      Type 'U[] | { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+        Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+          Types of property 'length' are incompatible.
+            Type 'U' is not assignable to type 'number'.
+tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(17,1): error TS2322: Type 'C<B>' is not assignable to type 'readonly B[]'.
+  The types returned by 'map(...)' are incompatible between these types.
+    Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'readonly B[]'.
   The types returned by 'concat(...)' are incompatible between these types.
     Type 'A[]' is not assignable to type 'B[]'.
       Type 'A' is not assignable to type 'B'.
 
 
-==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
+==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (5 errors) ====
     class A { a }
     class B extends A { b }
     class C<T> extends Array<T> { c }
@@ -26,8 +43,28 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
 !!! related TS2728 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts:2:21: 'b' is declared here.
     
     rra = cra;
+    ~~~
+!!! error TS2322: Type 'C<A>' is not assignable to type 'readonly A[]'.
+!!! error TS2322:   The types returned by 'map(...)' are incompatible between these types.
+!!! error TS2322:     Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
+!!! error TS2322:       Type 'U[] | { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+!!! error TS2322:         Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+!!! error TS2322:           Types of property 'length' are incompatible.
+!!! error TS2322:             Type 'U' is not assignable to type 'number'.
     rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
+    ~~~
+!!! error TS2322: Type 'C<B>' is not assignable to type 'readonly A[]'.
+!!! error TS2322:   The types returned by 'map(...)' are incompatible between these types.
+!!! error TS2322:     Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
+!!! error TS2322:       Type 'U[] | { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+!!! error TS2322:         Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; }' is not assignable to type 'U[]'.
+!!! error TS2322:           Types of property 'length' are incompatible.
+!!! error TS2322:             Type 'U' is not assignable to type 'number'.
     rrb = crb;
+    ~~~
+!!! error TS2322: Type 'C<B>' is not assignable to type 'readonly B[]'.
+!!! error TS2322:   The types returned by 'map(...)' are incompatible between these types.
+!!! error TS2322:     Type '{ [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } extends U[] ? { [x: number]: U; c: U; length: U; toString: U; toLocaleString: U; pop: U; push: U; concat: U; join: U; reverse: U; shift: U; slice: U; sort: U; splice: U; unshift: U; indexOf: U; lastIndexOf: U; every: U; some: U; forEach: U; map: U; filter: U; reduce: U; reduceRight: U; } : U[]' is not assignable to type 'U[]'.
     rrb = cra; // error: 'A' is not assignable to 'B'
     ~~~
 !!! error TS2322: Type 'C<A>' is not assignable to type 'readonly B[]'.

@@ -151,18 +151,18 @@
 >0 : 0
 
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
->((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
->((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
->(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
+>((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : never[] | [boolean, boolean]
+>((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => never[] | [boolean, boolean]
+>(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => never[] | [boolean, boolean]
 >first : number
 >rest : [number, number]
->first ? [] : rest.map(n => n > 0) : boolean[]
+>first ? [] : rest.map(n => n > 0) : never[] | [boolean, boolean]
 >first : number
 >[] : never[]
->rest.map(n => n > 0) : boolean[]
->rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>rest.map(n => n > 0) : [boolean, boolean]
+>rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => [U, U]
 >rest : [number, number]
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => [U, U]
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean

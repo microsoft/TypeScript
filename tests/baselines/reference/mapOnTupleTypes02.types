@@ -3,14 +3,14 @@ export type Point = [number, number];
 >Point : Point
 
 export function increment(point: Point) {
->increment : (point: Point) => number[]
+>increment : (point: Point) => [number, number]
 >point : Point
 
   return point.map(d => d + 1);
->point.map(d => d + 1) : number[]
->point.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>point.map(d => d + 1) : [number, number]
+>point.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => [U, U]
 >point : Point
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => [U, U]
 >d => d + 1 : (d: number) => number
 >d : number
 >d + 1 : number

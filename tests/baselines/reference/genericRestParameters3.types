@@ -186,7 +186,7 @@ baz(1, 2);   // Error
 baz(...ca);  // Error
 >baz(...ca) : void
 >baz : <T>(...args: CoolArray<T>) => void
->...ca : number
+>...ca : any
 >ca : CoolArray<number>
 
 // Repro from #26491

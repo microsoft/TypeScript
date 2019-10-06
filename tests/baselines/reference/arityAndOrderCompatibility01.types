@@ -36,9 +36,9 @@ var [a, b, c] = x;
 >x : [string, number]
 
 var [d, e, f] = y;
->d : string
->e : number
->f : string | number
+>d : any
+>e : any
+>f : any
 >y : StrNum
 
 var [g, h, i] = z;

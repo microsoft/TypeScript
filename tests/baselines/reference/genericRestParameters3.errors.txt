@@ -22,6 +22,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(37,21): error TS234
     Property '0' is missing in type 'CoolArray<any>' but required in type '[(...args: any[]) => void]'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(44,32): error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
   Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(46,25): error TS2370: A rest parameter must be of an array type.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(49,1): error TS2345: Argument of type '[]' is not assignable to parameter of type 'CoolArray<unknown>'.
   Property 'hello' is missing in type '[]' but required in type 'CoolArray<unknown>'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(50,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type 'CoolArray<unknown>'.
@@ -30,11 +31,12 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(51,5): error TS2345
   Property 'hello' is missing in type '[number, number]' but required in type 'CoolArray<unknown>'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(52,5): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'CoolArray<number>'.
   Property 'hello' is missing in type 'number[]' but required in type 'CoolArray<number>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(52,8): error TS2461: Type 'CoolArray<number>' is not an array type.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
   Property '1' is missing in type '["what"]' but required in type '[number, string]'.
 
 
-==== tests/cases/conformance/types/rest/genericRestParameters3.ts (15 errors) ====
+==== tests/cases/conformance/types/rest/genericRestParameters3.ts (17 errors) ====
     declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
     declare let f2: (x: string, y: string) => void;
     declare let f3: (x: string, y: number, z: boolean) => void;
@@ -117,6 +119,8 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
 !!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:30:5: 'hello' is declared here.
     
     declare function baz<T>(...args: CoolArray<T>): void;
+                            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2370: A rest parameter must be of an array type.
     declare const ca: CoolArray<number>;
     
     baz();       // Error
@@ -139,6 +143,8 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'CoolArray<number>'.
 !!! error TS2345:   Property 'hello' is missing in type 'number[]' but required in type 'CoolArray<number>'.
 !!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:30:5: 'hello' is declared here.
+           ~~
+!!! error TS2461: Type 'CoolArray<number>' is not an array type.
     
     // Repro from #26491
     
