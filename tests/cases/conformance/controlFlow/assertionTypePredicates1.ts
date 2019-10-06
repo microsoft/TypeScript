@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 // @declaration: true
 
 declare function isString(value: unknown): value is string;
