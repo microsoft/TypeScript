@@ -4086,7 +4086,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[В функции отсутствует завершающий оператор возвращаемого значения, а тип возвращаемого значения не включает undefined.]]></Val>
+            <Val><![CDATA[В функции отсутствует завершающий оператор return, а тип возвращаемого значения не включает "undefined".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

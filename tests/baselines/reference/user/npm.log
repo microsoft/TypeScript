@@ -723,7 +723,6 @@ node_modules/npm/lib/search/all-package-metadata.js(239,20): error TS2339: Prope
 node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
-node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Property 'getWindowSize' does not exist on type 'WriteStream'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.

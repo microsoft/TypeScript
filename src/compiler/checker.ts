@@ -18124,6 +18124,16 @@ namespace ts {
             return false;
         }
 
+        function optionalChainContainsReference(source: Node, target: Node) {
+            while (isOptionalChain(source)) {
+                source = source.expression;
+                if (isMatchingReference(source, target)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // Return true if target is a property access xxx.yyy, source is a property access xxx.zzz, the declared
         // type of xxx is a union type, and yyy is a property that is possibly a discriminant. We consider a property
         // a possible discriminant if its type differs in the constituents of containing union type, and if every
@@ -19378,6 +19388,14 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
+                        if (assumeTrue && strictNullChecks) {
+                            if (optionalChainContainsReference(left, reference)) {
+                                type = narrowTypeByOptionalChainContainment(type, operator, right);
+                            }
+                            else if (optionalChainContainsReference(right, reference)) {
+                                type = narrowTypeByOptionalChainContainment(type, operator, left);
+                            }
+                        }
                         if (isMatchingReferenceDiscriminant(left, declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
@@ -19400,6 +19418,18 @@ namespace ts {
                         return narrowType(type, expr.right, assumeTrue);
                 }
                 return type;
+            }
+
+            function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression): Type {
+                // We are in the true branch of obj?.foo === value or obj?.foo !== value. We remove undefined and null from
+                // the type of obj if (a) the operator is === and the type of value doesn't include undefined or (b) the
+                // operator is !== and the type of value is undefined.
+                const valueType = getTypeOfExpression(value);
+                return operator === SyntaxKind.EqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefinedOrNull) ||
+                    operator === SyntaxKind.EqualsEqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefined) ||
+                    operator === SyntaxKind.ExclamationEqualsToken && valueType.flags & TypeFlags.Nullable ||
+                    operator === SyntaxKind.ExclamationEqualsEqualsToken && valueType.flags & TypeFlags.Undefined ?
+                    getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -19452,6 +19482,10 @@ namespace ts {
                 // We have '==', '!=', '===', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
                 if (!isMatchingReference(reference, target)) {
+                    if (assumeTrue && (operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken) &&
+                        strictNullChecks && optionalChainContainsReference(target, reference)) {
+                        return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                    }
                     // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
                     // narrowed type of 'y' to its declared type.
                     if (containsMatchingReference(reference, target)) {
@@ -19633,6 +19667,9 @@ namespace ts {
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
+                    if (assumeTrue && strictNullChecks && optionalChainContainsReference(left, reference)) {
+                        return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                    }
                     // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
                     // narrowed type of 'y' to its declared type. We do this because preceding 'x.y'
                     // references might reference a different 'y' property. However, we make an exception
@@ -23621,7 +23658,20 @@ namespace ts {
                 // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
                 const thisArgumentNode = getThisArgumentOfCall(node);
-                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                let thisArgumentType: Type;
+                if (thisArgumentNode) {
+                    thisArgumentType = checkExpression(thisArgumentNode);
+                    if (isOptionalChainRoot(thisArgumentNode.parent)) {
+                        thisArgumentType = getNonNullableType(thisArgumentType);
+                    }
+                    else if (isOptionalChain(thisArgumentNode.parent)) {
+                        thisArgumentType = removeOptionalTypeMarker(thisArgumentType);
+                    }
+                }
+                else {
+                    thisArgumentType = voidType;
+                }
+
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
