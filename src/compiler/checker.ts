@@ -19106,7 +19106,7 @@ namespace ts {
                         const flowType = getTypeAtFlowNode(flow.antecedent);
                         const type = getTypeFromFlowType(flowType);
                         const narrowedType = predicate.type ? narrowTypeByTypePredicate(type, predicate, flow.node, /*assumeTrue*/ true) :
-                            predicate.kind === TypePredicateKind.AssertsIdentifier && predicate.parameterIndex < flow.node.arguments.length ? narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]) :
+                            predicate.kind === TypePredicateKind.AssertsIdentifier && predicate.parameterIndex >= 0 && predicate.parameterIndex < flow.node.arguments.length ? narrowTypeByAssertion(type, flow.node.arguments[predicate.parameterIndex]) :
                             type;
                         return narrowedType === type ? flowType : createFlowType(narrowedType, isIncomplete(flowType));
                     }
