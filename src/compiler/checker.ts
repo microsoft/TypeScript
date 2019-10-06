@@ -18802,18 +18802,9 @@ namespace ts {
 
         function isFalseExpression(expr: Expression): boolean {
             const node = skipParentheses(expr);
-            if (node.kind === SyntaxKind.FalseKeyword) {
-                return true;
-            }
-            if (node.kind === SyntaxKind.BinaryExpression) {
-                if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                    return isFalseExpression((<BinaryExpression>node).left) || isFalseExpression((<BinaryExpression>node).right);
-                }
-                if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                    return isFalseExpression((<BinaryExpression>node).left) && isFalseExpression((<BinaryExpression>node).right);
-                }
-            }
-            return false;
+            return node.kind === SyntaxKind.FalseKeyword || node.kind === SyntaxKind.BinaryExpression && (
+                (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isFalseExpression((<BinaryExpression>node).left) || isFalseExpression((<BinaryExpression>node).right)) ||
+                (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken && isFalseExpression((<BinaryExpression>node).left) && isFalseExpression((<BinaryExpression>node).right));
         }
 
         function isReachableFlowNodeWorker(flow: FlowNode, noCacheCheck: boolean): boolean {
