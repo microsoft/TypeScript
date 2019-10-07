@@ -17,10 +17,10 @@ namespace ts {
             ];
         }
 
-        it("verify that subsequent builds after initial build doesnt build anything", async () => {
+        it("verify that subsequent builds after initial build doesnt build anything", () => {
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
-            await createSolutionBuilder(host, ["/src"], { verbose: true }).buildAsync();
+            createSolutionBuilder(host, ["/src"], { verbose: true }).build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/folder/tsconfig.json", "src/src/folder2/tsconfig.json", "src/src/tsconfig.json", "src/tests/tsconfig.json", "src/tsconfig.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/folder/tsconfig.json", "src/src/folder/index.js"],
@@ -36,7 +36,7 @@ namespace ts {
                 ...outputs("/src/tests"),
             ]);
             host.clearDiagnostics();
-            await createSolutionBuilder(host, ["/src"], { verbose: true }).buildAsync();
+            createSolutionBuilder(host, ["/src"], { verbose: true }).build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/folder/tsconfig.json", "src/src/folder2/tsconfig.json", "src/src/tsconfig.json", "src/tests/tsconfig.json", "src/tsconfig.json"),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/src/folder/tsconfig.json", "src/src/folder/index.ts", "src/src/folder/index.js"],

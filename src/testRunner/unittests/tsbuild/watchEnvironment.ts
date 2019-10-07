@@ -12,7 +12,7 @@ namespace ts.tscWatch {
         });
 
         function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: Map<string>) {
-            it("watchFile on same file multiple times because file is part of multiple projects", async () => {
+            it("watchFile on same file multiple times because file is part of multiple projects", () => {
                 const project = `${TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
                 let maxPkgs = 4;
                 const configPath = `${project}/tsconfig.json`;
@@ -26,7 +26,7 @@ namespace ts.tscWatch {
                 writePkgReferences();
                 const host = createSolutionBuilderWithWatchHost(system);
                 const solutionBuilder = createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
-                await solutionBuilder.buildAsync();
+                solutionBuilder.build();
                 checkOutputErrorsInitial(system, emptyArray, /*disableConsoleClears*/ undefined, [
                     `Projects in this build: \r\n${
                         concatenate(

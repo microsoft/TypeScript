@@ -22,10 +22,10 @@ namespace ts.tscWatch {
         return host;
     }
 
-    async function createSolutionBuilderWithWatchAsync(system: TsBuildWatchSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
+    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
-        await solutionBuilder.buildAsync();
+        solutionBuilder.build();
         return solutionBuilder;
     }
 
@@ -142,9 +142,9 @@ namespace ts.tscWatch {
             testProjectExpectedWatchedDirectoriesRecursive = undefined!;
         });
 
-        async function createSolutionInWatchModeAsync(allFiles: readonly File[], defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
+        function createSolutionInWatchMode(allFiles: readonly File[], defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            await createSolutionBuilderWithWatchAsync(host, [`${project}/${SubProject.tests}`], defaultOptions);
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], defaultOptions);
             verifyWatches(host);
             checkOutputErrorsInitial(host, emptyArray, disableConsoleClears);
             const outputFileStamps = getOutputFileStamps(host);
@@ -161,14 +161,14 @@ namespace ts.tscWatch {
         }
 
         it("creates solution in watch mode", () => {
-            createSolutionInWatchModeAsync(allFiles);
+            createSolutionInWatchMode(allFiles);
         });
 
-        it("verify building references watches only those projects", async () => {
+        it("verify building references watches only those projects", () => {
             const system = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             const host = createSolutionBuilderWithWatchHost(system);
             const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
-            await solutionBuilder.buildReferencesAsync(`${project}/${SubProject.tests}`);
+            solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
 
             checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));
             checkWatchedDirectories(system, emptyArray, /*recursive*/ false);
@@ -194,8 +194,8 @@ namespace ts.tscWatch {
             };
 
             function verifyProjectChanges(allFilesGetter: () => readonly File[]) {
-                async function createSolutionInWatchModeToVerifyChangesAsync(additionalFiles?: readonly [SubProject, string][]) {
-                    const host = await createSolutionInWatchModeAsync(allFilesGetter());
+                function createSolutionInWatchModeToVerifyChanges(additionalFiles?: readonly [SubProject, string][]) {
+                    const host = createSolutionInWatchMode(allFilesGetter());
                     return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
 
                     function verifyChangeWithFile(fileName: string, content: string, local?: boolean) {
@@ -254,8 +254,8 @@ namespace ts.tscWatch {
                     }
                 }
 
-                it("change builds changes and reports found errors message", async () => {
-                    const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = await createSolutionInWatchModeToVerifyChangesAsync();
+                it("change builds changes and reports found errors message", () => {
+                    const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = createSolutionInWatchModeToVerifyChanges();
                     verifyChange(`${core[1].content}
 export class someClass { }`);
 
@@ -276,15 +276,15 @@ export class someClass2 { }`);
                     }
                 });
 
-                it("non local change does not start build of referencing projects", async () => {
-                    const { verifyChangeWithFile } = await createSolutionInWatchModeToVerifyChangesAsync();
+                it("non local change does not start build of referencing projects", () => {
+                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges();
                     verifyChangeWithFile(core[1].path, `${core[1].content}
 function foo() { }`, /*local*/ true);
                 });
 
-                it("builds when new file is added, and its subsequent updates", async () => {
+                it("builds when new file is added, and its subsequent updates", () => {
                     const additinalFiles: readonly [SubProject, string][] = [[SubProject.core, newFileWithoutExtension]];
-                    const { verifyChangeWithFile } = await createSolutionInWatchModeToVerifyChangesAsync(additinalFiles);
+                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
                     verifyChange(newFile.content);
 
                     // Another change requeues and builds it
@@ -316,10 +316,10 @@ export class someClass2 { }`);
             });
         });
 
-        it("watches config files that are not present", async () => {
+        it("watches config files that are not present", () => {
             const allFiles = [libFile, ...core, logic[1], ...tests];
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            await createSolutionBuilderWithWatchAsync(host, [`${project}/${SubProject.tests}`]);
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
             checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase()));
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
@@ -353,7 +353,7 @@ export class someClass2 { }`);
             verifyWatches(host);
         });
 
-        it("when referenced using prepend, builds referencing project even for non local change", async () => {
+        it("when referenced using prepend, builds referencing project even for non local change", () => {
             const coreTsConfig: File = {
                 path: core[0].path,
                 content: JSON.stringify({
@@ -378,7 +378,7 @@ export class someClass2 { }`);
 
             const projectFiles = [coreTsConfig, coreIndex, logicTsConfig, logicIndex];
             const host = createTsBuildWatchSystem([libFile, ...projectFiles], { currentDirectory: projectsLocation });
-            await createSolutionBuilderWithWatchAsync(host, [`${project}/${SubProject.logic}`]);
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.logic}`]);
             verifyWatches();
             checkOutputErrorsInitial(host, emptyArray);
             const outputFileStamps = getOutputFileStamps();
@@ -438,7 +438,7 @@ function myFunc() { return 100; }`, /*isLocal*/ true);
             }
         });
 
-        it("when referenced project change introduces error in the down stream project and then fixes it", async () => {
+        it("when referenced project change introduces error in the down stream project and then fixes it", () => {
             const subProjectLibrary = `${projectsLocation}/${project}/Library`;
             const libraryTs: File = {
                 path: `${subProjectLibrary}/library.ts`,
@@ -472,7 +472,7 @@ createSomeObject().message;`
 
             const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
             const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
-            await createSolutionBuilderWithWatchAsync(host, ["App"]);
+            createSolutionBuilderWithWatch(host, ["App"]);
             checkOutputErrorsInitial(host, emptyArray);
 
             // Change message in library to message2
@@ -491,8 +491,8 @@ createSomeObject().message;`
         });
 
         describe("reports errors in all projects on incremental compile", () => {
-            async function verifyIncrementalErrorsAsync(defaultBuildOptions?: BuildOptions, disabledConsoleClear?: boolean) {
-                const host = await createSolutionInWatchModeAsync(allFiles, defaultBuildOptions, disabledConsoleClear);
+            function verifyIncrementalErrors(defaultBuildOptions?: BuildOptions, disabledConsoleClear?: boolean) {
+                const host = createSolutionInWatchMode(allFiles, defaultBuildOptions, disabledConsoleClear);
                 const outputFileStamps = getOutputFileStamps(host);
 
                 host.writeFile(logic[1].path, `${logic[1].content}
@@ -520,11 +520,11 @@ let x: string = 10;`);
             }
 
             it("when preserveWatchOutput is not used", () => {
-                verifyIncrementalErrorsAsync();
+                verifyIncrementalErrors();
             });
 
             it("when preserveWatchOutput is passed on command line", () => {
-                verifyIncrementalErrorsAsync({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
+                verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
             });
 
             describe("when declaration emit errors are present", () => {
@@ -566,10 +566,10 @@ let x: string = 10;`);
                     outputs.forEach(f => assert.equal(host.fileExists(f), !expectedErrors.length, `Expected file ${f} to ${!expectedErrors.length ? "exist" : "not exist"}`));
                 }
 
-                async function createSolutionWithWatchAsync(withFixedError?: true) {
+                function createSolutionWithWatch(withFixedError?: true) {
                     const files = [libFile, withFixedError ? fileWithFixedError : fileWithError, fileWithoutError, tsconfig];
                     const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${solution}` });
-                    await createSolutionBuilderWithWatchAsync(host, [subProject]);
+                    createSolutionBuilderWithWatch(host, [subProject]);
                     verifyDtsErrors(host, /*isIncremental*/ false, withFixedError ? emptyArray : expectedDtsEmitErrors);
                     return host;
                 }
@@ -587,21 +587,21 @@ let x: string = 10;`);
                     verifyDtsErrors(host, /*isIncremental*/ true, emptyArray);
                 }
 
-                it("when fixing error files all files are emitted", async () => {
-                    const host = await createSolutionWithWatchAsync();
+                it("when fixing error files all files are emitted", () => {
+                    const host = createSolutionWithWatch();
                     fixError(host);
                 });
 
-                it("when file with no error changes, declaration errors are reported", async () => {
-                    const host = await createSolutionWithWatchAsync();
+                it("when file with no error changes, declaration errors are reported", () => {
+                    const host = createSolutionWithWatch();
                     host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
                     incrementalBuild(host);
                     verifyDtsErrors(host, /*isIncremental*/ true, expectedDtsEmitErrors);
                 });
 
                 describe("when reporting errors on introducing error", () => {
-                    async function createSolutionWithIncrementalErrorAsync() {
-                        const host = await createSolutionWithWatchAsync(/*withFixedError*/ true);
+                    function createSolutionWithIncrementalError() {
+                        const host = createSolutionWithWatch(/*withFixedError*/ true);
                         host.writeFile(fileWithError.path, fileWithError.content);
                         host.writtenFiles.clear();
 
@@ -615,8 +615,8 @@ let x: string = 10;`);
                         assert.isTrue(host.writtenFiles.has(host.toFullPath(f)), `Expected to write ${f}: ${arrayFrom(host.writtenFiles.keys())}`);
                     }
 
-                    it("when fixing errors only changed file is emitted", async () => {
-                        const host = await createSolutionWithIncrementalErrorAsync();
+                    it("when fixing errors only changed file is emitted", () => {
+                        const host = createSolutionWithIncrementalError();
                         fixError(host);
                         assert.equal(host.writtenFiles.size, 3, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
                         verifyWrittenFile(host, outputs[0]);
@@ -624,8 +624,8 @@ let x: string = 10;`);
                         verifyWrittenFile(host, outputs[4]);
                     });
 
-                    it("when file with no error changes, declaration errors are reported", async () => {
-                        const host = await createSolutionWithIncrementalErrorAsync();
+                    it("when file with no error changes, declaration errors are reported", () => {
+                        const host = createSolutionWithIncrementalError();
                         host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
                         host.writtenFiles.clear();
 
@@ -645,14 +645,14 @@ let x: string = 10;`);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, 1, /*recursive*/ true);
                 }
 
-                async function createSolutionOfProjectAsync(allFiles: readonly File[],
+                function createSolutionOfProject(allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
                     const host = createTsBuildWatchSystem(allFiles, { currentDirectory });
                     const solutionBuilder = createSolutionBuilder(host, [solutionBuilderconfig], {});
-                    await solutionBuilder.buildAsync();
+                    solutionBuilder.build();
                     const outputFileStamps = getOutputFileStamps(host);
                     for (const stamp of outputFileStamps) {
                         assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
@@ -660,14 +660,14 @@ let x: string = 10;`);
                     return { host, solutionBuilder };
                 }
 
-                async function createSolutionAndWatchModeOfProjectAsync(
+                function createSolutionAndWatchModeOfProject(
                     allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     watchConfig: string,
                     getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
-                    const { host, solutionBuilder } = await createSolutionOfProjectAsync(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
+                    const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
                     // Build in watch mode
                     const watch = createWatchOfConfigFile(watchConfig, host);
@@ -676,13 +676,13 @@ let x: string = 10;`);
                     return { host, solutionBuilder, watch };
                 }
 
-                async function createSolutionAndServiceOfProjectAsync(allFiles: readonly File[],
+                function createSolutionAndServiceOfProject(allFiles: readonly File[],
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     openFileName: string,
                     getOutputFileStamps: (host: TsBuildWatchSystem) => readonly OutputFileStamp[]) {
                     // Build the composite project
-                    const { host, solutionBuilder } = await createSolutionOfProjectAsync(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
+                    const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
                     // service
                     const service = projectSystem.createProjectService(host);
@@ -708,12 +708,12 @@ let x: string = 10;`);
                     const expectedProjectFiles = () => [libFile, ...tests, ...logic.slice(1), ...core.slice(1, core.length - 1)].map(f => f.path);
                     const expectedProgramFiles = () => [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts];
 
-                    function createSolutionAndWatchModeAsync() {
-                        return createSolutionAndWatchModeOfProjectAsync(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[0].path, getOutputFileStamps);
+                    function createSolutionAndWatchMode() {
+                        return createSolutionAndWatchModeOfProject(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[0].path, getOutputFileStamps);
                     }
 
                     function createSolutionAndService() {
-                        return createSolutionAndServiceOfProjectAsync(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[1].path, getOutputFileStamps);
+                        return createSolutionAndServiceOfProject(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[1].path, getOutputFileStamps);
                     }
 
                     function verifyWatches(host: TsBuildWatchSystem, withTsserver?: boolean) {
@@ -727,14 +727,14 @@ let x: string = 10;`);
                     }
 
                     function verifyScenario(
-                        editAsync: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => Promise<void>,
+                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
                         expectedProgramFilesAfterEdit: () => readonly string[],
                         expectedProjectFilesAfterEdit: () => readonly string[]
                     ) {
-                        it("with tsc-watch", async () => {
-                            const { host, solutionBuilder, watch } = await createSolutionAndWatchModeAsync();
+                        it("with tsc-watch", () => {
+                            const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
-                            await editAsync(host, solutionBuilder);
+                            edit(host, solutionBuilder);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
@@ -742,10 +742,10 @@ let x: string = 10;`);
 
                         });
 
-                        it("with tsserver", async () => {
-                            const { host, solutionBuilder, service } = await createSolutionAndService();
+                        it("with tsserver", () => {
+                            const { host, solutionBuilder, service } = createSolutionAndService();
 
-                            await editAsync(host, solutionBuilder);
+                            edit(host, solutionBuilder);
 
                             host.checkTimeoutQueueLengthAndRun(2);
                             checkProjectActualFiles(service, tests[0].path, expectedProjectFilesAfterEdit());
@@ -753,8 +753,8 @@ let x: string = 10;`);
                     }
 
                     describe("verifies dependencies and watches", () => {
-                        it("with tsc-watch", async () => {
-                            const { host, watch } = await createSolutionAndWatchModeAsync();
+                        it("with tsc-watch", () => {
+                            const { host, watch } = createSolutionAndWatchMode();
                             verifyWatches(host);
                             verifyDependencies(watch, coreIndexDts, [coreIndexDts]);
                             verifyDependencies(watch, coreAnotherModuleDts, [coreAnotherModuleDts]);
@@ -762,19 +762,19 @@ let x: string = 10;`);
                             verifyDependencies(watch, tests[1].path, expectedProgramFiles().filter(f => f !== libFile.path));
                         });
 
-                        it("with tsserver", async () => {
-                            const { host } = await createSolutionAndService();
+                        it("with tsserver", () => {
+                            const { host } = createSolutionAndService();
                             verifyWatches(host, /*withTsserver*/ true);
                         });
                     });
 
                     describe("local edit in ts file, result in watch compilation because logic.d.ts is written", () => {
-                        verifyScenario(async (host, solutionBuilder) => {
+                        verifyScenario((host, solutionBuilder) => {
                             host.writeFile(logic[1].path, `${logic[1].content}
 function foo() {
 }`);
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
-                            await solutionBuilder.buildNextInvalidatedProjectAsync();
+                            solutionBuilder.buildNextInvalidatedProject();
 
                             // not ideal, but currently because of d.ts but no new file is written
                             // There will be timeout queued even though file contents are same
@@ -782,23 +782,23 @@ function foo() {
                     });
 
                     describe("non local edit in ts file, rebuilds in watch compilation", () => {
-                        verifyScenario(async (host, solutionBuilder) => {
+                        verifyScenario((host, solutionBuilder) => {
                             host.writeFile(logic[1].path, `${logic[1].content}
 export function gfoo() {
 }`);
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
-                            await solutionBuilder.buildNextInvalidatedProjectAsync();
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, expectedProgramFiles, expectedProjectFiles);
                     });
 
                     describe("change in project reference config file builds correctly", () => {
-                        verifyScenario(async (host, solutionBuilder) => {
+                        verifyScenario((host, solutionBuilder) => {
                             host.writeFile(logic[0].path, JSON.stringify({
                                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                                 references: [{ path: "../core" }]
                             }));
                             solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath, ConfigFileProgramReloadLevel.Full);
-                            await solutionBuilder.buildNextInvalidatedProjectAsync();
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, () => [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")], expectedProjectFiles);
                     });
                 });
@@ -913,11 +913,11 @@ export function gfoo() {
                         ];
 
                         function createSolutionAndWatchMode() {
-                            return createSolutionAndWatchModeOfProjectAsync(allFiles, getProjectPath(project), configToBuild, configToBuild, getOutputFileStamps);
+                            return createSolutionAndWatchModeOfProject(allFiles, getProjectPath(project), configToBuild, configToBuild, getOutputFileStamps);
                         }
 
                         function createSolutionAndService() {
-                            return createSolutionAndServiceOfProjectAsync(allFiles, getProjectPath(project), configToBuild, cTs.path, getOutputFileStamps);
+                            return createSolutionAndServiceOfProject(allFiles, getProjectPath(project), configToBuild, cTs.path, getOutputFileStamps);
                         }
 
                         function getOutputFileStamps(host: TsBuildWatchSystem) {
@@ -973,8 +973,8 @@ export function gfoo() {
                             orphanInfosAfterRevert?: readonly string[];
                         }
                         function verifyScenario({ edit, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
-                            it("with tsc-watch", async () => {
-                                const { host, solutionBuilder, watch } = await createSolutionAndWatchMode();
+                            it("with tsc-watch", () => {
+                                const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
                                 edit(host, solutionBuilder);
 
@@ -993,8 +993,8 @@ export function gfoo() {
 
                             if (!multiFolder) return; // With side by side file open is in inferred project without any settings
 
-                            it("with tsserver", async () => {
-                                const { host, solutionBuilder, service } = await createSolutionAndService();
+                            it("with tsserver", () => {
+                                const { host, solutionBuilder, service } = createSolutionAndService();
 
                                 edit(host, solutionBuilder);
 
@@ -1012,24 +1012,24 @@ export function gfoo() {
 
                         describe("verifies dependencies and watches", () => {
                             // Initial build
-                            it("with tsc-watch", async () => {
-                                const { host, watch } = await createSolutionAndWatchMode();
+                            it("with tsc-watch", () => {
+                                const { host, watch } = createSolutionAndWatchMode();
                                 verifyProgram(host, watch);
                             });
                             if (!multiFolder) return;
-                            it("with tsserver", async () => {
-                                const { host, service } = await createSolutionAndService();
+                            it("with tsserver", () => {
+                                const { host, service } = createSolutionAndService();
                                 verifyProject(host, service);
                             });
                         });
 
                         describe("non local edit updates the program and watch correctly", () => {
                             verifyScenario({
-                                edit: async (host, solutionBuilder) => {
+                                edit: (host, solutionBuilder) => {
                                     // edit
                                     host.writeFile(bTs.path, `${bTs.content}\nexport function gfoo() {\n}`);
                                     solutionBuilder.invalidateProject((bTsconfig.path.toLowerCase() as ResolvedConfigFilePath));
-                                    await solutionBuilder.buildNextInvalidatedProjectAsync();
+                                    solutionBuilder.buildNextInvalidatedProject();
                                 },
                                 expectedEditErrors: emptyArray,
                                 expectedProgramFiles,
@@ -1165,7 +1165,7 @@ export function gfoo() {
                     describe("when config files are side by side", () => {
                         verifyTransitiveReferences(/*multiFolder*/ false);
 
-                        it("when referenced project uses different module resolution", async () => {
+                        it("when referenced project uses different module resolution", () => {
                             const bTs: File = {
                                 path: bTsFile.path,
                                 content: `import {A} from "a";export const b = new A();`
@@ -1197,7 +1197,7 @@ export function gfoo() {
                             function getOutputFileStamps(host: TsBuildWatchSystem) {
                                 return expectedFiles.map(file => transformOutputToOutputFileStamp(file, host));
                             }
-                            const { host, watch } = await createSolutionAndWatchModeOfProjectAsync(allFiles, getProjectPath(project), "tsconfig.c.json", "tsconfig.c.json", getOutputFileStamps);
+                            const { host, watch } = createSolutionAndWatchModeOfProject(allFiles, getProjectPath(project), "tsconfig.c.json", "tsconfig.c.json", getOutputFileStamps);
                             verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies);
                         });
                     });
@@ -1210,7 +1210,7 @@ export function gfoo() {
 
         it("incremental updates in verbose mode", () => {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatchAsync(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
             checkOutputErrorsInitial(host, emptyArray, /*disableConsoleClears*/ undefined, [
                 `Projects in this build: \r\n    * sample1/core/tsconfig.json\r\n    * sample1/logic/tsconfig.json\r\n    * sample1/tests/tsconfig.json\n\n`,
                 `Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist\n\n`,
@@ -1289,7 +1289,7 @@ export function someFn() { }`);
     }
   ]`
             ));
-            createSolutionBuilderWithWatchAsync(host, ["tsconfig.json"], { verbose: true, watch: true });
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
             checkOutputErrorsInitial(host, [
                 `error TS6202: Project references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json\r\n/user/username/projects/demo/core/tsconfig.json\r\n/user/username/projects/demo/zoo/tsconfig.json\r\n/user/username/projects/demo/animals/tsconfig.json\n`
             ], /*disableConsoleClears*/ undefined, [
@@ -1322,7 +1322,7 @@ export function someFn() { }`);
             ], { currentDirectory: projectLocation });
             host.writeFile(coreFiles[1].path, `import * as A from '../animals';
 ${coreFiles[1].content}`);
-            createSolutionBuilderWithWatchAsync(host, ["tsconfig.json"], { verbose: true, watch: true });
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
             const errors = [
                 `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
                 `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,

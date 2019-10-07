@@ -3,9 +3,9 @@ namespace ts {
         writtenFiles: Map<true>;
         baseLine(): void;
     };
-    async function executeCommandLineAsync(sys: TscCompileSystem, commandLineArgs: readonly string[]) {
+    function executeCommandLine(sys: TscCompileSystem, commandLineArgs: readonly string[]) {
         if (isBuild(commandLineArgs)) {
-            return await performBuildAsync(sys, commandLineArgs.slice(1));
+            return performBuild(sys, commandLineArgs.slice(1));
         }
 
         const reportDiagnostic = createDiagnosticReporter(sys);
@@ -115,7 +115,7 @@ namespace ts {
         return sys.exit(exitCode);
     }
 
-    async function performBuildAsync(sys: TscCompileSystem, args: string[]) {
+    function performBuild(sys: TscCompileSystem, args: string[]) {
         const { buildOptions, projects, errors } = parseBuildCommand(args);
         const reportDiagnostic = createDiagnosticReporter(sys, buildOptions.pretty);
 
@@ -135,7 +135,7 @@ namespace ts {
         );
         fakes.patchSolutionBuilderHost(buildHost, sys);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-        const exitCode = buildOptions.clean ? builder.clean() : await builder.buildAsync();
+        const exitCode = buildOptions.clean ? builder.clean() : builder.build();
         baselineBuildInfo(builder.getAllParsedConfigs(), sys.vfs, sys.writtenFiles);
         return sys.exit(exitCode);
     }
@@ -167,7 +167,7 @@ namespace ts {
         baselineReadFileCalls?: boolean;
     }
 
-    export async function tscCompileAsync(input: TscCompile) {
+    export function tscCompile(input: TscCompile) {
         const baseFs = input.fs();
         const fs = baseFs.shadow();
         const {
@@ -198,7 +198,7 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        await executeCommandLineAsync(sys, commandLineArgs);
+        executeCommandLine(sys, commandLineArgs);
         sys.write(`exitCode:: ${sys.exitCode}\n`);
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
@@ -227,8 +227,8 @@ namespace ts {
         describe(input.scenario, () => {
             describe(input.subScenario, () => {
                 let sys: TscCompileSystem;
-                before(async () => {
-                    sys = await tscCompileAsync({
+                before(() => {
+                    sys = tscCompile({
                         ...input,
                         fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
                     });

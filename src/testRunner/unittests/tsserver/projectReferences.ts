@@ -1,11 +1,11 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        async function createHostAsync(files: readonly File[], rootNames: readonly string[]) {
+        function createHost(files: readonly File[], rootNames: readonly string[]) {
             const host = createServerHost(files);
 
             // ts build should succeed
             const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
-            await solutionBuilder.buildAsync();
+            solutionBuilder.build();
             assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
 
             return host;
@@ -26,8 +26,8 @@ namespace ts.projectSystem {
             const containerConfig = TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
             const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
 
-            it("does not error on container only project", async () => {
-                const host = await createHostAsync(files, [containerConfig.path]);
+            it("does not error on container only project", () => {
+                const host = createHost(files, [containerConfig.path]);
 
                 // Open external project for the folder
                 const session = createSession(host);
@@ -63,8 +63,8 @@ namespace ts.projectSystem {
                 assert.deepEqual(optionsDiagnostics, []);
             });
 
-            it("can successfully find references with --out options", async () => {
-                const host = await createHostAsync(files, [containerConfig.path]);
+            it("can successfully find references with --out options", () => {
+                const host = createHost(files, [containerConfig.path]);
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
@@ -427,8 +427,8 @@ fn5();
             interface OpenTsFile extends VerifierAndWithRefs {
                 onHostCreate?: (host: TestServerHost) => void;
             }
-            async function openTsFileAsync({ withRefs, disableSourceOfProjectReferenceRedirect, verifier, onHostCreate }: OpenTsFile) {
-                const host = await createHostAsync(files, [mainConfig.path]);
+            function openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier, onHostCreate }: OpenTsFile) {
+                const host = createHost(files, [mainConfig.path]);
                 if (!withRefs) {
                     // Erase project reference
                     host.writeFile(mainConfig.path, JSON.stringify({
@@ -677,8 +677,8 @@ fn5();
                 }: VerifyScenarioWithChanges,
                 timeoutBeforeAction: boolean,
             ) {
-                it(scenarioName, async () => {
-                    const { host, session, verifiers } = await openTsFileAsync({ verifier, withRefs });
+                it(scenarioName, () => {
+                    const { host, session, verifiers } = openTsFile({ verifier, withRefs });
 
                     // Create DocumentPositionMapper
                     firstAction(session, verifiers);
@@ -745,8 +745,8 @@ fn5();
                 noDts
             }: VerifyScenarioWhenFileNotPresent) {
                 describe(scenarioName, () => {
-                    it("when file is not present", async () => {
-                        const { host, session, verifiers } = await openTsFileAsync({
+                    it("when file is not present", () => {
+                        const { host, session, verifiers } = openTsFile({
                             verifier,
                             withRefs,
                             onHostCreate: host => host.deleteFile(fileLocation)
@@ -756,9 +756,9 @@ fn5();
                         verifyScenarioAndScriptInfoCollection(session, host, verifiers, fileNotPresentKey, noDts);
                     });
 
-                    it("when file is created after actions on projects", async () => {
+                    it("when file is created after actions on projects", () => {
                         let fileContents: string | undefined;
-                        const { host, session, verifiers } = await openTsFileAsync({
+                        const { host, session, verifiers } = openTsFile({
                             verifier,
                             withRefs,
                             onHostCreate: host => {
@@ -772,8 +772,8 @@ fn5();
                         verifyScenarioAndScriptInfoCollection(session, host, verifiers, fileCreatedKey);
                     });
 
-                    it("when file is deleted after actions on the projects", async () => {
-                        const { host, session, verifiers } = await openTsFileAsync({ verifier, withRefs });
+                    it("when file is deleted after actions on the projects", () => {
+                        const { host, session, verifiers } = openTsFile({ verifier, withRefs });
                         firstAction(session, verifiers);
 
                         // The dependency file is deleted when orphan files are collected
@@ -799,8 +799,8 @@ fn5();
             }
 
             function verifyScenarioWorker({ mainScenario, verifier }: VerifyScenario, withRefs: boolean, disableSourceOfProjectReferenceRedirect?: true) {
-                it(mainScenario, async () => {
-                    const { host, session, verifiers } = await openTsFileAsync({ withRefs, disableSourceOfProjectReferenceRedirect, verifier });
+                it(mainScenario, () => {
+                    const { host, session, verifiers } = openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier });
                     checkProject(session, verifiers);
                     verifyScenarioAndScriptInfoCollection(session, host, verifiers, "main");
                 });

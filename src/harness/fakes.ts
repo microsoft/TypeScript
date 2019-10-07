@@ -51,10 +51,6 @@ namespace fakes {
             this.vfs.writeFileSync(path, writeByteOrderMark ? utils.addUTF8ByteOrderMark(data) : data);
         }
 
-        public async writeFileAsync(path: string, data: string, writeByteOrderMark?: boolean): Promise<void> {
-            this.writeFile(path, data, writeByteOrderMark);
-        }
-
         public deleteFile(path: string) {
             this.vfs.unlinkSync(path);
         }
@@ -304,10 +300,6 @@ namespace fakes {
                 this.outputs.push(document);
             }
             this.outputs[this._outputsMap.get(document.file)!] = document;
-        }
-
-        public async writeFileAsync(fileName: string, content: string, writeByteOrderMark: boolean) {
-            return this.writeFile(fileName, content, writeByteOrderMark);
         }
 
         public trace(s: string): void {

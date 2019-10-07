@@ -166,7 +166,7 @@ namespace ts {
             baselineOnly: true
         });
 
-        it("clean projects", async () => {
+        it("clean projects", () => {
             const fs = outFileFs.shadow();
             const expectedOutputs = [
                 ...outputFiles[project.first],
@@ -175,7 +175,7 @@ namespace ts {
             ];
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist
             verifyOutputsPresent(fs, expectedOutputs);
@@ -188,7 +188,7 @@ namespace ts {
             builder.clean();
         });
 
-        it("verify buildInfo absence results in new build", async () => {
+        it("verify buildInfo absence results in new build", () => {
             const { fs, tick } = getFsWithTime(outFileFs);
             const expectedOutputs = [
                 ...outputFiles[project.first],
@@ -197,7 +197,7 @@ namespace ts {
             ];
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist
             verifyOutputsPresent(fs, expectedOutputs);
@@ -209,7 +209,7 @@ namespace ts {
             tick();
 
             builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.buildinfo]],
@@ -221,30 +221,30 @@ namespace ts {
             );
         });
 
-        it("verify that if incremental is set to false, tsbuildinfo is not generated", async () => {
+        it("verify that if incremental is set to false, tsbuildinfo is not generated", () => {
             const fs = outFileFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
             const builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist - without tsbuildinfo for third project
             verifyOutputsPresent(fs, expectedOutputFiles.slice(0, expectedOutputFiles.length - 2));
             verifyOutputsAbsent(fs, [outputFiles[project.third][ext.buildinfo]]);
         });
 
-        it("rebuilds completely when version in tsbuildinfo doesnt match ts version", async () => {
+        it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
             const { fs, tick } = getFsWithTime(outFileFs);
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             host.clearDiagnostics();
             tick();
             builder = createSolutionBuilder(host);
             changeCompilerVersion(host);
             tick();
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[project.first][source.config], fakes.version, version],
@@ -256,7 +256,7 @@ namespace ts {
             );
         });
 
-        it("rebuilds completely when command line incremental flag changes between non dts changes", async () => {
+        it("rebuilds completely when command line incremental flag changes between non dts changes", () => {
             const { fs, tick } = getFsWithTime(outFileFs);
             // Make non composite third project
             replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
@@ -264,7 +264,7 @@ namespace ts {
             // Build with command line incremental
             const host = fakes.SolutionBuilderHost.create(fs);
             let builder = createSolutionBuilder(host, { incremental: true });
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             host.clearDiagnostics();
             tick();
@@ -272,7 +272,7 @@ namespace ts {
             // Make non incremental build with change in file that doesnt affect dts
             appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
             builder = createSolutionBuilder(host, { verbose: true });
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
                 [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -286,7 +286,7 @@ namespace ts {
             // Make incremental build with change in file that doesnt affect dts
             appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
             builder = createSolutionBuilder(host, { verbose: true, incremental: true });
-            await builder.buildAsync();
+            builder.build();
             // Builds completely because tsbuildinfo is old.
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
@@ -299,11 +299,11 @@ namespace ts {
             host.clearDiagnostics();
         });
 
-        it("builds till project specified", async () => {
+        it("builds till project specified", () => {
             const fs = outFileFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, { verbose: false });
-            const result = await builder.buildAsync(sources[project.second][source.config]);
+            const result = builder.build(sources[project.second][source.config]);
             host.assertDiagnosticMessages(/*empty*/);
             // First and Third is not built
             verifyOutputsAbsent(fs, [...outputFiles[project.first], ...outputFiles[project.third]]);
@@ -312,11 +312,11 @@ namespace ts {
             assert.equal(result, ExitStatus.Success);
         });
 
-        it("cleans till project specified", async () => {
+        it("cleans till project specified", () => {
             const fs = outFileFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, { verbose: false });
-            await builder.buildAsync();
+            builder.build();
             const result = builder.clean(sources[project.second][source.config]);
             host.assertDiagnosticMessages(/*empty*/);
             // First and Third output for present
@@ -747,7 +747,7 @@ ${internal} enum internalEnum { a, b, c }`);
             });
         });
 
-        it("non module projects without prepend", async () => {
+        it("non module projects without prepend", () => {
             const fs = outFileFs.shadow();
             // No prepend
             replaceText(fs, sources[project.third][source.config], `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
@@ -765,7 +765,7 @@ ${internal} enum internalEnum { a, b, c }`);
 
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host);
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], "src/first/first_PART1.js"],

@@ -110,7 +110,6 @@ namespace ts {
                 },
                 getDefaultLibFileName: () => "",
                 writeFile: (_fileName, _content) => { throw new Error("unsupported"); },
-                writeFileAsync: notImplemented,
                 getCurrentDirectory: () => sys.getCurrentDirectory(),
                 getCanonicalFileName: fileName => sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
                 getNewLine: () => sys.newLine,

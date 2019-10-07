@@ -9,7 +9,7 @@ namespace ts {
             projFs = undefined!; // Release the contents
         });
 
-        it("verify that it builds correctly", async () => {
+        it("verify that it builds correctly", () => {
             const allExpectedOutputs = [
                 "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
                 "/src/dist/main/a.js", "/src/dist/main/a.d.ts",
@@ -18,12 +18,12 @@ namespace ts {
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(/*empty*/);
             verifyOutputsPresent(fs, allExpectedOutputs);
         });
 
-        it("verify that it reports error for same .tsbuildinfo file because no rootDir in the base", async () => {
+        it("verify that it reports error for same .tsbuildinfo file because no rootDir in the base", () => {
             const allExpectedOutputs = [
                 "/src/dist/other.js", "/src/dist/other.d.ts",
                 "/src/dist/tsconfig.tsbuildinfo"
@@ -36,7 +36,7 @@ namespace ts {
             replaceText(fs, "/src/tsconfig.base.json", `"rootDir": "./src/",`, "");
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.json", "src/src/main/tsconfig.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.json", "src/dist/other.js"],
@@ -52,7 +52,7 @@ namespace ts {
             verifyOutputsAbsent(fs, missingOutputs);
         });
 
-        it("verify that it reports error for same .tsbuildinfo file", async () => {
+        it("verify that it reports error for same .tsbuildinfo file", () => {
             const allExpectedOutputs = [
                 "/src/dist/other.js", "/src/dist/other.d.ts",
                 "/src/dist/tsconfig.tsbuildinfo"
@@ -71,7 +71,7 @@ namespace ts {
             }));
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.json", "src/src/main/tsconfig.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.json", "src/dist/other.js"],
@@ -87,7 +87,7 @@ namespace ts {
             verifyOutputsAbsent(fs, missingOutputs);
         });
 
-        it("verify that it reports no error when .tsbuildinfo differ", async () => {
+        it("verify that it reports no error when .tsbuildinfo differ", () => {
             const allExpectedOutputs = [
                 "/src/dist/other.js", "/src/dist/other.d.ts",
                 "/src/dist/tsconfig.main.tsbuildinfo",
@@ -107,7 +107,7 @@ namespace ts {
             }));
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main/tsconfig.main.json"], { verbose: true });
-            await builder.buildAsync();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.other.json", "src/src/main/tsconfig.main.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.other.json", "src/dist/other.js"],
