@@ -161,7 +161,12 @@ namespace ts {
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
-    let flowNodeCreated: <T extends FlowNode>(node: T) => T = identity;
+    function initFlowNode<T extends FlowNode>(node: T) {
+        Debug.attachFlowNodeDebugInfo(node);
+        return node;
+    }
+
+    let flowNodeCreated: <T extends FlowNode>(node: T) => T = initFlowNode;
 
     const binder = createBinder();
 
@@ -237,6 +242,10 @@ namespace ts {
             skipTransformFlagAggregation = file.isDeclarationFile;
 
             Symbol = objectAllocator.getSymbolConstructor();
+
+            // Attach debugging information if necessary
+            Debug.attachFlowNodeDebugInfo(unreachableFlow);
+            Debug.attachFlowNodeDebugInfo(reportedUnreachableFlow);
 
             if (!file.locals) {
                 bind(file);
@@ -626,7 +635,7 @@ namespace ts {
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
                 if (!isIIFE) {
-                    currentFlow = { flags: FlowFlags.Start };
+                    currentFlow = initFlowNode({ flags: FlowFlags.Start });
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
                         currentFlow.node = <FunctionExpression | ArrowFunction | MethodDeclaration>node;
                     }
@@ -638,7 +647,7 @@ namespace ts {
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
                 hasExplicitReturn = false;
-                flowNodeCreated = identity;
+                flowNodeCreated = initFlowNode;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
@@ -919,11 +928,11 @@ namespace ts {
         }
 
         function createBranchLabel(): FlowLabel {
-            return { flags: FlowFlags.BranchLabel, antecedents: undefined };
+            return initFlowNode({ flags: FlowFlags.BranchLabel, antecedents: undefined });
         }
 
         function createLoopLabel(): FlowLabel {
-            return { flags: FlowFlags.LoopLabel, antecedents: undefined };
+            return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined });
         }
 
         function setFlowNodeReferenced(flow: FlowNode) {
@@ -1193,7 +1202,7 @@ namespace ts {
             // as possible antecedents of the start of the `catch` or `finally` blocks.
             // Don't bother intercepting the call if there's no finally or catch block that needs the information
             if (node.catchClause || node.finallyBlock) {
-                flowNodeCreated = node => (tryPriors.push(node), node);
+                flowNodeCreated = node => (tryPriors.push(node), initFlowNode(node));
             }
             bind(node.tryBlock);
             flowNodeCreated = oldFlowNodeCreated;
@@ -1262,7 +1271,7 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} };
+                const preFinallyFlow: PreFinallyFlow = initFlowNode({ flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} });
                 addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
@@ -1983,7 +1992,7 @@ namespace ts {
                 const host = getJSDocHost(typeAlias);
                 container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
-                currentFlow = { flags: FlowFlags.Start };
+                currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
                 const declName = getNameOfDeclaration(typeAlias);

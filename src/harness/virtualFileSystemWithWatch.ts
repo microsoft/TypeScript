@@ -341,7 +341,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly currentDirectory: string;
         private readonly customWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
-        public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
+        public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
 
         constructor(
             public withSafeList: boolean,

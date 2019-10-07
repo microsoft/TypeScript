@@ -42,6 +42,12 @@ namespace ts {
         clear(): void;
     }
 
+    /* @internal */
+    export interface MapConstructor {
+        // eslint-disable-next-line @typescript-eslint/prefer-function-type
+        new <T>(): Map<T>;
+    }
+
     /** ES6 Iterator type. */
     export interface Iterator<T> {
         next(): { value: T, done?: false } | { value: never, done: true };
@@ -68,26 +74,38 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    // Natives
+    // NOTE: This must be declared in a separate block from the one below so that we don't collide with the exported definition of `Map`.
+    declare const Map: (new <T>() => Map<T>) | undefined;
+
+    /**
+     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
+     */
+    export function tryGetNativeMap(): MapConstructor | undefined {
+        // Internet Explorer's Map doesn't support iteration, so don't use it.
+        // eslint-disable-next-line no-in-operator
+        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
+    }
+}
+
+/* @internal */
+namespace ts {
     export const emptyArray: never[] = [] as never[];
 
-    /** Create a MapLike with good performance. */
-    function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
+    export const Map: MapConstructor = tryGetNativeMap() || (() => {
+        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createMapShim === "function") {
+            return createMapShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
+    })();
 
-        // Using 'delete' on an object causes V8 to put the object in dictionary mode.
-        // This disables creation of hidden classes, which are expensive when an object is
-        // constantly changing shape.
-        map.__ = undefined;
-        delete map.__;
-
-        return map;
-    }
-
-    /** Create a new map. If a template object is provided, the map will copy entries from it. */
+    /** Create a new map. */
     export function createMap<T>(): Map<T> {
-        return new MapCtr<T>();
+        return new Map<T>();
     }
 
+    /** Create a new map from an array of entries. */
     export function createMapFromEntries<T>(entries: [string, T][]): Map<T> {
         const map = createMap<T>();
         for (const [key, value] of entries) {
@@ -96,8 +114,9 @@ namespace ts {
         return map;
     }
 
+    /** Create a new map from a template object is provided, the map will copy entries from it. */
     export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
-        const map: Map<T> = new MapCtr<T>();
+        const map: Map<T> = new Map<T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -108,204 +127,6 @@ namespace ts {
         }
 
         return map;
-    }
-
-    // The global Map object. This may not be available, so we must test for it.
-    declare const Map: (new <T>() => Map<T>) | undefined;
-    // Internet Explorer's Map doesn't support iteration, so don't use it.
-    // eslint-disable-next-line no-in-operator
-    export const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
-
-    // Keep the class inside a function so it doesn't get compiled if it's not used.
-    export function shimMap(): new <T>() => Map<T> {
-
-        interface MapEntry<T> {
-            readonly key?: string;
-            value?: T;
-
-            // Linked list references for iterators.
-            nextEntry?: MapEntry<T>;
-            previousEntry?: MapEntry<T>;
-
-            /**
-             * Specifies if iterators should skip the next entry.
-             * This will be set when an entry is deleted.
-             * See https://github.com/Microsoft/TypeScript/pull/27292 for more information.
-             */
-            skipNext?: boolean;
-        }
-
-        class MapIterator<T, U extends (string | T | [string, T])> {
-            private currentEntry?: MapEntry<T>;
-            private selector: (key: string, value: T) => U;
-
-            constructor(currentEntry: MapEntry<T>, selector: (key: string, value: T) => U) {
-                this.currentEntry = currentEntry;
-                this.selector = selector;
-            }
-
-            public next(): { value: U, done: false } | { value: never, done: true } {
-                // Navigate to the next entry.
-                while (this.currentEntry) {
-                    const skipNext = !!this.currentEntry.skipNext;
-                    this.currentEntry = this.currentEntry.nextEntry;
-
-                    if (!skipNext) {
-                        break;
-                    }
-                }
-
-                if (this.currentEntry) {
-                    return { value: this.selector(this.currentEntry.key!, this.currentEntry.value!), done: false };
-                }
-                else {
-                    return { value: undefined as never, done: true };
-                }
-            }
-        }
-
-        return class <T> implements Map<T> {
-            private data = createDictionaryObject<MapEntry<T>>();
-            public size = 0;
-
-            // Linked list references for iterators.
-            // See https://github.com/Microsoft/TypeScript/pull/27292
-            // for more information.
-
-            /**
-             * The first entry in the linked list.
-             * Note that this is only a stub that serves as starting point
-             * for iterators and doesn't contain a key and a value.
-             */
-            private readonly firstEntry: MapEntry<T>;
-            private lastEntry: MapEntry<T>;
-
-            constructor() {
-                // Create a first (stub) map entry that will not contain a key
-                // and value but serves as starting point for iterators.
-                this.firstEntry = {};
-                // When the map is empty, the last entry is the same as the
-                // first one.
-                this.lastEntry = this.firstEntry;
-            }
-
-            get(key: string): T | undefined {
-                const entry = this.data[key] as MapEntry<T> | undefined;
-                return entry && entry.value!;
-            }
-
-            set(key: string, value: T): this {
-                if (!this.has(key)) {
-                    this.size++;
-
-                    // Create a new entry that will be appended at the
-                    // end of the linked list.
-                    const newEntry: MapEntry<T> = {
-                        key,
-                        value
-                    };
-                    this.data[key] = newEntry;
-
-                    // Adjust the references.
-                    const previousLastEntry = this.lastEntry;
-                    previousLastEntry.nextEntry = newEntry;
-                    newEntry.previousEntry = previousLastEntry;
-                    this.lastEntry = newEntry;
-                }
-                else {
-                    this.data[key].value = value;
-                }
-
-                return this;
-            }
-
-            has(key: string): boolean {
-                // eslint-disable-next-line no-in-operator
-                return key in this.data;
-            }
-
-            delete(key: string): boolean {
-                if (this.has(key)) {
-                    this.size--;
-                    const entry = this.data[key];
-                    delete this.data[key];
-
-                    // Adjust the linked list references of the neighbor entries.
-                    const previousEntry = entry.previousEntry!;
-                    previousEntry.nextEntry = entry.nextEntry;
-                    if (entry.nextEntry) {
-                        entry.nextEntry.previousEntry = previousEntry;
-                    }
-
-                    // When the deleted entry was the last one, we need to
-                    // adjust the lastEntry reference.
-                    if (this.lastEntry === entry) {
-                        this.lastEntry = previousEntry;
-                    }
-
-                    // Adjust the forward reference of the deleted entry
-                    // in case an iterator still references it. This allows us
-                    // to throw away the entry, but when an active iterator
-                    // (which points to the current entry) continues, it will
-                    // navigate to the entry that originally came before the
-                    // current one and skip it.
-                    entry.previousEntry = undefined;
-                    entry.nextEntry = previousEntry;
-                    entry.skipNext = true;
-
-                    return true;
-                }
-                return false;
-            }
-
-            clear(): void {
-                this.data = createDictionaryObject<MapEntry<T>>();
-                this.size = 0;
-
-                // Reset the linked list. Note that we must adjust the forward
-                // references of the deleted entries to ensure iterators stuck
-                // in the middle of the list don't continue with deleted entries,
-                // but can continue with new entries added after the clear()
-                // operation.
-                const firstEntry = this.firstEntry;
-                let currentEntry = firstEntry.nextEntry;
-                while (currentEntry) {
-                    const nextEntry = currentEntry.nextEntry;
-                    currentEntry.previousEntry = undefined;
-                    currentEntry.nextEntry = firstEntry;
-                    currentEntry.skipNext = true;
-
-                    currentEntry = nextEntry;
-                }
-                firstEntry.nextEntry = undefined;
-                this.lastEntry = firstEntry;
-            }
-
-            keys(): Iterator<string> {
-                return new MapIterator(this.firstEntry, key => key);
-            }
-
-            values(): Iterator<T> {
-                return new MapIterator(this.firstEntry, (_key, value) => value);
-            }
-
-            entries(): Iterator<[string, T]> {
-                return new MapIterator(this.firstEntry, (key, value) => [key, value] as [string, T]);
-            }
-
-            forEach(action: (value: T, key: string) => void): void {
-                const iterator = this.entries();
-                while (true) {
-                    const iterResult = iterator.next();
-                    if (iterResult.done) {
-                        break;
-                    }
-
-                    const [key, value] = iterResult.value;
-                    action(value, key);
-                }
-            }
-        };
     }
 
     export function length(array: readonly any[] | undefined): number {
@@ -2050,20 +1871,6 @@ namespace ts {
 
     export function stringContains(str: string, substring: string): boolean {
         return str.indexOf(substring) !== -1;
-    }
-
-    export function fileExtensionIs(path: string, extension: string): boolean {
-        return path.length > extension.length && endsWith(path, extension);
-    }
-
-    export function fileExtensionIsOneOf(path: string, extensions: readonly string[]): boolean {
-        for (const extension of extensions) {
-            if (fileExtensionIs(path, extension)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

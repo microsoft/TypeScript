@@ -14,6 +14,7 @@
         ]
     },
     "references": [
+        { "path": "../shims", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
@@ -60,7 +61,7 @@
         "unittests/publicApi.ts",
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
-        "unittests/shimMap.ts",
+        "unittests/createMapShim.ts",
         "unittests/transform.ts",
         "unittests/config/commandLineParsing.ts",
         "unittests/config/configurationExtension.ts",
