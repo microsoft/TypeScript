@@ -44,6 +44,7 @@
         "es2020.symbol.wellknown",
         "esnext.bigint",
         "esnext.intl",
+        "esnext.string",
         // Default libraries
         "es5.full",
         "es2015.full",
