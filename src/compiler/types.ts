@@ -4264,10 +4264,6 @@ namespace ts {
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
         widened?: Type; // Cached widened form of the type
-        /* @internal */
-        optionalTypeOfType?: Type;       // A cached copy of the type unioned with the optionalType marker.
-        /* @internal */
-        nonOptionalTypeOfType?: Type;    // A cached copy of the type with the optionalType marker removed.
     }
 
     /* @internal */
@@ -4661,9 +4657,9 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
-        HasRestParameter = 1 << 0,
-        HasLiteralTypes = 1 << 1,
-        IsOptionalCall = 1 << 2,
+        HasRestParameter = 1 << 0,      // Indicates last parameter is rest parameter
+        HasLiteralTypes = 1 << 1,       // Indicates signature is specialized
+        IsOptionalCall = 1 << 2,        // Indicates signature comes from a CallChain
 
         // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
@@ -4672,10 +4668,8 @@ namespace ts {
     }
 
     export interface Signature {
-        /* @internal */
-        flags: SignatureFlags;
-        /* @internal */
-        checker: TypeChecker;
+        /* @internal */ flags: SignatureFlags;
+        /* @internal */ checker?: TypeChecker;
         declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
         typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: readonly Symbol[];               // Parameters
