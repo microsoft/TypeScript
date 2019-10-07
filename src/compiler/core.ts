@@ -59,6 +59,23 @@ namespace ts {
     }
 
     /* @internal */
+    export interface PromiseConstructor extends PromiseConstructorLike {
+        new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason: unknown) => void) => void): Promise<T>;
+        prototype: Promise<any>;
+        resolve<T>(value: T | PromiseLike<T>): Promise<T>;
+        resolve(): Promise<void>;
+        reject<T = never>(reason: unknown): Promise<T>;
+        all<T>(promises: (T | PromiseLike<T>)[]): Promise<T[]>;
+        race<T>(promises: (T | PromiseLike<T>)[]): Promise<T>;
+    }
+
+    /* @internal */
+    export interface Promise<T> {
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+        catch<TResult = never>(onrejected?: ((reason: unknown) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    }
+
+    /* @internal */
     export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
     /* @internal */
@@ -75,8 +92,9 @@ namespace ts {
 /* @internal */
 namespace ts {
     // Natives
-    // NOTE: This must be declared in a separate block from the one below so that we don't collide with the exported definition of `Map`.
-    declare const Map: (new <T>() => Map<T>) | undefined;
+    // NOTE: These must be declared in a separate block from the one below so that we don't collide with the exported definitions of `Map` and `Promise`.
+    declare const Map: MapConstructor | undefined;
+    declare const Promise: PromiseConstructor | undefined;
 
     /**
      * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
@@ -85,6 +103,10 @@ namespace ts {
         // Internet Explorer's Map doesn't support iteration, so don't use it.
         // eslint-disable-next-line no-in-operator
         return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
+    }
+
+    export function tryGetNativePromise(): PromiseConstructor | undefined {
+        return typeof Promise === "function" ? Promise : undefined;
     }
 }
 
@@ -98,6 +120,14 @@ namespace ts {
             return createMapShim();
         }
         throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
+    })();
+
+    export const Promise: PromiseConstructor = tryGetNativePromise() || (() => {
+        // NOTE: createPromiseShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createPromiseShim === "function") {
+            return createPromiseShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native Promise implementation.");
     })();
 
     /** Create a new map. */

@@ -1,6 +1,8 @@
+/* eslint-disable async-type */
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 /// <reference types="node" />
+
 
 import Octokit = require("@octokit/rest");
 const {runSequence} = require("./run-sequence");

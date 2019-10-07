@@ -4,6 +4,7 @@
         "outFile": "../../built/local/shims.js"
     },
     "files": [
-        "mapShim.ts"
+        "mapShim.ts",
+        "promiseShim.ts"
     ]
 }

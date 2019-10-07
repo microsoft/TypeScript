@@ -1,5 +1,5 @@
 describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
-    it("return (es5)", async () => {
+    it("return (es5)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         async function * g() {
             return Promise.resolve(0);
@@ -13,7 +13,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
             { value: 0, done: true }
         ]);
     });
-    it("return (es2015)", async () => {
+    it("return (es2015)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         async function * g() {
             return Promise.resolve(0);

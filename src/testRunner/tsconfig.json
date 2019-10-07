@@ -62,6 +62,7 @@
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
         "unittests/createMapShim.ts",
+        "unittests/createPromiseShim.ts",
         "unittests/transform.ts",
         "unittests/config/commandLineParsing.ts",
         "unittests/config/configurationExtension.ts",

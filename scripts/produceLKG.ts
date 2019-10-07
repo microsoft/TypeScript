@@ -1,3 +1,4 @@
+/* eslint-disable async-type */
 /// <reference types="node" />
 
 import childProcess = require("child_process");

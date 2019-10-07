@@ -49,6 +49,7 @@
             "allowDeclarations": true
         }],
         "no-double-space": "error",
+        "async-type": "error",
         "boolean-trivia": "error",
         "no-in-operator": "error",
         "simple-indent": "error",

@@ -1,5 +1,5 @@
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
-    it("sync (es5)", async () => {
+    it("sync (es5)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
@@ -25,7 +25,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.strictEqual(result.output[2], 3);
     });
 
-    it("sync (es2015)", async () => {
+    it("sync (es2015)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator: IterableIterator<any> = {
@@ -51,7 +51,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.strictEqual(result.output[2], 3);
     });
 
-    it("async (es5)", async () => {
+    it("async (es5)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
@@ -77,7 +77,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         assert.instanceOf(result.output[2], Promise);
     });
 
-    it("async (es2015)", async () => {
+    it("async (es2015)", async (): Promise<void> => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;
         const iterator = {
