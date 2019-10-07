@@ -903,7 +903,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'esnext', 'commonjs',  'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 1323
     },
