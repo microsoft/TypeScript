@@ -384,3 +384,16 @@ type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 >T2 : Symbol(T2, Decl(mappedTypesArraysTuples.ts, 98, 59))
 >Constrained : Symbol(Constrained, Decl(mappedTypesArraysTuples.ts, 96, 51))
 
+interface MyArray<T> extends ReadonlyArray<T> {}
+>MyArray : Symbol(MyArray, Decl(mappedTypesArraysTuples.ts, 99, 49))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 101, 18))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 101, 18))
+
+const [x]: Boxified<MyArray<any>> = undefined as unknown as Boxified<[any]>;
+>x : Symbol(x, Decl(mappedTypesArraysTuples.ts, 102, 7))
+>Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
+>MyArray : Symbol(MyArray, Decl(mappedTypesArraysTuples.ts, 99, 49))
+>undefined : Symbol(undefined)
+>Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
+

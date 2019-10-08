@@ -100,6 +100,9 @@ type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolea
 type Constrained<T extends any[]> = ElementType<Mapped<T>>;
 type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 
+interface MyArray<T> extends ReadonlyArray<T> {}
+const [x]: Boxified<MyArray<any>> = undefined as unknown as Boxified<[any]>;
+
 
 //// [mappedTypesArraysTuples.js]
 "use strict";
@@ -122,6 +125,7 @@ function f2(a) {
 function acceptMappedArray(arr) {
     acceptArray(mapArray(arr));
 }
+var x = undefined[0];
 
 
 //// [mappedTypesArraysTuples.d.ts]
@@ -210,3 +214,6 @@ declare type Unconstrained<T> = ElementType<Mapped<T>>;
 declare type T1 = Unconstrained<[string, number, boolean]>;
 declare type Constrained<T extends any[]> = ElementType<Mapped<T>>;
 declare type T2 = Constrained<[string, number, boolean]>;
+interface MyArray<T> extends ReadonlyArray<T> {
+}
+declare const x: Box<any>;

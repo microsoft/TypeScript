@@ -101,3 +101,6 @@ type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolea
 
 type Constrained<T extends any[]> = ElementType<Mapped<T>>;
 type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
+
+interface MyArray<T> extends ReadonlyArray<T> {}
+const [x]: Boxified<MyArray<any>> = undefined as unknown as Boxified<[any]>;
