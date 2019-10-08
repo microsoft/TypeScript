@@ -4696,6 +4696,8 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
+        optionalCallSignatureCache?: Signature; // Optional chained call version of signature (deferred)
+        /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache

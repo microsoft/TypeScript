@@ -8639,6 +8639,11 @@ namespace ts {
             return result;
         }
 
+        function getOptionalCallSignature(signature: Signature) {
+            return signatureIsOptionalCall(signature) ? signature :
+                (signature.optionalCallSignatureCache || (signature.optionalCallSignatureCache = createOptionalCallSignature(signature)));
+        }
+
         function createOptionalCallSignature(signature: Signature) {
             const result = cloneSignature(signature);
             result.flags |= SignatureFlags.IsOptionalCall;
@@ -23238,7 +23243,7 @@ namespace ts {
                     spliceIndex = index;
                 }
 
-                result.splice(spliceIndex, 0, isOptionalCall ? createOptionalCallSignature(signature) : signature);
+                result.splice(spliceIndex, 0, isOptionalCall ? getOptionalCallSignature(signature) : signature);
             }
         }
 
