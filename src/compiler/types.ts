@@ -3306,7 +3306,7 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
-        /* @internal */ getNonOptionalType(type: Type): Type;
+        getNonOptionalType(type: Type): Type;
         /* @internal */ isNullableType(type: Type): boolean;
         getTypeArguments(type: TypeReference): readonly Type[];
 
@@ -3428,7 +3428,7 @@ namespace ts {
         /* @internal */ getNullType(): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
-        /* @internal */ getOptionalType(): Type;
+        getOptionalType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
