@@ -11664,6 +11664,12 @@ interface PerformanceEventMap {
     "resourcetimingbufferfull": Event;
 }
 
+interface PerformanceEntryTypes {
+    resource : PerformanceResourceTiming
+    measure: PerformanceMeasure
+    mark: PerformanceMark
+}
+
 /** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. */
 interface Performance extends EventTarget {
     /** @deprecated */
@@ -11677,7 +11683,7 @@ interface Performance extends EventTarget {
     clearResourceTimings(): void;
     getEntries(): PerformanceEntryList;
     getEntriesByName(name: string, type?: string): PerformanceEntryList;
-    getEntriesByType(type: string): PerformanceEntryList;
+    getEntriesByType<Type extends string>(type: Type): Type extends keyof PerformanceEntryTypes ? PerformanceEntryTypes[Type][] : PerformanceEntryList;
     mark(markName: string): void;
     measure(measureName: string, startMark?: string, endMark?: string): void;
     now(): number;
