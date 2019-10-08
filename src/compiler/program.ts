@@ -2929,10 +2929,6 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
-            if (options.noEmit && isIncrementalCompilation(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", options.incremental ? "incremental" : "composite");
-            }
-
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
