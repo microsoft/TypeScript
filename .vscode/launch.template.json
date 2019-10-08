@@ -1,0 +1,39 @@
+// Rename this file 'launch.json' or merge its
+// contents into your existing configurations.
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "protocol": "inspector",
+      "request": "launch",
+      "name": "Mocha Tests (currently opened test)",
+      "runtimeArgs": ["--nolazy"],
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "bdd",
+        "--no-timeouts",
+        "--colors",
+        "built/local/run.js",
+        "-f",
+        "${fileBasenameNoExtension}",
+        "--skip-percent",
+        "0"
+      ],
+      "env": {
+        "NODE_ENV": "testing"
+      },
+      "sourceMaps": true,
+      "smartStep": true,
+      "preLaunchTask": "tests",
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceRoot}/built/local/run.js"
+      ]
+    }
+  ]
+}

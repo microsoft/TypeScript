@@ -142,6 +142,14 @@ namespace ts {
             description: Diagnostics.Show_verbose_diagnostic_information
         },
         {
+            name: "generateCpuProfile",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.FILE_OR_DIRECTORY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Generates_a_CPU_profile
+        },
+        {
             name: "incremental",
             shortName: "i",
             type: "boolean",
@@ -874,6 +882,13 @@ namespace ts {
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
         },
         {
+            name: "useDefineForClassFields",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
+        },
+        {
             name: "keyofStringsOnly",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
@@ -986,7 +1001,8 @@ namespace ts {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
         strict: true,
-        esModuleInterop: true
+        esModuleInterop: true,
+        forceConsistentCasingInFileNames: true
     };
 
     let optionNameMapCache: OptionNameMap;

@@ -4987,7 +4987,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX フラグメントはインライン JSX ファクトリ プラグマの使用時にサポートされていません]]></Val>
+            <Val><![CDATA[JSX フラグメントはインライン JSX ファクトリ pragma の使用時にサポートされていません]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

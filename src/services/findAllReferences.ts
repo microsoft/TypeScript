@@ -55,7 +55,7 @@ namespace ts.FindAllReferences {
             if (isInJSFile(node)) {
                 const binaryExpression = isBinaryExpression(node.parent) ?
                     node.parent :
-                    isPropertyAccessExpression(node.parent) &&
+                    isAccessExpression(node.parent) &&
                         isBinaryExpression(node.parent.parent) &&
                         node.parent.parent.left === node.parent ?
                         node.parent.parent :
@@ -448,7 +448,7 @@ namespace ts.FindAllReferences {
     function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
         let end = (endNode || node).getEnd();
-        if (node.kind === SyntaxKind.StringLiteral) {
+        if (isStringLiteralLike(node)) {
             Debug.assert(endNode === undefined);
             start += 1;
             end -= 1;
@@ -1234,8 +1234,9 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.Identifier:
                 return (node as Identifier).text.length === searchSymbolName.length;
 
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
-                const str = node as StringLiteral;
+                const str = node as StringLiteralLike;
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) || (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node)) &&
                     str.text.length === searchSymbolName.length;
             }

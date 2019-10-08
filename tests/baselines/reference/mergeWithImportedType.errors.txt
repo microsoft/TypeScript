@@ -1,0 +1,11 @@
+tests/cases/compiler/f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'E'.
+
+
+==== tests/cases/compiler/f1.ts (0 errors) ====
+    export enum E {X}
+    
+==== tests/cases/compiler/f2.ts (1 errors) ====
+    import {E} from "./f1";
+            ~
+!!! error TS2440: Import declaration conflicts with local declaration of 'E'.
+    export type E = E;

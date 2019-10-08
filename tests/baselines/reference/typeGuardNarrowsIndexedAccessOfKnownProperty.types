@@ -208,10 +208,10 @@ interface Y {
 }
 
 type A = ["aa", number];
->A : ["aa", number]
+>A : A
 
 type B = ["bb", string];
->B : ["bb", string]
+>B : B
 
 type Z = X | Y;
 >Z : Z
@@ -271,7 +271,7 @@ function check(z: Z, c: C) {
             var aa: number = c[1] // should be number
 >aa : number
 >c[1] : number
->c : ["aa", number]
+>c : A
 >1 : 1
 
             break;
@@ -281,7 +281,7 @@ function check(z: Z, c: C) {
             var bb: string = c[1] // should be string
 >bb : string
 >c[1] : string
->c : ["bb", string]
+>c : B
 >1 : 1
 
             break;

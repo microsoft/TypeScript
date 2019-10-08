@@ -1,0 +1,30 @@
+=== tests/cases/compiler/input.ts ===
+export = exports;
+>exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
+
+declare class exports {
+>exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
+
+    constructor(p: number);
+>p : Symbol(p, Decl(input.ts, 2, 16))
+
+    t: number;
+>t : Symbol(exports.t, Decl(input.ts, 2, 27))
+}
+export class Sub {
+>Sub : Symbol(Sub, Decl(input.ts, 4, 1), Decl(input.ts, 4, 1))
+
+    instance!: {
+>instance : Symbol(Sub.instance, Decl(input.ts, 5, 18))
+
+        t: number;
+>t : Symbol(t, Decl(input.ts, 6, 16))
+
+    };
+}
+declare namespace exports {
+>exports : Symbol(exports, Decl(input.ts, 0, 17), Decl(input.ts, 9, 1))
+
+    export { Sub };
+>Sub : Symbol(exports.Sub, Decl(input.ts, 11, 12))
+}

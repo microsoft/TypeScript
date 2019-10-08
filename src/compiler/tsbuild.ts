@@ -174,6 +174,7 @@ namespace ts {
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
+        /* @internal */ generateCpuProfile?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -316,7 +317,7 @@ namespace ts {
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
-            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            let output = pretty ? `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] ` : `${getLocaleTimeString(system)} - `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
             system.write(output);
         };

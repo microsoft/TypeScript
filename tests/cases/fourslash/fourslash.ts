@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
@@ -87,6 +93,11 @@ declare module ts {
         reportsUnnecessary?: {};
     }
 
+    interface LineAndCharacter {
+        line: number;
+        character: number;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -96,12 +107,25 @@ declare namespace FourSlashInterface {
         position: number;
         data?: any;
     }
+    enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
+    }
     interface EditorOptions {
         BaseIndentSize?: number,
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+    }
+    interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
@@ -118,6 +142,26 @@ declare namespace FourSlashInterface {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation: boolean;
         [s: string]: boolean | number | string | undefined;
+    }
+    interface FormatCodeSettings extends EditorSettings {
+        readonly insertSpaceAfterCommaDelimiter?: boolean;
+        readonly insertSpaceAfterSemicolonInForStatements?: boolean;
+        readonly insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        readonly insertSpaceAfterConstructor?: boolean;
+        readonly insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        readonly insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        readonly insertSpaceAfterTypeAssertion?: boolean;
+        readonly insertSpaceBeforeFunctionParenthesis?: boolean;
+        readonly placeOpenBraceOnNewLineForFunctions?: boolean;
+        readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: ts.SemicolonPreference;
     }
     interface Range {
         fileName: string;
@@ -155,10 +199,16 @@ declare namespace FourSlashInterface {
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
+        position(lineAndCharacter: ts.LineAndCharacter, fileName?: string): void;
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
+        /**
+         * Selects a line at a given index, not including any newline characters.
+         * @param index 0-based
+         */
+        selectLine(index: number): void;
     }
     class verifyNegatable {
         private negative;
@@ -346,6 +396,15 @@ declare namespace FourSlashInterface {
         insert(text: string): void;
         insertLine(text: string): void;
         insertLines(...lines: string[]): void;
+        /** @param index 0-based */
+        deleteLine(index: number): void;
+        /**
+         * @param startIndex 0-based
+         * @param endIndexInclusive 0-based
+         */
+        deleteLineRange(startIndex: number, endIndexInclusive: number): void;
+        /** @param index 0-based */
+        replaceLine(index: number, text: string): void;
         moveRight(count?: number): void;
         moveLeft(count?: number): void;
         enableFormatting(): void;
@@ -375,7 +434,7 @@ declare namespace FourSlashInterface {
     class format {
         document(): void;
         copyFormatOptions(): FormatCodeOptions;
-        setFormatOptions(options: FormatCodeOptions): any;
+        setFormatOptions(options: FormatCodeOptions | FormatCodeSettings): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
         setOption(name: keyof FormatCodeOptions, value: number | string | boolean): void;

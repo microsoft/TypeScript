@@ -402,6 +402,47 @@ declare module "fs" {
                 host.checkTimeoutQueueLength(0);
             });
         });
+
+        it("when types in compiler option are global and installed at later point", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const app: File = {
+                path: `${projectRoot}/lib/app.ts`,
+                content: `myapp.component("hello");`
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        types: ["@myapp/ts-types"]
+                    }
+                })
+            };
+            const host = createWatchedSystem([app, tsconfig, libFile]);
+            const watch = createWatchOfConfigFile(tsconfig.path, host);
+            checkProgramActualFiles(watch(), [app.path, libFile.path]);
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsInitial(host, [
+                createCompilerDiagnostic(Diagnostics.Cannot_find_type_definition_file_for_0, "@myapp/ts-types")
+            ]);
+
+            host.ensureFileOrFolder({
+                path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
+                content: JSON.stringify({
+                    version: "1.65.1",
+                    types: "types/somefile.define.d.ts"
+                })
+            });
+            host.ensureFileOrFolder({
+                path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
+                content: `
+declare namespace myapp {
+    function component(str: string): number;
+}`
+            });
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
     });
 
     describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch with modules linked to sibling folder", () => {

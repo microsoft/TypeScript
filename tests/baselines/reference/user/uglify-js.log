@@ -98,9 +98,9 @@ node_modules/uglify-js/lib/parse.js(1426,20): error TS2531: Object is possibly '
 node_modules/uglify-js/lib/parse.js(1512,48): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/parse.js(1538,35): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/parse.js(1583,52): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/propmangle.js(69,18): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | Math | DateConstructor | RegExpConstructor | ErrorConstructor | ArrayConstructor'.
+node_modules/uglify-js/lib/propmangle.js(69,18): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | ... 4 more ... | ArrayConstructor'.
   Property 'prototype' does not exist on type 'Math'.
-node_modules/uglify-js/lib/propmangle.js(70,45): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | Math | DateConstructor | RegExpConstructor | ErrorConstructor | ArrayConstructor'.
+node_modules/uglify-js/lib/propmangle.js(70,45): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | ... 4 more ... | ArrayConstructor'.
   Property 'prototype' does not exist on type 'Math'.
 node_modules/uglify-js/lib/propmangle.js(80,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(94,30): error TS2554: Expected 0 arguments, but got 1.
@@ -115,8 +115,6 @@ node_modules/uglify-js/lib/scope.js(460,30): error TS2554: Expected 0 arguments,
 node_modules/uglify-js/lib/scope.js(485,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(55,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/lib/sourcemap.js(61,23): error TS2304: Cannot find name 'MOZ_SourceMap'.
-node_modules/uglify-js/tools/exit.js(7,32): error TS2339: Property 'bufferSize' does not exist on type 'WriteStream'.
-node_modules/uglify-js/tools/exit.js(7,61): error TS2339: Property 'bufferSize' does not exist on type 'WriteStream'.
 node_modules/uglify-js/tools/exit.js(10,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[(number | undefined)?]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '0 | 1'.

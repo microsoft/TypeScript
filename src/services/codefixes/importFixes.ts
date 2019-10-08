@@ -169,7 +169,7 @@ namespace ts.codefix {
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, exportInfos, host, preferences)).moduleSpecifier;
         const fix = first(getFixForImport(exportInfos, symbolName, position, program, sourceFile, host, preferences));
-        return { moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
+        return { moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
     }
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -284,13 +284,27 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): readonly (FixAddNewImport | FixUseImportType)[] {
         const isJs = isSourceFileJS(sourceFile);
+        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                    exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
-        // Sort to keep the shortest paths first
-        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
+                    exportedSymbolIsTypeOnly && isJs
+                        ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position, "position should be defined") }
+                        : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
+
+        // Sort by presence in package.json, then shortest paths first
+        return sort(choicesForEachExportingModule, (a, b) => {
+            const allowsImportingA = allowsImportingSpecifier(a.moduleSpecifier);
+            const allowsImportingB = allowsImportingSpecifier(b.moduleSpecifier);
+            if (allowsImportingA && !allowsImportingB) {
+                return -1;
+            }
+            if (allowsImportingB && !allowsImportingA) {
+                return 1;
+            }
+            return a.moduleSpecifier.length - b.moduleSpecifier.length;
+        });
     }
 
     function getFixesForAddImport(
@@ -384,7 +398,8 @@ namespace ts.codefix {
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
 
-        const fixes = arrayFrom(flatMapIterator(getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program).entries(), ([_, exportInfos]) =>
+        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, checker, program, host);
+        const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
@@ -397,6 +412,7 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         checker: TypeChecker,
         program: Program,
+        host: LanguageServiceHost
     ): ReadonlyMap<readonly SymbolExportInfo[]> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
@@ -404,7 +420,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
+        forEachExternalModuleToImportFrom(program, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -605,12 +621,37 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(checker: TypeChecker, from: SourceFile, allSourceFiles: readonly SourceFile[], cb: (module: Symbol) => void) {
-        forEachExternalModule(checker, allSourceFiles, (module, sourceFile) => {
-            if (sourceFile === undefined || sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
-                cb(module);
+    export function forEachExternalModuleToImportFrom(
+        program: Program,
+        host: LanguageServiceHost,
+        from: SourceFile,
+        filterByPackageJson: boolean,
+        cb: (module: Symbol) => void,
+    ) {
+        let filteredCount = 0;
+        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
+        const allSourceFiles = program.getSourceFiles();
+        forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
+            if (sourceFile === undefined) {
+                if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
+                    cb(module);
+                }
+                else if (packageJson) {
+                    filteredCount++;
+                }
+            }
+            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
+                    cb(module);
+                }
+                else if (packageJson) {
+                    filteredCount++;
+                }
             }
         });
+        if (host.log) {
+            host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
+        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
@@ -663,5 +704,128 @@ namespace ts.codefix {
         }
         // Need `|| "_"` to ensure result isn't empty.
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
+    }
+
+    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost) {
+        const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
+        const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
+        // Mix in `getProbablySymlinks` from Program when host doesn't have it
+        // in order for non-Project hosts to have a symlinks cache.
+        const moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost = {
+            directoryExists: maybeBind(host, host.directoryExists),
+            fileExists: maybeBind(host, host.fileExists),
+            getCurrentDirectory: maybeBind(host, host.getCurrentDirectory),
+            readFile: maybeBind(host, host.readFile),
+            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
+        };
+
+        let usesNodeCoreModules: boolean | undefined;
+        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier };
+
+        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
+            const packageName = getNodeModuleRootSpecifier(specifier);
+            for (const packageJson of packageJsons) {
+                if (packageJson.has(packageName, dependencyGroups) || packageJson.has(getTypesPackageName(packageName), dependencyGroups)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function allowsImportingAmbientModule(moduleSymbol: Symbol, allSourceFiles: readonly SourceFile[]): boolean {
+            if (!packageJsons.length) {
+                return true;
+            }
+
+            const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
+            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName, allSourceFiles);
+            if (typeof declaringNodeModuleName === "undefined") {
+                return true;
+            }
+
+            const declaredModuleSpecifier = stripQuotes(moduleSymbol.getName());
+            if (isAllowedCoreNodeModulesImport(declaredModuleSpecifier)) {
+                return true;
+            }
+
+            return moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
+                || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        }
+
+        function allowsImportingSourceFile(sourceFile: SourceFile, allSourceFiles: readonly SourceFile[]): boolean {
+            if (!packageJsons.length) {
+                return true;
+            }
+
+            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, allSourceFiles);
+            if (!moduleSpecifier) {
+                return true;
+            }
+
+            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        }
+
+        /**
+         * Use for a specific module specifier that has already been resolved.
+         * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
+         * the best module specifier for a given module _and_ determine if it’s importable.
+         */
+        function allowsImportingSpecifier(moduleSpecifier: string) {
+            if (!packageJsons.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {
+                return true;
+            }
+            if (pathIsRelative(moduleSpecifier) || isRootedDiskPath(moduleSpecifier)) {
+                return true;
+            }
+            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
+        }
+
+        function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
+            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
+            // from Node core modules or not. We can start by seeing if the user is actually using
+            // any node core modules, as opposed to simply having @types/node accidentally as a
+            // dependency of a dependency.
+            if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+                if (usesNodeCoreModules === undefined) {
+                    usesNodeCoreModules = consumesNodeCoreModules(fromFile);
+                }
+                if (usesNodeCoreModules) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getNodeModulesPackageNameFromFileName(importedFileName: string, allSourceFiles: readonly SourceFile[]): string | undefined {
+            if (!stringContains(importedFileName, "node_modules")) {
+                return undefined;
+            }
+            const specifier = moduleSpecifiers.getNodeModulesPackageName(
+                host.getCompilationSettings(),
+                fromFile.path,
+                importedFileName,
+                moduleSpecifierResolutionHost,
+                allSourceFiles,
+                program.redirectTargetsMap);
+
+            if (!specifier) {
+                return undefined;
+            }
+            // Paths here are not node_modules, so we don’t care about them;
+            // returning anything will trigger a lookup in package.json.
+            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
+                return getNodeModuleRootSpecifier(specifier);
+            }
+        }
+
+        function getNodeModuleRootSpecifier(fullSpecifier: string): string {
+            const components = getPathComponents(getPackageNameFromTypesPackageName(fullSpecifier)).slice(1);
+            // Scoped packages
+            if (startsWith(components[0], "@")) {
+                return `${components[0]}/${components[1]}`;
+            }
+            return components[0];
+        }
     }
 }

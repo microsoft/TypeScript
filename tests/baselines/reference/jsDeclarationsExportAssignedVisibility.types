@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const Obj = require("./obj");
+>Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>require("./obj") : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>require : any
+>"./obj" : "./obj"
+
+class Container {
+>Container : Container
+
+    constructor() {
+        this.usage = new Obj();
+>this.usage = new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
+>this.usage : import("tests/cases/conformance/jsdoc/declarations/obj")
+>this : this
+>usage : import("tests/cases/conformance/jsdoc/declarations/obj")
+>new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
+>Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+    }
+}
+
+module.exports = Container;
+>module.exports = Container : typeof Container
+>module.exports : typeof Container
+>module : { "tests/cases/conformance/jsdoc/declarations/index": typeof Container; }
+>exports : typeof Container
+>Container : typeof Container
+
+=== tests/cases/conformance/jsdoc/declarations/obj.js ===
+module.exports = class Obj {
+>module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>module : { "tests/cases/conformance/jsdoc/declarations/obj": typeof import("tests/cases/conformance/jsdoc/declarations/obj"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+
+    constructor() {
+        this.x = 12;
+>this.x = 12 : 12
+>this.x : number
+>this : this
+>x : number
+>12 : 12
+    }
+}

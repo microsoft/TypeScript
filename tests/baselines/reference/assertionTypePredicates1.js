@@ -125,6 +125,17 @@ declare class Wat {
     set p2(x: asserts this is string);
 }
 
+function f20(x: unknown) {
+    const assert = (value: unknown): asserts value => {}
+    assert(typeof x === "string");  // Error
+    const a = [assert];
+    a[0](typeof x === "string");  // Error
+    const t1 = new Test();
+    t1.assert(typeof x === "string");  // Error
+    const t2: Test = new Test();
+    t2.assert(typeof x === "string");
+}
+
 
 //// [assertionTypePredicates1.js]
 "use strict";
@@ -250,6 +261,16 @@ var Test2 = /** @class */ (function (_super) {
     }
     return Test2;
 }(Test));
+function f20(x) {
+    var assert = function (value) { };
+    assert(typeof x === "string"); // Error
+    var a = [assert];
+    a[0](typeof x === "string"); // Error
+    var t1 = new Test();
+    t1.assert(typeof x === "string"); // Error
+    var t2 = new Test();
+    t2.assert(typeof x === "string");
+}
 
 
 //// [assertionTypePredicates1.d.ts]
@@ -287,3 +308,4 @@ declare class Wat {
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
 }
+declare function f20(x: unknown): void;

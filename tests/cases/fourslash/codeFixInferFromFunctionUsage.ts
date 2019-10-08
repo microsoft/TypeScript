@@ -2,7 +2,7 @@
 
 // @noImplicitAny: true
 ////function wrap( [| arr |] ) {
-////     arr.other(function (a: number, b: number) { return a < b ? -1 : 1 })
+////     arr.other(function (a: number, b: number) { return a < b ? -1 : 1 });
 //// }
 
 // https://github.com/Microsoft/TypeScript/issues/29330

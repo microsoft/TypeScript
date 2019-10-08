@@ -624,30 +624,6 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
-        const paths: string[] = [];
-        forEachAncestorDirectory(directory, ancestor => {
-            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (!currentConfigPath) {
-                return true; // break out
-            }
-            paths.push(currentConfigPath);
-        });
-        return paths;
-    }
-
-    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
-        let packageJson: string | undefined;
-        forEachAncestorDirectory(directory, ancestor => {
-            if (ancestor === "node_modules") return true;
-            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (packageJson) {
-                return true; // break out
-            }
-        });
-        return packageJson;
-    }
-
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): readonly string[] {
         if (!host.readFile || !host.fileExists) return emptyArray;
 
@@ -702,31 +678,6 @@ namespace ts.Completions.StringCompletions {
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
     const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
-
-    function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
-        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
-    }
-
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[]): readonly string[] {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryFileExists(host: LanguageServiceHost, path: string): boolean {
-        return tryIOAndConsumeErrors(host, host.fileExists, path);
-    }
-
-    function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
-        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
-    }
-
-    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
-        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
-    }
-
-    function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
-        try { return cb(); }
-        catch { return undefined; }
-    }
 
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);

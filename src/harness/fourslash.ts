@@ -421,7 +421,10 @@ namespace FourSlash {
             })!;
         }
 
-        public goToPosition(pos: number) {
+        public goToPosition(positionOrLineAndCharacter: number | ts.LineAndCharacter) {
+            const pos = typeof positionOrLineAndCharacter === "number"
+                ? positionOrLineAndCharacter
+                : this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, positionOrLineAndCharacter);
             this.currentCaretPosition = pos;
             this.selectionEnd = -1;
         }
@@ -445,6 +448,12 @@ namespace FourSlash {
         public selectRange(range: Range): void {
             this.goToRangeStart(range);
             this.selectionEnd = range.end;
+        }
+
+        public selectLine(index: number) {
+            const lineStart = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
+            const lineEnd = lineStart + this.getLineContent(index).length;
+            this.selectRange({ fileName: this.activeFile.fileName, pos: lineStart, end: lineEnd });
         }
 
         public moveCaretRight(count = 1) {
@@ -803,7 +812,7 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`Includes: completion '${name}' not found.`);
-                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
+                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
                         this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
@@ -1081,11 +1090,23 @@ namespace FourSlash {
                 TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
         }
 
+        private configure(preferences: ts.UserPreferences) {
+            if (this.testType === FourSlashTestType.Server) {
+                (this.languageService as ts.server.SessionClient).configure(preferences);
+            }
+        }
+
         private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo | undefined {
+            if (options) {
+                this.configure(options);
+            }
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
         private getCompletionEntryDetails(entryName: string, source?: string, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
+            if (preferences) {
+                this.configure(preferences);
+            }
             return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences);
         }
 
@@ -1683,7 +1704,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits);
                     }
                 }
             }
@@ -1694,6 +1715,12 @@ namespace FourSlash {
         public replace(start: number, length: number, text: string) {
             this.editScriptAndUpdateMarkers(this.activeFile.fileName, start, start + length, text);
             this.checkPostEditInvariants();
+        }
+
+        public deleteLineRange(startIndex: number, endIndexInclusive: number) {
+            const startPos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: startIndex, character: 0 });
+            const endPos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: endIndexInclusive + 1, character: 0 });
+            this.replace(startPos, endPos - startPos, "");
         }
 
         public deleteCharBehindMarker(count = 1) {
@@ -1721,6 +1748,8 @@ namespace FourSlash {
             let offset = this.currentCaretPosition;
             const prevChar = " ";
             const checkCadence = (text.length >> 2) + 1;
+            const selection = this.getSelection();
+            this.replace(selection.pos, selection.end - selection.pos, "");
 
             for (let i = 0; i < text.length; i++) {
                 const ch = text.charAt(i);
@@ -1756,7 +1785,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits);
                     }
                 }
             }
@@ -1775,7 +1804,7 @@ namespace FourSlash {
             if (this.enableFormatting) {
                 const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeSettings);
                 if (edits.length) {
-                    this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                    this.applyEdits(this.activeFile.fileName, edits);
                 }
             }
 
@@ -1810,9 +1839,7 @@ namespace FourSlash {
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
          */
-        private applyEdits(fileName: string, edits: readonly ts.TextChange[], isFormattingEdit: boolean): number {
-            // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
-            const oldContent = this.getFileContent(fileName);
+        private applyEdits(fileName: string, edits: readonly ts.TextChange[]): number {
             let runningOffset = 0;
 
             forEachTextChange(edits, edit => {
@@ -1833,14 +1860,6 @@ namespace FourSlash {
                 runningOffset += editDelta;
             });
 
-            if (isFormattingEdit) {
-                const newContent = this.getFileContent(fileName);
-
-                if (this.removeWhitespace(newContent) !== this.removeWhitespace(oldContent)) {
-                    this.raiseError("Formatting operation destroyed non-whitespace content");
-                }
-            }
-
             return runningOffset;
         }
 
@@ -1856,17 +1875,17 @@ namespace FourSlash {
 
         public formatDocument() {
             const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         public formatSelection(start: number, end: number) {
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         public formatOnType(pos: number, key: string) {
             const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
-            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits);
         }
 
         private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
@@ -2414,7 +2433,7 @@ namespace FourSlash {
 
             if (options.applyChanges) {
                 for (const change of action.changes) {
-                    this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                    this.applyEdits(change.fileName, change.textChanges);
                 }
                 this.verifyNewContentAfterChange(options, action.changes.map(c => c.fileName));
             }
@@ -2497,7 +2516,7 @@ namespace FourSlash {
 
         private applyChanges(changes: readonly ts.FileTextChanges[]): void {
             for (const change of changes) {
-                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(change.fileName, change.textChanges);
             }
         }
 
@@ -2525,7 +2544,7 @@ namespace FourSlash {
                 ts.Debug.assert(codeFix.changes.length === 1);
                 const change = ts.first(codeFix.changes);
                 ts.Debug.assert(change.fileName === fileName);
-                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(change.fileName, change.textChanges);
                 const text = range ? this.rangeText(range) : this.getFileContent(this.activeFile.fileName);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
@@ -2929,7 +2948,7 @@ namespace FourSlash {
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.emptyOptions)!;
             for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(edit.fileName, edit.textChanges);
             }
 
             let renameFilename: string | undefined;
@@ -3045,7 +3064,7 @@ namespace FourSlash {
             const editInfo = this.languageService.getEditsForRefactor(marker.fileName, formattingOptions, marker.position, refactorNameToApply, actionName, ts.emptyOptions)!;
 
             for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                this.applyEdits(edit.fileName, edit.textChanges);
             }
             const actualContent = this.getFileContent(marker.fileName);
 
@@ -3059,11 +3078,9 @@ namespace FourSlash {
             Harness.IO.log(stringify(codeFixes));
         }
 
-        // Get the text of the entire line the caret is currently at
-        private getCurrentLineContent() {
+        private getLineContent(index: number) {
             const text = this.getFileContent(this.activeFile.fileName);
-
-            const pos = this.currentCaretPosition;
+            const pos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
             let startPos = pos, endPos = pos;
 
             while (startPos > 0) {
@@ -3086,6 +3103,14 @@ namespace FourSlash {
             }
 
             return text.substring(startPos, endPos);
+        }
+
+        // Get the text of the entire line the caret is currently at
+        private getCurrentLineContent() {
+            return this.getLineContent(this.languageServiceAdapterHost.positionToLineAndCharacter(
+                this.activeFile.fileName,
+                this.currentCaretPosition,
+            ).line);
         }
 
         private findFile(indexOrName: string | number): FourSlashFile {
@@ -3822,11 +3847,11 @@ namespace FourSlashInterface {
             this.state.goToImplementation();
         }
 
-        public position(position: number, fileNameOrIndex?: string | number): void {
+        public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
             if (fileNameOrIndex !== undefined) {
                 this.file(fileNameOrIndex);
             }
-            this.state.goToPosition(position);
+            this.state.goToPosition(positionOrLineAndCharacter);
         }
 
         // Opens a file, given either its index as it
@@ -4297,6 +4322,19 @@ namespace FourSlashInterface {
 
         public insertLines(...lines: string[]) {
             this.state.type(lines.join("\n"));
+        }
+
+        public deleteLine(index: number) {
+            this.deleteLineRange(index, index);
+        }
+
+        public deleteLineRange(startIndex: number, endIndexInclusive: number) {
+            this.state.deleteLineRange(startIndex, endIndexInclusive);
+        }
+
+        public replaceLine(index: number, text: string) {
+            this.state.selectLine(index);
+            this.state.type(text);
         }
 
         public moveRight(count?: number) {
