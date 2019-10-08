@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2020
 
 function bigInt64ArraySubarray() {
     var arr = new BigInt64Array(10);

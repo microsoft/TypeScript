@@ -2603,7 +2603,7 @@
         "category": "Error",
         "code": 2736
     },
-    "BigInt literals are not available when targeting lower than ESNext.": {
+    "BigInt literals are not available when targeting lower than ES2020.": {
         "category": "Error",
         "code": 2737
     },
