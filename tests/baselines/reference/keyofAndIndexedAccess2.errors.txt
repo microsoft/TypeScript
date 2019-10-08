@@ -26,9 +26,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(67,3): error TS232
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type '123' is not assignable to type 'never'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(115,21): error TS2313: Type parameter 'Q' has a circular constraint.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (23 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (24 errors) ====
     function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
         obj[k0] = 1;
         obj[k0] = 2;
@@ -195,6 +196,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
     type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
     type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'Q' has a circular constraint.
+!!! related TS2751 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:116:36: Circularity originates in type at this location.
     type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
     
     // Repros from #30938

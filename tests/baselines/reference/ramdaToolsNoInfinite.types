@@ -200,14 +200,14 @@ declare namespace Curry {
     };
 
     type Gaps<T extends any[]> = CleanedGaps<PartialGaps<T>>;
->Gaps : CleanedGaps<PartialGaps<T>>
+>Gaps : NonNullable<PartialGaps<T>[number]>[]
 
     type Curry<F extends ((...args: any) => any)> =
 >Curry : Curry<F>
 >args : any
 
         <T extends any[]>(...args: Tools.Cast<Tools.Cast<T, Gaps<Parameters<F>>>, any[]>) =>
->args : Tools.Cast<Tools.Cast<T, CleanedGaps<PartialGaps<Parameters<F>>>>, any[]>
+>args : Tools.Cast<Tools.Cast<T, NonNullable<PartialGaps<Parameters<F>>[number]>[]>, any[]>
 >Tools : any
 >Tools : any
 

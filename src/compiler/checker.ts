@@ -13657,8 +13657,8 @@ namespace ts {
                     return mapType(mappedTypeVariable, t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
-                                isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
+                            return isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
+                                t.flags & (TypeFlags.Object | TypeFlags.Intersection) && isArrayLikeType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
                         }
                         return t;

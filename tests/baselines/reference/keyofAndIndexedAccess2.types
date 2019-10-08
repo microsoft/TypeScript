@@ -435,7 +435,7 @@ type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 >A : A<T>
 
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
->B : A<{ [Q in keyof T]: StrictExclude<A<{ [Q in keyof T[Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<any>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>
+>B : A<{ [Q in keyof T]: never; }>
 
 // Repros from #30938
 
