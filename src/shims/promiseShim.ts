@@ -2,9 +2,11 @@
 namespace ts {
     declare function setTimeout<A extends any[]>(handler: (...args: A) => void, timeout: number, ...args: A): any;
 
+    export interface Promise<T> extends globalThis.Promise<T> {
+    }
+
     export interface PromiseConstructor extends PromiseConstructorLike {
         new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason: unknown) => void) => void): Promise<T>;
-        prototype: Promise<any>;
         resolve<T>(value: T | PromiseLike<T>): Promise<T>;
         resolve(): Promise<void>;
         reject<T = never>(reason: unknown): Promise<T>;
@@ -12,13 +14,8 @@ namespace ts {
         race<T>(promises: (T | PromiseLike<T>)[]): Promise<T>;
     }
 
-    export interface Promise<T> {
-        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
-        catch<TResult = never>(onrejected?: ((reason: unknown) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-    }
-
     export function createPromiseShim(): PromiseConstructor {
-        class Promise<T> {
+        class Promise<T> implements ts.Promise<T> {
             private _state: "pending" | "fulfilled" | "rejected" = "pending";
             private _result: unknown;
             private _reactions: PromiseReaction[] = [];
