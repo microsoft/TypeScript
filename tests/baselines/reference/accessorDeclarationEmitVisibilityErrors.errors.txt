@@ -1,5 +1,5 @@
 tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS2304: Cannot find name 'DoesNotExist'.
-tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS4106: Parameter 'arg' of accessor has or is using private name 'DoesNotExist'.
+tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS4037: Parameter type of public setter 'bet' from exported class has or is using private name 'DoesNotExist'.
 
 
 ==== tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS4
                      ~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'DoesNotExist'.
                      ~~~~~~~~~~~~
-!!! error TS4106: Parameter 'arg' of accessor has or is using private name 'DoesNotExist'.
+!!! error TS4037: Parameter type of public setter 'bet' from exported class has or is using private name 'DoesNotExist'.
     }

@@ -184,7 +184,7 @@ declare module schema {
 }
 declare module schema {
     class T {
-        get createValidator9(): <T>(data: T) => T;
-        set createValidator10(v: <T>(data: T) => T);
+        /**@accessor*/ readonly createValidator9: <T>(data: T) => T;
+        /**@accessor*/ createValidator10: <T>(data: T) => T;
     }
 }

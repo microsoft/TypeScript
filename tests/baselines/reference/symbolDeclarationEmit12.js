@@ -35,8 +35,8 @@ declare module M {
         [Symbol.iterator]: I;
         [Symbol.toPrimitive](x: I): void;
         [Symbol.isConcatSpreadable](): I;
-        get [Symbol.toPrimitive](): any;
-        set [Symbol.toPrimitive](x: I);
+        /**@accessor*/ readonly [Symbol.toPrimitive]: any;
+        /**@accessor*/ [Symbol.toPrimitive]: I;
     }
     export {};
 }

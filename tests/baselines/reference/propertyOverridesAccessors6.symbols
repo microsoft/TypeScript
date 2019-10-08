@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/a.d.ts ===
+declare class A {
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+
+    /**@accessor*/ p: number
+>p : Symbol(A.p, Decl(a.d.ts, 0, 17))
+}
+=== tests/cases/conformance/classes/propertyMemberDeclarations/b.ts ===
+class B extends A {
+>B : Symbol(B, Decl(b.ts, 0, 0))
+>A : Symbol(A, Decl(a.d.ts, 0, 0))
+
+    get p() { return 1 }
+>p : Symbol(B.p, Decl(b.ts, 0, 19), Decl(b.ts, 1, 24))
+
+    set p(value) { }
+>p : Symbol(B.p, Decl(b.ts, 0, 19), Decl(b.ts, 1, 24))
+>value : Symbol(value, Decl(b.ts, 2, 10))
+}
+

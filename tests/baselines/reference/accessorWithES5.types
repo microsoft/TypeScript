@@ -19,6 +19,20 @@ class D {
     }
 }
 
+class E {
+>E : E
+
+    // comment 1
+    get x() { return 2; }
+>x : number
+>2 : 2
+
+    // comment 2
+    set x(v) { }
+>x : number
+>v : number
+}
+
 var x = {
 >x : { readonly a: number; }
 >{    get a() { return 1 }} : { readonly a: number; }
@@ -36,3 +50,4 @@ var y = {
 >b : any
 >v : any
 }
+

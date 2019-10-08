@@ -19,12 +19,8 @@ declare class C {
 
 //// [ambientAccessors.d.ts]
 declare class C {
-    static get a(): string;
-    static set a(value: string);
-    private static get b();
-    private static set b(value);
-    get x(): string;
-    set x(value: string);
-    private get y();
-    private set y(value);
+    /**@accessor*/ static a: string;
+    /**@accessor*/ private static b;
+    /**@accessor*/ x: string;
+    /**@accessor*/ private y;
 }

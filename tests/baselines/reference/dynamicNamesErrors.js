@@ -101,12 +101,12 @@ export interface InterfaceMemberVisibility {
 export declare class ClassMemberVisibility {
     static [x]: number;
     static [y](): number;
-    static get [z](): number;
-    static set [w](value: number);
+    /**@accessor*/ static readonly [z]: number;
+    /**@accessor*/ static [w]: number;
     [x]: number;
     [y](): number;
-    get [z](): number;
-    set [w](value: number);
+    /**@accessor*/ readonly [z]: number;
+    /**@accessor*/ [w]: number;
 }
 export declare type ObjectTypeVisibility = {
     [x]: number;

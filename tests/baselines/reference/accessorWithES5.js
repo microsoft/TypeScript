@@ -10,6 +10,13 @@ class D {
     }
 }
 
+class E {
+    // comment 1
+    get x() { return 2; }
+    // comment 2
+    set x(v) { }
+}
+
 var x = {
     get a() { return 1 }
 }
@@ -17,6 +24,7 @@ var x = {
 var y = {
     set b(v) { }
 }
+
 
 //// [accessorWithES5.js]
 var C = /** @class */ (function () {
@@ -42,9 +50,40 @@ var D = /** @class */ (function () {
     });
     return D;
 }());
+var E = /** @class */ (function () {
+    function E() {
+    }
+    Object.defineProperty(E.prototype, "x", {
+        // comment 1
+        get: function () { return 2; },
+        // comment 2
+        set: function (v) { },
+        enumerable: true,
+        configurable: true
+    });
+    return E;
+}());
 var x = {
     get a() { return 1; }
 };
 var y = {
     set b(v) { }
+};
+
+
+//// [accessorWithES5.d.ts]
+declare class C {
+    /**@accessor*/ readonly x: number;
+}
+declare class D {
+    /**@accessor*/ x: any;
+}
+declare class E {
+    /**@accessor*/ x: number;
+}
+declare var x: {
+    readonly a: number;
+};
+declare var y: {
+    b: any;
 };

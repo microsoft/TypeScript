@@ -303,9 +303,7 @@ declare let Q1: new (x: unknown) => x is string;
 declare let Q2: new (x: boolean) => asserts x;
 declare let Q3: new (x: unknown) => asserts x is string;
 declare class Wat {
-    get p1(): this is string;
-    set p1(x: this is string);
-    get p2(): asserts this is string;
-    set p2(x: asserts this is string);
+    /**@accessor*/ p1: this is string;
+    /**@accessor*/ p2: asserts this is string;
 }
 declare function f20(x: unknown): void;

@@ -83,6 +83,7 @@ namespace ts {
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
+        const newLine = getNewLineCharacter(options);
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
@@ -864,25 +865,35 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
-                        const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
-                        return cleanup(updateGetAccessor(
-                            input,
-                            /*decorators*/ undefined,
-                            ensureModifiers(input),
-                            input.name,
-                            updateAccessorParamsList(input, isPrivate),
-                            !isPrivate ? ensureType(input, accessorType) : undefined,
-                            /*body*/ undefined));
+                        if (options.useDefineForClassFields) {
+                            const isPrivate = hasModifier(input, ModifierFlags.Private);
+                            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                            return cleanup(updateGetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateAccessorParamsList(input, isPrivate),
+                                !isPrivate ? ensureType(input, accessorType) : undefined,
+                                /*body*/ undefined));
+                        }
+                        else {
+                            return cleanup(ensureAccessor(input));
+                        }
                     }
                     case SyntaxKind.SetAccessor: {
-                        return cleanup(updateSetAccessor(
-                            input,
-                            /*decorators*/ undefined,
-                            ensureModifiers(input),
-                            input.name,
-                            updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
-                            /*body*/ undefined));
+                        if (options.useDefineForClassFields) {
+                            return cleanup(updateSetAccessor(
+                                input,
+                                /*decorators*/ undefined,
+                                ensureModifiers(input),
+                                input.name,
+                                updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
+                                /*body*/ undefined));
+                        }
+                        else {
+                            return cleanup(ensureAccessor(input));
+                        }
                     }
                     case SyntaxKind.PropertyDeclaration:
                         return cleanup(updateProperty(
@@ -1453,6 +1464,42 @@ namespace ts {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
             }
             return accessorType;
+        }
+
+        function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
+            const accessors = resolver.getAllAccessorDeclarations(node);
+            if (node.kind !== accessors.firstAccessor.kind) {
+                return;
+            }
+            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessors);
+            const prop = createProperty(/*decorators*/ undefined, maskModifiers(node, /*mask*/ undefined, (!accessors.setAccessor) ? ModifierFlags.Readonly : ModifierFlags.None), node.name, node.questionToken, ensureType(node, accessorType), /*initializer*/ undefined);
+            const leadingsSyntheticCommentRanges = accessors.secondAccessor && getLeadingCommentRangesOfNode(accessors.secondAccessor, currentSourceFile);
+            if (leadingsSyntheticCommentRanges) {
+                for (const range of leadingsSyntheticCommentRanges) {
+                    if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
+                        let text = currentSourceFile.text.slice(range.pos + 2, range.end - 2);
+                        const lines = text.split(/\r\n?|\n/g);
+                        if (lines.length > 1) {
+                            const lastLines = lines.slice(1);
+                            const indentation = guessIndentation(lastLines);
+                            text = [lines[0], ...map(lastLines, l => l.slice(indentation))].join(newLine);
+                        }
+                        addSyntheticLeadingComment(
+                            prop,
+                            range.kind,
+                            text,
+                            range.hasTrailingNewLine
+                        );
+                    }
+                }
+            }
+            addSyntheticLeadingComment(
+                prop,
+                SyntaxKind.MultiLineCommentTrivia,
+                "*@accessor",
+                /*hasTrailingNewLine*/ false
+            );
+            return prop;
         }
 
         function transformHeritageClauses(nodes: NodeArray<HeritageClause> | undefined) {

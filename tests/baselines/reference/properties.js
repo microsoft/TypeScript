@@ -32,6 +32,5 @@ var MyClass = /** @class */ (function () {
 
 //// [properties.d.ts]
 declare class MyClass {
-    get Count(): number;
-    set Count(value: number);
+    /**@accessor*/ Count: number;
 }

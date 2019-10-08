@@ -138,12 +138,11 @@ var C4 = /** @class */ (function () {
 declare class C1 {
     protected x: number;
     protected f(): number;
-    protected set accessor(a: number);
-    protected get accessor(): number;
+    /**@accessor*/ protected accessor: number;
     protected static sx: number;
     protected static sf(): number;
-    protected static set staticSetter(a: number);
-    protected static get staticGetter(): number;
+    /**@accessor*/ protected static staticSetter: number;
+    /**@accessor*/ protected static readonly staticGetter: number;
 }
 declare class C2 extends C1 {
     protected f(): number;
@@ -154,7 +153,7 @@ declare class C3 extends C2 {
     static sx: number;
     f(): number;
     static sf(): number;
-    static get staticGetter(): number;
+    /**@accessor*/ static readonly staticGetter: number;
 }
 declare class C4 {
     protected a: number;

@@ -103,10 +103,10 @@ export declare class C2 {
     bar(): (t: typeof C2) => void;
 }
 export declare class C3 {
-    get C3(): number;
+    /**@accessor*/ readonly C3: number;
     bar(): (t: typeof C3) => void;
 }
 export declare class C4 {
-    set C4(v: any);
+    /**@accessor*/ C4: any;
     bar(): (t: typeof C4) => void;
 }

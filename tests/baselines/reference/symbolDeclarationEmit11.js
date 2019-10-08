@@ -19,6 +19,5 @@ C[Symbol.iterator] = 0;
 declare class C {
     static [Symbol.iterator]: number;
     static [Symbol.isConcatSpreadable](): void;
-    static get [Symbol.toPrimitive](): string;
-    static set [Symbol.toPrimitive](x: string);
+    /**@accessor*/ static [Symbol.toPrimitive]: string;
 }

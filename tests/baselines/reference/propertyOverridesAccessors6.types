@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/a.d.ts ===
+declare class A {
+>A : A
+
+    /**@accessor*/ p: number
+>p : number
+}
+=== tests/cases/conformance/classes/propertyMemberDeclarations/b.ts ===
+class B extends A {
+>B : B
+>A : A
+
+    get p() { return 1 }
+>p : number
+>1 : 1
+
+    set p(value) { }
+>p : number
+>value : number
+}
+

@@ -160,9 +160,8 @@ declare class c {
     /** function comment */
     myFoo(): number;
     /** getter comment*/
-    get prop1(): number;
     /** setter comment*/
-    set prop1(val: number);
+    /**@accessor*/ prop1: number;
     /** overload signature1*/
     foo1(a: number): string;
     /** Overload signature 2*/

@@ -13,6 +13,5 @@ class C {
 
 //// [symbolDeclarationEmit4.d.ts]
 declare class C {
-    get [Symbol.toPrimitive](): string;
-    set [Symbol.toPrimitive](x: string);
+    /**@accessor*/ [Symbol.toPrimitive]: string;
 }

@@ -18,17 +18,31 @@ class D {
     }
 }
 
+class E {
+>E : Symbol(E, Decl(accessorWithES5.ts, 9, 1))
+
+    // comment 1
+    get x() { return 2; }
+>x : Symbol(E.x, Decl(accessorWithES5.ts, 11, 9), Decl(accessorWithES5.ts, 13, 25))
+
+    // comment 2
+    set x(v) { }
+>x : Symbol(E.x, Decl(accessorWithES5.ts, 11, 9), Decl(accessorWithES5.ts, 13, 25))
+>v : Symbol(v, Decl(accessorWithES5.ts, 15, 10))
+}
+
 var x = {
->x : Symbol(x, Decl(accessorWithES5.ts, 11, 3))
+>x : Symbol(x, Decl(accessorWithES5.ts, 18, 3))
 
     get a() { return 1 }
->a : Symbol(a, Decl(accessorWithES5.ts, 11, 9))
+>a : Symbol(a, Decl(accessorWithES5.ts, 18, 9))
 }
 
 var y = {
->y : Symbol(y, Decl(accessorWithES5.ts, 15, 3))
+>y : Symbol(y, Decl(accessorWithES5.ts, 22, 3))
 
     set b(v) { }
->b : Symbol(b, Decl(accessorWithES5.ts, 15, 9))
->v : Symbol(v, Decl(accessorWithES5.ts, 16, 10))
+>b : Symbol(b, Decl(accessorWithES5.ts, 22, 9))
+>v : Symbol(v, Decl(accessorWithES5.ts, 23, 10))
 }
+

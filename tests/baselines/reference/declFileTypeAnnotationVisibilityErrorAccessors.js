@@ -271,27 +271,21 @@ declare module m {
         }
     }
     export class c {
-        get foo1(): private1;
-        get foo2(): private1;
-        set foo3(param: private1);
-        get foo4(): private1;
-        set foo4(param: private1);
-        get foo5(): private1;
-        set foo5(param: private1);
-        get foo11(): public1;
-        get foo12(): public1;
-        set foo13(param: public1);
-        get foo14(): public1;
-        set foo14(param: public1);
-        get foo15(): public1;
-        set foo15(param: public1);
-        get foo111(): m2.public2;
-        get foo112(): m2.public2;
-        set foo113(param: m2.public2);
-        get foo114(): m2.public2;
-        set foo114(param: m2.public2);
-        get foo115(): m2.public2;
-        set foo115(param: m2.public2);
+        /**@accessor*/ readonly foo1: private1;
+        /**@accessor*/ readonly foo2: private1;
+        /**@accessor*/ foo3: private1;
+        /**@accessor*/ foo4: private1;
+        /**@accessor*/ foo5: private1;
+        /**@accessor*/ readonly foo11: public1;
+        /**@accessor*/ readonly foo12: public1;
+        /**@accessor*/ foo13: public1;
+        /**@accessor*/ foo14: public1;
+        /**@accessor*/ foo15: public1;
+        /**@accessor*/ readonly foo111: m2.public2;
+        /**@accessor*/ readonly foo112: m2.public2;
+        /**@accessor*/ foo113: m2.public2;
+        /**@accessor*/ foo114: m2.public2;
+        /**@accessor*/ foo115: m2.public2;
     }
     export {};
 }
