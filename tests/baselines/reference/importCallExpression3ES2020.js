@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpression3ESNext.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression3ES2020.ts] ////
 
 //// [0.ts]
 export class B {
@@ -12,6 +12,7 @@ async function foo() {
     c.print();
 }
 foo();
+
 
 //// [0.js]
 export class B {

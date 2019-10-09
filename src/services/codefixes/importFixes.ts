@@ -378,6 +378,7 @@ namespace ts.codefix {
                 return ImportKind.Equals;
             case ModuleKind.System:
             case ModuleKind.ES2015:
+            case ModuleKind.ES2020:
             case ModuleKind.ESNext:
             case ModuleKind.None:
                 // Fall back to the `import * as ns` style import.

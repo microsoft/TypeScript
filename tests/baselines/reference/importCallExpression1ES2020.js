@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpression1ESNext.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression1ES2020.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -15,6 +15,7 @@ export var p2 = import("./0");
 function foo() {
     const p2 = import("./0");
 }
+
 
 //// [0.js]
 export function foo() { return "foo"; }

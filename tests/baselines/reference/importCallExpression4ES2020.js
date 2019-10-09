@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpression4ESNext.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression4ES2020.ts] ////
 
 //// [0.ts]
 export class B {
@@ -25,6 +25,7 @@ class C {
         });
     }
 }
+
 
 //// [0.js]
 export class B {

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpression5ESNext.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression6ES2020.ts] ////
 
 //// [0.ts]
 export class B {
@@ -17,6 +17,7 @@ let myModule = import(specify);
 let myModule1 = import(undefined);
 let myModule2 = import(bar() ? "./1" : null);
 let myModule3 = import(null);
+
 
 //// [0.js]
 export class B {

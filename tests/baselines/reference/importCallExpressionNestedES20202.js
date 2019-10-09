@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpressionNestedESNext2.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionNestedES20202.ts] ////
 
 //// [foo.ts]
 export default "./foo";
@@ -7,6 +7,7 @@ export default "./foo";
 async function foo() {
     return await import((await import("./foo")).default);
 }
+
 
 //// [foo.js]
 export default "./foo";

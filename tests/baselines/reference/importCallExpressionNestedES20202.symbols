@@ -10,3 +10,4 @@ async function foo() {
 >"./foo" : Symbol("tests/cases/conformance/dynamicImport/foo", Decl(foo.ts, 0, 0))
 >default : Symbol(default, Decl(foo.ts, 0, 0))
 }
+
