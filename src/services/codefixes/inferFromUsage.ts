@@ -316,12 +316,14 @@ namespace ts.codefix {
         if (isLiteralImportTypeNode(typeNode) && typeNode.qualifier && type.symbol) {
             // Replace 'import("./a").SomeType' with 'SomeType' and an actual import if possible
             const moduleSymbol = find(type.symbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)?.getSourceFile().symbol;
+            // Symbol for the left-most thing after the dot
+            const symbol = getLeftMostIdentifierOfEntityName(typeNode.qualifier).symbol;
             if (moduleSymbol) {
                 const action = codefix.getImportCompletionAction(
-                    type.symbol,
+                    symbol,
                     moduleSymbol,
                     sourceFile,
-                    type.symbol.name,
+                    symbol.name,
                     host,
                     program,
                     formatContext,

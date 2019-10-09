@@ -4179,6 +4179,14 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
     }
 
+    export function getLeftMostIdentifierOfEntityName(node: EntityName) {
+        let current = node;
+        while (!isIdentifier(current)) {
+            current = current.left;
+        }
+        return current;
+    }
+
     export function isDottedName(node: Expression): boolean {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
             node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
