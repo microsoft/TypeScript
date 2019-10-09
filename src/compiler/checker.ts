@@ -7436,7 +7436,9 @@ namespace ts {
                         }
                         else {
                             Debug.assert(!!getter, "there must exist a getter as we are current checking either setter or getter in this function");
-                            errorOrSuggestion(noImplicitAny, getter!, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                            if (!isPrivateWithinAmbient(getter!)) {
+                                errorOrSuggestion(noImplicitAny, getter!, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                            }
                         }
                         return anyType;
                     }
