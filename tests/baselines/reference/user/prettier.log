@@ -1,21 +1,42 @@
 Exit Code: 1
 Standard output:
-node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1259: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' can only be default-imported using the 'esModuleInterop' flag
-src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
-src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
-src/cli/util.js(372,29): error TS2532: Object is possibly 'undefined'.
-src/cli/util.js(372,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
-src/cli/util.js(413,36): error TS2345: Argument of type '{ dot: true; nodir: boolean; }' is not assignable to parameter of type 'GlobbyOptions'.
+node_modules/@glimmer/interfaces/dist/types/lib/components.d.ts(1,40): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/components/component-manager.d.ts(1,45): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/components/component-manager.d.ts(2,31): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/dom/attributes.d.ts(8,8): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/dom/bounds.d.ts(1,43): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/dom/changes.d.ts(7,8): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/dom/tree-construction.d.ts(7,8): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/arguments.d.ts(1,45): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/element.d.ts(1,36): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/environment.d.ts(1,76): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/environment.d.ts(2,36): error TS2307: Cannot find module '@glimmer/runtime'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/environment.d.ts(3,46): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/modifier.d.ts(4,21): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/modifier.d.ts(6,31): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/render.d.ts(1,43): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/scope.d.ts(2,40): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/interfaces/dist/types/lib/runtime/vm.d.ts(2,31): error TS2307: Cannot find module '@glimmer/reference'.
+node_modules/@glimmer/util/dist/types/lib/destroy.d.ts(3,69): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'SymbolDestroyable' is not assignable to type 'Maybe<Dict<unknown>>'.
+    Type 'SymbolDestroyable' is not assignable to type 'Dict<unknown>'.
+      Index signature is missing in type 'SymbolDestroyable'.
+node_modules/@glimmer/util/dist/types/lib/dom.d.ts(1,31): error TS2307: Cannot find module '@simple-dom/interface'.
+node_modules/@glimmer/util/dist/types/lib/is-serialization-first-node.d.ts(1,28): error TS2307: Cannot find module '@simple-dom/interface'.
+src/cli/util.js(63,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+src/cli/util.js(122,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
+src/cli/util.js(416,36): error TS2345: Argument of type '{ dot: true; nodir: boolean; }' is not assignable to parameter of type 'GlobbyOptions'.
   Object literal may only specify known properties, and 'nodir' does not exist in type 'GlobbyOptions'.
-src/cli/util.js(452,25): error TS2532: Object is possibly 'undefined'.
-src/cli/util.js(452,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
-src/cli/util.js(510,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
-src/cli/util.js(531,37): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
-src/cli/util.js(594,16): error TS2339: Property 'type' does not exist on type 'never'.
-src/cli/util.js(595,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
-src/cli/util.js(596,17): error TS2339: Property 'name' does not exist on type 'never'.
-src/cli/util.js(696,22): error TS2339: Property 'name' does not exist on type 'never'.
-src/cli/util.js(696,46): error TS2339: Property 'alias' does not exist on type 'never'.
+src/cli/util.js(483,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+src/cli/util.js(509,36): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
+src/cli/util.js(562,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
+src/cli/util.js(635,16): error TS2339: Property 'type' does not exist on type 'never'.
+src/cli/util.js(636,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
+src/cli/util.js(637,17): error TS2339: Property 'name' does not exist on type 'never'.
+src/cli/util.js(737,22): error TS2339: Property 'name' does not exist on type 'never'.
+src/cli/util.js(737,46): error TS2339: Property 'alias' does not exist on type 'never'.
+src/common/create-ignorer.js(34,19): error TS2349: This expression is not callable.
+  Type 'typeof import("/prettier/prettier/node_modules/ignore/index")' has no call signatures.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(14,12): error TS2571: Object is of type 'unknown'.
 src/config/resolve-config.js(50,16): error TS2571: Object is of type 'unknown'.
@@ -57,13 +78,6 @@ src/language-graphql/index.js(8,62): error TS2345: Argument of type '{ override:
 src/language-handlebars/index.js(7,26): error TS2307: Cannot find module 'linguist-languages/data/handlebars'.
 src/language-handlebars/index.js(7,65): error TS2345: Argument of type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: null; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }; }' is not assignable to parameter of type 'PreprocessOptions'.
-  Types of property 'plugins' are incompatible.
-    Type '{ ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
-      Types of property 'ast' are incompatible.
-        Type '(() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]' is not assignable to type 'ASTPluginBuilder[]'.
-          Type '() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' is not assignable to type 'ASTPluginBuilder'.
-            Property 'name' is missing in type '{ visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' but required in type 'ASTPlugin'.
 src/language-html/ast.js(53,11): error TS2536: Type 'Extract<keyof this, string>' cannot be used to index type 'Node'.
 src/language-html/ast.js(56,15): error TS2339: Property 'index' does not exist on type 'Node'.
 src/language-html/ast.js(56,22): error TS2339: Property 'siblings' does not exist on type 'Node'.
@@ -114,14 +128,14 @@ src/language-html/parser-html.js(161,14): error TS2339: Property 'tagDefinition'
 src/language-html/parser-html.js(194,29): error TS2345: Argument of type '{ type: any; value: any; raw: any; }' is not assignable to parameter of type 'Node'.
   Type '{ type: any; value: any; raw: any; }' is missing the following properties from type 'Node': sourceSpan, visit
 src/language-html/preprocess.js(28,19): error TS2554: Expected 0-1 arguments, but got 2.
-src/language-html/printer-html.js(313,13): error TS2769: No overload matches this call.
+src/language-html/printer-html.js(314,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
-src/language-html/printer-html.js(470,11): error TS2769: No overload matches this call.
+src/language-html/printer-html.js(471,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
       Types of property 'slice' are incompatible.
@@ -130,28 +144,28 @@ src/language-html/printer-html.js(470,11): error TS2769: No overload matches thi
             Type '{ type: string; parts: any; }' is not assignable to type 'never'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; }[]' is not assignable to parameter of type 'ConcatArray<never>'.
-src/language-html/printer-html.js(491,11): error TS2769: No overload matches this call.
+src/language-html/printer-html.js(492,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
-src/language-html/printer-html.js(514,11): error TS2769: No overload matches this call.
+src/language-html/printer-html.js(515,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '"" | ">" | "/>" | "}}" | "]>" | "><!--<![endif]-->" | "[endif]-->" | "]><!-->"' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '""' is not assignable to type 'ConcatArray<never>'.
-src/language-html/printer-html.js(637,55): error TS2554: Expected 0 arguments, but got 1.
+src/language-html/printer-html.js(638,55): error TS2554: Expected 0 arguments, but got 1.
 src/language-html/syntax-vue.js(14,11): error TS2339: Property 'left' does not exist on type '{ left: string; operator: any; right: any; } | undefined'.
 src/language-html/syntax-vue.js(14,17): error TS2339: Property 'operator' does not exist on type '{ left: string; operator: any; right: any; } | undefined'.
 src/language-html/syntax-vue.js(14,27): error TS2339: Property 'right' does not exist on type '{ left: string; operator: any; right: any; } | undefined'.
 src/language-html/utils.js(10,30): error TS2307: Cannot find module 'html-tag-names'.
 src/language-html/utils.js(11,39): error TS2307: Cannot find module 'html-element-attributes'.
-src/language-html/utils.js(441,17): error TS2554: Expected 0 arguments, but got 1.
-src/language-js/comments.js(866,64): error TS2554: Expected 0 arguments, but got 1.
+src/language-html/utils.js(444,17): error TS2554: Expected 0 arguments, but got 1.
+src/language-js/comments.js(864,64): error TS2554: Expected 0 arguments, but got 1.
 src/language-js/index.js(9,26): error TS2307: Cannot find module 'linguist-languages/data/javascript'.
 src/language-js/index.js(19,26): error TS2307: Cannot find module 'linguist-languages/data/javascript'.
 src/language-js/index.js(19,65): error TS2345: Argument of type '{ override: { name: string; since: string; parsers: string[]; vscodeLanguageIds: string[]; aliases: never[]; filenames: never[]; extensions: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
@@ -170,45 +184,7 @@ src/language-js/index.js(66,26): error TS2307: Cannot find module 'linguist-lang
 src/language-js/index.js(76,26): error TS2307: Cannot find module 'linguist-languages/data/json5'.
 src/language-js/index.js(76,60): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-js/printer-estree.js(262,36): error TS2304: Cannot find name 'Doc'.
-src/language-js/printer-estree.js(263,62): error TS2304: Cannot find name 'Doc'.
-src/language-js/printer-estree.js(270,12): error TS2304: Cannot find name 'FastPath'.
-src/language-js/printer-estree.js(271,12): error TS2304: Cannot find name 'Options'.
-src/language-js/printer-estree.js(397,9): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
-src/language-js/printer-estree.js(1470,28): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>[]): (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; })[]', gave the following error.
-    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
-      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>': length, join, slice
-  Overload 2 of 2, '(...items: (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>)[]): (string | { ...; })[]', gave the following error.
-    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
-      Type '{ type: string; parts: any; }' is missing the following properties from type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }': id, contents, break, expandedStates
-src/language-js/printer-estree.js(1890,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(1892,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(1894,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(1903,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(2426,28): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
-src/language-js/printer-estree.js(3513,11): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
-      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
-src/language-js/printer-estree.js(4031,23): error TS2532: Object is possibly 'undefined'.
-src/language-js/printer-estree.js(4032,24): error TS2532: Object is possibly 'undefined'.
-src/language-js/printer-estree.js(4360,5): error TS2345: Argument of type '"" | { type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'string'.
-  Type '{ type: string; parts: any; }' is not assignable to type 'string'.
-src/language-js/printer-estree.js(4364,16): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(4406,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(4708,9): error TS2554: Expected 0-2 arguments, but got 3.
-src/language-js/printer-estree.js(5939,55): error TS2554: Expected 0-1 arguments, but got 2.
-src/language-js/printer-estree.js(5975,7): error TS2769: No overload matches this call.
+src/language-js/needs-parens.js(890,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
       Types of property 'slice' are incompatible.
@@ -219,14 +195,77 @@ src/language-js/printer-estree.js(5975,7): error TS2769: No overload matches thi
   Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
       Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
+src/language-js/printer-estree.js(265,36): error TS2304: Cannot find name 'Doc'.
+src/language-js/printer-estree.js(266,62): error TS2304: Cannot find name 'Doc'.
+src/language-js/printer-estree.js(273,12): error TS2304: Cannot find name 'FastPath'.
+src/language-js/printer-estree.js(274,12): error TS2304: Cannot find name 'Options'.
+src/language-js/printer-estree.js(400,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+src/language-js/printer-estree.js(1472,28): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>[]): (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; })[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>': length, join, slice
+  Overload 2 of 2, '(...items: (string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>)[]): (string | { ...; })[]', gave the following error.
+    Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; } | ConcatArray<string | { type: string; id: any; contents: any; break: boolean; expandedStates: any; }>'.
+      Type '{ type: string; parts: any; }' is missing the following properties from type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }': id, contents, break, expandedStates
+src/language-js/printer-estree.js(1905,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1907,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1909,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1918,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(3464,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+      Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+src/language-js/printer-estree.js(3893,22): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/language-js/printer-estree.js(3960,14): error TS2339: Property 'comments' does not exist on type 'Expression'.
+  Property 'comments' does not exist on type 'Identifier'.
+src/language-js/printer-estree.js(3972,9): error TS2367: This condition will always return 'false' since the types '"FunctionExpression" | "ClassExpression" | "ObjectExpression" | "TaggedTemplateExpression" | "CallExpression" | "ConditionalExpression" | "UpdateExpression" | "SequenceExpression" | ... 11 more ... | "MetaProperty"' and '"OptionalMemberExpression"' have no overlap.
+src/language-js/printer-estree.js(3973,13): error TS2339: Property 'property' does not exist on type 'SimpleLiteral | RegExpLiteral | FunctionExpression | ArrowFunctionExpression | ArrayExpression | ObjectExpression | YieldExpression | UnaryExpression | UpdateExpression | ... 12 more ... | AwaitExpression'.
+  Property 'property' does not exist on type 'SimpleLiteral'.
+src/language-js/printer-estree.js(3973,52): error TS2339: Property 'property' does not exist on type 'SimpleLiteral | RegExpLiteral | FunctionExpression | ArrowFunctionExpression | ArrayExpression | ObjectExpression | YieldExpression | UnaryExpression | UpdateExpression | ... 12 more ... | AwaitExpression'.
+  Property 'property' does not exist on type 'SimpleLiteral'.
+src/language-js/printer-estree.js(3978,9): error TS2367: This condition will always return 'false' since the types '"FunctionExpression" | "ClassExpression" | "ObjectExpression" | "TaggedTemplateExpression" | "CallExpression" | "ConditionalExpression" | "UpdateExpression" | "SequenceExpression" | ... 11 more ... | "MetaProperty"' and '"OptionalMemberExpression"' have no overlap.
+src/language-js/printer-estree.js(3980,29): error TS2339: Property 'object' does not exist on type 'SimpleLiteral | RegExpLiteral | FunctionExpression | ArrowFunctionExpression | ArrayExpression | ObjectExpression | YieldExpression | UnaryExpression | UpdateExpression | ... 12 more ... | AwaitExpression'.
+  Property 'object' does not exist on type 'SimpleLiteral'.
+src/language-js/printer-estree.js(3981,22): error TS2339: Property 'comments' does not exist on type 'SimpleLiteral | RegExpLiteral | FunctionExpression | ArrowFunctionExpression | ArrayExpression | ObjectExpression | YieldExpression | UnaryExpression | UpdateExpression | ... 12 more ... | AwaitExpression'.
+  Property 'comments' does not exist on type 'SimpleLiteral'.
+src/language-js/printer-estree.js(3987,9): error TS2367: This condition will always return 'false' since the types '"FunctionExpression" | "ClassExpression" | "ObjectExpression" | "TaggedTemplateExpression" | "CallExpression" | "ConditionalExpression" | "UpdateExpression" | "SequenceExpression" | ... 11 more ... | "MetaProperty"' and '"Identifier"' have no overlap.
+src/language-js/printer-estree.js(3988,9): error TS2367: This condition will always return 'false' since the types '"FunctionExpression" | "ClassExpression" | "ObjectExpression" | "TaggedTemplateExpression" | "CallExpression" | "ConditionalExpression" | "UpdateExpression" | "SequenceExpression" | ... 11 more ... | "MetaProperty"' and '"ThisExpression"' have no overlap.
+src/language-js/printer-estree.js(4192,23): error TS2532: Object is possibly 'undefined'.
+src/language-js/printer-estree.js(4193,24): error TS2532: Object is possibly 'undefined'.
+src/language-js/printer-estree.js(4546,5): error TS2345: Argument of type '"" | { type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'string'.
+  Type '{ type: string; parts: any; }' is not assignable to type 'string'.
+src/language-js/printer-estree.js(4550,16): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
+src/language-js/printer-estree.js(4592,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
+src/language-js/printer-estree.js(4894,9): error TS2554: Expected 0-2 arguments, but got 3.
+src/language-js/printer-estree.js(6101,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
+    Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
+      Types of property 'slice' are incompatible.
+        Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
+          Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
+            Type 'string | number' is not assignable to type '(childPath: any) => any'.
+              Type 'string' is not assignable to type '(childPath: any) => any'.
+  Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
+    Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
+      Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
+src/language-js/utils.js(107,55): error TS2554: Expected 0-1 arguments, but got 2.
 src/language-markdown/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/markdown'.
 src/language-markdown/index.js(20,5): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
-src/language-markdown/printer-markdown.js(270,18): error TS2532: Object is possibly 'undefined'.
-src/language-markdown/printer-markdown.js(271,17): error TS2532: Object is possibly 'undefined'.
-src/language-markdown/printer-markdown.js(292,14): error TS2532: Object is possibly 'undefined'.
+src/language-markdown/printer-markdown.js(278,18): error TS2532: Object is possibly 'undefined'.
+src/language-markdown/printer-markdown.js(279,17): error TS2532: Object is possibly 'undefined'.
+src/language-markdown/printer-markdown.js(300,14): error TS2532: Object is possibly 'undefined'.
 src/language-markdown/utils.js(203,5): error TS2322: Type 'never[]' is not assignable to type 'null'.
-src/language-markdown/utils.js(208,39): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'null'.
+src/language-markdown/utils.js(213,47): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'null'.
 src/language-yaml/index.js(8,26): error TS2307: Cannot find module 'linguist-languages/data/yaml'.
 src/language-yaml/index.js(8,59): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; }'.
   Property 'extend' is missing in type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' but required in type '{ extend: any; override: any; }'.
@@ -270,11 +309,11 @@ src/main/core-options.js(251,9): error TS2322: Type '[{ since: string; value: fa
         Object literal may only specify known properties, and 'since' does not exist in type '{ value: (string | number | boolean)[]; }'.
 src/main/core-options.js(254,5): error TS2322: Type 'string' is not assignable to type 'boolean | null'.
 src/main/core-options.js(259,3): error TS2740: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; }' is missing the following properties from type 'OptionInfo': array, deprecated, redirect, oppositeDescription, and 3 more.
-src/main/core.js(304,34): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(304,47): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(309,28): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(309,72): error TS2538: Type 'false' cannot be used as an index type.
-src/main/core.js(317,14): error TS2538: Type 'false' cannot be used as an index type.
+src/main/core.js(303,34): error TS2538: Type 'false' cannot be used as an index type.
+src/main/core.js(303,47): error TS2538: Type 'false' cannot be used as an index type.
+src/main/core.js(308,28): error TS2538: Type 'false' cannot be used as an index type.
+src/main/core.js(308,72): error TS2538: Type 'false' cannot be used as an index type.
+src/main/core.js(316,14): error TS2538: Type 'false' cannot be used as an index type.
 src/main/options-normalizer.js(35,35): error TS2339: Property 'yellow' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/main/options-normalizer.js(36,35): error TS2339: Property 'blue' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/main/options-normalizer.js(54,5): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
