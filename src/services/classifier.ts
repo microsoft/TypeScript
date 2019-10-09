@@ -985,8 +985,7 @@ namespace ts {
                 return ClassificationType.bigintLiteral;
             }
             else if (tokenKind === SyntaxKind.StringLiteral) {
-                // TODO: GH#18217
-                return token!.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+                return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
             }
             else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                 // TODO: we should get another classification type for these literals.
