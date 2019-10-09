@@ -2,31 +2,30 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.11.0 (pre-LTS)
+Node.js version is 12.11.1 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.4 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.5 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.4 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.5 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.4 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.5 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.4 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.5 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
-XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
 Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/eventProcessorHost.d.ts:36:9 - (TS1086) An accessor cannot be declared in an ambient context.
@@ -36,6 +35,7 @@ Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be
 Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
+XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
@@ -77,8 +77,6 @@ Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are onl
 Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
-(!) Circular dependency: dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/queryMetrics.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/headerUtils.js
-(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
 XX of XX: [@azure/logger] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
@@ -131,7 +129,16 @@ Warning: dist-esm/ChangeFeedResponse.d.ts:45:9 - (TS1056) Accessors are only ava
 Warning: dist-esm/client/Conflict/Conflict.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/client/Container/Container.d.ts:39:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/client/Container/Container.d.ts:44:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-[...10 lines omitted...]
+Warning: dist-esm/client/Container/Container.d.ts:51:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Database/Database.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Item/Item.d.ts:20:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Offer/Offer.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Permission/Permission.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:48:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/StoredProcedure/StoredProcedure.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/client/StoredProcedure/StoredProcedureResponse.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/client/Trigger/Trigger.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/client/User/User.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
@@ -149,8 +156,6 @@ Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are onl
 Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
-(!) Circular dependency: dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/queryMetrics.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/headerUtils.js
-(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
 created dist/index.js in ?s
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
@@ -169,11 +174,11 @@ BLOCKED (10)
 @azure/core-amqp
 @azure/core-arm
 @azure/event-hubs
-@azure/keyvault-keys
-@azure/keyvault-secrets
 @azure/app-configuration
 @azure/eventhubs-checkpointstore-blob
 @azure/keyvault-certificates
+@azure/keyvault-keys
+@azure/keyvault-secrets
 @azure/template
 ================================
 FAILURE (1)
@@ -181,20 +186,20 @@ FAILURE (1)
 @azure/core-http ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.4 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X-preview.5 build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.4 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.5 build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.4 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X-preview.5 build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.4 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X-preview.5 build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
