@@ -120,7 +120,6 @@ namespace ts.textChanges {
         ReplaceWithSingleNode,
         ReplaceWithMultipleNodes,
         Text,
-        Raw,
     }
 
     type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode | ChangeText;
