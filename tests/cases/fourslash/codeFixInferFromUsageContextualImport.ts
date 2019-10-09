@@ -22,7 +22,7 @@ verify.codeFix({
   newFileContent:
 `import { getEmail, User } from "./a";
 
-function f([|user|]) {
+export function f(user: User) {
     getEmail(user);
 }`
 });
