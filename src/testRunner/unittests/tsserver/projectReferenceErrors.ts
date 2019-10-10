@@ -1,48 +1,92 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: with project references and error reporting", () => {
-        const projectLocation = "/user/username/projects/myproject";
-        const dependecyLocation = `${projectLocation}/dependency`;
-        const usageLocation = `${projectLocation}/usage`;
+    export interface GetErrDiagnostics {
+        file: string | File;
+        syntax?: protocol.Diagnostic[];
+        semantic?: protocol.Diagnostic[];
+        suggestion?: protocol.Diagnostic[];
+    }
+    export interface VerifyGetErrRequestBase {
+        session: TestSession;
+        host: TestServerHost;
+        onErrEvent?: () => void;
+        existingTimeouts?: number;
+    }
+    export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
+        expected: readonly GetErrDiagnostics[];
+    }
+    export function verifyGetErrRequest(request: VerifyGetErrRequest) {
+        const { session, expected } = request;
+        session.clearMessages();
+        const expectedSequenceId = session.getNextSeq();
+        session.executeCommandSeq<protocol.GeterrRequest>({
+            command: protocol.CommandTypes.Geterr,
+            arguments: {
+                delay: 0,
+                files: expected.map(f => filePath(f.file))
+            }
+        });
+        checkAllErrors({ ...request, expectedSequenceId });
+    }
 
-        interface CheckErrorsInFile {
-            session: TestSession;
-            host: TestServerHost;
-            expected: GetErrDiagnostics;
-            expectedSequenceId?: number;
+    export interface CheckAllErrors extends VerifyGetErrRequest {
+        expectedSequenceId: number;
+    }
+    function checkAllErrors({ expected, expectedSequenceId, ...rest }: CheckAllErrors) {
+        for (let i = 0; i < expected.length; i++) {
+            checkErrorsInFile({
+                ...rest,
+                expected: expected[i],
+                expectedSequenceId: i === expected.length - 1 ? expectedSequenceId : undefined,
+            });
         }
-        function checkErrorsInFile({ session, host, expected: { file, syntax, semantic, suggestion }, expectedSequenceId }: CheckErrorsInFile) {
+    }
+
+    function filePath(file: string | File) {
+        return isString(file) ? file : file.path;
+    }
+    interface CheckErrorsInFile extends VerifyGetErrRequestBase {
+        expected: GetErrDiagnostics;
+        expectedSequenceId?: number;
+    }
+    function checkErrorsInFile({
+        session, host, onErrEvent, existingTimeouts, expectedSequenceId,
+        expected: { file, syntax, semantic, suggestion },
+    }: CheckErrorsInFile) {
+        onErrEvent = onErrEvent || noop;
+        if (existingTimeouts !== undefined) {
+            host.checkTimeoutQueueLength(existingTimeouts + 1);
+            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+        }
+        else {
             host.checkTimeoutQueueLengthAndRun(1);
-            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: syntax });
+        }
+        if (syntax) {
+            onErrEvent();
+            checkErrorMessage(session, "syntaxDiag", { file: filePath(file), diagnostics: syntax });
+        }
+        if (semantic) {
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks(1);
-            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: semantic });
+            onErrEvent();
+            checkErrorMessage(session, "semanticDiag", { file: filePath(file), diagnostics: semantic });
+        }
+        if (suggestion) {
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks(1);
-            checkErrorMessage(session, "suggestionDiag", { file: file.path, diagnostics: suggestion });
-            if (expectedSequenceId !== undefined) {
-                checkCompleteEvent(session, 2, expectedSequenceId);
-            }
-            session.clearMessages();
+            onErrEvent();
+            checkErrorMessage(session, "suggestionDiag", { file: filePath(file), diagnostics: suggestion });
         }
+        if (expectedSequenceId !== undefined) {
+            checkCompleteEvent(session, syntax || semantic || suggestion ? 2 : 1, expectedSequenceId);
+        }
+        session.clearMessages();
+    }
 
-        interface CheckAllErrors {
-            session: TestSession;
-            host: TestServerHost;
-            expected: readonly GetErrDiagnostics[];
-            expectedSequenceId: number;
-        }
-        function checkAllErrors({ session, host, expected, expectedSequenceId }: CheckAllErrors) {
-            for (let i = 0; i < expected.length; i++) {
-                checkErrorsInFile({
-                    session,
-                    host,
-                    expected: expected[i],
-                    expectedSequenceId: i === expected.length - 1 ? expectedSequenceId : undefined
-                });
-            }
-        }
+    describe("unittests:: tsserver:: with project references and error reporting", () => {
+        const dependecyLocation = `${projectRoot}/dependency`;
+        const usageLocation = `${projectRoot}/usage`;
 
         function verifyErrorsUsingGeterr({ allFiles, openFiles, expectedGetErr }: VerifyScenario) {
             it("verifies the errors in open file", () => {
@@ -50,18 +94,7 @@ namespace ts.projectSystem {
                 const session = createSession(host, { canUseEvents: true, });
                 openFilesForSession(openFiles(), session);
 
-                session.clearMessages();
-                const expectedSequenceId = session.getNextSeq();
-                const expected = expectedGetErr();
-                session.executeCommandSeq<protocol.GeterrRequest>({
-                    command: protocol.CommandTypes.Geterr,
-                    arguments: {
-                        delay: 0,
-                        files: expected.map(f => f.file.path)
-                    }
-                });
-
-                checkAllErrors({ session, host, expected, expectedSequenceId });
+                verifyGetErrRequest({ session, host, expected: expectedGetErr() });
             });
         }
 
@@ -96,27 +129,27 @@ namespace ts.projectSystem {
                     const actualSyntax = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
                         command: protocol.CommandTypes.SyntacticDiagnosticsSync,
                         arguments: {
-                            file: file.path,
+                            file: filePath(file),
                             projectFileName: project
                         }
                     }).response as protocol.Diagnostic[];
-                    assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${file.path}, project: ${project}`);
+                    assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${filePath(file)}, project: ${project}`);
                     const actualSemantic = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
                         command: protocol.CommandTypes.SemanticDiagnosticsSync,
                         arguments: {
-                            file: file.path,
+                            file: filePath(file),
                             projectFileName: project
                         }
                     }).response as protocol.Diagnostic[];
-                    assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${file.path}, project: ${project}`);
+                    assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${filePath(file)}, project: ${project}`);
                     const actualSuggestion = session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
                         command: protocol.CommandTypes.SuggestionDiagnosticsSync,
                         arguments: {
-                            file: file.path,
+                            file: filePath(file),
                             projectFileName: project
                         }
                     }).response as protocol.Diagnostic[];
-                    assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${file.path}, project: ${project}`);
+                    assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${filePath(file)}, project: ${project}`);
                 }
             });
         }
@@ -140,12 +173,6 @@ namespace ts.projectSystem {
             });
         }
 
-        interface GetErrDiagnostics {
-            file: File;
-            syntax: protocol.Diagnostic[];
-            semantic: protocol.Diagnostic[];
-            suggestion: protocol.Diagnostic[];
-        }
         interface GetErrForProjectDiagnostics {
             project: string;
             errors: readonly GetErrDiagnostics[];

@@ -1533,6 +1533,14 @@ namespace ts.server {
             return undefined;
         }
 
+        /*@internal*/
+        findDefaultConfiguredProject(info: ScriptInfo) {
+            if (!info.isScriptOpen()) return undefined;
+            const configFileName = this.getConfigFileNameForFile(info);
+            return configFileName &&
+                this.findConfiguredProjectByProjectName(configFileName);
+        }
+
         /**
          * This function tries to search for a tsconfig.json for the given file.
          * This is different from the method the compiler uses because

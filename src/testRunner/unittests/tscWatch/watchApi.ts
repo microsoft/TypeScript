@@ -1,6 +1,5 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
-        const projectRoot = "/user/username/projects/project";
         const configFileJson: any = {
             compilerOptions: { module: "commonjs", resolveJsonModule: true },
             files: ["index.ts"]
@@ -39,7 +38,6 @@ namespace ts.tscWatch {
     });
 
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to watch status reporter", () => {
-        const projectRoot = "/user/username/projects/project";
         const configFileJson: any = {
             compilerOptions: { module: "commonjs" },
             files: ["index.ts"]
