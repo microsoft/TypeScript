@@ -3259,6 +3259,9 @@ namespace ts {
         InvalidProject_OutputsSkipped = 3,
 
         // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkipped = 4,
+
+        /** @deprecated Use ProjectReferenceCycle_OutputsSkipped instead. */
         ProjectReferenceCycle_OutputsSkupped = 4,
     }
 

@@ -88,7 +88,7 @@ namespace ts {
     }
   ]`
                 ),
-                expectedExitStatus: ExitStatus.ProjectReferenceCycle_OutputsSkupped,
+                expectedExitStatus: ExitStatus.ProjectReferenceCycle_OutputsSkipped,
                 expectedDiagnostics: () => [
                     getExpectedDiagnosticForProjectsInBuild("src/animals/tsconfig.json", "src/zoo/tsconfig.json", "src/core/tsconfig.json", "src/tsconfig.json"),
                     errorDiagnostic([

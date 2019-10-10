@@ -1807,7 +1807,7 @@ namespace ts {
         startWatching(state, buildOrder);
 
         return isCircularBuildOrder(buildOrder) ?
-            ExitStatus.ProjectReferenceCycle_OutputsSkupped :
+            ExitStatus.ProjectReferenceCycle_OutputsSkipped :
             errorProjects ?
                 successfulProjects ?
                     ExitStatus.DiagnosticsPresent_OutputsGenerated :
@@ -1821,7 +1821,7 @@ namespace ts {
 
         if (isCircularBuildOrder(buildOrder)) {
             reportErrors(state, buildOrder.circularDiagnostics);
-            return ExitStatus.ProjectReferenceCycle_OutputsSkupped;
+            return ExitStatus.ProjectReferenceCycle_OutputsSkipped;
         }
 
         const { options, host } = state;
