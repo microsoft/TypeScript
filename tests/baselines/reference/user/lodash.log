@@ -79,10 +79,8 @@ node_modules/lodash/_baseUniq.js(62,40): error TS2554: Expected 2 arguments, but
 node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' does not exist on type 'LazyWrapper'.
 node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
-node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: any, isDeep?: boolean | undefined) => any'.
-node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: any, isDeep?: boolean | undefined) => any; }'.
-node_modules/lodash/_cloneBuffer.js(22,14): error TS2577: Return type annotation circularly references itself.
-node_modules/lodash/_cloneBuffer.js(24,22): error TS2502: 'buffer' is referenced directly or indirectly in its own type annotation.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: Buffer, isDeep?: boolean | undefined) => Buffer'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
 node_modules/lodash/_copySymbols.js(13,40): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_copySymbolsIn.js(13,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
