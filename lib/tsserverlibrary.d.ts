@@ -6626,7 +6626,7 @@ declare namespace ts.server.protocol {
     interface DefinitionResponse extends Response {
         body?: FileSpanWithContext[];
     }
-    interface DefinitionInfoAndBoundSpanReponse extends Response {
+    interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
     }
     /**

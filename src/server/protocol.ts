@@ -918,7 +918,7 @@ namespace ts.server.protocol {
         body?: FileSpanWithContext[];
     }
 
-    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+    export interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
     }
 

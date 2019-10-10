@@ -290,7 +290,7 @@ namespace ts.server {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
-            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.assertDefined(response.body); // TODO: GH#18217
 
             return {
