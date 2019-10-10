@@ -7619,6 +7619,14 @@ namespace ts {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
 
+    export function shouldSuppressEmit(options: CompilerOptions): boolean {
+        return !!options.noEmit || !!options.listFilesOnly;
+    }
+
+    export function shouldListFiles(options: CompilerOptions): boolean {
+        return !!options.listFiles || !!options.listFilesOnly;
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -8339,7 +8347,8 @@ namespace ts {
         // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
         // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
         // '/// <reference no-default-lib="true"/>' directive.
-        return (options.skipLibCheck && sourceFile.isDeclarationFile ||
+        return options.listFilesOnly ||
+            (options.skipLibCheck && sourceFile.isDeclarationFile ||
             options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
             host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
     }

@@ -4311,6 +4311,10 @@
         "category": "Message",
         "code": 6502
     },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

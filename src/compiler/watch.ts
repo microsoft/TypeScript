@@ -129,7 +129,7 @@ namespace ts {
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
-        if (program.getCompilerOptions().listFiles) {
+        if (shouldListFiles(program.getCompilerOptions())) {
             forEach(program.getSourceFiles(), file => {
                 writeFileName(file.fileName);
             });

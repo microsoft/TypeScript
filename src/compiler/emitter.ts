@@ -332,7 +332,7 @@ namespace ts {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
+            if (host.isEmitBlocked(buildInfoPath) || shouldSuppressEmit(compilerOptions)) {
                 emitSkipped = true;
                 return;
             }
@@ -349,7 +349,7 @@ namespace ts {
             }
 
             // Make sure not to write js file and source map file if any of them cannot be written
-            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || compilerOptions.noEmit) {
+            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || shouldSuppressEmit(compilerOptions)) {
                 emitSkipped = true;
                 return;
             }
@@ -436,7 +436,7 @@ namespace ts {
                 onEmitNode: declarationTransform.emitNodeWithNotification,
                 substituteNode: declarationTransform.substituteNode,
             });
-            const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+            const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!shouldSuppressEmit(compilerOptions);
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || forceDtsEmit) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");

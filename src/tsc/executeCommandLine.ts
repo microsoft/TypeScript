@@ -207,6 +207,11 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
+        if (commandLine.options.watch && commandLine.options.listFilesOnly) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "listFilesOnly"));
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+
         if (commandLine.options.project) {
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
