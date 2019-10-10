@@ -319,7 +319,7 @@ namespace ts.codefix {
             // Symbol for the left-most thing after the dot
             const symbol = getLeftMostIdentifierOfEntityName(typeNode.qualifier).symbol;
             if (moduleSymbol) {
-                const action = codefix.getImportCompletionAction(
+                const action = getImportCompletionAction(
                     symbol,
                     moduleSymbol,
                     sourceFile,
