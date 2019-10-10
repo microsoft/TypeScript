@@ -303,12 +303,10 @@ namespace ts.codefix {
                 const typeExpression = createJSDocTypeExpression(typeNode);
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
-                return;
             }
-            if (tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, sourceFile, declaration, type, program, host, formatContext, preferences)) {
-                return;
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, sourceFile, declaration, type, program, host, formatContext, preferences)) {
+                changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
-            changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
         }
     }
 
@@ -317,8 +315,8 @@ namespace ts.codefix {
             // Replace 'import("./a").SomeType' with 'SomeType' and an actual import if possible
             const moduleSymbol = find(type.symbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)?.getSourceFile().symbol;
             // Symbol for the left-most thing after the dot
-            const symbol = getLeftMostIdentifierOfEntityName(typeNode.qualifier).symbol;
             if (moduleSymbol) {
+                const symbol = getFirstIdentifier(typeNode.qualifier).symbol;
                 const action = getImportCompletionAction(
                     symbol,
                     moduleSymbol,

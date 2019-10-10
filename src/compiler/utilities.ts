@@ -4179,12 +4179,21 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
     }
 
-    export function getLeftMostIdentifierOfEntityName(node: EntityName) {
-        let current = node;
-        while (!isIdentifier(current)) {
-            current = current.left;
+    export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return node;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.left;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+            case SyntaxKind.PropertyAccessExpression:
+                do {
+                    node = node.expression;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
         }
-        return current;
     }
 
     export function isDottedName(node: Expression): boolean {
