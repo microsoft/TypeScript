@@ -3530,9 +3530,10 @@ namespace ts {
 
     /* @internal */
     export const enum ContextFlags {
-        None = 0,
-        Signature = 1 << 0,  // Obtaining contextual signature
-        Completion = 1 << 1,  // Obtaining constraint type for completion
+        None          = 0,
+        Signature     = 1 << 0, // Obtaining contextual signature
+        NoConstraints = 1 << 1, // Don't obtain type variable constraints
+        Completion    = 1 << 2, // Obtaining constraint type for completion
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
