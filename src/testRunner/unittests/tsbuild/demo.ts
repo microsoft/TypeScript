@@ -39,17 +39,19 @@ namespace ts {
 
         interface VerifyBuild {
             modifyDiskLayout: (fs: vfs.FileSystem) => void;
+            tsconfigs?: readonly string[];
             expectedExitStatus: ExitStatus;
             expectedDiagnostics: (fs: vfs.FileSystem) => fakes.ExpectedDiagnostic[];
             expectedOutputs: readonly string[];
             notExpectedOutputs: readonly string[];
         }
 
-        function verifyBuild({ modifyDiskLayout, expectedExitStatus, expectedDiagnostics, expectedOutputs, notExpectedOutputs }: VerifyBuild) {
+        function verifyBuild({ modifyDiskLayout, tsconfigs = ["/src/tsconfig.json"],
+                               expectedExitStatus, expectedDiagnostics, expectedOutputs, notExpectedOutputs }: VerifyBuild) {
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             modifyDiskLayout(fs);
-            const builder = createSolutionBuilder(host, ["/src/tsconfig.json"], { verbose: true });
+            const builder = createSolutionBuilder(host, tsconfigs, { verbose: true });
             const exitStatus = builder.build();
             assert.equal(exitStatus, expectedExitStatus);
             host.assertDiagnosticMessages(...expectedDiagnostics(fs));
@@ -151,6 +153,20 @@ namespace ts {
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/animals/tsconfig.json", "/src/core"],
                     [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built, "src/zoo/tsconfig.json", "src/animals"],
                     [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built, "/src/zoo/tsconfig.json", "/src/animals"],
+                ],
+                expectedOutputs: emptyArray,
+                notExpectedOutputs: [...coreOutputs(), ...animalOutputs(), ...zooOutputs()]
+            });
+        });
+
+        it("returns an error exit in case of a bogus file", () => {
+            verifyBuild({
+                modifyDiskLayout: noop,
+                tsconfigs: ["bogus.json"],
+                expectedExitStatus: ExitStatus.DiagnosticsPresent_OutputsSkipped,
+                expectedDiagnostics: _ => [
+                    getExpectedDiagnosticForProjectsInBuild("bogus.json"),
+                    errorDiagnostic([Diagnostics.File_0_not_found, "/bogus.json"]),
                 ],
                 expectedOutputs: emptyArray,
                 notExpectedOutputs: [...coreOutputs(), ...animalOutputs(), ...zooOutputs()]
