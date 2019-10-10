@@ -6,7 +6,7 @@ namespace ts.projectSystem {
             // ts build should succeed
             const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
             solutionBuilder.build();
-            assert.equal(host.getOutput().length, 0);
+            assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
 
             return host;
         }
@@ -1166,7 +1166,7 @@ ${dependencyTs.content}`);
                             dtsFileCreated: "main",
                             dtsFileDeleted: ["noDts", noDts => ({
                                 // Map collection after file open
-                                closedInfos: noDts.closedInfos.concat(dtsMapLocation) ,
+                                closedInfos: noDts.closedInfos.concat(dtsMapLocation),
                                 expectsMap: true
                             })],
                             dependencyChange: ["change", () => ({
@@ -1176,6 +1176,128 @@ ${dependencyTs.content}`);
                         }
                     ]
                 });
+            });
+        });
+
+        describe("when root file is file from referenced project", () => {
+            function verify(disableSourceOfProjectReferenceRedirect: boolean) {
+                const projectLocation = `/user/username/projects/project`;
+                const commonConfig: File = {
+                    path: `${projectLocation}/src/common/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            declarationMap: true,
+                            outDir: "../../out",
+                            baseUrl: "..",
+                            disableSourceOfProjectReferenceRedirect
+                        },
+                        include: ["./**/*"]
+                    })
+                };
+                const keyboardTs: File = {
+                    path: `${projectLocation}/src/common/input/keyboard.ts`,
+                    content: `function bar() { return "just a random function so .d.ts location doesnt match"; }
+export function evaluateKeyboardEvent() { }`
+                };
+                const keyboardTestTs: File = {
+                    path: `${projectLocation}/src/common/input/keyboard.test.ts`,
+                    content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
+function testEvaluateKeyboardEvent() {
+    return evaluateKeyboardEvent();
+}
+`
+                };
+                const srcConfig: File = {
+                    path: `${projectLocation}/src/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            declarationMap: true,
+                            outDir: "../out",
+                            baseUrl: ".",
+                            paths: {
+                                "common/*": ["./common/*"],
+                            },
+                            tsBuildInfoFile: "../out/src.tsconfig.tsbuildinfo",
+                            disableSourceOfProjectReferenceRedirect
+                        },
+                        include: ["./**/*"],
+                        references: [
+                            { path: "./common" }
+                        ]
+                    })
+                };
+                const terminalTs: File = {
+                    path: `${projectLocation}/src/terminal.ts`,
+                    content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
+function foo() {
+    return evaluateKeyboardEvent();
+}
+`
+                };
+                const host = createHost(
+                    [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
+                    [srcConfig.path]
+                );
+                const session = createSession(host);
+                openFilesForSession([keyboardTs, terminalTs], session);
+
+                const searchStr = "evaluateKeyboardEvent";
+                const importStr = `import { evaluateKeyboardEvent } from 'common/input/keyboard';`;
+                const result = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr)
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(result, {
+                    refs: [
+                        makeReferenceItem({
+                            file: keyboardTs,
+                            text: searchStr,
+                            contextText: `export function evaluateKeyboardEvent() { }`,
+                            isDefinition: true,
+                            lineText: `export function evaluateKeyboardEvent() { }`
+                        }),
+                        makeReferenceItem({
+                            file: keyboardTestTs,
+                            text: searchStr,
+                            contextText: importStr,
+                            isDefinition: true,
+                            lineText: importStr
+                        }),
+                        makeReferenceItem({
+                            file: keyboardTestTs,
+                            text: searchStr,
+                            options: { index: 1 },
+                            isDefinition: false,
+                            lineText: `    return evaluateKeyboardEvent();`
+                        }),
+                        makeReferenceItem({
+                            file: terminalTs,
+                            text: searchStr,
+                            contextText: importStr,
+                            isDefinition: true,
+                            lineText: importStr
+                        }),
+                        makeReferenceItem({
+                            file: terminalTs,
+                            text: searchStr,
+                            options: { index: 1 },
+                            isDefinition: false,
+                            lineText: `    return evaluateKeyboardEvent();`
+                        }),
+                    ],
+                    symbolName: searchStr,
+                    symbolStartOffset: protocolLocationFromSubstring(keyboardTs.content, searchStr).offset,
+                    symbolDisplayString: "function evaluateKeyboardEvent(): void"
+                });
+            }
+
+            it(`when using declaration file maps to navigate between projects`, () => {
+                verify(/*disableSourceOfProjectReferenceRedirect*/ true);
+            });
+            it(`when using original source files in the project`, () => {
+                verify(/*disableSourceOfProjectReferenceRedirect*/ false);
             });
         });
 

@@ -373,6 +373,13 @@ namespace ts {
                             Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                             Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.GetAccessor:
+                    return symbolAccessibilityResult.errorModuleName ?
+                        symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_accessor_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_accessor_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Parameter_0_of_accessor_has_or_is_using_private_name_1;
 
                 default:
                     return Debug.fail(`Unknown parent for parameter: ${(ts as any).SyntaxKind[node.parent.kind]}`);

@@ -484,6 +484,47 @@ namespace ts {
         return node;
     }
 
+    function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+        return createCall(
+            createPropertyAccess(object, asName(methodName)),
+            /*typeArguments*/ undefined,
+            argumentsList
+        );
+    }
+
+    function createGlobalMethodCall(globalObjectName: string, methodName: string, argumentsList: readonly Expression[]) {
+        return createMethodCall(createIdentifier(globalObjectName), methodName, argumentsList);
+    }
+
+    /* @internal */
+    export function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
+        return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+    }
+
+    function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
+        if (expression) {
+            properties.push(createPropertyAssignment(propertyName, expression));
+            return true;
+        }
+        return false;
+    }
+
+    /* @internal */
+    export function createPropertyDescriptor(attributes: PropertyDescriptorAttributes, singleLine?: boolean) {
+        const properties: PropertyAssignment[] = [];
+        tryAddPropertyAssignment(properties, "enumerable", asExpression(attributes.enumerable));
+        tryAddPropertyAssignment(properties, "configurable", asExpression(attributes.configurable));
+
+        let isData = tryAddPropertyAssignment(properties, "writable", asExpression(attributes.writable));
+        isData = tryAddPropertyAssignment(properties, "value", attributes.value) || isData;
+
+        let isAccessor = tryAddPropertyAssignment(properties, "get", attributes.get);
+        isAccessor = tryAddPropertyAssignment(properties, "set", attributes.set) || isAccessor;
+
+        Debug.assert(!(isData && isAccessor), "A PropertyDescriptor may not be both an accessor descriptor and a data descriptor.");
+        return createObjectLiteral(properties, !singleLine);
+    }
+
     export function updateMethod(
         node: MethodDeclaration,
         decorators: readonly Decorator[] | undefined,
@@ -1024,11 +1065,35 @@ namespace ts {
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
+        if (isOptionalChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.questionDotToken, name);
+        }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
         return node.expression !== expression
             || node.name !== name
             ? updateNode(setEmitFlags(createPropertyAccess(expression, name), getEmitFlags(node)), node)
+            : node;
+    }
+
+    export function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier) {
+        const node = <PropertyAccessChain>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        node.questionDotToken = questionDotToken;
+        node.name = asName(name);
+        setEmitFlags(node, EmitFlags.NoIndentation);
+        return node;
+    }
+
+    export function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a PropertyAccessExpression using updatePropertyAccessChain. Use updatePropertyAccess instead.");
+        // Because we are updating an existing PropertyAccessChain we want to inherit its emitFlags
+        // instead of using the default from createPropertyAccess
+        return node.expression !== expression
+            || node.questionDotToken !== questionDotToken
+            || node.name !== name
+            ? updateNode(setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), getEmitFlags(node)), node)
             : node;
     }
 
@@ -1040,9 +1105,30 @@ namespace ts {
     }
 
     export function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
+        if (isOptionalChain(node)) {
+            return updateElementAccessChain(node, expression, node.questionDotToken, argumentExpression);
+        }
         return node.expression !== expression
             || node.argumentExpression !== argumentExpression
             ? updateNode(createElementAccess(expression, argumentExpression), node)
+            : node;
+    }
+
+    export function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression) {
+        const node = <ElementAccessChain>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        node.questionDotToken = questionDotToken;
+        node.argumentExpression = asExpression(index);
+        return node;
+    }
+
+    export function updateElementAccessChain(node: ElementAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update an ElementAccessExpression using updateElementAccessChain. Use updateElementAccess instead.");
+        return node.expression !== expression
+            || node.questionDotToken !== questionDotToken
+            || node.argumentExpression !== argumentExpression
+            ? updateNode(createElementAccessChain(expression, questionDotToken, argumentExpression), node)
             : node;
     }
 
@@ -1055,10 +1141,33 @@ namespace ts {
     }
 
     export function updateCall(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
+        if (isOptionalChain(node)) {
+            return updateCallChain(node, expression, node.questionDotToken, typeArguments, argumentsArray);
+        }
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
             ? updateNode(createCall(expression, typeArguments, argumentsArray), node)
+            : node;
+    }
+
+    export function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+        const node = <CallChain>createSynthesizedNode(SyntaxKind.CallExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        node.questionDotToken = questionDotToken;
+        node.typeArguments = asNodeArray(typeArguments);
+        node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
+        return node;
+    }
+
+    export function updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a CallExpression using updateCallChain. Use updateCall instead.");
+        return node.expression !== expression
+            || node.questionDotToken !== questionDotToken
+            || node.typeArguments !== typeArguments
+            || node.arguments !== argumentsArray
+            ? updateNode(createCallChain(expression, questionDotToken, typeArguments, argumentsArray), node)
             : node;
     }
 
@@ -2218,6 +2327,11 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
+    export function createEmptyExports() {
+        return createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined);
+    }
+
     export function createNamedExports(elements: readonly ExportSpecifier[]) {
         const node = <NamedExports>createSynthesizedNode(SyntaxKind.NamedExports);
         node.elements = createNodeArray(elements);
@@ -2730,6 +2844,22 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
+    export function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression) {
+        const node = <SyntheticReferenceExpression>createSynthesizedNode(SyntaxKind.SyntheticReferenceExpression);
+        node.expression = expression;
+        node.thisArg = thisArg;
+        return node;
+    }
+
+    /* @internal */
+    export function updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression) {
+        return node.expression !== expression
+            || node.thisArg !== thisArg
+            ? updateNode(createSyntheticReferenceExpression(expression, thisArg), node)
+            : node;
+    }
+
     export function createBundle(sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.prepends = prepends;
@@ -2850,7 +2980,10 @@ namespace ts {
                     (texts || (texts = [])).push(prependNode);
                     break;
                 case BundleFileSectionKind.Internal:
-                    if (stripInternal) break;
+                    if (stripInternal) {
+                        if (!texts) texts = [];
+                        break;
+                    }
                     // falls through
 
                 case BundleFileSectionKind.Text:
@@ -3124,6 +3257,10 @@ namespace ts {
         return createBinary(left, SyntaxKind.BarBarToken, right);
     }
 
+    export function createNullishCoalesce(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.QuestionQuestionToken, right);
+    }
+
     export function createLogicalNot(operand: Expression) {
         return createPrefix(SyntaxKind.ExclamationToken, operand);
     }
@@ -3146,8 +3283,11 @@ namespace ts {
         return isString(name) ? createIdentifier(name) : name;
     }
 
-    function asExpression(value: string | number | Expression) {
-        return isString(value) || typeof value === "number" ? createLiteral(value) : value;
+    function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
+        return typeof value === "string" ? createStringLiteral(value) :
+            typeof value === "number" ? createNumericLiteral(""+value) :
+            typeof value === "boolean" ? value ? createTrue() : createFalse() :
+        value;
     }
 
     function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
@@ -4466,7 +4606,7 @@ namespace ts {
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
-        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 4) {
+        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 3) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
             return true;

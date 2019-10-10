@@ -849,8 +849,8 @@ declare module '@custom/plugin' {
                 // comment`;
             const configFileContentAfterComment = `
                 "compilerOptions": {
-                    "allowJs": true,
-                    "declaration": true
+                    "inlineSourceMap": true,
+                    "mapRoot": "./"
                 }
             }`;
             const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
@@ -874,7 +874,7 @@ declare module '@custom/plugin' {
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response as readonly server.protocol.DiagnosticWithLinePosition[];
-            assert.isTrue(diags.length === 2);
+            assert.isTrue(diags.length === 3);
 
             configFile.content = configFileContentWithoutCommentLine;
             host.reloadFS([file, configFile]);
@@ -885,10 +885,11 @@ declare module '@custom/plugin' {
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response as readonly server.protocol.DiagnosticWithLinePosition[];
-            assert.isTrue(diagsAfterEdit.length === 2);
+            assert.isTrue(diagsAfterEdit.length === 3);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
             verifyDiagnostic(diags[1], diagsAfterEdit[1]);
+            verifyDiagnostic(diags[2], diagsAfterEdit[2]);
 
             function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
                 assert.equal(beforeEditDiag.message, afterEditDiag.message);

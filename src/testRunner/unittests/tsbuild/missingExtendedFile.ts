@@ -3,7 +3,7 @@ namespace ts {
         it("unittests:: tsbuild - when tsconfig extends the missing file", () => {
             const projFs = loadProjectFromDisk("tests/projects/missingExtendedConfig");
             const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
+            const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/tsconfig.json"], {});
             builder.build();
             host.assertDiagnosticMessages(

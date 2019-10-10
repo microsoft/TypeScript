@@ -888,7 +888,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.getNumberOfJsFiles()) {
+                else if (result.dts.size !== result.getNumberOfJsFiles(/*includeJson*/ true)) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }
@@ -907,7 +907,7 @@ namespace Harness {
                 if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName)) {
+                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: utils.removeByteOrderMark(declFile.text) });
@@ -1269,7 +1269,7 @@ namespace Harness {
                 return;
             }
             else if (options.sourceMap || declMaps) {
-                if (result.maps.size !== (result.getNumberOfJsFiles() * (declMaps && options.sourceMap ? 2 : 1))) {
+                if (result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 

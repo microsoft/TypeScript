@@ -33,6 +33,7 @@ namespace ts {
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
+        reScanQuestionToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -184,6 +185,8 @@ namespace ts {
         "&&": SyntaxKind.AmpersandAmpersandToken,
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
+        "??": SyntaxKind.QuestionQuestionToken,
+        "?.": SyntaxKind.QuestionDotToken,
         ":": SyntaxKind.ColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
@@ -901,6 +904,7 @@ namespace ts {
             scanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
+            reScanQuestionToken,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -1829,6 +1833,14 @@ namespace ts {
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            return token = SyntaxKind.QuestionDotToken;
+                        }
+                        if (text.charCodeAt(pos) === CharacterCodes.question) {
+                            pos++;
+                            return token = SyntaxKind.QuestionQuestionToken;
+                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;
@@ -2016,6 +2028,12 @@ namespace ts {
                 return token = SyntaxKind.LessThanToken;
             }
             return token;
+        }
+
+        function reScanQuestionToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.QuestionToken;
         }
 
         function scanJsxToken(): JsxTokenSyntaxKind {
