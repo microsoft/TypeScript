@@ -552,15 +552,21 @@ namespace ts {
      * patch writefile to create folder before writing the file
      */
     /*@internal*/
+    // TODO (acasey): does anyone want this?
     export function patchWriteFileAsyncEnsuringDirectory(sys: System) {
         // patch writeFileAsync to create folder before writing the file
         const originalWriteFileAsync = sys.writeFileAsync;
         sys.writeFileAsync = (path, data, writeBom) => {
-            const directoryPath = getDirectoryPath(normalizeSlashes(path));
-            if (directoryPath && !sys.directoryExists(directoryPath)) {
-                recursiveCreateDirectory(directoryPath, sys);
+            try {
+                return originalWriteFileAsync.call(sys, path, data, writeBom);
             }
-            return originalWriteFileAsync.call(sys, path, data, writeBom);
+            catch(_) {
+                const directoryPath = getDirectoryPath(normalizeSlashes(path));
+                if (directoryPath && !sys.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys);
+                }
+                return originalWriteFileAsync.call(sys, path, data, writeBom);
+            }
         };
     }
 
@@ -1373,48 +1379,8 @@ namespace ts {
                     data = byteOrderMarkIndicator + data;
                 }
 
-                let fd: number | undefined;
-
-                try {
-                    fd = await openAsync(fileName, "w");
-                    await writeAsync(fd, data, /*position*/ undefined, "utf8"); // TODO (acasey): just use fs.writeFile?
-                }
-                finally {
-                    if (fd !== undefined) {
-                        await closeAsync(fd);
-                    }
-                }
-            }
-
-            function openAsync(path: string, mode: string | number) {
-                return new Promise<number>((resolve, reject) => {
-                    _fs.open(path, mode, (err, fd) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        else {
-                            resolve(fd);
-                        }
-                    });
-                });
-            }
-
-            function writeAsync(fd: number, data:string, position: number | undefined, encoding: string) {
                 return new Promise<void>((resolve, reject) => {
-                    _fs.write(fd, data, position, encoding, err => {
-                        if (err) {
-                            reject(err);
-                        }
-                        else {
-                            resolve();
-                        }
-                    });
-                });
-            }
-
-            function closeAsync(fd: number) {
-                return new Promise<void>((resolve, reject) => {
-                    _fs.close(fd, err => {
+                    _fs.writeFile(fileName, data, err => {
                         if (err) {
                             reject(err);
                         }

@@ -325,9 +325,14 @@ namespace ts {
         async function writeFileAsync(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
             try {
                 // Performance marks don't make sense around an await.
-                // CONSIDER: directoryExists and createDirectory could also be made async.
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                await host.writeFileAsync!(fileName, text, writeByteOrderMark);
+                try {
+                    await host.writeFileAsync!(fileName, text, writeByteOrderMark);
+                }
+                catch (e) {
+                    // CONSIDER: directoryExists and createDirectory could also be made async.
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+                    await host.writeFileAsync!(fileName, text, writeByteOrderMark);
+                }
             }
             catch (e) {
                 if (onError) {

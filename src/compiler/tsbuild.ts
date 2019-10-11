@@ -1088,6 +1088,21 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = createMap() as FileMap<string>;
 
+            if (host.directoryExists && host.createDirectory) {
+                const dirs = outputFiles.map(file => getDirectoryPath(normalizePath(file.name))).sort((a, b) => a.length - b.length);
+                for (let i = 0; i < dirs.length; i++) {
+                    if (i == 0 || dirs[i] !== dirs[i - 1]) {
+                        try {
+                            createDirectoryRecursive(dirs[i], host.directoryExists, host.createDirectory);
+                        }
+                        catch (e) {
+                            debugger;
+                        }
+                        1;
+                    }
+                }
+            }
+
             for (const chunk of makeChunks(outputFiles, /*chunkSize*/32)) {
                 await Promise.all(chunk.map(async ({ name, text, writeByteOrderMark }) => {
                     let priorChangeTime: Date | undefined;
@@ -1122,6 +1137,16 @@ namespace ts {
                 resultFlags
             );
             return emitResult;
+        }
+
+	// TODO (acasey): unify impls
+        function createDirectoryRecursive(path: string, exists: (path: string) => boolean, create: (path: string) => void) {
+            if (!path || exists(path)) {
+                return;
+            }
+
+            createDirectoryRecursive(getDirectoryPath(path), exists, create);
+            create(path);
         }
 
         function makeChunks<T>(array: readonly T[], chunkSize: number): readonly T[][] {

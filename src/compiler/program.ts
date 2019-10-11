@@ -200,6 +200,7 @@ namespace ts {
             try {
                 // Performance marks don't make sense around an await.
                 // CONSIDER: these directory operations could be async (limited experimentation suggests it doesn't help).
+                // CONSIDER: This could be deferred until writeFile fails.
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options)) {
