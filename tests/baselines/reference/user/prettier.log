@@ -44,7 +44,7 @@ src/config/resolve-config.js(121,32): error TS2345: Argument of type '{ sync: fa
   Property 'cache' is missing in type '{ sync: false; }' but required in type '{ cache: boolean; sync: boolean; }'.
 src/config/resolve-config.js(128,32): error TS2345: Argument of type '{ sync: true; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: true; }' but required in type '{ cache: boolean; sync: boolean; }'.
-src/doc/doc-printer.js(7,14): error TS1023: An index signature parameter type must be 'string' or 'number'.
+src/doc/doc-printer.js(7,14): error TS1023: An index signature parameter type must be either 'string' or 'number'.
 src/doc/doc-printer.js(7,37): error TS2304: Cannot find name 'MODE'.
 src/doc/doc-printer.js(257,17): error TS2532: Object is possibly 'undefined'.
 src/doc/doc-printer.js(258,18): error TS2532: Object is possibly 'undefined'.
