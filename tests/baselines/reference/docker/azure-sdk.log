@@ -216,12 +216,12 @@ XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
 XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
 XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
 XX of XX: [@azure/template] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-processor-host] completed with warnings in ? seconds
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
