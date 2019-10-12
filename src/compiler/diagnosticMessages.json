@@ -2651,7 +2651,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },

@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts(3,9): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts(3,11): error TS2749: 'b' refers to a value, but is being used as a type here.
-tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts(3,14): error TS2749: 'b' refers to a value, but is being used as a type here.
+tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts(3,11): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
+tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts(3,14): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts (3 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOpe
             ~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
               ~
-!!! error TS2749: 'b' refers to a value, but is being used as a type here.
+!!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                  ~
-!!! error TS2749: 'b' refers to a value, but is being used as a type here.
+!!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
     }
