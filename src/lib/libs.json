@@ -40,6 +40,7 @@
         "es2019.object",
         "es2019.string",
         "es2019.symbol",
+        "es2020.promise",
         "es2020.string",
         "es2020.symbol.wellknown",
         "esnext.bigint",
