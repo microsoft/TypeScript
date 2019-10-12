@@ -2001,28 +2001,11 @@ namespace ts {
         function checkAndReportErrorForUsingValueAsType(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Type & ~SymbolFlags.Namespace)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, ~SymbolFlags.Type & SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                const symbolIsValue = symbol && !(symbol.flags & SymbolFlags.Namespace);
-
-                if (symbolIsValue && isIdentifierATypeArgument(errorLocation)) {
-                    const unescapedName = unescapeLeadingUnderscores(name);
-                    error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_argument_here_Did_you_mean_typeof_1, unescapedName, unescapedName);
-                    return true;
-                }
-                else if (symbolIsValue) {
+                if (symbol && !(symbol.flags & SymbolFlags.Namespace)) {
                     error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
-            return false;
-        }
-
-        function isIdentifierATypeArgument(node: Node): boolean {
-            const grandparentNode = node.parent.parent as NodeWithTypeArguments;
-            if (grandparentNode && grandparentNode.typeArguments) {
-                const parent = node.parent as TypeNode;
-                return grandparentNode.typeArguments.indexOf(parent) > -1;
-            }
-
             return false;
         }
 
