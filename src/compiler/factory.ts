@@ -4739,7 +4739,7 @@ namespace ts {
         const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
         const emittedCondition = skipPartiallyEmittedExpressions(condition);
         const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+        if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
             return createParen(condition);
         }
         return condition;
