@@ -2665,12 +2665,13 @@ namespace ts {
                 return ambientModule;
             }
             const currentSourceFile = getSourceFileOfNode(location);
+            const currentSourceFileExtension = currentSourceFile ? extensionFromPath(currentSourceFile.fileName) : Extension.Ts;
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
-                    if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
+                    if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && !extensionIsJS(currentSourceFileExtension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
@@ -2704,7 +2705,7 @@ namespace ts {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
-                else {
+                else if(!extensionIsJS(currentSourceFileExtension)){
                     errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule, moduleReference);
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.

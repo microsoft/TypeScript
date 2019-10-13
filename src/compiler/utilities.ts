@@ -8159,6 +8159,10 @@ namespace ts {
         return extensionIsTS(ext) || ext === Extension.Json;
     }
 
+    export function extensionIsJS(ext: Extension): boolean {
+      return ext === Extension.Js || ext === Extension.Jsx;
+    }
+
     /**
      * Gets the extension from a path.
      * Path must have a valid extension.
