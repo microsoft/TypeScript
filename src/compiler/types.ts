@@ -2250,12 +2250,14 @@ namespace ts {
         parent: CaseBlock;
         expression: Expression;
         statements: NodeArray<Statement>;
+        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export interface DefaultClause extends Node {
         kind: SyntaxKind.DefaultClause;
         parent: CaseBlock;
         statements: NodeArray<Statement>;
+        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export type CaseOrDefaultClause = CaseClause | DefaultClause;

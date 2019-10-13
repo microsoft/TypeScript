@@ -31079,6 +31079,9 @@ namespace ts {
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
+                if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
+                    grammarErrorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+                }
             });
             if (node.caseBlock.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
