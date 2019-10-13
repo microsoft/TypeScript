@@ -86,6 +86,7 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
+@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
