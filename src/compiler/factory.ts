@@ -1811,7 +1811,7 @@ namespace ts {
         const node = <ForOfStatement>createSynthesizedNode(SyntaxKind.ForOfStatement);
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
-        node.expression = expression;
+        node.expression = isCommaSequence(expression) ? createParen(expression) : expression;
         node.statement = asEmbeddedStatement(statement);
         return node;
     }
