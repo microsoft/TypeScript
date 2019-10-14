@@ -78,7 +78,7 @@ namespace ts.server.typingsInstaller {
                 return false;
             }
         }
-    }
+    };
     const installer = new NodeTypingsInstaller(nodeHost, globalTypingsCacheLocation, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 

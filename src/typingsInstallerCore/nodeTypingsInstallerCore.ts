@@ -92,7 +92,7 @@ namespace ts.server.typingsInstaller {
         }
 
         private installTypesRegistry(globalTypingsCacheLocation: string) {
-            let result: typeof typesRegistryPackageName | typeof definitelyTypedTypesRegistryPackageName | undefined =
+            const result: typeof typesRegistryPackageName | typeof definitelyTypedTypesRegistryPackageName | undefined =
                 this.installTypesRegistryFromPackageName(definitelyTypedTypesRegistryPackageName, globalTypingsCacheLocation)
                 || this.installTypesRegistryFromPackageName(typesRegistryPackageName, globalTypingsCacheLocation);
             if (!result) {

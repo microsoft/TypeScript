@@ -1997,9 +1997,7 @@ declare module "stream" {
         });
         it("constructs successfully from npm (falling back from @definitelytyped)", () => {
             const host = createHost();
-            host.execSyncAndLog = function(command) {
-                return !command.includes("@definitelytyped");
-            }
+            host.execSyncAndLog = command => !command.includes("@definitelytyped");
             const i = new TI.NodeTypingsInstaller(host, "a", "b", "c", "d", true, 1, host.log);
             assert.isUndefined((i as any).delayedInitializationError);
             assert.notInclude(host.log.out, "Updated @definitelytyped/types-registry");
@@ -2007,9 +2005,7 @@ declare module "stream" {
         });
         it("fails construction", () => {
             const host = createHost();
-            host.execSyncAndLog = function() {
-                return false;
-            }
+            host.execSyncAndLog = () => false;
             const i = new TI.NodeTypingsInstaller(host, "a", "b", "c", "d", true, 1, host.log);
             assert.equal("event::initializationFailed", (i as any).delayedInitializationError.kind);
             assert.equal("UPDATE FAILED", (i as any).delayedInitializationError.message);
