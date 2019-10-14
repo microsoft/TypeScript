@@ -2041,6 +2041,41 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
+        const result: CompilerOptions = {};
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                result[name] = convertToOptionValueWithAbsolutePaths(
+                    optionsNameMap.get(name.toLowerCase()),
+                    options[name] as CompilerOptionsValue,
+                    toAbsolutePath
+                );
+            }
+        }
+        if (result.configFilePath) {
+            result.configFilePath = toAbsolutePath(result.configFilePath);
+        }
+        return result;
+    }
+
+    function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
+        if (option) {
+            if (option.type === "list") {
+                const values = value as readonly (string | number)[];
+                if (option.element.isFilePath && values.length) {
+                    return values.map(toAbsolutePath);
+                }
+            }
+            else if (option.isFilePath) {
+                return toAbsolutePath(value as string);
+            }
+        }
+        return value;
+    }
+
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param json The contents of the config file to parse

@@ -120,7 +120,12 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        const commandLineOptions = commandLine.options;
+        const currentDirectory = sys.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+        const commandLineOptions = convertToOptionsWithAbsolutePaths(
+            commandLine.options,
+            fileName => toPath(fileName, currentDirectory, getCanonicalFileName)
+        );
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
@@ -148,7 +153,7 @@ namespace ts {
         else {
             if (commandLineOptions.showConfig) {
                 // eslint-disable-next-line no-null/no-null
-                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
+                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
             }
             updateReportDiagnostic(commandLineOptions);
@@ -157,7 +162,10 @@ namespace ts {
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
-                performIncrementalCompilation(commandLine);
+                performIncrementalCompilation({
+                    ...commandLine,
+                    options: commandLineOptions
+                });
             }
             else {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);

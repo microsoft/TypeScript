@@ -50,8 +50,15 @@ namespace ts {
 
         Debug.assert(commandLine.fileNames.length !== 0 || !!configFileName);
 
+        const currentDirectory = sys.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+        const commandLineOptions = convertToOptionsWithAbsolutePaths(
+            commandLine.options,
+            fileName => toPath(fileName, currentDirectory, getCanonicalFileName)
+        );
+
         if (configFileName) {
-            const configParseResult = Debug.assertDefined(parseConfigFileWithSystem(configFileName, commandLine.options, sys, reportDiagnostic));
+            const configParseResult = Debug.assertDefined(parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic));
             if (isIncrementalCompilation(configParseResult.options)) {
                 performIncrementalCompilation(sys, configParseResult);
             }
@@ -61,10 +68,16 @@ namespace ts {
         }
         else {
             if (isIncrementalCompilation(commandLine.options)) {
-                performIncrementalCompilation(sys, commandLine);
+                performIncrementalCompilation(sys, {
+                    ...commandLine,
+                    options: commandLineOptions
+                });
             }
             else {
-                performCompilation(sys, commandLine);
+                performCompilation(sys, {
+                    ...commandLine,
+                    options: commandLineOptions
+                });
             }
         }
     }
