@@ -2,7 +2,7 @@ namespace ts {
     describe("unittests:: tsc:: incremental::", () => {
         verifyTscIncrementalEdits({
             scenario: "incremental",
-            subScenario: "when passing passing filename for buildinfo on commandline",
+            subScenario: "when passing filename for buildinfo on commandline",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
                 "/src/project/tsconfig.json": utils.dedent`
@@ -21,6 +21,22 @@ namespace ts {
                 buildKind: BuildKind.IncrementalDtsUnchanged,
                 modifyFs: noop,
             }]
+        });
+
+        verifyTsc({
+            scenario: "incremental",
+            subScenario: "when passing rootDir from commandline",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "incremental": true,
+                            "outDir": "dist",
+                        },
+                    }`,
+            }),
+            commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         });
     });
 }
