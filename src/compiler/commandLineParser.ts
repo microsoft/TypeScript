@@ -49,6 +49,7 @@ namespace ts {
         ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],

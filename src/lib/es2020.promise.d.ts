@@ -26,5 +26,5 @@ interface PromiseConstructor {
     allSettled<T1, T2, T3, T4>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<[PromiseResult<T1>, PromiseResult<T2>, PromiseResult<T3>, PromiseResult<T4>]>;
     allSettled<T1, T2, T3>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[PromiseResult<T1>, PromiseResult<T2>, PromiseResult<T3>]>;
     allSettled<T1, T2>(values: readonly [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[PromiseResult<T1>, PromiseResult<T2>]>;
-    allSettled<T>(values: readonly (T | PromiseLike<T>)[]): Promise<PromiseResult<T>[]>;
+    allSettled<T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseResult<T>[]>;
 }
