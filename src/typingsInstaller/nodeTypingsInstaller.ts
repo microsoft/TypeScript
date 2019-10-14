@@ -1,3 +1,11 @@
+/**
+ * Create a NodeTypingsInstaller for use in ATA.
+ *
+ * This file creates an instance of NodeTypingsInstaller *upon evaluation*,
+ * so is not suitable for inclusion in other compilations.
+ * See ../typingsInstallerCore/nodeTypingsInstallerCore.ts for the class definition,
+ * and ../testRunner/unittests/tsserver/typingsInstaller.ts for the tests.
+ */
 namespace ts.server.typingsInstaller {
     const fs: {
         appendFileSync(file: string, content: string): void
