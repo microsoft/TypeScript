@@ -1724,21 +1724,21 @@ namespace ts.projectSystem {
         ];
         it("works when the command is too long to install all packages at once", () => {
             const commands: string[] = [];
-            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+            const succeeded = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
                 commands.push(command);
-                return false;
+                return true;
             });
-            assert.isFalse(hasError);
+            assert.isTrue(succeeded);
             assert.deepEqual(commands, expectedCommands, "commands");
         });
 
         it("installs remaining packages when one of the partial command fails", () => {
             const commands: string[] = [];
-            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+            const succeeded = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
                 commands.push(command);
-                return commands.length === 1;
+                return commands.length === 0;
             });
-            assert.isTrue(hasError);
+            assert.isFalse(succeeded);
             assert.deepEqual(commands, expectedCommands, "commands");
         });
     });
@@ -1953,6 +1953,66 @@ declare module "stream" {
 
             // Verify that the pkgcurrentdirectory from the current directory isnt picked up
             checkProjectActualFiles(project, [file.path]);
+        });
+    });
+
+    describe("unittests:: tsserver:: nodeTypingsInstaller", () => {
+        function createHost() {
+            const log = {
+                out: "",
+                isEnabled: () => true,
+                writeLine(text: string) {
+                    this.out += text + sys.newLine;
+                },
+            };
+            return {
+                log,
+                useCaseSensitiveFileNames: true,
+                execSyncAndLog(command: string, options: string): boolean {
+                    log.writeLine(`Running ${command} ${options}`);
+                    return true;
+                },
+                writeFile(): void { },
+                createDirectory(): void { },
+
+                directoryExists(): boolean {
+                    return true;
+                },
+                fileExists(): boolean {
+                    return true;
+                },
+                readFile(): string | undefined {
+                    return '{ "yep": true }';
+                },
+                readDirectory(): string[] {
+                    return [];
+                },
+            };
+        }
+        it("constructs successfully from @definitelytyped", () => {
+            const host = createHost();
+            const i = new TI.NodeTypingsInstaller(host, "a", "b", "c", "d", true, 1, host.log);
+            assert.isUndefined((i as any).delayedInitializationError);
+            assert.include(host.log.out, "Updated @definitelytyped/types-registry");
+        });
+        it("constructs successfully from npm (falling back from @definitelytyped)", () => {
+            const host = createHost();
+            host.execSyncAndLog = function(command) {
+                return !command.includes("@definitelytyped");
+            }
+            const i = new TI.NodeTypingsInstaller(host, "a", "b", "c", "d", true, 1, host.log);
+            assert.isUndefined((i as any).delayedInitializationError);
+            assert.notInclude(host.log.out, "Updated @definitelytyped/types-registry");
+            assert.include(host.log.out, "Updated types-registry");
+        });
+        it("fails construction", () => {
+            const host = createHost();
+            host.execSyncAndLog = function() {
+                return false;
+            }
+            const i = new TI.NodeTypingsInstaller(host, "a", "b", "c", "d", true, 1, host.log);
+            assert.equal("event::initializationFailed", (i as any).delayedInitializationError.kind);
+            assert.equal("UPDATE FAILED", (i as any).delayedInitializationError.message);
         });
     });
 }

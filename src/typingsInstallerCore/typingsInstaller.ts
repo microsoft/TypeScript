@@ -32,13 +32,13 @@ namespace ts.server.typingsInstaller {
 
     /*@internal*/
     export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
-        let hasError = false;
+        let succeeded = true;
         for (let remaining = packageNames.length; remaining > 0;) {
             const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
             remaining = result.remaining;
-            hasError = install(result.command) || hasError;
+            succeeded = install(result.command) && succeeded;
         }
-        return hasError;
+        return succeeded;
     }
 
     /*@internal*/
@@ -391,7 +391,7 @@ namespace ts.server.typingsInstaller {
 
         private ensureDirectoryExists(directory: string, host: InstallTypingHost): void {
             const directoryName = getDirectoryPath(directory);
-            if (!host.directoryExists(directoryName)) {
+            if (!host.directoryExists(directoryName) && directory !== directoryName) {
                 this.ensureDirectoryExists(directoryName, host);
             }
             if (!host.directoryExists(directory)) {
@@ -540,4 +540,5 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
+
 }

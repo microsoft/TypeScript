@@ -15,6 +15,7 @@
         { "path": "../jsTyping" }
     ],
     "files": [
-        "typingsInstaller.ts"
+        "typingsInstaller.ts",
+        "nodeTypingsInstallerCore.ts"
     ]
 }
