@@ -682,8 +682,8 @@ interface Math {
     /** Returns a pseudorandom number between 0 and 1. */
     random(): number;
     /**
-     * Returns a supplied numeric expression rounded to the nearest number.
-     * @param x The value to be rounded to the nearest number.
+     * Returns a supplied numeric expression rounded to the nearest integer.
+     * @param x The value to be rounded to the nearest integer.
      */
     round(x: number): number;
     /**
