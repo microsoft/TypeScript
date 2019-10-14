@@ -4174,6 +4174,23 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
     }
 
+    export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return node;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.left;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+            case SyntaxKind.PropertyAccessExpression:
+                do {
+                    node = node.expression;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+        }
+    }
+
     export function isDottedName(node: Expression): boolean {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
             node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||

@@ -32242,23 +32242,6 @@ namespace ts {
             }
         }
 
-        function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    return node;
-                case SyntaxKind.QualifiedName:
-                    do {
-                        node = node.left;
-                    } while (node.kind !== SyntaxKind.Identifier);
-                    return node;
-                case SyntaxKind.PropertyAccessExpression:
-                    do {
-                        node = node.expression;
-                    } while (node.kind !== SyntaxKind.Identifier);
-                    return node;
-            }
-        }
-
         function getFirstNonModuleExportsIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
