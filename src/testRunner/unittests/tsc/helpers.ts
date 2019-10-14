@@ -79,6 +79,7 @@ namespace ts {
         const { fileNames, options, projectReferences } = config;
         const reportDiagnostic = createDiagnosticReporter(sys, options.pretty);
         const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
+        fakes.patchHostForBuildInfoReadWrite(host);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -102,7 +103,10 @@ namespace ts {
     function performIncrementalCompilation(sys: TscCompileSystem, config: ParsedCommandLine) {
         const reportDiagnostic = createDiagnosticReporter(sys, config.options.pretty);
         const { options, fileNames, projectReferences } = config;
+        const host = createIncrementalCompilerHost(options, sys);
+        fakes.patchHostForBuildInfoReadWrite(host);
         const exitCode = ts.performIncrementalCompilation({
+            host,
             system: sys,
             rootNames: fileNames,
             options,

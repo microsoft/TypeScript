@@ -524,7 +524,7 @@ ${indentText}${text}`;
 
     export const version = "FakeTSVersion";
 
-    export function patchSolutionBuilderHost(host: ts.SolutionBuilderHost<ts.BuilderProgram>, sys: System) {
+    export function patchHostForBuildInfoReadWrite(host: ts.CompilerHost | ts.SolutionBuilderHost<ts.BuilderProgram>) {
         const originalReadFile = host.readFile;
         host.readFile = (path, encoding) => {
             const value = originalReadFile.call(host, path, encoding);
@@ -537,7 +537,7 @@ ${indentText}${text}`;
 
         if (host.writeFile) {
             const originalWriteFile = host.writeFile;
-            host.writeFile = (fileName, content, writeByteOrderMark) => {
+            host.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
                 if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(host, fileName, content, writeByteOrderMark);
                 const buildInfo = ts.getBuildInfo(content);
                 sanitizeBuildInfoProgram(buildInfo);
@@ -545,6 +545,10 @@ ${indentText}${text}`;
                 originalWriteFile.call(host, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
             };
         }
+    }
+
+    export function patchSolutionBuilderHost(host: ts.SolutionBuilderHost<ts.BuilderProgram>, sys: System) {
+        patchHostForBuildInfoReadWrite(host);
 
         ts.Debug.assert(host.now === undefined);
         host.now = () => new Date(sys.vfs.time());

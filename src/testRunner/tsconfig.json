@@ -113,6 +113,7 @@
         "unittests/tsbuild/watchEnvironment.ts",
         "unittests/tsbuild/watchMode.ts",
         "unittests/tsc/declarationEmit.ts",
+        "unittests/tsc/incremental.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
         "unittests/tscWatch/emitAndErrorUpdates.ts",
