@@ -99,6 +99,7 @@
         "unittests/tsbuild/demo.ts",
         "unittests/tsbuild/emitDeclarationOnly.ts",
         "unittests/tsbuild/emptyFiles.ts",
+        "unittests/tsbuild/exitCodeOnBogusFile.ts",
         "unittests/tsbuild/graphOrdering.ts",
         "unittests/tsbuild/inferredTypeFromTransitiveModule.ts",
         "unittests/tsbuild/javascriptProjectEmit.ts",
