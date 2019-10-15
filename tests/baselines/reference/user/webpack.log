@@ -1,21 +1,33 @@
 Exit Code: 1
 Standard output:
-lib/logging/Logger.js(49,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(53,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(57,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(61,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(65,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(70,21): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(75,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(79,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(83,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(87,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(91,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(95,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(99,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(103,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(117,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/logging/Logger.js(127,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "warn" | "info" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/BannerPlugin.js(34,27): error TS2345: Argument of type 'BannerPluginArgument' is not assignable to parameter of type 'object | object[]'.
+  Type 'string' is not assignable to type 'object | object[]'.
+lib/logging/Logger.js(49,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(53,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(57,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(61,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(65,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(70,21): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(75,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(79,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(83,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(87,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(91,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(95,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(99,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(103,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(117,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/logging/Logger.js(127,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/util/registerExternalSerializer.js(253,14): error TS2339: Property 'line' does not exist on type 'Position'.
+lib/util/registerExternalSerializer.js(254,14): error TS2339: Property 'column' does not exist on type 'Position'.
+lib/validateSchema.js(15,11): error TS2339: Property 'children' does not exist on type 'ErrorObject'.
+lib/validateSchema.js(16,11): error TS2339: Property 'children' does not exist on type 'ErrorObject'.
+lib/validateSchema.js(26,22): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
+  Property 'additionalProperty' does not exist on type 'RefParams'.
+lib/validateSchema.js(40,22): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
+  Property 'additionalProperty' does not exist on type 'RefParams'.
+lib/validateSchema.js(51,31): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
+  Property 'additionalProperty' does not exist on type 'RefParams'.
 
 
 
