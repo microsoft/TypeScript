@@ -1561,10 +1561,6 @@
         "category": "Error",
         "code": 2423
     },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
-    },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
         "code": 2425

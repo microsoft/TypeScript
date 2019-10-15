@@ -31692,15 +31692,13 @@ namespace ts {
                         }
                     }
                     else if (isPrototypeProperty(base)) {
-                        if (isPrototypeProperty(derived)) {
-                            // method is overridden with method -- correct case
+                        if (isPrototypeProperty(derived) || derived.flags & SymbolFlags.Property) {
+                            // method is overridden with method or property -- correct case
                             continue;
                         }
-                        else if (derived.flags & SymbolFlags.Accessor) {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
-                        }
                         else {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
+                            Debug.assert(!!(derived.flags & SymbolFlags.Accessor));
+                            errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                         }
                     }
                     else if (base.flags & SymbolFlags.Accessor) {
