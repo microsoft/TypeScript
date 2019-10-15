@@ -9,7 +9,7 @@ tests/cases/compiler/reachabilityChecks4.ts(22,9): error TS7029: Fallthrough cas
             case 2:
                 return 1;
             case 3:
-            ~~~~
+            ~~~~~~~
 !!! error TS7029: Fallthrough case in switch.
                 if (y) {
                     return 2;
@@ -27,7 +27,7 @@ tests/cases/compiler/reachabilityChecks4.ts(22,9): error TS7029: Fallthrough cas
             case 0:
                 fail();
             case 1:
-            ~~~~
+            ~~~~~~~
 !!! error TS7029: Fallthrough case in switch.
                 noop();
             case 2:
