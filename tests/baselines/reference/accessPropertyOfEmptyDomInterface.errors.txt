@@ -1,0 +1,49 @@
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(9,13): error TS2595: Property 'value' does not exist on type 'HTMLInputElement'. Try changing the `lib` compiler option to include 'dom'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(11,18): error TS2595: Property 'value' does not exist on type 'HTMLInputElement & EventTarget'. Try changing the `lib` compiler option to include 'dom'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(13,11): error TS2595: Property 'value' does not exist on type 'HTMLInputElement | EventTarget'. Try changing the `lib` compiler option to include 'dom'.
+  Property 'value' does not exist on type 'HTMLInputElement'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(16,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(18,19): error TS2339: Property 'value' does not exist on type '"HTMLInputElement"'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(20,11): error TS2339: Property 'value' does not exist on type '{ HTMLInputElement: string; }'.
+tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts(22,21): error TS2339: Property 'value' does not exist on type 'HTMLInputElementFoo'.
+
+
+==== tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts (7 errors) ====
+    interface HTMLInputElement {}
+    interface EventTarget {}
+    interface HTMLInputElementFoo {}
+    
+    let _: any;
+    
+    // These errors should suggest adding 'dom' to `lib`.
+    const element = {} as HTMLInputElement;
+    _ = element.value;
+                ~~~~~
+!!! error TS2595: Property 'value' does not exist on type 'HTMLInputElement'. Try changing the `lib` compiler option to include 'dom'.
+    const intersection = {} as HTMLInputElement & EventTarget;
+    _ = intersection.value;
+                     ~~~~~
+!!! error TS2595: Property 'value' does not exist on type 'HTMLInputElement & EventTarget'. Try changing the `lib` compiler option to include 'dom'.
+    const union = {} as HTMLInputElement | EventTarget;
+    _ = union.value;
+              ~~~~~
+!!! error TS2595: Property 'value' does not exist on type 'HTMLInputElement | EventTarget'. Try changing the `lib` compiler option to include 'dom'.
+!!! error TS2595:   Property 'value' does not exist on type 'HTMLInputElement'.
+    
+    // These errors should not suggest adding 'dom' to `lib`.
+    _ = undefined.value;
+        ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    const stringLiteral = "HTMLInputElement";
+    _ = stringLiteral.value;
+                      ~~~~~
+!!! error TS2339: Property 'value' does not exist on type '"HTMLInputElement"'.
+    const asKey = { HTMLInputElement: "" };
+    _ = asKey.value;
+              ~~~~~
+!!! error TS2339: Property 'value' does not exist on type '{ HTMLInputElement: string; }'.
+    const extraCharacters = {} as HTMLInputElementFoo;
+    _ = extraCharacters.value;
+                        ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'HTMLInputElementFoo'.
+    

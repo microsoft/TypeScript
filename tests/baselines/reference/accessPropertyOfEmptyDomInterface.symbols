@@ -1,0 +1,68 @@
+=== tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts ===
+interface HTMLInputElement {}
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 0))
+
+interface EventTarget {}
+>EventTarget : Symbol(EventTarget, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 29))
+
+interface HTMLInputElementFoo {}
+>HTMLInputElementFoo : Symbol(HTMLInputElementFoo, Decl(accessPropertyOfEmptyDomInterface.ts, 1, 24))
+
+let _: any;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+
+// These errors should suggest adding 'dom' to `lib`.
+const element = {} as HTMLInputElement;
+>element : Symbol(element, Decl(accessPropertyOfEmptyDomInterface.ts, 7, 5))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 0))
+
+_ = element.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>element : Symbol(element, Decl(accessPropertyOfEmptyDomInterface.ts, 7, 5))
+
+const intersection = {} as HTMLInputElement & EventTarget;
+>intersection : Symbol(intersection, Decl(accessPropertyOfEmptyDomInterface.ts, 9, 5))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 29))
+
+_ = intersection.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>intersection : Symbol(intersection, Decl(accessPropertyOfEmptyDomInterface.ts, 9, 5))
+
+const union = {} as HTMLInputElement | EventTarget;
+>union : Symbol(union, Decl(accessPropertyOfEmptyDomInterface.ts, 11, 5))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(accessPropertyOfEmptyDomInterface.ts, 0, 29))
+
+_ = union.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>union : Symbol(union, Decl(accessPropertyOfEmptyDomInterface.ts, 11, 5))
+
+// These errors should not suggest adding 'dom' to `lib`.
+_ = undefined.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+const stringLiteral = "HTMLInputElement";
+>stringLiteral : Symbol(stringLiteral, Decl(accessPropertyOfEmptyDomInterface.ts, 16, 5))
+
+_ = stringLiteral.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>stringLiteral : Symbol(stringLiteral, Decl(accessPropertyOfEmptyDomInterface.ts, 16, 5))
+
+const asKey = { HTMLInputElement: "" };
+>asKey : Symbol(asKey, Decl(accessPropertyOfEmptyDomInterface.ts, 18, 5))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(accessPropertyOfEmptyDomInterface.ts, 18, 15))
+
+_ = asKey.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>asKey : Symbol(asKey, Decl(accessPropertyOfEmptyDomInterface.ts, 18, 5))
+
+const extraCharacters = {} as HTMLInputElementFoo;
+>extraCharacters : Symbol(extraCharacters, Decl(accessPropertyOfEmptyDomInterface.ts, 20, 5))
+>HTMLInputElementFoo : Symbol(HTMLInputElementFoo, Decl(accessPropertyOfEmptyDomInterface.ts, 1, 24))
+
+_ = extraCharacters.value;
+>_ : Symbol(_, Decl(accessPropertyOfEmptyDomInterface.ts, 4, 3))
+>extraCharacters : Symbol(extraCharacters, Decl(accessPropertyOfEmptyDomInterface.ts, 20, 5))
+

@@ -1,0 +1,89 @@
+=== tests/cases/compiler/accessPropertyOfEmptyDomInterface.ts ===
+interface HTMLInputElement {}
+interface EventTarget {}
+interface HTMLInputElementFoo {}
+
+let _: any;
+>_ : any
+
+// These errors should suggest adding 'dom' to `lib`.
+const element = {} as HTMLInputElement;
+>element : HTMLInputElement
+>{} as HTMLInputElement : HTMLInputElement
+>{} : {}
+
+_ = element.value;
+>_ = element.value : any
+>_ : any
+>element.value : any
+>element : HTMLInputElement
+>value : any
+
+const intersection = {} as HTMLInputElement & EventTarget;
+>intersection : HTMLInputElement & EventTarget
+>{} as HTMLInputElement & EventTarget : HTMLInputElement & EventTarget
+>{} : {}
+
+_ = intersection.value;
+>_ = intersection.value : any
+>_ : any
+>intersection.value : any
+>intersection : HTMLInputElement & EventTarget
+>value : any
+
+const union = {} as HTMLInputElement | EventTarget;
+>union : HTMLInputElement | EventTarget
+>{} as HTMLInputElement | EventTarget : HTMLInputElement | EventTarget
+>{} : {}
+
+_ = union.value;
+>_ = union.value : any
+>_ : any
+>union.value : any
+>union : HTMLInputElement | EventTarget
+>value : any
+
+// These errors should not suggest adding 'dom' to `lib`.
+_ = undefined.value;
+>_ = undefined.value : any
+>_ : any
+>undefined.value : any
+>undefined : undefined
+>value : any
+
+const stringLiteral = "HTMLInputElement";
+>stringLiteral : "HTMLInputElement"
+>"HTMLInputElement" : "HTMLInputElement"
+
+_ = stringLiteral.value;
+>_ = stringLiteral.value : any
+>_ : any
+>stringLiteral.value : any
+>stringLiteral : "HTMLInputElement"
+>value : any
+
+const asKey = { HTMLInputElement: "" };
+>asKey : { HTMLInputElement: string; }
+>{ HTMLInputElement: "" } : { HTMLInputElement: string; }
+>HTMLInputElement : string
+>"" : ""
+
+_ = asKey.value;
+>_ = asKey.value : any
+>_ : any
+>asKey.value : any
+>asKey : { HTMLInputElement: string; }
+>value : any
+
+const extraCharacters = {} as HTMLInputElementFoo;
+>extraCharacters : HTMLInputElementFoo
+>{} as HTMLInputElementFoo : HTMLInputElementFoo
+>{} : {}
+
+_ = extraCharacters.value;
+>_ = extraCharacters.value : any
+>_ : any
+>extraCharacters.value : any
+>extraCharacters : HTMLInputElementFoo
+>value : any
+
