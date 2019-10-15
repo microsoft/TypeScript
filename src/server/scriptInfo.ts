@@ -46,7 +46,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
+        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -125,7 +125,7 @@ namespace ts.server {
             const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
             const reloaded = this.reload(newText);
             this.fileSize = fileSize; // NB: after reload since reload clears it
-            this.ownFileText = !tempFileName || tempFileName === this.fileName;
+            this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
             return reloaded;
         }
 
@@ -206,10 +206,10 @@ namespace ts.server {
 
         private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
             let text: string;
-            const fileName = tempFileName || this.fileName;
+            const fileName = tempFileName || this.info.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTSFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.info.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);
@@ -335,7 +335,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, fileName, initialVersion, this);
+            this.textStorage = new TextStorage(host, this, initialVersion);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
