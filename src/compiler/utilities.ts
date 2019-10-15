@@ -961,6 +961,11 @@ namespace ts {
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                const start = skipTrivia(sourceFile.text, (<CaseOrDefaultClause>node).pos);
+                const end = (<CaseOrDefaultClause>node).statements.length > 0 ? (<CaseOrDefaultClause>node).statements[0].pos : (<CaseOrDefaultClause>node).end;
+                return createTextSpanFromBounds(start, end);
         }
 
         if (errorNode === undefined) {

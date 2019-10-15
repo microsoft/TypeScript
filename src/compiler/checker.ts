@@ -31054,10 +31054,7 @@ namespace ts {
                         firstDefaultClause = clause;
                     }
                     else {
-                        const sourceFile = getSourceFileOfNode(node);
-                        const start = skipTrivia(sourceFile.text, clause.pos);
-                        const end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
-                        grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
+                        grammarErrorOnNode(clause, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
                         hasDuplicateDefaultClause = true;
                     }
                 }
@@ -31080,7 +31077,7 @@ namespace ts {
                 }
                 forEach(clause.statements, checkSourceElement);
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
-                    grammarErrorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+                    error(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             });
             if (node.caseBlock.locals) {
