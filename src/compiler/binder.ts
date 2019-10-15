@@ -1341,7 +1341,7 @@ namespace ts {
                 bind(clause);
                 fallthroughFlow = currentFlow;
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
-                    errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+                    clause.fallthroughFlowNode = currentFlow;
                 }
             }
             clauses.transformFlags = subtreeTransformFlags | TransformFlags.HasComputedFlags;
