@@ -22954,7 +22954,12 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        if (isEmptyDomInterface(containingType)) {
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom, declarationNameToString(propNode), typeToString(containingType));
+                        }
+                        else {
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        }
                     }
                 }
             }
@@ -22963,6 +22968,10 @@ namespace ts {
                 addRelatedInfo(resultDiagnostic, relatedInfo);
             }
             diagnostics.add(resultDiagnostic);
+        }
+
+        function isEmptyDomInterface(type: Type): boolean {
+            return isEmptyObjectType(type) && /\bHTML\w*Element\b(?![:"])/.test(typeToString(type));
         }
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {

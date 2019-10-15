@@ -2201,6 +2201,10 @@
         "category": "Error",
         "code": 2594
     },
+    "Property '{0}' does not exist on type '{1}'. Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2595
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -4044,7 +4048,7 @@
         "category": "Message",
         "code": 6201
     },
-        "Project references may not form a circular graph. Cycle detected: {0}": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6202
     },
