@@ -50,8 +50,15 @@ namespace ts {
 
         Debug.assert(commandLine.fileNames.length !== 0 || !!configFileName);
 
+        const currentDirectory = sys.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+        const commandLineOptions = convertToOptionsWithAbsolutePaths(
+            commandLine.options,
+            fileName => toPath(fileName, currentDirectory, getCanonicalFileName)
+        );
+
         if (configFileName) {
-            const configParseResult = Debug.assertDefined(parseConfigFileWithSystem(configFileName, commandLine.options, sys, reportDiagnostic));
+            const configParseResult = Debug.assertDefined(parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic));
             if (isIncrementalCompilation(configParseResult.options)) {
                 performIncrementalCompilation(sys, configParseResult);
             }
@@ -61,10 +68,16 @@ namespace ts {
         }
         else {
             if (isIncrementalCompilation(commandLine.options)) {
-                performIncrementalCompilation(sys, commandLine);
+                performIncrementalCompilation(sys, {
+                    ...commandLine,
+                    options: commandLineOptions
+                });
             }
             else {
-                performCompilation(sys, commandLine);
+                performCompilation(sys, {
+                    ...commandLine,
+                    options: commandLineOptions
+                });
             }
         }
     }
@@ -79,6 +92,7 @@ namespace ts {
         const { fileNames, options, projectReferences } = config;
         const reportDiagnostic = createDiagnosticReporter(sys, options.pretty);
         const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
+        fakes.patchHostForBuildInfoReadWrite(host);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -102,7 +116,10 @@ namespace ts {
     function performIncrementalCompilation(sys: TscCompileSystem, config: ParsedCommandLine) {
         const reportDiagnostic = createDiagnosticReporter(sys, config.options.pretty);
         const { options, fileNames, projectReferences } = config;
+        const host = createIncrementalCompilerHost(options, sys);
+        fakes.patchHostForBuildInfoReadWrite(host);
         const exitCode = ts.performIncrementalCompilation({
+            host,
             system: sys,
             rootNames: fileNames,
             options,

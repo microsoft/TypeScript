@@ -1118,7 +1118,7 @@ namespace ts {
 
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: convertFromReusableCompilerOptions(program.options, toAbsolutePath),
+            compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
             referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
             exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
@@ -1154,40 +1154,6 @@ namespace ts {
         function toAbsolutePath(path: string) {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
         }
-    }
-
-    function convertFromReusableCompilerOptions(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
-        const result: CompilerOptions = {};
-        const optionsNameMap = getOptionNameMap().optionNameMap;
-
-        for (const name in options) {
-            if (hasProperty(options, name)) {
-                result[name] = convertFromReusableCompilerOptionValue(
-                    optionsNameMap.get(name.toLowerCase()),
-                    options[name] as CompilerOptionsValue,
-                    toAbsolutePath
-                );
-            }
-        }
-        if (result.configFilePath) {
-            result.configFilePath = toAbsolutePath(result.configFilePath);
-        }
-        return result;
-    }
-
-    function convertFromReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
-        if (option) {
-            if (option.type === "list") {
-                const values = value as readonly (string | number)[];
-                if (option.element.isFilePath && values.length) {
-                    return values.map(toAbsolutePath);
-                }
-            }
-            else if (option.isFilePath) {
-                return toAbsolutePath(value as string);
-            }
-        }
-        return value;
     }
 
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {

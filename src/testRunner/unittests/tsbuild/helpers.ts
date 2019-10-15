@@ -290,7 +290,7 @@ interface Symbol {
         baselineSourceMap, modifyFs, baselineReadFileCalls,
         incrementalScenarios
     }: VerifyTsBuildInput) {
-        describe(`tsc --b ${scenario}:: ${subScenario}`, () => {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
             let tick: () => void;
             let sys: TscCompileSystem;
             before(() => {
