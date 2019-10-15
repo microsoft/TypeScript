@@ -18378,6 +18378,32 @@ namespace ts {
                 }
                 // Infer from the members of source and target only if the two types are possibly related
                 if (!typesDefinitelyUnrelated(source, target)) {
+                    if (isArrayType(source) || isTupleType(source)) {
+                        if (isTupleType(target)) {
+                            const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
+                            const targetLength = getLengthOfTupleType(target);
+                            const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
+                            const targetRestType = getRestTypeOfTupleType(target);
+                            const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
+                            for (let i = 0; i < fixedLength; i++) {
+                                inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
+                            }
+                            if (targetRestType) {
+                                const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
+                                if (sourceRestType) {
+                                    types.push(sourceRestType);
+                                }
+                                if (types.length) {
+                                    inferFromTypes(getUnionType(types), targetRestType);
+                                }
+                            }
+                            return;
+                        }
+                        if (isArrayType(target)) {
+                            inferFromIndexTypes(source, target);
+                            return;
+                        }
+                    }
                     inferFromProperties(source, target);
                     inferFromSignatures(source, target, SignatureKind.Call);
                     inferFromSignatures(source, target, SignatureKind.Construct);
@@ -18386,32 +18412,6 @@ namespace ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                if (isArrayType(source) || isTupleType(source)) {
-                    if (isTupleType(target)) {
-                        const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
-                        const targetLength = getLengthOfTupleType(target);
-                        const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
-                        const targetRestType = getRestTypeOfTupleType(target);
-                        const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
-                        for (let i = 0; i < fixedLength; i++) {
-                            inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
-                        }
-                        if (targetRestType) {
-                            const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
-                            if (sourceRestType) {
-                                types.push(sourceRestType);
-                            }
-                            if (types.length) {
-                                inferFromTypes(getUnionType(types), targetRestType);
-                            }
-                        }
-                        return;
-                    }
-                    if (isArrayType(target)) {
-                        inferFromIndexTypes(source, target);
-                        return;
-                    }
-                }
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
