@@ -197,7 +197,7 @@ src/language-js/index.js(71,73): error TS2345: Argument of type '{ override: { s
 src/language-js/index.js(81,26): error TS2307: Cannot find module 'linguist-languages/data/JSON5'.
 src/language-js/index.js(81,60): error TS2345: Argument of type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is not assignable to parameter of type '{ extend: any; override: any; exclude: any; }'.
   Type '{ override: { since: string; parsers: string[]; vscodeLanguageIds: string[]; }; }' is missing the following properties from type '{ extend: any; override: any; exclude: any; }': extend, exclude
-src/language-js/needs-parens.js(857,14): error TS2769: No overload matches this call.
+src/language-js/needs-parens.js(880,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
       The types returned by 'slice(...)' are incompatible between these types.
@@ -207,22 +207,22 @@ src/language-js/needs-parens.js(857,14): error TS2769: No overload matches this 
   Overload 2 of 2, '(...items: (((childPath: any) => any) | ConcatArray<(childPath: any) => any>)[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
       Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
-src/language-js/printer-estree.js(262,36): error TS2304: Cannot find name 'Doc'.
-src/language-js/printer-estree.js(263,62): error TS2304: Cannot find name 'Doc'.
-src/language-js/printer-estree.js(270,12): error TS2304: Cannot find name 'FastPath'.
-src/language-js/printer-estree.js(271,12): error TS2304: Cannot find name 'Options'.
-src/language-js/printer-estree.js(397,9): error TS2769: No overload matches this call.
+src/language-js/printer-estree.js(263,36): error TS2304: Cannot find name 'Doc'.
+src/language-js/printer-estree.js(264,62): error TS2304: Cannot find name 'Doc'.
+src/language-js/printer-estree.js(271,12): error TS2304: Cannot find name 'FastPath'.
+src/language-js/printer-estree.js(272,12): error TS2304: Cannot find name 'Options'.
+src/language-js/printer-estree.js(398,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type '{ type: string; parts: any; } | { type: string; contents: any; n: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
       Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
-src/language-js/printer-estree.js(1896,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(1898,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1897,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1899,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
   Type '{ type: string; parts: any; }' is missing the following properties from type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }': id, contents, break, expandedStates
-src/language-js/printer-estree.js(1900,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
-src/language-js/printer-estree.js(1909,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1901,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1910,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; id: any; contents: any; break: boolean; expandedStates: any; }'.
 src/language-js/printer-estree.js(3430,11): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type 'never[] | { type: string; parts: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
@@ -240,7 +240,7 @@ src/language-js/printer-estree.js(4364,11): error TS2322: Type '{ type: string; 
 src/language-js/printer-estree.js(4379,11): error TS2322: Type '{ type: string; parts: any; }' is not assignable to type 'string'.
 src/language-js/printer-estree.js(4391,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
 src/language-js/printer-estree.js(4664,9): error TS2554: Expected 0-2 arguments, but got 3.
-src/language-js/printer-estree.js(5672,7): error TS2769: No overload matches this call.
+src/language-js/printer-estree.js(5674,7): error TS2769: No overload matches this call.
   Overload 1 of 2, '(...items: ConcatArray<(childPath: any) => any>[]): ((childPath: any) => any)[]', gave the following error.
     Argument of type '(string | number)[]' is not assignable to parameter of type 'ConcatArray<(childPath: any) => any>'.
       The types returned by 'slice(...)' are incompatible between these types.
