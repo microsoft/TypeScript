@@ -472,13 +472,13 @@ namespace ts.server {
                 if (isConfiguredProject(p)) {
                     p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
-                const isInfoRoot = p.isRoot(this);
+                const existingRoot = p.getRootFilesMap().get(this.path);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
-                if (isInfoRoot && !isInferredProject(p)) {
-                    p.addMissingFileRoot(this.fileName);
+                if (existingRoot && !isInferredProject(p)) {
+                    p.addMissingFileRoot(existingRoot.fileName);
                 }
             }
             clear(this.containingProjects);
