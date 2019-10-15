@@ -1395,8 +1395,10 @@ namespace ts.FindAllReferences.Core {
                 || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
-            const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
-            searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);
+            const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
+            if (exportInfo) {
+                searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);
+            }
         }
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
