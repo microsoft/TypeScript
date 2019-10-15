@@ -12438,7 +12438,7 @@ namespace ts {
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
             let host = node.parent;
-            while (isParenthesizedTypeNode(host)) {
+            while (isParenthesizedTypeNode(host) || isTypeOperatorNode(host) && host.operator === SyntaxKind.ReadonlyKeyword) {
                 host = host.parent;
             }
             return isTypeAlias(host) ? getSymbolOfNode(host) : undefined;
