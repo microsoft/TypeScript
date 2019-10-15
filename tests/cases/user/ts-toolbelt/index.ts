@@ -1,3 +1,5 @@
+// ! this library is mostly used with ramda
+
 import {I, T, Test} from "ts-toolbelt";
 
 const {check, checks} = Test;
