@@ -151,13 +151,16 @@ namespace ts {
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
-                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                // PERF: Checking for directory existence is expensive.
+                // Instead, assume the directory exists and fall back
+                // to creating it if the file write fails.
+                try {
+                    writeFileWorker(fileName, data, writeByteOrderMark);
                 }
-                else {
-                    system.writeFile(fileName, data, writeByteOrderMark);
+                catch (_) {
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+                    writeFileWorker(fileName, data, writeByteOrderMark);
                 }
 
                 performance.mark("afterIOWrite");
@@ -167,6 +170,15 @@ namespace ts {
                 if (onError) {
                     onError(e.message);
                 }
+            }
+        }
+
+        function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
+            if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
+                writeFileIfUpdated(fileName, data, writeByteOrderMark);
+            }
+            else {
+                system.writeFile(fileName, data, writeByteOrderMark);
             }
         }
 

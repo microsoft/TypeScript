@@ -541,11 +541,20 @@ namespace ts {
         // patch writefile to create folder before writing the file
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (path, data, writeBom) => {
-            const directoryPath = getDirectoryPath(normalizeSlashes(path));
-            if (directoryPath && !sys.directoryExists(directoryPath)) {
-                recursiveCreateDirectory(directoryPath, sys);
+            // PERF: Checking for directory existence is expensive.
+            // Instead, assume the directory exists and fall back
+            // to creating it if the file write fails.
+            try {
+                originalWriteFile.call(sys, path, data, writeBom);
             }
-            originalWriteFile.call(sys, path, data, writeBom);
+            catch (_) {
+                const directoryPath = getDirectoryPath(normalizeSlashes(path));
+                if (directoryPath && !sys.directoryExists(directoryPath)) {
+                    recursiveCreateDirectory(directoryPath, sys);
+                }
+
+                originalWriteFile.call(sys, path, data, writeBom);
+            }
         };
     }
 
