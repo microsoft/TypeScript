@@ -6,4 +6,5 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-("I AM THE " + "TAG" + " " + " PORTION")(__makeTemplateObject(["I ", " THE TEMPLATE PORTION"], ["I ", " THE TEMPLATE PORTION"]), "AM");
+("I AM THE " + "TAG" + " " + " PORTION")(templateObject_4828094090_1 || (templateObject_4828094090_1 = __makeTemplateObject(["I ", " THE TEMPLATE PORTION"], ["I ", " THE TEMPLATE PORTION"])), "AM");
+var templateObject_4828094090_1;

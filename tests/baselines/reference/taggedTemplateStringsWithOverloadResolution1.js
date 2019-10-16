@@ -40,9 +40,10 @@ var c = foo([], 1, 2); // boolean
 var d = foo([], 1, true); // boolean (with error)
 var e = foo([], 1, "2"); // {}
 var f = foo([], 1, 2, 3); // any (with error)
-var u = foo(__makeTemplateObject([""], [""])); // number
-var v = foo(__makeTemplateObject(["", ""], ["", ""]), 1); // string
-var w = foo(__makeTemplateObject(["", "", ""], ["", "", ""]), 1, 2); // boolean
-var x = foo(__makeTemplateObject(["", "", ""], ["", "", ""]), 1, true); // boolean (with error)
-var y = foo(__makeTemplateObject(["", "", ""], ["", "", ""]), 1, "2"); // {}
-var z = foo(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), 1, 2, 3); // any (with error)
+var u = foo(templateObject_5381_1 || (templateObject_5381_1 = __makeTemplateObject([""], [""]))); // number
+var v = foo(templateObject_193515161_1 || (templateObject_193515161_1 = __makeTemplateObject(["", ""], ["", ""])), 1); // string
+var w = foo(templateObject_802426797_1 || (templateObject_802426797_1 = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, 2); // boolean
+var x = foo(templateObject_802426797_2 || (templateObject_802426797_2 = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, true); // boolean (with error)
+var y = foo(templateObject_802426797_3 || (templateObject_802426797_3 = __makeTemplateObject(["", "", ""], ["", "", ""])), 1, "2"); // {}
+var z = foo(templateObject_401516609_1 || (templateObject_401516609_1 = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), 1, 2, 3); // any (with error)
+var templateObject_5381_1, templateObject_193515161_1, templateObject_802426797_1, templateObject_802426797_2, templateObject_802426797_3, templateObject_401516609_1;

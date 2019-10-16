@@ -34,10 +34,11 @@ var n;
         return x;
     }
     function templateObjectFactory() {
-        return id(__makeTemplateObject(["hello world"], ["hello world"]));
+        return id(templateObject_894552257_1 || (templateObject_894552257_1 = __makeTemplateObject(["hello world"], ["hello world"])));
     }
     var result = templateObjectFactory() === templateObjectFactory();
 })(n || (n = {}));
+var templateObject_894552257_1;
 //// [module.js]
 "use strict";
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {

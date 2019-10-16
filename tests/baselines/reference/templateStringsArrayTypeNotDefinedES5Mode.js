@@ -14,4 +14,5 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 function f(x, y, z) {
 }
 f({}, 10, 10);
-f(__makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"]), 1234, 5678);
+f(templateObject_1506811259_1 || (templateObject_1506811259_1 = __makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"])), 1234, 5678);
+var templateObject_1506811259_1;

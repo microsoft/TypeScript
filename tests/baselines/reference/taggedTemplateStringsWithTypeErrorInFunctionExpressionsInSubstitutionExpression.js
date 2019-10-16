@@ -15,4 +15,5 @@ function foo() {
         rest[_i] = arguments[_i];
     }
 }
-foo(__makeTemplateObject(["", ""], ["", ""]), function (x) { x = "bad"; });
+foo(templateObject_193515161_1 || (templateObject_193515161_1 = __makeTemplateObject(["", ""], ["", ""])), function (x) { x = "bad"; });
+var templateObject_193515161_1;

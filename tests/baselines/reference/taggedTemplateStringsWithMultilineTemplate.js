@@ -18,4 +18,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(__makeTemplateObject(["\n\n"], ["\n\\\n\n"]));
+f(templateObject_2086933503_1 || (templateObject_2086933503_1 = __makeTemplateObject(["\n\n"], ["\n\\\n\n"])));
+var templateObject_2086933503_1;

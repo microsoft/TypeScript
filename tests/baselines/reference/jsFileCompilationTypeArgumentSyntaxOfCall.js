@@ -10,6 +10,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 Foo();
-Foo(__makeTemplateObject([""], [""]));
+Foo(templateObject_5381_1 || (templateObject_5381_1 = __makeTemplateObject([""], [""])));
 <Foo></Foo>;
 <Foo />;
+var templateObject_5381_1;

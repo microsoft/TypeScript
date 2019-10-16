@@ -14,4 +14,5 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 var x;
-var result = foo(__makeTemplateObject(["", ""], ["", ""]), x);
+var result = foo(templateObject_193515161_1 || (templateObject_193515161_1 = __makeTemplateObject(["", ""], ["", ""])), x);
+var templateObject_193515161_1;

@@ -78,40 +78,41 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 function fn1() { return null; }
-var s = fn1(__makeTemplateObject(["", ""], ["", ""]), undefined);
+var s = fn1(templateObject_193515161_1 || (templateObject_193515161_1 = __makeTemplateObject(["", ""], ["", ""])), undefined);
 // No candidate overloads found
-fn1(__makeTemplateObject(["", ""], ["", ""]), {}); // Error
+fn1(templateObject_193515161_2 || (templateObject_193515161_2 = __makeTemplateObject(["", ""], ["", ""])), {}); // Error
 function fn2() { return undefined; }
-var d1 = fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, undefined); // contextually typed
-var d2 = fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, undefined); // any
+var d1 = fn2(templateObject_802426797_1 || (templateObject_802426797_1 = __makeTemplateObject(["", "", ""], ["", "", ""])), 0, undefined); // contextually typed
+var d2 = fn2(templateObject_802426797_2 || (templateObject_802426797_2 = __makeTemplateObject(["", "", ""], ["", "", ""])), 0, undefined); // any
 d1.foo(); // error
 d2(); // no error (typed as any)
 // Generic and non-generic overload where generic overload is the only candidate
-fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), 0, ''); // OK
+fn2(templateObject_802426797_3 || (templateObject_802426797_3 = __makeTemplateObject(["", "", ""], ["", "", ""])), 0, ''); // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
-fn2(__makeTemplateObject(["", "", ""], ["", "", ""]), '', 0); // OK
+fn2(templateObject_802426797_4 || (templateObject_802426797_4 = __makeTemplateObject(["", "", ""], ["", "", ""])), '', 0); // OK
 function fn3() { return null; }
-var s = fn3(__makeTemplateObject(["", ""], ["", ""]), 3);
-var s = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', 3, '');
-var n = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), 5, 5, 5);
+var s = fn3(templateObject_193515161_3 || (templateObject_193515161_3 = __makeTemplateObject(["", ""], ["", ""])), 3);
+var s = fn3(templateObject_401516609_1 || (templateObject_401516609_1 = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), '', 3, '');
+var n = fn3(templateObject_401516609_2 || (templateObject_401516609_2 = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), 5, 5, 5);
 var n;
 // Generic overloads with differing arity tagging with arguments matching each overload type parameter count
-var s = fn3(__makeTemplateObject(["", ""], ["", ""]), 4);
-var s = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', '', '');
-var n = fn3(__makeTemplateObject(["", "", "", ""], ["", "", "", ""]), '', '', 3);
+var s = fn3(templateObject_193515161_4 || (templateObject_193515161_4 = __makeTemplateObject(["", ""], ["", ""])), 4);
+var s = fn3(templateObject_401516609_3 || (templateObject_401516609_3 = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), '', '', '');
+var n = fn3(templateObject_401516609_4 || (templateObject_401516609_4 = __makeTemplateObject(["", "", "", ""], ["", "", "", ""])), '', '', 3);
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
-fn3(__makeTemplateObject([""], [""])); // Error
+fn3(templateObject_5381_1 || (templateObject_5381_1 = __makeTemplateObject([""], [""]))); // Error
 function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), '', 3);
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), 3, '');
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), 3, undefined);
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), '', null);
+fn4(templateObject_802426797_5 || (templateObject_802426797_5 = __makeTemplateObject(["", "", ""], ["", "", ""])), '', 3);
+fn4(templateObject_802426797_6 || (templateObject_802426797_6 = __makeTemplateObject(["", "", ""], ["", "", ""])), 3, '');
+fn4(templateObject_802426797_7 || (templateObject_802426797_7 = __makeTemplateObject(["", "", ""], ["", "", ""])), 3, undefined);
+fn4(templateObject_802426797_8 || (templateObject_802426797_8 = __makeTemplateObject(["", "", ""], ["", "", ""])), '', null);
 // Generic overloads with constraints called with type arguments that do not satisfy the constraints
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), null, null); // Error
+fn4(templateObject_802426797_9 || (templateObject_802426797_9 = __makeTemplateObject(["", "", ""], ["", "", ""])), null, null); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), true, null);
-fn4(__makeTemplateObject(["", "", ""], ["", "", ""]), null, true);
+fn4(templateObject_802426797_10 || (templateObject_802426797_10 = __makeTemplateObject(["", "", ""], ["", "", ""])), true, null);
+fn4(templateObject_802426797_11 || (templateObject_802426797_11 = __makeTemplateObject(["", "", ""], ["", "", ""])), null, true);
 function fn5() { return undefined; }
-fn5(__makeTemplateObject(["", ""], ["", ""]), function (n) { return n.toFixed(); }); // will error; 'n' should have type 'string'.
-fn5(__makeTemplateObject(["", ""], ["", ""]), function (n) { return n.substr(0); });
+fn5(templateObject_193515161_5 || (templateObject_193515161_5 = __makeTemplateObject(["", ""], ["", ""])), function (n) { return n.toFixed(); }); // will error; 'n' should have type 'string'.
+fn5(templateObject_193515161_6 || (templateObject_193515161_6 = __makeTemplateObject(["", ""], ["", ""])), function (n) { return n.substr(0); });
+var templateObject_193515161_1, templateObject_193515161_2, templateObject_802426797_1, templateObject_802426797_2, templateObject_802426797_3, templateObject_802426797_4, templateObject_193515161_3, templateObject_401516609_1, templateObject_401516609_2, templateObject_193515161_4, templateObject_401516609_3, templateObject_401516609_4, templateObject_5381_1, templateObject_802426797_5, templateObject_802426797_6, templateObject_802426797_7, templateObject_802426797_8, templateObject_802426797_9, templateObject_802426797_10, templateObject_802426797_11, templateObject_193515161_5, templateObject_193515161_6;

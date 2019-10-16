@@ -146,4 +146,5 @@ var C = /** @class */ (function () {
 function id(x) {
     return x;
 }
-var result = id(__makeTemplateObject(["hello world"], ["hello world"]));
+var result = id(templateObject_894552257_1 || (templateObject_894552257_1 = __makeTemplateObject(["hello world"], ["hello world"])));
+var templateObject_894552257_1;

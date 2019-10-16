@@ -21,5 +21,6 @@ var c = 123 + 456 + " trailing";
 var d = "Hello " + 123 + " World";
 var e = "Hello";
 var f = 1 + (1 + " end of string");
-var g = tag(__makeTemplateObject(["Hello ", " World"], ["Hello ", " World"]), 123);
-var h = tag(__makeTemplateObject(["Hello"], ["Hello"]));
+var g = tag(templateObject_2881633237_1 || (templateObject_2881633237_1 = __makeTemplateObject(["Hello ", " World"], ["Hello ", " World"])), 123);
+var h = tag(templateObject_223289465_1 || (templateObject_223289465_1 = __makeTemplateObject(["Hello"], ["Hello"])));
+var templateObject_2881633237_1, templateObject_223289465_1;

@@ -29,7 +29,7 @@ function foo1() {
     }
     return undefined;
 }
-var a = foo1(__makeTemplateObject(["", ""], ["", ""]), 1);
+var a = foo1(templateObject_193515161_1 || (templateObject_193515161_1 = __makeTemplateObject(["", ""], ["", ""])), 1);
 var b = foo1([], 1);
 function foo2() {
     var stuff = [];
@@ -38,5 +38,6 @@ function foo2() {
     }
     return undefined;
 }
-var c = foo2(__makeTemplateObject(["", ""], ["", ""]), 1);
+var c = foo2(templateObject_193515161_2 || (templateObject_193515161_2 = __makeTemplateObject(["", ""], ["", ""])), 1);
 var d = foo2([], 1);
+var templateObject_193515161_1, templateObject_193515161_2;

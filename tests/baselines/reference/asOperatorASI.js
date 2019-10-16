@@ -23,7 +23,8 @@ var Foo = /** @class */ (function () {
 }());
 // Example 1
 var x = 10;
-as(__makeTemplateObject(["Hello world"], ["Hello world"])); // should not error
+as(templateObject__1984225119_1 || (templateObject__1984225119_1 = __makeTemplateObject(["Hello world"], ["Hello world"]))); // should not error
 // Example 2
 var y = 20;
 as(Foo); // should emit
+var templateObject__1984225119_1;

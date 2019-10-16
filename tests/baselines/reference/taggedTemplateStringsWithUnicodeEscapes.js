@@ -15,4 +15,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(__makeTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"]), " should be converted to ");
+f(templateObject_836884249_1 || (templateObject_836884249_1 = __makeTemplateObject(["'\uD83D\uDCA9'", "'\uD83D\uDCA9'"], ["'\\u{1f4a9}'", "'\\uD83D\\uDCA9'"])), " should be converted to ");
+var templateObject_836884249_1;

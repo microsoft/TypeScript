@@ -15,4 +15,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-f(__makeTemplateObject(["\r", "\n"], ["\\x0D", "\\x0A"]), "Interrupted CRLF");
+f(templateObject__2197423066_1 || (templateObject__2197423066_1 = __makeTemplateObject(["\r", "\n"], ["\\x0D", "\\x0A"])), "Interrupted CRLF");
+var templateObject__2197423066_1;

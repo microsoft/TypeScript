@@ -8,5 +8,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-var x = {}(__makeTemplateObject(["a"], ["a"]));
+var x = {}(templateObject_177670_1 || (templateObject_177670_1 = __makeTemplateObject(["a"], ["a"])));
 321;
+var templateObject_177670_1;

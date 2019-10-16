@@ -11,10 +11,11 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 declare;
-module(__makeTemplateObject(["M1"], ["M1"]));
+module(templateObject_5862499_1 || (templateObject_5862499_1 = __makeTemplateObject(["M1"], ["M1"])));
 {
 }
 declare;
-module(__makeTemplateObject(["M", ""], ["M", ""]), 2);
+module(templateObject_2089378918_1 || (templateObject_2089378918_1 = __makeTemplateObject(["M", ""], ["M", ""])), 2);
 {
 }
+var templateObject_5862499_1, templateObject_2089378918_1;
