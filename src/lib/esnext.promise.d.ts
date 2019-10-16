@@ -1,3 +1,15 @@
+interface AggregateError extends Error {
+    errors: any[]
+}
+
+interface AggregateErrorConstructor {
+    new(errors: Iterable<any>, message?: string): AggregateError;
+    (errors: Iterable<any>, message?: string): AggregateError;
+    readonly prototype: AggregateError;
+}
+
+declare var AggregateError: AggregateErrorConstructor;
+
 /**
  * Represents the completion of an asynchronous operation
  */
