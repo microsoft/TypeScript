@@ -96,7 +96,7 @@ namespace ts {
             if (existingDirectories.has(directoryPath)) {
                 return true;
             }
-            if (system.directoryExists(directoryPath)) {
+            if ((compilerHost.directoryExists || system.directoryExists)(directoryPath)) {
                 existingDirectories.set(directoryPath, true);
                 return true;
             }
@@ -107,45 +107,8 @@ namespace ts {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 const parentDirectory = getDirectoryPath(directoryPath);
                 ensureDirectoriesExist(parentDirectory);
-                if (compilerHost.createDirectory) {
-                    compilerHost.createDirectory(directoryPath);
-                }
-                else {
-                    system.createDirectory(directoryPath);
-                }
+                (compilerHost.createDirectory || system.createDirectory)(directoryPath);
             }
-        }
-
-        let outputFingerprints: Map<OutputFingerprint>;
-
-        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
-            if (!outputFingerprints) {
-                outputFingerprints = createMap<OutputFingerprint>();
-            }
-
-            const hash = system.createHash!(data); // TODO: GH#18217
-            const mtimeBefore = system.getModifiedTime!(fileName); // TODO: GH#18217
-
-            if (mtimeBefore) {
-                const fingerprint = outputFingerprints.get(fileName);
-                // If output has not been changed, and the file has no external modification
-                if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
-                    fingerprint.hash === hash &&
-                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                    return;
-                }
-            }
-
-            system.writeFile(fileName, data, writeByteOrderMark);
-
-            const mtimeAfter = system.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
-
-            outputFingerprints.set(fileName, {
-                hash,
-                byteOrderMark: writeByteOrderMark,
-                mtime: mtimeAfter
-            });
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -155,6 +118,9 @@ namespace ts {
                 // PERF: Checking for directory existence is expensive.
                 // Instead, assume the directory exists and fall back
                 // to creating it if the file write fails.
+                // NOTE: If patchWriteFileEnsuringDirectory has been called,
+                // the file write will do its own directory creation and
+                // the ensureDirectoriesExist call will always be redundant.
                 try {
                     writeFileWorker(fileName, data, writeByteOrderMark);
                 }
@@ -173,13 +139,40 @@ namespace ts {
             }
         }
 
+        let outputFingerprints: Map<OutputFingerprint>;
         function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
-            if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
-                writeFileIfUpdated(fileName, data, writeByteOrderMark);
-            }
-            else {
+            if (!isWatchSet(options) || !system.createHash || !system.getModifiedTime) {
                 system.writeFile(fileName, data, writeByteOrderMark);
+                return;
             }
+
+            if (!outputFingerprints) {
+                outputFingerprints = createMap<OutputFingerprint>();
+            }
+
+            const hash = system.createHash(data);
+            const mtimeBefore = system.getModifiedTime(fileName);
+
+            if (mtimeBefore) {
+                const fingerprint = outputFingerprints.get(fileName);
+                // If output has not been changed, and the file has no external modification
+                if (fingerprint &&
+                    fingerprint.byteOrderMark === writeByteOrderMark &&
+                    fingerprint.hash === hash &&
+                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                    return;
+                }
+            }
+
+            system.writeFile(fileName, data, writeByteOrderMark);
+
+            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
+
+            outputFingerprints.set(fileName, {
+                hash,
+                byteOrderMark: writeByteOrderMark,
+                mtime: mtimeAfter
+            });
         }
 
         function getDefaultLibLocation(): string {
