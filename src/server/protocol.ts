@@ -918,9 +918,12 @@ namespace ts.server.protocol {
         body?: FileSpanWithContext[];
     }
 
-    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+    export interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
     }
+
+    /** @deprecated Use `DefinitionInfoAndBoundSpanResponse` instead. */
+    export type DefinitionInfoAndBoundSpanReponse = DefinitionInfoAndBoundSpanResponse;
 
     /**
      * Definition response message.  Gives text range for definition.
