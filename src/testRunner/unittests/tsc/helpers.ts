@@ -60,7 +60,7 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        ts.executeCommandLine(
+        executeCommandLine(
             sys,
             {
                 onCompilerHostCreate: host => fakes.patchHostForBuildInfoReadWrite(host),
