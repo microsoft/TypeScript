@@ -169,8 +169,14 @@ namespace ts {
         Initial = "initial-build",
         IncrementalDtsChange = "incremental-declaration-changes",
         IncrementalDtsUnchanged = "incremental-declaration-doesnt-change",
-        IncrementalHeadersChange = "incremental-headers-change-without-dts-changes"
+        IncrementalHeadersChange = "incremental-headers-change-without-dts-changes",
+        NoChangeRun ="no-change-run"
     }
+
+    export const noChangeRun: TscIncremental = {
+        buildKind: BuildKind.NoChangeRun,
+        modifyFs: noop
+    };
 
     export interface TscCompile {
         scenario: string;
