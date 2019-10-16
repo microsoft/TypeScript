@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/project/.tsbuildinfo]

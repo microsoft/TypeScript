@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc --p src/project --rootDir src/project/src
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/project/dist/main.js]

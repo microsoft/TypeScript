@@ -222,7 +222,7 @@ namespace ts {
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
         executeCommandLine(sys, commandLineArgs);
-        sys.write(`exitCode:: ${sys.exitCode}\n`);
+        sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }

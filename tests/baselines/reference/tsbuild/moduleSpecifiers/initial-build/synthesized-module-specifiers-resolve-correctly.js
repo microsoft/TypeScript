@@ -19,7 +19,7 @@
 
 12:00:00 AM - Building project '/src/solution/sub-project-2/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/solution/common/nominal.d.ts]

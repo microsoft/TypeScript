@@ -18,7 +18,7 @@
 
 12:00:00 AM - Building project '/src/zoo/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/animals/animal.d.ts]

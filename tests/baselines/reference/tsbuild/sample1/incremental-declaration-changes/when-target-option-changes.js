@@ -15,7 +15,7 @@ TSFILE: /src/core/tsconfig.tsbuildinfo
 /src/core/anotherModule.ts
 /src/core/index.ts
 /src/core/some_decl.d.ts
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/core/anotherModule.js]

@@ -10,7 +10,7 @@ error TS6202: Project references may not form a circular graph. Cycle detected: 
 /src/core/tsconfig.json
 /src/zoo/tsconfig.json
 /src/animals/tsconfig.json
-exitCode:: 4
+exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkupped
 
 
 //// [/src/core/tsconfig.json]

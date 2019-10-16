@@ -13,6 +13,6 @@
 
 12:04:00 AM - Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 

@@ -25,7 +25,7 @@ src/core/utilities.ts(1,20): error TS6307: File '/src/animals/index.ts' is not l
 
 12:00:00 AM - Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
 
-exitCode:: 1
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/core/utilities.ts]
