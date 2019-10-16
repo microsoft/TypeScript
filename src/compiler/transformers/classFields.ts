@@ -770,6 +770,10 @@ namespace ts {
                 }
             }
 
+            if (isPrivateIdentifier(propertyName) && !property.initializer) {
+                return undefined;
+            }
+
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
                 : hasModifier(getOriginalNode(property), ModifierFlags.ParameterPropertyModifier) && isIdentifier(propertyName) ? propertyName
                 : createVoidZero();

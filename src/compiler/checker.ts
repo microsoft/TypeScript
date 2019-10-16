@@ -23173,6 +23173,10 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
             if (isPrivateIdentifier(right)) {
+                if (isOptionalChain(node)) {
+                    grammarErrorOnNode(right, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
+                    return anyType;
+                }
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
             }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
@@ -23550,9 +23554,14 @@ namespace ts {
                 return true;
             }
             const prop = getPropertyOfType(type, propertyName);
-            return prop ? checkPropertyAccessibility(node, isSuper, type, prop)
-                // In js files properties of unions are allowed in completion
-                : isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
+            if (prop) {
+                if (isOptionalChain(node) && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration)) {
+                    return false;
+                }
+                return checkPropertyAccessibility(node, isSuper, type, prop);
+            }
+            // In js files properties of unions are allowed in completion
+            return isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
         }
 
         /**

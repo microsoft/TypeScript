@@ -5437,5 +5437,9 @@
     "Private identifiers are not allowed in variable declarations.": {
         "category": "Error",
         "code": 18029
+    },
+    "An optional chain cannot contain private identifiers.": {
+        "category": "Error",
+        "code": 18030
     }
 }
