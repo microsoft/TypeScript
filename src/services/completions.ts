@@ -1000,6 +1000,7 @@ namespace ts.Completions {
         let completionKind = CompletionKind.None;
         let isNewIdentifierLocation = false;
         let keywordFilters = KeywordCompletionFilters.None;
+        // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
@@ -1342,9 +1343,12 @@ namespace ts.Completions {
                     }
 
                     const symbolId = getSymbolId(symbol);
-                    symbols.push(symbol);
-                    symbolToOriginInfoMap[symbolId] = origin;
-                    symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                    const existingSymbol = findLast(symbols, symbol => symbol.id === symbolId);
+                    if (!existingSymbol) {
+                        symbols.push(symbol);
+                        symbolToOriginInfoMap[symbolId] = origin;
+                        symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                    }
                 });
             }
             filterGlobalCompletion(symbols);
