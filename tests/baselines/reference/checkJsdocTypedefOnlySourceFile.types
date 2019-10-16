@@ -13,3 +13,8 @@ exports.SomeName;
 >exports : {}
 >SomeName : any
 
+/** @type {exports.SomeName} */
+const myString = 'str';
+>myString : any
+>'str' : "str"
+

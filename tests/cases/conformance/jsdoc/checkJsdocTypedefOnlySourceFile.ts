@@ -10,3 +10,6 @@ var exports = {};
  * @typedef {string}
  */
 exports.SomeName;
+
+/** @type {exports.SomeName} */
+const myString = 'str';
