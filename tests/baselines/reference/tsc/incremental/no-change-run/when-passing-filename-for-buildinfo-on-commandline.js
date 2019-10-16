@@ -1,4 +1,4 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+//// [/lib/no-change-runOutput.txt]
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
 exitCode:: 0
 

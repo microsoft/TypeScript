@@ -17,13 +17,10 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsUnchanged,
-                modifyFs: noop,
-            }]
+            incrementalScenarios: [noChangeRun]
         });
 
-        verifyTsc({
+        verifyTscIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
@@ -37,6 +34,7 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
+            incrementalScenarios: [noChangeRun]
         });
     });
 }
