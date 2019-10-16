@@ -1,0 +1,51 @@
+=== tests/cases/compiler/errorForObjectLiteralAgainstTypeWithIndexer01.ts ===
+type PlainObjectItem = string | number | boolean | null
+>PlainObjectItem : PlainObjectItem
+>null : null
+
+interface PlainObject {
+    [key: string]: PlainObjectItem | PlainObjectItem[] | PlainObject
+>key : string
+}
+
+const hoge: PlainObject = {
+>hoge : PlainObject
+>{    key1: 'hoge',    key2: {        key21: 'aaa',        key22: false,        key23: {            key231: [1,2,3,4,5],            date: new Date()        }    }} : { key1: string; key2: { key21: string; key22: false; key23: { key231: number[]; date: Date; }; }; }
+
+    key1: 'hoge',
+>key1 : string
+>'hoge' : "hoge"
+
+    key2: {
+>key2 : { key21: string; key22: false; key23: { key231: number[]; date: Date; }; }
+>{        key21: 'aaa',        key22: false,        key23: {            key231: [1,2,3,4,5],            date: new Date()        }    } : { key21: string; key22: false; key23: { key231: number[]; date: Date; }; }
+
+        key21: 'aaa',
+>key21 : string
+>'aaa' : "aaa"
+
+        key22: false,
+>key22 : false
+>false : false
+
+        key23: {
+>key23 : { key231: number[]; date: Date; }
+>{            key231: [1,2,3,4,5],            date: new Date()        } : { key231: number[]; date: Date; }
+
+            key231: [1,2,3,4,5],
+>key231 : number[]
+>[1,2,3,4,5] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+            date: new Date()
+>date : Date
+>new Date() : Date
+>Date : DateConstructor
+        }
+    }
+}
+

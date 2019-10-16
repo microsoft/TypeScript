@@ -1,0 +1,27 @@
+tests/cases/compiler/errorForObjectLiteralAgainstTypeWithIndexer01.ts(9,5): error TS2322: Type '{ key21: string; key22: false; key23: { key231: number[]; date: Date; }; }' is not assignable to type 'string | number | boolean | PlainObject | PlainObjectItem[] | null'.
+  Type '{ key21: string; key22: false; key23: { key231: number[]; date: Date; }; }' is not assignable to type 'null'.
+
+
+==== tests/cases/compiler/errorForObjectLiteralAgainstTypeWithIndexer01.ts (1 errors) ====
+    type PlainObjectItem = string | number | boolean | null
+    
+    interface PlainObject {
+        [key: string]: PlainObjectItem | PlainObjectItem[] | PlainObject
+    }
+    
+    const hoge: PlainObject = {
+        key1: 'hoge',
+        key2: {
+        ~~~~
+!!! error TS2322: Type '{ key21: string; key22: false; key23: { key231: number[]; date: Date; }; }' is not assignable to type 'string | number | boolean | PlainObject | PlainObjectItem[] | null'.
+!!! error TS2322:   Type '{ key21: string; key22: false; key23: { key231: number[]; date: Date; }; }' is not assignable to type 'null'.
+!!! related TS6501 tests/cases/compiler/errorForObjectLiteralAgainstTypeWithIndexer01.ts:4:5: The expected type comes from this index signature.
+            key21: 'aaa',
+            key22: false,
+            key23: {
+                key231: [1,2,3,4,5],
+                date: new Date()
+            }
+        }
+    }
+    

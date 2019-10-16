@@ -1,0 +1,43 @@
+=== tests/cases/compiler/errorForObjectLiteralAgainstTypeWithIndexer01.ts ===
+type PlainObjectItem = string | number | boolean | null
+>PlainObjectItem : Symbol(PlainObjectItem, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 0))
+
+interface PlainObject {
+>PlainObject : Symbol(PlainObject, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 55))
+
+    [key: string]: PlainObjectItem | PlainObjectItem[] | PlainObject
+>key : Symbol(key, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 3, 5))
+>PlainObjectItem : Symbol(PlainObjectItem, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 0))
+>PlainObjectItem : Symbol(PlainObjectItem, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 0))
+>PlainObject : Symbol(PlainObject, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 55))
+}
+
+const hoge: PlainObject = {
+>hoge : Symbol(hoge, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 6, 5))
+>PlainObject : Symbol(PlainObject, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 0, 55))
+
+    key1: 'hoge',
+>key1 : Symbol(key1, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 6, 27))
+
+    key2: {
+>key2 : Symbol(key2, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 7, 17))
+
+        key21: 'aaa',
+>key21 : Symbol(key21, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 8, 11))
+
+        key22: false,
+>key22 : Symbol(key22, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 9, 21))
+
+        key23: {
+>key23 : Symbol(key23, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 10, 21))
+
+            key231: [1,2,3,4,5],
+>key231 : Symbol(key231, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 11, 16))
+
+            date: new Date()
+>date : Symbol(date, Decl(errorForObjectLiteralAgainstTypeWithIndexer01.ts, 12, 32))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+        }
+    }
+}
+
