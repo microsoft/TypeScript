@@ -20890,13 +20890,13 @@ namespace ts {
         function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, contextFlags?: ContextFlags): Type {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget, /*candidatesOutArray*/ undefined, /*checkMode*/ undefined);
+            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
             if (contextFlags && contextFlags & ContextFlags.Completion && signature.target) {
-                const baseSiganture = getBaseSignature(signature.target);
-                return intersectTypes(getTypeAtPosition(signature, argIndex), getTypeAtPosition(baseSiganture, argIndex));
+                const baseSignature = getBaseSignature(signature.target);
+                return intersectTypes(getTypeAtPosition(signature, argIndex), getTypeAtPosition(baseSignature, argIndex));
             }
             return getTypeAtPosition(signature, argIndex);
         }
@@ -24379,7 +24379,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, isOptional, /*fallbackError*/ undefined);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, isOptional);
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
@@ -24450,7 +24450,7 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, /*isOptional*/ false, /*fallbackError*/ undefined);
+                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, /*isOptional*/ false);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -24459,7 +24459,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*isOptional*/ false, /*fallbackError*/ undefined);
+                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*isOptional*/ false);
                 if (!noImplicitAny) {
                     if (signature.declaration && !isJSConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                         error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
