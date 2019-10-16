@@ -158,25 +158,6 @@ namespace ts.JsDoc {
         }
     }
 
-    /**
-     * Iterates through 'array' by index and performs the callback on each element of array until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, the callback is applied to each element of array and undefined is returned.
-     */
-    function forEachUnique<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U): U | undefined {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array.indexOf(array[i]) === i) {
-                    const result = callback(array[i], i);
-                    if (result) {
-                        return result;
-                    }
-                }
-            }
-        }
-        return undefined;
-    }
-
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
         return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => {
             return {
