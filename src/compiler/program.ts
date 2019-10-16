@@ -1583,11 +1583,11 @@ namespace ts {
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             let declarationDiagnostics: readonly Diagnostic[] = [];
 
-            if (options.listFilesOnly || (!forceDtsEmit && shouldSuppressEmit(options))) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-            }
-
             if (!forceDtsEmit) {
+                if (options.noEmit) {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+                }
+
                 // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
                 // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
                 // get any preEmit diagnostics, not just the ones
@@ -2037,9 +2037,7 @@ namespace ts {
         }
 
         function getGlobalDiagnostics(): SortedReadonlyArray<Diagnostic> {
-            return !options.listFilesOnly && rootNames.length
-                ? sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice())
-                : emptyArray as any as SortedReadonlyArray<Diagnostic>;
+            return rootNames.length ? sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice()) : emptyArray as any as SortedReadonlyArray<Diagnostic>;
         }
 
         function getConfigFileParsingDiagnostics(): readonly Diagnostic[] {
@@ -3092,7 +3090,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "emitDeclarationOnly", "declaration", "composite");
                 }
 
-                if (shouldSuppressEmit(options)) {
+                if (options.noEmit) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
                 }
             }
@@ -3115,7 +3113,7 @@ namespace ts {
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
-            if (!shouldSuppressEmit(options) && !options.suppressOutputPathCheck) {
+            if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createMap<true>();
                 forEachEmittedFile(emitHost, (emitFileNames) => {
@@ -3184,7 +3182,7 @@ namespace ts {
         }
 
         function verifyProjectReferences() {
-            const buildInfoPath = !shouldSuppressEmit(options) && !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
+            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
             forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
@@ -3325,7 +3323,7 @@ namespace ts {
         }
 
         function isEmittedFile(file: string): boolean {
-            if (shouldSuppressEmit(options)) {
+            if (options.noEmit) {
                 return false;
             }
 

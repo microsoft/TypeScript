@@ -167,7 +167,6 @@ namespace ts {
         /*@internal*/ preserveWatchOutput?: boolean;
         /*@internal*/ listEmittedFiles?: boolean;
         /*@internal*/ listFiles?: boolean;
-        /*@internal*/ listFilesOnly?: boolean;
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
 
@@ -1924,7 +1923,7 @@ namespace ts {
     }
 
     function isOutputFile(state: SolutionBuilderState, fileName: string, configFile: ParsedCommandLine) {
-        if (shouldSuppressEmit(configFile.options)) return false;
+        if (configFile.options.noEmit) return false;
 
         // ts or tsx files are not output
         if (!fileExtensionIs(fileName, Extension.Dts) &&
