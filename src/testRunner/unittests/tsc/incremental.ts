@@ -36,5 +36,23 @@ namespace ts {
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
             incrementalScenarios: [noChangeRun]
         });
+
+        verifyTscIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "when passing rootDir is in the tsconfig",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "incremental": true,
+                            "outDir": "./built",
+                            "rootDir": "./"
+                        },
+                    }`,
+            }),
+            commandLineArgs: ["--p", "src/project"],
+            incrementalScenarios: [noChangeRun]
+        });
     });
 }
