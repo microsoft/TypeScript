@@ -14791,7 +14791,6 @@ namespace ts {
                     const bestMatchingType =
                         findMatchingDiscriminantType(source, target) ||
                         findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
-                        findBestTypeForObjectLiteral(source, target) ||
                         findBestTypeForInvokable(source, target) ||
                         findMostOverlappyType(source, target);
 
@@ -14818,12 +14817,6 @@ namespace ts {
                 }
             }
 
-            function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
-                if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && forEachType(unionTarget, isArrayLikeType)) {
-                    return find(unionTarget.types, t => !isArrayLikeType(t));
-                }
-            }
-
             function findBestTypeForInvokable(source: Type, unionTarget: UnionOrIntersectionType) {
                 let signatureKind = SignatureKind.Call;
                 const hasSignatures = getSignaturesOfType(source, signatureKind).length > 0 ||
@@ -14836,7 +14829,13 @@ namespace ts {
             function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
                 let bestMatch: Type | undefined;
                 let matchingCount = 0;
+                const sourceIsObjectLiteral = !!(getObjectFlags(source) & ObjectFlags.ObjectLiteral);
                 for (const target of unionTarget.types) {
+                    // Skip checking object literals against array-like types.
+                    // They're useless candidates.
+                    if (sourceIsObjectLiteral && isArrayLikeType(target)) {
+                        continue;
+                    }
                     const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
                     if (overlap.flags & TypeFlags.Index) {
                         // perfect overlap of keys
