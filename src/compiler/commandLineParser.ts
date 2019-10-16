@@ -2533,7 +2533,7 @@ namespace ts {
 
     function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (option.isFilePath) {
-            value = normalizePath(combinePaths(basePath, value));
+            value = getNormalizedAbsolutePath(value, basePath);
             if (value === "") {
                 value = ".";
             }

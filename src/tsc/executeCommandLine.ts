@@ -241,10 +241,9 @@ namespace ts {
         }
 
         const currentDirectory = sys.getCurrentDirectory();
-        const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
         const commandLineOptions = convertToOptionsWithAbsolutePaths(
             commandLine.options,
-            fileName => toPath(fileName, currentDirectory, getCanonicalFileName)
+            fileName => getNormalizedAbsolutePath(fileName, currentDirectory)
         );
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
