@@ -14829,13 +14829,15 @@ namespace ts {
             function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
                 let bestMatch: Type | undefined;
                 let matchingCount = 0;
-                const sourceIsObjectLiteral = !!(getObjectFlags(source) & ObjectFlags.ObjectLiteral);
+                const sourceObjectFlags = getObjectFlags(source);
+                const sourceIsObjectLiteral = !!(sourceObjectFlags & ObjectFlags.ObjectLiteral);
                 for (const target of unionTarget.types) {
+                    // Relating objects to primitives is useless.
+                    if (sourceObjectFlags && target.flags & TypeFlags.Primitive) continue;
                     // Skip checking object literals against array-like types.
                     // They're useless candidates.
-                    if (sourceIsObjectLiteral && isArrayLikeType(target)) {
-                        continue;
-                    }
+                    if (sourceIsObjectLiteral && isArrayLikeType(target)) continue;
+
                     const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
                     if (overlap.flags & TypeFlags.Index) {
                         // perfect overlap of keys
