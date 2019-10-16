@@ -3955,7 +3955,7 @@ namespace ts {
             // to avoid walking over the template string twice and shifting all our arguments over after the fact.
             const templateArguments: Expression[] = [undefined!];
             const cookedStrings: Expression[] = [];
-            const rawStrings: Expression[] = [];
+            const rawStrings: StringLiteral[] = [];
             const template = node.template;
             if (isNoSubstitutionTemplateLiteral(template)) {
                 cookedStrings.push(createLiteral(template.text));
@@ -3973,24 +3973,38 @@ namespace ts {
 
             const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
 
-            // Create a variable to cache the template object if we're in a module.
-            // Do not do this in the global scope, as any variable we currently generate could conflict with
-            // variables from outside of the current compilation. In the future, we can revisit this behavior.
-            if (isExternalModule(currentSourceFile)) {
-                const tempVar = createUniqueName("templateObject");
-                recordTaggedTemplateString(tempVar);
-                templateArguments[0] = createLogicalOr(
+            // Create a variable to cache the template object.
+            let tempNameText = "templateObject";
+            if (!isExternalModule(currentSourceFile)) {
+                // In the global scope we append a hash of the string contents to avoid the risk
+                // of these variables trampling on each other. This can already happen in other places
+                // but typical use-cases for TemplateResults involve identity checks.
+                const hashStr = getHashStringForRawTemplateContents(rawStrings);
+                tempNameText += hashStr;
+            }
+            const tempVar = createUniqueName(tempNameText);
+            recordTaggedTemplateString(tempVar);
+            templateArguments[0] = createLogicalOr(
+                tempVar,
+                createAssignment(
                     tempVar,
-                    createAssignment(
-                        tempVar,
-                        helperCall)
-                );
+                    helperCall)
+            );
+            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
+        }
+
+        function getHashStringForRawTemplateContents(rawStrings: StringLiteral[]) {
+            const rawContents = map(rawStrings, s => s.text.replace(/\{\|}/g, "{{|}}")).join("{|}");
+            let hashStr = generateDjb2Hash(rawContents);
+            Debug.assert(hashStr.length > 0, "hashStr is not empty.");
+            if (hashStr.charCodeAt(0) === CharacterCodes.minus) {
+                hashStr = "__" + hashStr.slice(1);
             }
             else {
-                templateArguments[0] = helperCall;
+                hashStr = "_" + hashStr;
             }
-
-            return createCall(tag, /*typeArguments*/ undefined, templateArguments);
+            Debug.assert(isIdentifierText(hashStr, ScriptTarget.ES3), "hashStr can be an identifier on its own.");
+            return hashStr;
         }
 
         /**
