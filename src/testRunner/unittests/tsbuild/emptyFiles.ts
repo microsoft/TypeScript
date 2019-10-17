@@ -10,14 +10,14 @@ namespace ts {
 
         verifyTsc({
             scenario: "emptyFiles",
-            subScenario: "does not have empty files diagnostic when files is empty and references are provided",
+            subScenario: "has empty files diagnostic when files is empty and no references are provided",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/no-references"],
         });
 
         verifyTsc({
             scenario: "emptyFiles",
-            subScenario: "has empty files diagnostic when files is empty and no references are provided",
+            subScenario: "does not have empty files diagnostic when files is empty and references are provided",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/with-references"],
         });
