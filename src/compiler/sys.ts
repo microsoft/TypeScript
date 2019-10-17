@@ -547,7 +547,7 @@ namespace ts {
             try {
                 originalWriteFile.call(sys, path, data, writeBom);
             }
-            catch (_) {
+            catch {
                 const directoryPath = getDirectoryPath(normalizeSlashes(path));
                 if (directoryPath && !sys.directoryExists(directoryPath)) {
                     recursiveCreateDirectory(directoryPath, sys);

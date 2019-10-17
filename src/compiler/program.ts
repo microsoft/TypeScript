@@ -124,7 +124,7 @@ namespace ts {
                 try {
                     writeFileWorker(fileName, data, writeByteOrderMark);
                 }
-                catch (_) {
+                catch {
                     ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
                     writeFileWorker(fileName, data, writeByteOrderMark);
                 }

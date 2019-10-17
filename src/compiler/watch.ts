@@ -307,9 +307,20 @@ namespace ts {
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
             try {
                 performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                host.writeFile!(fileName, text, writeByteOrderMark);
+                // PERF: Checking for directory existence is expensive.
+                // Instead, assume the directory exists and fall back
+                // to creating it if the file write fails.
+                // NOTE: If patchWriteFileEnsuringDirectory has been called,
+                // the file write will do its own directory creation and
+                // the ensureDirectoriesExist call will always be redundant.
+                try {
+                    host.writeFile!(fileName, text, writeByteOrderMark);
+                }
+                catch {
+                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+                    host.writeFile!(fileName, text, writeByteOrderMark);
+                }
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
