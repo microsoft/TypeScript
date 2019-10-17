@@ -11,7 +11,7 @@ namespace ts {
 
         verifyTsc({
             scenario: "demo",
-            subScenario: "in master branch with everything setup correctly, reports no error",
+            subScenario: "in master branch with everything setup correctly and reports no error",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"]
         });
