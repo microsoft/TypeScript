@@ -641,7 +641,10 @@ namespace ts.codefix {
                     filteredCount++;
                 }
             }
-            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName, globalTypingsCache)) {
+            else if (sourceFile &&
+                sourceFile !== from &&
+                isImportablePath(from.fileName, sourceFile.fileName, hostGetCanonicalFileName(host), globalTypingsCache)
+            ) {
                 if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
                 }
@@ -670,11 +673,13 @@ namespace ts.codefix {
      * Don't include something from a `node_modules` that isn't actually reachable by a global import.
      * A relative import to node_modules is usually a bad idea.
      */
-    function isImportablePath(fromPath: string, toPath: string, globalCachePath?: string): boolean {
+    function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
         // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
         const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
-        const toNodeModulesParent = toNodeModules && getDirectoryPath(toNodeModules);
-        return toNodeModulesParent === undefined || startsWith(fromPath, toNodeModulesParent) || (!!globalCachePath && startsWith(globalCachePath, toNodeModulesParent));
+        const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
+        return toNodeModulesParent === undefined
+            || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
+            || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
