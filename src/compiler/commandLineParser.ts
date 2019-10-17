@@ -220,6 +220,8 @@ namespace ts {
             name: "listFilesOnly",
             type: "boolean",
             category: Diagnostics.Command_line_Options,
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             isCommandLineOnly: true,
             description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing
         },
