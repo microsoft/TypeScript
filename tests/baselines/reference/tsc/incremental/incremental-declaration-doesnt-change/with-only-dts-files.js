@@ -1,6 +1,6 @@
 //// [/lib/incremental-declaration-doesnt-changeOutput.txt]
 /lib/tsc --incremental --p src/project
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/project/src/main.d.ts]

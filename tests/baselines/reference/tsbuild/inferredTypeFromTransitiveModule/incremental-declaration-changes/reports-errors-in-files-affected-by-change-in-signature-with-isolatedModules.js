@@ -8,7 +8,7 @@
 12:04:00 AM - Building project '/src/tsconfig.json'...
 
 src/lazyIndex.ts(4,5): error TS2554: Expected 0 arguments, but got 1.
-exitCode:: 1
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/bar.ts]

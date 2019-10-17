@@ -17,7 +17,7 @@
 
 12:04:00 AM - Building project '/src/third/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/second/tsconfig.json": 1,

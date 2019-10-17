@@ -13,7 +13,7 @@
 
 12:04:00 AM - Building project '/src/tests/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/tests/index.d.ts] file written with same contents

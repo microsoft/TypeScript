@@ -39,6 +39,7 @@
 
         "unittests/services/extract/helpers.ts",
         "unittests/tsbuild/helpers.ts",
+        "../tsc/executeCommandLine.ts",
         "unittests/tsc/helpers.ts",
         "unittests/tscWatch/helpers.ts",
         "unittests/tsserver/helpers.ts",

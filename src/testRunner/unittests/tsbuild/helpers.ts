@@ -279,6 +279,7 @@ interface Symbol {
         buildKind: BuildKind;
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario?: string;
+        commandLineArgs?: readonly string[];
     }
 
     export interface VerifyTsBuildInput extends TscCompile {
@@ -318,7 +319,12 @@ interface Symbol {
                 verifyTscBaseline(() => sys);
             });
 
-            for (const { buildKind, modifyFs, subScenario: incrementalSubScenario } of incrementalScenarios) {
+            for (const {
+                buildKind,
+                modifyFs,
+                subScenario: incrementalSubScenario,
+                commandLineArgs: incrementalCommandLineArgs
+            } of incrementalScenarios) {
                 describe(incrementalSubScenario || buildKind, () => {
                     let newSys: TscCompileSystem;
                     before(() => {
@@ -329,7 +335,7 @@ interface Symbol {
                             subScenario: incrementalSubScenario || subScenario,
                             buildKind,
                             fs: () => sys.vfs,
-                            commandLineArgs,
+                            commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                             modifyFs: fs => {
                                 tick();
                                 modifyFs(fs);

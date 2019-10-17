@@ -12,7 +12,7 @@
 
 12:00:00 AM - Building project '/src/app/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/app/file3.ts]

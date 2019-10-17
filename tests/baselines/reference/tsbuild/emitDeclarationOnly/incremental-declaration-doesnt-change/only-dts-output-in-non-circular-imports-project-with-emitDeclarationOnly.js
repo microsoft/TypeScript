@@ -9,7 +9,7 @@
 
 12:08:00 AM - Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/a.d.ts] file written with same contents

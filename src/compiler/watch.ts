@@ -91,7 +91,7 @@ namespace ts {
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
-        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
+        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
         return result;

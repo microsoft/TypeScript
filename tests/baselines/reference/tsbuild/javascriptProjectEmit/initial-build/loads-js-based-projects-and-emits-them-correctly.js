@@ -47,7 +47,7 @@ module.exports = {};
 
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc -b /src
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/lib/sub-project/index.d.ts]
