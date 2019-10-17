@@ -7270,9 +7270,6 @@ namespace ts {
             // Handle variable, parameter or property
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                 // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                if (symbol.flags & SymbolFlags.ValueModule) {
-                    return getTypeOfFuncClassEnumModule(symbol);
-                }
                 return reportCircularityError(symbol);
             }
             let type: Type | undefined;
