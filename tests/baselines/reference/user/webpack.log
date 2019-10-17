@@ -1,7 +1,72 @@
 Exit Code: 1
 Standard output:
-lib/BannerPlugin.js(34,27): error TS2345: Argument of type 'BannerPluginArgument' is not assignable to parameter of type 'object | object[]'.
-  Type 'string' is not assignable to type 'object | object[]'.
+lib/FlagDependencyExportsPlugin.js(113,27): error TS2339: Property 'setUnknownExportsProvided' does not exist on type 'typeof ExportsInfo'.
+lib/FlagDependencyExportsPlugin.js(120,44): error TS2339: Property 'getExportInfo' does not exist on type 'typeof ExportsInfo'.
+lib/FlagDependencyExportsPlugin.js(128,44): error TS2339: Property 'getExportInfo' does not exist on type 'typeof ExportsInfo'.
+lib/FlagDependencyExportsPlugin.js(183,10): error TS2322: Type 'ExportsInfo' is not assignable to type 'typeof ExportsInfo'.
+lib/FlagDependencyExportsPlugin.js(184,26): error TS2339: Property 'otherExportsInfo' does not exist on type 'typeof ExportsInfo'.
+lib/FlagDependencyExportsPlugin.js(187,24): error TS2339: Property 'setUnknownExportsProvided' does not exist on type 'typeof ExportsInfo'.
+lib/FlagDependencyUsagePlugin.js(73,44): error TS2345: Argument of type 'ExportsInfo' is not assignable to parameter of type 'typeof ExportsInfo'.
+lib/FlagDependencyUsagePlugin.js(85,44): error TS2345: Argument of type 'ExportsInfo' is not assignable to parameter of type 'typeof ExportsInfo'.
+lib/FlagDependencyUsagePlugin.js(135,33): error TS2345: Argument of type 'ExportsInfo' is not assignable to parameter of type 'typeof ExportsInfo'.
+lib/WebpackOptionsApply.js(633,10): error TS2322: Type 'WebpackLogger' is not assignable to type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(155,9): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(222,9): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(301,10): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(431,10): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(434,11): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(480,11): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(483,12): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(576,12): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/buildChunkGraph.js(716,3): error TS2345: Argument of type 'WebpackLogger' is not assignable to parameter of type 'typeof WebpackLogger'.
+  Property 'prototype' is missing in type 'WebpackLogger' but required in type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(326,10): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(331,13): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(334,13): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(336,13): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(341,12): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(344,13): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(351,13): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(356,12): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(363,17): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(366,17): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(370,17): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(385,17): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(388,17): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(398,16): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(405,19): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(408,19): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(416,18): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(427,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(431,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(433,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(435,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(455,17): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(458,17): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(465,16): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(475,18): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(478,18): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(491,17): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(502,18): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(508,19): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(513,21): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(516,21): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(539,24): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(557,25): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(559,25): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(582,18): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(602,20): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(603,20): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(606,20): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(607,20): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(608,20): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(613,17): error TS2339: Property 'warn' does not exist on type 'typeof WebpackLogger'.
+lib/cache/PackFileCacheStrategy.js(614,17): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
+lib/dependencies/HarmonyExportImportedSpecifierDependency.js(223,6): error TS2741: Property 'prototype' is missing in type 'ExportsInfo' but required in type 'typeof ExportsInfo'.
+lib/dependencies/HarmonyImportDependencyParserPlugin.js(92,25): error TS2345: Argument of type 'Set<typeof TopLevelSymbol>' is not assignable to parameter of type 'true | Set<string | TopLevelSymbol>'.
+  Type 'Set<typeof TopLevelSymbol>' is not assignable to type 'Set<string | TopLevelSymbol>'.
+    Type 'typeof TopLevelSymbol' is not assignable to type 'string | TopLevelSymbol'.
+      Type 'typeof TopLevelSymbol' is missing the following properties from type 'TopLevelSymbol': innerGraph, addDependency
 lib/logging/Logger.js(49,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(53,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(57,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
@@ -18,16 +83,12 @@ lib/logging/Logger.js(99,20): error TS2345: Argument of type 'string' is not ass
 lib/logging/Logger.js(103,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(117,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(127,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "log" | "info" | "warn" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
+lib/util/registerExternalSerializer.js(217,14): error TS2339: Property 'start' does not exist on type 'typeof SourceLocation'.
+lib/util/registerExternalSerializer.js(218,14): error TS2339: Property 'start' does not exist on type 'typeof SourceLocation'.
+lib/util/registerExternalSerializer.js(219,14): error TS2339: Property 'end' does not exist on type 'typeof SourceLocation'.
+lib/util/registerExternalSerializer.js(220,14): error TS2339: Property 'end' does not exist on type 'typeof SourceLocation'.
 lib/util/registerExternalSerializer.js(253,14): error TS2339: Property 'line' does not exist on type 'Position'.
 lib/util/registerExternalSerializer.js(254,14): error TS2339: Property 'column' does not exist on type 'Position'.
-lib/validateSchema.js(15,11): error TS2339: Property 'children' does not exist on type 'ErrorObject'.
-lib/validateSchema.js(16,11): error TS2339: Property 'children' does not exist on type 'ErrorObject'.
-lib/validateSchema.js(26,22): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
-  Property 'additionalProperty' does not exist on type 'RefParams'.
-lib/validateSchema.js(40,22): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
-  Property 'additionalProperty' does not exist on type 'RefParams'.
-lib/validateSchema.js(51,31): error TS2339: Property 'additionalProperty' does not exist on type 'ErrorParameters'.
-  Property 'additionalProperty' does not exist on type 'RefParams'.
 
 
 
