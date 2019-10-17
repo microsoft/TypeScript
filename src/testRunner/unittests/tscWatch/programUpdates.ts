@@ -1126,7 +1126,7 @@ foo().hello`
             const bTsPath = `${projectRoot}/b.ts`;
             host.writeFile(bTsPath, aFile.content);
             host.runQueuedTimeoutCallbacks();
-            checkProgramActualFiles(watch(), [aFile.path, "b.ts", libFile.path]);
+            checkProgramActualFiles(watch(), [aFile.path, bTsPath, libFile.path]);
             checkOutputErrorsIncremental(host, [
                 "a.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n",
                 "b.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n"
@@ -1383,10 +1383,12 @@ ${aFile.content}`;
             };
 
             const host = createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            createWatchOfConfigFile(tsconfig.path, host);
+            const watch = createWatchOfConfigFile(tsconfig.path, host);
+            checkProgramActualFiles(watch(), [loggerFile.path, anotherFile.path, libFile.path]);
             checkOutputErrorsInitial(host, emptyArray);
             host.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger"));
             host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), [`${projectRoot}/Logger.ts`, anotherFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, [
                 createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, loggerFile.path, `${projectRoot}/Logger.ts`),
             ]);

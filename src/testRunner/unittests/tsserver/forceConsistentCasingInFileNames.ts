@@ -59,7 +59,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true, logger: projectSystem.createLoggerWritingToConsole() });
+            const session = createSession(host, { canUseEvents: true });
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
                 arguments: {

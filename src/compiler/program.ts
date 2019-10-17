@@ -2388,6 +2388,7 @@ namespace ts {
 
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
+                file.fileName = fileName; // Ensure that source file has same name as what we were looking for
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
@@ -2871,6 +2872,7 @@ namespace ts {
                 }
                 commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             }
+            sourceFile.fileName = refPath;
             sourceFile.path = sourceFilePath;
             sourceFile.resolvedPath = sourceFilePath;
             sourceFile.originalFileName = refPath;
