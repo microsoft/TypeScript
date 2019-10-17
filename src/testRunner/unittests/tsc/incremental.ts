@@ -17,13 +17,10 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsUnchanged,
-                modifyFs: noop,
-            }]
+            incrementalScenarios: [noChangeRun]
         });
 
-        verifyTsc({
+        verifyTscIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
@@ -37,6 +34,25 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
+            incrementalScenarios: [noChangeRun]
+        });
+
+        verifyTscIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "with only dts files",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.d.ts": "export const x = 10;",
+                "/src/project/src/another.d.ts": "export const y = 10;",
+                "/src/project/tsconfig.json": "{}",
+            }),
+            commandLineArgs: ["--incremental", "--p", "src/project"],
+            incrementalScenarios: [
+                noChangeRun,
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;")
+                }
+            ]
         });
     });
 }
