@@ -43,7 +43,7 @@ node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'un
 node_modules/lodash/_baseFlatten.js(24,22): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/_baseHas.js(16,56): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
   Type 'any[]' is not assignable to type 'string | number | symbol'.
-    Type 'any[]' is not assignable to type 'string'.
+    Type 'any[]' is not assignable to type 'symbol'.
 node_modules/lodash/_baseIntersection.js(53,40): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
 node_modules/lodash/_baseIntersection.js(60,54): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
@@ -237,7 +237,7 @@ node_modules/lodash/core.js(2609,51): error TS2554: Expected 0 arguments, but go
 node_modules/lodash/core.js(2644,12): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/core.js(3245,58): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
   Type 'any[]' is not assignable to type 'string | number | symbol'.
-    Type 'any[]' is not assignable to type 'string'.
+    Type 'any[]' is not assignable to type 'symbol'.
 node_modules/lodash/core.js(3354,53): error TS2538: Type 'any[]' cannot be used as an index type.
 node_modules/lodash/core.js(3424,41): error TS2769: No overload matches this call.
   The last overload gave the following error.
