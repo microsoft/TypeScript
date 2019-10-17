@@ -3700,6 +3700,36 @@ namespace ts {
         }, sourceFiles);
     }
 
+    function ensureDirectoriesExist(
+        directoryPath: string,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+        if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+            const parentDirectory = getDirectoryPath(directoryPath);
+            ensureDirectoriesExist(parentDirectory, createDirectory, directoryExists);
+            createDirectory(directoryPath);
+        }
+    }
+
+    export function writeFileEnsuringDirectories(
+        path: string,
+        data: string,
+        writeByteOrderMark: boolean | undefined,
+        writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+
+        // PERF: Checking for directory existence is expensive.  Instead, assume the directory exists
+        // and fall back to creating it if the file write fails.
+        try {
+            writeFile(path, data, writeByteOrderMark);
+        }
+        catch {
+            ensureDirectoriesExist(getDirectoryPath(normalizePath(path)), createDirectory, directoryExists);
+            writeFile(path, data, writeByteOrderMark);
+        }
+    }
+
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }

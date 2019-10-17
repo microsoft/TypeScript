@@ -103,31 +103,20 @@ namespace ts {
             return false;
         }
 
-        function ensureDirectoriesExist(directoryPath: string) {
-            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                const parentDirectory = getDirectoryPath(directoryPath);
-                ensureDirectoriesExist(parentDirectory);
-                (compilerHost.createDirectory || system.createDirectory)(directoryPath);
-            }
-        }
-
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 performance.mark("beforeIOWrite");
 
-                // PERF: Checking for directory existence is expensive.
-                // Instead, assume the directory exists and fall back
-                // to creating it if the file write fails.
                 // NOTE: If patchWriteFileEnsuringDirectory has been called,
-                // the file write will do its own directory creation and
+                // the system.writeFile will do its own directory creation and
                 // the ensureDirectoriesExist call will always be redundant.
-                try {
-                    writeFileWorker(fileName, data, writeByteOrderMark);
-                }
-                catch {
-                    ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                    writeFileWorker(fileName, data, writeByteOrderMark);
-                }
+                writeFileEnsuringDirectories(
+                    fileName,
+                    data,
+                    writeByteOrderMark,
+                    writeFileWorker,
+                    compilerHost.createDirectory || system.createDirectory,
+                    directoryExists);
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");

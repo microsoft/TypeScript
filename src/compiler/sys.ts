@@ -522,17 +522,6 @@ namespace ts {
         }
     }
 
-    function recursiveCreateDirectory(directoryPath: string, sys: System) {
-        const basePath = getDirectoryPath(directoryPath);
-        const shouldCreateParent = basePath !== "" && directoryPath !== basePath && !sys.directoryExists(basePath);
-        if (shouldCreateParent) {
-            recursiveCreateDirectory(basePath, sys);
-        }
-        if (shouldCreateParent || !sys.directoryExists(directoryPath)) {
-            sys.createDirectory(directoryPath);
-        }
-    }
-
     /**
      * patch writefile to create folder before writing the file
      */
@@ -540,22 +529,14 @@ namespace ts {
     export function patchWriteFileEnsuringDirectory(sys: System) {
         // patch writefile to create folder before writing the file
         const originalWriteFile = sys.writeFile;
-        sys.writeFile = (path, data, writeBom) => {
-            // PERF: Checking for directory existence is expensive.
-            // Instead, assume the directory exists and fall back
-            // to creating it if the file write fails.
-            try {
-                originalWriteFile.call(sys, path, data, writeBom);
-            }
-            catch {
-                const directoryPath = getDirectoryPath(normalizeSlashes(path));
-                if (directoryPath && !sys.directoryExists(directoryPath)) {
-                    recursiveCreateDirectory(directoryPath, sys);
-                }
-
-                originalWriteFile.call(sys, path, data, writeBom);
-            }
-        };
+        sys.writeFile = (path, data, writeBom) =>
+            writeFileEnsuringDirectories(
+                path,
+                data,
+                writeBom,
+                (p, d, w) => originalWriteFile.call(sys, p, d, w),
+                sys.createDirectory,
+                sys.directoryExists);
     }
 
     /*@internal*/
