@@ -1365,33 +1365,5 @@ ${aFile.content}`;
                 getDiagnosticOfFileFromProgram(watch(), aFile.path, aContent.indexOf(`"../b"`), `"../b"`.length, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, bFile.path, projectRoot)
             ]);
         });
-
-        it("forceConsistentCasingInFileNames works when renaming file with different casing", () => {
-            const loggerFile: File = {
-                path: `${projectRoot}/logger.ts`,
-                content: `export class logger { }`
-            };
-            const anotherFile: File = {
-                path: `${projectRoot}/another.ts`,
-                content: `import { logger } from "./logger"; new logger();`
-            };
-            const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: { forceConsistentCasingInFileNames: true }
-                })
-            };
-
-            const host = createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const watch = createWatchOfConfigFile(tsconfig.path, host);
-            checkProgramActualFiles(watch(), [loggerFile.path, anotherFile.path, libFile.path]);
-            checkOutputErrorsInitial(host, emptyArray);
-            host.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger"));
-            host.runQueuedTimeoutCallbacks();
-            checkProgramActualFiles(watch(), [`${projectRoot}/Logger.ts`, anotherFile.path, libFile.path]);
-            checkOutputErrorsIncremental(host, [
-                createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, loggerFile.path, `${projectRoot}/Logger.ts`),
-            ]);
-        });
     });
 }
