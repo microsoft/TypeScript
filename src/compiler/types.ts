@@ -3371,8 +3371,10 @@ namespace ts {
 
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
+
         getRootSymbols(symbol: Symbol): readonly Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
@@ -3530,6 +3532,14 @@ namespace ts {
         None = 0,
         Literal,
         Subtype
+    }
+
+    /* @internal */
+    export const enum ContextFlags {
+        None          = 0,
+        Signature     = 1 << 0, // Obtaining contextual signature
+        NoConstraints = 1 << 1, // Don't obtain type variable constraints
+        Completion    = 1 << 2, // Obtaining constraint type for completion
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
