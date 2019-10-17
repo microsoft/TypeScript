@@ -307,6 +307,11 @@ namespace ts.server {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
 
+        /*@internal*/
+        getGlobalTypingsCacheLocation() {
+            return this.getGlobalCache();
+        }
+
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
         }

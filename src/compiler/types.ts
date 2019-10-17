@@ -6170,6 +6170,8 @@ namespace ts {
         readFile?(path: string): string | undefined;
         /* @internal */
         getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
+        /* @internal */
+        getGlobalTypingsCacheLocation?(): string | undefined;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
