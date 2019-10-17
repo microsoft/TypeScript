@@ -10740,7 +10740,7 @@ namespace ts {
                     errorType;
             }
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
-                const jsdocType = getTypeFromJSAlias(node, symbol);
+                const jsdocType = getTypeFromJSDocValueReference(node, symbol);
                 if (jsdocType) {
                     return jsdocType;
                 }
@@ -10754,19 +10754,25 @@ namespace ts {
         }
 
         /**
-         * A JSdoc TypeReference may be to a value imported from commonjs.
-         * These should really be aliases, but this special-case code fakes alias resolution
-         * by producing a type from a value.
+         * A JSdoc TypeReference may be to a value, but resolve it as a type anyway.
+         * Note: If the value is imported from commonjs, it should really be an alias,
+         * but this function fakes special-case code fakes alias resolution as well.
          */
-        function getTypeFromJSAlias(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
+        function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
             const valueType = getTypeOfSymbol(symbol);
-            const typeType =
-                valueType.symbol &&
-                valueType.symbol !== symbol && // Make sure this is a commonjs export by checking that symbol -> type -> symbol doesn't roundtrip.
-                getTypeReferenceType(node, valueType.symbol);
-            if (typeType) {
-                return getSymbolLinks(symbol).resolvedJSDocType = typeType;
+            let typeType = valueType;
+            if (symbol.valueDeclaration) {
+                const decl = getRootDeclaration(symbol.valueDeclaration);
+                const isRequireAlias = isVariableDeclaration(decl)
+                    && decl.initializer
+                    && isCallExpression(decl.initializer)
+                    && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)
+                    && valueType.symbol;
+                if (isRequireAlias) {
+                    typeType = getTypeReferenceType(node, valueType.symbol);
+                }
             }
+            return getSymbolLinks(symbol).resolvedJSDocType = typeType;
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
