@@ -1009,6 +1009,9 @@ namespace ts.server {
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
+                        if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
+                            project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                        }
                         return;
                     }
 
@@ -1214,6 +1217,16 @@ namespace ts.server {
                     }
                     // Do not remove the project so that we can reuse this project
                     // if it would need to be re-created with next file open
+
+                    // If project had open file affecting
+                    // Reload the root Files from config if its not already scheduled
+                    if (p.openFileWatchTriggered.has(info.path)) {
+                        p.openFileWatchTriggered.delete(info.path);
+                        if (!p.pendingReload) {
+                            p.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                            p.markFileAsDirty(info.path);
+                        }
+                    }
                 }
                 else if (isInferredProject(p) && p.isRoot(info)) {
                     // If this was the last open root file of inferred project

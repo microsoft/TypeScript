@@ -1676,6 +1676,9 @@ namespace ts.server {
         /* @internal */
         pendingReloadReason: string | undefined;
 
+        /* @internal */
+        openFileWatchTriggered = createMap<true>();
+
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
 
@@ -1785,9 +1788,11 @@ namespace ts.server {
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
+                    this.openFileWatchTriggered.clear();
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
+                    this.openFileWatchTriggered.clear();
                     const reason = Debug.assertDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
                     this.projectService.reloadConfiguredProject(this, reason);
@@ -1914,6 +1919,7 @@ namespace ts.server {
             this.configFileSpecs = undefined;
             this.projectReferenceCallbacks = undefined;
             this.mapOfDeclarationDirectories = undefined;
+            this.openFileWatchTriggered.clear();
             super.close();
         }
 
