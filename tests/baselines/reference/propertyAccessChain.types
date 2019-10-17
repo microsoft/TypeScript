@@ -80,3 +80,12 @@ o6<number>()?.x;
 >o6 : <T>() => { x: number; } | undefined
 >x : number | undefined
 
+// GH#34109
+o1?.b ? 1 : 0;
+>o1?.b ? 1 : 0 : 0 | 1
+>o1?.b : string | undefined
+>o1 : { b: string; } | undefined
+>b : string | undefined
+>1 : 1
+>0 : 0
+
