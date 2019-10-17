@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="fr-FR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -1348,7 +1348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment can only be used in a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Une attribution d'exportation peut uniquement être utilisée dans un module.]]></Val>
+            <Val><![CDATA[Une affectation d'exportation peut uniquement être utilisée dans un module.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5539,7 +5539,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all code paths return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les chemins de code ne retournent pas tous une valeur.]]></Val>
+            <Val><![CDATA[Les chemins du code ne retournent pas tous une valeur.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6916,7 +6916,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Report error when not all code paths in function return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Signalez une erreur quand les chemins de code de la fonction ne retournent pas tous une valeur.]]></Val>
+            <Val><![CDATA[Signalez une erreur quand les chemins du code de la fonction ne retournent pas tous une valeur.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

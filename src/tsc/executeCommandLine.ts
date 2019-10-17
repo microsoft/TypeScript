@@ -604,8 +604,8 @@ namespace ts {
         createWatchProgram(watchCompilerHost);
     }
 
-    function canReportDiagnostics(sys: System, compilerOptions: CompilerOptions) {
-        return sys === ts.sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
+    function canReportDiagnostics(system: System, compilerOptions: CompilerOptions) {
+        return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
     }
 
     function enableStatistics(sys: System, compilerOptions: CompilerOptions) {

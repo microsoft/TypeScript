@@ -15,7 +15,11 @@ Please help us by doing the following steps before logging an issue:
 Please fill in the *entire* template below.
 -->
 
-<!-- Please try to reproduce the issue with `typescript@next`. It may have already been fixed. -->
+<!--
+Please try to reproduce the issue with the latest published version. It may have already been fixed.
+For npm: `typescript@next`
+This is also the 'Nightly' version in the playground: http://www.typescriptlang.org/play/?ts=Nightly
+-->
 **TypeScript Version:**  3.7.x-dev.201xxxxx
 
 <!-- Search terms you tried before logging this (so others can find this issue more easily) -->

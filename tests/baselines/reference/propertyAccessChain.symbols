@@ -79,3 +79,9 @@ o6<number>()?.x;
 >o6 : Symbol(o6, Decl(propertyAccessChain.ts, 16, 13))
 >x : Symbol(x, Decl(propertyAccessChain.ts, 16, 41))
 
+// GH#34109
+o1?.b ? 1 : 0;
+>o1?.b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+>o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
+

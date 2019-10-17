@@ -251,9 +251,7 @@ namespace ts {
             state.seenAffectedFiles = createMap<true>();
         }
 
-        state.emittedBuildInfo = !state.changedFilesSet.size &&
-            !state.affectedFilesPendingEmit;
-
+        state.emittedBuildInfo = !state.changedFilesSet.size && !state.affectedFilesPendingEmit;
         return state;
     }
 
