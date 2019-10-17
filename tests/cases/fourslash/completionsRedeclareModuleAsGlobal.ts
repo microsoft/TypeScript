@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// 32675 - if this fails there are two copies of assert in completions
+
 // @esModuleInterop: true,
 // @target: esnext
 

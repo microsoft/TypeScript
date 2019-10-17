@@ -1343,12 +1343,9 @@ namespace ts.Completions {
                     }
 
                     const symbolId = getSymbolId(symbol);
-                    const existingSymbol = findLast(symbols, symbol => symbol.id === symbolId);
-                    if (!existingSymbol) {
-                        symbols.push(symbol);
-                        symbolToOriginInfoMap[symbolId] = origin;
-                        symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
-                    }
+                    symbols.push(symbol);
+                    symbolToOriginInfoMap[symbolId] = origin;
+                    symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
                 });
             }
             filterGlobalCompletion(symbols);
@@ -1468,7 +1465,7 @@ namespace ts.Completions {
         }
 
         /**
-         * Gathers symbols that can be imported from other files, deduplicating along the way. Symbols can be “duplicates”
+         * Gathers symbols that can be imported from other files, de-duplicating along the way. Symbols can be "duplicates"
          * if re-exported from another module, e.g. `export { foo } from "./a"`. That syntax creates a fresh symbol, but
          * it’s just an alias to the first, and both have the same name, so we generally want to filter those aliases out,
          * if and only if the the first can be imported (it may be excluded due to package.json filtering in
@@ -1552,7 +1549,7 @@ namespace ts.Completions {
                 // Don't add another completion for `export =` of a symbol that's already global.
                 // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol &&
-                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
+                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator && !findAncestor(d, isGlobalScopeAugmentation))) {
                     pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
