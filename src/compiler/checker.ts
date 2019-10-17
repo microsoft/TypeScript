@@ -19324,6 +19324,10 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
+                if (strictNullChecks && access.questionDotToken) {
+                    type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull)
+                }
+
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
                 return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType!));

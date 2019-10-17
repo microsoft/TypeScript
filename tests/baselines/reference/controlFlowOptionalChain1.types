@@ -1,0 +1,60 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain1.ts ===
+type Shape =
+>Shape : Shape
+
+    | { type: 'rectangle', width: number, height: number }
+>type : "rectangle"
+>width : number
+>height : number
+
+    | { type: 'circle', radius: number }
+>type : "circle"
+>radius : number
+
+declare function assertUndefined(v: undefined): void
+>assertUndefined : (v: undefined) => void
+>v : undefined
+
+function getArea(shape?: Shape) {
+>getArea : (shape?: { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined) => number | void
+>shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+
+    switch (shape?.type) {
+>shape?.type : "rectangle" | "circle" | undefined
+>shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>type : "rectangle" | "circle" | undefined
+
+        case 'circle':
+>'circle' : "circle"
+
+            return Math.PI * shape.radius ** 2
+>Math.PI * shape.radius ** 2 : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>shape.radius ** 2 : number
+>shape.radius : number
+>shape : { type: "circle"; radius: number; }
+>radius : number
+>2 : 2
+
+        case 'rectangle':
+>'rectangle' : "rectangle"
+
+            return shape.width * shape.height
+>shape.width * shape.height : number
+>shape.width : number
+>shape : { type: "rectangle"; width: number; height: number; }
+>width : number
+>shape.height : number
+>shape : { type: "rectangle"; width: number; height: number; }
+>height : number
+
+        default:
+            return assertUndefined(shape)
+>assertUndefined(shape) : void
+>assertUndefined : (v: undefined) => void
+>shape : never
+    }
+}
+

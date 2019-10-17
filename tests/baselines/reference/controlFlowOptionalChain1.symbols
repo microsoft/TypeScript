@@ -1,0 +1,52 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain1.ts ===
+type Shape =
+>Shape : Symbol(Shape, Decl(controlFlowOptionalChain1.ts, 0, 0))
+
+    | { type: 'rectangle', width: number, height: number }
+>type : Symbol(type, Decl(controlFlowOptionalChain1.ts, 1, 7))
+>width : Symbol(width, Decl(controlFlowOptionalChain1.ts, 1, 26))
+>height : Symbol(height, Decl(controlFlowOptionalChain1.ts, 1, 41))
+
+    | { type: 'circle', radius: number }
+>type : Symbol(type, Decl(controlFlowOptionalChain1.ts, 2, 7))
+>radius : Symbol(radius, Decl(controlFlowOptionalChain1.ts, 2, 23))
+
+declare function assertUndefined(v: undefined): void
+>assertUndefined : Symbol(assertUndefined, Decl(controlFlowOptionalChain1.ts, 2, 40))
+>v : Symbol(v, Decl(controlFlowOptionalChain1.ts, 4, 33))
+
+function getArea(shape?: Shape) {
+>getArea : Symbol(getArea, Decl(controlFlowOptionalChain1.ts, 4, 52))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+>Shape : Symbol(Shape, Decl(controlFlowOptionalChain1.ts, 0, 0))
+
+    switch (shape?.type) {
+>shape?.type : Symbol(type, Decl(controlFlowOptionalChain1.ts, 1, 7), Decl(controlFlowOptionalChain1.ts, 2, 7))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+>type : Symbol(type, Decl(controlFlowOptionalChain1.ts, 1, 7), Decl(controlFlowOptionalChain1.ts, 2, 7))
+
+        case 'circle':
+            return Math.PI * shape.radius ** 2
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>shape.radius : Symbol(radius, Decl(controlFlowOptionalChain1.ts, 2, 23))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+>radius : Symbol(radius, Decl(controlFlowOptionalChain1.ts, 2, 23))
+
+        case 'rectangle':
+            return shape.width * shape.height
+>shape.width : Symbol(width, Decl(controlFlowOptionalChain1.ts, 1, 26))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+>width : Symbol(width, Decl(controlFlowOptionalChain1.ts, 1, 26))
+>shape.height : Symbol(height, Decl(controlFlowOptionalChain1.ts, 1, 41))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+>height : Symbol(height, Decl(controlFlowOptionalChain1.ts, 1, 41))
+
+        default:
+            return assertUndefined(shape)
+>assertUndefined : Symbol(assertUndefined, Decl(controlFlowOptionalChain1.ts, 2, 40))
+>shape : Symbol(shape, Decl(controlFlowOptionalChain1.ts, 6, 17))
+    }
+}
+
