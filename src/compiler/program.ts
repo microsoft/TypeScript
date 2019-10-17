@@ -1560,7 +1560,6 @@ namespace ts {
         }
 
         function getDiagnosticsProducingTypeChecker() {
-            Debug.assert(!options.listFilesOnly || !!options.extendedDiagnostics);
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
 
