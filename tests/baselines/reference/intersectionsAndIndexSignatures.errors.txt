@@ -1,0 +1,74 @@
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(13,1): error TS2322: Type '{ a: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(15,1): error TS2322: Type '{} & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(17,1): error TS2322: Type '{ [key: number]: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(19,1): error TS2322: Type '{ [key: string]: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(29,10): error TS2339: Property 'b' does not exist on type '{ a: string; }'.
+tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts(31,7): error TS2322: Type 'constr<{}, { [key: string]: { a: string; }; }>' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
+  Index signatures are incompatible.
+    Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+
+
+==== tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts (6 errors) ====
+    declare let s1: { a: string } & { b: string };
+    declare let s2: { a: string } & { b: number };
+    declare let s3: { [K in never]: never } & { b: string };
+    declare let s4: { [K in never]: never } & { b: number };
+    declare let s5: { [key: number]: string } & { b: string };
+    declare let s6: { [key: number]: string } & { b: number };
+    declare let s7: { [key: string]: string } & { b: string };
+    declare let s8: { [key: string]: string } & { b: number };
+    
+    declare let t1: { [key: string]: string };
+    
+    t1 = s1;
+    t1 = s2;  // Error
+    ~~
+!!! error TS2322: Type '{ a: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    t1 = s3;
+    t1 = s4;  // Error
+    ~~
+!!! error TS2322: Type '{} & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    t1 = s5;
+    t1 = s6;  // Error
+    ~~
+!!! error TS2322: Type '{ [key: number]: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    t1 = s7;
+    t1 = s8;  // Error
+    ~~
+!!! error TS2322: Type '{ [key: string]: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    // Repro from #32484
+    
+    type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
+    
+    type s = constr<{}, { [key: string]: { a: string } }>;
+    
+    declare const q: s;
+    q["asd"].a.substr(1);
+    q["asd"].b;  // Error
+             ~
+!!! error TS2339: Property 'b' does not exist on type '{ a: string; }'.
+    
+    const d: { [key: string]: {a: string, b: string} } = q;  // Error
+          ~
+!!! error TS2322: Type 'constr<{}, { [key: string]: { a: string; }; }>' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
+!!! error TS2322:   Index signatures are incompatible.
+!!! error TS2322:     Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts:31:39: 'b' is declared here.
+    

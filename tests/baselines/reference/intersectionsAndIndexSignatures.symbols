@@ -1,0 +1,118 @@
+=== tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts ===
+declare let s1: { a: string } & { b: string };
+>s1 : Symbol(s1, Decl(intersectionsAndIndexSignatures.ts, 0, 11))
+>a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 0, 17))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 0, 33))
+
+declare let s2: { a: string } & { b: number };
+>s2 : Symbol(s2, Decl(intersectionsAndIndexSignatures.ts, 1, 11))
+>a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 1, 17))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 1, 33))
+
+declare let s3: { [K in never]: never } & { b: string };
+>s3 : Symbol(s3, Decl(intersectionsAndIndexSignatures.ts, 2, 11))
+>K : Symbol(K, Decl(intersectionsAndIndexSignatures.ts, 2, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 2, 43))
+
+declare let s4: { [K in never]: never } & { b: number };
+>s4 : Symbol(s4, Decl(intersectionsAndIndexSignatures.ts, 3, 11))
+>K : Symbol(K, Decl(intersectionsAndIndexSignatures.ts, 3, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 3, 43))
+
+declare let s5: { [key: number]: string } & { b: string };
+>s5 : Symbol(s5, Decl(intersectionsAndIndexSignatures.ts, 4, 11))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 4, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 4, 45))
+
+declare let s6: { [key: number]: string } & { b: number };
+>s6 : Symbol(s6, Decl(intersectionsAndIndexSignatures.ts, 5, 11))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 5, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 5, 45))
+
+declare let s7: { [key: string]: string } & { b: string };
+>s7 : Symbol(s7, Decl(intersectionsAndIndexSignatures.ts, 6, 11))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 6, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 6, 45))
+
+declare let s8: { [key: string]: string } & { b: number };
+>s8 : Symbol(s8, Decl(intersectionsAndIndexSignatures.ts, 7, 11))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 7, 19))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 7, 45))
+
+declare let t1: { [key: string]: string };
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 9, 19))
+
+t1 = s1;
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s1 : Symbol(s1, Decl(intersectionsAndIndexSignatures.ts, 0, 11))
+
+t1 = s2;  // Error
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s2 : Symbol(s2, Decl(intersectionsAndIndexSignatures.ts, 1, 11))
+
+t1 = s3;
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s3 : Symbol(s3, Decl(intersectionsAndIndexSignatures.ts, 2, 11))
+
+t1 = s4;  // Error
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s4 : Symbol(s4, Decl(intersectionsAndIndexSignatures.ts, 3, 11))
+
+t1 = s5;
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s5 : Symbol(s5, Decl(intersectionsAndIndexSignatures.ts, 4, 11))
+
+t1 = s6;  // Error
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s6 : Symbol(s6, Decl(intersectionsAndIndexSignatures.ts, 5, 11))
+
+t1 = s7;
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s7 : Symbol(s7, Decl(intersectionsAndIndexSignatures.ts, 6, 11))
+
+t1 = s8;  // Error
+>t1 : Symbol(t1, Decl(intersectionsAndIndexSignatures.ts, 9, 11))
+>s8 : Symbol(s8, Decl(intersectionsAndIndexSignatures.ts, 7, 11))
+
+// Repro from #32484
+
+type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
+>constr : Symbol(constr, Decl(intersectionsAndIndexSignatures.ts, 18, 8))
+>Source : Symbol(Source, Decl(intersectionsAndIndexSignatures.ts, 22, 12))
+>Tgt : Symbol(Tgt, Decl(intersectionsAndIndexSignatures.ts, 22, 19))
+>K : Symbol(K, Decl(intersectionsAndIndexSignatures.ts, 22, 30))
+>Source : Symbol(Source, Decl(intersectionsAndIndexSignatures.ts, 22, 12))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Tgt : Symbol(Tgt, Decl(intersectionsAndIndexSignatures.ts, 22, 19))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Tgt : Symbol(Tgt, Decl(intersectionsAndIndexSignatures.ts, 22, 19))
+>Source : Symbol(Source, Decl(intersectionsAndIndexSignatures.ts, 22, 12))
+
+type s = constr<{}, { [key: string]: { a: string } }>;
+>s : Symbol(s, Decl(intersectionsAndIndexSignatures.ts, 22, 105))
+>constr : Symbol(constr, Decl(intersectionsAndIndexSignatures.ts, 18, 8))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 24, 23))
+>a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 24, 38))
+
+declare const q: s;
+>q : Symbol(q, Decl(intersectionsAndIndexSignatures.ts, 26, 13))
+>s : Symbol(s, Decl(intersectionsAndIndexSignatures.ts, 22, 105))
+
+q["asd"].a.substr(1);
+>q["asd"].a.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>q["asd"].a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 24, 38))
+>q : Symbol(q, Decl(intersectionsAndIndexSignatures.ts, 26, 13))
+>a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 24, 38))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+
+q["asd"].b;  // Error
+>q : Symbol(q, Decl(intersectionsAndIndexSignatures.ts, 26, 13))
+
+const d: { [key: string]: {a: string, b: string} } = q;  // Error
+>d : Symbol(d, Decl(intersectionsAndIndexSignatures.ts, 30, 5))
+>key : Symbol(key, Decl(intersectionsAndIndexSignatures.ts, 30, 12))
+>a : Symbol(a, Decl(intersectionsAndIndexSignatures.ts, 30, 27))
+>b : Symbol(b, Decl(intersectionsAndIndexSignatures.ts, 30, 37))
+>q : Symbol(q, Decl(intersectionsAndIndexSignatures.ts, 26, 13))
+

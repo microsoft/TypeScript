@@ -1,0 +1,121 @@
+=== tests/cases/conformance/types/intersection/intersectionsAndIndexSignatures.ts ===
+declare let s1: { a: string } & { b: string };
+>s1 : { a: string; } & { b: string; }
+>a : string
+>b : string
+
+declare let s2: { a: string } & { b: number };
+>s2 : { a: string; } & { b: number; }
+>a : string
+>b : number
+
+declare let s3: { [K in never]: never } & { b: string };
+>s3 : {} & { b: string; }
+>b : string
+
+declare let s4: { [K in never]: never } & { b: number };
+>s4 : {} & { b: number; }
+>b : number
+
+declare let s5: { [key: number]: string } & { b: string };
+>s5 : { [key: number]: string; } & { b: string; }
+>key : number
+>b : string
+
+declare let s6: { [key: number]: string } & { b: number };
+>s6 : { [key: number]: string; } & { b: number; }
+>key : number
+>b : number
+
+declare let s7: { [key: string]: string } & { b: string };
+>s7 : { [key: string]: string; } & { b: string; }
+>key : string
+>b : string
+
+declare let s8: { [key: string]: string } & { b: number };
+>s8 : { [key: string]: string; } & { b: number; }
+>key : string
+>b : number
+
+declare let t1: { [key: string]: string };
+>t1 : { [key: string]: string; }
+>key : string
+
+t1 = s1;
+>t1 = s1 : { a: string; } & { b: string; }
+>t1 : { [key: string]: string; }
+>s1 : { a: string; } & { b: string; }
+
+t1 = s2;  // Error
+>t1 = s2 : { a: string; } & { b: number; }
+>t1 : { [key: string]: string; }
+>s2 : { a: string; } & { b: number; }
+
+t1 = s3;
+>t1 = s3 : {} & { b: string; }
+>t1 : { [key: string]: string; }
+>s3 : {} & { b: string; }
+
+t1 = s4;  // Error
+>t1 = s4 : {} & { b: number; }
+>t1 : { [key: string]: string; }
+>s4 : {} & { b: number; }
+
+t1 = s5;
+>t1 = s5 : { [key: number]: string; } & { b: string; }
+>t1 : { [key: string]: string; }
+>s5 : { [key: number]: string; } & { b: string; }
+
+t1 = s6;  // Error
+>t1 = s6 : { [key: number]: string; } & { b: number; }
+>t1 : { [key: string]: string; }
+>s6 : { [key: number]: string; } & { b: number; }
+
+t1 = s7;
+>t1 = s7 : { [key: string]: string; } & { b: string; }
+>t1 : { [key: string]: string; }
+>s7 : { [key: string]: string; } & { b: string; }
+
+t1 = s8;  // Error
+>t1 = s8 : { [key: string]: string; } & { b: number; }
+>t1 : { [key: string]: string; }
+>s8 : { [key: string]: string; } & { b: number; }
+
+// Repro from #32484
+
+type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
+>constr : constr<Source, Tgt>
+
+type s = constr<{}, { [key: string]: { a: string } }>;
+>s : constr<{}, { [key: string]: { a: string; }; }>
+>key : string
+>a : string
+
+declare const q: s;
+>q : constr<{}, { [key: string]: { a: string; }; }>
+
+q["asd"].a.substr(1);
+>q["asd"].a.substr(1) : string
+>q["asd"].a.substr : (from: number, length?: number | undefined) => string
+>q["asd"].a : string
+>q["asd"] : { a: string; }
+>q : constr<{}, { [key: string]: { a: string; }; }>
+>"asd" : "asd"
+>a : string
+>substr : (from: number, length?: number | undefined) => string
+>1 : 1
+
+q["asd"].b;  // Error
+>q["asd"].b : any
+>q["asd"] : { a: string; }
+>q : constr<{}, { [key: string]: { a: string; }; }>
+>"asd" : "asd"
+>b : any
+
+const d: { [key: string]: {a: string, b: string} } = q;  // Error
+>d : { [key: string]: { a: string; b: string; }; }
+>key : string
+>a : string
+>b : string
+>q : constr<{}, { [key: string]: { a: string; }; }>
+
