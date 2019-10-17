@@ -7335,10 +7335,6 @@ namespace ts {
             }
 
             if (!popTypeResolution()) {
-                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                if (symbol.flags & SymbolFlags.ValueModule) {
-                    return getTypeOfFuncClassEnumModule(symbol);
-                }
                 return reportCircularityError(symbol);
             }
             return type;
