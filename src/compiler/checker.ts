@@ -14604,13 +14604,13 @@ namespace ts {
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
                         result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ true);
-                        // When the target is a structured type with an index signature, we need to check that every
-                        // constituent of the source intersection relates to the index signature.
-                        if (result && target.flags & TypeFlags.StructuredType && (getIndexInfoOfType(target, IndexKind.String) || getIndexInfoOfType(target, IndexKind.Number))) {
-                            result &= eachTypeRelatedToIndexTypes(<IntersectionType>source, target, reportErrors);
-                        }
                     }
-                    if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
+                    if (result && source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Object && (getIndexInfoOfType(target, IndexKind.String) || getIndexInfoOfType(target, IndexKind.Number))) {
+                        // When the source is an intersection and the target is an object type with an index signature we check
+                        // that every object type constituent of the source relates to that index signature.
+                        result &= eachTypeRelatedToIndexTypes(<IntersectionType>source, target, reportErrors);
+                    }
+                    else if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent)) {
                             resetErrorInfo(saveErrorInfo);
                         }
@@ -14933,17 +14933,17 @@ namespace ts {
             function eachTypeRelatedToIndexTypes(source: IntersectionType, target: Type, reportErrors: boolean): Ternary {
                 let related = Ternary.True;
                 for (const sourceType of source.types) {
-                    const sourceIsPrimitive = !!(sourceType.flags & TypeFlags.Primitive);
-                    if (related) {
-                        related &= indexTypesRelatedTo(sourceType, target, IndexKind.String, sourceIsPrimitive, reportErrors);
+                    if (sourceType.flags & TypeFlags.Object) {
                         if (related) {
-                            related &= indexTypesRelatedTo(sourceType, target, IndexKind.Number, sourceIsPrimitive, reportErrors);
+                            related &= indexTypesRelatedTo(sourceType, target, IndexKind.String, /*sourceIsPrimitive*/ false, reportErrors);
+                            if (related) {
+                                related &= indexTypesRelatedTo(sourceType, target, IndexKind.Number, /*sourceIsPrimitive*/ false, reportErrors);
+                            }
                         }
                     }
                 }
                 return related;
             }
-
 
             function typeArgumentsRelatedTo(sources: readonly Type[] = emptyArray, targets: readonly Type[] = emptyArray, variances: readonly VarianceFlags[] = emptyArray, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 if (sources.length !== targets.length && relation === identityRelation) {
@@ -15947,7 +15947,7 @@ namespace ts {
                     if (prop.nameType && prop.nameType.flags & TypeFlags.UniqueESSymbol) {
                         continue;
                     }
-                    if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
+                    if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName) && !isInfinityOrNaNString(prop.escapedName)) {
                         const related = isRelatedTo(getTypeOfSymbol(prop), target, reportErrors);
                         if (!related) {
                             if (reportErrors) {
