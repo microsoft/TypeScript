@@ -6,6 +6,7 @@ Node.js version is 12.12.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
+XX of XX: [@azure/logger] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/core-http@X.X.X-preview.5 build:tsc: `tsc -p tsconfig.es.json`
@@ -78,7 +79,6 @@ Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are on
 Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
 created dist/index.js in ?s
-XX of XX: [@azure/logger] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
@@ -88,22 +88,16 @@ Warning: typings/src/receiver.d.ts:165:9 - (TS1086) An accessor cannot be declar
 Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/storage-file] completed successfully in ? seconds
-XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (11)
+SUCCESS (8)
 ================================
 @azure/core-tracing (? seconds)
+@azure/logger (? seconds)
 @azure/test-utils-recorder (? seconds)
 @azure/abort-controller (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-auth (? seconds)
 @azure/core-paging (? seconds)
-@azure/logger (? seconds)
-@azure/storage-blob (? seconds)
-@azure/storage-file (? seconds)
-@azure/storage-queue (? seconds)
 testhub (? seconds)
 ================================
 SUCCESS WITH WARNINGS (3)
@@ -168,7 +162,7 @@ Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declar
 Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
 ================================
-BLOCKED (11)
+BLOCKED (14)
 ================================
 @azure/identity
 @azure/core-amqp
@@ -180,6 +174,9 @@ BLOCKED (11)
 @azure/keyvault-certificates
 @azure/keyvault-keys
 @azure/keyvault-secrets
+@azure/storage-blob
+@azure/storage-file
+@azure/storage-queue
 @azure/template
 ================================
 FAILURE (1)
@@ -224,6 +221,9 @@ XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
 XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
 XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-queue] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-file] blocked by [@azure/core-http]!
 XX of XX: [@azure/template] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-processor-host] completed with warnings in ? seconds
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
