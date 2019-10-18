@@ -7688,6 +7688,7 @@ namespace ts {
         // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
             const declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration)!;
+            Debug.assert(!!declaration, "Class was missing valueDeclaration -OR- non-class had no interface declarations");
             return getOuterTypeParameters(declaration);
         }
 
