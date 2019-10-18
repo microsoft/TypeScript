@@ -605,11 +605,18 @@ export = C;
                 "/a/b",
                 /*useCaseSensitiveFileNames*/ false,
                 ["c.ts", "d.ts"],
-                () => [createCompilerDiagnostic(
-                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                    "d.ts",
-                    "D.ts"
-                )]
+                program => [{
+                    ...tscWatch.getDiagnosticOfFileFromProgram(
+                        program,
+                        "c.ts",
+                        `/// <reference path="D.ts"/>`.indexOf(`D.ts`),
+                        "D.ts".length,
+                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                        "D.ts",
+                        "d.ts",
+                    ),
+                    reportsUnnecessary: undefined
+                }]
             );
         });
 
@@ -624,11 +631,18 @@ export = C;
                 "/a/b",
                 /*useCaseSensitiveFileNames*/ false,
                 ["c.ts", "d.ts"],
-                () => [createCompilerDiagnostic(
-                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                    "d.ts",
-                    "/a/b/D.ts"
-                )]
+                program => [{
+                    ...tscWatch.getDiagnosticOfFileFromProgram(
+                        program,
+                        "c.ts",
+                        `import {x} from "D"`.indexOf(`"D"`),
+                        `"D"`.length,
+                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                        "/a/b/D.ts",
+                        "d.ts",
+                    ),
+                    reportsUnnecessary: undefined
+                }]
             );
         });
 
@@ -643,11 +657,18 @@ export = C;
                 "",
                 /*useCaseSensitiveFileNames*/ false,
                 ["moduleA.ts", "moduleB.ts"],
-                () => [createCompilerDiagnostic(
-                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                    "moduleB.ts",
-                    "ModuleB.ts"
-                )]
+                program => [{
+                    ...tscWatch.getDiagnosticOfFileFromProgram(
+                        program,
+                        "moduleA.ts",
+                        `import {x} from "./ModuleB"`.indexOf(`"./ModuleB"`),
+                        `"./ModuleB"`.length,
+                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                        "ModuleB.ts",
+                        "moduleB.ts",
+                    ),
+                    reportsUnnecessary: undefined
+                }]
             );
         });
 
@@ -663,11 +684,18 @@ export = C;
                 "/a/b",
                 /*useCaseSensitiveFileNames*/ true,
                 ["c.ts", "d.ts"],
-                () => [createCompilerDiagnostic(
-                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                    "d.ts",
-                    "/a/b/D.ts"
-                )]
+                program => [{
+                    ...tscWatch.getDiagnosticOfFileFromProgram(
+                        program,
+                        "c.ts",
+                        `import {x} from "D"`.indexOf(`"D"`),
+                        `"D"`.length,
+                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                        "/a/b/D.ts",
+                        "d.ts",
+                    ),
+                    reportsUnnecessary: undefined
+                }]
             );
         });
 
@@ -684,11 +712,18 @@ export = C;
                 /*useCaseSensitiveFileNames*/ false,
                 ["moduleA.ts", "moduleB.ts", "moduleC.ts"],
                 program => [
-                    createCompilerDiagnostic(
-                        Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                        "moduleC.ts",
-                        "ModuleC.ts"
-                    ),
+                    {
+                        ...tscWatch.getDiagnosticOfFileFromProgram(
+                            program,
+                            "moduleA.ts",
+                            `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
+                            `"./ModuleC"`.length,
+                            Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                            "ModuleC.ts",
+                            "moduleC.ts",
+                        ),
+                        reportsUnnecessary: undefined
+                    },
                     {
                         ...tscWatch.getDiagnosticOfFileFromProgram(
                             program,

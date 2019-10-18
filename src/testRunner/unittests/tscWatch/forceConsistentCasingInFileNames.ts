@@ -29,7 +29,15 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [`${projectRoot}/Logger.ts`, anotherFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, [
-                createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, loggerFile.path, `${projectRoot}/Logger.ts`),
+                getDiagnosticOfFileFromProgram(
+                    watch(),
+                    anotherFile.path,
+                    anotherFile.content.indexOf(`"./logger"`),
+                    `"./logger"`.length,
+                    Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                    `${projectRoot}/Logger.ts`,
+                    loggerFile.path,
+                ),
             ]);
         });
 

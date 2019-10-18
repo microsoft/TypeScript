@@ -3083,6 +3083,7 @@ namespace ts {
 
     /*@internal*/
     export interface RefFile {
+        referencedFileName: string;
         kind: RefFileKind;
         index: number;
         file: Path;

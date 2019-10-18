@@ -2275,13 +2275,23 @@ namespace ts {
             );
         }
 
-        function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFileName: string, refFile: RefFile | undefined): void {
-            fileProcessingDiagnostics.add(createRefFileDiagnostic(
-                refFile,
-                Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                fileName,
-                existingFileName
-            ));
+        function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFile: SourceFile, refFile: RefFile | undefined): void {
+            const refs = !refFile ? refFileMap && refFileMap.get(existingFile.path) : undefined;
+            const refToReportErrorOn = refs && find(refs, ref => ref.referencedFileName === existingFile.fileName);
+            fileProcessingDiagnostics.add(refToReportErrorOn ?
+                createFileDiagnosticAtReference(
+                    refToReportErrorOn,
+                    Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                    existingFile.fileName,
+                    fileName,
+                ) :
+                createRefFileDiagnostic(
+                    refFile,
+                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
+                    fileName,
+                    existingFile.fileName
+                )
+            );
         }
 
         function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string): SourceFile {
@@ -2320,20 +2330,20 @@ namespace ts {
             const originalFileName = fileName;
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
+                addFileToRefFileMap(fileName, file || undefined, refFile);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
                 if (file && options.forceConsistentCasingInFileNames) {
-                    let inputName = fileName;
                     const checkedName = file.fileName;
-                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    const isRedirect = toPath(checkedName) !== toPath(fileName);
                     if (isRedirect) {
-                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                        fileName = getProjectReferenceRedirect(fileName) || fileName;
                     }
                     // Check if it differs only in drive letters its ok to ignore that error:
                     const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
-                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(inputName, currentDirectory);
+                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(fileName, currentDirectory);
                     if (checkedAbsolutePath !== inputAbsolutePath) {
-                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile);
+                        reportFileNamesDifferOnlyInCasingError(fileName, file, refFile);
                     }
                 }
 
@@ -2360,7 +2370,6 @@ namespace ts {
                     }
                 }
 
-                addFileToRefFileMap(file || undefined, refFile);
                 return file || undefined;
             }
 
@@ -2423,13 +2432,14 @@ namespace ts {
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
+                addFileToRefFileMap(fileName, file, refFile);
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {
-                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile);
+                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile, refFile);
                     }
                     else {
                         filesByNameIgnoreCase!.set(pathLowerCase, file);
@@ -2457,13 +2467,13 @@ namespace ts {
                     processingOtherFiles!.push(file);
                 }
             }
-            addFileToRefFileMap(file, refFile);
             return file;
         }
 
-        function addFileToRefFileMap(file: SourceFile | undefined, refFile: RefFile | undefined) {
+        function addFileToRefFileMap(referencedFileName: string, file: SourceFile | undefined, refFile: RefFile | undefined) {
             if (refFile && file) {
                 (refFileMap || (refFileMap = createMultiMap())).add(file.path, {
+                    referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,
                     file: refFile.file.path
@@ -2690,15 +2700,27 @@ namespace ts {
                         // Don't bother reading the file again if it's the same file.
                         if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
                             const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
-                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName!)!.text) {
+                            const existingFile = getSourceFile(previousResolution.resolvedFileName!)!;
+                            if (otherFileText !== existingFile.text) {
+                                // Try looking up ref for original file
+                                const refs = !refFile ? refFileMap && refFileMap.get(existingFile.path) : undefined;
+                                const refToReportErrorOn = refs && find(refs, ref => ref.referencedFileName === existingFile.fileName);
                                 fileProcessingDiagnostics.add(
-                                    createRefFileDiagnostic(
-                                        refFile,
-                                        Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                        typeReferenceDirective,
-                                        resolvedTypeReferenceDirective.resolvedFileName,
-                                        previousResolution.resolvedFileName
-                                    )
+                                    refToReportErrorOn ?
+                                        createFileDiagnosticAtReference(
+                                            refToReportErrorOn,
+                                            Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                            typeReferenceDirective,
+                                            resolvedTypeReferenceDirective.resolvedFileName,
+                                            previousResolution.resolvedFileName
+                                        ) :
+                                        createRefFileDiagnostic(
+                                            refFile,
+                                            Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                            typeReferenceDirective,
+                                            resolvedTypeReferenceDirective.resolvedFileName,
+                                            previousResolution.resolvedFileName
+                                        )
                                 );
                             }
                         }
@@ -3184,33 +3206,36 @@ namespace ts {
             }
         }
 
+        function createFileDiagnosticAtReference(refPathToReportErrorOn: ts.RefFile, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+            const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
+            const { kind, index } = refPathToReportErrorOn;
+            let pos: number, end: number;
+            switch (kind) {
+                case RefFileKind.Import:
+                    pos = skipTrivia(refFile.text, refFile.imports[index].pos);
+                    end = refFile.imports[index].end;
+                    break;
+                case RefFileKind.ReferenceFile:
+                    ({ pos, end } = refFile.referencedFiles[index]);
+                    break;
+                case RefFileKind.TypeReferenceDirective:
+                    ({ pos, end } = refFile.typeReferenceDirectives[index]);
+                    break;
+                default:
+                    return Debug.assertNever(kind);
+            }
+            return createFileDiagnostic(refFile, pos, end - pos, message, ...args);
+        }
+
         function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Map<true>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             const refPaths = refFileMap && refFileMap.get(file.path);
             const refPathToReportErrorOn = forEach(refPaths, refPath => rootPaths.has(refPath.file) ? refPath : undefined) ||
                 elementAt(refPaths, 0);
-            if (refPathToReportErrorOn) {
-                const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
-                const { kind, index } = refPathToReportErrorOn;
-                let pos: number, end: number;
-                switch (kind) {
-                    case RefFileKind.Import:
-                        pos = skipTrivia(refFile.text, refFile.imports[index].pos);
-                        end = refFile.imports[index].end;
-                        break;
-                    case RefFileKind.ReferenceFile:
-                        ({ pos, end } = refFile.referencedFiles[index]);
-                        break;
-                    case RefFileKind.TypeReferenceDirective:
-                        ({ pos, end } = refFile.typeReferenceDirectives[index]);
-                        break;
-                    default:
-                        return Debug.assertNever(kind);
-                }
-                programDiagnostics.add(createFileDiagnostic(refFile, pos, end - pos, message, ...args));
-            }
-            else {
-                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
-            }
+            programDiagnostics.add(
+                refPathToReportErrorOn ?
+                    createFileDiagnosticAtReference(refPathToReportErrorOn, message, ...args) :
+                    createCompilerDiagnostic(message, ...args)
+            );
         }
 
         function verifyProjectReferences() {
