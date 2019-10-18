@@ -549,8 +549,8 @@ namespace ts {
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
-        perFile?: Map<T[]>;
-        allDiagnostics?: Diagnostic[];
+        perFile?: Map<readonly T[]>;
+        allDiagnostics?: readonly T[];
     }
 
     interface RefFile extends TextRange {
@@ -1649,9 +1649,9 @@ namespace ts {
         }
 
         function getDiagnosticsHelper<T extends Diagnostic>(
-            sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => readonly T[],
-            cancellationToken: CancellationToken): readonly T[] {
+            sourceFile: SourceFile | undefined,
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
+            cancellationToken: CancellationToken | undefined): readonly T[] {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1663,15 +1663,15 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
+        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1717,11 +1717,11 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
         }
 
-        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
+        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
@@ -1751,7 +1751,7 @@ namespace ts {
                         }
                     }
                 }
-                return diagnostics;
+                return diagnostics || emptyArray;
             });
         }
 
@@ -1971,36 +1971,36 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
-        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken) {
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
-                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
+                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
             });
         }
 
-        function getAndCacheDiagnostics<T extends Diagnostic>(
-            sourceFile: SourceFile | undefined,
-            cancellationToken: CancellationToken,
-            cache: DiagnosticCache<T>,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => T[] | undefined,
-        ): readonly T[] {
+        function getAndCacheDiagnostics<T extends SourceFile | undefined, U extends Diagnostic>(
+            sourceFile: T,
+            cancellationToken: CancellationToken | undefined,
+            cache: DiagnosticCache<U>,
+            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined) => readonly U[],
+        ): readonly U[] {
 
             const cachedResult = sourceFile
                 ? cache.perFile && cache.perFile.get(sourceFile.path)
-                : cache.allDiagnostics as T[];
+                : cache.allDiagnostics;
 
             if (cachedResult) {
                 return cachedResult;
             }
-            const result = getDiagnostics(sourceFile!, cancellationToken) || emptyArray; // TODO: GH#18217
+            const result = getDiagnostics(sourceFile, cancellationToken);
             if (sourceFile) {
                 if (!cache.perFile) {
-                    cache.perFile = createMap<T[]>();
+                    cache.perFile = createMap();
                 }
                 cache.perFile.set(sourceFile.path, result);
             }
