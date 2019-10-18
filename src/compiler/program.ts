@@ -319,19 +319,18 @@ namespace ts {
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
     /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[]; // eslint-disable-line @typescript-eslint/unified-signatures
     export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        const diagnostics = [
-            ...program.getConfigFileParsingDiagnostics(),
-            ...program.getOptionsDiagnostics(cancellationToken),
-            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-            ...program.getGlobalDiagnostics(cancellationToken),
-            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-        ];
+        let diagnostics: Diagnostic[] | undefined;
+        diagnostics = addRange(diagnostics, program.getConfigFileParsingDiagnostics());
+        diagnostics = addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+        diagnostics = addRange(diagnostics, program.getSyntacticDiagnostics(sourceFile, cancellationToken));
+        diagnostics = addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
+        diagnostics = addRange(diagnostics, program.getSemanticDiagnostics(sourceFile, cancellationToken));
 
         if (getEmitDeclarations(program.getCompilerOptions())) {
-            addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
+            diagnostics = addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
-        return sortAndDeduplicateDiagnostics(diagnostics);
+        return sortAndDeduplicateDiagnostics(diagnostics || emptyArray);
     }
 
     export interface FormatDiagnosticsHost {
@@ -727,7 +726,7 @@ namespace ts {
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<ts.RefFile> | undefined;
 
-        const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
+        const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
@@ -947,6 +946,8 @@ namespace ts {
             getSemanticDiagnostics,
             getSuggestionDiagnostics,
             getDeclarationDiagnostics,
+            getBindAndCheckDiagnostics,
+            getProgramDiagnostics,
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
@@ -1671,6 +1672,31 @@ namespace ts {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
+        function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
+        }
+
+        function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
+            if (skipTypeChecking(sourceFile, options, program)) {
+                return emptyArray;
+            }
+
+            const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
+            const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+
+            let diagnostics: Diagnostic[] | undefined;
+            for (const diags of [fileProcessingDiagnosticsInFile, programDiagnosticsInFile]) {
+                if (diags) {
+                    for (const diag of diags) {
+                        if (shouldReportDiagnostic(diag)) {
+                            diagnostics = append(diagnostics, diag);
+                        }
+                    }
+                }
+            }
+            return diagnostics || emptyArray;
+        }
+
         function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
@@ -1718,10 +1744,17 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
+            return concatenate(
+                getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken),
+                getProgramDiagnostics(sourceFile)
+            );
         }
 
-        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
+        }
+
+        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
@@ -1738,11 +1771,9 @@ namespace ts {
                     sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
-                const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
-                const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 let diagnostics: Diagnostic[] | undefined;
-                for (const diags of [bindDiagnostics, checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
+                for (const diags of [bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
                     if (diags) {
                         for (const diag of diags) {
                             if (shouldReportDiagnostic(diag)) {

@@ -3133,6 +3133,9 @@ namespace ts {
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         /* @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
 
+        /* @internal */ getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        /* @internal */ getProgramDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
          */
