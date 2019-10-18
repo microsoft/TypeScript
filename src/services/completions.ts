@@ -340,10 +340,6 @@ namespace ts.Completions {
         let replacementSpan: TextSpan | undefined;
 
         const insertQuestionDot = origin && originIsNullableMember(origin);
-        if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
-            return undefined;
-        }
-
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
             insertText = needsConvertPropertyAccess
@@ -785,7 +781,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         isUncheckedFile: boolean,
         position: number,
-        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
+        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText" | "includeAutomaticOptionalChainCompletions">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
     ): CompletionData | Request | undefined {
@@ -1124,6 +1120,9 @@ namespace ts.Completions {
                                 insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
                                 type = type.getNonNullableType();
                             }
+                            if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
+                                return;
+                            }
                             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
 
@@ -1144,6 +1143,9 @@ namespace ts.Completions {
                 if (type.isNullableType()) {
                     insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
                     type = type.getNonNullableType();
+                }
+                if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
+                    return;
                 }
                 addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
