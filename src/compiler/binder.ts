@@ -2925,10 +2925,10 @@ namespace ts {
             declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 
-        function isTopLevelNamespaceAssignment(propertyAccessOrDefinePropertyCall: BindableAccessExpression | BindableObjectDefinePropertyCall) {
-            return isBinaryExpression(propertyAccessOrDefinePropertyCall.parent)
-                ? getParentOfBinaryExpression(propertyAccessOrDefinePropertyCall.parent).parent.kind === SyntaxKind.SourceFile
-                : propertyAccessOrDefinePropertyCall.parent.parent.kind === SyntaxKind.SourceFile;
+        function isTopLevelNamespaceAssignment(propertyAccess: BindableAccessExpression) {
+            return isBinaryExpression(propertyAccess.parent)
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
+                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
