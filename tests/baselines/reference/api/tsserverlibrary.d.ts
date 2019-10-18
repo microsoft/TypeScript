@@ -8297,7 +8297,7 @@ declare namespace ts.server.protocol {
          */
         readonly includeCompletionsWithInsertText?: boolean;
         /**
-         * Unless this option is disabled, or `includeCompletionsWithInsertText` is not enabled,
+         * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
          * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
