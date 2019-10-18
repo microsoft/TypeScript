@@ -2870,7 +2870,7 @@ namespace ts {
                     }
                 });
             }
-            if (containerIsClass && namespaceSymbol) {
+            if (containerIsClass && namespaceSymbol && namespaceSymbol.valueDeclaration) {
                 addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
             }
             return namespaceSymbol;
