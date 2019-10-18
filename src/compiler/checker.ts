@@ -19175,20 +19175,25 @@ namespace ts {
                 if (isMatchingReference(reference, expr)) {
                     type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
-                else if (isMatchingReferenceDiscriminant(expr, type)) {
-                    type = narrowTypeByDiscriminant(
-                        type,
-                        expr as AccessExpression,
-                        t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
-                }
                 else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
                     type = narrowBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
-                else if (containsMatchingReferenceDiscriminant(reference, expr)) {
-                    type = declaredType;
-                }
-                else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
-                    return unreachableNeverType;
+                else {
+                    if (strictNullChecks && optionalChainContainsReference(expr, reference)) {
+                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                    }
+                    if (isMatchingReferenceDiscriminant(expr, type)) {
+                        type = narrowTypeByDiscriminant(
+                            type,
+                            expr as AccessExpression,
+                            t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
+                    }
+                    else if (containsMatchingReferenceDiscriminant(reference, expr)) {
+                        type = declaredType;
+                    }
+                    else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
+                        return unreachableNeverType;
+                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -19384,12 +19389,12 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (assumeTrue && strictNullChecks) {
+                        if (strictNullChecks) {
                             if (optionalChainContainsReference(left, reference)) {
-                                type = narrowTypeByOptionalChainContainment(type, operator, right);
+                                type = narrowTypeByOptionalChainContainment(type, operator, right, assumeTrue);
                             }
                             else if (optionalChainContainsReference(right, reference)) {
-                                type = narrowTypeByOptionalChainContainment(type, operator, left);
+                                type = narrowTypeByOptionalChainContainment(type, operator, left, assumeTrue);
                             }
                         }
                         if (isMatchingReferenceDiscriminant(left, declaredType)) {
@@ -19416,15 +19421,21 @@ namespace ts {
                 return type;
             }
 
-            function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression): Type {
-                // We are in the true branch of obj?.foo === value or obj?.foo !== value. We remove undefined and null from
+            function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
+                const op = assumeTrue ? operator :
+                    operator === SyntaxKind.EqualsEqualsToken ? SyntaxKind.ExclamationEqualsToken :
+                    operator === SyntaxKind.EqualsEqualsEqualsToken ? SyntaxKind.ExclamationEqualsEqualsToken :
+                    operator === SyntaxKind.ExclamationEqualsToken ? SyntaxKind.EqualsEqualsToken :
+                    operator === SyntaxKind.ExclamationEqualsEqualsToken ? SyntaxKind.EqualsEqualsEqualsToken :
+                    operator;
+                // We are in a branch of obj?.foo === value or obj?.foo !== value. We remove undefined and null from
                 // the type of obj if (a) the operator is === and the type of value doesn't include undefined or (b) the
                 // operator is !== and the type of value is undefined.
                 const valueType = getTypeOfExpression(value);
-                return operator === SyntaxKind.EqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefinedOrNull) ||
-                    operator === SyntaxKind.EqualsEqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefined) ||
-                    operator === SyntaxKind.ExclamationEqualsToken && valueType.flags & TypeFlags.Nullable ||
-                    operator === SyntaxKind.ExclamationEqualsEqualsToken && valueType.flags & TypeFlags.Undefined ?
+                return op === SyntaxKind.EqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefinedOrNull) ||
+                    op === SyntaxKind.EqualsEqualsEqualsToken && !(getTypeFacts(valueType) & TypeFacts.EQUndefined) ||
+                    op === SyntaxKind.ExclamationEqualsToken && valueType.flags & TypeFlags.Nullable ||
+                    op === SyntaxKind.ExclamationEqualsEqualsToken && valueType.flags & TypeFlags.Undefined ?
                     getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
             }
 
@@ -19524,6 +19535,12 @@ namespace ts {
                     }
                     return type;
                 }
+            }
+
+            function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+                const noClauseIsDefaultOrUndefined = clauseStart !== clauseEnd &&
+                    every(getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd), t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
+                return noClauseIsDefaultOrUndefined ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
