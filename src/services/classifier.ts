@@ -500,7 +500,7 @@ namespace ts {
 
         function pushClassification(start: number, end: number, type: ClassificationType): void {
             const length = end - start;
-            Debug.assert(length >= 0, `Classification had non-positive length of ${length}`);
+            Debug.assert(length > 0, `Classification had non-positive length of ${length}`);
             spans.push(start);
             spans.push(length);
             spans.push(type);
