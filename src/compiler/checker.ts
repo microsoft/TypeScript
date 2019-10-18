@@ -1030,7 +1030,8 @@ namespace ts {
          * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
          */
         function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
-            if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
+            const resolvedTarget = resolveSymbol(target);
+            if (!(resolvedTarget.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
                 if (source === target) {
                     // This can happen when an export assigned namespace exports something also erroneously exported at the top level
@@ -1038,7 +1039,6 @@ namespace ts {
                     return target;
                 }
                 if (!(target.flags & SymbolFlags.Transient)) {
-                    const resolvedTarget = resolveSymbol(target);
                     if (resolvedTarget === unknownSymbol) {
                         return source;
                     }
@@ -7269,10 +7269,6 @@ namespace ts {
 
             // Handle variable, parameter or property
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
-                    return getTypeOfFuncClassEnumModule(symbol);
-                }
                 return reportCircularityError(symbol);
             }
             let type: Type | undefined;
@@ -7339,10 +7335,6 @@ namespace ts {
             }
 
             if (!popTypeResolution()) {
-                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
-                    return getTypeOfFuncClassEnumModule(symbol);
-                }
                 return reportCircularityError(symbol);
             }
             return type;

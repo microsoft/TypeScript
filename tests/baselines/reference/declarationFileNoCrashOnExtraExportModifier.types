@@ -26,5 +26,5 @@ declare namespace exports {
 >exports : typeof exports
 
     export { Sub };
->Sub : typeof import("tests/cases/compiler/input").Sub
+>Sub : typeof Sub
 }

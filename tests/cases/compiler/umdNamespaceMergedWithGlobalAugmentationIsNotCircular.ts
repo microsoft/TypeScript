@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUmdGlobalAccess: true
 // @module: esnext
 // @moduleResolution: node
 // @target: es2018

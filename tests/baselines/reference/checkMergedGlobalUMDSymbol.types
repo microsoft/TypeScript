@@ -17,12 +17,12 @@ declare global {
 >global : typeof global
 
   export const THREE: typeof _three;
->THREE : typeof import("tests/cases/compiler/global")
+>THREE : typeof _three
 >_three : typeof _three
 }
 
 === tests/cases/compiler/test.ts ===
 const m = THREE
->m : typeof import("tests/cases/compiler/global")
->THREE : typeof import("tests/cases/compiler/global")
+>m : typeof THREE
+>THREE : typeof THREE
 
