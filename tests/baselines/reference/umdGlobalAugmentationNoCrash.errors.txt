@@ -1,0 +1,31 @@
+tests/cases/compiler/global.d.ts(2,11): error TS2451: Cannot redeclare block-scoped variable 'React'.
+tests/cases/compiler/module.d.ts(1,21): error TS2451: Cannot redeclare block-scoped variable 'React'.
+tests/cases/compiler/some_module.ts(2,1): error TS2686: 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.
+
+
+==== tests/cases/compiler/global.d.ts (1 errors) ====
+    declare global {
+        const React: typeof import("./module");
+              ~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'React'.
+!!! related TS6203 /.src/tests/cases/compiler/module.d.ts:1:21: 'React' was also declared here.
+    }
+    export {};
+    
+==== tests/cases/compiler/module.d.ts (1 errors) ====
+    export as namespace React;
+                        ~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'React'.
+!!! related TS6203 tests/cases/compiler/global.d.ts:2:11: 'React' was also declared here.
+    export function foo(): string;
+    
+==== tests/cases/compiler/some_module.ts (1 errors) ====
+    export {}
+    React.foo;
+    ~~~~~
+!!! error TS2686: 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.
+    
+==== tests/cases/compiler/emits.ts (0 errors) ====
+    console.log("hello");
+    React.foo;
+    

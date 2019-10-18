@@ -31,6 +31,6 @@ console.log("hello");
 
 React.foo;
 >React.foo : () => string
->React : typeof import("tests/cases/compiler/module")
+>React : typeof React
 >foo : () => string
 
