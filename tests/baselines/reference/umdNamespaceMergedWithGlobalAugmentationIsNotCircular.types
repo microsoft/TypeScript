@@ -3,17 +3,17 @@ declare global {
 >global : typeof global
 
     const React: typeof import("./module");
->React : typeof React
+>React : typeof import("tests/cases/compiler/module")
 }
 
 export { };
 
 === tests/cases/compiler/module.d.ts ===
 export = React;
->React : typeof import("tests/cases/compiler/module")
+>React : typeof React
 
 export as namespace React;
->React : typeof import("tests/cases/compiler/module")
+>React : typeof React
 
 declare namespace React {
 >React : typeof React
@@ -26,7 +26,7 @@ declare namespace React {
 export { };
 React.createRef;
 >React.createRef : () => any
->React : typeof React
+>React : typeof import("tests/cases/compiler/module")
 >createRef : () => any
 
 === tests/cases/compiler/emits.ts ===
