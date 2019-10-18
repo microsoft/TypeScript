@@ -338,7 +338,12 @@ namespace ts.Completions {
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
+
         const insertQuestionDot = origin && originIsNullableMember(origin);
+        if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
+            return undefined;
+        }
+
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
             insertText = needsConvertPropertyAccess
