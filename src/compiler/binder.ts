@@ -2789,6 +2789,10 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
+            if (namespaceSymbol) {
+                // Ensure the namespace symbol becomes class-like
+                addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
+            }
             bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ true);
         }
 
@@ -2921,10 +2925,10 @@ namespace ts {
             declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 
-        function isTopLevelNamespaceAssignment(propertyAccess: BindableAccessExpression) {
-            return isBinaryExpression(propertyAccess.parent)
-                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
-                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+        function isTopLevelNamespaceAssignment(propertyAccessOrDefinePropertyCall: BindableAccessExpression | BindableObjectDefinePropertyCall) {
+            return isBinaryExpression(propertyAccessOrDefinePropertyCall.parent)
+                ? getParentOfBinaryExpression(propertyAccessOrDefinePropertyCall.parent).parent.kind === SyntaxKind.SourceFile
+                : propertyAccessOrDefinePropertyCall.parent.parent.kind === SyntaxKind.SourceFile;
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
