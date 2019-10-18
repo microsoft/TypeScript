@@ -1117,11 +1117,17 @@ namespace ts.Completions {
                             let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
                             let insertQuestionDot = false;
                             if (type.isNullableType()) {
-                                insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                                type = type.getNonNullableType();
-                            }
-                            if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
-                                return;
+                                const canCorrectToQuestionDot =
+                                isRightOfDot &&
+                                !isRightOfQuestionDot &&
+                                preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                                if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                                    type = type.getNonNullableType();
+                                    if (canCorrectToQuestionDot) {
+                                        insertQuestionDot = true;
+                                    }
+                                }
                             }
                             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
@@ -1141,11 +1147,17 @@ namespace ts.Completions {
                 let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 let insertQuestionDot = false;
                 if (type.isNullableType()) {
-                    insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                    type = type.getNonNullableType();
-                }
-                if (insertQuestionDot && preferences.includeAutomaticOptionalChainCompletions === false) {
-                    return;
+                    const canCorrectToQuestionDot =
+                        isRightOfDot &&
+                        !isRightOfQuestionDot &&
+                        preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                    if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                        type = type.getNonNullableType();
+                        if (canCorrectToQuestionDot) {
+                            insertQuestionDot = true;
+                        }
+                    }
                 }
                 addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
