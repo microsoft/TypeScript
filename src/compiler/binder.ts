@@ -1556,10 +1556,6 @@ namespace ts {
             }
         }
 
-        function isOutermostOptionalChain(node: OptionalChain) {
-            return !isOptionalChain(node.parent) || isOptionalChainRoot(node.parent) || node !== node.parent.expression;
-        }
-
         function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
             if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
