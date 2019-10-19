@@ -873,6 +873,7 @@ namespace ts {
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
+        const castableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<RelationComparisonResult>();
 
@@ -13396,13 +13397,24 @@ namespace ts {
 
         /**
          * This is *not* a bi-directional relationship.
+         * If one needs to check both directions for castability, use a second call to this function or 'checkTypeCastableTo'.
+         *
+         * A type S is comparable to a type T if some (but not necessarily all) of the possible values of S are also possible values of T.
+         * It is used to check following cases:
+         *   - the type of an expression in a type assertion with the type being asserted.
+         */
+        function isTypeCastableTo(source: Type, target: Type): boolean {
+            return isTypeRelatedTo(source, target, castableRelation);
+        }
+
+        /**
+         * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
          *
          * A type S is comparable to a type T if some (but not necessarily all) of the possible values of S are also possible values of T.
          * It is used to check following cases:
          *   - the types of the left and right sides of equality/inequality operators (`===`, `!==`, `==`, `!=`).
          *   - the types of `case` clause expressions and their respective `switch` expressions.
-         *   - the type of an expression in a type assertion with the type being asserted.
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, comparableRelation);
@@ -13839,6 +13851,14 @@ namespace ts {
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
          */
+        function checkTypeCastableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+            return checkTypeRelatedTo(source, target, castableRelation, errorNode, headMessage, containingMessageChain);
+        }
+
+        /**
+         * This is *not* a bi-directional relationship.
+         * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
+         */
         function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             return checkTypeRelatedTo(source, target, comparableRelation, errorNode, headMessage, containingMessageChain);
         }
@@ -14133,7 +14153,7 @@ namespace ts {
             if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
-            if (relation === assignableRelation || relation === comparableRelation) {
+            if (relation === assignableRelation || relation === comparableRelation || relation === castableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -14152,7 +14172,7 @@ namespace ts {
                 target = (<FreshableType>target).regularType;
             }
             if (source === target ||
-                relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                (relation === comparableRelation || relation === castableRelation) && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                 relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -14176,7 +14196,7 @@ namespace ts {
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
          * @param target The right-hand-side of the relation.
-         * @param relation The relation considered. One of 'identityRelation', 'subtypeRelation', 'assignableRelation', or 'comparableRelation'.
+         * @param relation The relation considered. One of 'identityRelation', 'subtypeRelation', 'assignableRelation', 'comparableRelation', or 'castableRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
          * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
@@ -14410,7 +14430,7 @@ namespace ts {
                 }
 
                 if (!message) {
-                    if (relation === comparableRelation) {
+                    if (relation === comparableRelation || relation === castableRelation) {
                         message = Diagnostics.Type_0_is_not_comparable_to_type_1;
                     }
                     else if (sourceType === targetType) {
@@ -14520,7 +14540,7 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                if ((relation === comparableRelation || relation === castableRelation) && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
@@ -14534,8 +14554,7 @@ namespace ts {
                         return Ternary.False;
                     }
                 }
-
-                const isPerformingCommonPropertyChecks = relation !== comparableRelation && !isApparentIntersectionConstituent &&
+                const isPerformingCommonPropertyChecks = relation !== castableRelation && !isApparentIntersectionConstituent &&
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
@@ -14562,7 +14581,7 @@ namespace ts {
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
-                    result = relation === comparableRelation ?
+                    result = relation === comparableRelation || relation === castableRelation ?
                         someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), isIntersectionConstituent) :
                         eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                 }
@@ -14694,7 +14713,7 @@ namespace ts {
                 }
                 if (isExcessPropertyCheckTarget(target)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                    if ((relation === assignableRelation || relation === comparableRelation) &&
+                    if ((relation === assignableRelation || relation === comparableRelation || relation === castableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
@@ -15435,7 +15454,7 @@ namespace ts {
             // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
             // that S and T are contra-variant whereas X and Y are co-variant.
             function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
-                const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
+                const modifiersRelated = relation === comparableRelation || relation === castableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                     getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
@@ -15651,7 +15670,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 // When checking for comparability, be more lenient with optional properties.
-                if (relation !== comparableRelation && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
+                if ((relation !== comparableRelation && relation !== castableRelation) && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
                     // TypeScript 1.0 spec (April 2014): 3.8.3
                     // S is a subtype of a type T, and T is a supertype of S if ...
                     // S' and T are object types and, for each member M in T..
@@ -15848,7 +15867,7 @@ namespace ts {
                     // in the context of the target signature before checking the relationship. Ideally we'd do
                     // this regardless of the number of signatures, but the potential costs are prohibitive due
                     // to the quadratic nature of the logic below.
-                    const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
+                    const eraseGenerics = relation === comparableRelation || relation === castableRelation || !!compilerOptions.noStrictGenericChecks;
                     result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors, incompatibleReporter(sourceSignatures[0], targetSignatures[0]));
                 }
                 else {
@@ -25245,8 +25264,8 @@ namespace ts {
             const targetType = getTypeFromTypeNode(type);
             if (produceDiagnostics && targetType !== errorType) {
                 const widenedType = getWidenedType(exprType);
-                if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, errNode,
+                if (!isTypeCastableTo(targetType, widenedType)) {
+                    checkTypeCastableTo(exprType, targetType, errNode,
                         Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
                 }
             }
