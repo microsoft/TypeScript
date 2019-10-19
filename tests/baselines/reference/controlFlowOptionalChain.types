@@ -1170,6 +1170,163 @@ function f14(o: Thing | null) {
     }
 }
 
+function f15(o: Thing | undefined, value: number) {
+>f15 : (o: Thing | undefined, value: number) => void
+>o : Thing | undefined
+>value : number
+
+    if (o?.foo === value) {
+>o?.foo === value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : number
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    if (o?.foo !== value) {
+>o?.foo !== value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : number
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (o?.foo == value) {
+>o?.foo == value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : number
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    if (o?.foo != value) {
+>o?.foo != value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : number
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+}
+
+function f16(o: Thing | undefined) {
+>f16 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    if (o?.foo === undefined) {
+>o?.foo === undefined : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>undefined : undefined
+
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    else {
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    if (o?.foo !== undefined) {
+>o?.foo !== undefined : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>undefined : undefined
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    if (o?.foo == undefined) {
+>o?.foo == undefined : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>undefined : undefined
+
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    else {
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    if (o?.foo != undefined) {
+>o?.foo != undefined : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>undefined : undefined
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+}
+
 function f20(o: Thing | undefined) {
 >f20 : (o: Thing | undefined) => void
 >o : Thing | undefined
@@ -1285,5 +1442,447 @@ function f21(o: Thing | null) {
 >o : Thing
 >baz : Error
     }
+}
+
+function f22(o: Thing | undefined) {
+>f22 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    if (typeof o?.foo === "number") {
+>typeof o?.foo === "number" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"number" : "number"
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string
+>o : Thing | undefined
+>foo : string
+    }
+    if (typeof o?.foo !== "number") {
+>typeof o?.foo !== "number" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"number" : "number"
+
+        o.foo;  // Error
+>o.foo : string
+>o : Thing | undefined
+>foo : string
+    }
+    else {
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (typeof o?.foo == "number") {
+>typeof o?.foo == "number" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"number" : "number"
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string
+>o : Thing | undefined
+>foo : string
+    }
+    if (typeof o?.foo != "number") {
+>typeof o?.foo != "number" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"number" : "number"
+
+        o.foo;  // Error
+>o.foo : string
+>o : Thing | undefined
+>foo : string
+    }
+    else {
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+}
+
+function f23(o: Thing | undefined) {
+>f23 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    if (typeof o?.foo === "undefined") {
+>typeof o?.foo === "undefined" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"undefined" : "undefined"
+
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    else {
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    if (typeof o?.foo !== "undefined") {
+>typeof o?.foo !== "undefined" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"undefined" : "undefined"
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    if (typeof o?.foo == "undefined") {
+>typeof o?.foo == "undefined" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"undefined" : "undefined"
+
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+    else {
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    if (typeof o?.foo != "undefined") {
+>typeof o?.foo != "undefined" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"undefined" : "undefined"
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+    }
+}
+
+declare function assert(x: unknown): asserts x;
+>assert : (x: unknown) => asserts x
+>x : unknown
+
+declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
+>assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
+>x : T
+
+function f30(o: Thing | undefined) {
+>f30 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(o?.foo);
+>assert(o?.foo) : void
+>assert : (x: unknown) => asserts x
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(o?.foo === 42);
+>assert(o?.foo === 42) : void
+>assert : (x: unknown) => asserts x
+>o?.foo === 42 : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>42 : 42
+
+        o.foo;
+>o.foo : 42
+>o : Thing
+>foo : 42
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(typeof o?.foo === "number");
+>assert(typeof o?.foo === "number") : void
+>assert : (x: unknown) => asserts x
+>typeof o?.foo === "number" : boolean
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>"number" : "number"
+
+        o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assertNonNull(o?.foo);
+>assertNonNull(o?.foo) : void
+>assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+
+        o.foo;
+>o.foo : string | number
+>o : Thing
+>foo : string | number
+    }
+}
+
+function f40(o: Thing | undefined) {
+>f40 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    switch (o?.foo) {
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+
+        case "abc":
+>"abc" : "abc"
+
+            o.foo;
+>o.foo : "abc"
+>o : Thing
+>foo : "abc"
+
+            break;
+        case 42:
+>42 : 42
+
+            o.foo;
+>o.foo : 42
+>o : Thing
+>foo : 42
+
+            break;
+        case undefined:
+>undefined : undefined
+
+            o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+
+            break;
+        default:
+            o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+
+            break;
+    }
+}
+
+function f41(o: Thing | undefined) {
+>f41 : (o: Thing | undefined) => void
+>o : Thing | undefined
+
+    switch (typeof o?.foo) {
+>typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+
+        case "string":
+>"string" : "string"
+
+            o.foo;
+>o.foo : string
+>o : Thing
+>foo : string
+
+            break;
+        case "number":
+>"number" : "number"
+
+            o.foo;
+>o.foo : number
+>o : Thing
+>foo : number
+
+            break;
+        case "undefined":
+>"undefined" : "undefined"
+
+            o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+
+            break;
+        default:
+            o.foo;  // Error
+>o.foo : never
+>o : Thing | undefined
+>foo : never
+
+            break;
+    }
+}
+
+// Repros from #34570
+
+type Shape =
+>Shape : Shape
+
+    | { type: 'rectangle', width: number, height: number }
+>type : "rectangle"
+>width : number
+>height : number
+
+    | { type: 'circle', radius: number }
+>type : "circle"
+>radius : number
+
+function getArea(shape?: Shape) {
+>getArea : (shape?: { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined) => number
+>shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+
+    switch (shape?.type) {
+>shape?.type : "rectangle" | "circle" | undefined
+>shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>type : "rectangle" | "circle" | undefined
+
+        case 'circle':
+>'circle' : "circle"
+
+            return Math.PI * shape.radius ** 2
+>Math.PI * shape.radius ** 2 : number
+>Math.PI : number
+>Math : Math
+>PI : number
+>shape.radius ** 2 : number
+>shape.radius : number
+>shape : { type: "circle"; radius: number; }
+>radius : number
+>2 : 2
+
+        case 'rectangle':
+>'rectangle' : "rectangle"
+
+            return shape.width * shape.height
+>shape.width * shape.height : number
+>shape.width : number
+>shape : { type: "rectangle"; width: number; height: number; }
+>width : number
+>shape.height : number
+>shape : { type: "rectangle"; width: number; height: number; }
+>height : number
+
+        default:
+            return 0
+>0 : 0
+    }
+}
+
+type Feature = {
+>Feature : Feature
+
+  id: string;
+>id : string
+
+  geometry?: {
+>geometry : { type: string; coordinates: number[]; } | undefined
+
+    type: string;
+>type : string
+
+    coordinates: number[];
+>coordinates : number[]
+
+  };
+};
+
+
+function extractCoordinates(f: Feature): number[] {
+>extractCoordinates : (f: Feature) => number[]
+>f : Feature
+
+    if (f.geometry?.type !== 'test') {
+>f.geometry?.type !== 'test' : boolean
+>f.geometry?.type : string | undefined
+>f.geometry : { type: string; coordinates: number[]; } | undefined
+>f : Feature
+>geometry : { type: string; coordinates: number[]; } | undefined
+>type : string | undefined
+>'test' : "test"
+
+        return [];
+>[] : never[]
+    }
+    return f.geometry.coordinates;
+>f.geometry.coordinates : number[]
+>f.geometry : { type: string; coordinates: number[]; }
+>f : Feature
+>geometry : { type: string; coordinates: number[]; }
+>coordinates : number[]
 }
 
