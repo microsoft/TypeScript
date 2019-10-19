@@ -1112,7 +1112,7 @@ namespace ts.codefix {
             }
             const returnType = combineFromUsage(combineUsages(calls.map(call => call.return_)));
             // TODO: GH#18217
-            return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+            return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
         }
 
         function addCandidateType(usage: Usage, type: Type | undefined) {
