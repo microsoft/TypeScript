@@ -19187,13 +19187,18 @@ namespace ts {
                     type = narrowBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
                 else {
-                    if (strictNullChecks && optionalChainContainsReference(expr, reference)) {
-                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                    if (strictNullChecks) {
+                        if (optionalChainContainsReference(expr, reference)) {
+                            type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
+                                t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
+                        }
+                        else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr as TypeOfExpression).expression, reference)) {
+                            type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
+                                t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (<StringLiteralType>t).value === "undefined"));
+                        }
                     }
                     if (isMatchingReferenceDiscriminant(expr, type)) {
-                        type = narrowTypeByDiscriminant(
-                            type,
-                            expr as AccessExpression,
+                        type = narrowTypeByDiscriminant(type, expr as AccessExpression,
                             t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                     }
                     else if (containsMatchingReferenceDiscriminant(reference, expr)) {
@@ -19539,10 +19544,9 @@ namespace ts {
                 }
             }
 
-            function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
-                const noClauseIsDefaultOrUndefined = clauseStart !== clauseEnd &&
-                    every(getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd), t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
-                return noClauseIsDefaultOrUndefined ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+            function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number, clauseCheck: (type: Type) => boolean) {
+                const everyClauseChecks = clauseStart !== clauseEnd && every(getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd), clauseCheck);
+                return everyClauseChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
@@ -19771,8 +19775,9 @@ namespace ts {
                         if (isMatchingReference(reference, predicateArgument)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
                         }
-                        if (strictNullChecks && assumeTrue && !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
-                            type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                        if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
+                            !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
+                            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                         }
                         if (containsMatchingReference(reference, predicateArgument)) {
                             return declaredType;
