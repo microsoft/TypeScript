@@ -247,29 +247,30 @@ function f10(x) {
 var Test = /** @class */ (function () {
     function Test() {
     }
-    Test.prototype.assert = function (value) {
+    var proto_1 = Test.prototype;
+    proto_1.assert = function (value) {
         if (value)
             return;
         throw new Error();
     };
-    Test.prototype.isTest2 = function () {
+    proto_1.isTest2 = function () {
         return this instanceof Test2;
     };
-    Test.prototype.assertIsTest2 = function () {
+    proto_1.assertIsTest2 = function () {
         if (this instanceof Test2)
             return;
         throw new Error();
     };
-    Test.prototype.assertThis = function () {
+    proto_1.assertThis = function () {
         if (!this)
             return;
         throw new Error();
     };
-    Test.prototype.bar = function () {
+    proto_1.bar = function () {
         this.assertThis();
         this;
     };
-    Test.prototype.foo = function (x) {
+    proto_1.foo = function (x) {
         this.assert(typeof x === "string");
         x.length;
         if (this.isTest2()) {
@@ -278,7 +279,7 @@ var Test = /** @class */ (function () {
         this.assertIsTest2();
         this.z;
     };
-    Test.prototype.baz = function (x) {
+    proto_1.baz = function (x) {
         this.assert(false);
         x; // Unreachable
     };

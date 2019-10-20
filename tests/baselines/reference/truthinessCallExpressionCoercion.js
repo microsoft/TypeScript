@@ -121,10 +121,11 @@ function checksPropertyAccess() {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    Foo.prototype.isUser = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.isUser = function () {
         return true;
     };
-    Foo.prototype.test = function () {
+    proto_1.test = function () {
         if (this.isUser) { // error
         }
         if (this.maybeIsUser) { // ok

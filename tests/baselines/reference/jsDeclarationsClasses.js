@@ -255,7 +255,8 @@ var E = /** @class */ (function () {
     function E(a, b) {
         this.initializedField = 12;
     }
-    Object.defineProperty(E.prototype, "f1", {
+    var proto_1 = E.prototype;
+    Object.defineProperty(proto_1, "f1", {
         /**
          * @return {U}
          */
@@ -267,7 +268,7 @@ var E = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(E.prototype, "f2", {
+    Object.defineProperty(proto_1, "f2", {
         /**
          * @return {U}
          */
@@ -275,7 +276,7 @@ var E = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(E.prototype, "f3", {
+    Object.defineProperty(proto_1, "f3", {
         /**
          * @param {U} _p
          */

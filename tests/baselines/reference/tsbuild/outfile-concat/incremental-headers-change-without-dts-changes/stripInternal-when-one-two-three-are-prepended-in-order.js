@@ -882,7 +882,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3162,
+          "end": 3180,
           "kind": "text"
         }
       ]
@@ -958,7 +958,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3162)
+text: (110-3180)
 var N;
 (function (N) {
     function f() {
@@ -969,8 +969,9 @@ var N;
 var normalC = (function () {
     function normalC() {
     }
-    normalC.prototype.method = function () { };
-    Object.defineProperty(normalC.prototype, "c", {
+    var proto_1 = normalC.prototype;
+    proto_1.method = function () { };
+    Object.defineProperty(proto_1, "c", {
         get: function () { return 10; },
         set: function (val) { },
         enumerable: true,

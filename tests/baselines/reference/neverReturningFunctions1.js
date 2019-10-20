@@ -297,21 +297,22 @@ function f24(x) {
 var Test = /** @class */ (function () {
     function Test() {
     }
-    Test.prototype.fail = function (message) {
+    var proto_1 = Test.prototype;
+    proto_1.fail = function (message) {
         throw new Error(message);
     };
-    Test.prototype.f1 = function (x) {
+    proto_1.f1 = function (x) {
         if (x === undefined)
             this.fail("undefined argument");
         x.length; // string
     };
-    Test.prototype.f2 = function (x) {
+    proto_1.f2 = function (x) {
         if (x >= 0)
             return x;
         this.fail("negative number");
         x; // Unreachable
     };
-    Test.prototype.f3 = function (x) {
+    proto_1.f3 = function (x) {
         x; // string
         this.fail();
         x; // Unreachable
