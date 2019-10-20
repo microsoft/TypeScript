@@ -840,6 +840,7 @@ namespace ts.projectSystem {
             const watchedFilesExpected = createMap<number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
+            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -993,7 +994,6 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
-            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
                 path: `${projects}/a/b/app.js`,
                 content: `
@@ -1005,7 +1005,7 @@ namespace ts.projectSystem {
                 content: "module.exports = 0",
             };
 
-            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
             const host = createServerHost([file, commanderJS]);
             const installer = new (class extends Installer {

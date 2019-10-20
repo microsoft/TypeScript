@@ -565,46 +565,46 @@ namespace ts.projectSystem {
 
             it("should return empty array if change is made in a global declaration file", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ {},
+                    /*expectDTSEmit*/ false
                 );
             });
 
             it("should return empty array if change is made in a module declaration file", () => {
                 testDTS(
-                /*dtsFileContents*/ "export const x: string;",
-                /*tsFileContents*/  "import { x } from './runtime/a;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
+                    /*dtsFileContents*/ "export const x: string;",
+                    /*tsFileContents*/  "import { x } from './runtime/a;",
+                    /*opts*/ {},
+                    /*expectDTSEmit*/ false
                 );
             });
 
             it("should return results if change is made in a global declaration file with declaration emit", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { declaration: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { declaration: true },
+                    /*expectDTSEmit*/ true
                 );
             });
 
             it("should return results if change is made in a global declaration file with composite enabled", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { composite: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { composite: true },
+                    /*expectDTSEmit*/ true
                 );
             });
 
             it("should return results if change is made in a global declaration file with decorator emit enabled", () => {
                 testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
-                /*expectDTSEmit*/ true
+                    /*dtsFileContents*/ "declare const x: string;",
+                    /*tsFileContents*/ "var y = 1;",
+                    /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
+                    /*expectDTSEmit*/ true
                 );
             });
         });
@@ -802,7 +802,6 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
-        const projectRoot = "/user/username/projects/myproject";
         const core: File = {
             path: `${projectRoot}/core/core.ts`,
             content: "let z = 10;"

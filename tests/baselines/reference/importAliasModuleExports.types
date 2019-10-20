@@ -1,0 +1,40 @@
+=== tests/cases/conformance/salsa/mod1.js ===
+class Alias {
+>Alias : Alias
+
+    bar() { return 1 }
+>bar : () => number
+>1 : 1
+}
+module.exports = Alias;
+>module.exports = Alias : typeof Alias
+>module.exports : typeof Alias
+>module : { "tests/cases/conformance/salsa/mod1": typeof Alias; }
+>exports : typeof Alias
+>Alias : typeof Alias
+
+=== tests/cases/conformance/salsa/main.js ===
+import A from './mod1'
+>A : typeof A
+
+A.prototype.foo = 0
+>A.prototype.foo = 0 : 0
+>A.prototype.foo : any
+>A.prototype : A
+>A : typeof A
+>prototype : A
+>foo : any
+>0 : 0
+
+new A().bar
+>new A().bar : () => number
+>new A() : A
+>A : typeof A
+>bar : () => number
+
+new A().foo
+>new A().foo : any
+>new A() : A
+>A : typeof A
+>foo : any
+

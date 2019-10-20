@@ -8,10 +8,10 @@ type T2 = T1 & { b: number };
 >b : number
 
 type T3 = number[];
->T3 : number[]
+>T3 : T3
 
 type T4 = [string, number];
->T4 : [string, number]
+>T4 : T4
 
 type T5 = { [P in 'a' | 'b' | 'c']: string };
 >T5 : T5

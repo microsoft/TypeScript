@@ -172,6 +172,12 @@ const enum Enum1 {
 >Enum1["W"] : Enum1
 >Enum1 : typeof Enum1
 >"W" : "W"
+
+    W5 = Enum1[`V`],
+>W5 : Enum1
+>Enum1[`V`] : Enum1
+>Enum1 : typeof Enum1
+>`V` : "V"
 }
 
 
@@ -222,6 +228,20 @@ module A {
 >E : typeof E
 >"V2" : "V2"
 >200 : 200
+
+                V4 = A.B.C.E[`V1`] << 1,
+>V4 : E
+>A.B.C.E[`V1`] << 1 : number
+>A.B.C.E[`V1`] : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+>`V1` : "V1"
+>1 : 1
             }
         }
     }
@@ -485,10 +505,10 @@ function foo(x: Enum1) {
 >Enum1 : typeof Enum1
 >"T" : "T"
 
-        case Enum1.U:
->Enum1.U : Enum1
+        case Enum1[`U`]:
+>Enum1[`U`] : Enum1
 >Enum1 : typeof Enum1
->U : Enum1
+>`U` : "U"
 
         case Enum1.V:
 >Enum1.V : Enum1

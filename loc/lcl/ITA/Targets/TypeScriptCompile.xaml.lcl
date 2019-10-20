@@ -11,8 +11,11 @@
     <Item ItemId="0;general@Category@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[General]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Generale]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="5" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
   <Item ItemId=";&lt;EnumProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
@@ -20,26 +23,38 @@
     <Item ItemId="0;copytooutputdirectory@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Specifies if the file should be copied to the output folder.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Specifica se il file deve essere copiato nella cartella di output.]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="23" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;{}{itemtype}@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Specifies the action taken on this file when an app package is produced.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Specifica l'azione eseguita su questo file quando viene prodotto un pacchetto dell'app.]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="9" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;copytooutputdirectory@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Copy to Output Directory]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Copia nella directory di output]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="21" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;{}{itemtype}@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Package Action]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Azione pacchetto]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="7" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
   <Item ItemId=";&lt;EnumValue&gt;" ItemType="0" PsrId="210" Leaf="false">
@@ -47,50 +62,74 @@
     <Item ItemId="0;always@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Copy always]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Copia sempre]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="27" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;appxmanifest@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[App Manifest]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Manifesto dell'app]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="15" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;content@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Content]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Contenuto]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="13" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;never@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Do not copy]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non copiare]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="25" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Nessuna]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="11" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;preservenewest@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Copy if newer]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Copia se più recente]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="29" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;priresource@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Resource]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Risorsa]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="17" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;typescriptcompile@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[TypeScriptCompile]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[TypeScriptCompile]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="19" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
   <Item ItemId=";&lt;Rule&gt;" ItemType="0" PsrId="210" Leaf="false">
@@ -98,14 +137,20 @@
     <Item ItemId="0;typescriptcompile@Rule@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[File TypeScript]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="3" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;typescriptcompile@Rule@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[TypeScript file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[File TypeScript]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="1" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
   <Item ItemId=";&lt;StringProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
@@ -113,26 +158,38 @@
     <Item ItemId="0;fullpath@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Location of the file.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Percorso del file.]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="37" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;identity@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Name of the file or folder.]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Nome del file o della cartella.]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="33" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;fullpath@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[Full Path]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Percorso completo]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="35" />
+      <Disp Icon="Str" />
     </Item>
     <Item ItemId="0;identity@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
       <Str Cat="AppData">
         <Val><![CDATA[File Name]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Nome file]]></Val>
+        </Tgt>
       </Str>
-      <Disp Icon="Str" Order="31" />
+      <Disp Icon="Str" />
     </Item>
   </Item>
 </LCX>

@@ -8,13 +8,13 @@ namespace ts.tscWatch {
         };
 
         interface VerifyIncrementalWatchEmitInput {
-            files: ReadonlyArray<File>;
+            files: readonly File[];
             optionsToExtend?: CompilerOptions;
-            expectedInitialEmit: ReadonlyArray<File>;
-            expectedInitialErrors: ReadonlyArray<string>;
+            expectedInitialEmit: readonly File[];
+            expectedInitialErrors: readonly string[];
             modifyFs?: (host: WatchedSystem) => void;
-            expectedIncrementalEmit?: ReadonlyArray<File>;
-            expectedIncrementalErrors?: ReadonlyArray<string>;
+            expectedIncrementalEmit?: readonly File[];
+            expectedIncrementalErrors?: readonly string[];
         }
         function verifyIncrementalWatchEmit(input: () => VerifyIncrementalWatchEmitInput) {
             it("with tsc --w", () => {
@@ -52,7 +52,7 @@ namespace ts.tscWatch {
         interface VerifyIncrementalWatchEmitWorkerInput {
             input: VerifyIncrementalWatchEmitInput;
             emitAndReportErrors: (configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) => { close(): void; };
-            verifyErrors: (host: WatchedSystem, errors: ReadonlyArray<string>) => void;
+            verifyErrors: (host: WatchedSystem, errors: readonly string[]) => void;
         }
         function verifyIncrementalWatchEmitWorker({
             input: {
@@ -100,8 +100,8 @@ namespace ts.tscWatch {
             writtenFiles: Map<string>;
             emitAndReportErrors: VerifyIncrementalWatchEmitWorkerInput["emitAndReportErrors"];
             verifyErrors: VerifyIncrementalWatchEmitWorkerInput["verifyErrors"];
-            expectedEmit: ReadonlyArray<File>;
-            expectedErrors: ReadonlyArray<string>;
+            expectedEmit: readonly File[];
+            expectedErrors: readonly string[];
         }
         function verifyBuild({
             host, optionsToExtend, writtenFiles, emitAndReportErrors,
@@ -120,7 +120,7 @@ namespace ts.tscWatch {
             return getBuildInfoText(buildInfo);
         }
 
-        function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {
+        function checkFileEmit(actual: Map<string>, expected: readonly File[]) {
             assert.equal(actual.size, expected.length, `Actual: ${JSON.stringify(arrayFrom(actual.entries()), /*replacer*/ undefined, " ")}\nExpected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
             for (const file of expected) {
                 let expectedContent = file.content;

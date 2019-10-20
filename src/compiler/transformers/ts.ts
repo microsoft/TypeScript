@@ -369,8 +369,8 @@ namespace ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
-                    // TypeScript accessibility and readonly modifiers are elided.
-
+                // TypeScript accessibility and readonly modifiers are elided
+                // falls through
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
                 case SyntaxKind.OptionalType:
@@ -400,12 +400,15 @@ namespace ts {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
+                    // falls through
 
                 case SyntaxKind.IndexSignature:
                     // TypeScript index signatures are elided.
+                    // falls through
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
+                    // falls through
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
@@ -577,7 +580,7 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
+        function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -607,7 +610,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
@@ -892,7 +895,7 @@ namespace ts {
             const members: ClassElement[] = [];
             const constructor = getFirstConstructorWithBody(node);
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
@@ -921,7 +924,7 @@ namespace ts {
          * @param isStatic A value indicating whether to retrieve static or instance members of
          *                 the class.
          */
-        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
+        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
             return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
         }
 
@@ -960,8 +963,8 @@ namespace ts {
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: ReadonlyArray<Decorator> | undefined;
-            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined>;
+            decorators: readonly Decorator[] | undefined;
+            parameters?: readonly (readonly Decorator[] | undefined)[];
         }
 
         /**
@@ -971,7 +974,7 @@ namespace ts {
          * @param node The function-like node.
          */
         function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
-            let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
+            let decorators: (readonly Decorator[] | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
                 const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
@@ -1585,7 +1588,7 @@ namespace ts {
             return createIdentifier("Object");
         }
 
-        function serializeTypeList(types: ReadonlyArray<TypeNode>): SerializedTypeNode {
+        function serializeTypeList(types: readonly TypeNode[]): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode | undefined;
@@ -1713,7 +1716,7 @@ namespace ts {
             const left = serializeEntityNameAsExpressionFallback(node.left);
             const temp = createTempVariable(hoistVariableDeclaration);
             return createLogicalAnd(
-                    createLogicalAnd(
+                createLogicalAnd(
                     left.left,
                     createStrictInequality(createAssignment(temp, left.right), createVoidZero())
                 ),
@@ -1904,7 +1907,7 @@ namespace ts {
 
         function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
             if (!some(parametersWithPropertyAssignments)) {
                 return visitFunctionBody(body, visitor, context);
             }
@@ -2177,7 +2180,7 @@ namespace ts {
                 return setTextRange(
                     createAssignment(
                         getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                        visitNode(node.initializer!, visitor, isExpression)
+                        visitNode(node.initializer, visitor, isExpression)
                     ),
                     /*location*/ node
                 );
@@ -3246,9 +3249,10 @@ namespace ts {
 
                 const substitute = createLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
+                    const originalNode = getOriginalNode(node, isAccessExpression);
+                    const propertyName = isPropertyAccessExpression(originalNode)
+                        ? declarationNameToString(originalNode.name)
+                        : getTextOfNode(originalNode.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }

@@ -1,7 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Inferred projects", () => {
         it("create inferred project", () => {
-            const projectRoot = "/user/username/projects/project";
             const appFile: File = {
                 path: `${projectRoot}/app.ts`,
                 content: `
@@ -31,7 +30,6 @@ namespace ts.projectSystem {
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
-            const projectRoot = "/user/username/projects/project";
             const file1 = {
                 path: `${projectRoot}/a/b/main.ts`,
                 content: "let x =1;"
@@ -347,7 +345,6 @@ namespace ts.projectSystem {
         });
 
         it("should still retain configured project created while opening the file", () => {
-            const projectRoot = "/user/username/projects/project";
             const appFile: File = {
                 path: `${projectRoot}/app.ts`,
                 content: `const app = 20;`

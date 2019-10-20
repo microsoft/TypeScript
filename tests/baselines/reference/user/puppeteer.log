@@ -71,8 +71,8 @@ lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assign
   Type 'Worker | Worker' is not assignable to type 'Worker'.
     Type 'Worker' is missing the following properties from type 'Worker': onmessage, postMessage, terminate, addEventListener, and 3 more.
 lib/Target.js(135,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/WebSocketTransport.js(32,72): error TS2345: Argument of type 'WebSocket' is not assignable to parameter of type 'WebSocket'.
-  Property 'dispatchEvent' is missing in type 'WebSocket' but required in type 'WebSocket'.
+lib/WebSocketTransport.js(32,72): error TS2345: Argument of type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' is not assignable to parameter of type 'WebSocket'.
+  Property 'dispatchEvent' is missing in type 'import("/puppeteer/puppeteer/node_modules/@types/ws/index")' but required in type 'WebSocket'.
 lib/Worker.js(25,50): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(26,24): error TS2503: Cannot find namespace 'Protocol'.
 lib/Worker.js(33,26): error TS2503: Cannot find namespace 'Protocol'.
