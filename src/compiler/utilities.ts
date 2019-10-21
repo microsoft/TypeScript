@@ -6632,6 +6632,7 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     // Object properties can have computed names; only method-like bodies start a new scope
                     case SyntaxKind.GetAccessor:
+                        // falls through
                     case SyntaxKind.SetAccessor:
                         return true;
                     default:
