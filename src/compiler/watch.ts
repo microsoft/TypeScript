@@ -307,9 +307,9 @@ namespace ts {
                     fileName,
                     text,
                     writeByteOrderMark,
-                    (f, w, d) => host.writeFile!(f, w, d),
-                    p => host.createDirectory!(p),
-                    p => host.directoryExists!(p));
+                    (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                    path => host.createDirectory!(path),
+                    path => host.directoryExists!(path));
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");

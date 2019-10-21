@@ -114,9 +114,9 @@ namespace ts {
                     fileName,
                     data,
                     writeByteOrderMark,
-                    (f, d, w) => writeFileWorker(f, d, w),
-                    p => (compilerHost.createDirectory || system.createDirectory)(p),
-                    p => directoryExists(p));
+                    (path, data, writeByteOrderMark) => writeFileWorker(path, data, writeByteOrderMark),
+                    path => (compilerHost.createDirectory || system.createDirectory)(path),
+                    path => directoryExists(path));
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
