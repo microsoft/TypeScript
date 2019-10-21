@@ -1,72 +1,66 @@
 Exit Code: 1
 Standard output:
 @uifabric/build: yarn run vX.X.X
-@uifabric/build: $ node ./just-scripts.js no-op --production --lint
+@uifabric/build: $ node ./just-scripts.js no-op
 @uifabric/build: Done in ?s.
 @uifabric/example-data: yarn run vX.X.X
-@uifabric/example-data: $ just-scripts build --production --lint
+@uifabric/example-data: $ just-scripts build
 @uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/example-data: [XX:XX:XX XM] ■ Running tslint
 @uifabric/example-data: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/example-data/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/example-data: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/example-data/webpack.config.js
 @uifabric/example-data: Webpack version: 4.29.5
 @uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
 @uifabric/example-data: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
-@uifabric/migration: $ just-scripts build --production --lint
+@uifabric/migration: $ just-scripts build
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
-@uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
+@uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
 @uifabric/migration: Done in ?s.
 @uifabric/monaco-editor: yarn run vX.X.X
-@uifabric/monaco-editor: $ just-scripts build --production --lint
+@uifabric/monaco-editor: $ just-scripts build
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Removing [esm, lib, lib-commonjs]
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
-@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
+@uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
 @uifabric/monaco-editor: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
-@uifabric/set-version: $ just-scripts build --production --lint
+@uifabric/set-version: $ just-scripts build
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/set-version: [XX:XX:XX XM] ■ Running tslint
 @uifabric/set-version: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/set-version/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running Webpack
 @uifabric/set-version: [XX:XX:XX XM] ■ Webpack Config Path: null
 @uifabric/set-version: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
 @uifabric/set-version: Done in ?s.
 @uifabric/webpack-utils: yarn run vX.X.X
-@uifabric/webpack-utils: $ just-scripts build --production --lint
+@uifabric/webpack-utils: $ just-scripts build
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running tslint
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
+@uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
 @uifabric/webpack-utils: Done in ?s.
 @uifabric/merge-styles: yarn run vX.X.X
-@uifabric/merge-styles: $ just-scripts build --production --lint
+@uifabric/merge-styles: $ just-scripts build
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running tslint
 @uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
 @uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Webpack
@@ -89,38 +83,32 @@ Standard output:
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
-@uifabric/jest-serializer-merge-styles: $ just-scripts build --production --lint
+@uifabric/jest-serializer-merge-styles: $ just-scripts build
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
 @uifabric/jest-serializer-merge-styles: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
-@uifabric/test-utilities: $ just-scripts build --production --lint
+@uifabric/test-utilities: $ just-scripts build
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
 @uifabric/test-utilities: Done in ?s.
 @uifabric/utilities: yarn run vX.X.X
-@uifabric/utilities: $ just-scripts build --production --lint
+@uifabric/utilities: $ just-scripts build
 @uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/utilities: [XX:XX:XX XM] ■ Running tslint
 @uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/utilities/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
-@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
-@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
-@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
-@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --inlineSources --sourceRoot "../src" --outDir lib-amd --module amd --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
 @uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors --forceExit
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
@@ -168,7 +156,7 @@ Standard output:
 Standard error:
 info cli using local version of lerna
 lerna notice cli vX.X.X
-lerna info Executing command in 42 packages: "yarn run build --production --lint"
+lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
@@ -192,4 +180,4 @@ lerna info Executing command in 42 packages: "yarn run build --production --lint
 @uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
 @uifabric/utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @uifabric/utilities: error Command failed with exit code 1.
-lerna ERR! yarn run build --production --lint exited 1 in '@uifabric/utilities'
+lerna ERR! yarn run build exited 1 in '@uifabric/utilities'

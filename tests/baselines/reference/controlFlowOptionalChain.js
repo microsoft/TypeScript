@@ -59,8 +59,8 @@ o2.f;
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 if (o3?.x === 1) {
-    o3; // TODO: should be `{ x: y, y: string }`
-    o3.x; // TODO: should not be an error.
+    o3;
+    o3.x;
     o3?.x;
 }
 else {
@@ -160,6 +160,373 @@ function f01(x: unknown) {
     }
 }
 
+type Thing = { foo: string | number, bar(): number, baz: object };
+
+function f10(o: Thing | undefined, value: number) {
+    if (o?.foo === value) {
+        o.foo;
+    }
+    if (o?.["foo"] === value) {
+        o["foo"];
+    }
+    if (o?.bar() === value) {
+        o.bar;
+    }
+    if (o?.foo == value) {
+        o.foo;
+    }
+    if (o?.["foo"] == value) {
+        o["foo"];
+    }
+    if (o?.bar() == value) {
+        o.bar;
+    }
+}
+
+function f11(o: Thing | null, value: number) {
+    if (o?.foo === value) {
+        o.foo;
+    }
+    if (o?.["foo"] === value) {
+        o["foo"];
+    }
+    if (o?.bar() === value) {
+        o.bar;
+    }
+    if (o?.foo == value) {
+        o.foo;
+    }
+    if (o?.["foo"] == value) {
+        o["foo"];
+    }
+    if (o?.bar() == value) {
+        o.bar;
+    }
+}
+
+function f12(o: Thing | undefined, value: number | undefined) {
+    if (o?.foo === value) {
+        o.foo;  // Error
+    }
+    if (o?.["foo"] === value) {
+        o["foo"];  // Error
+    }
+    if (o?.bar() === value) {
+        o.bar;  // Error
+    }
+    if (o?.foo == value) {
+        o.foo;  // Error
+    }
+    if (o?.["foo"] == value) {
+        o["foo"];  // Error
+    }
+    if (o?.bar() == value) {
+        o.bar;  // Error
+    }
+}
+
+function f12a(o: Thing | undefined, value: number | null) {
+    if (o?.foo === value) {
+        o.foo;
+    }
+    if (o?.["foo"] === value) {
+        o["foo"];
+    }
+    if (o?.bar() === value) {
+        o.bar;
+    }
+    if (o?.foo == value) {
+        o.foo;  // Error
+    }
+    if (o?.["foo"] == value) {
+        o["foo"];  // Error
+    }
+    if (o?.bar() == value) {
+        o.bar;  // Error
+    }
+}
+
+function f13(o: Thing | undefined) {
+    if (o?.foo !== undefined) {
+        o.foo;
+    }
+    if (o?.["foo"] !== undefined) {
+        o["foo"];
+    }
+    if (o?.bar() !== undefined) {
+        o.bar;
+    }
+    if (o?.foo != undefined) {
+        o.foo;
+    }
+    if (o?.["foo"] != undefined) {
+        o["foo"];
+    }
+    if (o?.bar() != undefined) {
+        o.bar;
+    }
+}
+
+function f13a(o: Thing | undefined) {
+    if (o?.foo !== null) {
+        o.foo;  // Error
+    }
+    if (o?.["foo"] !== null) {
+        o["foo"];  // Error
+    }
+    if (o?.bar() !== null) {
+        o.bar;  // Error
+    }
+    if (o?.foo != null) {
+        o.foo;
+    }
+    if (o?.["foo"] != null) {
+        o["foo"];
+    }
+    if (o?.bar() != null) {
+        o.bar;
+    }
+}
+
+function f14(o: Thing | null) {
+    if (o?.foo !== undefined) {
+        o.foo;
+    }
+    if (o?.["foo"] !== undefined) {
+        o["foo"];
+    }
+    if (o?.bar() !== undefined) {
+        o.bar;
+    }
+}
+
+function f15(o: Thing | undefined, value: number) {
+    if (o?.foo === value) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo !== value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo == value) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo != value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+}
+
+function f16(o: Thing | undefined) {
+    if (o?.foo === undefined) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo !== undefined) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo == undefined) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo != undefined) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
+function f20(o: Thing | undefined) {
+    if (typeof o?.foo === "number") {
+        o.foo;
+    }
+    if (typeof o?.["foo"] === "number") {
+        o["foo"];
+    }
+    if (typeof o?.bar() === "number") {
+        o.bar;
+    }
+    if (o?.baz instanceof Error) {
+        o.baz;
+    }
+}
+
+function f21(o: Thing | null) {
+    if (typeof o?.foo === "number") {
+        o.foo;
+    }
+    if (typeof o?.["foo"] === "number") {
+        o["foo"];
+    }
+    if (typeof o?.bar() === "number") {
+        o.bar;
+    }
+    if (o?.baz instanceof Error) {
+        o.baz;
+    }
+}
+
+function f22(o: Thing | undefined) {
+    if (typeof o?.foo === "number") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo !== "number") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo == "number") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo != "number") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+}
+
+function f23(o: Thing | undefined) {
+    if (typeof o?.foo === "undefined") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo !== "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo == "undefined") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo != "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
+declare function assert(x: unknown): asserts x;
+declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
+
+function f30(o: Thing | undefined) {
+    if (!!true) {
+        assert(o?.foo);
+        o.foo;
+    }
+    if (!!true) {
+        assert(o?.foo === 42);
+        o.foo;
+    }
+    if (!!true) {
+        assert(typeof o?.foo === "number");
+        o.foo;
+    }
+    if (!!true) {
+        assertNonNull(o?.foo);
+        o.foo;
+    }
+}
+
+function f40(o: Thing | undefined) {
+    switch (o?.foo) {
+        case "abc":
+            o.foo;
+            break;
+        case 42:
+            o.foo;
+            break;
+        case undefined:
+            o.foo;  // Error
+            break;
+        default:
+            o.foo;  // Error
+            break;
+    }
+}
+
+function f41(o: Thing | undefined) {
+    switch (typeof o?.foo) {
+        case "string":
+            o.foo;
+            break;
+        case "number":
+            o.foo;
+            break;
+        case "undefined":
+            o.foo;  // Error
+            break;
+        default:
+            o.foo;  // Error
+            break;
+    }
+}
+
+// Repros from #34570
+
+type Shape =
+    | { type: 'rectangle', width: number, height: number }
+    | { type: 'circle', radius: number }
+
+function getArea(shape?: Shape) {
+    switch (shape?.type) {
+        case 'circle':
+            return Math.PI * shape.radius ** 2
+        case 'rectangle':
+            return shape.width * shape.height
+        default:
+            return 0
+    }
+}
+
+type Feature = {
+  id: string;
+  geometry?: {
+    type: string;
+    coordinates: number[];
+  };
+};
+
+
+function extractCoordinates(f: Feature): number[] {
+    if (f.geometry?.type !== 'test') {
+        return [];
+    }
+    return f.geometry.coordinates;
+}
+
 
 //// [controlFlowOptionalChain.js]
 "use strict";
@@ -206,8 +573,8 @@ o2;
 (_k = o2) === null || _k === void 0 ? void 0 : _k.f;
 o2.f;
 if (((_l = o3) === null || _l === void 0 ? void 0 : _l.x) === 1) {
-    o3; // TODO: should be `{ x: y, y: string }`
-    o3.x; // TODO: should not be an error.
+    o3;
+    o3.x;
     (_m = o3) === null || _m === void 0 ? void 0 : _m.x;
 }
 else {
@@ -285,4 +652,351 @@ function f01(x) {
         (_d = maybeNever) === null || _d === void 0 ? void 0 : _d();
         x;
     }
+}
+function f10(o, value) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === value) {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === value) {
+        o["foo"];
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === value) {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) == value) {
+        o.foo;
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) == value) {
+        o["foo"];
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) == value) {
+        o.bar;
+    }
+}
+function f11(o, value) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === value) {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === value) {
+        o["foo"];
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === value) {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) == value) {
+        o.foo;
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) == value) {
+        o["foo"];
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) == value) {
+        o.bar;
+    }
+}
+function f12(o, value) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === value) {
+        o.foo; // Error
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === value) {
+        o["foo"]; // Error
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === value) {
+        o.bar; // Error
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) == value) {
+        o.foo; // Error
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) == value) {
+        o["foo"]; // Error
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) == value) {
+        o.bar; // Error
+    }
+}
+function f12a(o, value) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === value) {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === value) {
+        o["foo"];
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === value) {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) == value) {
+        o.foo; // Error
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) == value) {
+        o["foo"]; // Error
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) == value) {
+        o.bar; // Error
+    }
+}
+function f13(o) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) !== undefined) {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) !== undefined) {
+        o["foo"];
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) !== undefined) {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != undefined) {
+        o.foo;
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) != undefined) {
+        o["foo"];
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) != undefined) {
+        o.bar;
+    }
+}
+function f13a(o) {
+    var _a, _b, _c, _d, _e, _f;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) !== null) {
+        o.foo; // Error
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) !== null) {
+        o["foo"]; // Error
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) !== null) {
+        o.bar; // Error
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != null) {
+        o.foo;
+    }
+    if (((_e = o) === null || _e === void 0 ? void 0 : _e["foo"]) != null) {
+        o["foo"];
+    }
+    if (((_f = o) === null || _f === void 0 ? void 0 : _f.bar()) != null) {
+        o.bar;
+    }
+}
+function f14(o) {
+    var _a, _b, _c;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) !== undefined) {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) !== undefined) {
+        o["foo"];
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) !== undefined) {
+        o.bar;
+    }
+}
+function f15(o, value) {
+    var _a, _b, _c, _d;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === value) {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b.foo) !== value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.foo) == value) {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+}
+function f16(o) {
+    var _a, _b, _c, _d;
+    if (((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === undefined) {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (((_b = o) === null || _b === void 0 ? void 0 : _b.foo) !== undefined) {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (((_c = o) === null || _c === void 0 ? void 0 : _c.foo) == undefined) {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != undefined) {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+}
+function f20(o) {
+    var _a, _b, _c, _d;
+    if (typeof ((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === "number") {
+        o.foo;
+    }
+    if (typeof ((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === "number") {
+        o["foo"];
+    }
+    if (typeof ((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === "number") {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.baz) instanceof Error) {
+        o.baz;
+    }
+}
+function f21(o) {
+    var _a, _b, _c, _d;
+    if (typeof ((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === "number") {
+        o.foo;
+    }
+    if (typeof ((_b = o) === null || _b === void 0 ? void 0 : _b["foo"]) === "number") {
+        o["foo"];
+    }
+    if (typeof ((_c = o) === null || _c === void 0 ? void 0 : _c.bar()) === "number") {
+        o.bar;
+    }
+    if (((_d = o) === null || _d === void 0 ? void 0 : _d.baz) instanceof Error) {
+        o.baz;
+    }
+}
+function f22(o) {
+    var _a, _b, _c, _d;
+    if (typeof ((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === "number") {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (typeof ((_b = o) === null || _b === void 0 ? void 0 : _b.foo) !== "number") {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof ((_c = o) === null || _c === void 0 ? void 0 : _c.foo) == "number") {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (typeof ((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != "number") {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+}
+function f23(o) {
+    var _a, _b, _c, _d;
+    if (typeof ((_a = o) === null || _a === void 0 ? void 0 : _a.foo) === "undefined") {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof ((_b = o) === null || _b === void 0 ? void 0 : _b.foo) !== "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+    if (typeof ((_c = o) === null || _c === void 0 ? void 0 : _c.foo) == "undefined") {
+        o.foo; // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof ((_d = o) === null || _d === void 0 ? void 0 : _d.foo) != "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo; // Error
+    }
+}
+function f30(o) {
+    var _a, _b, _c, _d;
+    if (!!true) {
+        assert((_a = o) === null || _a === void 0 ? void 0 : _a.foo);
+        o.foo;
+    }
+    if (!!true) {
+        assert(((_b = o) === null || _b === void 0 ? void 0 : _b.foo) === 42);
+        o.foo;
+    }
+    if (!!true) {
+        assert(typeof ((_c = o) === null || _c === void 0 ? void 0 : _c.foo) === "number");
+        o.foo;
+    }
+    if (!!true) {
+        assertNonNull((_d = o) === null || _d === void 0 ? void 0 : _d.foo);
+        o.foo;
+    }
+}
+function f40(o) {
+    var _a;
+    switch ((_a = o) === null || _a === void 0 ? void 0 : _a.foo) {
+        case "abc":
+            o.foo;
+            break;
+        case 42:
+            o.foo;
+            break;
+        case undefined:
+            o.foo; // Error
+            break;
+        default:
+            o.foo; // Error
+            break;
+    }
+}
+function f41(o) {
+    var _a;
+    switch (typeof ((_a = o) === null || _a === void 0 ? void 0 : _a.foo)) {
+        case "string":
+            o.foo;
+            break;
+        case "number":
+            o.foo;
+            break;
+        case "undefined":
+            o.foo; // Error
+            break;
+        default:
+            o.foo; // Error
+            break;
+    }
+}
+function getArea(shape) {
+    var _a;
+    switch ((_a = shape) === null || _a === void 0 ? void 0 : _a.type) {
+        case 'circle':
+            return Math.PI * Math.pow(shape.radius, 2);
+        case 'rectangle':
+            return shape.width * shape.height;
+        default:
+            return 0;
+    }
+}
+function extractCoordinates(f) {
+    var _a;
+    if (((_a = f.geometry) === null || _a === void 0 ? void 0 : _a.type) !== 'test') {
+        return [];
+    }
+    return f.geometry.coordinates;
 }

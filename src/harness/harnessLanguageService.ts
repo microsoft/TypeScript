@@ -220,6 +220,10 @@ namespace Harness.LanguageService {
             return !!this.typesRegistry && this.typesRegistry.has(name);
         }
 
+        getGlobalTypingsCacheLocation() {
+            return "/Library/Caches/typescript";
+        }
+
         installPackage = ts.notImplemented;
 
         getCompilationSettings() { return this.settings; }
@@ -796,7 +800,7 @@ namespace Harness.LanguageService {
             return mockHash(s);
         }
 
-        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+        require(_initialDir: string, _moduleName: string): ts.RequireResult {
             switch (_moduleName) {
                 // Adds to the Quick Info a fixed string and a string from the config file
                 // and replaces the first display part

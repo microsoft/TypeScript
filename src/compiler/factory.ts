@@ -1065,7 +1065,9 @@ namespace ts {
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
-        Debug.assert(!(node.flags & NodeFlags.OptionalChain), "Cannot update a PropertyAccessChain using updatePropertyAccess. Use updatePropertyAccessChain instead.");
+        if (isOptionalChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.questionDotToken, name);
+        }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
         return node.expression !== expression
@@ -1103,7 +1105,9 @@ namespace ts {
     }
 
     export function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
-        Debug.assert(!(node.flags & NodeFlags.OptionalChain), "Cannot update an ElementAccessChain using updateElementAccess. Use updateElementAccessChain instead.");
+        if (isOptionalChain(node)) {
+            return updateElementAccessChain(node, expression, node.questionDotToken, argumentExpression);
+        }
         return node.expression !== expression
             || node.argumentExpression !== argumentExpression
             ? updateNode(createElementAccess(expression, argumentExpression), node)
@@ -1137,7 +1141,9 @@ namespace ts {
     }
 
     export function updateCall(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
-        Debug.assert(!(node.flags & NodeFlags.OptionalChain), "Cannot update a CallChain using updateCall. Use updateCallChain instead.");
+        if (isOptionalChain(node)) {
+            return updateCallChain(node, expression, node.questionDotToken, typeArguments, argumentsArray);
+        }
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
@@ -1805,7 +1811,7 @@ namespace ts {
         const node = <ForOfStatement>createSynthesizedNode(SyntaxKind.ForOfStatement);
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
-        node.expression = expression;
+        node.expression = isCommaSequence(expression) ? createParen(expression) : expression;
         node.statement = asEmbeddedStatement(statement);
         return node;
     }
@@ -2974,7 +2980,10 @@ namespace ts {
                     (texts || (texts = [])).push(prependNode);
                     break;
                 case BundleFileSectionKind.Internal:
-                    if (stripInternal) break;
+                    if (stripInternal) {
+                        if (!texts) texts = [];
+                        break;
+                    }
                     // falls through
 
                 case BundleFileSectionKind.Text:
@@ -4730,7 +4739,7 @@ namespace ts {
         const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
         const emittedCondition = skipPartiallyEmittedExpressions(condition);
         const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+        if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
             return createParen(condition);
         }
         return condition;

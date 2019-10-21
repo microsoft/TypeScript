@@ -1401,7 +1401,14 @@ namespace ts {
             // Only for end of file because the error gets reported incorrectly on embedded script tags.
             const reportAtCurrentPosition = token() === SyntaxKind.EndOfFileToken;
 
-            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || Diagnostics.Identifier_expected);
+            const isReservedWord = scanner.isReservedWord();
+            const msgArg = scanner.getTokenText();
+
+            const defaultMessage = isReservedWord ?
+                Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here :
+                Diagnostics.Identifier_expected;
+
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || defaultMessage, msgArg);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {

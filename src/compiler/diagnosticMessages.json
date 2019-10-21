@@ -71,7 +71,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be either 'string' or 'number'.": {
         "category": "Error",
         "code": 1023
     },
@@ -903,7 +903,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'esnext', 'commonjs',  'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 1323
     },
@@ -1042,6 +1042,10 @@
     "Tagged template expressions are not permitted in an optional chain.": {
         "category": "Error",
         "code": 1358
+    },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1556,10 +1560,6 @@
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
         "category": "Error",
         "code": 2423
-    },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
@@ -2248,6 +2248,14 @@
     "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
         "category": "Error",
         "code": 2612
+    },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 2613
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 2614
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -4302,6 +4310,10 @@
     "The expected type comes from the return type of this signature.": {
         "category": "Message",
         "code": 6502
+    },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

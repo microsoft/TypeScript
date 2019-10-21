@@ -92,10 +92,9 @@ namespace ts.projectSystem {
         });
 
         describe("with main and depedency project", () => {
-            const projectLocation = "/user/username/projects/myproject";
-            const dependecyLocation = `${projectLocation}/dependency`;
-            const dependecyDeclsLocation = `${projectLocation}/decls`;
-            const mainLocation = `${projectLocation}/main`;
+            const dependecyLocation = `${projectRoot}/dependency`;
+            const dependecyDeclsLocation = `${projectRoot}/decls`;
+            const mainLocation = `${projectRoot}/main`;
             const dependencyTs: File = {
                 path: `${dependecyLocation}/FnS.ts`,
                 content: `export function fn1() { }
@@ -137,11 +136,11 @@ fn5();
             };
 
             const randomFile: File = {
-                path: `${projectLocation}/random/random.ts`,
+                path: `${projectRoot}/random/random.ts`,
                 content: "let a = 10;"
             };
             const randomConfig: File = {
-                path: `${projectLocation}/random/tsconfig.json`,
+                path: `${projectRoot}/random/tsconfig.json`,
                 content: "{}"
             };
             const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
@@ -1302,9 +1301,8 @@ function foo() {
         });
 
         it("reusing d.ts files from composite and non composite projects", () => {
-            const projectLocation = "/user/username/projects/myproject";
             const configA: File = {
-                path: `${projectLocation}/compositea/tsconfig.json`,
+                path: `${projectRoot}/compositea/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1316,27 +1314,27 @@ function foo() {
                 })
             };
             const aTs: File = {
-                path: `${projectLocation}/compositea/a.ts`,
+                path: `${projectRoot}/compositea/a.ts`,
                 content: `import { b } from "@ref/compositeb/b";`
             };
             const a2Ts: File = {
-                path: `${projectLocation}/compositea/a2.ts`,
+                path: `${projectRoot}/compositea/a2.ts`,
                 content: `export const x = 10;`
             };
             const configB: File = {
-                path: `${projectLocation}/compositeb/tsconfig.json`,
+                path: `${projectRoot}/compositeb/tsconfig.json`,
                 content: configA.content
             };
             const bTs: File = {
-                path: `${projectLocation}/compositeb/b.ts`,
+                path: `${projectRoot}/compositeb/b.ts`,
                 content: "export function b() {}"
             };
             const bDts: File = {
-                path: `${projectLocation}/dist/compositeb/b.d.ts`,
+                path: `${projectRoot}/dist/compositeb/b.d.ts`,
                 content: "export declare function b(): void;"
             };
             const configC: File = {
-                path: `${projectLocation}/compositec/tsconfig.json`,
+                path: `${projectRoot}/compositec/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1349,7 +1347,7 @@ function foo() {
                 })
             };
             const cTs: File = {
-                path: `${projectLocation}/compositec/c.ts`,
+                path: `${projectRoot}/compositec/c.ts`,
                 content: aTs.content
             };
             const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];

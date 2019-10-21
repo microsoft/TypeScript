@@ -228,7 +228,7 @@ interface Symbol {
             if (section.kind !== BundleFileSectionKind.Prepend) {
                 writeTextOfSection(section.pos, section.end);
             }
-            else {
+            else if (section.texts.length > 0) {
                 Debug.assert(section.pos === first(section.texts).pos);
                 Debug.assert(section.end === last(section.texts).end);
                 for (const text of section.texts) {
@@ -236,6 +236,9 @@ interface Symbol {
                     writeSectionHeader(text);
                     writeTextOfSection(text.pos, text.end);
                 }
+            }
+            else {
+                Debug.assert(section.pos === section.end);
             }
         }
         baselineRecorder.WriteLine("======================================================================");
@@ -276,6 +279,7 @@ interface Symbol {
         buildKind: BuildKind;
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario?: string;
+        commandLineArgs?: readonly string[];
     }
 
     export interface VerifyTsBuildInput extends TscCompile {
@@ -287,7 +291,7 @@ interface Symbol {
         baselineSourceMap, modifyFs, baselineReadFileCalls,
         incrementalScenarios
     }: VerifyTsBuildInput) {
-        describe(`tsc --b ${scenario}:: ${subScenario}`, () => {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
             let tick: () => void;
             let sys: TscCompileSystem;
             before(() => {
@@ -315,7 +319,12 @@ interface Symbol {
                 verifyTscBaseline(() => sys);
             });
 
-            for (const { buildKind, modifyFs, subScenario: incrementalSubScenario } of incrementalScenarios) {
+            for (const {
+                buildKind,
+                modifyFs,
+                subScenario: incrementalSubScenario,
+                commandLineArgs: incrementalCommandLineArgs
+            } of incrementalScenarios) {
                 describe(incrementalSubScenario || buildKind, () => {
                     let newSys: TscCompileSystem;
                     before(() => {
@@ -326,7 +335,7 @@ interface Symbol {
                             subScenario: incrementalSubScenario || subScenario,
                             buildKind,
                             fs: () => sys.vfs,
-                            commandLineArgs,
+                            commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                             modifyFs: fs => {
                                 tick();
                                 modifyFs(fs);

@@ -4188,7 +4188,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generic type instantiation is excessively deep and possibly infinite.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Genel tür oluşturma işlemi, fazla ayrıntılı ve büyük olasılıkla sınırsız.]]></Val>
+            <Val><![CDATA[Genel tür örneği oluşturma işlemi, fazla ayrıntılı ve büyük olasılıkla sınırsız.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

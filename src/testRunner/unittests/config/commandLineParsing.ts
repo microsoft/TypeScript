@@ -446,6 +446,23 @@ namespace ts {
                 });
         });
 
+        it("parse build with listFilesOnly ", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--listFilesOnly"],
+                {
+                    errors: [{
+                        messageText:"Unknown build option '--listFilesOnly'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    projects: ["."],
+                    buildOptions: {}
+                });
+        });
+
         it("Parse multiple flags with input projects at the end", () => {
             // --lib es5,es2015.symbol.wellknown --target es5 0.ts
             assertParseResult(["--force", "--verbose", "src", "tests"],

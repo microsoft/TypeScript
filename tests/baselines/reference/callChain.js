@@ -33,6 +33,10 @@ declare const o4: undefined | (<T>(f: (a: T) => T) => T);
 declare function incr(x: number): number;
 const v: number | undefined = o4?.(incr);
 
+// GH#33744
+declare const o5: <T>() => undefined | (() => void);
+o5<number>()?.();
+
 //// [callChain.js]
 "use strict";
 var __spreadArrays = (this && this.__spreadArrays) || function () {
@@ -42,7 +46,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13;
 (_a = o1) === null || _a === void 0 ? void 0 : _a();
 (_b = o1) === null || _b === void 0 ? void 0 : _b(1);
 (_c = o1) === null || _c === void 0 ? void 0 : _c.apply(void 0, [1, 2]);
@@ -68,3 +72,4 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
 (_9 = (_8 = o3)["b"]) === null || _9 === void 0 ? void 0 : _9.call.apply(_9, __spreadArrays([_8], [1, 2])).c;
 (_11 = (_10 = o3)["b"]) === null || _11 === void 0 ? void 0 : _11.call.apply(_11, __spreadArrays([_10, 1], [2, 3], [4])).c;
 var v = (_12 = o4) === null || _12 === void 0 ? void 0 : _12(incr);
+(_13 = o5()) === null || _13 === void 0 ? void 0 : _13();

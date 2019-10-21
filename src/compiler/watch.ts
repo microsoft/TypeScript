@@ -91,7 +91,7 @@ namespace ts {
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
-        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
+        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
         return result;
@@ -129,7 +129,7 @@ namespace ts {
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
-        if (program.getCompilerOptions().listFiles) {
+        if (program.getCompilerOptions().listFiles || program.getCompilerOptions().listFilesOnly) {
             forEach(program.getSourceFiles(), file => {
                 writeFileName(file.fileName);
             });
@@ -149,6 +149,8 @@ namespace ts {
         emitOnlyDtsFiles?: boolean,
         customTransformers?: CustomTransformers
     ) {
+        const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
+
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
@@ -158,15 +160,20 @@ namespace ts {
         // semantic errors.
         if (diagnostics.length === configFileParsingDiagnosticsLength) {
             addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
-            addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
 
-            if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+            if (!isListFilesOnly) {
+                addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
+
+                if (diagnostics.length === configFileParsingDiagnosticsLength) {
+                    addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+                }
             }
         }
 
         // Emit and report any errors we ran into.
-        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        const emitResult = isListFilesOnly
+            ? { emitSkipped: true, diagnostics: emptyArray }
+            : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(diagnostics, emitDiagnostics);
 

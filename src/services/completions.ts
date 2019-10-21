@@ -338,6 +338,7 @@ namespace ts.Completions {
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
+
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
@@ -780,7 +781,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         isUncheckedFile: boolean,
         position: number,
-        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
+        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText" | "includeAutomaticOptionalChainCompletions">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
     ): CompletionData | Request | undefined {
@@ -1000,6 +1001,7 @@ namespace ts.Completions {
         let completionKind = CompletionKind.None;
         let isNewIdentifierLocation = false;
         let keywordFilters = KeywordCompletionFilters.None;
+        // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
@@ -1115,8 +1117,17 @@ namespace ts.Completions {
                             let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
                             let insertQuestionDot = false;
                             if (type.isNullableType()) {
-                                insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                                type = type.getNonNullableType();
+                                const canCorrectToQuestionDot =
+                                isRightOfDot &&
+                                !isRightOfQuestionDot &&
+                                preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                                if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                                    type = type.getNonNullableType();
+                                    if (canCorrectToQuestionDot) {
+                                        insertQuestionDot = true;
+                                    }
+                                }
                             }
                             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
@@ -1136,8 +1147,17 @@ namespace ts.Completions {
                 let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 let insertQuestionDot = false;
                 if (type.isNullableType()) {
-                    insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                    type = type.getNonNullableType();
+                    const canCorrectToQuestionDot =
+                        isRightOfDot &&
+                        !isRightOfQuestionDot &&
+                        preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                    if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                        type = type.getNonNullableType();
+                        if (canCorrectToQuestionDot) {
+                            insertQuestionDot = true;
+                        }
+                    }
                 }
                 addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
@@ -1464,7 +1484,7 @@ namespace ts.Completions {
         }
 
         /**
-         * Gathers symbols that can be imported from other files, deduplicating along the way. Symbols can be “duplicates”
+         * Gathers symbols that can be imported from other files, de-duplicating along the way. Symbols can be "duplicates"
          * if re-exported from another module, e.g. `export { foo } from "./a"`. That syntax creates a fresh symbol, but
          * it’s just an alias to the first, and both have the same name, so we generally want to filter those aliases out,
          * if and only if the the first can be imported (it may be excluded due to package.json filtering in
@@ -1548,7 +1568,7 @@ namespace ts.Completions {
                 // Don't add another completion for `export =` of a symbol that's already global.
                 // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol &&
-                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
+                    every(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator && !findAncestor(d, isGlobalScopeAugmentation))) {
                     pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
                 }
 
@@ -1760,7 +1780,7 @@ namespace ts.Completions {
             let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                const typeForObject = typeChecker.getContextualType(objectLikeContainer);
+                const typeForObject = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completion);
                 if (!typeForObject) return GlobalsSearch.Fail;
                 isNewIdentifierLocation = hasIndexSignature(typeForObject);
                 typeMembers = getPropertiesForObjectExpression(typeForObject, objectLikeContainer, typeChecker);
@@ -2406,6 +2426,8 @@ namespace ts.Completions {
                     return isFunctionLikeBodyKeyword(kind)
                         || kind === SyntaxKind.DeclareKeyword
                         || kind === SyntaxKind.ModuleKeyword
+                        || kind === SyntaxKind.TypeKeyword
+                        || kind === SyntaxKind.NamespaceKeyword
                         || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);

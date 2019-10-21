@@ -1964,6 +1964,8 @@ declare namespace ts {
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
         InvalidProject_OutputsSkipped = 3,
+        ProjectReferenceCycle_OutputsSkipped = 4,
+        /** @deprecated Use ProjectReferenceCycle_OutputsSkipped instead. */
         ProjectReferenceCycle_OutputsSkupped = 4
     }
     export interface EmitResult {
@@ -3169,6 +3171,7 @@ declare namespace ts {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -4902,6 +4905,9 @@ declare namespace ts {
         isClassOrInterface(): this is InterfaceType;
         isClass(): this is InterfaceType;
     }
+    interface TypeReference {
+        typeArguments?: readonly Type[];
+    }
     interface Signature {
         getDeclaration(): SignatureDeclaration;
         getTypeParameters(): TypeParameter[] | undefined;
@@ -5068,7 +5074,7 @@ declare namespace ts {
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
         dispose(): void;
     }
@@ -5191,7 +5197,7 @@ declare namespace ts {
     }
     interface FileTextChanges {
         fileName: string;
-        textChanges: TextChange[];
+        textChanges: readonly TextChange[];
         isNewFile?: boolean;
     }
     interface CodeAction {

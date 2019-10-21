@@ -2250,12 +2250,14 @@ namespace ts {
         parent: CaseBlock;
         expression: Expression;
         statements: NodeArray<Statement>;
+        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export interface DefaultClause extends Node {
         kind: SyntaxKind.DefaultClause;
         parent: CaseBlock;
         statements: NodeArray<Statement>;
+        /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
@@ -2681,6 +2683,7 @@ namespace ts {
         isArrayType?: boolean;
     }
 
+    // NOTE: Ensure this is up-to-date with src/debug/debug.ts
     export const enum FlowFlags {
         Unreachable    = 1 << 0,  // Unreachable code
         Start          = 1 << 1,  // Start of flow graph
@@ -3258,6 +3261,9 @@ namespace ts {
         InvalidProject_OutputsSkipped = 3,
 
         // When build is skipped because project references form cycle
+        ProjectReferenceCycle_OutputsSkipped = 4,
+
+        /** @deprecated Use ProjectReferenceCycle_OutputsSkipped instead. */
         ProjectReferenceCycle_OutputsSkupped = 4,
     }
 
@@ -3365,8 +3371,10 @@ namespace ts {
 
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
+
         getRootSymbols(symbol: Symbol): readonly Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
@@ -3443,8 +3451,7 @@ namespace ts {
             resolvedReturnType: Type,
             typePredicate: TypePredicate | undefined,
             minArgumentCount: number,
-            hasRestParameter: boolean,
-            hasLiteralTypes: boolean,
+            flags: SignatureFlags
         ): Signature;
         /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
         /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
@@ -3524,6 +3531,14 @@ namespace ts {
         None = 0,
         Literal,
         Subtype
+    }
+
+    /* @internal */
+    export const enum ContextFlags {
+        None          = 0,
+        Signature     = 1 << 0, // Obtaining contextual signature
+        NoConstraints = 1 << 1, // Don't obtain type variable constraints
+        Completion    = 1 << 2, // Obtaining constraint type for completion
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -4655,7 +4670,22 @@ namespace ts {
         Construct,
     }
 
+    /* @internal */
+    export const enum SignatureFlags {
+        None = 0,
+        HasRestParameter = 1 << 0,      // Indicates last parameter is rest parameter
+        HasLiteralTypes = 1 << 1,       // Indicates signature is specialized
+        IsOptionalCall = 1 << 2,        // Indicates signature comes from a CallChain
+
+        // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
+        // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
+        // instantiating the return type.
+        PropagatingFlags = HasRestParameter | HasLiteralTypes,
+    }
+
     export interface Signature {
+        /* @internal */ flags: SignatureFlags;
+        /* @internal */ checker?: TypeChecker;
         declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
         typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: readonly Symbol[];               // Parameters
@@ -4672,10 +4702,6 @@ namespace ts {
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
-        hasRestParameter: boolean;          // True if last parameter is rest parameter
-        /* @internal */
-        hasLiteralTypes: boolean;           // True if specialized
-        /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */
         mapper?: TypeMapper;                // Instantiation mapper
@@ -4686,11 +4712,11 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
+        optionalCallSignatureCache?: Signature; // Optional chained call version of signature (deferred)
+        /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
-        /* @internal */
-        isOptionalCall?: boolean;
     }
 
     export const enum IndexKind {
@@ -4935,6 +4961,7 @@ namespace ts {
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
+        /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
@@ -5122,6 +5149,11 @@ namespace ts {
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
     }
+
+    /* @internal */
+    export type RequireResult<T = {}> =
+        | { module: T, modulePath?: string, error: undefined }
+        | { module: undefined, modulePath?: undefined, error: { stack?: string, message?: string } };
 
     export interface CreateProgramOptions {
         rootNames: readonly string[];
@@ -6149,6 +6181,8 @@ namespace ts {
         readFile?(path: string): string | undefined;
         /* @internal */
         getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
+        /* @internal */
+        getGlobalTypingsCacheLocation?(): string | undefined;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -6418,6 +6452,7 @@ namespace ts {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

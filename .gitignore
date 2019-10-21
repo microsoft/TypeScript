@@ -61,9 +61,10 @@ internal/
 **/.DS_Store
 .settings
 **/.vs
-**/.vscode
+**/.vscode/*
 !**/.vscode/tasks.json
-!**/.vscode/settings.json
+!**/.vscode/settings.template.json
+!**/.vscode/launch.template.json
 !**/.vscode/extensions.json
 !tests/cases/projects/projectOption/**/node_modules
 !tests/cases/projects/NodeModulesSearch/**/*

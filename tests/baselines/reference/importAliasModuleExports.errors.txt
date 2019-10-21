@@ -1,0 +1,20 @@
+tests/cases/conformance/salsa/main.js(2,13): error TS2339: Property 'foo' does not exist on type 'Alias'.
+tests/cases/conformance/salsa/main.js(4,9): error TS2339: Property 'foo' does not exist on type 'Alias'.
+
+
+==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+    class Alias {
+        bar() { return 1 }
+    }
+    module.exports = Alias;
+    
+==== tests/cases/conformance/salsa/main.js (2 errors) ====
+    import A from './mod1'
+    A.prototype.foo = 0
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Alias'.
+    new A().bar
+    new A().foo
+            ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Alias'.
+    

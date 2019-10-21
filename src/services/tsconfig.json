@@ -4,6 +4,7 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
+        { "path": "../shims" },
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],

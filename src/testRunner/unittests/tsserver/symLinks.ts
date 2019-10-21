@@ -149,34 +149,16 @@ new C();`
             const filesInProjectWithResolvedModule = [...filesInProjectWithUnresolvedModule, recongnizerTextDistTypingFile.path];
 
             function verifyErrors(session: TestSession, semanticErrors: protocol.Diagnostic[]) {
-                session.clearMessages();
-                const expectedSequenceId = session.getNextSeq();
-                session.executeCommandSeq<protocol.GeterrRequest>({
-                    command: server.CommandNames.Geterr,
-                    arguments: {
-                        delay: 0,
-                        files: [recognizersDateTimeSrcFile.path],
-                    }
+                verifyGetErrRequest({
+                    session,
+                    host: session.testhost,
+                    expected: [{
+                        file: recognizersDateTimeSrcFile,
+                        syntax: [],
+                        semantic: semanticErrors,
+                        suggestion: []
+                    }]
                 });
-
-                const host = session.testhost;
-                host.checkTimeoutQueueLengthAndRun(1);
-
-                checkErrorMessage(session, "syntaxDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: [] });
-                session.clearMessages();
-
-                host.runQueuedImmediateCallbacks(1);
-
-                checkErrorMessage(session, "semanticDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: semanticErrors });
-                session.clearMessages();
-
-                host.runQueuedImmediateCallbacks(1);
-
-                checkErrorMessage(session, "suggestionDiag", {
-                    file: recognizersDateTimeSrcFile.path,
-                    diagnostics: [],
-                });
-                checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
             function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: ReadonlyMap<number>, nonRecursiveDirectories: string[]) {
