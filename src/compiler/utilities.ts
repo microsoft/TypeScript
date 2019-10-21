@@ -6612,11 +6612,7 @@ namespace ts {
         return isSourceFile(node) || isModuleBlock(node) || isBlock(node) && isFunctionLike(node.parent);
     }
 
-    /**
-     * @returns Whether a node or its children refer to a different `this` than its parent.
-     * @internal
-     */
-    export function isNewOrDelayedThisScope(node: Node): boolean {
+    export function isNewOrDelayedThisScope(node: any): boolean {
         switch (node.kind) {
             // Arrow functions use the same scope, but may do so in a "delayed" manner
             // For example, `const getThis = () => this` may be before a super() call in a derived constructor
@@ -6627,14 +6623,13 @@ namespace ts {
                 return true;
             case SyntaxKind.Block:
                 switch (node.parent.kind) {
-                    // The `extends` clause of a class is its parent scope, unlike its constructor and methods
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
+                        // The `extends` clause of a class is its parent scope, unlike its constructor and methods
                         // falls through
-                    // Object properties can have computed names; only method-like bodies start a new scope
                     case SyntaxKind.GetAccessor:
-                        // falls through
                     case SyntaxKind.SetAccessor:
+                        // Object properties can have computed names; only method-like bodies start a new scope
                         return true;
                     default:
                         return false;
