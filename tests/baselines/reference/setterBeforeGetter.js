@@ -16,8 +16,7 @@ class Foo {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    Object.defineProperty(proto_1, "bar", {
+    Object.defineProperty(Foo.prototype, "bar", {
         get: function () {
             return this._bar;
         },

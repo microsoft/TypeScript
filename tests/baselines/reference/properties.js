@@ -16,8 +16,7 @@ class MyClass
 var MyClass = /** @class */ (function () {
     function MyClass() {
     }
-    var proto_1 = MyClass.prototype;
-    Object.defineProperty(proto_1, "Count", {
+    Object.defineProperty(MyClass.prototype, "Count", {
         get: function () {
             return 42;
         },

@@ -38,8 +38,7 @@ var y = {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(C.prototype, "x", {
         get: function () { return 1; },
         enumerable: true,
         configurable: true
@@ -49,8 +48,7 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D() {
     }
-    var proto_2 = D.prototype;
-    Object.defineProperty(proto_2, "x", {
+    Object.defineProperty(D.prototype, "x", {
         set: function (v) { },
         enumerable: true,
         configurable: true
@@ -60,8 +58,7 @@ var D = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E() {
     }
-    var proto_3 = E.prototype;
-    Object.defineProperty(proto_3, "x", {
+    Object.defineProperty(E.prototype, "x", {
         get: function () {
             return 1;
         },

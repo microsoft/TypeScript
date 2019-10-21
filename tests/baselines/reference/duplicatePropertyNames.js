@@ -55,9 +55,8 @@ var C = /** @class */ (function () {
         this.baz = function () { };
         this.baz = function () { };
     }
-    var proto_1 = C.prototype;
-    proto_1.bar = function (x) { };
-    proto_1.bar = function (x) { };
+    C.prototype.bar = function (x) { };
+    C.prototype.bar = function (x) { };
     return C;
 }());
 var a;

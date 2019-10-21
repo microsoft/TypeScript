@@ -47,8 +47,7 @@ class class2 {
 var class1 = /** @class */ (function () {
     function class1() {
     }
-    var proto_1 = class1.prototype;
-    Object.defineProperty(proto_1, "a", {
+    Object.defineProperty(class1.prototype, "a", {
         get: function () {
             var _this_1 = this;
             var x2 = {
@@ -76,8 +75,7 @@ var class1 = /** @class */ (function () {
 var class2 = /** @class */ (function () {
     function class2() {
     }
-    var proto_2 = class2.prototype;
-    Object.defineProperty(proto_2, "a", {
+    Object.defineProperty(class2.prototype, "a", {
         get: function () {
             var _this_1 = this;
             var _this = 2;

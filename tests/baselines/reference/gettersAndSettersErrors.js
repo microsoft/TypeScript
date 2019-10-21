@@ -43,8 +43,7 @@ var C = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E() {
     }
-    var proto_2 = E.prototype;
-    Object.defineProperty(proto_2, "Baz", {
+    Object.defineProperty(E.prototype, "Baz", {
         get: function () { return 0; },
         set: function (n) { } // error - accessors do not agree in visibility
         ,

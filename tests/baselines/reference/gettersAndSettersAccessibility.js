@@ -9,8 +9,7 @@ class C99 {
 var C99 = /** @class */ (function () {
     function C99() {
     }
-    var proto_1 = C99.prototype;
-    Object.defineProperty(proto_1, "Baz", {
+    Object.defineProperty(C99.prototype, "Baz", {
         get: function () { return 0; },
         set: function (n) { } // error - accessors do not agree in visibility
         ,

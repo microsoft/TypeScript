@@ -1078,25 +1078,6 @@ namespace ts {
     }
 
     /**
-     * Returns whether an array has exactly one member that matches a filter.
-     */
-    export function containsExactlyOne<T>(array: ReadonlyArray<T>, filter: (item: T) => boolean) {
-        let found = false;
-
-        for (const item of array) {
-            if (filter(item)) {
-                if (found) {
-                    return false;
-                }
-
-                found = true;
-            }
-        }
-
-        return found;
-    }
-
-    /**
      * Returns the only element of an array if it contains only one element, `undefined` otherwise.
      */
     export function singleOrUndefined<T>(array: readonly T[] | undefined): T | undefined {

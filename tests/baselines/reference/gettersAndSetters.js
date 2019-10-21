@@ -49,8 +49,7 @@ var C = /** @class */ (function () {
         this.get = function () { }; // ok
         this.set = function () { }; // ok
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "Foo", {
+    Object.defineProperty(C.prototype, "Foo", {
         get: function () { return this.fooBack; } // ok
         ,
         set: function (foo) { this.fooBack = foo; } // ok

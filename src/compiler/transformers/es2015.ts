@@ -1591,7 +1591,7 @@ namespace ts {
 
                 // If the class has exactly one non-static member, it'll access prototype members on itself:
                 //   ClassName.prototype.member = ...
-                if (containsExactlyOne(node.members, classMemberAssignsToPrototype)) {
+                if (!membersContainMultipleUniqueNames(node.members.filter(classMemberAssignsToPrototype))) {
                     prototypeStorageName = originalPrototypeAccess;
                     return prototypeStorageName;
                 }
@@ -1623,6 +1623,33 @@ namespace ts {
 
         function classMemberAssignsToPrototype(node: ClassElement) {
             return !hasModifier(node, ModifierFlags.Static) && !isConstructorDeclaration(node);
+        }
+
+        function membersContainMultipleUniqueNames(members: ClassElement[]) {
+            if (members.length <= 1) {
+                return false;
+            }
+
+            let foundName: string | undefined;
+
+            for (const member of members) {
+                // If a name isn't immediately identifiable, we assume it's unique
+                if (!member.name || !isPropertyNameLiteral(member.name)) {
+                    return true;
+                }
+
+                const text = getTextOfIdentifierOrLiteral(member.name);
+                if (foundName === undefined) {
+                    foundName = text;
+                    continue;
+                }
+
+                if (text !== foundName) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /**

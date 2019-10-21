@@ -38,8 +38,7 @@ import { Input, TemplateRef } from './deps';
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }
-    var proto_1 = MyComponent.prototype;
-    Object.defineProperty(proto_1, "ref", {
+    Object.defineProperty(MyComponent.prototype, "ref", {
         get: function () { return this._ref; },
         set: function (value) { this._ref = value; },
         enumerable: true,

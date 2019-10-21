@@ -35,8 +35,7 @@ class GetterAndSetter {
 var GetterOnly = /** @class */ (function () {
     function GetterOnly() {
     }
-    var proto_1 = GetterOnly.prototype;
-    Object.defineProperty(proto_1, "Value", {
+    Object.defineProperty(GetterOnly.prototype, "Value", {
         get: function () {
             var _this = this;
             var fn = function () { return _this; };
@@ -53,8 +52,7 @@ var GetterOnly = /** @class */ (function () {
 var SetterOnly = /** @class */ (function () {
     function SetterOnly() {
     }
-    var proto_2 = SetterOnly.prototype;
-    Object.defineProperty(proto_2, "Value", {
+    Object.defineProperty(SetterOnly.prototype, "Value", {
         get: function () {
             return '';
         },
@@ -71,8 +69,7 @@ var SetterOnly = /** @class */ (function () {
 var GetterAndSetter = /** @class */ (function () {
     function GetterAndSetter() {
     }
-    var proto_3 = GetterAndSetter.prototype;
-    Object.defineProperty(proto_3, "Value", {
+    Object.defineProperty(GetterAndSetter.prototype, "Value", {
         get: function () {
             var _this = this;
             var fn = function () { return _this; };

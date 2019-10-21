@@ -69,8 +69,7 @@ var f3 = d.value;
 var A = /** @class */ (function () {
     function A() {
     }
-    var proto_2 = A.prototype;
-    Object.defineProperty(proto_2, "property", {
+    Object.defineProperty(A.prototype, "property", {
         get: function () { return this._property; },
         set: function (value) { this._property = value; },
         enumerable: true,

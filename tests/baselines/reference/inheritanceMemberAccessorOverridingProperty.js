@@ -36,8 +36,7 @@ var b = /** @class */ (function (_super) {
     function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = b.prototype;
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(b.prototype, "x", {
         get: function () {
             return "20";
         },

@@ -42,8 +42,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var A = /** @class */ (function () {
     function A() {
     }
-    var proto_1 = A.prototype;
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(A.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -57,8 +56,7 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {
     }
-    var proto_2 = B.prototype;
-    Object.defineProperty(proto_2, "x", {
+    Object.defineProperty(B.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -72,8 +70,7 @@ var B = /** @class */ (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_3 = C.prototype;
-    Object.defineProperty(proto_3, "x", {
+    Object.defineProperty(C.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -87,8 +84,7 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D() {
     }
-    var proto_4 = D.prototype;
-    Object.defineProperty(proto_4, "x", {
+    Object.defineProperty(D.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -102,8 +98,7 @@ var D = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E() {
     }
-    var proto_5 = E.prototype;
-    Object.defineProperty(proto_5, "x", {
+    Object.defineProperty(E.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,
@@ -117,8 +112,7 @@ var E = /** @class */ (function () {
 var F = /** @class */ (function () {
     function F() {
     }
-    var proto_6 = F.prototype;
-    Object.defineProperty(proto_6, "x", {
+    Object.defineProperty(F.prototype, "x", {
         get: function () { return 0; },
         set: function (value) { },
         enumerable: true,

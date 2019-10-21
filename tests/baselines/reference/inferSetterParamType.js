@@ -22,8 +22,7 @@ class Foo2 {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    Object.defineProperty(proto_1, "bar", {
+    Object.defineProperty(Foo.prototype, "bar", {
         get: function () {
             return 0;
         },
@@ -37,8 +36,7 @@ var Foo = /** @class */ (function () {
 var Foo2 = /** @class */ (function () {
     function Foo2() {
     }
-    var proto_2 = Foo2.prototype;
-    Object.defineProperty(proto_2, "bar", {
+    Object.defineProperty(Foo2.prototype, "bar", {
         get: function () {
             return 0; // should be an error - can't coerce infered return type to match setter annotated type
         },

@@ -29,8 +29,7 @@ var GetAndSet = /** @class */ (function () {
     function GetAndSet() {
         this.getAndSet = null; // error at "getAndSet"
     }
-    var proto_1 = GetAndSet.prototype;
-    Object.defineProperty(proto_1, "haveGetAndSet", {
+    Object.defineProperty(GetAndSet.prototype, "haveGetAndSet", {
         get: function () {
             return this.getAndSet;
         },

@@ -61,8 +61,7 @@ var Explicit = /** @class */ (function () {
     function Explicit() {
         this.n = 17;
     }
-    var proto_1 = Explicit.prototype;
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(Explicit.prototype, "x", {
         get: function () { return this.n; },
         set: function (n) { this.n = n; },
         enumerable: true,

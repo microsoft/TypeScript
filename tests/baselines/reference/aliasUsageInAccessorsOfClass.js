@@ -68,8 +68,7 @@ var moduleA = require("./aliasUsage1_moduleA");
 var C2 = /** @class */ (function () {
     function C2() {
     }
-    var proto_1 = C2.prototype;
-    Object.defineProperty(proto_1, "A", {
+    Object.defineProperty(C2.prototype, "A", {
         get: function () {
             return this.x;
         },

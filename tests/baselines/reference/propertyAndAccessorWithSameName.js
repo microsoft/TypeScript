@@ -46,8 +46,7 @@ var D = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E() {
     }
-    var proto_1 = E.prototype;
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(E.prototype, "x", {
         get: function () {
             return 1;
         },
