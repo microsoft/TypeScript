@@ -1359,9 +1359,12 @@ namespace ts.server {
                 return;
             }
 
-            // Search our peer node_modules, then any globally-specified probe paths
-            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+            // Search any globally-specified probe paths, then our peer node_modules
+            const searchPaths = [
+              ...this.projectService.pluginProbeLocations,
+              // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+              combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+            ];
 
             if (this.projectService.globalPlugins) {
                 // Enable global plugins with synthetic configuration entries
