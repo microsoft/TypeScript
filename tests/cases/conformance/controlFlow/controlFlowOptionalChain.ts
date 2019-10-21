@@ -302,6 +302,60 @@ function f14(o: Thing | null) {
     }
 }
 
+function f15(o: Thing | undefined, value: number) {
+    if (o?.foo === value) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo !== value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo == value) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo != value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+}
+
+function f16(o: Thing | undefined) {
+    if (o?.foo === undefined) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo !== undefined) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo == undefined) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (o?.foo != undefined) {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
 function f20(o: Thing | undefined) {
     if (typeof o?.foo === "number") {
         o.foo;
@@ -330,4 +384,147 @@ function f21(o: Thing | null) {
     if (o?.baz instanceof Error) {
         o.baz;
     }
+}
+
+function f22(o: Thing | undefined) {
+    if (typeof o?.foo === "number") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo !== "number") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo == "number") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo != "number") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+}
+
+function f23(o: Thing | undefined) {
+    if (typeof o?.foo === "undefined") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo !== "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (typeof o?.foo == "undefined") {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;
+    }
+    if (typeof o?.foo != "undefined") {
+        o.foo;
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
+declare function assert(x: unknown): asserts x;
+declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
+
+function f30(o: Thing | undefined) {
+    if (!!true) {
+        assert(o?.foo);
+        o.foo;
+    }
+    if (!!true) {
+        assert(o?.foo === 42);
+        o.foo;
+    }
+    if (!!true) {
+        assert(typeof o?.foo === "number");
+        o.foo;
+    }
+    if (!!true) {
+        assertNonNull(o?.foo);
+        o.foo;
+    }
+}
+
+function f40(o: Thing | undefined) {
+    switch (o?.foo) {
+        case "abc":
+            o.foo;
+            break;
+        case 42:
+            o.foo;
+            break;
+        case undefined:
+            o.foo;  // Error
+            break;
+        default:
+            o.foo;  // Error
+            break;
+    }
+}
+
+function f41(o: Thing | undefined) {
+    switch (typeof o?.foo) {
+        case "string":
+            o.foo;
+            break;
+        case "number":
+            o.foo;
+            break;
+        case "undefined":
+            o.foo;  // Error
+            break;
+        default:
+            o.foo;  // Error
+            break;
+    }
+}
+
+// Repros from #34570
+
+type Shape =
+    | { type: 'rectangle', width: number, height: number }
+    | { type: 'circle', radius: number }
+
+function getArea(shape?: Shape) {
+    switch (shape?.type) {
+        case 'circle':
+            return Math.PI * shape.radius ** 2
+        case 'rectangle':
+            return shape.width * shape.height
+        default:
+            return 0
+    }
+}
+
+type Feature = {
+  id: string;
+  geometry?: {
+    type: string;
+    coordinates: number[];
+  };
+};
+
+
+function extractCoordinates(f: Feature): number[] {
+    if (f.geometry?.type !== 'test') {
+        return [];
+    }
+    return f.geometry.coordinates;
 }
