@@ -303,7 +303,13 @@ namespace ts {
                 // NOTE: If patchWriteFileEnsuringDirectory has been called,
                 // the host.writeFile will do its own directory creation and
                 // the ensureDirectoriesExist call will always be redundant.
-                writeFileEnsuringDirectories(fileName, text, writeByteOrderMark, host.writeFile!, host.createDirectory!, host.directoryExists!);
+                writeFileEnsuringDirectories(
+                    fileName,
+                    text,
+                    writeByteOrderMark,
+                    (f, w, d) => host.writeFile!(f, w, d),
+                    p => host.createDirectory!(p),
+                    p => host.directoryExists!(p));
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");

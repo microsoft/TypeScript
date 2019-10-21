@@ -533,10 +533,10 @@ namespace ts {
             writeFileEnsuringDirectories(
                 path,
                 data,
-                writeBom,
+                !!writeBom,
                 (p, d, w) => originalWriteFile.call(sys, p, d, w),
-                p => sys.createDirectory.call(sys, p),
-                p => sys.directoryExists.call(sys, p));
+                p => sys.createDirectory(p),
+                p => sys.directoryExists(p));
     }
 
     /*@internal*/

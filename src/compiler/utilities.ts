@@ -3714,8 +3714,8 @@ namespace ts {
     export function writeFileEnsuringDirectories(
         path: string,
         data: string,
-        writeByteOrderMark: boolean | undefined,
-        writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void,
+        writeByteOrderMark: boolean,
+        writeFile: (path: string, data: string, writeByteOrderMark: boolean) => void,
         createDirectory: (path: string) => void,
         directoryExists: (path: string) => boolean): void {
 
