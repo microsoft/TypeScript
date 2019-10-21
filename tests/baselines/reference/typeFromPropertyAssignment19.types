@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/index.js ===
 /// <reference path='./types.d.ts'/>
 const C = require("./semver")
->C : typeof C
->require("./semver") : typeof C
+>C : typeof import("tests/cases/conformance/salsa/semver")
+>require("./semver") : typeof import("tests/cases/conformance/salsa/semver")
 >require : any
 >"./semver" : "./semver"
 
@@ -10,7 +10,7 @@ var two = C.f(1)
 >two : any
 >C.f(1) : any
 >C.f : (n: any) => any
->C : typeof C
+>C : typeof import("tests/cases/conformance/salsa/semver")
 >f : (n: any) => any
 >1 : 1
 

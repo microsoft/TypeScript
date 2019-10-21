@@ -29,7 +29,7 @@ namespace ts {
                     }
                     const initResult = convertToTSConfig(commandLine, configPath, configParseHost);
 
-                    // tslint:disable-next-line:no-null-keyword
+                    // eslint-disable-next-line no-null/no-null
                     Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
                 });
             });
@@ -53,34 +53,54 @@ namespace ts {
 
         showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
 
+        showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
+            compilerOptions: {
+                esModuleInterop: true,
+                target: "es5",
+                module: "commonjs",
+                strict: true,
+            },
+            compileOnSave: true,
+            exclude: [
+                "dist"
+            ],
+            files: [],
+            include: [
+                "src/*"
+            ],
+            references: [
+                { path: "./test" }
+            ],
+        });
+
         // Regression test for https://github.com/Microsoft/TypeScript/issues/28836
         showTSConfigCorrectly("Show TSConfig with paths and more", ["-p", "tsconfig.json"], {
-    compilerOptions: {
-        allowJs: true,
-        outDir: "./lib",
-        esModuleInterop: true,
-        module: "commonjs",
-        moduleResolution: "node",
-        target: "ES2017",
-        sourceMap: true,
-        baseUrl: ".",
-        paths: {
-            "@root/*": ["./*"],
-            "@configs/*": ["src/configs/*"],
-            "@common/*": ["src/common/*"],
-            "*": [
-                "node_modules/*",
-                "src/types/*"
+            compilerOptions: {
+                allowJs: true,
+                outDir: "./lib",
+                esModuleInterop: true,
+                module: "commonjs",
+                moduleResolution: "node",
+                target: "ES2017",
+                sourceMap: true,
+                baseUrl: ".",
+                paths: {
+                    "@root/*": ["./*"],
+                    "@configs/*": ["src/configs/*"],
+                    "@common/*": ["src/common/*"],
+                    "*": [
+                        "node_modules/*",
+                        "src/types/*"
+                    ]
+                },
+                experimentalDecorators: true,
+                emitDecoratorMetadata: true,
+                resolveJsonModule: true
+            },
+            include: [
+                "./src/**/*"
             ]
-        },
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
-        resolveJsonModule: true
-    },
-    include: [
-        "./src/**/*"
-    ]
-});
+        });
 
         // Bulk validation of all option declarations
         for (const option of optionDeclarations) {

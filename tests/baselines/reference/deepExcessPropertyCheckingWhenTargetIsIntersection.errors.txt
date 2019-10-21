@@ -1,10 +1,8 @@
 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(21,33): error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
-tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34): error TS2326: Types of property 'icon' are incompatible.
-  Type '{ props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }' is not assignable to type 'NestedProp<ITestProps>'.
-    Types of property 'props' are incompatible.
-      Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
-        Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34): error TS2200: The types of 'icon.props' are incompatible between these types.
+  Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+    Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
 
 
 ==== tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts (2 errors) ====
@@ -40,9 +38,7 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
     
     TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2326: Types of property 'icon' are incompatible.
-!!! error TS2326:   Type '{ props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }' is not assignable to type 'NestedProp<ITestProps>'.
-!!! error TS2326:     Types of property 'props' are incompatible.
-!!! error TS2326:       Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
-!!! error TS2326:         Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+!!! error TS2200: The types of 'icon.props' are incompatible between these types.
+!!! error TS2200:   Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+!!! error TS2200:     Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
     

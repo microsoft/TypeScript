@@ -24,12 +24,14 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
+        context.enableSubstitution(SyntaxKind.MetaProperty); // Substitutes 'import.meta'
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
         const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
         const exportFunctionsMap: Identifier[] = []; // The export function associated with a source file.
         const noSubstitutionMap: boolean[][] = []; // Set of nodes for which substitution rules should be ignored for each file.
+        const contextObjectMap: Identifier[] = []; // The context object associated with a source file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -75,7 +77,7 @@ namespace ts {
             // existing identifiers.
             exportFunction = createUniqueName("exports");
             exportFunctionsMap[id] = exportFunction;
-            contextObject = createUniqueName("context");
+            contextObject = contextObjectMap[id] = createUniqueName("context");
 
             // Add the body of the module.
             const dependencyGroups = collectDependencyGroups(moduleInfo.externalImports);
@@ -106,7 +108,7 @@ namespace ts {
                             createExpressionStatement(
                                 createCall(
                                     createPropertyAccess(createIdentifier("System"), "register"),
-                                /*typeArguments*/ undefined,
+                                    /*typeArguments*/ undefined,
                                     moduleName
                                         ? [moduleName, dependencies, moduleBodyFunction]
                                         : [dependencies, moduleBodyFunction]
@@ -621,7 +623,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id]!, node);
+                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -1586,6 +1588,7 @@ namespace ts {
                 moduleInfo = moduleInfoMap[id];
                 exportFunction = exportFunctionsMap[id];
                 noSubstitution = noSubstitutionMap[id];
+                contextObject = contextObjectMap[id];
 
                 if (noSubstitution) {
                     delete noSubstitutionMap[id];
@@ -1596,6 +1599,7 @@ namespace ts {
                 currentSourceFile = undefined!;
                 moduleInfo = undefined!;
                 exportFunction = undefined!;
+                contextObject = undefined!;
                 noSubstitution = undefined;
             }
             else {
@@ -1641,6 +1645,7 @@ namespace ts {
             }
             return node;
         }
+
         /**
          * Substitution for a ShorthandPropertyAssignment whose name that may contain an imported or exported symbol.
          *
@@ -1694,6 +1699,8 @@ namespace ts {
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
                     return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
+                case SyntaxKind.MetaProperty:
+                    return substituteMetaProperty(<MetaProperty>node);
             }
 
             return node;
@@ -1827,6 +1834,13 @@ namespace ts {
                 }
             }
 
+            return node;
+        }
+
+        function substituteMetaProperty(node: MetaProperty) {
+            if (isImportMeta(node)) {
+                return createPropertyAccess(contextObject, createIdentifier("meta"));
+            }
             return node;
         }
 

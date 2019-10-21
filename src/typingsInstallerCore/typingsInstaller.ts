@@ -267,28 +267,29 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet.set(cacheLocation, true);
         }
 
-        private filterTypings(typingsToInstall: ReadonlyArray<string>): ReadonlyArray<string> {
-            return typingsToInstall.filter(typing => {
-                if (this.missingTypingsSet.get(typing)) {
-                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' is in missingTypingsSet - skipping...`);
-                    return false;
+        private filterTypings(typingsToInstall: readonly string[]): readonly string[] {
+            return mapDefined(typingsToInstall, typing => {
+                const typingKey = mangleScopedPackageName(typing);
+                if (this.missingTypingsSet.get(typingKey)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                    return undefined;
                 }
                 const validationResult = JsTyping.validatePackageName(typing);
-                if (validationResult !== JsTyping.PackageNameValidationResult.Ok) {
+                if (validationResult !== JsTyping.NameValidationResult.Ok) {
                     // add typing name to missing set so we won't process it again
-                    this.missingTypingsSet.set(typing, true);
+                    this.missingTypingsSet.set(typingKey, true);
                     if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
-                    return false;
+                    return undefined;
                 }
-                if (!this.typesRegistry.has(typing)) {
-                    if (this.log.isEnabled()) this.log.writeLine(`Entry for package '${typing}' does not exist in local types registry - skipping...`);
-                    return false;
+                if (!this.typesRegistry.has(typingKey)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                    return undefined;
                 }
-                if (this.packageNameToTypingLocation.get(typing) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typing)!, this.typesRegistry.get(typing)!)) {
-                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}' already has an up-to-date typing - skipping...`);
-                    return false;
+                if (this.packageNameToTypingLocation.get(typingKey) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)) {
+                    if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+                    return undefined;
                 }
-                return true;
+                return typingKey;
             });
         }
 
@@ -328,7 +329,9 @@ namespace ts.server.typingsInstaller {
             this.sendResponse(<BeginInstallTypes>{
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
-                typingsInstallerVersion: ts.version, // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
+                // qualified explicitly to prevent occasional shadowing
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+                typingsInstallerVersion: ts.version,
                 projectName: req.projectName
             });
 
@@ -377,7 +380,9 @@ namespace ts.server.typingsInstaller {
                         projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
-                        typingsInstallerVersion: ts.version // tslint:disable-line no-unnecessary-qualifier (qualified explicitly to prevent occasional shadowing)
+                        // qualified explicitly to prevent occasional shadowing
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+                        typingsInstallerVersion: ts.version
                     };
                     this.sendResponse(response);
                 }

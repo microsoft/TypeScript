@@ -5,5 +5,5 @@ declare class foo();
 > : any
 
 function foo() {}
->foo : () => void
+>foo : typeof foo
 

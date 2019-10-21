@@ -71,7 +71,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be either 'string' or 'number'.": {
         "category": "Error",
         "code": 1023
     },
@@ -242,10 +242,6 @@
     "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1085
-    },
-    "An accessor cannot be declared in an ambient context.": {
-        "category": "Error",
-        "code": 1086
     },
     "'{0}' modifier cannot appear on a constructor declaration.": {
         "category": "Error",
@@ -462,10 +458,6 @@
     "File name '{0}' differs from already included file name '{1}' only in casing.": {
         "category": "Error",
         "code": 1149
-    },
-    "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
-        "category": "Error",
-        "code": 1150
     },
     "'const' declarations must be initialized.": {
         "category": "Error",
@@ -855,6 +847,10 @@
         "category": "Error",
         "code": 1259
     },
+    "Keywords cannot contain escape characters.": {
+        "category": "Error",
+        "code": 1260
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -907,7 +903,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'esnext', 'commonjs',  'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 1323
     },
@@ -983,7 +979,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1038,6 +1034,47 @@
     "Did you mean to mark this function as 'async'?": {
         "category": "Error",
         "code": 1356
+    },
+    "An enum member name must be followed by a ',', '=', or '}'.": {
+        "category": "Error",
+        "code": 1357
+    },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
+    },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
+    },
+
+    "The types of '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2200
+    },
+    "The types returned by '{0}' are incompatible between these types.": {
+        "category": "Error",
+        "code": 2201
+    },
+    "Call signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2202,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signature return types '{0}' and '{1}' are incompatible.": {
+        "category": "Error",
+        "code": 2203,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Call signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2204,
+        "elidedInCompatabilityPyramid": true
+    },
+    "Construct signatures with no arguments have incompatible return types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2205,
+        "elidedInCompatabilityPyramid": true
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1212,7 +1249,7 @@
         "category": "Error",
         "code": 2342
     },
-    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+    "This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
         "code": 2343
     },
@@ -1523,10 +1560,6 @@
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
         "category": "Error",
         "code": 2423
-    },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
@@ -2204,6 +2237,27 @@
         "category": "Error",
         "code": 2609
     },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+        "category": "Error",
+        "code": 2610
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+        "category": "Error",
+        "code": 2611
+    },
+    "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
+        "category": "Error",
+        "code": 2612
+    },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 2613
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 2614
+    },
+
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -2693,9 +2747,41 @@
         "category": "Error",
         "code": 2773
     },
-    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.": {
+    "This condition will always return true since the function is always defined. Did you mean to call it instead?": {
         "category": "Error",
         "code": 2774
+    },
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Assertions require the call target to be an identifier or qualified name.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.": {
+        "category": "Error",
+        "code": 2782
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2998,7 +3084,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -3043,6 +3128,18 @@
         "category": "Error",
         "code": 4105
     },
+    "Parameter '{0}' of accessor has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.": {
+        "category": "Error",
+        "code": 4108
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3083,6 +3180,10 @@
     "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
+    },
+    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
+        "category": "Error",
+        "code": 5048
     },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
@@ -3183,6 +3284,10 @@
     "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
         "category": "Error",
         "code": 5075
+    },
+    "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
+        "category": "Error",
+        "code": 5076
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3939,6 +4044,10 @@
         "category": "Message",
         "code": 6201
     },
+    "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
     "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
@@ -4011,6 +4120,18 @@
         "category": "Message",
         "code": 6220
     },
+    "Disable use of source files instead of declaration files from referenced projects.": {
+        "category": "Message",
+        "code": 6221
+    },
+    "Emit class fields with Define instead of Set.": {
+        "category": "Message",
+        "code": 6222
+    },
+    "Generates a CPU profile.": {
+        "category": "Message",
+        "code": 6223
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4020,10 +4141,7 @@
         "category": "Message",
         "code": 6302
     },
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6202
-    },
+
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -4176,6 +4294,14 @@
         "category": "Message",
         "code": 6381
     },
+    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6382
+    },
+    "Project '{0}' can't be built because its dependency '{1}' was not built": {
+        "category": "Message",
+        "code": 6383
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4188,6 +4314,10 @@
     "The expected type comes from the return type of this signature.": {
         "category": "Message",
         "code": 6502
+    },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4525,6 +4655,14 @@
         "category": "Error",
         "code": 9004
     },
+    "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9005
+    },
+    "Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9006
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -4642,6 +4780,10 @@
     "'await' has no effect on the type of this expression.": {
         "category": "Suggestion",
         "code": 80007
+    },
+    "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
+        "category": "Suggestion",
+        "code": 80008
     },
 
     "Add missing 'super()' call": {
@@ -5111,6 +5253,38 @@
     "Remove all unnecessary uses of 'await'": {
         "category": "Message",
         "code": 95087
+    },
+    "Enable the '--jsx' flag in your configuration file": {
+        "category": "Message",
+        "code": 95088
+    },
+    "Add 'await' to initializers": {
+        "category": "Message",
+        "code": 95089
+    },
+    "Extract to interface": {
+        "category": "Message",
+        "code": 95090
+    },
+    "Convert to a bigint numeric literal": {
+        "category": "Message",
+        "code": 95091
+    },
+    "Convert all to bigint numeric literals": {
+        "category": "Message",
+        "code": 95092
+    },
+    "Convert 'const' to 'let'": {
+        "category": "Message",
+        "code": 95093
+    },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

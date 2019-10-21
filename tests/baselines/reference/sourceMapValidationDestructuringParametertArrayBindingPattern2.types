@@ -7,10 +7,10 @@ declare var console: {
 >msg : any
 }
 type Robot = [string, [string, string]];
->Robot : [string, [string, string]]
+>Robot : Robot
 
 var robotA: Robot = ["trimmer", ["trimming", "edging"]];
->robotA : [string, [string, string]]
+>robotA : Robot
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : [string, string]
@@ -18,7 +18,7 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >"edging" : "edging"
 
 function foo1([, skillA]: Robot) {
->foo1 : ([, skillA]: [string, [string, string]]) => void
+>foo1 : ([, skillA]: Robot) => void
 > : undefined
 >skillA : [string, string]
 
@@ -31,7 +31,7 @@ function foo1([, skillA]: Robot) {
 }
 
 function foo2([nameMB]: Robot) {
->foo2 : ([nameMB]: [string, [string, string]]) => void
+>foo2 : ([nameMB]: Robot) => void
 >nameMB : string
 
     console.log(nameMB);
@@ -43,7 +43,7 @@ function foo2([nameMB]: Robot) {
 }
 
 function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
 >nameMA : string
 >primarySkillA : string
 >secondarySkillA : string
@@ -57,7 +57,7 @@ function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 }
 
 function foo4([...multiRobotAInfo]: Robot) {
->foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
+>foo4 : ([...multiRobotAInfo]: Robot) => void
 >multiRobotAInfo : [string, [string, string]]
 
     console.log(multiRobotAInfo);
@@ -70,12 +70,12 @@ function foo4([...multiRobotAInfo]: Robot) {
 
 foo1(robotA);
 >foo1(robotA) : void
->foo1 : ([, skillA]: [string, [string, string]]) => void
->robotA : [string, [string, string]]
+>foo1 : ([, skillA]: Robot) => void
+>robotA : Robot
 
 foo1(["roomba", ["vaccum", "mopping"]]);
 >foo1(["roomba", ["vaccum", "mopping"]]) : void
->foo1 : ([, skillA]: [string, [string, string]]) => void
+>foo1 : ([, skillA]: Robot) => void
 >["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
 >["vaccum", "mopping"] : [string, string]
@@ -84,12 +84,12 @@ foo1(["roomba", ["vaccum", "mopping"]]);
 
 foo2(robotA);
 >foo2(robotA) : void
->foo2 : ([nameMB]: [string, [string, string]]) => void
->robotA : [string, [string, string]]
+>foo2 : ([nameMB]: Robot) => void
+>robotA : Robot
 
 foo2(["roomba", ["vaccum", "mopping"]]);
 >foo2(["roomba", ["vaccum", "mopping"]]) : void
->foo2 : ([nameMB]: [string, [string, string]]) => void
+>foo2 : ([nameMB]: Robot) => void
 >["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
 >["vaccum", "mopping"] : [string, string]
@@ -98,12 +98,12 @@ foo2(["roomba", ["vaccum", "mopping"]]);
 
 foo3(robotA);
 >foo3(robotA) : void
->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
->robotA : [string, [string, string]]
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
+>robotA : Robot
 
 foo3(["roomba", ["vaccum", "mopping"]]);
 >foo3(["roomba", ["vaccum", "mopping"]]) : void
->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
 >["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
 >["vaccum", "mopping"] : [string, string]
@@ -112,12 +112,12 @@ foo3(["roomba", ["vaccum", "mopping"]]);
 
 foo4(robotA);
 >foo4(robotA) : void
->foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
->robotA : [string, [string, string]]
+>foo4 : ([...multiRobotAInfo]: Robot) => void
+>robotA : Robot
 
 foo4(["roomba", ["vaccum", "mopping"]]);
 >foo4(["roomba", ["vaccum", "mopping"]]) : void
->foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
+>foo4 : ([...multiRobotAInfo]: Robot) => void
 >["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
 >["vaccum", "mopping"] : [string, string]

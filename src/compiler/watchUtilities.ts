@@ -10,7 +10,7 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently used as non-optional
         directoryExists?(path: string): boolean;
         getDirectories?(path: string): string[];
-        readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         realpath?(path: string): string;
 
         createDirectory?(path: string): void;
@@ -26,7 +26,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
 
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
 
         /** Returns the queried result for the file exists and directory exists if at all it was done */
         addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
@@ -113,7 +113,7 @@ namespace ts {
             return getCanonicalFileName(name1) === getCanonicalFileName(name2);
         }
 
-        function hasEntry(entries: ReadonlyArray<string>, name: string) {
+        function hasEntry(entries: readonly string[], name: string) {
             return some(entries, file => fileNameEqual(file, name));
         }
 
@@ -168,7 +168,7 @@ namespace ts {
             return host.getDirectories!(rootDir);
         }
 
-        function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
+        function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
             const rootDirPath = toPath(rootDir);
             const result = tryReadDirectory(rootDir, rootDirPath);
             if (result) {
@@ -370,6 +370,9 @@ namespace ts {
         const createFileWatcher: CreateFileWatcher<WatchFileHost, PollingInterval, FileWatcherEventKind, never, X, Y> = getCreateFileWatcher(watchLogLevel, watchFile);
         const createFilePathWatcher: CreateFileWatcher<WatchFileHost, PollingInterval, FileWatcherEventKind, Path, X, Y> = watchLogLevel === WatchLogLevel.None ? watchFilePath : createFileWatcher;
         const createDirectoryWatcher: CreateFileWatcher<WatchDirectoryHost, WatchDirectoryFlags, undefined, never, X, Y> = getCreateFileWatcher(watchLogLevel, watchDirectory);
+        if (watchLogLevel === WatchLogLevel.Verbose && sysLog === noop) {
+            sysLog = s => log(s);
+        }
         return {
             watchFile: (host, file, callback, pollingInterval, detailInfo1, detailInfo2) =>
                 createFileWatcher(host, file, callback, pollingInterval, /*passThrough*/ undefined, detailInfo1, detailInfo2, watchFile, log, "FileWatcher", getDetailWatchInfo),

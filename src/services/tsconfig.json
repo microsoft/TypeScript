@@ -4,6 +4,7 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
+        { "path": "../shims" },
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
@@ -47,6 +48,7 @@
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addMissingAwait.ts",
         "codefixes/addMissingConst.ts",
+        "codefixes/addMissingDeclareProperty.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/addNameToNamelessParameter.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
@@ -65,6 +67,7 @@
         "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
         "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "codefixes/fixEnableExperimentalDecorators.ts",
+        "codefixes/fixEnableJsxFlag.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixUnusedIdentifier.ts",
@@ -78,9 +81,11 @@
         "codefixes/fixStrictClassInitialization.ts",
         "codefixes/requireInTs.ts",
         "codefixes/useDefaultImport.ts",
+        "codefixes/useBigintLiteral.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
         "codefixes/convertToMappedObjectType.ts",
         "codefixes/removeUnnecessaryAwait.ts",
+        "codefixes/convertConstToLet.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",

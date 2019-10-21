@@ -1,49 +1,59 @@
 namespace ts {
     describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule", time);
+            projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
         });
         after(() => {
             projFs = undefined!;
         });
 
-        verifyTsbuildOutput({
-            scenario: "inferred type from transitive module",
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "inferredTypeFromTransitiveModule",
-            rootNames: ["/src"],
-            expectedMapFileNames: emptyArray,
-            lastProjectOutputJs: `/src/obj/index.js`,
-            outputFiles: [
-                "/src/obj/bar.js", "/src/obj/bar.d.ts",
-                "/src/obj/bundling.js", "/src/obj/bundling.d.ts",
-                "/src/obj/lazyIndex.js", "/src/obj/lazyIndex.d.ts",
-                "/src/obj/index.js", "/src/obj/index.d.ts",
-                "/src/obj/tsconfig.tsbuildinfo"
-            ],
-            initialBuild: {
-                modifyFs: noop,
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tsconfig.json", "src/obj/bar.js"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"]
-                ]
+        verifyTscIncrementalEdits({
+            scenario: "inferredTypeFromTransitiveModule",
+            subScenario: "inferred type from transitive module",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: changeBarParam,
+            }],
+        });
+
+        verifyTscIncrementalEdits({
+            subScenario: "inferred type from transitive module with isolatedModules",
+            fs: () => projFs,
+            scenario: "inferredTypeFromTransitiveModule",
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            modifyFs: changeToIsolatedModules,
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: changeBarParam
+            }]
+        });
+
+        verifyTscIncrementalEdits({
+            scenario: "inferredTypeFromTransitiveModule",
+            subScenario: "reports errors in files affected by change in signature with isolatedModules",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src", "--verbose"],
+            modifyFs: fs => {
+                changeToIsolatedModules(fs);
+                appendText(fs, "/src/lazyIndex.ts", `
+import { default as bar } from './bar';
+bar("hello");`);
             },
-            incrementalDtsChangedBuild: {
-                modifyFs: fs => replaceText(fs, "/src/bar.ts", "param: string", ""),
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild("src/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tsconfig.json", "src/obj/bar.js", "src/bar.ts"],
-                    [Diagnostics.Building_project_0, "/src/tsconfig.json"],
-                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tsconfig.json"]
-                ]
-            },
-            baselineOnly: true,
-            verifyDiagnostics: true
+            incrementalScenarios: [{
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: changeBarParam
+            }]
         });
     });
+
+    function changeToIsolatedModules(fs: vfs.FileSystem) {
+        replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
+    }
+
+    function changeBarParam(fs: vfs.FileSystem) {
+        replaceText(fs, "/src/bar.ts", "param: string", "");
+    }
 }

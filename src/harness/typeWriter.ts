@@ -97,7 +97,7 @@ class TypeWriterWalker {
         if (!isSymbolWalk) {
             // Don't try to get the type of something that's already a type.
             // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
-            if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAlias(node.parent) && node.parent.name === node)) {
+            if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)) {
                 return undefined;
             }
 
@@ -128,8 +128,8 @@ class TypeWriterWalker {
                     !this.isImportStatementName(node) &&
                     !this.isExportStatementName(node) &&
                     !this.isIntrinsicJsxTag(node)) ?
-                (type as ts.IntrinsicType).intrinsicName :
-                this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                    (type as ts.IntrinsicType).intrinsicName :
+                    this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,

@@ -1,0 +1,44 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator3.ts ===
+declare const a1: 'literal' | undefined | null
+>a1 : "literal" | null | undefined
+>null : null
+
+declare const a2: '' | undefined | null
+>a2 : "" | null | undefined
+>null : null
+
+declare const a3: 1 | undefined | null
+>a3 : 1 | null | undefined
+>null : null
+
+declare const a4: 0 | undefined | null
+>a4 : 0 | null | undefined
+>null : null
+
+declare const a5: true | undefined | null
+>a5 : true | null | undefined
+>true : true
+>null : null
+
+declare const a6: false | undefined | null
+>a6 : false | null | undefined
+>false : false
+>null : null
+
+
+const aa1 = a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever'
+>aa1 : boolean | "" | 0 | "literal" | 1 | "whatever"
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever' : boolean | "" | 0 | "literal" | 1 | "whatever"
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 : boolean | "" | 0 | "literal" | 1 | null | undefined
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 : true | "" | 0 | "literal" | 1 | null | undefined
+>a1 ?? a2 ?? a3 ?? a4 : "" | 0 | "literal" | 1 | null | undefined
+>a1 ?? a2 ?? a3 : "" | "literal" | 1 | null | undefined
+>a1 ?? a2 : "" | "literal" | null | undefined
+>a1 : "literal" | null | undefined
+>a2 : "" | null | undefined
+>a3 : 1 | null | undefined
+>a4 : 0 | null | undefined
+>a5 : true | null | undefined
+>a6 : false | null | undefined
+>'whatever' : "whatever"
+

@@ -491,19 +491,40 @@ namespace ts.server {
                 case 1:
                     return this.containingProjects[0];
                 default:
-                    // if this file belongs to multiple projects, the first configured project should be
-                    // the default project; if no configured projects, the first external project should
-                    // be the default project; otherwise the first inferred project should be the default.
+                    // If this file belongs to multiple projects, below is the order in which default project is used
+                    // - for open script info, its default configured project during opening is default if info is part of it
+                    // - first configured project of which script info is not a source of project reference redirect
+                    // - first configured project
+                    // - first external project
+                    // - first inferred project
                     let firstExternalProject;
-                    for (const project of this.containingProjects) {
+                    let firstConfiguredProject;
+                    let firstNonSourceOfProjectReferenceRedirect;
+                    let defaultConfiguredProject: ConfiguredProject | false | undefined;
+                    for (let index = 0; index < this.containingProjects.length; index++) {
+                        const project = this.containingProjects[index];
                         if (project.projectKind === ProjectKind.Configured) {
-                            return project;
+                            if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
+                                // If we havent found default configuredProject and
+                                // its not the last one, find it and use that one if there
+                                if (defaultConfiguredProject === undefined &&
+                                    index !== this.containingProjects.length - 1) {
+                                    defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
+                                }
+                                if (defaultConfiguredProject === project) return project;
+                                if (!firstNonSourceOfProjectReferenceRedirect) firstNonSourceOfProjectReferenceRedirect = project;
+                            }
+                            if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
                         else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
                             firstExternalProject = project;
                         }
                     }
-                    return firstExternalProject || this.containingProjects[0];
+                    return defaultConfiguredProject ||
+                        firstNonSourceOfProjectReferenceRedirect ||
+                        firstConfiguredProject ||
+                        firstExternalProject ||
+                        this.containingProjects[0];
             }
         }
 
@@ -574,7 +595,7 @@ namespace ts.server {
 
         markContainingProjectsAsDirty() {
             for (const p of this.containingProjects) {
-                p.markAsDirty();
+                p.markFileAsDirty(this.path);
             }
         }
 
@@ -595,8 +616,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         /*@internal*/
-        // tslint:disable-next-line:unified-signatures
-        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }

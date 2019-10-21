@@ -1,5 +1,5 @@
 // Block scoped definitions work poorly for global variables, temporarily enable var
-/* tslint:disable:no-var-keyword */
+/* eslint-disable no-var */
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
@@ -16,7 +16,7 @@ var assert: typeof _chai.assert = _chai.assert;
         }
         assertDeepImpl(a, b, msg);
 
-        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
+        function arrayExtraKeysObject(a: readonly ({} | null | undefined)[]): object {
             const obj: { [key: string]: {} | null | undefined } = {};
             for (const key in a) {
                 if (Number.isNaN(Number(key))) {
@@ -28,10 +28,11 @@ var assert: typeof _chai.assert = _chai.assert;
     };
 }
 
-var global: NodeJS.Global = Function("return this").call(undefined); // tslint:disable-line:function-constructor
+var global: NodeJS.Global = Function("return this").call(undefined); // eslint-disable-line no-new-func
 
 declare var window: {};
 declare var XMLHttpRequest: new() => XMLHttpRequest;
+
 interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
@@ -44,7 +45,7 @@ interface XMLHttpRequest {
     getResponseHeader(header: string): string | null;
     overrideMimeType(mime: string): void;
 }
-/* tslint:enable:no-var-keyword prefer-const */
+/* eslint-enable no-var */
 
 namespace Utils {
     export function encodeString(s: string): string {
@@ -53,7 +54,7 @@ namespace Utils {
 
     export function byteLength(s: string, encoding?: string): number {
         // stub implementation if Buffer is not available (in-browser case)
-        return Buffer.byteLength(s, encoding);
+        return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
     }
 
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -176,7 +177,7 @@ namespace Utils {
         return a !== undefined && typeof a.pos === "number";
     }
 
-    export function convertDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>) {
+    export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
         return diagnostics.map(convertDiagnostic);
     }
 
@@ -247,7 +248,7 @@ namespace Utils {
                 o.containsParseError = true;
             }
 
-            for (const propertyName of Object.getOwnPropertyNames(n) as ReadonlyArray<keyof ts.SourceFile | keyof ts.Identifier>) {
+            for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier)[]) {
                 switch (propertyName) {
                     case "parent":
                     case "symbol":
@@ -302,7 +303,7 @@ namespace Utils {
         }
     }
 
-    export function assertDiagnosticsEquals(array1: ReadonlyArray<ts.Diagnostic>, array2: ReadonlyArray<ts.Diagnostic>) {
+    export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2: readonly ts.Diagnostic[]) {
         if (array1 === array2) {
             return;
         }
@@ -439,7 +440,7 @@ namespace Utils {
 }
 
 namespace Harness {
-    // tslint:disable-next-line:interface-name
+    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;
@@ -461,7 +462,7 @@ namespace Harness {
         getExecutingFilePath(): string;
         getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
+        readDirectory(path: string, extension?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): readonly string[];
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
@@ -623,8 +624,10 @@ namespace Harness {
     ) => void;
 
     // Settings
+    /* eslint-disable prefer-const */
     export let userSpecifiedRoot = "";
     export let lightMode = false;
+    /* eslint-enable prefer-const */
 
     /** Functionality for compiling TypeScript code */
     export namespace Compiler {
@@ -726,6 +729,7 @@ namespace Harness {
             includeBuiltFile?: string;
             baselineFile?: string;
             libFiles?: string;
+            noTypesAndSymbols?: boolean;
         }
 
         // Additional options not already in ts.optionDeclarations
@@ -742,6 +746,7 @@ namespace Harness {
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
+            { name: "noTypesAndSymbols", type: "boolean" },
             // Emitted js baseline will print full paths for every output file
             { name: "fullEmitPaths", type: "boolean" }
         ];
@@ -831,7 +836,7 @@ namespace Harness {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
             }
             if (options.rootDirs) {
-                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory!));
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
@@ -869,8 +874,8 @@ namespace Harness {
             currentDirectory: string;
         }
 
-        export function prepareDeclarationCompilationContext(inputFiles: ReadonlyArray<TestFile>,
-            otherFiles: ReadonlyArray<TestFile>,
+        export function prepareDeclarationCompilationContext(inputFiles: readonly TestFile[],
+            otherFiles: readonly TestFile[],
             result: compiler.CompilationResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
@@ -883,7 +888,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.getNumberOfJsFiles()) {
+                else if (result.dts.size !== result.getNumberOfJsFiles(/*includeJson*/ true)) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }
@@ -902,7 +907,7 @@ namespace Harness {
                 if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName)) {
+                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: utils.removeByteOrderMark(declFile.text) });
@@ -949,12 +954,12 @@ namespace Harness {
             return { declInputFiles, declOtherFiles, declResult: output };
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function minimalDiagnosticsToString(diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => IO.newLine() };
             return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
-        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function getErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             let outputLines = "";
             const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -969,7 +974,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1121,10 +1126,9 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
             Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"),
-                // tslint:disable-next-line no-null-keyword
-                !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty));
+                !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
         }
 
         export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
@@ -1202,9 +1206,7 @@ namespace Harness {
                     const [, content] = value;
                     result += content;
                 }
-                /* tslint:disable:no-null-keyword */
-                return result || null;
-                /* tslint:enable:no-null-keyword */
+                return result || null; // eslint-disable-line no-null/no-null
             }
 
             function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -1267,7 +1269,7 @@ namespace Harness {
                 return;
             }
             else if (options.sourceMap || declMaps) {
-                if (result.maps.size !== (result.getNumberOfJsFiles() * (declMaps && options.sourceMap ? 2 : 1))) {
+                if (result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
@@ -1275,9 +1277,7 @@ namespace Harness {
                 if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                     // We need to return null here or the runBaseLine will actually create a empty file.
                     // Baselining isn't required here because there is no output.
-                    /* tslint:disable:no-null-keyword */
-                    sourceMapCode = null;
-                    /* tslint:enable:no-null-keyword */
+                    sourceMapCode = null; // eslint-disable-line no-null/no-null
                 }
                 else {
                     sourceMapCode = "";
@@ -1290,7 +1290,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
             if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1339,7 +1339,8 @@ namespace Harness {
                 jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
             }
 
-            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null); // tslint:disable-line no-null-keyword
+            // eslint-disable-next-line no-null/no-null
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
         }
 
         function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
@@ -1347,7 +1348,7 @@ namespace Harness {
             return "//// [" + fileName + "]\r\n" + utils.removeTestPathPrefixes(file.text);
         }
 
-        export function collateOutputs(outputFiles: ReadonlyArray<documents.TextDocument>): string {
+        export function collateOutputs(outputFiles: readonly documents.TextDocument[]): string {
             const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";
@@ -1493,9 +1494,7 @@ namespace Harness {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray | null;
-            /* tslint:disable:no-null-keyword */
-            while ((match = optionRegex.exec(content)) !== null) {
-            /* tslint:enable:no-null-keyword */
+            while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-null/no-null
                 opts[match[1]] = match[2].trim();
             }
 
@@ -1673,9 +1672,8 @@ namespace Harness {
 
             const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-            /* tslint:disable:no-null-keyword */
+            // eslint-disable-next-line no-null/no-null
             if (actual === null) {
-            /* tslint:enable:no-null-keyword */
                 actual = noContent;
             }
 
@@ -1738,7 +1736,8 @@ namespace Harness {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
             const errors: Error[] = [];
-            // tslint:disable-next-line:no-null-keyword
+
+            // eslint-disable-next-line no-null/no-null
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];

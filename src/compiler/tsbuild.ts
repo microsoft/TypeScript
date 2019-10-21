@@ -116,6 +116,7 @@ namespace ts {
         export interface UpstreamBlocked {
             type: UpToDateStatusType.UpstreamBlocked;
             upstreamProjectName: string;
+            upstreamProjectBlocked: boolean;
         }
 
         /**
@@ -173,6 +174,7 @@ namespace ts {
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
+        /* @internal */ generateCpuProfile?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -273,6 +275,26 @@ namespace ts {
     export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
 
+    /*@internal*/
+    export type BuildOrder = readonly ResolvedConfigFileName[];
+    /*@internal*/
+    export interface CircularBuildOrder {
+        buildOrder: BuildOrder;
+        circularDiagnostics: readonly Diagnostic[];
+    }
+    /*@internal*/
+    export type AnyBuildOrder = BuildOrder | CircularBuildOrder;
+
+    /*@internal*/
+    export function isCircularBuildOrder(buildOrder: AnyBuildOrder): buildOrder is CircularBuildOrder {
+        return !!buildOrder && !!(buildOrder as CircularBuildOrder).buildOrder;
+    }
+
+    /*@internal*/
+    export function getBuildOrderFromAnyBuildOrder(anyBuildOrder: AnyBuildOrder): BuildOrder {
+        return isCircularBuildOrder(anyBuildOrder) ? anyBuildOrder.buildOrder : anyBuildOrder;
+    }
+
     export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
@@ -281,12 +303,13 @@ namespace ts {
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
-        /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
+        /*@internal*/ getBuildOrder(): AnyBuildOrder;
 
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildNextInvalidatedProject(): void;
+        /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
     }
 
     /**
@@ -294,7 +317,7 @@ namespace ts {
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
-            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            let output = pretty ? `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] ` : `${getLocaleTimeString(system)} - `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
             system.write(output);
         };
@@ -331,11 +354,11 @@ namespace ts {
         return result;
     }
 
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
+    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
     }
 
-    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
     }
 
@@ -361,7 +384,7 @@ namespace ts {
         // State of solution
         readonly options: BuildOptions;
         readonly baseCompilerOptions: CompilerOptions;
-        readonly rootNames: ReadonlyArray<string>;
+        readonly rootNames: readonly string[];
 
         readonly resolvedConfigFilePaths: Map<ResolvedConfigFilePath>;
         readonly configFileCache: ConfigFileMap<ConfigFileCacheEntry>;
@@ -379,7 +402,7 @@ namespace ts {
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
 
         // Mutable state
-        buildOrder: readonly ResolvedConfigFileName[] | undefined;
+        buildOrder: AnyBuildOrder | undefined;
         readFileWithCache: (f: string) => string | undefined;
         projectCompilerOptions: CompilerOptions;
         cache: SolutionBuilderStateCache | undefined;
@@ -402,7 +425,7 @@ namespace ts {
         writeLog: (s: string) => void;
     }
 
-    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilderState<T> {
+    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilderState<T> {
         const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
         const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
         const currentDirectory = host.getCurrentDirectory();
@@ -523,16 +546,19 @@ namespace ts {
         return resolveConfigFileProjectName(resolvePath(state.currentDirectory, name));
     }
 
-    function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
+    function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
         const temporaryMarks = createMap() as ConfigFileMap<true>;
         const permanentMarks = createMap() as ConfigFileMap<true>;
         const circularityReportStack: string[] = [];
         let buildOrder: ResolvedConfigFileName[] | undefined;
+        let circularDiagnostics: Diagnostic[] | undefined;
         for (const root of roots) {
             visit(root);
         }
 
-        return buildOrder || emptyArray;
+        return circularDiagnostics ?
+            { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
+            buildOrder || emptyArray;
 
         function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
             const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -541,8 +567,12 @@ namespace ts {
             // Circular
             if (temporaryMarks.has(projPath)) {
                 if (!inCircularContext) {
-                    // TODO:: Do we report this as error?
-                    reportStatus(state, Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
+                    (circularDiagnostics || (circularDiagnostics = [])).push(
+                        createCompilerDiagnostic(
+                            Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
+                            circularityReportStack.join("\r\n")
+                        )
+                    );
                 }
                 return;
             }
@@ -564,13 +594,56 @@ namespace ts {
     }
 
     function getBuildOrder(state: SolutionBuilderState) {
-        return state.buildOrder ||
-            (state.buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f))));
+        return state.buildOrder || createStateBuildOrder(state);
     }
 
-    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
+    function createStateBuildOrder(state: SolutionBuilderState) {
+        const buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f)));
+
+        // Clear all to ResolvedConfigFilePaths cache to start fresh
+        state.resolvedConfigFilePaths.clear();
+        const currentProjects = arrayToSet(
+            getBuildOrderFromAnyBuildOrder(buildOrder),
+            resolved => toResolvedConfigFilePath(state, resolved)
+        ) as ConfigFileMap<true>;
+
+        const noopOnDelete = { onDeleteValue: noop };
+        // Config file cache
+        mutateMapSkippingNewValues(state.configFileCache, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectStatus, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.buildInfoChecked, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.builderPrograms, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.diagnostics, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectPendingBuild, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
+
+        // Remove watches for the program no longer in the solution
+        if (state.watch) {
+            mutateMapSkippingNewValues(
+                state.allWatchedConfigFiles,
+                currentProjects,
+                { onDeleteValue: closeFileWatcher }
+            );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedWildcardDirectories,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcherOf) }
+            );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedInputFiles,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
+            );
+        }
+        return state.buildOrder = buildOrder;
+    }
+
+    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined): AnyBuildOrder | undefined {
         const resolvedProject = project && resolveProjectName(state, project);
         const buildOrderFromState = getBuildOrder(state);
+        if (isCircularBuildOrder(buildOrderFromState)) return buildOrderFromState;
         if (resolvedProject) {
             const projectPath = toResolvedConfigFilePath(state, resolvedProject);
             const projectIndex = findIndex(
@@ -579,7 +652,8 @@ namespace ts {
             );
             if (projectIndex === -1) return undefined;
         }
-        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) : buildOrderFromState;
+        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) as BuildOrder : buildOrderFromState;
+        Debug.assert(!isCircularBuildOrder(buildOrder));
         Debug.assert(!onlyReferences || resolvedProject !== undefined);
         Debug.assert(!onlyReferences || buildOrder[buildOrder.length - 1] === resolvedProject);
         return onlyReferences ? buildOrder.slice(0, buildOrder.length - 1) : buildOrder;
@@ -659,7 +733,7 @@ namespace ts {
         state.allProjectBuildPending = false;
         if (state.options.watch) { reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode); }
         enableCache(state);
-        const buildOrder = getBuildOrder(state);
+        const buildOrder = getBuildOrderFromAnyBuildOrder(getBuildOrder(state));
         buildOrder.forEach(configFileName =>
             state.projectPendingBuild.set(
                 toResolvedConfigFilePath(state, configFileName),
@@ -705,14 +779,14 @@ namespace ts {
         getBuilderProgram(): T | undefined;
         getProgram(): Program | undefined;
         getSourceFile(fileName: string): SourceFile | undefined;
-        getSourceFiles(): ReadonlyArray<SourceFile>;
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
+        getSourceFiles(): readonly SourceFile[];
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getConfigFileParsingDiagnostics(): readonly Diagnostic[];
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getAllDependencies(sourceFile: SourceFile): readonly string[];
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         /*
          * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
          * emit in build system is responsible in updating status of the project
@@ -884,7 +958,7 @@ namespace ts {
             return program && action(program);
         }
 
-        function withProgramOrEmptyArray<U>(action: (program: T) => ReadonlyArray<U>): ReadonlyArray<U> {
+        function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
             return withProgramOrUndefined(action) || emptyArray;
         }
 
@@ -925,7 +999,7 @@ namespace ts {
             step++;
         }
 
-        function handleDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
+        function handleDiagnostics(diagnostics: readonly Diagnostic[], errorFlags: BuildResultFlags, errorType: string) {
             if (diagnostics.length) {
                 buildResult = buildErrors(
                     state,
@@ -1194,10 +1268,11 @@ namespace ts {
 
     function getNextInvalidatedProject<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
-        buildOrder: readonly ResolvedConfigFileName[],
+        buildOrder: AnyBuildOrder,
         reportQueue: boolean
     ): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
+        if (isCircularBuildOrder(buildOrder)) return undefined;
         if (state.currentInvalidatedProject) {
             // Only if same buildOrder the currentInvalidated project can be sent again
             return arrayIsEqualTo(state.currentInvalidatedProject.buildOrder, buildOrder) ?
@@ -1266,7 +1341,16 @@ namespace ts {
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
                 reportAndStoreErrors(state, projectPath, config.errors);
                 projectPendingBuild.delete(projectPath);
-                if (options.verbose) reportStatus(state, Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
+                if (options.verbose) {
+                    reportStatus(
+                        state,
+                        status.upstreamProjectBlocked ?
+                            Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
+                            Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                        project,
+                        status.upstreamProjectName
+                    );
+                }
                 continue;
             }
 
@@ -1320,7 +1404,7 @@ namespace ts {
         state: SolutionBuilderState<T>,
         resolvedPath: ResolvedConfigFilePath,
         program: T | undefined,
-        diagnostics: ReadonlyArray<Diagnostic>,
+        diagnostics: readonly Diagnostic[],
         errorFlags: BuildResultFlags,
         errorType: string
     ) {
@@ -1468,10 +1552,12 @@ namespace ts {
                 }
 
                 // An upstream project is blocked
-                if (refStatus.type === UpToDateStatusType.Unbuildable) {
+                if (refStatus.type === UpToDateStatusType.Unbuildable ||
+                    refStatus.type === UpToDateStatusType.UpstreamBlocked) {
                     return {
                         type: UpToDateStatusType.UpstreamBlocked,
-                        upstreamProjectName: ref.path
+                        upstreamProjectName: ref.path,
+                        upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked
                     };
                 }
 
@@ -1536,7 +1622,7 @@ namespace ts {
 
         if (!state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
-            const buildInfoPath = getOutputPathForBuildInfo(project.options);
+            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
                 const value = state.readFileWithCache(buildInfoPath);
                 const buildInfo = value && getBuildInfo(value);
@@ -1668,8 +1754,8 @@ namespace ts {
                                 }
                                 break;
                             }
+                            // falls through
 
-                        // falls through
                         case UpToDateStatusType.UpToDateWithUpstreamTypes:
                         case UpToDateStatusType.OutOfDateWithPrepend:
                             if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
@@ -1702,34 +1788,35 @@ namespace ts {
 
         let reportQueue = true;
         let successfulProjects = 0;
-        let errorProjects = 0;
         while (true) {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
             reportQueue = false;
             invalidatedProject.done(cancellationToken);
-            if (state.diagnostics.has(invalidatedProject.projectPath)) {
-                errorProjects++;
-            }
-            else {
-                successfulProjects++;
-            }
+            if (!state.diagnostics.has(invalidatedProject.projectPath)) successfulProjects++;
         }
 
         disableCache(state);
         reportErrorSummary(state, buildOrder);
         startWatching(state, buildOrder);
 
-        return errorProjects ?
-            successfulProjects ?
-                ExitStatus.DiagnosticsPresent_OutputsGenerated :
-                ExitStatus.DiagnosticsPresent_OutputsSkipped :
-            ExitStatus.Success;
+        return isCircularBuildOrder(buildOrder)
+            ? ExitStatus.ProjectReferenceCycle_OutputsSkipped
+            : !buildOrder.some(p => state.diagnostics.has(toResolvedConfigFilePath(state, p)))
+                ? ExitStatus.Success
+                : successfulProjects
+                    ? ExitStatus.DiagnosticsPresent_OutputsGenerated
+                    : ExitStatus.DiagnosticsPresent_OutputsSkipped;
     }
 
     function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
+        if (isCircularBuildOrder(buildOrder)) {
+            reportErrors(state, buildOrder.circularDiagnostics);
+            return ExitStatus.ProjectReferenceCycle_OutputsSkipped;
+        }
 
         const { options, host } = state;
         const filesToDelete = options.dry ? [] as string[] : undefined;
@@ -1912,10 +1999,10 @@ namespace ts {
         );
     }
 
-    function startWatching(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
+    function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
-        for (const resolved of buildOrder) {
+        for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
             // Watch this file
             watchConfigFile(state, resolved, resolvedPath);
@@ -1935,9 +2022,9 @@ namespace ts {
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilder<T> {
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilder<T> {
         const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options);
         return {
             build: (project, cancellationToken) => build(state, project, cancellationToken),
@@ -1956,6 +2043,10 @@ namespace ts {
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
             buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),
+            getAllParsedConfigs: () => arrayFrom(mapDefinedIterator(
+                state.configFileCache.values(),
+                config => isParsedCommandLine(config) ? config : undefined
+            )),
         };
     }
 
@@ -1973,11 +2064,11 @@ namespace ts {
         }
     }
 
-    function reportErrors({ host }: SolutionBuilderState, errors: ReadonlyArray<Diagnostic>) {
+    function reportErrors({ host }: SolutionBuilderState, errors: readonly Diagnostic[]) {
         errors.forEach(err => host.reportDiagnostic(err));
     }
 
-    function reportAndStoreErrors(state: SolutionBuilderState, proj: ResolvedConfigFilePath, errors: ReadonlyArray<Diagnostic>) {
+    function reportAndStoreErrors(state: SolutionBuilderState, proj: ResolvedConfigFilePath, errors: readonly Diagnostic[]) {
         reportErrors(state, errors);
         state.projectErrorsReported.set(proj, true);
         if (errors.length) {
@@ -1989,24 +2080,33 @@ namespace ts {
         reportAndStoreErrors(state, proj, [state.configFileCache.get(proj) as Diagnostic]);
     }
 
-    function reportErrorSummary(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]) {
-        if (!state.needsSummary || (!state.watch && !state.host.reportErrorSummary)) return;
+    function reportErrorSummary(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
+        if (!state.needsSummary) return;
         state.needsSummary = false;
+        const canReportSummary = state.watch || !!state.host.reportErrorSummary;
         const { diagnostics } = state;
-        // Report errors from the other projects
-        buildOrder.forEach(project => {
-            const projectPath = toResolvedConfigFilePath(state, project);
-            if (!state.projectErrorsReported.has(projectPath)) {
-                reportErrors(state, diagnostics.get(projectPath) || emptyArray);
-            }
-        });
         let totalErrors = 0;
-        diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+        if (isCircularBuildOrder(buildOrder)) {
+            reportBuildQueue(state, buildOrder.buildOrder);
+            reportErrors(state, buildOrder.circularDiagnostics);
+            if (canReportSummary) totalErrors += getErrorCountForSummary(buildOrder.circularDiagnostics);
+        }
+        else {
+            // Report errors from the other projects
+            buildOrder.forEach(project => {
+                const projectPath = toResolvedConfigFilePath(state, project);
+                if (!state.projectErrorsReported.has(projectPath)) {
+                    reportErrors(state, diagnostics.get(projectPath) || emptyArray);
+                }
+            });
+            if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+        }
+
         if (state.watch) {
             reportWatchStatus(state, getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
         }
-        else {
-            state.host.reportErrorSummary!(totalErrors);
+        else if (state.host.reportErrorSummary) {
+            state.host.reportErrorSummary(totalErrors);
         }
     }
 
@@ -2079,7 +2179,9 @@ namespace ts {
             case UpToDateStatusType.UpstreamBlocked:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
+                    status.upstreamProjectBlocked ?
+                        Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
+                        Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                     relName(state, configFileName),
                     relName(state, status.upstreamProjectName)
                 );
@@ -2100,6 +2202,7 @@ namespace ts {
                 );
             case UpToDateStatusType.ContainerOnly:
             // Don't report status on "solution" projects
+            // falls through
             case UpToDateStatusType.ComputingUpstream:
                 // Should never leak from getUptoDateStatusWorker
                 break;

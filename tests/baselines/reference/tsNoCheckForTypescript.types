@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsdoc/file.ts ===
+// @ts-nocheck
+
+export const a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
+>a : any
+>1 + {} : any
+>1 : 1
+>{} : {}
+
+export interface Aleph {
+    q: number;
+>q : number
+}
+
+export class Bet implements Aleph {
+>Bet : Bet
+
+    q: string = "lol" // And so will this implements error
+>q : string
+>"lol" : "lol"
+}
+

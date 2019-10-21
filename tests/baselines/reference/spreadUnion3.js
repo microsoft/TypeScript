@@ -42,5 +42,5 @@ function g(t) {
 g();
 g(undefined);
 g(null);
-var x = __assign({}, nullAndUndefinedUnion, nullAndUndefinedUnion);
+var x = __assign(__assign({}, nullAndUndefinedUnion), nullAndUndefinedUnion);
 var y = __assign({}, nullAndUndefinedUnion);

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
@@ -21,7 +21,7 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
         const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
@@ -86,16 +86,16 @@ namespace ts.DocumentHighlights {
                     : undefined;
         }
 
-        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: ReadonlyArray<SyntaxKind>): HighlightSpan[] | undefined {
+        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
             return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
                 nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 
-        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
             return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
         }
 
-        function highlightSpans(nodes: ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+        function highlightSpans(nodes: readonly Node[] | undefined): HighlightSpan[] | undefined {
             return nodes && nodes.map(node => getHighlightSpanForNode(node, sourceFile));
         }
     }
@@ -104,7 +104,7 @@ namespace ts.DocumentHighlights {
      * Aggregates all throw-statements within this node *without* crossing
      * into function boundaries and try-blocks with catch-clauses.
      */
-    function aggregateOwnedThrowStatements(node: Node): ReadonlyArray<ThrowStatement> | undefined {
+    function aggregateOwnedThrowStatements(node: Node): readonly ThrowStatement[] | undefined {
         if (isThrowStatement(node)) {
             return [node];
         }
@@ -145,11 +145,11 @@ namespace ts.DocumentHighlights {
         return undefined;
     }
 
-    function aggregateAllBreakAndContinueStatements(node: Node): ReadonlyArray<BreakOrContinueStatement> | undefined {
+    function aggregateAllBreakAndContinueStatements(node: Node): readonly BreakOrContinueStatement[] | undefined {
         return isBreakOrContinueStatement(node) ? [node] : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
     }
 
-    function flatMapChildren<T>(node: Node, cb: (child: Node) => ReadonlyArray<T> | T | undefined): ReadonlyArray<T> {
+    function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
         const result: T[] = [];
         node.forEachChild(child => {
             const value = cb(child);
@@ -172,7 +172,8 @@ namespace ts.DocumentHighlights {
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         return false;
                     }
-                // falls through
+                    // falls through
+
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
@@ -191,9 +192,9 @@ namespace ts.DocumentHighlights {
         return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
     }
 
-    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
+    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
         // Types of node whose children might have modifiers.
-        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ClassLikeDeclaration;
+        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -213,11 +214,13 @@ namespace ts.DocumentHighlights {
                 return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeLiteral:
                 const nodes = container.members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
-                if (modifierFlag & ModifierFlags.AccessibilityModifier) {
+                if (modifierFlag & (ModifierFlags.AccessibilityModifier | ModifierFlags.Readonly)) {
                     const constructor = find(container.members, isConstructorDeclaration);
                     if (constructor) {
                         return [...nodes, ...constructor.parameters];
@@ -244,7 +247,7 @@ namespace ts.DocumentHighlights {
     function getLoopBreakContinueOccurrences(loopNode: IterationStatement): Node[] {
         const keywords: Node[] = [];
 
-        if (pushKeywordIf(keywords, loopNode.getFirstToken()!, SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+        if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
             // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
             if (loopNode.kind === SyntaxKind.DoStatement) {
                 const loopTokens = loopNode.getChildren();
@@ -259,7 +262,7 @@ namespace ts.DocumentHighlights {
 
         forEach(aggregateAllBreakAndContinueStatements(loopNode.statement), statement => {
             if (ownsBreakOrContinueStatement(loopNode, statement)) {
-                pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
             }
         });
 
@@ -289,15 +292,15 @@ namespace ts.DocumentHighlights {
     function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, switchStatement.getFirstToken()!, SyntaxKind.SwitchKeyword);
+        pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
         // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
         forEach(switchStatement.caseBlock.clauses, clause => {
-            pushKeywordIf(keywords, clause.getFirstToken()!, SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+            pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
             forEach(aggregateAllBreakAndContinueStatements(clause), statement => {
                 if (ownsBreakOrContinueStatement(switchStatement, statement)) {
-                    pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword);
+                    pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
                 }
             });
         });
@@ -308,10 +311,10 @@ namespace ts.DocumentHighlights {
     function getTryCatchFinallyOccurrences(tryStatement: TryStatement, sourceFile: SourceFile): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, tryStatement.getFirstToken()!, SyntaxKind.TryKeyword);
+        pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
         if (tryStatement.catchClause) {
-            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken()!, SyntaxKind.CatchKeyword);
+            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
         }
 
         if (tryStatement.finallyBlock) {

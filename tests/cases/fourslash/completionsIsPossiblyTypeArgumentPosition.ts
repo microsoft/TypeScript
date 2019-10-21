@@ -9,25 +9,22 @@
 ////x + {| "valueOnly": true |}
 ////x < {| "valueOnly": true |}
 ////f < {| "valueOnly": true |}
-////g < {| "valueOnly": false |}
-////const something: C<{| "typeOnly": true |};
-////const something2: C<C<{| "typeOnly": true |};
-////new C<{| "valueOnly": false |};
-////new C<C<{| "valueOnly": false |};
+////g < /*g*/
+////const something: C</*something*/;
+////const something2: C<C</*something2*/;
+////new C</*C*/;
+////new C<C</*CC*/;
 ////
 ////declare const callAndConstruct: { new<T>(): callAndConstruct<T>; <T>(): string; };
 ////interface callAndConstruct<T> {}
 ////new callAndConstruct<callAndConstruct</*callAndConstruct*/
 
 for (const marker of test.markers()) {
-    if (marker.data && marker.data.typeOnly) {
-        verify.completions({ marker, includes: "T", excludes: "x" });
-    }
-    else if (marker.data && marker.data.valueOnly) {
+    if (marker.data && marker.data.valueOnly) {
         verify.completions({ marker, includes: "x", excludes: "T" });
     }
     else {
-        verify.completions({ marker, includes: ["x", "T"] });
+        verify.completions({ marker, includes: "T", excludes: "x" });
     }
 }
 

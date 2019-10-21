@@ -1,8 +1,10 @@
 /* @internal */
 namespace ts {
     export namespace Debug {
+        /* eslint-disable prefer-const */
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
+        /* eslint-enable prefer-const */
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -52,11 +54,12 @@ namespace ts {
         }
 
         export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            // eslint-disable-next-line no-null/no-null
             if (value === undefined || value === null) return fail(message);
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
+        export function assertEachDefined<T, A extends readonly T[]>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }
@@ -64,7 +67,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && "kind" in member && "pos" in member && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
@@ -184,6 +187,14 @@ namespace ts {
                 assertNode)
             : noop;
 
+        export const assertNotNode = shouldAssert(AssertionLevel.Normal)
+            ? (node: Node | undefined, test: ((node: Node | undefined) => boolean) | undefined, message?: string): void => assert(
+                test === undefined || !test(node),
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
+                assertNode)
+            : noop;
+
         export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(
                 test === undefined || node === undefined || test(node),
@@ -209,6 +220,40 @@ namespace ts {
             : noop;
 
         let isDebugInfoEnabled = false;
+
+        interface ExtendedDebugModule {
+            init(_ts: typeof ts): void;
+            formatControlFlowGraph(flowNode: FlowNode): string;
+        }
+
+        let extendedDebugModule: ExtendedDebugModule | undefined;
+
+        function extendedDebug() {
+            enableDebugInfo();
+            if (!extendedDebugModule) {
+                throw new Error("Debugging helpers could not be loaded.");
+            }
+            return extendedDebugModule;
+        }
+
+        export function printControlFlowGraph(flowNode: FlowNode) {
+            return console.log(formatControlFlowGraph(flowNode));
+        }
+
+        export function formatControlFlowGraph(flowNode: FlowNode) {
+            return extendedDebug().formatControlFlowGraph(flowNode);
+        }
+
+        export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
+            if (isDebugInfoEnabled) {
+                if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+                    Object.defineProperties(flowNode, {
+                        __debugFlowFlags: { get(this: FlowNode) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
+                        __debugToString: { value(this: FlowNode) { return formatControlFlowGraph(this); } }
+                    });
+                }
+            }
+        }
 
         /**
          * Injects debug information into frequently used types.
@@ -255,7 +300,23 @@ namespace ts {
                 }
             }
 
+            // attempt to load extended debugging information
+            try {
+                if (sys && sys.require) {
+                    const basePath = getDirectoryPath(resolvePath(sys.getExecutingFilePath()));
+                    const result = sys.require(basePath, "./compiler-debug") as RequireResult<ExtendedDebugModule>;
+                    if (!result.error) {
+                        result.module.init(ts);
+                        extendedDebugModule = result.module;
+                    }
+                }
+            }
+            catch {
+                // do nothing
+            }
+
             isDebugInfoEnabled = true;
         }
+
     }
 }

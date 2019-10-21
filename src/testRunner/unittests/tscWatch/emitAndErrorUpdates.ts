@@ -1,8 +1,7 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
-        const currentDirectory = "/user/username/projects/myproject";
         const config: File = {
-            path: `${currentDirectory}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: `{}`
         };
         function getOutputFileStampAndError(host: WatchedSystem, watch: Watch, file: File) {
@@ -12,32 +11,48 @@ namespace ts.tscWatch {
                 file,
                 fileStamp: host.getModifiedTime(file.path.replace(".ts", ".js")),
                 errors: builderProgram.getSemanticDiagnostics(watch().getSourceFileByPath(file.path as Path)),
-                errorsFromOldState: !!state.semanticDiagnosticsFromOldState && state.semanticDiagnosticsFromOldState.has(file.path)
+                errorsFromOldState: !!state.semanticDiagnosticsFromOldState && state.semanticDiagnosticsFromOldState.has(file.path),
+                dtsStamp: host.getModifiedTime(file.path.replace(".ts", ".d.ts"))
             };
         }
 
-        function getOutputFileStampsAndErrors(host: WatchedSystem, watch: Watch, directoryFiles: ReadonlyArray<File>) {
+        function getOutputFileStampsAndErrors(host: WatchedSystem, watch: Watch, directoryFiles: readonly File[]) {
             return directoryFiles.map(d => getOutputFileStampAndError(host, watch, d));
         }
 
-        function findStampAndErrors(stampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>, file: File) {
+        function findStampAndErrors(stampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[], file: File) {
             return find(stampsAndErrors, info => info.file === file)!;
         }
 
-        function verifyOutputFileStampsAndErrors(
-            file: File,
-            emitExpected: boolean,
-            errorRefershExpected: boolean,
-            beforeChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>,
-            afterChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>
-        ) {
+        interface VerifyOutputFileStampAndErrors {
+            file: File;
+            jsEmitExpected: boolean;
+            dtsEmitExpected: boolean;
+            errorRefershExpected: boolean;
+            beforeChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[];
+            afterChangeFileStampsAndErrors: readonly ReturnType<typeof getOutputFileStampAndError>[];
+        }
+        function verifyOutputFileStampsAndErrors({
+            file,
+            jsEmitExpected,
+            dtsEmitExpected,
+            errorRefershExpected,
+            beforeChangeFileStampsAndErrors,
+            afterChangeFileStampsAndErrors
+        }: VerifyOutputFileStampAndErrors) {
             const beforeChange = findStampAndErrors(beforeChangeFileStampsAndErrors, file);
             const afterChange = findStampAndErrors(afterChangeFileStampsAndErrors, file);
-            if (emitExpected) {
+            if (jsEmitExpected) {
                 assert.notStrictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Expected emit for file ${file.path}`);
             }
             else {
                 assert.strictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Did not expect new emit for file ${file.path}`);
+            }
+            if (dtsEmitExpected) {
+                assert.notStrictEqual(afterChange.dtsStamp, beforeChange.dtsStamp, `Expected emit for file ${file.path}`);
+            }
+            else {
+                assert.strictEqual(afterChange.dtsStamp, beforeChange.dtsStamp, `Did not expect new emit for file ${file.path}`);
             }
             if (errorRefershExpected) {
                 if (afterChange.errors !== emptyArray || beforeChange.errors !== emptyArray) {
@@ -51,20 +66,23 @@ namespace ts.tscWatch {
             }
         }
 
-        interface VerifyEmitAndErrorUpdates {
-            change: (host: WatchedSystem) => void;
-            getInitialErrors: (watch: Watch) => ReadonlyArray<Diagnostic> | ReadonlyArray<string>;
-            getIncrementalErrors: (watch: Watch) => ReadonlyArray<Diagnostic> | ReadonlyArray<string>;
-            filesWithNewEmit: ReadonlyArray<File>;
-            filesWithOnlyErrorRefresh: ReadonlyArray<File>;
-            filesNotTouched: ReadonlyArray<File>;
-            configFile?: File;
+        interface VerifyEmitAndErrorUpdatesWorker extends VerifyEmitAndErrorUpdates {
+            configFile: File;
         }
-
-        function verifyEmitAndErrorUpdates({ filesWithNewEmit, filesWithOnlyErrorRefresh, filesNotTouched, configFile = config, change, getInitialErrors, getIncrementalErrors }: VerifyEmitAndErrorUpdates) {
+        function verifyEmitAndErrorUpdatesWorker({
+            fileWithChange,
+            filesWithNewEmit,
+            filesWithOnlyErrorRefresh,
+            filesNotTouched,
+            configFile,
+            change,
+            getInitialErrors,
+            getIncrementalErrors
+        }: VerifyEmitAndErrorUpdatesWorker) {
             const nonLibFiles = [...filesWithNewEmit, ...filesWithOnlyErrorRefresh, ...filesNotTouched];
             const files = [...nonLibFiles, configFile, libFile];
-            const host = createWatchedSystem(files, { currentDirectory });
+            const compilerOptions = (JSON.parse(configFile.content).compilerOptions || {}) as CompilerOptions;
+            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
             const watch = createWatchOfConfigFile("tsconfig.json", host);
             checkProgramActualFiles(watch(), [...nonLibFiles.map(f => f.path), libFile.path]);
             checkOutputErrorsInitial(host, getInitialErrors(watch));
@@ -73,14 +91,82 @@ namespace ts.tscWatch {
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, getIncrementalErrors(watch));
             const afterChange = getOutputFileStampsAndErrors(host, watch, nonLibFiles);
-            filesWithNewEmit.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ true, /*errorRefershExpected*/ true, beforeChange, afterChange));
-            filesWithOnlyErrorRefresh.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ false, /*errorRefershExpected*/ true, beforeChange, afterChange));
-            filesNotTouched.forEach(file => verifyOutputFileStampsAndErrors(file, /*emitExpected*/ false, /*errorRefershExpected*/ false, beforeChange, afterChange));
+            filesWithNewEmit.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: !compilerOptions.isolatedModules || fileWithChange === file,
+                dtsEmitExpected: getEmitDeclarations(compilerOptions),
+                errorRefershExpected: true,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+            filesWithOnlyErrorRefresh.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: false,
+                dtsEmitExpected: getEmitDeclarations(compilerOptions) && !file.path.endsWith(".d.ts"),
+                errorRefershExpected: true,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+            filesNotTouched.forEach(file => verifyOutputFileStampsAndErrors({
+                file,
+                jsEmitExpected: false,
+                dtsEmitExpected: false,
+                errorRefershExpected: false,
+                beforeChangeFileStampsAndErrors: beforeChange,
+                afterChangeFileStampsAndErrors: afterChange
+            }));
+        }
+
+        function changeCompilerOptions(input: VerifyEmitAndErrorUpdates, additionalOptions: CompilerOptions): File {
+            const configFile = input.configFile || config;
+            const content = JSON.parse(configFile.content);
+            content.compilerOptions = { ...content.compilerOptions, ...additionalOptions };
+            return { path: configFile.path, content: JSON.stringify(content) };
+        }
+
+        interface VerifyEmitAndErrorUpdates {
+            change: (host: WatchedSystem) => void;
+            getInitialErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            getIncrementalErrors: (watch: Watch) => readonly Diagnostic[] | readonly string[];
+            fileWithChange: File;
+            filesWithNewEmit: readonly File[];
+            filesWithOnlyErrorRefresh: readonly File[];
+            filesNotTouched: readonly File[];
+            configFile?: File;
+        }
+        function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
+            it("with default config", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: input.configFile || config
+                });
+            });
+
+            it("with default config and --declaration", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { declaration: true })
+                });
+            });
+
+            it("config with --isolatedModules", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { isolatedModules: true })
+                });
+            });
+
+            it("config with --isolatedModules and --declaration", () => {
+                verifyEmitAndErrorUpdatesWorker({
+                    ...input,
+                    configFile: changeCompilerOptions(input, { isolatedModules: true, declaration: true })
+                });
+            });
         }
 
         describe("deep import changes", () => {
             const aFile: File = {
-                path: `${currentDirectory}/a.ts`,
+                path: `${projectRoot}/a.ts`,
                 content: `import {B} from './b';
 declare var console: any;
 let b = new B();
@@ -93,6 +179,7 @@ console.log(b.c.d);`
                 addImportedModule(bFile);
                 addImportedModule(cFile);
                 verifyEmitAndErrorUpdates({
+                    fileWithChange: cFile,
                     filesWithNewEmit,
                     filesWithOnlyErrorRefresh,
                     filesNotTouched: emptyArray,
@@ -113,9 +200,9 @@ console.log(b.c.d);`
                 }
             }
 
-            it("updates errors when deep import file changes", () => {
+            describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
-                    path: `${currentDirectory}/b.ts`,
+                    path: `${projectRoot}/b.ts`,
                     content: `import {C} from './c';
 export class B
 {
@@ -123,7 +210,7 @@ export class B
 }`
                 };
                 const cFile: File = {
-                    path: `${currentDirectory}/c.ts`,
+                    path: `${projectRoot}/c.ts`,
                     content: `export class C
 {
     d = 1;
@@ -132,9 +219,9 @@ export class B
                 verifyDeepImportChange(bFile, cFile);
             });
 
-            it("updates errors when deep import through declaration file changes", () => {
+            describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
-                    path: `${currentDirectory}/b.d.ts`,
+                    path: `${projectRoot}/b.d.ts`,
                     content: `import {C} from './c';
 export class B
 {
@@ -142,7 +229,7 @@ export class B
 }`
                 };
                 const cFile: File = {
-                    path: `${currentDirectory}/c.d.ts`,
+                    path: `${projectRoot}/c.d.ts`,
                     content: `export class C
 {
     d: number;
@@ -152,9 +239,9 @@ export class B
             });
         });
 
-        it("updates errors in file not exporting a deep multilevel import that changes", () => {
+        describe("updates errors in file not exporting a deep multilevel import that changes", () => {
             const aFile: File = {
-                path: `${currentDirectory}/a.ts`,
+                path: `${projectRoot}/a.ts`,
                 content: `export interface Point {
     name: string;
     c: Coords;
@@ -165,13 +252,13 @@ export interface Coords {
 }`
             };
             const bFile: File = {
-                path: `${currentDirectory}/b.ts`,
+                path: `${projectRoot}/b.ts`,
                 content: `import { Point } from "./a";
 export interface PointWrapper extends Point {
 }`
             };
             const cFile: File = {
-                path: `${currentDirectory}/c.ts`,
+                path: `${projectRoot}/c.ts`,
                 content: `import { PointWrapper } from "./b";
 export function getPoint(): PointWrapper {
     return {
@@ -184,15 +271,16 @@ export function getPoint(): PointWrapper {
 };`
             };
             const dFile: File = {
-                path: `${currentDirectory}/d.ts`,
+                path: `${projectRoot}/d.ts`,
                 content: `import { getPoint } from "./c";
 getPoint().c.x;`
             };
             const eFile: File = {
-                path: `${currentDirectory}/e.ts`,
+                path: `${projectRoot}/e.ts`,
                 content: `import "./d";`
             };
             verifyEmitAndErrorUpdates({
+                fileWithChange: aFile,
                 filesWithNewEmit: [aFile, bFile],
                 filesWithOnlyErrorRefresh: [cFile, dFile],
                 filesNotTouched: [eFile],
@@ -212,14 +300,14 @@ getPoint().c.x;`
 
         describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
-                path: `${currentDirectory}/tsconfig.json`,
+                path: `${projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     files: ["app.ts"],
                     compilerOptions: { baseUrl: "." }
                 })
             };
             const app: File = {
-                path: `${currentDirectory}/app.ts`,
+                path: `${projectRoot}/app.ts`,
                 content: `import { Data } from "lib2/public";
 export class App {
     public constructor() {
@@ -228,11 +316,11 @@ export class App {
 }`
             };
             const lib2Public: File = {
-                path: `${currentDirectory}/lib2/public.ts`,
+                path: `${projectRoot}/lib2/public.ts`,
                 content: `export * from "./data";`
             };
             const lib2Data: File = {
-                path: `${currentDirectory}/lib2/data.ts`,
+                path: `${projectRoot}/lib2/data.ts`,
                 content: `import { ITest } from "lib1/public";
 export class Data {
     public test() {
@@ -244,15 +332,15 @@ export class Data {
 }`
             };
             const lib1Public: File = {
-                path: `${currentDirectory}/lib1/public.ts`,
+                path: `${projectRoot}/lib1/public.ts`,
                 content: `export * from "./tools/public";`
             };
             const lib1ToolsPublic: File = {
-                path: `${currentDirectory}/lib1/tools/public.ts`,
+                path: `${projectRoot}/lib1/tools/public.ts`,
                 content: `export * from "./tools.interface";`
             };
             const lib1ToolsInterface: File = {
-                path: `${currentDirectory}/lib1/tools/tools.interface.ts`,
+                path: `${projectRoot}/lib1/tools/tools.interface.ts`,
                 content: `export interface ITest {
     title: string;
 }`
@@ -265,6 +353,7 @@ export class Data {
                     filesWithOnlyErrorRefresh.push(lib2Data2);
                 }
                 verifyEmitAndErrorUpdates({
+                    fileWithChange: lib1ToolsInterface,
                     filesWithNewEmit,
                     filesWithOnlyErrorRefresh,
                     filesNotTouched: emptyArray,
@@ -276,13 +365,13 @@ export class Data {
                     ]
                 });
             }
-            it("when there are no circular import and exports", () => {
+            describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(lib2Data);
             });
 
-            it("when there are circular import and exports", () => {
+            describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
-                    path: `${currentDirectory}/lib2/data.ts`,
+                    path: `${projectRoot}/lib2/data.ts`,
                     content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
 export class Data {
     public dat?: Data2; public test() {
@@ -294,7 +383,7 @@ export class Data {
 }`
                 };
                 const lib2Data2: File = {
-                    path: `${currentDirectory}/lib2/data2.ts`,
+                    path: `${projectRoot}/lib2/data2.ts`,
                     content: `import { Data } from "./data";
 export class Data2 {
     public dat?: Data;

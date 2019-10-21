@@ -28,6 +28,10 @@ async function main() {
         type: "token",
         token: process.argv[2]
     });
+
+    // Please keep the strings "an installable tgz" and "packed" in this message, as well as the devDependencies section,
+    // so that the playgrounds deployment process can find these comments.
+
     await gh.issues.createComment({
         number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
@@ -43,6 +47,9 @@ async function main() {
 and then running \`npm install\`.
 `
     });
+
+    // Send a ping to https://github.com/orta/make-monaco-builds#pull-request-builds
+    await gh.request("POST /repos/orta/make-monaco-builds/dispatches", { event_type: +process.env.SOURCE_ISSUE })
 }
 
 main().catch(async e => {
