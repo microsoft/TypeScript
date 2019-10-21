@@ -6612,6 +6612,7 @@ namespace ts {
         return isSourceFile(node) || isModuleBlock(node) || isBlock(node) && isFunctionLike(node.parent);
     }
 
+    /* @internal */
     export function isNewOrDelayedThisScope(node: any): boolean {
         switch (node.kind) {
             // Arrow functions use the same scope, but may do so in a "delayed" manner
