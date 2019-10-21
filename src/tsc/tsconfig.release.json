@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "./tsconfig.json",
     "compilerOptions": {
         "outFile": "../../built/local/tsc.release.js",
         "stripInternal": true,
@@ -8,7 +8,7 @@
         "declarationMap": false,
         "sourceMap": false,
         "composite": false,
-        "incremental":  true
+        "incremental": true
     },
     "references": [
         { "path": "../compiler/tsconfig.release.json", "prepend": true }
