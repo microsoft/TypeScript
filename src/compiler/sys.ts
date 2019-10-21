@@ -535,8 +535,8 @@ namespace ts {
                 data,
                 writeBom,
                 (p, d, w) => originalWriteFile.call(sys, p, d, w),
-                sys.createDirectory,
-                sys.directoryExists);
+                p => sys.createDirectory.call(sys, p),
+                p => sys.directoryExists.call(sys, p));
     }
 
     /*@internal*/
