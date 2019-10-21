@@ -6630,6 +6630,7 @@ namespace ts {
                     // The `extends` clause of a class is its parent scope, unlike its constructor and methods
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
+                        // falls through
                     // Object properties can have computed names; only method-like bodies start a new scope
                     case SyntaxKind.GetAccessor:
                         // falls through
