@@ -1,0 +1,20 @@
+tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx(7,21): error TS2326: Types of property 'name' are incompatible.
+  Type '"Matt"' is not assignable to type 'P["name"] & string'.
+    Type '"Matt"' is not assignable to type 'P["name"]'.
+
+
+==== tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
+        return class OuterComponent extends React.Component<P> {
+            render() {
+                return <Inner {...this.props} name="Matt"/>;
+                        ~~~~~
+!!! error TS2326: Types of property 'name' are incompatible.
+!!! error TS2326:   Type '"Matt"' is not assignable to type 'P["name"] & string'.
+!!! error TS2326:     Type '"Matt"' is not assignable to type 'P["name"]'.
+            }
+        };
+    }
