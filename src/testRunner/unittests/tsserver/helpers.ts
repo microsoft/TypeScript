@@ -313,6 +313,13 @@ namespace ts.projectSystem {
             return this.executeCommand(<T>request);
         }
 
+        public executeCommand(request: protocol.Request) {
+            this.logger.info(`request: ${JSON.stringify(request)}`);
+            const response = super.executeCommand(request);
+            this.logger.info(`response: ${JSON.stringify(response)}`);
+            return response;
+        }
+
         public event<T extends object>(body: T, eventName: string) {
             this.events.push(server.toEvent(eventName, body));
             super.event(body, eventName);
