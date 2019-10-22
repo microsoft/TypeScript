@@ -96,35 +96,51 @@ namespace ts {
             if (existingDirectories.has(directoryPath)) {
                 return true;
             }
-            if (system.directoryExists(directoryPath)) {
+            if ((compilerHost.directoryExists || system.directoryExists)(directoryPath)) {
                 existingDirectories.set(directoryPath, true);
                 return true;
             }
             return false;
         }
 
-        function ensureDirectoriesExist(directoryPath: string) {
-            if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                const parentDirectory = getDirectoryPath(directoryPath);
-                ensureDirectoriesExist(parentDirectory);
-                if (compilerHost.createDirectory) {
-                    compilerHost.createDirectory(directoryPath);
-                }
-                else {
-                    system.createDirectory(directoryPath);
+        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
+            try {
+                performance.mark("beforeIOWrite");
+
+                // NOTE: If patchWriteFileEnsuringDirectory has been called,
+                // the system.writeFile will do its own directory creation and
+                // the ensureDirectoriesExist call will always be redundant.
+                writeFileEnsuringDirectories(
+                    fileName,
+                    data,
+                    writeByteOrderMark,
+                    (path, data, writeByteOrderMark) => writeFileWorker(path, data, writeByteOrderMark),
+                    path => (compilerHost.createDirectory || system.createDirectory)(path),
+                    path => directoryExists(path));
+
+                performance.mark("afterIOWrite");
+                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
                 }
             }
         }
 
         let outputFingerprints: Map<OutputFingerprint>;
+        function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
+            if (!isWatchSet(options) || !system.createHash || !system.getModifiedTime) {
+                system.writeFile(fileName, data, writeByteOrderMark);
+                return;
+            }
 
-        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
             if (!outputFingerprints) {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
 
-            const hash = system.createHash!(data); // TODO: GH#18217
-            const mtimeBefore = system.getModifiedTime!(fileName); // TODO: GH#18217
+            const hash = system.createHash(data);
+            const mtimeBefore = system.getModifiedTime(fileName);
 
             if (mtimeBefore) {
                 const fingerprint = outputFingerprints.get(fileName);
@@ -139,35 +155,13 @@ namespace ts {
 
             system.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = system.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
+            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
 
             outputFingerprints.set(fileName, {
                 hash,
                 byteOrderMark: writeByteOrderMark,
                 mtime: mtimeAfter
             });
-        }
-
-        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-            try {
-                performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-
-                if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
-                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
-                }
-                else {
-                    system.writeFile(fileName, data, writeByteOrderMark);
-                }
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.message);
-                }
-            }
         }
 
         function getDefaultLibLocation(): string {
