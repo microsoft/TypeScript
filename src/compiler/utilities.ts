@@ -2061,26 +2061,30 @@ namespace ts {
             isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
     }
 
-    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
-        return isLiteralLikeElementAccess(node)
-            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
-                isEntityNameExpression(node.expression) ||
-                isBindableStaticElementAccessExpression(node.expression, /*excludeThisKeyword*/ true));
-    }
-
+    /** x.y OR x[0] */
     export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
         return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
     }
 
+    /** x[0] OR x['a'] OR x[Symbol.y] */
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
         return isElementAccessExpression(node) && (
             isStringOrNumericLiteralLike(node.argumentExpression) ||
             isWellKnownSymbolSyntactically(node.argumentExpression));
     }
 
+    /** Any series of property and element accesses. */
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
         return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
-        || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+            || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    }
+
+    /** Any series of property and element accesses, ending in a literal element access */
+    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
+        return isLiteralLikeElementAccess(node)
+            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
+                isEntityNameExpression(node.expression) ||
+                isBindableStaticAccessExpression(node.expression, /*excludeThisKeyword*/ true));
     }
 
     export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
