@@ -20,11 +20,20 @@ A.prototype.foo = 0
 >A : Symbol(A, Decl(main.js, 0, 6))
 >prototype : Symbol(A.prototype)
 
+A.prototype.func = function() { this._func = 0; }
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(main.js, 0, 6))
+>prototype : Symbol(A.prototype)
+>this : Symbol(A, Decl(mod1.js, 0, 0))
+
 new A().bar
 >new A().bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
 >A : Symbol(A, Decl(main.js, 0, 6))
 >bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
 
 new A().foo
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().func()
 >A : Symbol(A, Decl(main.js, 0, 6))
 

@@ -2709,7 +2709,7 @@ namespace ts {
                         }
                     }
 
-                    if (constructorSymbol) {
+                    if (constructorSymbol && constructorSymbol.valueDeclaration) {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
