@@ -648,7 +648,8 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName && isPropertyName(declName)) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
+            const propertyName = getPropertyNameForPropertyNameNode(declName);
+            return propertyName && unescapeLeadingUnderscores(propertyName);
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
