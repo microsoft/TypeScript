@@ -971,6 +971,7 @@ namespace ts {
             getResolvedProjectReferenceByPath,
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
+            useSourceOfProjectReferenceRedirect: () => useSourceOfProjectReferenceRedirect,
             emitBuildInfo,
             getProbableSymlinks
         };

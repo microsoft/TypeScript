@@ -632,8 +632,19 @@ namespace ts.codefix {
         const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
         const allSourceFiles = program.getSourceFiles();
         const globalTypingsCache = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
+        const everyIncludeResultCache = createMap<boolean>();
+        let filteredBecauseOfSourceOfProjectRef = 0;
         forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined) {
+                if (everyIncludeOfSourceOfProjectReferenceRedirect(
+                    program,
+                    module.valueDeclaration.getSourceFile().path,
+                    everyIncludeResultCache
+                )) {
+                    filteredBecauseOfSourceOfProjectRef++;
+                    return;
+                }
+
                 if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
                     cb(module);
                 }
@@ -645,6 +656,14 @@ namespace ts.codefix {
                 sourceFile !== from &&
                 isImportablePath(from.fileName, sourceFile.fileName, hostGetCanonicalFileName(host), globalTypingsCache)
             ) {
+                if (everyIncludeOfSourceOfProjectReferenceRedirect(
+                    program,
+                    sourceFile.path,
+                    everyIncludeResultCache
+                )) {
+                    filteredBecauseOfSourceOfProjectRef++;
+                    return;
+                }
                 if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
                 }
@@ -655,7 +674,46 @@ namespace ts.codefix {
         });
         if (host.log) {
             host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
+            host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredBecauseOfSourceOfProjectRef} because of modules only included by source of project reference`);
         }
+    }
+
+    function everyIncludeOfSourceOfProjectReferenceRedirect(
+        program: Program,
+        sourceFilePath: Path,
+        resultCache: Map<boolean>
+    ): boolean {
+        if (!program.useSourceOfProjectReferenceRedirect()) return false;
+        const result = resultCache.get(sourceFilePath);
+        if (result !== undefined) return result;
+        const newResult = everyIncludeOfSourceOfProjectReferenceRedirectWorker(
+            program,
+            sourceFilePath,
+            resultCache
+        );
+        resultCache.set(sourceFilePath, newResult);
+        return newResult;
+    }
+
+    function everyIncludeOfSourceOfProjectReferenceRedirectWorker(
+        program: Program,
+        sourceFilePath: Path,
+        resultCache: Map<boolean>
+    ): boolean {
+        const refFileMap = program.getRefFileMap();
+        if (!refFileMap) return false;
+        const refs = refFileMap.get(sourceFilePath);
+        if (!refs) return false;
+        // In case of circular assume source of project reference to ignore that ref
+        resultCache.set(sourceFilePath, true);
+        return refs.every(ref =>
+            program.isSourceOfProjectReferenceRedirect(ref.file) ||
+            everyIncludeOfSourceOfProjectReferenceRedirect(
+                program,
+                ref.file,
+                resultCache
+            )
+        );
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {

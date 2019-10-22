@@ -184,7 +184,7 @@ export class Config {
                 })!.response as protocol.CompletionInfo).entries.filter(entry => entry.hasAction);
             }
 
-            function createCompletionEntry(name: string, source: string): protocol.CompletionEntry {
+            function createCompletionEntry(name: string, source: string, partial: Partial<protocol.CompletionEntry>): protocol.CompletionEntry {
                 return {
                     hasAction: true,
                     insertText: undefined,
@@ -194,17 +194,15 @@ export class Config {
                     name,
                     replacementSpan: undefined,
                     sortText: Completions.SortText.AutoImportSuggestions,
-                    source
+                    source,
+                    ...partial
                 };
             }
 
             it("when inner source does not export internal library data", () => {
                 assert.deepEqual(
                     getCompletionsFrom(innerTest),
-                    [
-                        createCompletionEntry("Config", `${projectRoot}/node_modules/aws-sdk/index`),
-                        createCompletionEntry("IAM", `${projectRoot}/node_modules/aws-sdk/lib/core`),
-                    ]
+                    emptyArray
                 );
             });
 
@@ -213,10 +211,14 @@ export class Config {
                     getCompletionsFrom({
                         path: innerTest.path,
                         content: `${innerTest.content}export { IAM } from "aws-sdk";
-`}),
+`
+                    }),
                     [
-                        createCompletionEntry("Config", `${projectRoot}/node_modules/aws-sdk/index`),
-                        createCompletionEntry("IAM", `${projectRoot}/node_modules/aws-sdk/lib/core`),
+                        createCompletionEntry(
+                            "IAM",
+                            `${projectRoot}/src/inner/test`,
+                            { kind: ScriptElementKind.alias, kindModifiers: "" }
+                        ),
                     ]
                 );
             });
