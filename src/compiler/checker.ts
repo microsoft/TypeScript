@@ -14476,7 +14476,7 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: { skipped: boolean }): Ternary {
                 if (isFreshLiteralType(source)) {
                     source = (<FreshableType>source).regularType;
                 }
@@ -14524,34 +14524,44 @@ namespace ts {
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                const isPerformingExcessPropertyChecks = !isApparentIntersectionConstituent && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
+                const isPerformingExcessPropertyChecks = isObjectLiteralType(source) && !!(getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
-                    const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
-                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
-                        if (reportErrors) {
-                            reportRelationError(headMessage, source, target);
+                    if (isApparentIntersectionConstituent) {
+                        isApparentIntersectionConstituent.skipped = true;
+                    }
+                    else {
+                        const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
+                        if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
+                            if (reportErrors) {
+                                reportRelationError(headMessage, source, target);
+                            }
+                            return Ternary.False;
                         }
-                        return Ternary.False;
                     }
                 }
 
-                const isPerformingCommonPropertyChecks = relation !== comparableRelation && !isApparentIntersectionConstituent &&
+                const isPerformingCommonPropertyChecks = relation !== comparableRelation &&
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
-                if (isPerformingCommonPropertyChecks && !hasCommonProperties(source, target, isComparingJsxAttributes)) {
-                    if (reportErrors) {
-                        const calls = getSignaturesOfType(source, SignatureKind.Call);
-                        const constructs = getSignaturesOfType(source, SignatureKind.Construct);
-                        if (calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, /*reportErrors*/ false) ||
-                            constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, /*reportErrors*/ false)) {
-                            reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, typeToString(source), typeToString(target));
-                        }
-                        else {
-                            reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
-                        }
+                if (isPerformingCommonPropertyChecks) {
+                    if (isApparentIntersectionConstituent) {
+                        isApparentIntersectionConstituent.skipped = true;
                     }
-                    return Ternary.False;
+                    else if(!hasCommonProperties(source, target, isComparingJsxAttributes)) {
+                        if (reportErrors) {
+                            const calls = getSignaturesOfType(source, SignatureKind.Call);
+                            const constructs = getSignaturesOfType(source, SignatureKind.Construct);
+                            if (calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, /*reportErrors*/ false) ||
+                                constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, /*reportErrors*/ false)) {
+                                reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, typeToString(source), typeToString(target));
+                            }
+                            else {
+                                reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
+                            }
+                        }
+                        return Ternary.False;
+                    }
                 }
 
                 let result = Ternary.False;
@@ -14563,26 +14573,27 @@ namespace ts {
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
                     result = relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), isIntersectionConstituent) :
+                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), isIntersectionConstituent ? { skipped: false } : undefined) :
                         eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                 }
                 else {
                     if (target.flags & TypeFlags.Union) {
                         result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
-                        if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks)) {
+                        if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) && !isApparentIntersectionConstituent) {
                             // Validate against excess props using the original `source`
                             const discriminantType = findMatchingDiscriminantType(source, target as UnionType) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
-                            if (!propertiesRelatedTo(source, discriminantType, reportErrors, /*excludedProperties*/ undefined, isIntersectionConstituent)) {
+                            if (!propertiesRelatedTo(source, discriminantType, reportErrors, /*excludedProperties*/ undefined, isIntersectionConstituent ? { skipped: false } : undefined)) {
                                 return Ternary.False;
                             }
                         }
                     }
                     else if (target.flags & TypeFlags.Intersection) {
                         isIntersectionConstituent = true; // set here to affect the following trio of checks
-                        result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors);
-                        if (result && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks)) {
+                        const resres = { skipped: false };
+                        result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, resres);
+                        if (result && (isPerformingExcessPropertyChecks || resres.skipped)) {
                             // Validate against excess props using the original `source`
-                            if (!propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*isIntersectionConstituent*/ false)) {
+                            if (!propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, /*isIntersectionConstituent*/ undefined)) {
                                 return Ternary.False;
                             }
                         }
@@ -14601,10 +14612,10 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ true);
+                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ { skipped: false });
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
-                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent)) {
+                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent ? { skipped: false } : undefined)) {
                             resetErrorInfo(saveErrorInfo);
                         }
                     }
@@ -14627,7 +14638,7 @@ namespace ts {
                     if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
                         if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                            if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
+                            if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent ? { skipped: false } : undefined)) {
                                 resetErrorInfo(saveErrorInfo);
                             }
                         }
@@ -14676,7 +14687,7 @@ namespace ts {
                 let result: Ternary;
                 const flags = source.flags & target.flags;
                 if (flags & TypeFlags.Object || flags & TypeFlags.IndexedAccess || flags & TypeFlags.Conditional || flags & TypeFlags.Index || flags & TypeFlags.Substitution) {
-                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ false);
+                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ undefined);
                 }
                 if (flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
@@ -14882,11 +14893,11 @@ namespace ts {
                 return undefined;
             }
 
-            function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
+            function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean, box: { skipped: boolean }): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
-                    const related = isRelatedTo(source, targetType, reportErrors, /*headMessage*/ undefined, /*isIntersectionConstituent*/ true);
+                    const related = isRelatedTo(source, targetType, reportErrors, /*headMessage*/ undefined, /*isIntersectionConstituent*/ box);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -14895,7 +14906,7 @@ namespace ts {
                 return result;
             }
 
-            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 const sourceTypes = source.types;
                 if (source.flags & TypeFlags.Union && containsType(sourceTypes, target)) {
                     return Ternary.True;
@@ -14923,7 +14934,7 @@ namespace ts {
                 return result;
             }
 
-            function typeArgumentsRelatedTo(sources: readonly Type[] = emptyArray, targets: readonly Type[] = emptyArray, variances: readonly VarianceFlags[] = emptyArray, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function typeArgumentsRelatedTo(sources: readonly Type[] = emptyArray, targets: readonly Type[] = emptyArray, variances: readonly VarianceFlags[] = emptyArray, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 if (sources.length !== targets.length && relation === identityRelation) {
                     return Ternary.False;
                 }
@@ -14985,7 +14996,7 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
@@ -15069,7 +15080,7 @@ namespace ts {
                 return result;
             }
 
-            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
                     if (flags & TypeFlags.Index) {
@@ -15374,7 +15385,7 @@ namespace ts {
                 }
                 return Ternary.False;
 
-                function relateVariances(sourceTypeArguments: readonly Type[] | undefined, targetTypeArguments: readonly Type[] | undefined, variances: VarianceFlags[], isIntersectionConstituent: boolean) {
+                function relateVariances(sourceTypeArguments: readonly Type[] | undefined, targetTypeArguments: readonly Type[] | undefined, variances: VarianceFlags[], isIntersectionConstituent: { skipped: boolean } | undefined) {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, isIntersectionConstituent)) {
                         return result;
                     }
@@ -15503,7 +15514,7 @@ namespace ts {
                             if (!targetProperty) continue outer;
                             if (sourceProperty === targetProperty) continue;
                             // We compare the source property to the target in the context of a single discriminant type.
-                            const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, /*isIntersectionConstituent*/ false);
+                            const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, /*isIntersectionConstituent*/ undefined);
                             // If the target property could not be found, or if the properties were not related,
                             // then this constituent is not a match.
                             if (!related) {
@@ -15522,7 +15533,7 @@ namespace ts {
                 // Compare the remaining non-discriminant properties of each match.
                 let result = Ternary.True;
                 for (const type of matchingTypes) {
-                    result &= propertiesRelatedTo(source, type, /*reportErrors*/ false, excludedProperties, /*isIntersectionConstituent*/ false);
+                    result &= propertiesRelatedTo(source, type, /*reportErrors*/ false, excludedProperties, /*isIntersectionConstituent*/ undefined);
                     if (result) {
                         result &= signaturesRelatedTo(source, type, SignatureKind.Call, /*reportStructuralErrors*/ false);
                         if (result) {
@@ -15558,7 +15569,7 @@ namespace ts {
                 return result || properties;
             }
 
-            function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
                 const source = getTypeOfSourceProperty(sourceProp);
                 if (getCheckFlags(targetProp) & CheckFlags.DeferredType && !getSymbolLinks(targetProp).type) {
@@ -15570,7 +15581,7 @@ namespace ts {
                     let result = unionParent ? Ternary.False : Ternary.True;
                     const targetTypes = links.deferralConstituents!;
                     for (const targetType of targetTypes) {
-                        const related = isRelatedTo(source, targetType, /*reportErrors*/ false, /*headMessage*/ undefined, /*isIntersectionConstituent*/ !unionParent);
+                        const related = isRelatedTo(source, targetType, /*reportErrors*/ false, /*headMessage*/ undefined, /*isIntersectionConstituent*/ unionParent ? undefined : { skipped: false });
                         if (!unionParent) {
                             if (!related) {
                                 // Can't assign to a target individually - have to fallback to assigning to the _whole_ intersection (which forces normalization)
@@ -15601,7 +15612,7 @@ namespace ts {
                 }
             }
 
-            function propertyRelatedTo(source: Type, target: Type, sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function propertyRelatedTo(source: Type, target: Type, sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                 const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                 if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
@@ -15668,7 +15679,7 @@ namespace ts {
                 return related;
             }
 
-            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: UnderscoreEscapedMap<true> | undefined, isIntersectionConstituent: boolean): Ternary {
+            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: UnderscoreEscapedMap<true> | undefined, isIntersectionConstituent: { skipped: boolean } | undefined): Ternary {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
@@ -16055,6 +16066,7 @@ namespace ts {
         /**
          * A type is 'weak' if it is an object type with at least one optional property
          * and no required properties, call/construct signatures or index signatures
+         * Note: current change be further fixed by distinguishing "very weak" -- object or intersectoin w/some very weak -- from "weak" -- object or intersection w/all 
          */
         function isWeakType(type: Type): boolean {
             if (type.flags & TypeFlags.Object) {
@@ -16065,7 +16077,7 @@ namespace ts {
                     every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
             }
             if (type.flags & TypeFlags.Intersection) {
-                return every((<IntersectionType>type).types, isWeakType);
+                return every((type as IntersectionType).types, isWeakType);
             }
             return false;
         }
