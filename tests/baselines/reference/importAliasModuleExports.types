@@ -26,6 +26,20 @@ A.prototype.foo = 0
 >foo : any
 >0 : 0
 
+A.prototype.func = function() { this._func = 0; }
+>A.prototype.func = function() { this._func = 0; } : () => void
+>A.prototype.func : any
+>A.prototype : A
+>A : typeof A
+>prototype : A
+>func : any
+>function() { this._func = 0; } : () => void
+>this._func = 0 : 0
+>this._func : any
+>this : A
+>_func : any
+>0 : 0
+
 new A().bar
 >new A().bar : () => number
 >new A() : A
@@ -37,4 +51,11 @@ new A().foo
 >new A() : A
 >A : typeof A
 >foo : any
+
+new A().func()
+>new A().func() : any
+>new A().func : any
+>new A() : A
+>A : typeof A
+>func : any
 
