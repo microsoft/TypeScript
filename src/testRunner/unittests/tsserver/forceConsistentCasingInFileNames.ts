@@ -87,7 +87,7 @@ namespace ts.projectSystem {
                         fileName: anotherFile.path,
                         textChanges: [{
                             newText: "./logger",
-                            ...projectSystem.protocolTextSpanFromSubstring(
+                            ...protocolTextSpanFromSubstring(
                                 anotherFile.content,
                                 "./Logger"
                             )
@@ -145,7 +145,7 @@ namespace ts.projectSystem {
                         fileName: anotherFile.path,
                         textChanges: [{
                             newText: "./logger",
-                            ...projectSystem.protocolTextSpanFromSubstring(
+                            ...protocolTextSpanFromSubstring(
                                 anotherFile.content,
                                 "./Logger"
                             )
