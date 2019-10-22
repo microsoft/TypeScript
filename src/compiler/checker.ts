@@ -16066,7 +16066,7 @@ namespace ts {
         /**
          * A type is 'weak' if it is an object type with at least one optional property
          * and no required properties, call/construct signatures or index signatures
-         * Note: current change be further fixed by distinguishing "very weak" -- object or intersectoin w/some very weak -- from "weak" -- object or intersection w/all 
+         * Note: current change be further fixed by distinguishing "very weak" -- object or intersectoin w/some very weak -- from "weak" -- object or intersection w/all
          */
         function isWeakType(type: Type): boolean {
             if (type.flags & TypeFlags.Object) {
