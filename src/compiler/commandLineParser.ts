@@ -104,6 +104,14 @@ namespace ts {
             description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
         },
         {
+          name: "incremental",
+          shortName: "i",
+          type: "boolean",
+          category: Diagnostics.Basic_Options,
+          description: Diagnostics.Enable_incremental_compilation,
+          transpileOptionValue: undefined
+        },
+        {
             name: "listFiles",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
@@ -148,14 +156,6 @@ namespace ts {
             paramType: Diagnostics.FILE_OR_DIRECTORY,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Generates_a_CPU_profile
-        },
-        {
-            name: "incremental",
-            shortName: "i",
-            type: "boolean",
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Enable_incremental_compilation,
-            transpileOptionValue: undefined
         },
         {
             name: "locale",
@@ -1968,12 +1968,10 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
-        function isAllowedOption({ category, name }: CommandLineOption): boolean {
+        function isAllowedOption({ category }: CommandLineOption): boolean {
             // Skip options which do not have a category or have category `Command_line_Options`
-            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
             return category !== undefined
-                && category !== Diagnostics.Command_line_Options
-                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
+                && category !== Diagnostics.Command_line_Options;
         }
 
         function writeConfigurations() {
@@ -2018,6 +2016,8 @@ namespace ts {
             const result: string[] = [];
             result.push(`{`);
             result.push(`${tab}"compilerOptions": {`);
+            result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Overview_of_all_Compiler_Options_Colon_https_Colon_Slash_Slashwww_typescriptlang_org_Slashdocs_Slashhandbook_Slashcompiler_options_html)} */`);
+            result.push("");
             // Print out each row, aligning all the descriptions on the same column.
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
