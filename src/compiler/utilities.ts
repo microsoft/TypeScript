@@ -2115,7 +2115,7 @@ namespace ts {
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        if (isBindableStaticNameExpression(expr.left.expression) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
@@ -2183,8 +2183,10 @@ namespace ts {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
-            // F.G...x = expr
-            return AssignmentDeclarationKind.Property;
+            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs) && lhs.expression.kind !== SyntaxKind.ThisKeyword)) {
+                // F.G...x = expr
+                return AssignmentDeclarationKind.Property;
+            }
         }
 
         return AssignmentDeclarationKind.None;
