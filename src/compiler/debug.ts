@@ -95,7 +95,7 @@ namespace ts {
         export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
             const members = getEnumMembers(enumObject);
             if (value === 0) {
-                return members.length > 0 && members[0][0] === 0 ? members[0][1].join("|") : "0";
+                return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
             }
             if (isFlags) {
                 let result = "";
@@ -104,7 +104,7 @@ namespace ts {
                     const [enumValue, enumName] = members[i];
                     if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
                         remainingFlags &= ~enumValue;
-                        result = `${enumName.join("|")}${result ? "|" : ""}${result}`;
+                        result = `${enumName}${result ? "|" : ""}${result}`;
                     }
                 }
                 if (remainingFlags === 0) {
@@ -114,7 +114,7 @@ namespace ts {
             else {
                 for (const [enumValue, enumName] of members) {
                     if (enumValue === value) {
-                        return enumName[0];
+                        return enumName;
                     }
                 }
             }
@@ -122,17 +122,15 @@ namespace ts {
         }
 
         function getEnumMembers(enumObject: any) {
-            const result = createMultiMap<string>();
+            const result: [number, string][] = [];
             for (const name in enumObject) {
                 const value = enumObject[name];
                 if (typeof value === "number") {
-                    result.add("" + value, name);
+                    result.push([value, name]);
                 }
             }
 
-            return stableSort(
-                map(arrayFrom(result.entries()), ([x, y]) => [+x, y] as const),
-                (x, y) => compareValues(x[0], y[0]));
+            return stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         }
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
