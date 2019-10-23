@@ -1,17 +1,17 @@
 Exit Code: 1
 Standard output:
 lib/Accessibility.js(134,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Accessibility.js(341,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+lib/Accessibility.js(344,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(364,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+lib/Accessibility.js(367,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(376,7): error TS2322: Type 'boolean | "mixed"' is not assignable to type 'never'.
+lib/Accessibility.js(379,7): error TS2322: Type 'boolean | "mixed"' is not assignable to type 'never'.
   Type 'false' is not assignable to type 'never'.
-lib/Accessibility.js(387,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+lib/Accessibility.js(390,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(400,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+lib/Accessibility.js(403,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
   Type 'string' is not assignable to type 'never'.
-lib/Accessibility.js(406,22): error TS2503: Cannot find namespace 'Protocol'.
+lib/Accessibility.js(409,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(116,58): error TS2322: Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
   Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
@@ -42,7 +42,7 @@ lib/NetworkManager.js(295,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(319,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(529,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
+lib/Page.js(94,33): error TS2345: Argument of type 'CDPSession' is not assignable to parameter of type 'Puppeteer.CDPSession'.
   Types of property 'on' are incompatible.
     Type '(event: string | symbol, listener: (...args: any[]) => void) => CDPSession' is not assignable to type '<T extends string | number | symbol>(event: T, listener: (arg: any) => void) => CDPSession'.
       Types of parameters 'event' and 'event' are incompatible.
@@ -52,20 +52,20 @@ lib/Page.js(93,33): error TS2345: Argument of type 'CDPSession' is not assignabl
               Type 'T' is not assignable to type 'symbol'.
                 Type 'string | number | symbol' is not assignable to type 'symbol'.
                   Type 'string' is not assignable to type 'symbol'.
-lib/Page.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(219,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(387,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(450,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 227 more.
-lib/Page.js(460,9): error TS2349: This expression is not callable.
+lib/Page.js(147,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(220,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(388,20): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(451,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 227 more.
+lib/Page.js(461,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
-lib/Page.js(496,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(506,22): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(519,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(529,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(554,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(607,14): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(914,19): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(1315,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(497,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(507,22): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(520,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(530,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(555,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(608,14): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(944,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(1354,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(23,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Target.js(87,7): error TS2322: Type 'Promise<Worker | Worker>' is not assignable to type 'Promise<Worker>'.
   Type 'Worker | Worker' is not assignable to type 'Worker'.
