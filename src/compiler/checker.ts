@@ -10754,7 +10754,7 @@ namespace ts {
         /**
          * A JSdoc TypeReference may be to a value, but resolve it as a type anyway.
          * Note: If the value is imported from commonjs, it should really be an alias,
-         * but this function fakes special-case code fakes alias resolution as well.
+         * but this function's special-case code fakes alias resolution as well.
          */
         function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
             const valueType = getTypeOfSymbol(symbol);
@@ -10766,7 +10766,7 @@ namespace ts {
                     && isCallExpression(decl.initializer)
                     && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)
                     && valueType.symbol;
-                if (isRequireAlias) {
+                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
