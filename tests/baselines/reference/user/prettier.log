@@ -36,6 +36,8 @@ src/cli/util.js(693,22): error TS2339: Property 'name' does not exist on type 'n
 src/cli/util.js(693,46): error TS2339: Property 'alias' does not exist on type 'never'.
 src/common/create-ignorer.js(34,19): error TS2349: This expression is not callable.
   Type 'typeof import("/prettier/prettier/node_modules/ignore/index")' has no call signatures.
+src/common/get-file-info.js(36,27): error TS2339: Property 'resolveConfig' does not exist on type '{ ignorePath?: string | undefined; withNodeModules?: boolean | undefined; plugins: any; }'.
+src/common/get-file-info.js(59,25): error TS2339: Property 'resolveConfig' does not exist on type '{ ignorePath?: string | undefined; withNodeModules?: boolean | undefined; plugins: any; }'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(14,12): error TS2571: Object is of type 'unknown'.
 src/config/resolve-config.js(50,16): error TS2571: Object is of type 'unknown'.
