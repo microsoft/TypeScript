@@ -2003,7 +2003,12 @@ namespace ts {
                         switch (getAssignmentDeclarationPropertyAccessKind(declName.parent)) {
                             case AssignmentDeclarationKind.ExportsProperty:
                             case AssignmentDeclarationKind.ModuleExports:
-                                container = file;
+                                if (!isExternalOrCommonJsModule(file)) {
+                                    container = undefined!;
+                                }
+                                else {
+                                    container = file;
+                                }
                                 break;
                             case AssignmentDeclarationKind.ThisProperty:
                                 container = declName.parent.expression;
@@ -2017,7 +2022,9 @@ namespace ts {
                             case AssignmentDeclarationKind.None:
                                 return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");
                         }
-                        declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        if (container) {
+                            declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        }
                         container = oldContainer;
                     }
                 }
