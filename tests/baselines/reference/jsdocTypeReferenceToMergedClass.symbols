@@ -1,12 +1,14 @@
 === tests/cases/conformance/jsdoc/test.js ===
+// https://github.com/microsoft/TypeScript/issues/34685
+
 /** @param {Workspace.Project} p */
 function demo(p) {
 >demo : Symbol(demo, Decl(test.js, 0, 0))
->p : Symbol(p, Decl(test.js, 1, 14))
+>p : Symbol(p, Decl(test.js, 3, 14))
 
     p.isServiceProject()
 >p.isServiceProject : Symbol(isServiceProject, Decl(mod1.js, 3, 31))
->p : Symbol(p, Decl(test.js, 1, 14))
+>p : Symbol(p, Decl(test.js, 3, 14))
 >isServiceProject : Symbol(isServiceProject, Decl(mod1.js, 3, 31))
 }
 === tests/cases/conformance/jsdoc/mod1.js ===

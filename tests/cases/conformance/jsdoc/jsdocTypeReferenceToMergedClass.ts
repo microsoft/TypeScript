@@ -1,3 +1,4 @@
+// https://github.com/microsoft/TypeScript/issues/34685
 // @noEmit: true
 // @allowJs: true
 // @checkJs: true

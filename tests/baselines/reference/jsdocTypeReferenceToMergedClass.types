@@ -1,4 +1,6 @@
 === tests/cases/conformance/jsdoc/test.js ===
+// https://github.com/microsoft/TypeScript/issues/34685
+
 /** @param {Workspace.Project} p */
 function demo(p) {
 >demo : (p: wp) => void
