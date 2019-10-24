@@ -40,8 +40,34 @@ const dd2 = d2 ?? {b: 1};
 const dd3 = d3 ?? {b: 1};
 const dd4 = d4 ?? {b: 1};
 
+// Repro from #34635
+
+declare function foo(): void;
+
+const maybeBool = false;
+
+if (!(maybeBool ?? true)) {
+    foo();
+}
+
+if (maybeBool ?? true) {
+    foo();
+}
+else {
+    foo();
+}
+
+if (false ?? true) {
+    foo();
+}
+else {
+    foo();
+}
+
+
 //// [nullishCoalescingOperator1.js]
 "use strict";
+var _a;
 var aa1 = (a1 !== null && a1 !== void 0 ? a1 : 'whatever');
 var aa2 = (a2 !== null && a2 !== void 0 ? a2 : 'whatever');
 var aa3 = (a3 !== null && a3 !== void 0 ? a3 : 'whatever');
@@ -58,3 +84,19 @@ var dd1 = (d1 !== null && d1 !== void 0 ? d1 : { b: 1 });
 var dd2 = (d2 !== null && d2 !== void 0 ? d2 : { b: 1 });
 var dd3 = (d3 !== null && d3 !== void 0 ? d3 : { b: 1 });
 var dd4 = (d4 !== null && d4 !== void 0 ? d4 : { b: 1 });
+var maybeBool = false;
+if (!((maybeBool !== null && maybeBool !== void 0 ? maybeBool : true))) {
+    foo();
+}
+if ((maybeBool !== null && maybeBool !== void 0 ? maybeBool : true)) {
+    foo();
+}
+else {
+    foo();
+}
+if (_a = false, (_a !== null && _a !== void 0 ? _a : true)) {
+    foo();
+}
+else {
+    foo();
+}
