@@ -32,5 +32,11 @@ const fooApp = {
     definition: "import foo",
     ranges: fooAppRanges
 };
-verify.referenceGroups(fooTypesRanges, [fooTypes, fooApp]);
-verify.referenceGroups(fooAppRanges, [fooApp, fooTypes]);
+const exportFooRanges = [foo4];
+const fooExport = {
+    definition: "export foo",
+    ranges: exportFooRanges
+};
+verify.referenceGroups(fooTypesRanges, [fooTypes, fooExport, fooApp]);
+verify.referenceGroups(fooAppRanges, [fooApp, fooTypes, fooExport]);
+verify.referenceGroups(exportFooRanges, [fooExport, fooTypes, fooApp]);
