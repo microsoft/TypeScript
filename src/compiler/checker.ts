@@ -10728,7 +10728,6 @@ namespace ts {
             if (symbol === unknownSymbol) {
                 return errorType;
             }
-
             symbol = getExpandoSymbol(symbol) || symbol;
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol);
