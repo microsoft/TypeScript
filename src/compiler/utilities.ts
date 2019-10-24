@@ -8070,13 +8070,13 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTSExtensions: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Dts];
-    export const supportedTSExtensionsWithJson: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Json];
+    export const supportedTSExtensionsWithJson: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Json, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJSExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx];
     export const supportedJSAndJsonExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx, Extension.Json];
-    const allSupportedExtensions: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions];
-    const allSupportedExtensionsWithJson: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
+    const allSupportedExtensions: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Dts];
+    const allSupportedExtensionsWithJson: readonly Extension[] = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json, Extension.Dts];
 
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
@@ -8099,7 +8099,7 @@ namespace ts {
         if (!options || !options.resolveJsonModule) { return supportedExtensions; }
         if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
         if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
-        return [...supportedExtensions, Extension.Json];
+        return [...supportedExtensions, Extension.Json]; // TODO: Insert Json before DTS (q: when is this codepath hit?)
     }
 
     function isJSLike(scriptKind: ScriptKind | undefined): boolean {
@@ -8128,58 +8128,6 @@ namespace ts {
             }
         }
         return false;
-    }
-
-    /**
-     * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
-     * aligned to the offset of the highest priority extension in the
-     * allSupportedExtensions array.
-     */
-    export const enum ExtensionPriority {
-        TypeScriptFiles = 0,
-        DeclarationAndJavaScriptFiles = 2,
-
-        Highest = TypeScriptFiles,
-        Lowest = DeclarationAndJavaScriptFiles,
-    }
-
-    export function getExtensionPriority(path: string, supportedExtensions: readonly string[]): ExtensionPriority {
-        for (let i = supportedExtensions.length - 1; i >= 0; i--) {
-            if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
-            }
-        }
-
-        // If its not in the list of supported extensions, this is likely a
-        // TypeScript file with a non-ts extension
-        return ExtensionPriority.Highest;
-    }
-
-    /**
-     * Adjusts an extension priority to be the highest priority within the same range.
-     */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: readonly string[]): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.TypeScriptFiles;
-        }
-        else if (extensionPriority < supportedExtensions.length) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
-        }
-        else {
-            return supportedExtensions.length;
-        }
-    }
-
-    /**
-     * Gets the next lowest extension priority for a given priority.
-     */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: readonly string[]): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
-        }
-        else {
-            return supportedExtensions.length;
-        }
     }
 
     const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];

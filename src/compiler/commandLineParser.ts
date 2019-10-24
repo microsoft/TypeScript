@@ -2875,9 +2875,8 @@ namespace ts {
      * @param context The expansion context.
      */
     function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
+        const extensionPriority = extensions.indexOf(tryGetExtensionFromPath(file)!); // unknown extension is -1
+        for (let i = 0; i < extensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
@@ -2897,9 +2896,11 @@ namespace ts {
      * @param context The expansion context.
      */
     function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
+        const extensionPriority = extensions.indexOf(tryGetExtensionFromPath(file)!); // unknown extension is -1
+        if (extensionPriority === -1) {
+            return;
+        }
+        for (let i = extensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
             wildcardFiles.delete(lowerPriorityPath);
