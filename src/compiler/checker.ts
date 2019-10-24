@@ -2629,7 +2629,12 @@ namespace ts {
                 return undefined;
             }
             const init = isVariableDeclaration(decl) ? getDeclaredExpandoInitializer(decl) : getAssignedExpandoInitializer(decl);
-            return init && getSymbolOfNode(init) || undefined;
+            if (init) {
+                const initSymbol = getSymbolOfNode(init);
+                if (initSymbol) {
+                    return mergeJSSymbols(initSymbol, symbol);
+                }
+            }
         }
 
 
@@ -10723,6 +10728,7 @@ namespace ts {
             if (symbol === unknownSymbol) {
                 return errorType;
             }
+
             symbol = getExpandoSymbol(symbol) || symbol;
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol);
@@ -10766,9 +10772,7 @@ namespace ts {
                     && isCallExpression(decl.initializer)
                     && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)
                     && valueType.symbol;
-                const isImportType = node.kind === SyntaxKind.ImportType;
-                const isDelayedMergeClass = symbol !== valueType.symbol && getMergedSymbol(symbol) === valueType.symbol;
-                if (isRequireAlias || isImportType || isDelayedMergeClass) {
+                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
@@ -24997,7 +25001,7 @@ namespace ts {
         }
 
         function mergeJSSymbols(target: Symbol, source: Symbol | undefined) {
-            if (source && (hasEntries(source.exports) || hasEntries(source.members))) {
+            if (source) {
                 const links = getSymbolLinks(source);
                 if (!links.inferredClassSymbol || !links.inferredClassSymbol.has("" + getSymbolId(target))) {
                     const inferred = isTransientSymbol(target) ? target : cloneSymbol(target) as TransientSymbol;
