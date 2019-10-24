@@ -176,7 +176,9 @@ namespace ts.FindAllReferences {
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
                 for (const directImport of directImports) {
-                    addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    if (!isImportTypeNode(directImport)) {
+                        addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    }
                 }
             }
         }

@@ -1,22 +1,36 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /foo/types/types.ts
-////[|export type [|Full|] = { prop: string; };|]
+////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Full|] = { prop: string; };|]
 
 // @Filename: /foo/types/index.ts
-////import * as foo from './types';
-////export { foo };
+////[|import * as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}foo|] from './types';|]
+////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}foo|] };|]
 
 // @Filename: /app.ts
-////import { foo } from './foo/types';
-////export type fullType = foo.Full;
+////[|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}foo|] } from './foo/types';|]
+////export type fullType = [|foo|].[|Full|];
 ////type namespaceImport = typeof import('./foo/types');
-////type fullType2 = import('./foo/types').foo.Full;
+////type fullType2 = import('./foo/types').[|foo|].[|Full|];
 
 verify.noErrors();
-const [full0Def, full0] = test.ranges();
-verify.referenceGroups([full0], [{
-    definition: "type foo",
-    ranges: [full0]
-}])
+const [full0Def, full0, foo0Def, foo0, foo1Def, foo1, foo2Def, foo2, foo3, full1, foo4, full2] = test.ranges();
+const fullRanges = [full0, full1, full2];
+const full = {
+    definition: "type Full = {\n    prop: string;\n}",
+    ranges: fullRanges
+};
+verify.referenceGroups(fullRanges, [full]);
 
+const fooTypesRanges = [foo0, foo1];
+const fooTypes = {
+    definition: "import foo",
+    ranges: fooTypesRanges
+};
+const fooAppRanges = [foo2, foo3];
+const fooApp = {
+    definition: "import foo",
+    ranges: fooAppRanges
+};
+verify.referenceGroups(fooTypesRanges, [fooTypes, fooApp]);
+verify.referenceGroups(fooAppRanges, [fooApp, fooTypes]);
