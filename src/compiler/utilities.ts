@@ -5955,6 +5955,10 @@ namespace ts {
         return isOptionalChainRoot(node.parent) && node.parent.expression === node;
     }
 
+    export function isNullishCoalesce(node: Node) {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+    }
+
     export function isNewExpression(node: Node): node is NewExpression {
         return node.kind === SyntaxKind.NewExpression;
     }
