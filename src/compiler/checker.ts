@@ -10766,7 +10766,9 @@ namespace ts {
                     && isCallExpression(decl.initializer)
                     && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)
                     && valueType.symbol;
-                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
+                const isImportType = node.kind === SyntaxKind.ImportType;
+                const isDelayedMergeClass = symbol !== valueType.symbol && getMergedSymbol(symbol) === valueType.symbol;
+                if (isRequireAlias || isImportType || isDelayedMergeClass) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }

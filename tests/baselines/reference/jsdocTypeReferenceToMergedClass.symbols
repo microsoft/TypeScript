@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+// https://github.com/microsoft/TypeScript/issues/34685
+
+/** @param {Workspace.Project} p */
+function demo(p) {
+>demo : Symbol(demo, Decl(test.js, 0, 0))
+>p : Symbol(p, Decl(test.js, 3, 14))
+
+    p.isServiceProject()
+>p.isServiceProject : Symbol(isServiceProject, Decl(mod1.js, 3, 31))
+>p : Symbol(p, Decl(test.js, 3, 14))
+>isServiceProject : Symbol(isServiceProject, Decl(mod1.js, 3, 31))
+}
+=== tests/cases/conformance/jsdoc/mod1.js ===
+// Note: mod1.js needs to appear second to trigger the bug
+var Workspace = {}
+>Workspace : Symbol(Workspace, Decl(mod1.js, 1, 3), Decl(mod1.js, 1, 18), Decl(mod1.js, 2, 37))
+
+Workspace.Project = function wp() { }
+>Workspace.Project : Symbol(Workspace.Project, Decl(mod1.js, 1, 18), Decl(mod1.js, 3, 10))
+>Workspace : Symbol(Workspace, Decl(mod1.js, 1, 3), Decl(mod1.js, 1, 18), Decl(mod1.js, 2, 37))
+>Project : Symbol(Workspace.Project, Decl(mod1.js, 1, 18), Decl(mod1.js, 3, 10))
+>wp : Symbol(wp, Decl(mod1.js, 2, 19))
+
+Workspace.Project.prototype = {
+>Workspace.Project.prototype : Symbol(Workspace.Project.prototype, Decl(mod1.js, 2, 37))
+>Workspace.Project : Symbol(Workspace.Project, Decl(mod1.js, 1, 18), Decl(mod1.js, 3, 10))
+>Workspace : Symbol(Workspace, Decl(mod1.js, 1, 3), Decl(mod1.js, 1, 18), Decl(mod1.js, 2, 37))
+>Project : Symbol(Workspace.Project, Decl(mod1.js, 1, 18), Decl(mod1.js, 3, 10))
+>prototype : Symbol(Workspace.Project.prototype, Decl(mod1.js, 2, 37))
+
+  isServiceProject() {}
+>isServiceProject : Symbol(isServiceProject, Decl(mod1.js, 3, 31))
+}
+
