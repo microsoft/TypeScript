@@ -100,8 +100,7 @@ namespace ts {
             if (isFlags) {
                 let result = "";
                 let remainingFlags = value;
-                for (let i = 0; i < members.length; i++) {
-                    const [enumValue, enumName] = members[i];
+                for (const [enumValue, enumName] of members) {
                     if (enumValue > value) {
                         break;
                     }
