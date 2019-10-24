@@ -1,0 +1,41 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+// https://github.com/microsoft/TypeScript/issues/34685
+
+/** @param {Workspace.Project} p */
+function demo(p) {
+>demo : (p: wp) => void
+>p : wp
+
+    p.isServiceProject()
+>p.isServiceProject() : void
+>p.isServiceProject : () => void
+>p : wp
+>isServiceProject : () => void
+}
+=== tests/cases/conformance/jsdoc/mod1.js ===
+// Note: mod1.js needs to appear second to trigger the bug
+var Workspace = {}
+>Workspace : typeof Workspace
+>{} : {}
+
+Workspace.Project = function wp() { }
+>Workspace.Project = function wp() { } : typeof wp
+>Workspace.Project : typeof wp
+>Workspace : typeof Workspace
+>Project : typeof wp
+>function wp() { } : typeof wp
+>wp : typeof wp
+
+Workspace.Project.prototype = {
+>Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject(): void; }
+>Workspace.Project.prototype : { isServiceProject(): void; }
+>Workspace.Project : typeof wp
+>Workspace : typeof Workspace
+>Project : typeof wp
+>prototype : { isServiceProject(): void; }
+>{  isServiceProject() {}} : { isServiceProject(): void; }
+
+  isServiceProject() {}
+>isServiceProject : () => void
+}
+
