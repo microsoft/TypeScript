@@ -1,0 +1,25 @@
+=== tests/cases/compiler/declarationEmitAccessorsAsProperties.ts ===
+export class Cls {
+>Cls : Cls
+
+    get prop(): number {
+>prop : number
+
+        return 12;
+>12 : 12
+    }
+
+    set evt(x: number) {}
+>evt : number
+>x : number
+
+    get val(): number {
+>val : number
+
+        return 42;
+>42 : 42
+    }
+    set val(_) {}
+>val : number
+>_ : number
+}

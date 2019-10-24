@@ -3001,6 +3001,12 @@ namespace ts {
                 }
             }
 
+            if (options.legacyAccessorDeclarations) {
+                if (!getEmitDeclarations(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "declarationDir", "declaration", "composite");
+                }
+            }
+
             if (options.declarationMap && !getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "declarationMap", "declaration", "composite");
             }

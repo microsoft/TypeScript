@@ -49,6 +49,7 @@
         "transformers/module/es2015.ts",
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
+        "transformers/legacyAccessorDeclarations.ts",
         "transformer.ts",
         "emitter.ts",
         "watchUtilities.ts",

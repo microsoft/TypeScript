@@ -4939,6 +4939,7 @@ namespace ts {
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
+        legacyAccessorDeclarations?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;

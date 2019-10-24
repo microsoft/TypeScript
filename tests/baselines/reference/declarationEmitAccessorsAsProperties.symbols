@@ -1,0 +1,23 @@
+=== tests/cases/compiler/declarationEmitAccessorsAsProperties.ts ===
+export class Cls {
+>Cls : Symbol(Cls, Decl(declarationEmitAccessorsAsProperties.ts, 0, 0))
+
+    get prop(): number {
+>prop : Symbol(Cls.prop, Decl(declarationEmitAccessorsAsProperties.ts, 0, 18))
+
+        return 12;
+    }
+
+    set evt(x: number) {}
+>evt : Symbol(Cls.evt, Decl(declarationEmitAccessorsAsProperties.ts, 3, 5))
+>x : Symbol(x, Decl(declarationEmitAccessorsAsProperties.ts, 5, 12))
+
+    get val(): number {
+>val : Symbol(Cls.val, Decl(declarationEmitAccessorsAsProperties.ts, 5, 25), Decl(declarationEmitAccessorsAsProperties.ts, 9, 5))
+
+        return 42;
+    }
+    set val(_) {}
+>val : Symbol(Cls.val, Decl(declarationEmitAccessorsAsProperties.ts, 5, 25), Decl(declarationEmitAccessorsAsProperties.ts, 9, 5))
+>_ : Symbol(_, Decl(declarationEmitAccessorsAsProperties.ts, 10, 12))
+}

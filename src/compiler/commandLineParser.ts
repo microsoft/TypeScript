@@ -338,6 +338,14 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
+            name: "legacyAccessorDeclarations",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Emits_accessors_as_property_declarations_in_declaration_emit,
+            transpileOptionValue: undefined
+        },
+        {
             name: "sourceMap",
             type: "boolean",
             affectsEmit: true,

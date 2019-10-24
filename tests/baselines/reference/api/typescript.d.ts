@@ -2589,6 +2589,7 @@ declare namespace ts {
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
+        legacyAccessorDeclarations?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;

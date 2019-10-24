@@ -4128,6 +4128,10 @@
         "category": "Message",
         "code": 6223
     },
+    "Emits accessors as property declarations in declaration emit.": {
+        "category": "Message",
+        "code": 6224
+    },
 
     "Projects to reference": {
         "category": "Message",

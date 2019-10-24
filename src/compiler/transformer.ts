@@ -29,7 +29,7 @@ namespace ts {
     export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
         return {
             scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnlyDtsFiles),
-            declarationTransformers: getDeclarationTransformers(customTransformers),
+            declarationTransformers: getDeclarationTransformers(compilerOptions, customTransformers),
         };
     }
 
@@ -87,9 +87,12 @@ namespace ts {
         return transformers;
     }
 
-    function getDeclarationTransformers(customTransformers?: CustomTransformers) {
+    function getDeclarationTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
         transformers.push(transformDeclarations);
+        if (compilerOptions.legacyAccessorDeclarations) {
+            transformers.push(transformAccessorsToPropertyDeclarations);
+        }
         addRange(transformers, customTransformers && map(customTransformers.afterDeclarations, wrapDeclarationTransformerFactory));
         return transformers;
     }
