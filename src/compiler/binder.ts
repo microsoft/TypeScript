@@ -1,3 +1,4 @@
+
 /* @internal */
 namespace ts {
     export const enum ModuleInstanceState {
@@ -953,7 +954,7 @@ namespace ts {
             }
             if ((expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
                 expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) &&
-                !isExpressionOfOptionalChainRoot(expression) && !isQuestionQuestionExpression(expression.parent)) {
+                !isExpressionOfOptionalChainRoot(expression) && !isNullishCoalesce(expression.parent)) {
                 return unreachableFlow;
             }
             if (!isNarrowingExpression(expression)) {

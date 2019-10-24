@@ -5953,7 +5953,7 @@ namespace ts {
         return isOptionalChainRoot(node.parent) && node.parent.expression === node;
     }
 
-    export function isQuestionQuestionExpression(node: Node) {
+    export function isNullishCoalesce(node: Node) {
         return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
