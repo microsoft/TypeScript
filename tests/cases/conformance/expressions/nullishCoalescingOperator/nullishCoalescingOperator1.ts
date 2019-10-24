@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 
 declare const a1: string | undefined | null
 declare const a2: string | undefined | null
@@ -40,3 +41,27 @@ const dd1 = d1 ?? {b: 1};
 const dd2 = d2 ?? {b: 1};
 const dd3 = d3 ?? {b: 1};
 const dd4 = d4 ?? {b: 1};
+
+// Repro from #34635
+
+declare function foo(): void;
+
+const maybeBool = false;
+
+if (!(maybeBool ?? true)) {
+    foo();
+}
+
+if (maybeBool ?? true) {
+    foo();
+}
+else {
+    foo();
+}
+
+if (false ?? true) {
+    foo();
+}
+else {
+    foo();
+}
