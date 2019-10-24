@@ -1,22 +1,19 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.js ===
 // https://github.com/microsoft/TypeScript/issues/34685
 
-/** @param {Workspace.Project} p */
-function demo(p) {
->demo : (p: wp) => void
+var Workspace = {}
+>Workspace : typeof Workspace
+>{} : {}
+
+/** @type {Workspace.Project} */
+var p;
 >p : wp
 
-    p.isServiceProject()
+p.isServiceProject()
 >p.isServiceProject() : void
 >p.isServiceProject : () => void
 >p : wp
 >isServiceProject : () => void
-}
-=== tests/cases/conformance/jsdoc/mod1.js ===
-// Note: mod1.js needs to appear second to trigger the bug
-var Workspace = {}
->Workspace : typeof Workspace
->{} : {}
 
 Workspace.Project = function wp() { }
 >Workspace.Project = function wp() { } : typeof wp

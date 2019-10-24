@@ -3,14 +3,12 @@
 // @allowJs: true
 // @checkJs: true
 
-// @Filename: test.js
-/** @param {Workspace.Project} p */
-function demo(p) {
-    p.isServiceProject()
-}
-// @Filename: mod1.js
-// Note: mod1.js needs to appear second to trigger the bug
+// @Filename: jsdocTypeReferenceToMergedClass.js
 var Workspace = {}
+/** @type {Workspace.Project} */
+var p;
+p.isServiceProject()
+
 Workspace.Project = function wp() { }
 Workspace.Project.prototype = {
   isServiceProject() {}
