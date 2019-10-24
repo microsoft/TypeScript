@@ -1896,6 +1896,12 @@ namespace ts.FindAllReferences.Core {
             return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
         }
 
+        const exportSpecifier = !isForRenamePopulateSearchSymbolSet ?
+            getDeclarationOfKind<ExportSpecifier>(symbol, SyntaxKind.ExportSpecifier) :
+            undefined;
+        const localSymbol = exportSpecifier && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+        if (localSymbol) fromRoot(localSymbol);
+
         // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
         // Don't do this when populating search set for a rename when prefix and suffix text will be provided -- just rename the local.
         if (!isForRenamePopulateSearchSymbolSet) {

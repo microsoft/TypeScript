@@ -21,6 +21,7 @@ const full = {
     ranges: fullRanges
 };
 verify.referenceGroups(fullRanges, [full]);
+verify.renameLocations(fullRanges, fullRanges);
 
 const fooTypesRanges = [foo0, foo1];
 const fooTypes = {
@@ -39,4 +40,8 @@ const fooExport = {
 };
 verify.referenceGroups(fooTypesRanges, [fooTypes, fooExport, fooApp]);
 verify.referenceGroups(fooAppRanges, [fooApp, fooTypes, fooExport]);
-verify.referenceGroups(exportFooRanges, [fooExport, fooTypes, fooApp]);
+verify.referenceGroups(exportFooRanges, [fooTypes, fooExport, fooApp]);
+
+verify.renameLocations([foo0], [foo0, { range: foo1, suffixText: " as foo" }]);
+verify.renameLocations([foo1], [foo2, foo3, foo4, { range: foo1, prefixText: "foo as " }]);
+verify.renameLocations(fooAppRanges, [{ range: foo2, prefixText: "foo as " }, foo3]);
