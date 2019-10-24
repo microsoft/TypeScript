@@ -1,0 +1,27 @@
+=== tests/cases/compiler/wrapClass.ts ===
+export function wrapClass(param: any) {
+>wrapClass : (param: any) => typeof Wrapped
+>param : any
+
+    return class Wrapped {
+>class Wrapped {        foo() {            return param;        }    } : typeof Wrapped
+>Wrapped : typeof Wrapped
+
+        foo() {
+>foo : () => any
+
+            return param;
+>param : any
+        }
+    }
+}
+
+=== tests/cases/compiler/index.ts ===
+import { wrapClass } from "./wrapClass";
+>wrapClass : (param: any) => typeof Wrapped
+
+export default wrapClass(0);
+>wrapClass(0) : typeof Wrapped
+>wrapClass : (param: any) => typeof Wrapped
+>0 : 0
+

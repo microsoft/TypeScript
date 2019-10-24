@@ -4087,8 +4087,6 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         isClassLike(type.symbol.valueDeclaration) &&
-                        // Use `import` types for refs to other scopes, only anonymize something defined in the same scope
-                        findAncestor(type.symbol.valueDeclaration, d => d === getSourceFileOfNode(context.enclosingDeclaration)) &&
                         !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
                     ) {
                         return createAnonymousTypeNode(type);
