@@ -42,38 +42,38 @@ Zet.prototype.add = function(v, id) {
     this.u = v || this.t
 >this.u = v || this.t : T
 >this.u : T
->this : Zet
+>this : this
 >u : T
 >v || this.t : T
 >v : T
 >this.t : T
->this : Zet
+>this : this
 >t : T
 
     return id(this.u)
 >id(this.u) : T
 >id : (u: T) => T
 >this.u : T
->this : Zet
+>this : this
 >u : T
 }
 var z = new Zet(1)
->z : typeof Zet
->new Zet(1) : typeof Zet
+>z : Zet<number>
+>new Zet(1) : Zet<number>
 >Zet : typeof Zet
 >1 : 1
 
 z.t = 2
 >z.t = 2 : 2
 >z.t : number
->z : typeof Zet
+>z : Zet<number>
 >t : number
 >2 : 2
 
 z.u = false
 >z.u = false : false
 >z.u : number
->z : typeof Zet
+>z : Zet<number>
 >u : number
 >false : false
 

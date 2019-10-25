@@ -6,14 +6,14 @@ namespace ts {
         newFileOrDirPath: string,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        _preferences: UserPreferences,
+        preferences: UserPreferences,
         sourceMapper: SourceMapper,
-    ): ReadonlyArray<FileTextChanges> {
+    ): readonly FileTextChanges[] {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
-        return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
+        return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
             updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
@@ -91,7 +91,7 @@ namespace ts {
 
         function updatePaths(property: PropertyAssignment): boolean {
             // Type annotation needed due to #7294
-            const elements: ReadonlyArray<Expression> = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+            const elements: readonly Expression[] = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
             let foundExactMatch = false;
             for (const element of elements) {
                 foundExactMatch = tryUpdateString(element) || foundExactMatch;

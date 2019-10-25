@@ -17,7 +17,7 @@ async function countEverything(): Promise<number> {
     const [resultA, resultB] = await Promise.all([
         providerA(),
         providerB(),
-    ]);
+    ] as const);
 
     const dataA: A[] = resultA;
     const dataB: B[] = resultB;

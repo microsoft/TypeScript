@@ -37,17 +37,19 @@ declare var exports: any;
 
 === tests/cases/conformance/salsa/mod.js ===
 /// <reference path='./types.d.ts'/>
-var A = function() {
+var A = function A() {
 >A : Symbol(A, Decl(mod.js, 1, 3), Decl(mod.js, 8, 13))
+>A : Symbol(A, Decl(mod.js, 1, 7))
 
     this.a = 1
->a : Symbol(A.a, Decl(mod.js, 1, 20))
+>a : Symbol(A.a, Decl(mod.js, 1, 22))
 }
-var B = function() {
+var B = function B() {
 >B : Symbol(B, Decl(mod.js, 4, 3), Decl(mod.js, 9, 13))
+>B : Symbol(B, Decl(mod.js, 4, 7))
 
     this.b = 2
->b : Symbol(B.b, Decl(mod.js, 4, 20))
+>b : Symbol(B.b, Decl(mod.js, 4, 22))
 }
 exports.A = A
 >exports.A : Symbol(A, Decl(mod.js, 6, 1))

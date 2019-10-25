@@ -7,10 +7,10 @@ declare function require(name: string): any;
 declare var exports: any;
 // @Filename: mod.js
 /// <reference path='./types.d.ts'/>
-var A = function() {
+var A = function A() {
     this.a = 1
 }
-var B = function() {
+var B = function B() {
     this.b = 2
 }
 exports.A = A

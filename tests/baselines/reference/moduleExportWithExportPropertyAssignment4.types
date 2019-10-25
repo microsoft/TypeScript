@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
->mod1 : typeof A
->require('./mod1') : typeof A
+>mod1 : typeof import("tests/cases/conformance/salsa/mod1")
+>require('./mod1') : typeof import("tests/cases/conformance/salsa/mod1")
 >require : (name: string) => any
 >'./mod1' : "./mod1"
 
@@ -10,7 +10,7 @@ mod1.justExport.toFixed()
 >mod1.justExport.toFixed() : string
 >mod1.justExport.toFixed : (fractionDigits?: number) => string
 >mod1.justExport : number
->mod1 : typeof A
+>mod1 : typeof import("tests/cases/conformance/salsa/mod1")
 >justExport : number
 >toFixed : (fractionDigits?: number) => string
 
@@ -18,7 +18,7 @@ mod1.bothBefore.toFixed() // error
 >mod1.bothBefore.toFixed() : any
 >mod1.bothBefore.toFixed : any
 >mod1.bothBefore : string | number
->mod1 : typeof A
+>mod1 : typeof import("tests/cases/conformance/salsa/mod1")
 >bothBefore : string | number
 >toFixed : any
 
@@ -26,14 +26,14 @@ mod1.bothAfter.toFixed()
 >mod1.bothAfter.toFixed() : any
 >mod1.bothAfter.toFixed : any
 >mod1.bothAfter : string | number
->mod1 : typeof A
+>mod1 : typeof import("tests/cases/conformance/salsa/mod1")
 >bothAfter : string | number
 >toFixed : any
 
 mod1.justProperty.length
 >mod1.justProperty.length : number
 >mod1.justProperty : string
->mod1 : typeof A
+>mod1 : typeof import("tests/cases/conformance/salsa/mod1")
 >justProperty : string
 >length : number
 

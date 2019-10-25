@@ -86,7 +86,7 @@ namespace fakes {
             return result;
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
         }
 
@@ -140,7 +140,7 @@ namespace fakes {
         }
 
         public createHash(data: string): string {
-            return data;
+            return `${ts.generateDjb2Hash(data)}-${data}`;
         }
 
         public realpath(path: string) {
@@ -163,6 +163,10 @@ namespace fakes {
             catch {
                 return undefined;
             }
+        }
+
+        now() {
+            return new Date(this.vfs.time());
         }
     }
 
@@ -276,7 +280,7 @@ namespace fakes {
             return this.sys.getDirectories(path);
         }
 
-        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
             return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
@@ -520,33 +524,53 @@ ${indentText}${text}`;
 
     export const version = "FakeTSVersion";
 
-    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram: ts.CreateProgram<ts.BuilderProgram>;
-
-        constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
-            super(sys, options, setParentNodes);
-            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
-        }
-
-        readFile(path: string) {
-            const value = super.readFile(path);
+    export function patchHostForBuildInfoReadWrite(host: ts.CompilerHost | ts.SolutionBuilderHost<ts.BuilderProgram>) {
+        const originalReadFile = host.readFile;
+        host.readFile = (path, encoding) => {
+            const value = originalReadFile.call(host, path, encoding);
             if (!value || !ts.isBuildInfoFile(path)) return value;
             const buildInfo = ts.getBuildInfo(value);
             ts.Debug.assert(buildInfo.version === version);
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
+        };
+
+        if (host.writeFile) {
+            const originalWriteFile = host.writeFile;
+            host.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
+                if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(host, fileName, content, writeByteOrderMark);
+                const buildInfo = ts.getBuildInfo(content);
+                sanitizeBuildInfoProgram(buildInfo);
+                buildInfo.version = version;
+                originalWriteFile.call(host, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+            };
+        }
+    }
+
+    export function patchSolutionBuilderHost(host: ts.SolutionBuilderHost<ts.BuilderProgram>, sys: System) {
+        patchHostForBuildInfoReadWrite(host);
+
+        ts.Debug.assert(host.now === undefined);
+        host.now = () => new Date(sys.vfs.time());
+        ts.Debug.assertDefined(host.createHash);
+    }
+
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
+        createProgram: ts.CreateProgram<ts.BuilderProgram>;
+
+        private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+            super(sys, options, setParentNodes);
+            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
         }
 
-        public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
-            const buildInfo = ts.getBuildInfo(content);
-            sanitizeBuildInfoProgram(buildInfo);
-            buildInfo.version = version;
-            super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+        static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+            const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
+            patchSolutionBuilderHost(host, host.sys);
+            return host;
         }
 
-        now() {
-            return new Date(this.sys.vfs.time());
+        createHash(data: string) {
+            return `${ts.generateDjb2Hash(data)}-${data}`;
         }
 
         diagnostics: SolutionBuilderDiagnostic[] = [];
@@ -569,6 +593,15 @@ ${indentText}${text}`;
             assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
+        }
+
+        assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
+            const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
+            const expected = expectedDiagnostics.map(expectedDiagnosticToText);
+            assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
         }
 
         printDiagnostics(header = "== Diagnostics ==") {
