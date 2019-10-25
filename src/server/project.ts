@@ -1754,7 +1754,7 @@ namespace ts.server {
                 this.mapOfDeclarationDirectories = createMap();
                 this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
                     if (!ref) return;
-                    const out = ref.commandLine.options.outFile || ref.commandLine.options.outDir;
+                    const out = ref.commandLine.options.outFile || ref.commandLine.options.out;
                     if (out) {
                         this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
                     }
