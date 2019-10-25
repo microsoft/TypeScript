@@ -100,11 +100,13 @@ namespace ts {
             if (isFlags) {
                 let result = "";
                 let remainingFlags = value;
-                for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                    const [enumValue, enumName] = members[i];
-                    if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                for (const [enumValue, enumName] of members) {
+                    if (enumValue > value) {
+                        break;
+                    }
+                    if (enumValue !== 0 && enumValue & value) {
+                        result = `${result}${result ? "|" : ""}${enumName}`;
                         remainingFlags &= ~enumValue;
-                        result = `${enumName}${result ? "|" : ""}${result}`;
                     }
                 }
                 if (remainingFlags === 0) {
