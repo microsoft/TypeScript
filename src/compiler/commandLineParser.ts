@@ -1968,10 +1968,11 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
-        function isAllowedOption({ category }: CommandLineOption): boolean {
+        function isAllowedOption({ category, name }: CommandLineOption): boolean {
             // Skip options which do not have a category or have category `Command_line_Options`
             return category !== undefined
-                && category !== Diagnostics.Command_line_Options;
+                && category !== Diagnostics.Command_line_Options
+                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));;
         }
 
         function writeConfigurations() {
@@ -1989,14 +1990,11 @@ namespace ts {
             let marginLength = 0;
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
-            const descriptionColumn: string[] = [];
             categorizedOptions.forEach((options, category) => {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
-                    descriptionColumn.push("");
                 }
                 nameColumn.push(`/* ${category} */`);
-                descriptionColumn.push("");
                 for (const option of options) {
                     let optionName;
                     if (compilerOptionsMap.has(option.name)) {
@@ -2006,7 +2004,6 @@ namespace ts {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
                     }
                     nameColumn.push(optionName);
-                    descriptionColumn.push(`/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`);
                     marginLength = Math.max(optionName.length, marginLength);
                 }
             });
@@ -2019,10 +2016,8 @@ namespace ts {
             result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Overview_of_all_Compiler_Options_Colon_https_Colon_Slash_Slashwww_typescriptlang_org_Slashdocs_Slashhandbook_Slashcompiler_options_html)} */`);
             result.push("");
             // Print out each row, aligning all the descriptions on the same column.
-            for (let i = 0; i < nameColumn.length; i++) {
-                const optionName = nameColumn[i];
-                const description = descriptionColumn[i];
-                result.push(optionName && `${tab}${tab}${optionName}${description && (makePadding(marginLength - optionName.length + 2) + description)}`);
+            for (const optionName of nameColumn) {
+                result.push(optionName && `${tab}${tab}${optionName}`);
             }
             if (fileNames.length) {
                 result.push(`${tab}},`);
