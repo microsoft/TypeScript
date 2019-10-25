@@ -1,3 +1,4 @@
+
 /* @internal */
 namespace ts {
     export const enum ModuleInstanceState {
@@ -821,9 +822,6 @@ namespace ts {
                 case SyntaxKind.JSDocEnumTag:
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                     break;
-                case SyntaxKind.JSDocClassTag:
-                    bindJSDocClassTag(node as JSDocClassTag);
-                    break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile: {
                     bindEachFunctionsFirst((node as SourceFile).statements);
@@ -954,11 +952,10 @@ namespace ts {
             if (!expression) {
                 return flags & FlowFlags.TrueCondition ? antecedent : unreachableFlow;
             }
-            if (expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
-                expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) {
-                if (!isOptionalChainRoot(expression.parent)) {
-                    return unreachableFlow;
-                }
+            if ((expression.kind === SyntaxKind.TrueKeyword && flags & FlowFlags.FalseCondition ||
+                expression.kind === SyntaxKind.FalseKeyword && flags & FlowFlags.TrueCondition) &&
+                !isExpressionOfOptionalChainRoot(expression) && !isNullishCoalesce(expression.parent)) {
+                return unreachableFlow;
             }
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
@@ -2006,7 +2003,12 @@ namespace ts {
                         switch (getAssignmentDeclarationPropertyAccessKind(declName.parent)) {
                             case AssignmentDeclarationKind.ExportsProperty:
                             case AssignmentDeclarationKind.ModuleExports:
-                                container = file;
+                                if (!isExternalOrCommonJsModule(file)) {
+                                    container = undefined!;
+                                }
+                                else {
+                                    container = file;
+                                }
                                 break;
                             case AssignmentDeclarationKind.ThisProperty:
                                 container = declName.parent.expression;
@@ -2020,7 +2022,9 @@ namespace ts {
                             case AssignmentDeclarationKind.None:
                                 return Debug.fail("Shouldn't have detected typedef or enum on non-assignment declaration");
                         }
-                        declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        if (container) {
+                            declareModuleMember(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        }
                         container = oldContainer;
                     }
                 }
@@ -2454,6 +2458,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
                     return bindAnonymousTypeWorker(node as TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral);
+                case SyntaxKind.JSDocClassTag:
+                    return bindJSDocClassTag(node as JSDocClassTag);
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
@@ -2691,7 +2697,8 @@ namespace ts {
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
-            declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
+            const symbol = declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
+            setValueDeclaration(symbol, node);
         }
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
@@ -2709,7 +2716,7 @@ namespace ts {
                         }
                     }
 
-                    if (constructorSymbol) {
+                    if (constructorSymbol && constructorSymbol.valueDeclaration) {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
@@ -2789,6 +2796,10 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
+            if (namespaceSymbol) {
+                // Ensure the namespace symbol becomes class-like
+                addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
+            }
             bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ true);
         }
 

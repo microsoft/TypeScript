@@ -233,14 +233,14 @@ namespace ts.codefix {
         let someSigHasRestParameter = false;
         for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            if (sig.hasRestParameter) {
+            if (signatureHasRestParameter(sig)) {
                 someSigHasRestParameter = true;
             }
-            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
+            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))) {
                 maxArgsSignature = sig;
             }
         }
-        const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
+        const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
