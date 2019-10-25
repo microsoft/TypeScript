@@ -861,4 +861,76 @@ declare module '@custom/plugin' {
             ]);
         });
     });
+
+    describe("unittests:: tsserver:: Project Errors with resolveJsonModule", () => {
+        function createSessionForTest({ include }: { include: readonly string[]; }) {
+            const test: File = {
+                path: `${projectRoot}/src/test.ts`,
+                content: `import * as blabla from "./blabla.json";
+declare var console: any;
+console.log(blabla);`
+            };
+            const blabla: File = {
+                path: `${projectRoot}/src/blabla.json`,
+                content: "{}"
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        resolveJsonModule: true,
+                        composite: true
+                    },
+                    include
+                })
+            };
+
+            const host = createServerHost([test, blabla, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true });
+            openFilesForSession([test], session);
+            return { host, session, test, blabla, tsconfig };
+        }
+
+        it("should not report incorrect error when json is root file found by tsconfig", () => {
+            const { host, session, test } = createSessionForTest({
+                include: ["./src/*.ts", "./src/*.json"]
+            });
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    {
+                        file: test,
+                        syntax: [],
+                        semantic: [],
+                        suggestion: []
+                    }
+                ]
+            });
+        });
+
+        it("should report error when json is not root file found by tsconfig", () => {
+            const { host, session, test, blabla, tsconfig } = createSessionForTest({
+                include: ["./src/*.ts"]
+            });
+            const span = protocolTextSpanFromSubstring(test.content, `"./blabla.json"`);
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [{
+                    file: test,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(
+                            span.start,
+                            span.end,
+                            Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
+                            [blabla.path, tsconfig.path]
+                        )
+                    ],
+                    suggestion: []
+                }]
+            });
+        });
+    });
 }
