@@ -319,6 +319,7 @@ namespace ts {
 
         const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
         globalThisSymbol.exports = globals;
+        globalThisSymbol.declarations = [];
         globals.set(globalThisSymbol.escapedName, globalThisSymbol);
 
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
