@@ -16278,7 +16278,7 @@ namespace ts {
                     let count = 0;
                     for (let i = 0; i < depth; i++) {
                         const t = stack[i];
-                        if (t.flags & TypeFlags.Object && t.symbol === symbol && !isObjectOrArrayLiteralType(t)) {
+                        if (t.flags & TypeFlags.Object && t.symbol === symbol) {
                             count++;
                             if (count >= 5) return true;
                         }
