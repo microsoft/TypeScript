@@ -31,6 +31,7 @@ namespace ts.server {
             }
             case "openbsd":
             case "freebsd":
+            case "netbsd":
             case "darwin":
             case "linux":
             case "android": {
