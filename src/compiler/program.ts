@@ -2277,7 +2277,16 @@ namespace ts {
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined): SourceFile | undefined {
             if (useSourceOfProjectReferenceRedirect) {
-                const source = getSourceOfProjectReferenceRedirect(fileName);
+                let source = getSourceOfProjectReferenceRedirect(fileName);
+                if (!source &&
+                    host.realpath &&
+                    options.preserveSymlinks &&
+                    isDeclarationFileName(fileName) &&
+                    stringContains(fileName, nodeModulesPathPart)) {
+                    // use host's cached realpath
+                    const realPath = host.realpath(fileName);
+                    if (realPath !== fileName) source = getSourceOfProjectReferenceRedirect(realPath);
+                }
                 if (source) {
                     const file = isString(source) ?
                         findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, refFile, packageId) :
