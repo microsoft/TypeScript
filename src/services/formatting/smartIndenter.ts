@@ -327,7 +327,7 @@ namespace ts.formatting {
             if (isCallOrNewExpression(parent)) {
                 if (!parent.arguments) return false;
                 const currentNode = find(parent.arguments, arg => arg.pos === child.pos);
-                // If its not one of the argument, dont look past this
+                // If it's not one of the arguments, don't look past this
                 if (!currentNode) return false;
                 const currentIndex = parent.arguments.indexOf(currentNode);
                 if (currentIndex === 0) return false; // Can't look at previous node if first
