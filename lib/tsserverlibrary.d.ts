@@ -3525,6 +3525,7 @@ declare namespace ts {
     function isCallExpression(node: Node): node is CallExpression;
     function isCallChain(node: Node): node is CallChain;
     function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain;
+    function isNullishCoalesce(node: Node): boolean;
     function isNewExpression(node: Node): node is NewExpression;
     function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
     function isTypeAssertion(node: Node): node is TypeAssertion;
@@ -8683,23 +8684,31 @@ declare namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
         private projectReferenceCallbacks;
         private mapOfDeclarationDirectories;
+        private symlinkedDirectories;
+        private symlinkedFiles;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
         protected isInitialLoadPending: () => boolean;
+        private fileExistsIfProjectReferenceDts;
         /**
          * This implementation of fileExists checks if the file being requested is
          * .d.ts file for the referenced Project.
          * If it is it returns true irrespective of whether that file exists on host
          */
         fileExists(file: string): boolean;
+        private directoryExistsIfProjectReferenceDeclDir;
         /**
          * This implementation of directoryExists checks if the directory being requested is
          * directory of .d.ts file for the referenced Project.
          * If it is it returns true irrespective of whether that directory exists on host
          */
         directoryExists(path: string): boolean;
+        private realpathIfSymlinkedProjectReferenceDts;
+        private getRealpath;
+        private handleDirectoryCouldBeSymlink;
+        private fileOrDirectoryExistsUsingSource;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.

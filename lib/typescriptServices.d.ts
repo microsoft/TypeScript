@@ -3525,6 +3525,7 @@ declare namespace ts {
     function isCallExpression(node: Node): node is CallExpression;
     function isCallChain(node: Node): node is CallChain;
     function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain;
+    function isNullishCoalesce(node: Node): boolean;
     function isNewExpression(node: Node): node is NewExpression;
     function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
     function isTypeAssertion(node: Node): node is TypeAssertion;
