@@ -375,7 +375,7 @@ namespace ts.Completions {
             if (insertText === undefined) insertText = name;
             const precedingToken = findPrecedingToken(propertyAccessToConvert.pos, sourceFile);
             let awaitText = "";
-            if (precedingToken && tokenEndIsASICandidate(precedingToken, sourceFile)) {
+            if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
                 awaitText = ";";
             }
 

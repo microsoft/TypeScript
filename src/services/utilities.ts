@@ -2109,9 +2109,9 @@ namespace ts {
         return startLine !== endLine;
     }
 
-    export function tokenEndIsASICandidate(token: Node, sourceFile: SourceFileLike): boolean {
-        const contextAncestor = findAncestor(token, ancestor => {
-            if (ancestor.end !== token.end) {
+    export function positionIsASICandidate(pos: number, context: Node, sourceFile: SourceFileLike): boolean {
+        const contextAncestor = findAncestor(context, ancestor => {
+            if (ancestor.end !== pos) {
                 return "quit";
             }
             return syntaxMayBeASICandidate(ancestor.kind);

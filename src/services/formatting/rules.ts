@@ -855,6 +855,6 @@ namespace ts.formatting {
     }
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
-        return tokenEndIsASICandidate(context.currentTokenParent, context.sourceFile);
+        return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
     }
 }

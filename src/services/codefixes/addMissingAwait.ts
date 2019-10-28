@@ -282,7 +282,7 @@ namespace ts.codefix {
 
     function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
         const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
-        if (precedingToken && tokenEndIsASICandidate(precedingToken, sourceFile)) {
+        if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
             changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
         }
     }
