@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
-// TODO: Fixup
 class A {
 >A : A
 
