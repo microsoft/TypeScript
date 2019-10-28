@@ -1,12 +1,14 @@
 ---
 name: Question
-about: The issue tracker is not for questions. Please use Stack Overflow or other resources for help writing TypeScript code.
+about: The issue tracker is not for questions. Please use Stack Overflow or other
+  resources for help writing TypeScript code.
+title: ''
+labels: Question
+assignees: ''
 
 ---
 
 THE ISSUE TRACKER IS NOT FOR QUESTIONS.
-
-DO NOT CREATE A NEW ISSUE TO ASK A QUESTION.
 
 IF YOU ARE HAVING PROBLEMS WITH YOUR TYPESCRIPT CODE, DO NOT ASK A QUESTION HERE.
 
