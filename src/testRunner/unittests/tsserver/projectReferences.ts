@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        function createHost(files: readonly File[], rootNames: readonly string[]) {
+        function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
             const host = createServerHost(files);
 
             // ts build should succeed
@@ -1372,6 +1372,98 @@ function foo() {
             host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
             assert.isTrue(projectA.dirty);
             projectA.updateGraph();
+        });
+
+        describe("when references are monorepo like with symlinks", () => {
+            function verifySession(alreadyBuilt: boolean, extraOptions: CompilerOptions) {
+                const bPackageJson: File = {
+                    path: `${projectRoot}/packages/B/package.json`,
+                    content: JSON.stringify({
+                        main: "lib/index.js",
+                        types: "lib/index.d.ts"
+                    })
+                };
+                const aConfig = config("A", extraOptions, ["../B"]);
+                const bConfig = config("B", extraOptions);
+                const aIndex = index("A", `import { foo } from 'b';
+import { bar } from 'b/lib/bar';
+foo();
+bar();`);
+                const bIndex = index("B", `export function foo() { }`);
+                const bBar: File = {
+                    path: `${projectRoot}/packages/B/src/bar.ts`,
+                    content: `export function bar() { }`
+                };
+                const bSymlink: SymLink = {
+                    path: `${projectRoot}/node_modules/b`,
+                    symLink: `${projectRoot}/packages/B`
+                };
+
+                const files = [libFile, bPackageJson, aConfig, bConfig, aIndex, bIndex, bBar, bSymlink];
+                const host = alreadyBuilt ?
+                    createHost(files, [aConfig.path]) :
+                    createServerHost(files);
+
+                // Create symlink in node module
+                const session = createSession(host, { canUseEvents: true });
+                openFilesForSession([aIndex], session);
+                const service = session.getProjectService();
+                const project = service.configuredProjects.get(aConfig.path.toLowerCase())!;
+                assert.deepEqual(project.getAllProjectErrors(), []);
+                checkProjectActualFiles(
+                    project,
+                    [aConfig.path, aIndex.path, bIndex.path, bBar.path, libFile.path]
+                );
+                verifyGetErrRequest({
+                    host,
+                    session,
+                    expected: [
+                        { file: aIndex, syntax: [], semantic: [], suggestion: [] }
+                    ]
+                });
+            }
+
+            function verifySymlinkScenario(alreadyBuilt: boolean) {
+                it("with preserveSymlinks turned off", () => {
+                    verifySession(alreadyBuilt, {});
+                });
+
+                it("with preserveSymlinks turned on", () => {
+                    verifySession(alreadyBuilt, { preserveSymlinks: true });
+                });
+            }
+
+            describe("when solution is not built", () => {
+                verifySymlinkScenario(/*alreadyBuilt*/ false);
+            });
+
+            describe("when solution is already built", () => {
+                verifySymlinkScenario(/*alreadyBuilt*/ true);
+            });
+
+            function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
+                return {
+                    path: `${projectRoot}/packages/${packageName}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            baseUrl: ".",
+                            outDir: "lib",
+                            rootDir: "src",
+                            composite: true,
+                            ...extraOptions
+                        },
+                        include: ["src"],
+                        ...(references ? { references: references.map(path => ({ path })) } : {})
+                    })
+                };
+            }
+
+            function index(packageName: string, content: string): File {
+                return {
+                    path: `${projectRoot}/packages/${packageName}/src/index.ts`,
+                    content
+                };
+            }
         });
     });
 }
