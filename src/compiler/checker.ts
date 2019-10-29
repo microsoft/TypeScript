@@ -5359,7 +5359,7 @@ namespace ts {
                     const realMembers = locationMap.get("real") || emptyArray;
                     const mergedMembers = locationMap.get("merged") || emptyArray;
                     // TODO: `suppressNewPrivateContext` is questionable -we need to simply be emitting privates in whatever scope they were declared in, rather
-                    // than whatever scope we traverse to them in. That's a bit ofgetUnusedName a complex rewrite, since we're not _actually_ tracking privates at all in advance,
+                    // than whatever scope we traverse to them in. That's a bit of a complex rewrite, since we're not _actually_ tracking privates at all in advance,
                     // so we don't even have placeholders to fill in.
                     if (length(realMembers)) {
                         const localName = getInternalSymbolName(symbol, symbolName);
