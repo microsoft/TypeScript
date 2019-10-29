@@ -43,5 +43,7 @@ verify.referenceGroups(fooAppRanges, [fooApp, fooTypes, fooExport]);
 verify.referenceGroups(exportFooRanges, [fooTypes, fooExport, fooApp]);
 
 verify.renameLocations([foo0], [foo0, { range: foo1, suffixText: " as foo" }]);
-verify.renameLocations([foo1], [foo2, foo3, foo4, { range: foo1, prefixText: "foo as " }]);
+verify.renameLocations([foo1, foo4], [foo2, foo3, foo4, { range: foo1, prefixText: "foo as " }]);
 verify.renameLocations(fooAppRanges, [{ range: foo2, prefixText: "foo as " }, foo3]);
+
+verify.renameLocations([foo0, foo1, foo2, foo3], { ranges: [foo2, foo3, foo4, foo0, foo1], providePrefixAndSuffixTextForRename: false });

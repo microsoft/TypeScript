@@ -380,7 +380,10 @@ namespace ts.FindAllReferences {
                 return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
             }
             else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
-                return originalNode === entry.node ? { prefixText: name + " as " } : { suffixText: " as " + name };
+                // If the symbol for the node is same as declared node symbol use prefix text
+                return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
+                    { prefixText: name + " as " } :
+                    { suffixText: " as " + name };
             }
         }
 
@@ -763,7 +766,6 @@ namespace ts.FindAllReferences.Core {
 
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
-
         const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) ? undefined : find(symbol.declarations, isExportSpecifier);
         if (exportSpecifier) {
             // When renaming at an export specifier, rename the export and not the thing being exported.
