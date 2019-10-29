@@ -2378,6 +2378,7 @@ declare namespace ts {
         JSLiteral = 16384,
         FreshLiteral = 32768,
         ArrayLiteral = 65536,
+        ObjectRestType = 131072,
         ClassOrInterface = 3,
     }
     export interface ObjectType extends Type {
