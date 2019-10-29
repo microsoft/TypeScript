@@ -2272,12 +2272,15 @@ namespace ts {
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined): SourceFile | undefined {
             if (useSourceOfProjectReferenceRedirect) {
                 let source = getSourceOfProjectReferenceRedirect(fileName);
+                // If preserveSymlinks is true, module resolution wont jump the symlink
+                // but the resolved real path may be the .d.ts from project reference
+                // Note:: Currently we try the real path only if the
+                // file is from node_modules to avoid having to run real path on all file paths
                 if (!source &&
                     host.realpath &&
                     options.preserveSymlinks &&
                     isDeclarationFileName(fileName) &&
                     stringContains(fileName, nodeModulesPathPart)) {
-                    // use host's cached realpath
                     const realPath = host.realpath(fileName);
                     if (realPath !== fileName) source = getSourceOfProjectReferenceRedirect(realPath);
                 }
