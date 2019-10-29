@@ -4212,7 +4212,7 @@ namespace FourSlashInterface {
             this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
         }
 
-        public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[] }) {
+        public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[], providePrefixAndSuffixTextForRename?: boolean }) {
             this.state.verifyRangesAreRenameLocations(options);
         }
 
