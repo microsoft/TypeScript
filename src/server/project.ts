@@ -258,7 +258,8 @@ namespace ts.server {
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
             directoryStructureHost: DirectoryStructureHost,
-            currentDirectory: string | undefined) {
+            currentDirectory: string | undefined,
+            customRealpath?: (s: string) => string) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
             this.getCanonicalFileName = this.projectService.toCanonicalFileName;
@@ -286,7 +287,7 @@ namespace ts.server {
             }
 
             if (host.realpath) {
-                this.realpath = path => host.realpath!(path);
+                this.realpath = customRealpath || (path => host.realpath!(path));
             }
 
             // Use the current directory as resolution root only if the project created using current directory string
@@ -1660,6 +1661,12 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    interface SymlinkedDirectory {
+        real: string;
+        realPath: Path;
+    }
+
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
      * and if successfull create a ConfiguredProject for it.
@@ -1673,6 +1680,8 @@ namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
         private projectReferenceCallbacks: ResolvedProjectReferenceCallbacks | undefined;
         private mapOfDeclarationDirectories: Map<true> | undefined;
+        private symlinkedDirectories: Map<SymlinkedDirectory | false> | undefined;
+        private symlinkedFiles: Map<string> | undefined;
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
@@ -1714,7 +1723,9 @@ namespace ts.server {
                 /*compilerOptions*/ {},
                 /*compileOnSaveEnabled*/ false,
                 cachedDirectoryStructureHost,
-                getDirectoryPath(configFileName));
+                getDirectoryPath(configFileName),
+                projectService.host.realpath && (s => this.getRealpath(s))
+            );
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
@@ -1727,18 +1738,34 @@ namespace ts.server {
         useSourceOfProjectReferenceRedirect = () => !!this.languageServiceEnabled &&
             !this.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
 
+        private fileExistsIfProjectReferenceDts(file: string) {
+            const source = this.projectReferenceCallbacks!.getSourceOfProjectReferenceRedirect(file);
+            return source !== undefined ?
+                isString(source) ? super.fileExists(source) : true :
+                undefined;
+        }
+
         /**
          * This implementation of fileExists checks if the file being requested is
          * .d.ts file for the referenced Project.
          * If it is it returns true irrespective of whether that file exists on host
          */
         fileExists(file: string): boolean {
+            if (super.fileExists(file)) return true;
+            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
+            if (!isDeclarationFileName(file)) return false;
+
             // Project references go to source file instead of .d.ts file
-            if (this.useSourceOfProjectReferenceRedirect() && this.projectReferenceCallbacks) {
-                const source = this.projectReferenceCallbacks.getSourceOfProjectReferenceRedirect(file);
-                if (source) return isString(source) ? super.fileExists(source) : true;
-            }
-            return super.fileExists(file);
+            return this.fileOrDirectoryExistsUsingSource(file, /*isFile*/ true);
+        }
+
+        private directoryExistsIfProjectReferenceDeclDir(dir: string) {
+            const dirPath = this.toPath(dir);
+            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
+            return forEachKey(
+                this.mapOfDeclarationDirectories!,
+                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
+            );
         }
 
         /**
@@ -1747,14 +1774,17 @@ namespace ts.server {
          * If it is it returns true irrespective of whether that directory exists on host
          */
         directoryExists(path: string): boolean {
-            if (super.directoryExists(path)) return true;
+            if (super.directoryExists(path)) {
+                this.handleDirectoryCouldBeSymlink(path);
+                return true;
+            }
             if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return false;
 
             if (!this.mapOfDeclarationDirectories) {
                 this.mapOfDeclarationDirectories = createMap();
                 this.projectReferenceCallbacks.forEachResolvedProjectReference(ref => {
                     if (!ref) return;
-                    const out = ref.commandLine.options.outFile || ref.commandLine.options.outDir;
+                    const out = ref.commandLine.options.outFile || ref.commandLine.options.out;
                     if (out) {
                         this.mapOfDeclarationDirectories!.set(getDirectoryPath(this.toPath(out)), true);
                     }
@@ -1767,12 +1797,74 @@ namespace ts.server {
                     }
                 });
             }
-            const dirPath = this.toPath(path);
-            const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
-            return !!forEachKey(
-                this.mapOfDeclarationDirectories,
-                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
-            );
+
+            return this.fileOrDirectoryExistsUsingSource(path, /*isFile*/ false);
+        }
+
+        private realpathIfSymlinkedProjectReferenceDts(s: string): string | undefined {
+            return this.symlinkedFiles && this.symlinkedFiles.get(this.toPath(s));
+        }
+
+        private getRealpath(s: string): string {
+            return this.realpathIfSymlinkedProjectReferenceDts(s) ||
+                this.projectService.host.realpath!(s);
+        }
+
+        private handleDirectoryCouldBeSymlink(directory: string) {
+            if (!this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks) return;
+
+            // Because we already watch node_modules, handle symlinks in there
+            if (!this.realpath || !stringContains(directory, nodeModulesPathPart)) return;
+            if (!this.symlinkedDirectories) this.symlinkedDirectories = createMap();
+            const directoryPath = ensureTrailingDirectorySeparator(this.toPath(directory));
+            if (this.symlinkedDirectories.has(directoryPath)) return;
+
+            const real = this.projectService.host.realpath!(directory);
+            let realPath: Path;
+            if (real === directory ||
+                (realPath = ensureTrailingDirectorySeparator(this.toPath(real))) === directoryPath) {
+                // not symlinked
+                this.symlinkedDirectories.set(directoryPath, false);
+                return;
+            }
+
+            this.symlinkedDirectories.set(directoryPath, {
+                real: ensureTrailingDirectorySeparator(real),
+                realPath
+            });
+        }
+
+        private fileOrDirectoryExistsUsingSource(fileOrDirectory: string, isFile: boolean): boolean {
+            const fileOrDirectoryExistsUsingSource = isFile ?
+                (file: string) => this.fileExistsIfProjectReferenceDts(file) :
+                (dir: string) => this.directoryExistsIfProjectReferenceDeclDir(dir);
+            // Check current directory or file
+            const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
+            if (result !== undefined) return result;
+
+            if (!this.symlinkedDirectories) return false;
+            const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+            if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
+            if (isFile && this.symlinkedFiles && this.symlinkedFiles.has(fileOrDirectoryPath)) return true;
+
+            // If it contains node_modules check if its one of the symlinked path we know of
+            return firstDefinedIterator(
+                this.symlinkedDirectories.entries(),
+                ([directoryPath, symlinkedDirectory]) => {
+                    if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
+                    const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
+                    if (isFile && result) {
+                        if (!this.symlinkedFiles) this.symlinkedFiles = createMap();
+                        // Store the real path for the file'
+                        const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, this.currentDirectory);
+                        this.symlinkedFiles.set(
+                            fileOrDirectoryPath,
+                            `${symlinkedDirectory.real}${absolutePath.replace(new RegExp(directoryPath, "i"), "")}`
+                        );
+                    }
+                    return result;
+                }
+            ) || false;
         }
 
         /**
@@ -1785,6 +1877,8 @@ namespace ts.server {
             this.pendingReload = ConfigFileProgramReloadLevel.None;
             this.projectReferenceCallbacks = undefined;
             this.mapOfDeclarationDirectories = undefined;
+            this.symlinkedDirectories = undefined;
+            this.symlinkedFiles = undefined;
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
@@ -1917,6 +2011,8 @@ namespace ts.server {
             this.configFileSpecs = undefined;
             this.projectReferenceCallbacks = undefined;
             this.mapOfDeclarationDirectories = undefined;
+            this.symlinkedDirectories = undefined;
+            this.symlinkedFiles = undefined;
             super.close();
         }
 
