@@ -1,3 +1,4 @@
+// #34802
 // @Filename: jsdocTypeReferenceToImport.js
 // @noEmit: true
 // @allowJs: true

@@ -1,4 +1,6 @@
 === tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.js ===
+// #34802
+
 const C = require('./ex').C;
 >C : typeof import("tests/cases/conformance/jsdoc/ex").C
 >require('./ex').C : typeof import("tests/cases/conformance/jsdoc/ex").C
