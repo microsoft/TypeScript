@@ -1,13 +1,13 @@
 === tests/cases/conformance/jsdoc/foo.js ===
+// #33106
 /** @param {Image} image */
 function process(image) {
->process : (image: new (width?: number, height?: number) => HTMLImageElement) => HTMLImageElement
->image : new (width?: number, height?: number) => HTMLImageElement
+>process : (image: HTMLImageElement) => string
+>image : HTMLImageElement
 
-    return new image(1, 1)
->new image(1, 1) : HTMLImageElement
->image : new (width?: number, height?: number) => HTMLImageElement
->1 : 1
->1 : 1
+    return image.accessKey
+>image.accessKey : string
+>image : HTMLImageElement
+>accessKey : string
 }
 

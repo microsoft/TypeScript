@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToValue2.js ===
+// #34803
+/** @type {{
+    new(wuth?: number, thud?: number): HTMLImageElement;
+}} */
+var Im;
+>Im : Symbol(Im, Decl(jsdocTypeReferenceToValue2.js, 4, 3))
+
+/**
+ * @param {Im} i
+ * @param {Element} l
+ */
+function f(i, l) {
+>f : Symbol(f, Decl(jsdocTypeReferenceToValue2.js, 4, 7))
+>i : Symbol(i, Decl(jsdocTypeReferenceToValue2.js, 10, 11))
+>l : Symbol(l, Decl(jsdocTypeReferenceToValue2.js, 10, 13))
+
+    l.appendChild(i);
+>l.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>l : Symbol(l, Decl(jsdocTypeReferenceToValue2.js, 10, 13))
+>appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(jsdocTypeReferenceToValue2.js, 10, 11))
+
+    i.style.display = 'none';
+>i.style.display : Symbol(CSSStyleDeclaration.display, Decl(lib.dom.d.ts, --, --))
+>i.style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(jsdocTypeReferenceToValue2.js, 10, 11))
+>style : Symbol(ElementCSSInlineStyle.style, Decl(lib.dom.d.ts, --, --))
+>display : Symbol(CSSStyleDeclaration.display, Decl(lib.dom.d.ts, --, --))
+}
+
+

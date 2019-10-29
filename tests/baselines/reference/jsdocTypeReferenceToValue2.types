@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToValue2.js ===
+// #34803
+/** @type {{
+    new(wuth?: number, thud?: number): HTMLImageElement;
+}} */
+var Im;
+>Im : new (wuth?: number, thud?: number) => HTMLImageElement
+
+/**
+ * @param {Im} i
+ * @param {Element} l
+ */
+function f(i, l) {
+>f : (i: HTMLImageElement, l: Element) => void
+>i : HTMLImageElement
+>l : Element
+
+    l.appendChild(i);
+>l.appendChild(i) : HTMLImageElement
+>l.appendChild : <T extends Node>(newChild: T) => T
+>l : Element
+>appendChild : <T extends Node>(newChild: T) => T
+>i : HTMLImageElement
+
+    i.style.display = 'none';
+>i.style.display = 'none' : "none"
+>i.style.display : string
+>i.style : CSSStyleDeclaration
+>i : HTMLImageElement
+>style : CSSStyleDeclaration
+>display : string
+>'none' : "none"
+}
+
+

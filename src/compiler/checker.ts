@@ -10762,7 +10762,7 @@ namespace ts {
          */
         function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
             const valueType = getTypeOfSymbol(symbol);
-            let typeType = valueType;
+            let typeType;
             if (symbol.valueDeclaration) {
                 const decl = getRootDeclaration(symbol.valueDeclaration);
                 const isRequireAlias = isVariableDeclaration(decl)
@@ -10774,7 +10774,13 @@ namespace ts {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
-            return getSymbolLinks(symbol).resolvedJSDocType = typeType;
+            if (!typeType) {
+                const ctor = getSingleSignature(valueType, SignatureKind.Construct, /*allowMembers*/ true);
+                if (ctor) {
+                    typeType = getReturnTypeOfSignature(ctor);
+                }
+            }
+            return getSymbolLinks(symbol).resolvedJSDocType = typeType || valueType;
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
