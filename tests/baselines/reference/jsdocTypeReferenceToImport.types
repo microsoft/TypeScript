@@ -9,6 +9,14 @@ const C = require('./ex').C;
 >'./ex' : "./ex"
 >C : typeof import("tests/cases/conformance/jsdoc/ex").C
 
+const D = require('./ex')?.C;
+>D : typeof import("tests/cases/conformance/jsdoc/ex").C
+>require('./ex')?.C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
+>require : any
+>'./ex' : "./ex"
+>C : typeof import("tests/cases/conformance/jsdoc/ex").C
+
 /** @type {C} c */
 var c = new C()
 >c : import("tests/cases/conformance/jsdoc/ex").C
@@ -23,6 +31,22 @@ c.start
 c.end
 >c.end : number
 >c : import("tests/cases/conformance/jsdoc/ex").C
+>end : number
+
+/** @type {D} c */
+var d = new D()
+>d : import("tests/cases/conformance/jsdoc/ex").C
+>new D() : import("tests/cases/conformance/jsdoc/ex").C
+>D : typeof import("tests/cases/conformance/jsdoc/ex").C
+
+d.start
+>d.start : number
+>d : import("tests/cases/conformance/jsdoc/ex").C
+>start : number
+
+d.end
+>d.end : number
+>d : import("tests/cases/conformance/jsdoc/ex").C
 >end : number
 
 === tests/cases/conformance/jsdoc/ex.d.ts ===
