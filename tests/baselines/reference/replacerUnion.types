@@ -1,0 +1,49 @@
+=== tests/cases/compiler/replacerUnion.ts ===
+interface ReplacerFn {
+    (substr: string, ...args: any[]): string;
+>substr : string
+>args : any[]
+}
+
+function replaceMeStr(str: string, replacer: string) {
+>replaceMeStr : (str: string, replacer: string) => string
+>str : string
+>replacer : string
+
+    return str.replace(/foo/, replacer); // works! :)
+>str.replace(/foo/, replacer) : string
+>str.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>str : string
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>/foo/ : RegExp
+>replacer : string
+}
+
+function replaceMeFn(str: string, replacer: ReplacerFn) {
+>replaceMeFn : (str: string, replacer: ReplacerFn) => string
+>str : string
+>replacer : ReplacerFn
+
+    return str.replace(/foo/, replacer); // works! :)
+>str.replace(/foo/, replacer) : string
+>str.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>str : string
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>/foo/ : RegExp
+>replacer : ReplacerFn
+}
+
+function replaceMe(str: string, replacer: string | ReplacerFn) {
+>replaceMe : (str: string, replacer: string | ReplacerFn) => string
+>str : string
+>replacer : string | ReplacerFn
+
+    return str.replace(/foo/, replacer); // <---  !!!!!!!!! --- !!!!!! --- error! :(
+>str.replace(/foo/, replacer) : string
+>str.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>str : string
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
+>/foo/ : RegExp
+>replacer : string | ReplacerFn
+}
+
