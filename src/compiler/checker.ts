@@ -10765,11 +10765,15 @@ namespace ts {
             let typeType = valueType;
             if (symbol.valueDeclaration) {
                 const decl = getRootDeclaration(symbol.valueDeclaration);
-                const isRequireAlias = isVariableDeclaration(decl)
-                    && decl.initializer
-                    && isCallExpression(decl.initializer)
-                    && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true)
-                    && valueType.symbol;
+                let isRequireAlias = false;
+                if (isVariableDeclaration(decl) && decl.initializer) {
+                    let expr = decl.initializer;
+                    // skip past entity names, eg `require("x").a.b.c`
+                    while (isPropertyAccessExpression(expr)) {
+                        expr = expr.expression;
+                    }
+                    isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
+                }
                 if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
