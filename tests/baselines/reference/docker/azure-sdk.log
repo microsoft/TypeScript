@@ -5,29 +5,34 @@ Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 12.13.0 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
+XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/core-auth] completed successfully in ? seconds
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
 XX of XX: [@azure/logger] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.6 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.6 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.6 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.6 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:lib" exited with 1.
+XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
 Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
@@ -38,9 +43,6 @@ Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be
 Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
-XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/core-paging] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 Warning: dist-esm/ChangeFeedIterator.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 Warning: dist-esm/ChangeFeedResponse.d.ts:21:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
@@ -85,7 +87,6 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
-XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
 Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
@@ -96,20 +97,22 @@ Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declar
 Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (9)
+SUCCESS (7)
 ================================
-@azure/core-tracing (? seconds)
-@azure/core-auth (? seconds)
-@azure/logger (? seconds)
-@azure/test-utils-recorder (? seconds)
 @azure/abort-controller (? seconds)
+@azure/core-tracing (? seconds)
+@azure/logger (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-paging (? seconds)
-@azure/eventhubs-checkpointstore-blob (? seconds)
+@azure/test-utils-recorder (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (3)
+SUCCESS WITH WARNINGS (4)
 ================================
+@azure/core-auth (? seconds)
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
 @azure/event-processor-host (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
 Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
@@ -163,17 +166,18 @@ Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declar
 Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
 Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
 ================================
-BLOCKED (14)
+BLOCKED (15)
 ================================
 @azure/core-arm
 @azure/identity
-@azure/core-lro
 @azure/core-amqp
+@azure/core-lro
+@azure/event-hubs
 @azure/keyvault-keys
 @azure/keyvault-secrets
 @azure/app-configuration
 @azure/cognitiveservices-inkrecognizer
-@azure/event-hubs
+@azure/eventhubs-checkpointstore-blob
 @azure/keyvault-certificates
 @azure/storage-blob
 @azure/storage-file-share
@@ -185,20 +189,20 @@ FAILURE (1)
 @azure/core-http ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X-preview.6 build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.6 build:tsc script.
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ERROR: "build:tsc" exited with 2.
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X-preview.6 build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
 npm ERR! Exit status 1
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X-preview.6 build:lib script.
+npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -210,7 +214,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-
+XX of XX: [@azure/core-auth] completed with warnings in ? seconds
 XX of XX: [@azure/core-http] failed to build!
 XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
 XX of XX: [@azure/cognitiveservices-inkrecognizer] blocked by [@azure/core-http]!
@@ -223,6 +227,7 @@ XX of XX: [@azure/storage-blob] blocked by [@azure/core-http]!
 XX of XX: [@azure/identity] blocked by [@azure/core-http]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
 XX of XX: [@azure/storage-queue] blocked by [@azure/core-http]!
 XX of XX: [@azure/storage-file-share] blocked by [@azure/core-http]!
 XX of XX: [@azure/template] blocked by [@azure/core-http]!
