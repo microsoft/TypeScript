@@ -30142,13 +30142,15 @@ namespace ts {
                 return;
             }
 
+            const promisedType = getAwaitedType(type);
+
             // While it technically should be invalid for any known-truthy value
             // to be tested, we de-scope to functions unrefenced in the block as a
             // heuristic to identify the most common bugs. There are too many
             // false positives for values sourced from type definitions without
             // strictNullChecks otherwise.
             const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (callSignatures.length === 0) {
+            if (callSignatures.length === 0 && (!promisedType || promisedType === type)) {
                 return;
             }
 
