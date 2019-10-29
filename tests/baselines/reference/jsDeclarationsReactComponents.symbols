@@ -153,3 +153,47 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
 
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+import React from 'react';
+>React : Symbol(React, Decl(jsDeclarationsReactComponents5.jsx, 0, 6))
+
+import PropTypes from 'prop-types';
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+
+function Tree({ allowDropOnRoot }) {
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>allowDropOnRoot : Symbol(allowDropOnRoot, Decl(jsDeclarationsReactComponents5.jsx, 3, 15))
+
+  return <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+}
+
+Tree.propTypes = {
+>Tree.propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+
+    classes: PropTypes.object,
+>classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 7, 18))
+>PropTypes.object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
+>PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+>object : Symbol(PropTypes.object, Decl(react16.d.ts, 65, 16))
+
+};
+
+Tree.defaultProps = {
+>Tree.defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+>defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+
+    classes: {},
+>classes : Symbol(classes, Decl(jsDeclarationsReactComponents5.jsx, 11, 21))
+
+    parentSource: 'parent_id',
+>parentSource : Symbol(parentSource, Decl(jsDeclarationsReactComponents5.jsx, 12, 16))
+
+};
+
+export default Tree;
+>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+

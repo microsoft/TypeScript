@@ -182,3 +182,54 @@ TabbedShowLayout.defaultProps = {
 export default TabbedShowLayout;
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
 
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+import React from 'react';
+>React : typeof React
+
+import PropTypes from 'prop-types';
+>PropTypes : typeof PropTypes
+
+function Tree({ allowDropOnRoot }) {
+>Tree : typeof Tree
+>allowDropOnRoot : any
+
+  return <div />
+><div /> : JSX.Element
+>div : any
+}
+
+Tree.propTypes = {
+>Tree.propTypes = {    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
+>Tree.propTypes : { classes: PropTypes.Requireable<object>; }
+>Tree : typeof Tree
+>propTypes : { classes: PropTypes.Requireable<object>; }
+>{    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
+
+    classes: PropTypes.object,
+>classes : PropTypes.Requireable<object>
+>PropTypes.object : PropTypes.Requireable<object>
+>PropTypes : typeof PropTypes
+>object : PropTypes.Requireable<object>
+
+};
+
+Tree.defaultProps = {
+>Tree.defaultProps = {    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
+>Tree.defaultProps : { classes: {}; parentSource: string; }
+>Tree : typeof Tree
+>defaultProps : { classes: {}; parentSource: string; }
+>{    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
+
+    classes: {},
+>classes : {}
+>{} : {}
+
+    parentSource: 'parent_id',
+>parentSource : string
+>'parent_id' : "parent_id"
+
+};
+
+export default Tree;
+>Tree : typeof Tree
+

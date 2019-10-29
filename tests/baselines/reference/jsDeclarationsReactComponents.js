@@ -76,7 +76,24 @@ TabbedShowLayout.defaultProps = {
 };
 
 export default TabbedShowLayout;
+//// [jsDeclarationsReactComponents5.jsx]
+import React from 'react';
+import PropTypes from 'prop-types';
 
+function Tree({ allowDropOnRoot }) {
+  return <div />
+}
+
+Tree.propTypes = {
+    classes: PropTypes.object,
+};
+
+Tree.defaultProps = {
+    classes: {},
+    parentSource: 'parent_id',
+};
+
+export default Tree;
 
 //// [jsDeclarationsReactComponents1.js]
 "use strict";
@@ -145,6 +162,26 @@ TabbedShowLayout.defaultProps = {
     tabs: "default value"
 };
 exports.default = TabbedShowLayout;
+//// [jsDeclarationsReactComponents5.js]
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __importDefault(require("react"));
+var prop_types_1 = __importDefault(require("prop-types"));
+function Tree(_a) {
+    var allowDropOnRoot = _a.allowDropOnRoot;
+    return react_1.default.createElement("div", null);
+}
+Tree.propTypes = {
+    classes: prop_types_1.default.object,
+};
+Tree.defaultProps = {
+    classes: {},
+    parentSource: 'parent_id',
+};
+exports.default = Tree;
 
 
 //// [jsDeclarationsReactComponents1.d.ts]
@@ -190,3 +227,20 @@ declare namespace TabbedShowLayout {
         export const tabs: string;
     }
 }
+//// [jsDeclarationsReactComponents5.d.ts]
+/// <reference path="../..react16.d.ts" />
+export default Tree;
+declare function Tree({ allowDropOnRoot }: {
+    allowDropOnRoot: any;
+}): JSX.Element;
+declare namespace Tree {
+    export namespace propTypes {
+        export const classes: PropTypes.Requireable<object>;
+    }
+    export namespace defaultProps {
+        const classes_1: {};
+        export { classes_1 as classes };
+        export const parentSource: string;
+    }
+}
+import PropTypes from "prop-types";
