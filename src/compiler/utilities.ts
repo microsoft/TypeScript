@@ -2044,6 +2044,15 @@ namespace ts {
             && getElementOrPropertyAccessName(node) === "exports";
     }
 
+    export function isTopLevelInSourceFileOrIIFE(node: Node): boolean {
+        const container = getEnclosingBlockScopeContainer(node);
+        if (container.kind === SyntaxKind.SourceFile) {
+            return true;
+        }
+        const iife = getImmediatelyInvokedFunctionExpression(container);
+        return !!iife && isTopLevelInSourceFileOrIIFE(iife);
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
@@ -2104,7 +2113,7 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if (isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) {
+            if ((isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) && isTopLevelInSourceFileOrIIFE(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
             if (isBindableStaticAccessExpression(entityName) && getElementOrPropertyAccessName(entityName) === "prototype") {
@@ -2161,7 +2170,7 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isModuleExportsAccessExpression(lhs)) {
+        else if (isModuleExportsAccessExpression(lhs) && isTopLevelInSourceFileOrIIFE(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
@@ -2179,7 +2188,8 @@ namespace ts {
             if ((id.escapedText === "exports" ||
                 id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") &&
                 // ExportsProperty does not support binding with computed names
-                isBindableStaticAccessExpression(lhs)) {
+                isBindableStaticAccessExpression(lhs) &&
+                isTopLevelInSourceFileOrIIFE(lhs)) {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }

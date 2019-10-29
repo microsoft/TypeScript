@@ -1,0 +1,50 @@
+=== tests/cases/conformance/jsdoc/not-iife.js ===
+var ShouldBeGlobal = 0;
+>ShouldBeGlobal : Symbol(ShouldBeGlobal, Decl(not-iife.js, 0, 3))
+
+function f(type, ctor, exports) {
+>f : Symbol(f, Decl(not-iife.js, 0, 23))
+>type : Symbol(type, Decl(not-iife.js, 1, 11))
+>ctor : Symbol(ctor, Decl(not-iife.js, 1, 16))
+>exports : Symbol(exports, Decl(not-iife.js, 1, 22))
+
+    if (typeof exports !== "undefined") {
+>exports : Symbol(exports, Decl(not-iife.js, 1, 22))
+
+        exports.a = ctor;
+>exports : Symbol(exports, Decl(not-iife.js, 1, 22))
+>ctor : Symbol(ctor, Decl(not-iife.js, 1, 16))
+
+        module.exports.b = ctor;
+>ctor : Symbol(ctor, Decl(not-iife.js, 1, 16))
+
+        module.exports = { ctor };
+>ctor : Symbol(ctor, Decl(not-iife.js, 5, 26))
+
+        exports = { ctor };
+>exports : Symbol(exports, Decl(not-iife.js, 1, 22))
+>ctor : Symbol(ctor, Decl(not-iife.js, 6, 19))
+
+        module.exports["c"] = type;
+>type : Symbol(type, Decl(not-iife.js, 1, 11))
+    }
+}
+
+=== tests/cases/conformance/jsdoc/iife.js ===
+var ShouldNotBeGlobal = 0;
+>ShouldNotBeGlobal : Symbol(ShouldNotBeGlobal, Decl(iife.js, 0, 3))
+
+(function () {
+    exports.a = "b";
+>exports.a : Symbol(a, Decl(iife.js, 1, 14))
+>exports : Symbol(a, Decl(iife.js, 1, 14))
+>a : Symbol(a, Decl(iife.js, 1, 14))
+
+})();
+
+=== tests/cases/conformance/jsdoc/test.js ===
+ShouldBeGlobal;
+>ShouldBeGlobal : Symbol(ShouldBeGlobal, Decl(not-iife.js, 0, 3))
+
+ShouldNotBeGlobal;
+

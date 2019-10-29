@@ -2365,7 +2365,10 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression);
+                    const binaryExpression = node as BinaryExpression;
+                    binaryExpression.left.parent = binaryExpression;
+                    binaryExpression.right.parent = binaryExpression;
+                    const specialKind = getAssignmentDeclarationKind(binaryExpression);
                     switch (specialKind) {
                         case AssignmentDeclarationKind.ExportsProperty:
                             bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);

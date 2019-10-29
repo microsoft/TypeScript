@@ -1,0 +1,84 @@
+=== tests/cases/conformance/jsdoc/not-iife.js ===
+var ShouldBeGlobal = 0;
+>ShouldBeGlobal : number
+>0 : 0
+
+function f(type, ctor, exports) {
+>f : (type: any, ctor: any, exports: any) => void
+>type : any
+>ctor : any
+>exports : any
+
+    if (typeof exports !== "undefined") {
+>typeof exports !== "undefined" : boolean
+>typeof exports : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>exports : any
+>"undefined" : "undefined"
+
+        exports.a = ctor;
+>exports.a = ctor : any
+>exports.a : any
+>exports : any
+>a : any
+>ctor : any
+
+        module.exports.b = ctor;
+>module.exports.b = ctor : any
+>module.exports.b : any
+>module.exports : any
+>module : any
+>exports : any
+>b : any
+>ctor : any
+
+        module.exports = { ctor };
+>module.exports = { ctor } : { ctor: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{ ctor } : { ctor: any; }
+>ctor : any
+
+        exports = { ctor };
+>exports = { ctor } : { ctor: any; }
+>exports : any
+>{ ctor } : { ctor: any; }
+>ctor : any
+
+        module.exports["c"] = type;
+>module.exports["c"] = type : any
+>module.exports["c"] : any
+>module.exports : any
+>module : any
+>exports : any
+>"c" : "c"
+>type : any
+    }
+}
+
+=== tests/cases/conformance/jsdoc/iife.js ===
+var ShouldNotBeGlobal = 0;
+>ShouldNotBeGlobal : number
+>0 : 0
+
+(function () {
+>(function () {    exports.a = "b";})() : void
+>(function () {    exports.a = "b";}) : () => void
+>function () {    exports.a = "b";} : () => void
+
+    exports.a = "b";
+>exports.a = "b" : "b"
+>exports.a : string
+>exports : typeof import("tests/cases/conformance/jsdoc/iife")
+>a : string
+>"b" : "b"
+
+})();
+
+=== tests/cases/conformance/jsdoc/test.js ===
+ShouldBeGlobal;
+>ShouldBeGlobal : number
+
+ShouldNotBeGlobal;
+>ShouldNotBeGlobal : any
+
