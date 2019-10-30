@@ -4258,9 +4258,9 @@ namespace ts {
                         }
                     }
                 }
-                const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
-                context.approximateLength += (symbolName(propertySymbol).length + 1);
                 context.enclosingDeclaration = saveEnclosingDeclaration;
+                const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
+                context.approximateLength += (symbolName(propertySymbol).length + 1);
                 const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
                 if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                     const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
@@ -4892,23 +4892,38 @@ namespace ts {
                 }
             }
 
+            function isSingleQuotedStringNamed(d: Declaration) {
+                const name = getNameOfDeclaration(d);
+                if (name && isStringLiteral(name) && (
+                    name.singleQuote ||
+                    (!nodeIsSynthesized(name) && startsWith(getTextOfNode(name, /*includeTrivia*/ false), "'"))
+                )) {
+                    return true;
+                }
+                return false;
+            }
+
             function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
-                const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context);
+                const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
+                const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote);
                 if (fromNameType) {
                     return fromNameType;
                 }
+                if (isKnownSymbol(symbol)) {
+                    return createComputedPropertyName(createPropertyAccess(createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
+                }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-                return createPropertyNameNodeForIdentifierOrLiteral(rawName);
+                return createPropertyNameNodeForIdentifierOrLiteral(rawName, singleQuote);
             }
 
             // See getNameForSymbolFromNameType for a stringy equivalent
-            function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext) {
+            function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean) {
                 const nameType = symbol.nameType;
                 if (nameType) {
                     if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                         const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
                         if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
-                            return createLiteral(name);
+                            return createLiteral(name, !!singleQuote);
                         }
                         if (isNumericLiteralName(name) && startsWith(name, "-")) {
                             return createComputedPropertyName(createLiteral(+name));
@@ -4921,8 +4936,8 @@ namespace ts {
                 }
             }
 
-            function createPropertyNameNodeForIdentifierOrLiteral(name: string) {
-                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name) as StringLiteral | NumericLiteral;
+            function createPropertyNameNodeForIdentifierOrLiteral(name: string, singleQuote?: boolean) {
+                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name, !!singleQuote);
             }
 
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {

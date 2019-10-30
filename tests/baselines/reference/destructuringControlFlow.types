@@ -140,7 +140,7 @@ function f4() {
     ({ ["x"]: x } = 0);  // Error
 >({ ["x"]: x } = 0) : 0
 >{ ["x"]: x } = 0 : 0
->{ ["x"]: x } : { ["x"]: boolean; }
+>{ ["x"]: x } : { x: boolean; }
 >["x"] : boolean
 >"x" : "x"
 >x : boolean
