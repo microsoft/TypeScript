@@ -35,10 +35,6 @@ lib/logging/Logger.js(99,20): error TS2345: Argument of type 'string' is not ass
 lib/logging/Logger.js(103,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "info" | "warn" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(117,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "info" | "warn" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
 lib/logging/Logger.js(127,20): error TS2345: Argument of type 'string' is not assignable to parameter of type '"error" | "time" | "group" | "debug" | "info" | "warn" | "log" | "trace" | "groupCollapsed" | "groupEnd" | "profile" | "profileEnd" | "clear" | "status"'.
-lib/util/registerExternalSerializer.js(218,14): error TS2339: Property 'start' does not exist on type 'typeof SourceLocation'.
-lib/util/registerExternalSerializer.js(219,14): error TS2339: Property 'start' does not exist on type 'typeof SourceLocation'.
-lib/util/registerExternalSerializer.js(220,14): error TS2339: Property 'end' does not exist on type 'typeof SourceLocation'.
-lib/util/registerExternalSerializer.js(221,14): error TS2339: Property 'end' does not exist on type 'typeof SourceLocation'.
 
 
 
