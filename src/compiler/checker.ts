@@ -22043,8 +22043,13 @@ namespace ts {
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
                     spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
+                    propertiesArray = [];
+                    propertiesTable = createSymbolTable();
+                    hasComputedStringProperty = false;
+                    hasComputedNumberProperty = false;
                 }
-                return spread;
+                // remap the raw emptyObjectType fed in at the top into a fresh empty object literal type, unique to this use site
+                return mapType(spread, t => t === emptyObjectType ? createObjectLiteralType() : t);
             }
 
             return createObjectLiteralType();
