@@ -973,7 +973,7 @@ namespace ts {
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
          * in that order would be used to write the files
          */
-        function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emit(targetSourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
                 if (!targetSourceFile) {
@@ -983,7 +983,7 @@ namespace ts {
                     let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];
 
-                    let writeFileToUse = writeFile;
+                    let writeFileToUse = writeFileCallback;
                     let outputFiles: OutputFile[] | undefined;
                     let savedState: BuilderProgramState | undefined;
                     if (state.compilerOptions.noEmitOnError) {
@@ -1013,9 +1013,9 @@ namespace ts {
                             const emitterDiagnostics = createDiagnosticCollection();
                             forEach(
                                 outputFiles,
-                                ({ name, text, writeByteOrderMark }) => ts.writeFile(
+                                ({ name, text, writeByteOrderMark }) => writeFile(
                                     {
-                                        writeFile: writeFile ||
+                                        writeFile: writeFileCallback ||
                                             maybeBind(host, host.writeFile) ||
                                             Debug.assertDefined(state.program).writeFile
                                     },
@@ -1036,7 +1036,7 @@ namespace ts {
                     };
                 }
             }
-            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
+            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFileCallback || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
 
         /**
