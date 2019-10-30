@@ -55,7 +55,7 @@ namespace ts.FindAllReferences {
             if (isInJSFile(node)) {
                 const binaryExpression = isBinaryExpression(node.parent) ?
                     node.parent :
-                    isPropertyAccessExpression(node.parent) &&
+                    isAccessExpression(node.parent) &&
                         isBinaryExpression(node.parent.parent) &&
                         node.parent.parent.left === node.parent ?
                         node.parent.parent :
@@ -448,7 +448,7 @@ namespace ts.FindAllReferences {
     function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
         let end = (endNode || node).getEnd();
-        if (node.kind === SyntaxKind.StringLiteral) {
+        if (isStringLiteralLike(node)) {
             Debug.assert(endNode === undefined);
             start += 1;
             end -= 1;
@@ -584,7 +584,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlyMap<true>) {
-        const moduleSourceFile = symbol.flags & SymbolFlags.Module ? find(symbol.declarations, isSourceFile) : undefined;
+        const moduleSourceFile = (symbol.flags & SymbolFlags.Module) && symbol.declarations && find(symbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const exportEquals = symbol.exports!.get(InternalSymbolName.ExportEquals);
         // If !!exportEquals, we're about to add references to `import("mod")` anyway, so don't double-count them.
@@ -1234,8 +1234,9 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.Identifier:
                 return (node as Identifier).text.length === searchSymbolName.length;
 
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
-                const str = node as StringLiteral;
+                const str = node as StringLiteralLike;
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) || (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node)) &&
                     str.text.length === searchSymbolName.length;
             }
@@ -1394,8 +1395,10 @@ namespace ts.FindAllReferences.Core {
                 || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
-            const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
-            searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);
+            const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
+            if (exportInfo) {
+                searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);
+            }
         }
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.

@@ -802,7 +802,6 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
-        const projectRoot = "/user/username/projects/myproject";
         const core: File = {
             path: `${projectRoot}/core/core.ts`,
             content: "let z = 10;"

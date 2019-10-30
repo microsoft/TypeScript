@@ -4,7 +4,9 @@
         "outFile": "../../built/local/compiler.js"
     },
 
-    "references": [],
+    "references": [
+        { "path": "../shims" },
+    ],
 
     "files": [
         "core.ts",
@@ -15,6 +17,7 @@
 
         "types.ts",
         "sys.ts",
+        "path.ts",
         "diagnosticInformationMap.generated.ts",
         "scanner.ts",
         "utilities.ts",

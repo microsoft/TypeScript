@@ -124,6 +124,13 @@ namespace ts.server {
             return response;
         }
 
+        /*@internal*/
+        configure(preferences: UserPreferences) {
+            const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -283,7 +290,7 @@ namespace ts.server {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
-            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.assertDefined(response.body); // TODO: GH#18217
 
             return {

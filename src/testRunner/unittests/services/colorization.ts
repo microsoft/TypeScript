@@ -57,8 +57,8 @@ describe("unittests:: services:: Colorization", () => {
     }
 
     describe("test getClassifications", () => {
-        it("Returns correct token classes", () => {
-            testLexicalClassification("var x: string = \"foo\"; //Hello",
+        it("returns correct token classes", () => {
+            testLexicalClassification("var x: string = \"foo\" ?? \"bar\"; //Hello",
                 ts.EndOfLineState.None,
                 keyword("var"),
                 whitespace(" "),
@@ -66,6 +66,9 @@ describe("unittests:: services:: Colorization", () => {
                 punctuation(":"),
                 keyword("string"),
                 operator("="),
+                stringLiteral("\"foo\""),
+                whitespace(" "),
+                operator("??"),
                 stringLiteral("\"foo\""),
                 comment("//Hello"),
                 punctuation(";"));
@@ -93,14 +96,14 @@ describe("unittests:: services:: Colorization", () => {
                 operator(","));
         });
 
-        it("correctly classifies a multi-line string with one backslash", () => {
+        it("correctly classifies a multiline string with one backslash", () => {
             testLexicalClassification("'line1\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("correctly classifies a multi-line string with three backslashes", () => {
+        it("correctly classifies a multiline string with three backslashes", () => {
             testLexicalClassification("'line1\\\\\\",
                 ts.EndOfLineState.None,
                 stringLiteral("'line1\\\\\\"),
@@ -128,42 +131,42 @@ describe("unittests:: services:: Colorization", () => {
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the continuing line of a multi-line string ending in one backslash", () => {
+        it("correctly classifies the continuing line of a multiline string ending in one backslash", () => {
             testLexicalClassification("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("correctly classifies the continuing line of a multi-line string ending in three backslashes", () => {
+        it("correctly classifies the continuing line of a multiline string ending in three backslashes", () => {
             testLexicalClassification("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in no backslashes", () => {
+        it("correctly classifies the last line of an unterminated multiline string ending in no backslashes", () => {
             testLexicalClassification("  ",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("  "),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in two backslashes", () => {
+        it("correctly classifies the last line of an unterminated multiline string ending in two backslashes", () => {
             testLexicalClassification("\\\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of an unterminated multi-line string ending in four backslashes", () => {
+        it("correctly classifies the last line of an unterminated multiline string ending in four backslashes", () => {
             testLexicalClassification("\\\\\\\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\\\\\\\"),
                 finalEndOfLineState(ts.EndOfLineState.None));
         });
 
-        it("correctly classifies the last line of a multi-line string", () => {
+        it("correctly classifies the last line of a multiline string", () => {
             testLexicalClassification("'",
                 ts.EndOfLineState.InSingleQuoteStringLiteral,
                 stringLiteral("'"),

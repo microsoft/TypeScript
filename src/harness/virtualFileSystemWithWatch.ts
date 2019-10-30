@@ -44,7 +44,10 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
-        return new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
+        const host = new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
+        // Just like sys, patch the host to use writeFile
+        patchWriteFileEnsuringDirectory(host);
+        return host;
     }
 
     export interface File {
@@ -174,8 +177,8 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[]) {
-        checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+        checkMapKeys(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles);
     }
 
     export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>): void;
@@ -338,7 +341,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly currentDirectory: string;
         private readonly customWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
-        public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
+        public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
 
         constructor(
             public withSafeList: boolean,
@@ -1016,6 +1019,19 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<true>; };
+
+    export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
+        const host = inputHost as TestServerHostTrackingWrittenFiles;
+        const originalWriteFile = host.writeFile;
+        host.writtenFiles = createMap<true>();
+        host.writeFile = (fileName, content) => {
+            originalWriteFile.call(host, fileName, content);
+            const path = host.toFullPath(fileName);
+            host.writtenFiles.set(path, true);
+        };
+        return host;
+    }
     export const tsbuildProjectsLocation = "/user/username/projects";
     export function getTsBuildProjectFilePath(project: string, file: string) {
         return `${tsbuildProjectsLocation}/${project}/${file}`;

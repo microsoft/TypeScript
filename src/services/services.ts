@@ -99,7 +99,7 @@ namespace ts {
             return this._children || (this._children = createChildren(this, sourceFile));
         }
 
-        public getFirstToken(sourceFile?: SourceFile): Node | undefined {
+        public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
             this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
             if (!children.length) {
@@ -112,7 +112,7 @@ namespace ts {
                 child.getFirstToken(sourceFile);
         }
 
-        public getLastToken(sourceFile?: SourceFile): Node | undefined {
+        public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
             this.assertHasRealPosition();
             const children = this.getChildren(sourceFile);
 
@@ -339,7 +339,6 @@ namespace ts {
     }
 
     class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-        public symbol!: Symbol;
         public kind: TKind;
 
         constructor(kind: TKind, pos: number, end: number) {
@@ -349,9 +348,8 @@ namespace ts {
     }
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-        public kind!: SyntaxKind.Identifier;
+        public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
         public escapedText!: __String;
-        public symbol!: Symbol;
         public autoGenerateFlags!: GeneratedIdentifierFlags;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
@@ -411,8 +409,14 @@ namespace ts {
         getBaseTypes(): BaseType[] | undefined {
             return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
         }
+        isNullableType(): boolean {
+            return this.checker.isNullableType(this);
+        }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
+        }
+        getNonOptionalType(): Type {
+            return this.checker.getNonOptionalType(this);
         }
         getConstraint(): Type | undefined {
             return this.checker.getBaseConstraintOfType(this);
@@ -448,9 +452,19 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        /**
+         * This polyfills `referenceType.typeArguments` for API consumers
+         */
+        get typeArguments() {
+            if (getObjectFlags(this) & ObjectFlags.Reference) {
+                return this.checker.getTypeArguments(this as Type as TypeReference);
+            }
+            return undefined;
+        }
     }
 
     class SignatureObject implements Signature {
+        flags: SignatureFlags;
         checker: TypeChecker;
         declaration!: SignatureDeclaration;
         typeParameters?: TypeParameter[];
@@ -460,8 +474,6 @@ namespace ts {
         resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount!: number;
         minArgumentCount!: number;
-        hasRestParameter!: boolean;
-        hasLiteralTypes!: boolean;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
@@ -471,9 +483,11 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         jsDocTags?: JSDocTagInfo[];
 
-        constructor(checker: TypeChecker) {
+        constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
+            this.flags = flags;
         }
+
         getDeclaration(): SignatureDeclaration {
             return this.declaration;
         }
@@ -514,11 +528,11 @@ namespace ts {
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
-            for (const declaration of declarations) {
+            forEachUnique(declarations, declaration => {
                 const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-            }
+            });
         }
         return doc;
     }
@@ -541,7 +555,7 @@ namespace ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
-        public kind!: SyntaxKind.SourceFile;
+        public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
         public _declarationBrand: any;
         public fileName!: string;
         public path!: Path;
@@ -939,9 +953,7 @@ namespace ts {
                     names.push(entry);
                 }
                 else {
-                    if (entry.scriptKind !== ScriptKind.JSON) {
-                        names.push(entry.hostFileName);
-                    }
+                    names.push(entry.hostFileName);
                 }
             });
             return names;
@@ -1149,10 +1161,10 @@ namespace ts {
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCurrentDirectory: () => currentDirectory,
             getProgram,
-            fileExists: host.fileExists && (f => host.fileExists!(f)),
-            readFile: host.readFile && ((f, encoding) => host.readFile!(f, encoding)),
-            getDocumentPositionMapper: host.getDocumentPositionMapper && ((generatedFileName, sourceFileName) => host.getDocumentPositionMapper!(generatedFileName, sourceFileName)),
-            getSourceFileLike: host.getSourceFileLike && (f => host.getSourceFileLike!(f)),
+            fileExists: maybeBind(host, host.fileExists),
+            readFile: maybeBind(host, host.readFile),
+            getDocumentPositionMapper: maybeBind(host, host.getDocumentPositionMapper),
+            getSourceFileLike: maybeBind(host, host.getSourceFileLike),
             log
         });
 
@@ -1249,6 +1261,12 @@ namespace ts {
             }
             if (host.resolveTypeReferenceDirectives) {
                 compilerHost.resolveTypeReferenceDirectives = (...args) => host.resolveTypeReferenceDirectives!(...args);
+            }
+            if (host.setResolvedProjectReferenceCallbacks) {
+                compilerHost.setResolvedProjectReferenceCallbacks = callbacks => host.setResolvedProjectReferenceCallbacks!(callbacks);
+            }
+            if (host.useSourceOfProjectReferenceRedirect) {
+                compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
@@ -1458,7 +1476,7 @@ namespace ts {
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source });
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
@@ -1619,12 +1637,12 @@ namespace ts {
             return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
-        function getEmitOutput(fileName: string, emitOnlyDtsFiles = false) {
+        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
-            return getFileEmitOutput(program, sourceFile, emitOnlyDtsFiles, cancellationToken, customTransformers);
+            return getFileEmitOutput(program, sourceFile, !!emitOnlyDtsFiles, cancellationToken, customTransformers, forceDtsEmit);
         }
 
         // Signature help
@@ -2227,6 +2245,7 @@ namespace ts {
     function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;

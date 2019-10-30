@@ -218,6 +218,7 @@ namespace ts.textChanges {
     export interface TextChangesContext {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
+        preferences: UserPreferences;
     }
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
@@ -246,6 +247,18 @@ namespace ts.textChanges {
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+
+        public pushRaw(sourceFile: SourceFile, change: FileTextChanges) {
+            Debug.assertEqual(sourceFile.fileName, change.fileName);
+            for (const c of change.textChanges) {
+                this.changes.push({
+                    kind: ChangeKind.Text,
+                    sourceFile,
+                    text: c.newText,
+                    range: createTextRangeFromSpan(c.span),
+                });
+            }
+        }
 
         public deleteRange(sourceFile: SourceFile, range: TextRange): void {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -382,12 +395,12 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): boolean {
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
                 if (!endNode) {
-                    if (!isArrowFunction(node)) return; // Function missing parentheses, give up
+                    if (!isArrowFunction(node)) return false; // Function missing parentheses, give up
                     // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
                     endNode = first(node.parameters);
                 }
@@ -397,6 +410,7 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+            return true;
         }
 
         public tryInsertThisTypeAnnotation(sourceFile: SourceFile, node: ThisTypeAnnotatable, type: TypeNode): void {
@@ -831,28 +845,36 @@ namespace ts.textChanges {
             return (options.prefix || "") + noIndent + (options.suffix || "");
         }
 
+        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+            return {
+                ...options,
+                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+            };
+        }
+
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
-            const { options: formatOptions } = formatContext;
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
             const initialIndentation =
                 indentation !== undefined
                     ? indentation
                     : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             if (delta === undefined) {
-                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+                delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
             const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
+            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
 
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
-            const omitTrailingSemicolon = !!sourceFile && !probablyUsesSemicolons(sourceFile);
-            const writer = createWriter(newLineCharacter, omitTrailingSemicolon);
+            const writer = createWriter(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
             createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
@@ -894,11 +916,11 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string, omitTrailingSemicolon?: boolean): TextChangesWriter {
+    function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
 
-        const writer = omitTrailingSemicolon ? getTrailingSemicolonOmittingWriter(createTextWriter(newLine)) : createTextWriter(newLine);
+        const writer = createTextWriter(newLine);
         const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
@@ -1052,6 +1074,8 @@ namespace ts.textChanges {
             getColumn,
             getIndent,
             isAtStartOfLine,
+            hasTrailingComment: () => writer.hasTrailingComment(),
+            hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
             clear
         };
     }
