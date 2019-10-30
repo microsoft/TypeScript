@@ -5389,6 +5389,12 @@ namespace ts {
      * Gets the property name of a BindingOrAssignmentElement
      */
     export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+        const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
+        Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
+        return propertyName;
+    }
+
+    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -5429,8 +5435,6 @@ namespace ts {
                 ? target.expression
                 : target;
         }
-
-        Debug.fail("Invalid property name for binding element.");
     }
 
     function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
