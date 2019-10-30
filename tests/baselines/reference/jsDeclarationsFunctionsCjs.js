@@ -121,8 +121,7 @@ export namespace b {
 }
 export function c(): void;
 export namespace c {
-    class Cls {
-    }
+    export { Cls };
 }
 export function d(a: number, b: number): string;
 export function e<T, U>(a: T, b: U): T & U;
@@ -159,3 +158,6 @@ export function i(): void;
 export function ii(): void;
 export function jj(): void;
 export function j(): void;
+declare class Cls {
+}
+export {};
