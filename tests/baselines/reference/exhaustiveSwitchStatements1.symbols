@@ -501,3 +501,45 @@ function test4(value: 1 | 2) {
 >x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 188, 7))
 }
 
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+
+declare const zoo: { animal: Animal } | undefined;
+>zoo : Symbol(zoo, Decl(exhaustiveSwitchStatements1.ts, 200, 13))
+>animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+
+function expression(): Animal {
+>expression : Symbol(expression, Decl(exhaustiveSwitchStatements1.ts, 200, 50))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+
+    switch (zoo?.animal ?? Animal.DOG) {
+>zoo?.animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>zoo : Symbol(zoo, Decl(exhaustiveSwitchStatements1.ts, 200, 13))
+>animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+
+        case Animal.DOG: return Animal.DOG
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+
+        case Animal.CAT: return Animal.CAT
+>Animal.CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal.CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+    }
+}
+
