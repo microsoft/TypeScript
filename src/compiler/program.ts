@@ -972,7 +972,8 @@ namespace ts {
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
-            getProbableSymlinks
+            getProbableSymlinks,
+            writeFile
         };
 
         verifyCompilerOptions();
@@ -1457,6 +1458,10 @@ namespace ts {
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
 
+        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[]) {
+            host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles);
+        }
+
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
                 getPrependNodes,
@@ -1472,8 +1477,7 @@ namespace ts {
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
                 getProbableSymlinks,
-                writeFile: writeFileCallback || (
-                    (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
+                writeFile: writeFileCallback || writeFile,
                 isEmitBlocked,
                 readFile: f => host.readFile(f),
                 fileExists: f => {

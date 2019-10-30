@@ -3,12 +3,21 @@
 exitCode:: ExitStatus.Success
 
 
+//// [/src/dev-build/shared/types/db.js]
+"use strict";
+exports.__esModule = true;
+
+
 //// [/src/dev-build/src/main.js]
 "use strict";
 exports.__esModule = true;
 var a = {
     lastName: 'sdsd'
 };
+
+
+//// [/src/dev-build/src/other.js]
+console.log("hi");
 
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]

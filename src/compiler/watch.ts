@@ -152,20 +152,20 @@ namespace ts {
         const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
 
         // First get and report any syntactic errors.
-        const diagnostics = program.getConfigFileParsingDiagnostics().slice();
-        const configFileParsingDiagnosticsLength = diagnostics.length;
-        addRange(diagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+        const allDiagnostics = program.getConfigFileParsingDiagnostics().slice();
+        const configFileParsingDiagnosticsLength = allDiagnostics.length;
+        addRange(allDiagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
-        if (diagnostics.length === configFileParsingDiagnosticsLength) {
-            addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+        if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
+            addRange(allDiagnostics, program.getOptionsDiagnostics(cancellationToken));
 
             if (!isListFilesOnly) {
-                addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
+                addRange(allDiagnostics, program.getGlobalDiagnostics(cancellationToken));
 
-                if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                    addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+                if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
+                    addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
                 }
             }
         }
@@ -175,9 +175,10 @@ namespace ts {
             ? { emitSkipped: true, diagnostics: emptyArray }
             : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
-        addRange(diagnostics, emitDiagnostics);
+        addRange(allDiagnostics, emitDiagnostics);
 
-        sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
+        const diagnostics = sortAndDeduplicateDiagnostics(allDiagnostics);
+        diagnostics.forEach(reportDiagnostic);
         if (writeFileName) {
             const currentDir = program.getCurrentDirectory();
             forEach(emittedFiles, file => {

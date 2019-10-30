@@ -983,12 +983,50 @@ namespace ts {
                     let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];
 
+                    let writeFileToUse = writeFile;
+                    let outputFiles: OutputFile[] | undefined;
+                    let savedState: BuilderProgramState | undefined;
+                    if (state.compilerOptions.noEmitOnError) {
+                        // Create backup and write in memory
+                        writeFileToUse = (name, text, writeByteOrderMark) =>
+                            (outputFiles || (outputFiles = [])).push({ name, text, writeByteOrderMark });
+                        savedState = backupState || cloneBuilderProgramState(state);
+                    }
                     let affectedEmitResult: AffectedFileResult<EmitResult>;
-                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                    while (affectedEmitResult = emitNextAffectedFile(writeFileToUse, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
                         emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
                         diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
                         emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
                         sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
+                    }
+
+                    if (state.compilerOptions.noEmitOnError) {
+                        if (length(diagnostics)) {
+                            // Errors so dont write files
+                            emitSkipped = true;
+                            emittedFiles.length = 0;
+                            sourceMaps.length = 0;
+                            state = Debug.assertDefined(savedState);
+                        }
+                        else {
+                            // write files since no error
+                            const emitterDiagnostics = createDiagnosticCollection();
+                            forEach(
+                                outputFiles,
+                                ({ name, text, writeByteOrderMark }) => ts.writeFile(
+                                    {
+                                        writeFile: writeFile ||
+                                            maybeBind(host, host.writeFile) ||
+                                            Debug.assertDefined(state.program).writeFile
+                                    },
+                                    emitterDiagnostics,
+                                    name,
+                                    text,
+                                    writeByteOrderMark
+                                )
+                            );
+                            diagnostics = addRange(diagnostics, emitterDiagnostics.getDiagnostics());
+                        }
                     }
                     return {
                         emitSkipped,
