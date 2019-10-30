@@ -49,7 +49,8 @@ and then running \`npm install\`.
     });
 
     // Send a ping to https://github.com/orta/make-monaco-builds#pull-request-builds
-    await gh.request("POST /repos/orta/make-monaco-builds/dispatches", { event_type: +process.env.SOURCE_ISSUE })
+    await gh.request("POST /repos/orta/make-monaco-builds/dispatches", 
+    { event_type: +process.env.SOURCE_ISSUE, headers: { "Accept": "application/vnd.github.everest-preview+json" }})
 }
 
 main().catch(async e => {

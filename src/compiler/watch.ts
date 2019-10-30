@@ -303,20 +303,20 @@ namespace ts {
             readDirectory: maybeBind(host, host.readDirectory),
         };
 
-        function ensureDirectoriesExist(directoryPath: string) {
-            if (directoryPath.length > getRootLength(directoryPath) && !host.directoryExists!(directoryPath)) {
-                const parentDirectory = getDirectoryPath(directoryPath);
-                ensureDirectoriesExist(parentDirectory);
-                if (host.createDirectory) host.createDirectory(directoryPath);
-            }
-        }
-
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
             try {
                 performance.mark("beforeIOWrite");
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                host.writeFile!(fileName, text, writeByteOrderMark);
+                // NOTE: If patchWriteFileEnsuringDirectory has been called,
+                // the host.writeFile will do its own directory creation and
+                // the ensureDirectoriesExist call will always be redundant.
+                writeFileEnsuringDirectories(
+                    fileName,
+                    text,
+                    writeByteOrderMark,
+                    (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                    path => host.createDirectory!(path),
+                    path => host.directoryExists!(path));
 
                 performance.mark("afterIOWrite");
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");

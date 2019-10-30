@@ -447,6 +447,35 @@ namespace Foo {
             }).outputText;
         });
 
+        testBaseline("transformUpdateModuleMember", () => {
+            return transpileModule(`
+module MyModule {
+    const myVariable = 1;
+    function foo(param: string) {}
+}
+`, {
+                transformers: {
+                    before: [renameVariable],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function renameVariable(context: TransformationContext) {
+                    return (sourceFile: SourceFile): SourceFile => {
+                        return visitNode(sourceFile, rootTransform, isSourceFile);
+                    };
+                    function rootTransform<T extends Node>(node: T): Node {
+                        if (isVariableDeclaration(node)) {
+                            return updateVariableDeclaration(node, createIdentifier("newName"), /* type */ undefined, node.initializer);
+                        }
+                        return visitEachChild(node, rootTransform, context);
+                    }
+            }
+        });
+
         // https://github.com/Microsoft/TypeScript/issues/24709
         testBaseline("issue24709", () => {
             const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);

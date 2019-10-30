@@ -953,9 +953,7 @@ namespace ts {
                     names.push(entry);
                 }
                 else {
-                    if (entry.scriptKind !== ScriptKind.JSON) {
-                        names.push(entry.hostFileName);
-                    }
+                    names.push(entry.hostFileName);
                 }
             });
             return names;

@@ -338,6 +338,7 @@ namespace ts.Completions {
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan: TextSpan | undefined;
+
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
@@ -780,7 +781,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         isUncheckedFile: boolean,
         position: number,
-        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
+        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText" | "includeAutomaticOptionalChainCompletions">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
     ): CompletionData | Request | undefined {
@@ -1116,8 +1117,17 @@ namespace ts.Completions {
                             let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
                             let insertQuestionDot = false;
                             if (type.isNullableType()) {
-                                insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                                type = type.getNonNullableType();
+                                const canCorrectToQuestionDot =
+                                isRightOfDot &&
+                                !isRightOfQuestionDot &&
+                                preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                                if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                                    type = type.getNonNullableType();
+                                    if (canCorrectToQuestionDot) {
+                                        insertQuestionDot = true;
+                                    }
+                                }
                             }
                             addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
                         }
@@ -1137,8 +1147,17 @@ namespace ts.Completions {
                 let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 let insertQuestionDot = false;
                 if (type.isNullableType()) {
-                    insertQuestionDot = isRightOfDot && !isRightOfQuestionDot;
-                    type = type.getNonNullableType();
+                    const canCorrectToQuestionDot =
+                        isRightOfDot &&
+                        !isRightOfQuestionDot &&
+                        preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                    if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                        type = type.getNonNullableType();
+                        if (canCorrectToQuestionDot) {
+                            insertQuestionDot = true;
+                        }
+                    }
                 }
                 addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }

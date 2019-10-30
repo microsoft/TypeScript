@@ -2061,26 +2061,30 @@ namespace ts {
             isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
     }
 
-    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
-        return isLiteralLikeElementAccess(node)
-            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
-                isEntityNameExpression(node.expression) ||
-                isBindableStaticElementAccessExpression(node.expression, /*excludeThisKeyword*/ true));
-    }
-
+    /** x.y OR x[0] */
     export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
         return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
     }
 
+    /** x[0] OR x['a'] OR x[Symbol.y] */
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
         return isElementAccessExpression(node) && (
             isStringOrNumericLiteralLike(node.argumentExpression) ||
             isWellKnownSymbolSyntactically(node.argumentExpression));
     }
 
+    /** Any series of property and element accesses. */
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
         return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
-        || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+            || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    }
+
+    /** Any series of property and element accesses, ending in a literal element access */
+    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
+        return isLiteralLikeElementAccess(node)
+            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
+                isEntityNameExpression(node.expression) ||
+                isBindableStaticAccessExpression(node.expression, /*excludeThisKeyword*/ true));
     }
 
     export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
@@ -2111,7 +2115,7 @@ namespace ts {
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        if (isBindableStaticNameExpression(expr.left.expression) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
@@ -2179,8 +2183,10 @@ namespace ts {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
-            // F.G...x = expr
-            return AssignmentDeclarationKind.Property;
+            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs) && lhs.expression.kind !== SyntaxKind.ThisKeyword)) {
+                // F.G...x = expr
+                return AssignmentDeclarationKind.Property;
+            }
         }
 
         return AssignmentDeclarationKind.None;
@@ -3698,6 +3704,36 @@ namespace ts {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         }, sourceFiles);
+    }
+
+    function ensureDirectoriesExist(
+        directoryPath: string,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+        if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+            const parentDirectory = getDirectoryPath(directoryPath);
+            ensureDirectoriesExist(parentDirectory, createDirectory, directoryExists);
+            createDirectory(directoryPath);
+        }
+    }
+
+    export function writeFileEnsuringDirectories(
+        path: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        writeFile: (path: string, data: string, writeByteOrderMark: boolean) => void,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+
+        // PERF: Checking for directory existence is expensive.  Instead, assume the directory exists
+        // and fall back to creating it if the file write fails.
+        try {
+            writeFile(path, data, writeByteOrderMark);
+        }
+        catch {
+            ensureDirectoriesExist(getDirectoryPath(normalizePath(path)), createDirectory, directoryExists);
+            writeFile(path, data, writeByteOrderMark);
+        }
     }
 
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
@@ -5939,6 +5975,10 @@ namespace ts {
         return !isOptionalChain(node.parent) // cases 1 and 2
             || isOptionalChainRoot(node.parent) // case 3
             || node !== node.parent.expression; // case 4
+    }
+
+    export function isNullishCoalesce(node: Node) {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isNewExpression(node: Node): node is NewExpression {

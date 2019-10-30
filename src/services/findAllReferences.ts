@@ -584,7 +584,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlyMap<true>) {
-        const moduleSourceFile = symbol.flags & SymbolFlags.Module ? find(symbol.declarations, isSourceFile) : undefined;
+        const moduleSourceFile = (symbol.flags & SymbolFlags.Module) && symbol.declarations && find(symbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const exportEquals = symbol.exports!.get(InternalSymbolName.ExportEquals);
         // If !!exportEquals, we're about to add references to `import("mod")` anyway, so don't double-count them.
