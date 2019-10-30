@@ -163,6 +163,7 @@ namespace ts {
         ImmediateBaseConstraint,
         EnumTagType,
         JSDocTypeReference,
+        ResolvedTypeArguments,
     }
 
     const enum CheckMode {
@@ -6539,6 +6540,8 @@ namespace ts {
                     return !!(<Type>target).immediateBaseConstraint;
                 case TypeSystemPropertyName.JSDocTypeReference:
                     return !!getSymbolLinks(target as Symbol).resolvedJSDocType;
+                case TypeSystemPropertyName.ResolvedTypeArguments:
+                    return !!(target as TypeReference).resolvedTypeArguments;
             }
             return Debug.assertNever(propertyName);
         }
@@ -10629,12 +10632,28 @@ namespace ts {
 
         function getTypeArguments(type: TypeReference): readonly Type[] {
             if (!type.resolvedTypeArguments) {
+                if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedTypeArguments)) {
+                    return type.target.localTypeParameters?.map(() => errorType) || emptyArray;
+                }
                 const node = type.node;
                 const typeArguments = !node ? emptyArray :
                     node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
                     node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
                     map(node.elementTypes, getTypeFromTypeNode);
-                type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
+                if (popTypeResolution()) {
+                    type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
+                }
+                else {
+                    type.resolvedTypeArguments = type.target.localTypeParameters?.map(() => errorType) || emptyArray;
+                    error(
+                        type.node || currentNode,
+                        type.target.symbol
+                            ? Diagnostics.Type_arguments_for_0_circularly_reference_themselves
+                            : Diagnostics.Tuple_type_arguments_circularly_reference_themselves
+                        ,
+                        type.target.symbol && symbolToString(type.target.symbol)
+                    );
+                }
             }
             return type.resolvedTypeArguments;
         }

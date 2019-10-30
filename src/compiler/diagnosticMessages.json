@@ -3136,6 +3136,14 @@
         "category": "Error",
         "code": 4108
     },
+    "Type arguments for '{0}' circularly reference themselves.": {
+        "category": "Error",
+        "code": 4109
+    },
+    "Tuple type arguments circularly reference themselves.": {
+        "category": "Error",
+        "code": 4110
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
