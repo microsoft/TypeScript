@@ -1,5 +1,4 @@
 //// [index.js]
-// TODO: Fixup
 class A {
     member = new Q();
 }
@@ -15,7 +14,6 @@ module.exports.Another = Q;
 
 
 //// [index.js]
-// TODO: Fixup
 var A = /** @class */ (function () {
     function A() {
         this.member = new Q();
@@ -43,44 +41,11 @@ declare class Q {
     x: A;
 }
 declare namespace Q {
-    export { Another };
+    export { Q_1 as Another };
 }
 declare class A {
     member: Q;
 }
-declare var Another: typeof Q;
-declare class Q {
+declare class Q_1 {
     x: number;
 }
-
-
-//// [DtsFileErrors]
-
-
-out/index.d.ts(2,15): error TS2300: Duplicate identifier 'Q'.
-out/index.d.ts(5,19): error TS2300: Duplicate identifier 'Q'.
-out/index.d.ts(12,15): error TS2300: Duplicate identifier 'Q'.
-
-
-==== ./out/index.d.ts (3 errors) ====
-    export = Q;
-    declare class Q {
-                  ~
-!!! error TS2300: Duplicate identifier 'Q'.
-        x: A;
-    }
-    declare namespace Q {
-                      ~
-!!! error TS2300: Duplicate identifier 'Q'.
-        export { Another };
-    }
-    declare class A {
-        member: Q;
-    }
-    declare var Another: typeof Q;
-    declare class Q {
-                  ~
-!!! error TS2300: Duplicate identifier 'Q'.
-        x: number;
-    }
-    
