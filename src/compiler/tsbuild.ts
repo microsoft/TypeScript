@@ -174,6 +174,7 @@ namespace ts {
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
+        /* @internal */ generateCpuProfile?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -1787,31 +1788,25 @@ namespace ts {
 
         let reportQueue = true;
         let successfulProjects = 0;
-        let errorProjects = 0;
         while (true) {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
             reportQueue = false;
             invalidatedProject.done(cancellationToken);
-            if (state.diagnostics.has(invalidatedProject.projectPath)) {
-                errorProjects++;
-            }
-            else {
-                successfulProjects++;
-            }
+            if (!state.diagnostics.has(invalidatedProject.projectPath)) successfulProjects++;
         }
 
         disableCache(state);
         reportErrorSummary(state, buildOrder);
         startWatching(state, buildOrder);
 
-        return isCircularBuildOrder(buildOrder) ?
-            ExitStatus.ProjectReferenceCycle_OutputsSkupped :
-            errorProjects ?
-                successfulProjects ?
-                    ExitStatus.DiagnosticsPresent_OutputsGenerated :
-                    ExitStatus.DiagnosticsPresent_OutputsSkipped :
-                ExitStatus.Success;
+        return isCircularBuildOrder(buildOrder)
+            ? ExitStatus.ProjectReferenceCycle_OutputsSkipped
+            : !buildOrder.some(p => state.diagnostics.has(toResolvedConfigFilePath(state, p)))
+                ? ExitStatus.Success
+                : successfulProjects
+                    ? ExitStatus.DiagnosticsPresent_OutputsGenerated
+                    : ExitStatus.DiagnosticsPresent_OutputsSkipped;
     }
 
     function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
@@ -1820,7 +1815,7 @@ namespace ts {
 
         if (isCircularBuildOrder(buildOrder)) {
             reportErrors(state, buildOrder.circularDiagnostics);
-            return ExitStatus.ProjectReferenceCycle_OutputsSkupped;
+            return ExitStatus.ProjectReferenceCycle_OutputsSkipped;
         }
 
         const { options, host } = state;

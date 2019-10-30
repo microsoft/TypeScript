@@ -71,7 +71,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be either 'string' or 'number'.": {
         "category": "Error",
         "code": 1023
     },
@@ -903,7 +903,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'esnext', 'commonjs',  'amd', 'system', or 'umd'.": {
         "category": "Error",
         "code": 1323
     },
@@ -1038,6 +1038,14 @@
     "An enum member name must be followed by a ',', '=', or '}'.": {
         "category": "Error",
         "code": 1357
+    },
+    "Tagged template expressions are not permitted in an optional chain.": {
+        "category": "Error",
+        "code": 1358
+    },
+    "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
+        "category": "Error",
+        "code": 1359
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1241,7 +1249,7 @@
         "category": "Error",
         "code": 2342
     },
-    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+    "This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
         "code": 2343
     },
@@ -1552,10 +1560,6 @@
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
         "category": "Error",
         "code": 2423
-    },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
@@ -2233,6 +2237,27 @@
         "category": "Error",
         "code": 2609
     },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+        "category": "Error",
+        "code": 2610
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+        "category": "Error",
+        "code": 2611
+    },
+    "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": {
+        "category": "Error",
+        "code": 2612
+    },
+    "Module '{0}' has no default export. Did you mean to use 'import { {1} } from {0}' instead?": {
+        "category": "Error",
+        "code": 2613
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
+        "category": "Error",
+        "code": 2614
+    },
+
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
@@ -2726,6 +2751,35 @@
         "category": "Error",
         "code": 2774
     },
+    "Assertions require every name in the call target to be declared with an explicit type annotation.": {
+        "category": "Error",
+        "code": 2775
+    },
+    "Assertions require the call target to be an identifier or qualified name.": {
+        "category": "Error",
+        "code": 2776
+    },
+    "The operand of an increment or decrement operator may not be an optional property access.": {
+        "category": "Error",
+        "code": 2777
+    },
+    "The target of an object rest assignment may not be an optional property access.": {
+        "category": "Error",
+        "code": 2778
+    },
+    "The left-hand side of an assignment expression may not be an optional property access.": {
+        "category": "Error",
+        "code": 2779
+    },
+    "The left-hand side of a 'for...in' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2780
+    },
+    "The left-hand side of a 'for...of' statement may not be an optional property access.": {
+        "category": "Error",
+        "code": 2781
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3026,7 +3080,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -3071,6 +3124,26 @@
         "category": "Error",
         "code": 4105
     },
+    "Parameter '{0}' of accessor has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4106
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4107
+    },
+    "Parameter '{0}' of accessor has or is using name '{1}' from external module '{2}' but cannot be named.": {
+        "category": "Error",
+        "code": 4108
+    },
+    "Type arguments for '{0}' circularly reference themselves.": {
+        "category": "Error",
+        "code": 4109
+    },
+    "Tuple type arguments circularly reference themselves.": {
+        "category": "Error",
+        "code": 4110
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3111,6 +3184,10 @@
     "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
+    },
+    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
+        "category": "Error",
+        "code": 5048
     },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
@@ -3211,6 +3288,10 @@
     "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
         "category": "Error",
         "code": 5075
+    },
+    "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
+        "category": "Error",
+        "code": 5076
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3967,6 +4048,10 @@
         "category": "Message",
         "code": 6201
     },
+    "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
     "'{0}' was also declared here.": {
         "category": "Message",
         "code": 6203
@@ -4043,9 +4128,17 @@
         "category": "Message",
         "code": 6221
     },
-    "Disable searching solution for this project.": {
+    "Emit class fields with Define instead of Set.": {
         "category": "Message",
         "code": 6222
+    },
+    "Generates a CPU profile.": {
+        "category": "Message",
+        "code": 6223
+    },
+    "Disable searching solution for this project.": {
+        "category": "Message",
+        "code": 6224
     },
 
     "Projects to reference": {
@@ -4056,10 +4149,7 @@
         "category": "Message",
         "code": 6302
     },
-    "Project references may not form a circular graph. Cycle detected: {0}": {
-        "category": "Error",
-        "code": 6202
-    },
+
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -4232,6 +4322,10 @@
     "The expected type comes from the return type of this signature.": {
         "category": "Message",
         "code": 6502
+    },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4568,6 +4662,14 @@
     "Language service is disabled.": {
         "category": "Error",
         "code": 9004
+    },
+    "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9005
+    },
+    "Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.": {
+        "category": "Error",
+        "code": 9006
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
@@ -5183,6 +5285,14 @@
     "Convert 'const' to 'let'": {
         "category": "Message",
         "code": 95093
+    },
+    "Prefix with 'declare'": {
+        "category": "Message",
+        "code": 95094
+    },
+    "Prefix all incorrect property declarations with 'declare'": {
+        "category": "Message",
+        "code": 95095
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

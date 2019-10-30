@@ -1,7 +1,7 @@
 === /a.ts ===
 interface I {}
 export default I;
->I : I
+>I : import("/a").default
 
 === /b.ts ===
 export {};

@@ -1,0 +1,26 @@
+tests/cases/conformance/types/intersection/commonTypeIntersection.ts(2,5): error TS2322: Type '{ __typename?: "TypeTwo"; } & { a: boolean; }' is not assignable to type '{ __typename?: "TypeOne"; } & { a: boolean; }'.
+  Type '{ __typename?: "TypeTwo"; } & { a: boolean; }' is not assignable to type '{ __typename?: "TypeOne"; }'.
+    Types of property '__typename' are incompatible.
+      Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
+tests/cases/conformance/types/intersection/commonTypeIntersection.ts(4,5): error TS2322: Type '{ __typename?: "TypeTwo"; } & string' is not assignable to type '{ __typename?: "TypeOne"; } & string'.
+  Type '{ __typename?: "TypeTwo"; } & string' is not assignable to type '{ __typename?: "TypeOne"; }'.
+    Types of property '__typename' are incompatible.
+      Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
+
+
+==== tests/cases/conformance/types/intersection/commonTypeIntersection.ts (2 errors) ====
+    declare let x1: { __typename?: 'TypeTwo' } & { a: boolean };
+    let y1: { __typename?: 'TypeOne' } & { a: boolean} = x1;  // should error here
+        ~~
+!!! error TS2322: Type '{ __typename?: "TypeTwo"; } & { a: boolean; }' is not assignable to type '{ __typename?: "TypeOne"; } & { a: boolean; }'.
+!!! error TS2322:   Type '{ __typename?: "TypeTwo"; } & { a: boolean; }' is not assignable to type '{ __typename?: "TypeOne"; }'.
+!!! error TS2322:     Types of property '__typename' are incompatible.
+!!! error TS2322:       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
+    declare let x2: { __typename?: 'TypeTwo' } & string;
+    let y2: { __typename?: 'TypeOne' } & string = x2;  // should error here
+        ~~
+!!! error TS2322: Type '{ __typename?: "TypeTwo"; } & string' is not assignable to type '{ __typename?: "TypeOne"; } & string'.
+!!! error TS2322:   Type '{ __typename?: "TypeTwo"; } & string' is not assignable to type '{ __typename?: "TypeOne"; }'.
+!!! error TS2322:     Types of property '__typename' are incompatible.
+!!! error TS2322:       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
+    

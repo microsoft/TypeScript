@@ -32,7 +32,7 @@ tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2769: No overload m
 !!! error TS2769:           Types of parameters 'success' and 'onfulfilled' are incompatible.
 !!! error TS2769:             Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
 !!! error TS2769:               Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1418:5: 'catch' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1430:5: 'catch' is declared here.
 !!! related TS6502 tests/cases/compiler/promiseTypeInference.ts:2:23: The expected type comes from the return type of this signature.
-!!! related TS6502 /.ts/lib.es5.d.ts:1411:57: The expected type comes from the return type of this signature.
+!!! related TS6502 /.ts/lib.es5.d.ts:1423:57: The expected type comes from the return type of this signature.
     

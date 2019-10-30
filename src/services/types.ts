@@ -17,7 +17,11 @@ namespace ts {
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getLastToken(sourceFile?: SourceFile): Node | undefined;
+        /* @internal */
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
@@ -48,6 +52,8 @@ namespace ts {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
+        /*@internal*/ getNonOptionalType(): Type;
+        /*@internal*/ isNullableType(): boolean;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
 
@@ -60,6 +66,10 @@ namespace ts {
         isTypeParameter(): this is TypeParameter;
         isClassOrInterface(): this is InterfaceType;
         isClass(): this is InterfaceType;
+    }
+
+    export interface TypeReference {
+        typeArguments?: readonly Type[];
     }
 
     export interface Signature {
@@ -167,10 +177,30 @@ namespace ts {
         packageName: string;
     }
 
+    /* @internal */
+    export const enum PackageJsonDependencyGroup {
+        Dependencies         = 1 << 0,
+        DevDependencies      = 1 << 1,
+        PeerDependencies     = 1 << 2,
+        OptionalDependencies = 1 << 3,
+        All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
+    }
+
+    /* @internal */
+    export interface PackageJsonInfo {
+        fileName: string;
+        dependencies?: Map<string>;
+        devDependencies?: Map<string>;
+        peerDependencies?: Map<string>;
+        optionalDependencies?: Map<string>;
+        get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
+        has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
+    export interface LanguageServiceHost extends ModuleSpecifierResolutionHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -186,7 +216,6 @@ namespace ts {
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
-        useCaseSensitiveFileNames?(): boolean;
 
         /*
          * LS host can optionally implement these methods to support completions for module specifiers.
@@ -214,6 +243,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */
+        getGlobalTypingsCacheLocation?(): string | undefined;
 
         /*
          * Required for full import and type reference completions.
@@ -234,6 +265,10 @@ namespace ts {
         getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */
+        getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
+        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
         setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
         /* @internal */
@@ -358,7 +393,7 @@ namespace ts {
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
 
@@ -505,7 +540,7 @@ namespace ts {
 
     export interface FileTextChanges {
         fileName: string;
-        textChanges: TextChange[];
+        textChanges: readonly TextChange[];
         isNewFile?: boolean;
     }
 
@@ -680,6 +715,12 @@ namespace ts {
         Smart = 2,
     }
 
+    export enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
@@ -738,6 +779,7 @@ namespace ts {
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: SemicolonPreference;
     }
 
     export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
@@ -761,6 +803,7 @@ namespace ts {
             insertSpaceBeforeFunctionParenthesis: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
+            semicolons: SemicolonPreference.Ignore,
         };
     }
 

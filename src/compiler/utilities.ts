@@ -36,7 +36,7 @@ namespace ts {
 
     /** Create a new escaped identifier map. */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new MapCtr<T>() as UnderscoreEscapedMap<T>;
+        return new Map<T>() as UnderscoreEscapedMap<T>;
     }
 
     export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
@@ -57,7 +57,6 @@ namespace ts {
 
     function createSingleLineStringWriter(): EmitTextWriter {
         let str = "";
-
         const writeText: (text: string) => void = text => str += text;
         return {
             getText: () => str,
@@ -79,6 +78,8 @@ namespace ts {
             getColumn: () => 0,
             getIndent: () => 0,
             isAtStartOfLine: () => false,
+            hasTrailingComment: () => false,
+            hasTrailingWhitespace: () => !!str.length && isWhiteSpaceLike(str.charCodeAt(str.length - 1)),
 
             // Completely ignore indentation for string writers.  And map newlines to
             // a single space.
@@ -91,13 +92,6 @@ namespace ts {
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
-    }
-
-    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
-        const nonCanonicalizedPath = isRootedDiskPath(fileName)
-            ? normalizePath(fileName)
-            : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
@@ -967,6 +961,11 @@ namespace ts {
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                const start = skipTrivia(sourceFile.text, (<CaseOrDefaultClause>node).pos);
+                const end = (<CaseOrDefaultClause>node).statements.length > 0 ? (<CaseOrDefaultClause>node).statements[0].pos : (<CaseOrDefaultClause>node).end;
+                return createTextSpanFromBounds(start, end);
         }
 
         if (errorNode === undefined) {
@@ -1692,7 +1691,6 @@ namespace ts {
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
@@ -1715,6 +1713,7 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:
                 return isInExpressionContext(node);
             default:
@@ -1820,9 +1819,9 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: true): callExpression is RequireOrImportCall & { expression: Identifier, arguments: [StringLiteralLike] };
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression;
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression {
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: true): callExpression is RequireOrImportCall & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: boolean): callExpression is CallExpression;
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
@@ -1836,7 +1835,7 @@ namespace ts {
             return false;
         }
         const arg = args[0];
-        return !checkArgumentIsStringLiteralLike || isStringLiteralLike(arg);
+        return !requireStringLiteralLikeArgument || isStringLiteralLike(arg);
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -1860,22 +1859,26 @@ namespace ts {
             name = node.parent.name;
             decl = node.parent;
         }
-        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.right === node) {
-            name = node.parent.left;
-            decl = name;
-        }
-        else if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken) {
-            if (isVariableDeclaration(node.parent.parent) && node.parent.parent.initializer === node.parent) {
-                name = node.parent.parent.name;
-                decl = node.parent.parent;
-            }
-            else if (isBinaryExpression(node.parent.parent) && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken && node.parent.parent.right === node.parent) {
-                name = node.parent.parent.left;
+        else if (isBinaryExpression(node.parent)) {
+            const parentNode = node.parent;
+            const parentNodeOperator = node.parent.operatorToken.kind;
+            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
+                name = parentNode.left;
                 decl = name;
             }
+            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
+                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
+                    name = parentNode.parent.name;
+                    decl = parentNode.parent;
+                }
+                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
+                    name = parentNode.parent.left;
+                    decl = name;
+                }
 
-            if (!name || !isEntityNameExpression(name) || !isSameEntityName(name, node.parent.left)) {
-                return undefined;
+                if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
+                    return undefined;
+                }
             }
         }
 
@@ -1886,13 +1889,14 @@ namespace ts {
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
+        return isBinaryExpression(decl) || isAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
         if (isInJSFile(node) && node.initializer &&
-            isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
+            isBinaryExpression(node.initializer) &&
+                (node.initializer.operatorToken.kind === SyntaxKind.BarBarToken || node.initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
             node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
             return node.initializer.right;
         }
@@ -1906,18 +1910,23 @@ namespace ts {
     }
 
     function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
-        return forEach(node.properties, p => isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === "value" && p.initializer && getExpandoInitializer(p.initializer, isPrototypeAssignment));
+        return forEach(node.properties, p =>
+            isPropertyAssignment(p) &&
+            isIdentifier(p.name) &&
+            p.name.escapedText === "value" &&
+            p.initializer &&
+            getExpandoInitializer(p.initializer, isPrototypeAssignment));
     }
 
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedExpandoInitializer(node: Node | undefined) {
+    export function getAssignedExpandoInitializer(node: Node | undefined): Expression | undefined {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
-                getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+                getDefaultedExpandoInitializer(node.parent.left, node.parent.right, isPrototypeAssignment);
         }
         if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
             const result = hasExpandoValueProperty(node.arguments[2], node.arguments[1].text === "prototype");
@@ -1960,9 +1969,11 @@ namespace ts {
      * The second Lhs is required to be the same as the first except that it may be prefixed with
      * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
      */
-    function getDefaultedExpandoInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
-        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
+    function getDefaultedExpandoInitializer(name: Expression, initializer: Expression, isPrototypeAssignment: boolean) {
+        const e = isBinaryExpression(initializer)
+            && (initializer.operatorToken.kind === SyntaxKind.BarBarToken || initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
+            && getExpandoInitializer(initializer.right, isPrototypeAssignment);
+        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
             return e;
         }
     }
@@ -1977,7 +1988,7 @@ namespace ts {
     /** Given an expando initializer, return its declaration name, or the left-hand side of the assignment if it's part of an assignment declaration. */
     export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
         if (isBinaryExpression(node.parent)) {
-            const parent = (node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
+            const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
             if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
                 return parent.left;
             }
@@ -1997,19 +2008,20 @@ namespace ts {
      * my.app = self.my.app || class { }
      */
     function isSameEntityName(name: Expression, initializer: Expression): boolean {
-        if (isIdentifier(name) && isIdentifier(initializer)) {
-            return name.escapedText === initializer.escapedText;
+        if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
+            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
         }
-        if (isIdentifier(name) && isPropertyAccessExpression(initializer)) {
-            return (initializer.expression.kind as SyntaxKind.ThisKeyword === SyntaxKind.ThisKeyword ||
+        if (isIdentifier(name) && (isLiteralLikeAccess(initializer))) {
+            return (initializer.expression.kind === SyntaxKind.ThisKeyword ||
                 isIdentifier(initializer.expression) &&
-                (initializer.expression.escapedText === "window" as __String ||
-                    initializer.expression.escapedText === "self" as __String ||
-                    initializer.expression.escapedText === "global" as __String)) &&
-                isSameEntityName(name, initializer.name);
+                (initializer.expression.escapedText === "window" ||
+                    initializer.expression.escapedText === "self" ||
+                    initializer.expression.escapedText === "global")) &&
+                isSameEntityName(name, getNameOrArgument(initializer));
         }
-        if (isPropertyAccessExpression(name) && isPropertyAccessExpression(initializer)) {
-            return name.name.escapedText === initializer.name.escapedText && isSameEntityName(name.expression, initializer.expression);
+        if (isLiteralLikeAccess(name) && isLiteralLikeAccess(initializer)) {
+            return getElementOrPropertyAccessName(name) === getElementOrPropertyAccessName(initializer)
+                && isSameEntityName(name.expression, initializer.expression);
         }
         return false;
     }
@@ -2025,8 +2037,11 @@ namespace ts {
         return isIdentifier(node) && node.escapedText === "exports";
     }
 
-    export function isModuleExportsPropertyAccessExpression(node: Node) {
-        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.escapedText === "module" && node.name.escapedText === "exports";
+    export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier } {
+        return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
+            && isIdentifier(node.expression)
+            && node.expression.escapedText === "module"
+            && getElementOrPropertyAccessName(node) === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -2043,7 +2058,44 @@ namespace ts {
             idText(expr.expression.expression) === "Object" &&
             idText(expr.expression.name) === "defineProperty" &&
             isStringOrNumericLiteralLike(expr.arguments[1]) &&
-            isEntityNameExpression(expr.arguments[0]);
+            isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
+    }
+
+    /** x.y OR x[0] */
+    export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
+        return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
+    }
+
+    /** x[0] OR x['a'] OR x[Symbol.y] */
+    export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
+        return isElementAccessExpression(node) && (
+            isStringOrNumericLiteralLike(node.argumentExpression) ||
+            isWellKnownSymbolSyntactically(node.argumentExpression));
+    }
+
+    /** Any series of property and element accesses. */
+    export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
+        return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+            || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    }
+
+    /** Any series of property and element accesses, ending in a literal element access */
+    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
+        return isLiteralLikeElementAccess(node)
+            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
+                isEntityNameExpression(node.expression) ||
+                isBindableStaticAccessExpression(node.expression, /*excludeThisKeyword*/ true));
+    }
+
+    export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
+        return isEntityNameExpression(node) || isBindableStaticAccessExpression(node, excludeThisKeyword);
+    }
+
+    export function getNameOrArgument(expr: PropertyAccessExpression | LiteralLikeElementAccessExpression) {
+        if (isPropertyAccessExpression(expr)) {
+            return expr.name;
+        }
+        return expr.argumentExpression;
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
@@ -2052,53 +2104,89 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
+            if (isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
-            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+            if (isBindableStaticAccessExpression(entityName) && getElementOrPropertyAccessName(entityName) === "prototype") {
                 return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
-            !isPropertyAccessExpression(expr.left)) {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        const lhs = expr.left;
-        if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
-        return getAssignmentDeclarationPropertyAccessKind(lhs);
+        return getAssignmentDeclarationPropertyAccessKind(expr.left);
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression): AssignmentDeclarationKind {
+    /**
+     * Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
+     * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
+     */
+    /* @internal */
+    export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+        if (isPropertyAccessExpression(node)) {
+            return node.name;
+        }
+        const arg = skipParentheses(node.argumentExpression);
+        if (isNumericLiteral(arg) || isStringLiteralLike(arg)) {
+            return arg;
+        }
+        return node;
+    }
+
+    /* @internal */
+    export function getElementOrPropertyAccessName(node: LiteralLikeElementAccessExpression | PropertyAccessExpression): __String;
+    export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined;
+    export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined {
+        const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
+        if (name) {
+            if (isIdentifier(name)) {
+                return name.escapedText;
+            }
+            if (isStringLiteralLike(name) || isNumericLiteral(name)) {
+                return escapeLeadingUnderscores(name.text);
+            }
+        }
+        if (isElementAccessExpression(node) && isWellKnownSymbolSyntactically(node.argumentExpression)) {
+            return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>node.argumentExpression).name));
+        }
+        return undefined;
+    }
+
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isModuleExportsPropertyAccessExpression(lhs)) {
+        else if (isModuleExportsAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
-        else if (isEntityNameExpression(lhs.expression)) {
+        else if (isBindableStaticNameExpression(lhs.expression, /*excludeThisKeyword*/ true)) {
             if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return AssignmentDeclarationKind.PrototypeProperty;
             }
 
             let nextToLast = lhs;
-            while (isPropertyAccessExpression(nextToLast.expression)) {
-                nextToLast = nextToLast.expression;
+            while (!isIdentifier(nextToLast.expression)) {
+                nextToLast = nextToLast.expression as Exclude<BindableStaticNameExpression, Identifier>;
             }
-            Debug.assert(isIdentifier(nextToLast.expression));
-            const id = nextToLast.expression as Identifier;
-            if (id.escapedText === "exports" ||
-                id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
-                // exports.name = expr OR module.exports.name = expr
+            const id = nextToLast.expression;
+            if ((id.escapedText === "exports" ||
+                id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") &&
+                // ExportsProperty does not support binding with computed names
+                isBindableStaticAccessExpression(lhs)) {
+                // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
-            // F.G...x = expr
-            return AssignmentDeclarationKind.Property;
+            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs) && lhs.expression.kind !== SyntaxKind.ThisKeyword)) {
+                // F.G...x = expr
+                return AssignmentDeclarationKind.Property;
+            }
         }
 
         return AssignmentDeclarationKind.None;
@@ -2115,9 +2203,10 @@ namespace ts {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
-    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
+    export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
         return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
+            (!isElementAccessExpression(expr) || isLiteralLikeElementAccess(expr)) &&
             !!getJSDocTypeTag(expr.parent);
     }
 
@@ -2225,7 +2314,7 @@ namespace ts {
             isBinaryExpression(node.expression) &&
             getAssignmentDeclarationKind(node.expression) !== AssignmentDeclarationKind.None &&
             isBinaryExpression(node.expression.right) &&
-            node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken
+            (node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken || node.expression.right.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
             ? node.expression.right.right
             : undefined;
     }
@@ -2529,6 +2618,7 @@ namespace ts {
         const parent = name.parent;
         switch (name.kind) {
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
                 // falls through
@@ -2556,7 +2646,7 @@ namespace ts {
     }
 
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
-        return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
+        return isStringOrNumericLiteralLike(node) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
             isDeclaration(node.parent.parent);
     }
@@ -2606,6 +2696,8 @@ namespace ts {
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
     // module.exports = <EntityNameExpression>
+    // {<Identifier>}
+    // {name: <EntityNameExpression>}
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -2614,12 +2706,28 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node);
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
+            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
+            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
+            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+    }
+
+    function isAliasableExpression(e: Expression) {
+        return isEntityNameExpression(e) || isClassExpression(e);
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
-        const e = isExportAssignment(node) ? node.expression : node.right;
-        return isEntityNameExpression(e) || isClassExpression(e);
+        const e = getExportAssignmentExpression(node);
+        return isAliasableExpression(e);
+    }
+
+    export function getExportAssignmentExpression(node: ExportAssignment | BinaryExpression): Expression {
+        return isExportAssignment(node) ? node.expression : node.right;
+    }
+
+    export function getPropertyAssignmentAliasLikeExpression(node: PropertyAssignment | ShorthandPropertyAssignment | PropertyAccessExpression): Expression {
+        return node.kind === SyntaxKind.ShorthandPropertyAssignment ? node.name : node.kind === SyntaxKind.PropertyAssignment ? node.initializer :
+            (node.parent as BinaryExpression).right;
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -2697,6 +2805,11 @@ namespace ts {
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);
+    }
+
+    export function isStringAKeyword(name: string) {
+        const token = stringToToken(name);
+        return token !== undefined && isKeyword(token);
     }
 
     export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
@@ -2783,16 +2896,19 @@ namespace ts {
      *      is a property of the Symbol constructor that denotes a built-in
      *      Symbol.
      */
-    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration {
+    export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
         const name = getNameOfDeclaration(declaration);
         return !!name && isDynamicName(name);
     }
 
     export function isDynamicName(name: DeclarationName): boolean {
-        return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteralLike(name.expression) &&
-            !isSignedNumericLiteral(name.expression) &&
-            !isWellKnownSymbolSyntactically(name.expression);
+        if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
+            return false;
+        }
+        const expr = isElementAccessExpression(name) ? name.argumentExpression : name.expression;
+        return !isStringOrNumericLiteralLike(expr) &&
+            !isSignedNumericLiteral(expr) &&
+            !isWellKnownSymbolSyntactically(expr);
     }
 
     /**
@@ -2800,7 +2916,7 @@ namespace ts {
      *    Symbol.name
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
-    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
+    export function isWellKnownSymbolSyntactically(node: Node): node is WellKnownSymbolExpression {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
@@ -3053,6 +3169,8 @@ namespace ts {
 
     export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
         switch (kind) {
+            case SyntaxKind.QuestionQuestionToken:
+                return 4;
             case SyntaxKind.BarBarToken:
                 return 5;
             case SyntaxKind.AmpersandAmpersandToken:
@@ -3220,20 +3338,22 @@ namespace ts {
     }
 
     /**
-     * Strip off existed single quotes or double quotes from a given string
+     * Strip off existed surrounding single quotes, double quotes, or backticks from a given string
      *
      * @return non-quoted string
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isQuoteOrBacktick(name.charCodeAt(0))) {
             return name.substring(1, length - 1);
         }
         return name;
     }
 
-    export function startsWithQuote(name: string): boolean {
-        return isSingleOrDoubleQuote(name.charCodeAt(0));
+    function isQuoteOrBacktick(charCode: number) {
+        return charCode === CharacterCodes.singleQuote ||
+            charCode === CharacterCodes.doubleQuote ||
+            charCode === CharacterCodes.backtick;
     }
 
     function getReplacement(c: string, offset: number, input: string) {
@@ -3288,6 +3408,7 @@ namespace ts {
         let lineStart: boolean;
         let lineCount: number;
         let linePos: number;
+        let hasTrailingComment = false;
 
         function updateLineCountAndPosFor(s: string) {
             const lineStartsOfS = computeLineStarts(s);
@@ -3301,7 +3422,7 @@ namespace ts {
             }
         }
 
-        function write(s: string) {
+        function writeText(s: string) {
             if (s && s.length) {
                 if (lineStart) {
                     s = getIndentString(indent) + s;
@@ -3312,18 +3433,30 @@ namespace ts {
             }
         }
 
+        function write(s: string) {
+            if (s) hasTrailingComment = false;
+            writeText(s);
+        }
+
+        function writeComment(s: string) {
+            if (s) hasTrailingComment = true;
+            writeText(s);
+        }
+
         function reset(): void {
             output = "";
             indent = 0;
             lineStart = true;
             lineCount = 0;
             linePos = 0;
+            hasTrailingComment = false;
         }
 
         function rawWrite(s: string) {
             if (s !== undefined) {
                 output += s;
                 updateLineCountAndPosFor(s);
+                hasTrailingComment = false;
             }
         }
 
@@ -3339,6 +3472,7 @@ namespace ts {
                 lineCount++;
                 linePos = output.length;
                 lineStart = true;
+                hasTrailingComment = false;
             }
         }
 
@@ -3361,6 +3495,8 @@ namespace ts {
             getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
             getText: () => output,
             isAtStartOfLine: () => lineStart,
+            hasTrailingComment: () => hasTrailingComment,
+            hasTrailingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
             clear: reset,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -3375,16 +3511,12 @@ namespace ts {
             writeStringLiteral: write,
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
-            writeComment: write,
+            writeComment,
             getTextPosWithWriteLine
         };
     }
 
-    export interface TrailingSemicolonDeferringWriter extends EmitTextWriter {
-        resetPendingTrailingSemicolon(): void;
-    }
-
-    export function getTrailingSemicolonDeferringWriter(writer: EmitTextWriter): TrailingSemicolonDeferringWriter {
+    export function getTrailingSemicolonDeferringWriter(writer: EmitTextWriter): EmitTextWriter {
         let pendingTrailingSemicolon = false;
 
         function commitPendingTrailingSemicolon() {
@@ -3451,28 +3583,20 @@ namespace ts {
                 commitPendingTrailingSemicolon();
                 writer.decreaseIndent();
             },
-            resetPendingTrailingSemicolon() {
-                pendingTrailingSemicolon = false;
-            }
         };
     }
 
-    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
-        const deferringWriter = getTrailingSemicolonDeferringWriter(writer);
-        return {
-            ...deferringWriter,
-            writeLine() {
-                deferringWriter.resetPendingTrailingSemicolon();
-                writer.writeLine();
-            },
-        };
+    export interface ResolveModuleNameResolutionHost {
+        getCanonicalFileName(p: string): string;
+        getCommonSourceDirectory(): string;
+        getCurrentDirectory(): string;
     }
 
-    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile, referenceFile?: SourceFile): string {
+    export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -3483,7 +3607,7 @@ namespace ts {
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string, referencePath?: string): string {
+    export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
@@ -3580,6 +3704,36 @@ namespace ts {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         }, sourceFiles);
+    }
+
+    function ensureDirectoriesExist(
+        directoryPath: string,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+        if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+            const parentDirectory = getDirectoryPath(directoryPath);
+            ensureDirectoriesExist(parentDirectory, createDirectory, directoryExists);
+            createDirectory(directoryPath);
+        }
+    }
+
+    export function writeFileEnsuringDirectories(
+        path: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        writeFile: (path: string, data: string, writeByteOrderMark: boolean) => void,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+
+        // PERF: Checking for directory existence is expensive.  Instead, assume the directory exists
+        // and fall back to creating it if the file write fails.
+        try {
+            writeFile(path, data, writeByteOrderMark);
+        }
+        catch {
+            ensureDirectoriesExist(getDirectoryPath(normalizePath(path)), createDirectory, directoryExists);
+            writeFile(path, data, writeByteOrderMark);
+        }
     }
 
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
@@ -3974,7 +4128,6 @@ namespace ts {
     }
 
     export function getModifierFlagsNoCache(node: Node): ModifierFlags {
-
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {
@@ -4062,6 +4215,29 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
     }
 
+    export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return node;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.left;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+            case SyntaxKind.PropertyAccessExpression:
+                do {
+                    node = node.expression;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+        }
+    }
+
+    export function isDottedName(node: Expression): boolean {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+            node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
+            node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+    }
+
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }
@@ -4076,8 +4252,8 @@ namespace ts {
         return undefined;
     }
 
-    export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
-        return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
+    export function isPrototypeAccess(node: Node): node is BindableStaticAccessExpression {
+        return isBindableStaticAccessExpression(node) && getElementOrPropertyAccessName(node) === "prototype";
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
@@ -4610,23 +4786,6 @@ namespace ts {
         });
     }
 
-    /** Calls `callback` on `directory` and every ancestor directory it has, returning the first defined result. */
-    export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined {
-        while (true) {
-            const result = callback(directory);
-            if (result !== undefined) {
-                return result;
-            }
-
-            const parentPath = getDirectoryPath(directory);
-            if (parentPath === directory) {
-                return undefined;
-            }
-
-            directory = parentPath;
-        }
-    }
-
     // Return true if the given type is the constructor type for an abstract class
     export function isAbstractConstructorType(type: Type): boolean {
         return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
@@ -4735,6 +4894,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function getDotOrQuestionDotToken(node: PropertyAccessExpression) {
+        return node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
     }
 }
 
@@ -5243,6 +5406,17 @@ namespace ts {
         return name && isIdentifier(name) ? name : undefined;
     }
 
+    /** @internal */
+    export function nodeHasName(statement: Node, name: Identifier) {
+        if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
+            return true;
+        }
+        if (isVariableStatement(statement) && some(statement.declarationList.declarations, d => nodeHasName(d, name))) {
+            return true;
+        }
+        return false;
+    }
+
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
@@ -5273,7 +5447,7 @@ namespace ts {
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
+                        return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as AccessExpression);
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                     case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
@@ -5290,6 +5464,11 @@ namespace ts {
                 const { expression } = declaration as ExportAssignment;
                 return isIdentifier(expression) ? expression : undefined;
             }
+            case SyntaxKind.ElementAccessExpression:
+                const expr = declaration as ElementAccessExpression;
+                if (isBindableStaticElementAccessExpression(expr)) {
+                    return expr.argumentExpression;
+                }
         }
         return (declaration as NamedDeclaration).name;
     }
@@ -5311,8 +5490,8 @@ namespace ts {
             if (isIdentifier(node.parent.left)) {
                 return node.parent.left;
             }
-            else if (isPropertyAccessExpression(node.parent.left)) {
-                return node.parent.left.name;
+            else if (isAccessExpression(node.parent.left)) {
+                return getElementOrPropertyAccessArgumentExpressionOrName(node.parent.left);
             }
         }
         else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
@@ -5740,12 +5919,44 @@ namespace ts {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }
 
+    export function isPropertyAccessChain(node: Node): node is PropertyAccessChain {
+        return isPropertyAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
     export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function isElementAccessChain(node: Node): node is ElementAccessChain {
+        return isElementAccessExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
     export function isCallExpression(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression;
+    }
+
+    export function isCallChain(node: Node): node is CallChain {
+        return isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
+    }
+
+    export function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain {
+        const kind = node.kind;
+        return !!(node.flags & NodeFlags.OptionalChain) &&
+            (kind === SyntaxKind.PropertyAccessExpression
+                || kind === SyntaxKind.ElementAccessExpression
+                || kind === SyntaxKind.CallExpression);
+    }
+
+    /**
+     * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
+     */
+    /* @internal */
+    export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+        return isOptionalChainRoot(node.parent) && node.parent.expression === node;
+    }
+
+    export function isNullishCoalesce(node: Node) {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isNewExpression(node: Node): node is NewExpression {
@@ -6164,7 +6375,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypeExpression;
     }
 
-    export function isJSDocAllType(node: JSDocAllType): node is JSDocAllType {
+    export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
 
@@ -6757,6 +6968,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
+        return node.kind === SyntaxKind.SyntheticReferenceExpression;
+    }
+
+    /* @internal */
     export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
         return isNotEmittedStatement(node)
             || isPartiallyEmittedExpression(node);
@@ -6779,6 +6995,27 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isScopeMarker(node: Node) {
+        return isExportAssignment(node) || isExportDeclaration(node);
+    }
+
+    /* @internal */
+    export function hasScopeMarker(statements: readonly Statement[]) {
+        return some(statements, isScopeMarker);
+    }
+
+    /* @internal */
+    export function needsScopeMarker(result: Statement) {
+        return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
+    }
+
+    /* @internal */
+    export function isExternalModuleIndicator(result: Statement) {
+        // Exported top-level member indicates moduleness
+        return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
     }
 
     /* @internal */
@@ -7039,6 +7276,11 @@ namespace ts {
         return node.kind === SyntaxKind.GetAccessor;
     }
 
+    /* @internal */
+    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
+        return isOptionalChain(node) && !!node.questionDotToken;
+    }
+
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
@@ -7116,7 +7358,7 @@ namespace ts {
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
-        getSignatureConstructor(): new (checker: TypeChecker) => Signature;
+        getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
@@ -7137,7 +7379,12 @@ namespace ts {
         }
     }
 
-    function Signature() {}
+    function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
+        this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
+    }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
@@ -7441,569 +7688,41 @@ namespace ts {
         return true;
     }
 
-    /**
-     * Internally, we represent paths as strings with '/' as the directory separator.
-     * When we make system calls (eg: LanguageServiceHost.getDirectory()),
-     * we expect the host to correctly handle paths in our specified format.
-     */
-    export const directorySeparator = "/";
-    const altDirectorySeparator = "\\";
-    const urlSchemeSeparator = "://";
-    const backslashRegExp = /\\/g;
-
-    /**
-     * Normalize path separators.
-     */
-    export function normalizeSlashes(path: string): string {
-        return path.replace(backslashRegExp, directorySeparator);
-    }
-
-    function isVolumeCharacter(charCode: number) {
-        return (charCode >= CharacterCodes.a && charCode <= CharacterCodes.z) ||
-            (charCode >= CharacterCodes.A && charCode <= CharacterCodes.Z);
-    }
-
-    function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
-        const ch0 = url.charCodeAt(start);
-        if (ch0 === CharacterCodes.colon) return start + 1;
-        if (ch0 === CharacterCodes.percent && url.charCodeAt(start + 1) === CharacterCodes._3) {
-            const ch2 = url.charCodeAt(start + 2);
-            if (ch2 === CharacterCodes.a || ch2 === CharacterCodes.A) return start + 3;
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+        const result = createMap<string>();
+        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
+            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
+                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
+        for (const [resolvedPath, originalPath] of symlinks) {
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
+            result.set(commonOriginal, commonResolved);
         }
-        return -1;
+        return result;
     }
 
-    /**
-     * Returns length of the root part of a path or URL (i.e. length of "/", "x:/", "//server/share/, file:///user/files").
-     * If the root is part of a URL, the twos-complement of the root length is returned.
-     */
-    function getEncodedRootLength(path: string): number {
-        if (!path) return 0;
-        const ch0 = path.charCodeAt(0);
-
-        // POSIX or UNC
-        if (ch0 === CharacterCodes.slash || ch0 === CharacterCodes.backslash) {
-            if (path.charCodeAt(1) !== ch0) return 1; // POSIX: "/" (or non-normalized "\")
-
-            const p1 = path.indexOf(ch0 === CharacterCodes.slash ? directorySeparator : altDirectorySeparator, 2);
-            if (p1 < 0) return path.length; // UNC: "//server" or "\\server"
-
-            return p1 + 1; // UNC: "//server/" or "\\server\"
+    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
+        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
+        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
+            !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
+            getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])) {
+            aParts.pop();
+            bParts.pop();
         }
-
-        // DOS
-        if (isVolumeCharacter(ch0) && path.charCodeAt(1) === CharacterCodes.colon) {
-            const ch2 = path.charCodeAt(2);
-            if (ch2 === CharacterCodes.slash || ch2 === CharacterCodes.backslash) return 3; // DOS: "c:/" or "c:\"
-            if (path.length === 2) return 2; // DOS: "c:" (but not "c:d")
-        }
-
-        // URL
-        const schemeEnd = path.indexOf(urlSchemeSeparator);
-        if (schemeEnd !== -1) {
-            const authorityStart = schemeEnd + urlSchemeSeparator.length;
-            const authorityEnd = path.indexOf(directorySeparator, authorityStart);
-            if (authorityEnd !== -1) { // URL: "file:///", "file://server/", "file://server/path"
-                // For local "file" URLs, include the leading DOS volume (if present).
-                // Per https://www.ietf.org/rfc/rfc1738.txt, a host of "" or "localhost" is a
-                // special case interpreted as "the machine from which the URL is being interpreted".
-                const scheme = path.slice(0, schemeEnd);
-                const authority = path.slice(authorityStart, authorityEnd);
-                if (scheme === "file" && (authority === "" || authority === "localhost") &&
-                    isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
-                    const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
-                    if (volumeSeparatorEnd !== -1) {
-                        if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
-                            // URL: "file:///c:/", "file://localhost/c:/", "file:///c%3a/", "file://localhost/c%3a/"
-                            return ~(volumeSeparatorEnd + 1);
-                        }
-                        if (volumeSeparatorEnd === path.length) {
-                            // URL: "file:///c:", "file://localhost/c:", "file:///c$3a", "file://localhost/c%3a"
-                            // but not "file:///c:d" or "file:///c%3ad"
-                            return ~volumeSeparatorEnd;
-                        }
-                    }
-                }
-                return ~(authorityEnd + 1); // URL: "file://server/", "http://server/"
-            }
-            return ~path.length; // URL: "file://server", "http://server"
-        }
-
-        // relative
-        return 0;
+        return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
     }
 
-    /**
-     * Returns length of the root part of a path or URL (i.e. length of "/", "x:/", "//server/share/, file:///user/files").
-     *
-     * For example:
-     * ```ts
-     * getRootLength("a") === 0                   // ""
-     * getRootLength("/") === 1                   // "/"
-     * getRootLength("c:") === 2                  // "c:"
-     * getRootLength("c:d") === 0                 // ""
-     * getRootLength("c:/") === 3                 // "c:/"
-     * getRootLength("c:\\") === 3                // "c:\\"
-     * getRootLength("//server") === 7            // "//server"
-     * getRootLength("//server/share") === 8      // "//server/"
-     * getRootLength("\\\\server") === 7          // "\\\\server"
-     * getRootLength("\\\\server\\share") === 8   // "\\\\server\\"
-     * getRootLength("file:///path") === 8        // "file:///"
-     * getRootLength("file:///c:") === 10         // "file:///c:"
-     * getRootLength("file:///c:d") === 8         // "file:///"
-     * getRootLength("file:///c:/path") === 11    // "file:///c:/"
-     * getRootLength("file://server") === 13      // "file://server"
-     * getRootLength("file://server/path") === 14 // "file://server/"
-     * getRootLength("http://server") === 13      // "http://server"
-     * getRootLength("http://server/path") === 14 // "http://server/"
-     * ```
-     */
-    export function getRootLength(path: string) {
-        const rootLength = getEncodedRootLength(path);
-        return rootLength < 0 ? ~rootLength : rootLength;
-    }
-
-    // TODO(rbuckton): replace references with `resolvePath`
-    export function normalizePath(path: string): string {
-        return resolvePath(path);
-    }
-
-    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
-        path = normalizeSlashes(path);
-        const [root, ...parts] = reducePathComponents(getPathComponents(path));
-        if (parts.length) {
-            const joinedParts = root + parts.join(directorySeparator);
-            return { path: hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(joinedParts) : joinedParts, parts };
-        }
-        else {
-            return { path: root, parts };
-        }
-    }
-
-    /**
-     * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
-     * except that we support URL's as well.
-     *
-     * ```ts
-     * getDirectoryPath("/path/to/file.ext") === "/path/to"
-     * getDirectoryPath("/path/to/") === "/path"
-     * getDirectoryPath("/") === "/"
-     * ```
-     */
-    export function getDirectoryPath(path: Path): Path;
-    /**
-     * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
-     * except that we support URL's as well.
-     *
-     * ```ts
-     * getDirectoryPath("/path/to/file.ext") === "/path/to"
-     * getDirectoryPath("/path/to/") === "/path"
-     * getDirectoryPath("/") === "/"
-     * ```
-     */
-    export function getDirectoryPath(path: string): string;
-    export function getDirectoryPath(path: string): string {
-        path = normalizeSlashes(path);
-
-        // If the path provided is itself the root, then return it.
-        const rootLength = getRootLength(path);
-        if (rootLength === path.length) return path;
-
-        // return the leading portion of the path up to the last (non-terminal) directory separator
-        // but not including any trailing directory separator.
-        path = removeTrailingDirectorySeparator(path);
-        return path.slice(0, Math.max(rootLength, path.lastIndexOf(directorySeparator)));
-    }
-
-    export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
-        const canonicalFileName = getCanonicalFileName(fileName);
-        const canonicalDirectoryName = getCanonicalFileName(directoryName);
-        return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
-    }
-
-    export function isUrl(path: string) {
-        return getEncodedRootLength(path) < 0;
-    }
-
-    export function pathIsRelative(path: string): boolean {
-        return /^\.\.?($|[\\/])/.test(path);
-    }
-
-    /**
-     * Determines whether a path is an absolute path (e.g. starts with `/`, or a dos path
-     * like `c:`, `c:\` or `c:/`).
-     */
-    export function isRootedDiskPath(path: string) {
-        return getEncodedRootLength(path) > 0;
-    }
-
-    /**
-     * Determines whether a path consists only of a path root.
-     */
-    export function isDiskPathRoot(path: string) {
-        const rootLength = getEncodedRootLength(path);
-        return rootLength > 0 && rootLength === path.length;
-    }
-
-    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
-        return !isRootedDiskPath(absoluteOrRelativePath)
-            ? absoluteOrRelativePath
-            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-    }
-
-    function pathComponents(path: string, rootLength: number) {
-        const root = path.substring(0, rootLength);
-        const rest = path.substring(rootLength).split(directorySeparator);
-        if (rest.length && !lastOrUndefined(rest)) rest.pop();
-        return [root, ...rest];
-    }
-
-    /**
-     * Parse a path into an array containing a root component (at index 0) and zero or more path
-     * components (at indices > 0). The result is not normalized.
-     * If the path is relative, the root component is `""`.
-     * If the path is absolute, the root component includes the first path separator (`/`).
-     */
-    export function getPathComponents(path: string, currentDirectory = "") {
-        path = combinePaths(currentDirectory, path);
-        const rootLength = getRootLength(path);
-        return pathComponents(path, rootLength);
-    }
-
-    /**
-     * Reduce an array of path components to a more simplified path by navigating any
-     * `"."` or `".."` entries in the path.
-     */
-    export function reducePathComponents(components: readonly string[]) {
-        if (!some(components)) return [];
-        const reduced = [components[0]];
-        for (let i = 1; i < components.length; i++) {
-            const component = components[i];
-            if (!component) continue;
-            if (component === ".") continue;
-            if (component === "..") {
-                if (reduced.length > 1) {
-                    if (reduced[reduced.length - 1] !== "..") {
-                        reduced.pop();
-                        continue;
-                    }
-                }
-                else if (reduced[0]) continue;
-            }
-            reduced.push(component);
-        }
-        return reduced;
-    }
-
-    /**
-     * Parse a path into an array containing a root component (at index 0) and zero or more path
-     * components (at indices > 0). The result is normalized.
-     * If the path is relative, the root component is `""`.
-     * If the path is absolute, the root component includes the first path separator (`/`).
-     */
-    export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
-        return reducePathComponents(getPathComponents(path, currentDirectory));
-    }
-
-    export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined) {
-        return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
-    }
-
-    /**
-     * Formats a parsed path consisting of a root component (at index 0) and zero or more path
-     * segments (at indices > 0).
-     */
-    export function getPathFromPathComponents(pathComponents: readonly string[]) {
-        if (pathComponents.length === 0) return "";
-
-        const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
-        return root + pathComponents.slice(1).join(directorySeparator);
-    }
-
-    export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDirectory: string | undefined) {
-        return getPathWithoutRoot(getNormalizedPathComponents(fileName, currentDirectory));
-    }
-
-    function getPathWithoutRoot(pathComponents: readonly string[]) {
-        if (pathComponents.length === 0) return "";
-        return pathComponents.slice(1).join(directorySeparator);
+    // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
+    // ALso, don't assume that an `@foo` directory is linked. More likely the contents of that are linked.
+    function isNodeModulesOrScopedPackageDirectory(s: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+        return getCanonicalFileName(s) === "node_modules" || startsWith(s, "@");
     }
 }
 
 /* @internal */
 namespace ts {
-    export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
-        const fromComponents = reducePathComponents(getPathComponents(from));
-        const toComponents = reducePathComponents(getPathComponents(to));
-
-        let start: number;
-        for (start = 0; start < fromComponents.length && start < toComponents.length; start++) {
-            const fromComponent = getCanonicalFileName(fromComponents[start]);
-            const toComponent = getCanonicalFileName(toComponents[start]);
-            const comparer = start === 0 ? equateStringsCaseInsensitive : stringEqualityComparer;
-            if (!comparer(fromComponent, toComponent)) break;
-        }
-
-        if (start === 0) {
-            return toComponents;
-        }
-
-        const components = toComponents.slice(start);
-        const relative: string[] = [];
-        for (; start < fromComponents.length; start++) {
-            relative.push("..");
-        }
-        return ["", ...relative, ...components];
-    }
-
-    export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
-        return ensurePathIsNonModuleName(getRelativePathFromDirectory(getDirectoryPath(from), to, getCanonicalFileName));
-    }
-
-    /**
-     * Gets a relative path that can be used to traverse between `from` and `to`.
-     */
-    export function getRelativePathFromDirectory(from: string, to: string, ignoreCase: boolean): string;
-    /**
-     * Gets a relative path that can be used to traverse between `from` and `to`.
-     */
-    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string; // eslint-disable-line @typescript-eslint/unified-signatures
-    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
-        Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
-        const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
-        const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-        const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
-        return getPathFromPathComponents(pathComponents);
-    }
-
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
-        const pathComponents = getPathComponentsRelativeTo(
-            resolvePath(currentDirectory, directoryPathOrUrl),
-            resolvePath(currentDirectory, relativeOrAbsolutePath),
-            equateStringsCaseSensitive,
-            getCanonicalFileName
-        );
-
-        const firstComponent = pathComponents[0];
-        if (isAbsolutePathAnUrl && isRootedDiskPath(firstComponent)) {
-            const prefix = firstComponent.charAt(0) === directorySeparator ? "file://" : "file:///";
-            pathComponents[0] = prefix + firstComponent;
-        }
-
-        return getPathFromPathComponents(pathComponents);
-    }
-
-    /**
-     * Ensures a path is either absolute (prefixed with `/` or `c:`) or dot-relative (prefixed
-     * with `./` or `../`) so as not to be confused with an unprefixed module name.
-     */
-    export function ensurePathIsNonModuleName(path: string): string {
-        return getRootLength(path) === 0 && !pathIsRelative(path) ? "./" + path : path;
-    }
-
-    /**
-     * Returns the path except for its containing directory name.
-     * Semantics align with NodeJS's `path.basename` except that we support URL's as well.
-     *
-     * ```ts
-     * getBaseFileName("/path/to/file.ext") === "file.ext"
-     * getBaseFileName("/path/to/") === "to"
-     * getBaseFileName("/") === ""
-     * ```
-     */
-    export function getBaseFileName(path: string): string;
-    /**
-     * Gets the portion of a path following the last (non-terminal) separator (`/`).
-     * Semantics align with NodeJS's `path.basename` except that we support URL's as well.
-     * If the base name has any one of the provided extensions, it is removed.
-     *
-     * ```ts
-     * getBaseFileName("/path/to/file.ext", ".ext", true) === "file"
-     * getBaseFileName("/path/to/file.js", ".ext", true) === "file.js"
-     * ```
-     */
-    export function getBaseFileName(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
-    export function getBaseFileName(path: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
-        path = normalizeSlashes(path);
-
-        // if the path provided is itself the root, then it has not file name.
-        const rootLength = getRootLength(path);
-        if (rootLength === path.length) return "";
-
-        // return the trailing portion of the path starting after the last (non-terminal) directory
-        // separator but not including any trailing directory separator.
-        path = removeTrailingDirectorySeparator(path);
-        const name = path.slice(Math.max(getRootLength(path), path.lastIndexOf(directorySeparator) + 1));
-        const extension = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(name, extensions, ignoreCase) : undefined;
-        return extension ? name.slice(0, name.length - extension.length) : name;
-    }
-
-    /**
-     * Combines paths. If a path is absolute, it replaces any previous path.
-     */
-    export function combinePaths(path: string, ...paths: (string | undefined)[]): string {
-        if (path) path = normalizeSlashes(path);
-        for (let relativePath of paths) {
-            if (!relativePath) continue;
-            relativePath = normalizeSlashes(relativePath);
-            if (!path || getRootLength(relativePath) !== 0) {
-                path = relativePath;
-            }
-            else {
-                path = ensureTrailingDirectorySeparator(path) + relativePath;
-            }
-        }
-        return path;
-    }
-
-    /**
-     * Combines and resolves paths. If a path is absolute, it replaces any previous path. Any
-     * `.` and `..` path components are resolved.
-     */
-    export function resolvePath(path: string, ...paths: (string | undefined)[]): string {
-        const combined = some(paths) ? combinePaths(path, ...paths) : normalizeSlashes(path);
-        const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(combined)));
-        return normalized && hasTrailingDirectorySeparator(combined) ? ensureTrailingDirectorySeparator(normalized) : normalized;
-    }
-
-    /**
-     * Determines whether a path has a trailing separator (`/` or `\\`).
-     */
-    export function hasTrailingDirectorySeparator(path: string) {
-        if (path.length === 0) return false;
-        const ch = path.charCodeAt(path.length - 1);
-        return ch === CharacterCodes.slash || ch === CharacterCodes.backslash;
-    }
-
-    /**
-     * Removes a trailing directory separator from a path.
-     * @param path The path.
-     */
-    export function removeTrailingDirectorySeparator(path: Path): Path;
-    export function removeTrailingDirectorySeparator(path: string): string;
-    export function removeTrailingDirectorySeparator(path: string) {
-        if (hasTrailingDirectorySeparator(path)) {
-            return path.substr(0, path.length - 1);
-        }
-
-        return path;
-    }
-
-    /**
-     * Adds a trailing directory separator to a path, if it does not already have one.
-     * @param path The path.
-     */
-    export function ensureTrailingDirectorySeparator(path: Path): Path;
-    export function ensureTrailingDirectorySeparator(path: string): string;
-    export function ensureTrailingDirectorySeparator(path: string) {
-        if (!hasTrailingDirectorySeparator(path)) {
-            return path + directorySeparator;
-        }
-
-        return path;
-    }
-
-    // check path for these segments: '', '.'. '..'
-    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
-
-    function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
-        if (a === b) return Comparison.EqualTo;
-        if (a === undefined) return Comparison.LessThan;
-        if (b === undefined) return Comparison.GreaterThan;
-
-        // NOTE: Performance optimization - shortcut if the root segments differ as there would be no
-        //       need to perform path reduction.
-        const aRoot = a.substring(0, getRootLength(a));
-        const bRoot = b.substring(0, getRootLength(b));
-        const result = compareStringsCaseInsensitive(aRoot, bRoot);
-        if (result !== Comparison.EqualTo) {
-            return result;
-        }
-
-        // NOTE: Performance optimization - shortcut if there are no relative path segments in
-        //       the non-root portion of the path
-        const aRest = a.substring(aRoot.length);
-        const bRest = b.substring(bRoot.length);
-        if (!relativePathSegmentRegExp.test(aRest) && !relativePathSegmentRegExp.test(bRest)) {
-            return componentComparer(aRest, bRest);
-        }
-
-        // The path contains a relative path segment. Normalize the paths and perform a slower component
-        // by component comparison.
-        const aComponents = reducePathComponents(getPathComponents(a));
-        const bComponents = reducePathComponents(getPathComponents(b));
-        const sharedLength = Math.min(aComponents.length, bComponents.length);
-        for (let i = 1; i < sharedLength; i++) {
-            const result = componentComparer(aComponents[i], bComponents[i]);
-            if (result !== Comparison.EqualTo) {
-                return result;
-            }
-        }
-        return compareValues(aComponents.length, bComponents.length);
-    }
-
-    /**
-     * Performs a case-sensitive comparison of two paths.
-     */
-    export function comparePathsCaseSensitive(a: string, b: string) {
-        return comparePathsWorker(a, b, compareStringsCaseSensitive);
-    }
-
-    /**
-     * Performs a case-insensitive comparison of two paths.
-     */
-    export function comparePathsCaseInsensitive(a: string, b: string) {
-        return comparePathsWorker(a, b, compareStringsCaseInsensitive);
-    }
-
-    export function comparePaths(a: string, b: string, ignoreCase?: boolean): Comparison;
-    export function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean): Comparison;
-    export function comparePaths(a: string, b: string, currentDirectory?: string | boolean, ignoreCase?: boolean) {
-        if (typeof currentDirectory === "string") {
-            a = combinePaths(currentDirectory, a);
-            b = combinePaths(currentDirectory, b);
-        }
-        else if (typeof currentDirectory === "boolean") {
-            ignoreCase = currentDirectory;
-        }
-        return comparePathsWorker(a, b, getStringComparer(ignoreCase));
-    }
-
-    export function containsPath(parent: string, child: string, ignoreCase?: boolean): boolean;
-    export function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean): boolean;
-    export function containsPath(parent: string, child: string, currentDirectory?: string | boolean, ignoreCase?: boolean) {
-        if (typeof currentDirectory === "string") {
-            parent = combinePaths(currentDirectory, parent);
-            child = combinePaths(currentDirectory, child);
-        }
-        else if (typeof currentDirectory === "boolean") {
-            ignoreCase = currentDirectory;
-        }
-        if (parent === undefined || child === undefined) return false;
-        if (parent === child) return true;
-        const parentComponents = reducePathComponents(getPathComponents(parent));
-        const childComponents = reducePathComponents(getPathComponents(child));
-        if (childComponents.length < parentComponents.length) {
-            return false;
-        }
-
-        const componentEqualityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
-        for (let i = 0; i < parentComponents.length; i++) {
-            const equalityComparer = i === 0 ? equateStringsCaseInsensitive : componentEqualityComparer;
-            if (!equalityComparer(parentComponents[i], childComponents[i])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function isDirectorySeparator(charCode: number): boolean {
-        return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
-    }
-
     function stripLeadingDirectorySeparator(s: string): string | undefined {
-        return isDirectorySeparator(s.charCodeAt(0)) ? s.slice(1) : undefined;
+        return isAnyDirectorySeparator(s.charCodeAt(0)) ? s.slice(1) : undefined;
     }
 
     export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
@@ -8025,10 +7744,6 @@ namespace ts {
     }
 
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
-
-    export function hasExtension(fileName: string): boolean {
-        return stringContains(getBaseFileName(fileName), ".");
-    }
 
     export const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 
@@ -8494,13 +8209,6 @@ namespace ts {
         return <T>changeAnyExtension(path, newExtension, extensionsToRemove, /*ignoreCase*/ false);
     }
 
-    export function changeAnyExtension(path: string, ext: string): string;
-    export function changeAnyExtension(path: string, ext: string, extensions: string | readonly string[], ignoreCase: boolean): string;
-    export function changeAnyExtension(path: string, ext: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
-        const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
-        return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
-    }
-
     export function tryParsePattern(pattern: string): Pattern | undefined {
         // This should be verified outside of here and a proper error thrown.
         Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
@@ -8541,42 +8249,6 @@ namespace ts {
 
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
         return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
-    }
-
-    function getAnyExtensionFromPathWorker(path: string, extensions: string | readonly string[], stringEqualityComparer: (a: string, b: string) => boolean) {
-        if (typeof extensions === "string") extensions = [extensions];
-        for (let extension of extensions) {
-            if (!startsWith(extension, ".")) extension = "." + extension;
-            if (path.length >= extension.length && path.charAt(path.length - extension.length) === ".") {
-                const pathExtension = path.slice(path.length - extension.length);
-                if (stringEqualityComparer(pathExtension, extension)) {
-                    return pathExtension;
-                }
-            }
-        }
-        return "";
-    }
-
-    /**
-     * Gets the file extension for a path.
-     */
-    export function getAnyExtensionFromPath(path: string): string;
-    /**
-     * Gets the file extension for a path, provided it is one of the provided extensions.
-     */
-    export function getAnyExtensionFromPath(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
-    export function getAnyExtensionFromPath(path: string, extensions?: string | readonly string[], ignoreCase?: boolean): string {
-        // Retrieves any string from the final "." onwards from a base file name.
-        // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
-        if (extensions) {
-            return getAnyExtensionFromPathWorker(path, extensions, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive);
-        }
-        const baseFileName = getBaseFileName(path);
-        const extensionIndex = baseFileName.lastIndexOf(".");
-        if (extensionIndex >= 0) {
-            return baseFileName.substring(extensionIndex);
-        }
-        return "";
     }
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {

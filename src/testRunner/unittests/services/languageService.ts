@@ -15,10 +15,9 @@ class Carousel<T> extends Vue {
             "vue-class-component.d.ts": `import Vue from "./vue";
 export function Component(x: Config): any;`
         };
-        // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
-        //  to write an alias to a module's default export was referrenced across files and had no default export
-        it("should be able to create a language service which can respond to deinition requests without throwing", () => {
-            const languageService = createLanguageService({
+
+        function createLanguageService() {
+            return ts.createLanguageService({
                 getCompilationSettings() {
                     return {};
                 },
@@ -39,8 +38,45 @@ export function Component(x: Config): any;`
                     return getDefaultLibFilePath(options);
                 },
             });
+        }
+        // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
+        //  to write an alias to a module's default export was referrenced across files and had no default export
+        it("should be able to create a language service which can respond to deinition requests without throwing", () => {
+            const languageService = createLanguageService();
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
             expect(definitions).to.exist; // eslint-disable-line no-unused-expressions
+        });
+
+        it("getEmitOutput on language service has way to force dts emit", () => {
+            const languageService = createLanguageService();
+            assert.deepEqual(
+                languageService.getEmitOutput(
+                    "foo.ts",
+                    /*emitOnlyDtsFiles*/ true
+                ),
+                {
+                    emitSkipped: true,
+                    outputFiles: emptyArray,
+                    exportedModulesFromDeclarationEmit: undefined
+                }
+            );
+
+            assert.deepEqual(
+                languageService.getEmitOutput(
+                    "foo.ts",
+                    /*emitOnlyDtsFiles*/ true,
+                    /*forceDtsEmit*/ true
+                ),
+                {
+                    emitSkipped: false,
+                    outputFiles: [{
+                        name: "foo.d.ts",
+                        text: "export {};\r\n",
+                        writeByteOrderMark: false
+                    }],
+                    exportedModulesFromDeclarationEmit: undefined
+                }
+            );
         });
     });
 }

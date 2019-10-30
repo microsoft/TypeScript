@@ -323,19 +323,19 @@ declare class c2 {
     /** c2 c2_f1*/
     c2_f1(): void;
     /** c2 c2_prop*/
-    readonly c2_prop: number;
+    get c2_prop(): number;
     c2_nc_p1: number;
     c2_nc_f1(): void;
-    readonly c2_nc_prop: number;
+    get c2_nc_prop(): number;
     /** c2 p1*/
     p1: number;
     /** c2 f1*/
     f1(): void;
     /** c2 prop*/
-    readonly prop: number;
+    get prop(): number;
     nc_p1: number;
     nc_f1(): void;
-    readonly nc_prop: number;
+    get nc_prop(): number;
     /** c2 constructor*/
     constructor(a: number);
 }
@@ -346,10 +346,10 @@ declare class c3 extends c2 {
     /** c3 f1*/
     f1(): void;
     /** c3 prop*/
-    readonly prop: number;
+    get prop(): number;
     nc_p1: number;
     nc_f1(): void;
-    readonly nc_prop: number;
+    get nc_prop(): number;
 }
 declare var c2_i: c2;
 declare var c3_i: c3;

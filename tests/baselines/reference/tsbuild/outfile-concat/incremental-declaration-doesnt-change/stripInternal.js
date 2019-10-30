@@ -17,7 +17,7 @@
 
 12:08:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/first/tsconfig.json": 1,

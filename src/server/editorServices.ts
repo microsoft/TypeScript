@@ -1065,7 +1065,7 @@ namespace ts.server {
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
@@ -1074,6 +1074,13 @@ namespace ts.server {
 
                     if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
+
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    ) {
+                        this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
+                        project.onAddPackageJson(fileOrDirectoryPath);
+                    }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
@@ -1585,6 +1592,14 @@ namespace ts.server {
             } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
+        }
+
+        /*@internal*/
+        findDefaultConfiguredProject(info: ScriptInfo) {
+            if (!info.isScriptOpen()) return undefined;
+            const configFileName = this.getConfigFileNameForFile(info);
+            return configFileName &&
+                this.findConfiguredProjectByProjectName(configFileName);
         }
 
         /**
