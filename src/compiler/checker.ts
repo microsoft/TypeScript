@@ -12522,6 +12522,55 @@ namespace ts {
             return !!(type.flags & TypeFlags.Object) && !isGenericMappedType(type);
         }
 
+        function isEmptyObjectTypeOrSpreadsIntoEmptyObject(type: Type) {
+            return isEmptyObjectType(type) || !!(type.flags & (TypeFlags.Null | TypeFlags.Undefined | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index));
+        }
+
+        function tryMergeUnionOfObjectTypeAndEmptyObject(type: UnionType, readonly: boolean): Type | undefined {
+            if (type.types.length === 2) {
+                const firstType = type.types[0];
+                const secondType = type.types[1];
+                if (every(type.types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
+                    return isEmptyObjectType(firstType) ? firstType : isEmptyObjectType(secondType) ? secondType : emptyObjectType;
+                }
+                if (isEmptyObjectTypeOrSpreadsIntoEmptyObject(firstType)) {
+                    return getAnonymousPartialType(secondType);
+                }
+                if (isEmptyObjectTypeOrSpreadsIntoEmptyObject(secondType)) {
+                    return getAnonymousPartialType(firstType);
+                }
+            }
+
+            function getAnonymousPartialType(type: Type) {
+                // gets the type as if it had been spread, but where everything in the spread is made optional
+                const members = createSymbolTable();
+                for (const prop of getPropertiesOfType(type)) {
+                    if (getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                        // do nothing, skip privates
+                    }
+                    else if (isSpreadableProperty(prop)) {
+                        const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
+                        const flags = SymbolFlags.Property | SymbolFlags.Optional;
+                        const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
+                        result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
+                        result.declarations = prop.declarations;
+                        result.nameType = prop.nameType;
+                        result.syntheticOrigin = prop;
+                        members.set(prop.escapedName, result);
+                    }
+                }
+                const spread = createAnonymousType(
+                    type.symbol,
+                    members,
+                    emptyArray,
+                    emptyArray,
+                    getIndexInfoOfType(type, IndexKind.String),
+                    getIndexInfoOfType(type, IndexKind.Number));
+                spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
+                return spread;
+            }
+        }
+
         /**
          * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
@@ -12541,9 +12590,17 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
+                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
+                if (merged) {
+                    return getSpreadType(merged, right, symbol, objectFlags, readonly);
+                }
                 return mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly));
             }
             if (right.flags & TypeFlags.Union) {
+                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
+                if (merged) {
+                    return getSpreadType(left, merged, symbol, objectFlags, readonly);
+                }
                 return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
