@@ -21162,7 +21162,16 @@ namespace ts {
             }
             if (contextFlags && contextFlags & ContextFlags.Completion && signature.target) {
                 const baseSignature = getBaseSignature(signature.target);
-                return intersectTypes(getTypeAtPosition(signature, argIndex), getTypeAtPosition(baseSignature, argIndex));
+                // Only consider the type from the base signature for completions
+                // if it actually contributes something. The type from the contextually
+                // instantiated signature is the _real_ type anyway, so we should never
+                // let the base type _remove_ completions from the list.
+                const baseArgumentType = filterType(
+                    getTypeAtPosition(baseSignature, argIndex),
+                    t => !(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.IndexedAccess)));
+                if (!(baseArgumentType.flags & TypeFlags.Never)) {
+                    return intersectTypes(getTypeAtPosition(signature, argIndex), baseArgumentType);
+                }
             }
             return getTypeAtPosition(signature, argIndex);
         }
