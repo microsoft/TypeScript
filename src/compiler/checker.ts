@@ -21160,18 +21160,9 @@ namespace ts {
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
-            if (contextFlags && contextFlags & ContextFlags.Completion && signature.target) {
+            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !tryCast(callTarget, hasTypeArguments)?.typeArguments) {
                 const baseSignature = getBaseSignature(signature.target);
-                // Only consider the type from the base signature for completions
-                // if it actually contributes something. The type from the contextually
-                // instantiated signature is the _real_ type anyway, so we should never
-                // let the base type _remove_ completions from the list.
-                const baseArgumentType = filterType(
-                    getTypeAtPosition(baseSignature, argIndex),
-                    t => !(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.IndexedAccess)));
-                if (!(baseArgumentType.flags & TypeFlags.Never)) {
-                    return intersectTypes(getTypeAtPosition(signature, argIndex), baseArgumentType);
-                }
+                return getTypeAtPosition(baseSignature, argIndex);
             }
             return getTypeAtPosition(signature, argIndex);
         }
