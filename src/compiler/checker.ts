@@ -16346,7 +16346,7 @@ namespace ts {
         // for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
-            if (depth >= 5 && type.flags & TypeFlags.Object) {
+            if (depth >= 5 && type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
                 const symbol = type.symbol;
                 if (symbol) {
                     let count = 0;
