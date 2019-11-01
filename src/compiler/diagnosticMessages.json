@@ -3478,7 +3478,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
+    "File '{0}' has an unsupported extension. The only supported extensions are {1}. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6054
     },

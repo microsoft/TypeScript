@@ -2190,7 +2190,7 @@ namespace ts {
 
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
-                    if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
+                    if (fail) fail(Diagnostics.File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1_Did_you_mean_to_enable_the_allowJs_option, fileName, "'" + supportedExtensions.join("', '") + "'");
                     return undefined;
                 }
 
