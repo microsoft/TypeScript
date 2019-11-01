@@ -118,10 +118,41 @@ type BarComplex = { kind: "c", c: number } | { kind: "d", d: number } | string;
 declare function isPrimitiveUnion(x: unknown): x is PrimitiveUnion;
 declare function isFooComplex(x: unknown): x is FooComplex;
 declare function isBarComplex(x: unknown): x is BarComplex;
+declare function isZZYYComplex(x: unknown): x is { kind: "z"; zzz: string} | { kind: "y", yyy: number };
+
+function earlyExitsAndStuff(x: unknown) {
+    if (!isFooComplex(x) && !isBarComplex(x)) {
+        if (isZZYYComplex(x)) {
+            if (x.kind !== "z") {
+                return x.yyy;
+            }
+            return x.zzz;
+        }
+        return;
+    }
+    if (!!isPrimitiveUnion(x)) {
+        return x;
+    }
+    if (!isZZYYComplex(x)) {
+        if (x.kind === "a") {
+            let a = x.a;
+        }
+        if (x.kind === "b") {
+            let b = x.b;
+        }
+        if (x.kind === "c") {
+            let c = x.c;
+        }
+        if (x.kind === "d") {
+            let d = x.d;
+        }
+    }
+}
 
 function bluergh(x: unknown) {
     if (isPrimitiveUnion(x)) {
         let a: number | string = x;
+        return;
     }
     if (isFooComplex(x) && typeof x === "object") {
         if (x.kind === "a") {
