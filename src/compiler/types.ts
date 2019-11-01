@@ -4676,7 +4676,7 @@ namespace ts {
         HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
         HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
         IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
-        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain thet is the outermost chain of an optional expression
+        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
 
         // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
