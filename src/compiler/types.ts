@@ -4673,14 +4673,17 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
-        HasRestParameter = 1 << 0,      // Indicates last parameter is rest parameter
-        HasLiteralTypes = 1 << 1,       // Indicates signature is specialized
-        IsOptionalCall = 1 << 2,        // Indicates signature comes from a CallChain
+        HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
+        HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
+        IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
+        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
 
-        // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
+        // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
         // instantiating the return type.
         PropagatingFlags = HasRestParameter | HasLiteralTypes,
+
+        CallChainFlags = IsInnerCallChain | IsOuterCallChain,
     }
 
     export interface Signature {
@@ -4712,7 +4715,7 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
-        optionalCallSignatureCache?: Signature; // Optional chained call version of signature (deferred)
+        optionalCallSignatureCache?: { inner?: Signature, outer?: Signature }; // Optional chained call version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
