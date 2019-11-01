@@ -367,7 +367,7 @@ declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
 declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
-declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
+declare function f24<T, U, K extends keyof U | keyof T>(obj: Pick<T & U, K>): T & U;
 declare let x0: {
     foo: number;
     bar: string;

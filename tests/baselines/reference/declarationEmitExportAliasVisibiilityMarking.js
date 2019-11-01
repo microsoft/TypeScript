@@ -28,8 +28,8 @@ exports.lazyCard = function () { return Promise.resolve().then(function () { ret
 
 
 //// [Types.d.ts]
-declare type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
-declare type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
+declare type Suit = 'Clubs' | 'Diamonds' | 'Hearts' | 'Spades';
+declare type Rank = 'Jack' | 'King' | 'Queen' | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export { Suit, Rank };
 //// [Card.d.ts]
 import { Suit, Rank } from './Types';

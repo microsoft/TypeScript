@@ -290,8 +290,8 @@ declare function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>): void;
 declare function isFunction<T>(value: T): value is Extract<T, Function>;
 declare function getFunction<T>(item: T): Extract<T, Function>;
 declare function f10<T>(x: T): void;
-declare function f11(x: string | (() => string) | undefined): void;
-declare function f12(x: string | (() => string) | undefined): void;
+declare function f11(x: string | undefined | (() => string)): void;
+declare function f12(x: string | undefined | (() => string)): void;
 declare type Foo = {
     foo: string;
 };
@@ -327,7 +327,7 @@ interface B1<T> extends A1<T> {
     bat: B1<B1<T>>;
     boom: T extends any ? true : true;
 }
-declare function toString1(value: object | Function): string;
+declare function toString1(value: Function | object): string;
 declare function toString2(value: Function): string;
 declare function foo<T>(value: T): void;
 declare type A<T, V, E> = T extends object ? {

@@ -178,8 +178,8 @@ declare function fail(): never;
 declare function failOrThrow(shouldFail: boolean): never;
 declare function infiniteLoop1(): void;
 declare function infiniteLoop2(): never;
-declare function move1(direction: "up" | "down"): 1 | -1;
-declare function move2(direction: "up" | "down"): 1 | -1;
+declare function move1(direction: "down" | "up"): 1 | -1;
+declare function move2(direction: "down" | "up"): 1 | -1;
 declare function check<T>(x: T | undefined): T;
 declare class C {
     void1(): void;
@@ -187,7 +187,7 @@ declare class C {
     never1(): never;
     never2(): never;
 }
-declare function f1(x: string | number): void;
-declare function f2(x: string | number): never;
+declare function f1(x: number | string): void;
+declare function f2(x: number | string): never;
 declare function test(cb: () => string): string;
 declare let errorCallback: () => never;

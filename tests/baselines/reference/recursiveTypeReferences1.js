@@ -215,16 +215,16 @@ function level(h) {
 
 
 //// [recursiveTypeReferences1.d.ts]
-declare type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+declare type ValueOrArray<T> = Array<ValueOrArray<T>> | T;
 declare const a0: ValueOrArray<number>;
 declare const a1: ValueOrArray<number>;
-declare type HypertextNode = string | [string, {
+declare type HypertextNode = [string, {
     [key: string]: unknown;
-}, ...HypertextNode[]];
+}, ...HypertextNode[]] | string;
 declare const hypertextNode: HypertextNode;
-declare type Json = string | number | boolean | null | Json[] | {
+declare type Json = boolean | null | number | string | {
     [key: string]: Json;
-};
+} | Json[];
 declare let data: Json;
 interface Box<T> {
     value: T;
@@ -241,14 +241,14 @@ declare type Box2 = Box<Box2 | number>;
 declare const b20: Box2;
 declare const b21: Box2;
 declare const b22: Box2;
-declare type RecArray<T> = Array<T | RecArray<T>>;
+declare type RecArray<T> = Array<RecArray<T> | T>;
 declare function flat<T>(a: RecArray<T>): Array<T>;
-declare function flat1<T>(a: Array<T | Array<T>>): Array<T>;
-declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
+declare function flat1<T>(a: Array<Array<T> | T>): Array<T>;
+declare function flat2<T>(a: Array<Array<T | Array<T>> | T>): Array<T>;
 declare type T10 = T10[];
 declare type T11 = readonly T11[];
 declare type T12 = (T12)[];
-declare type T13 = T13[] | string;
+declare type T13 = string | T13[];
 declare type T14 = T14[] & {
     x: string;
 };

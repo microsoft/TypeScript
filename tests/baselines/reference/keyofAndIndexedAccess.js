@@ -1111,7 +1111,7 @@ declare class Item {
     price: number;
 }
 declare class Options {
-    visible: "yes" | "no";
+    visible: "no" | "yes";
 }
 declare type Dictionary<T> = {
     [x: string]: T;
@@ -1140,16 +1140,16 @@ declare type K13 = keyof {};
 declare type K14 = keyof Object;
 declare type K15 = keyof E;
 declare type K16 = keyof [string, number];
-declare type K17 = keyof (Shape | Item);
+declare type K17 = keyof (Item | Shape);
 declare type K18 = keyof (Shape & Item);
 declare type K19 = keyof NumericallyIndexed<Shape>;
 declare type KeyOf<T> = keyof T;
 declare type K20 = KeyOf<Shape>;
 declare type K21 = KeyOf<Dictionary<Shape>>;
 declare type NAME = "name";
-declare type WIDTH_OR_HEIGHT = "width" | "height";
+declare type WIDTH_OR_HEIGHT = "height" | "width";
 declare type Q10 = Shape["name"];
-declare type Q11 = Shape["width" | "height"];
+declare type Q11 = Shape["height" | "width"];
 declare type Q12 = Shape["name" | "visible"];
 declare type Q20 = Shape[NAME];
 declare type Q21 = Shape[WIDTH_OR_HEIGHT];
@@ -1160,7 +1160,7 @@ declare type Q33 = [string, number][E.A];
 declare type Q34 = [string, number][E.B];
 declare type Q35 = [string, number]["0"];
 declare type Q36 = [string, number]["1"];
-declare type Q40 = (Shape | Options)["visible"];
+declare type Q40 = (Options | Shape)["visible"];
 declare type Q41 = (Shape & Options)["visible"];
 declare type Q50 = Dictionary<Shape>["howdy"];
 declare type Q51 = Dictionary<Shape>[123];
@@ -1181,7 +1181,7 @@ declare function f20(component: Component<Shape>): void;
 declare function pluck<T, K extends keyof T>(array: T[], key: K): T[K][];
 declare function f30(shapes: Shape[]): void;
 declare function f31<K extends keyof Shape>(key: K): Shape[K];
-declare function f32<K extends "width" | "height">(key: K): Shape[K];
+declare function f32<K extends "height" | "width">(key: K): Shape[K];
 declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): S[K];
 declare function f34(ts: TaggedShape): void;
 declare class C {
@@ -1203,7 +1203,7 @@ declare function f55<T, K extends keyof T>(obj: T, key: K): void;
 declare function f60<T>(source: T, target: T): void;
 declare function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void): void;
 declare function f71(func: <T, U>(x: T, y: U) => Partial<T & U>): void;
-declare function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]): void;
+declare function f72(func: <T, U, K extends keyof U | keyof T>(x: T, y: U, k: K) => (T & U)[K]): void;
 declare function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]): void;
 declare function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]): void;
 declare function f80<T extends {
@@ -1253,7 +1253,7 @@ declare class OtherPerson {
 declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
-declare function path(obj: any, ...keys: (string | number)[]): any;
+declare function path(obj: any, ...keys: (number | string)[]): any;
 declare type Thing = {
     a: {
         x: number;
@@ -1292,7 +1292,7 @@ interface Options2<Data, Computed> {
 }
 declare class Component2<Data, Computed> {
     constructor(options: Options2<Data, Computed>);
-    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+    get<K extends keyof Computed | keyof Data>(key: K): (Data & Computed)[K];
 }
 interface R {
     p: number;
@@ -1401,9 +1401,9 @@ declare type SimpleDBRecord<Flag extends string> = {
 } & DBBoolTable<Flag>;
 declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
 declare type DynamicDBRecord<Flag extends string> = ({
-    dynamicField: number;
-} | {
     dynamicField: string;
+} | {
+    dynamicField: number;
 }) & DBBoolTable<Flag>;
 declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];
 interface I {

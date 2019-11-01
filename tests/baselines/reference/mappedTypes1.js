@@ -77,7 +77,7 @@ declare type T13 = {
     readonly [P in keyof Item]?: Item[P];
 };
 declare type T20 = {
-    [P in keyof Item]: Item[P] | null;
+    [P in keyof Item]: null | Item[P];
 };
 declare type T21 = {
     [P in keyof Item]: Array<Item[P]>;
@@ -116,10 +116,10 @@ declare type T43 = {
     [P in "a" | "b"]: void;
 };
 declare type T44 = {
-    [P in "a" | "b" | "0" | "1"]: void;
+    [P in "0" | "1" | "a" | "b"]: void;
 };
 declare type T47 = {
-    [P in string | "a" | "b" | "0" | "1"]: void;
+    [P in string | "0" | "1" | "a" | "b"]: void;
 };
 declare function f1<T1>(): {
     [P in keyof T1]: void;

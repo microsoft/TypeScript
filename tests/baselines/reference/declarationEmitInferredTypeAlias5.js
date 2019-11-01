@@ -23,7 +23,7 @@ exports.v = v;
 
 
 //// [0.d.ts]
-export declare type Data = string | boolean;
+export declare type Data = boolean | string;
 //// [1.d.ts]
 import * as Z from "./0";
 declare let v: Z.Data;

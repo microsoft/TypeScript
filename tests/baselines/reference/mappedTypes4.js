@@ -109,9 +109,9 @@ declare type C = {
 declare function f1(x: A | B | C | undefined): Boxified<A> | Boxified<B> | Boxified<C> | undefined;
 declare type T00 = Partial<A | B | C>;
 declare type T01 = Readonly<A | B | C | null | undefined>;
-declare type T02 = Boxified<A | B[] | C | string>;
-declare type T03 = Readonly<string | number | boolean | null | undefined | void>;
-declare type T04 = Boxified<string | number | boolean | null | undefined | void>;
+declare type T02 = Boxified<A | C | string | B[]>;
+declare type T03 = Readonly<boolean | null | number | string | undefined | void>;
+declare type T04 = Boxified<boolean | null | number | string | undefined | void>;
 declare type T05 = Partial<"hello" | "world" | 42>;
 declare type BoxifiedWithSentinel<T, U> = {
     [P in keyof T]: Box<T[P]> | U;

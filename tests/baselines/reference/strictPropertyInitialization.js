@@ -195,19 +195,19 @@ var C11 = /** @class */ (function () {
 declare class C1 {
     a: number;
     b: number | undefined;
-    c: number | null;
+    c: null | number;
     d?: number;
 }
 declare class C2 {
     a: number;
     b: number | undefined;
-    c: number | null;
+    c: null | number;
     d?: number;
 }
 declare class C3 {
     static a: number;
     static b: number | undefined;
-    static c: number | null;
+    static c: null | number;
     static d?: number;
 }
 declare class C4 {
@@ -235,7 +235,7 @@ declare class C8 {
 declare abstract class C9 {
     abstract a: number;
     abstract b: number | undefined;
-    abstract c: number | null;
+    abstract c: null | number;
     abstract d?: number;
 }
 declare class C10 {

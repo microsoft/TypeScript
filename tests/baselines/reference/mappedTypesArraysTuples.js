@@ -154,7 +154,7 @@ declare type A = {
 declare type B = {
     b: string;
 };
-declare type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
+declare type T40 = Boxified<A | ReadonlyArray<A> | [A, B] | string | string[] | A[]>;
 declare type ReadWrite<T> = {
     -readonly [P in keyof T]: T[P];
 };

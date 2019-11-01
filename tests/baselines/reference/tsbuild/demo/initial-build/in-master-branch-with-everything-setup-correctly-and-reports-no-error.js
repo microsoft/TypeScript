@@ -22,7 +22,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/lib/animals/animal.d.ts]
-export declare type Size = "small" | "medium" | "large";
+export declare type Size = "large" | "medium" | "small";
 export default interface Animal {
     size: Size;
 }
@@ -83,7 +83,7 @@ exports.createDog = dog_1.createDog;
       },
       "../../animals/animal.ts": {
         "version": "-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
-        "signature": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
+        "signature": "-1606517762-export declare type Size = \"large\" | \"medium\" | \"small\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
       },
       "../../animals/index.ts": {
         "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
@@ -208,8 +208,8 @@ exports.lastElementOf = lastElementOf;
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
       "../../animals/animal.ts": {
-        "version": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
-        "signature": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
+        "version": "-1606517762-export declare type Size = \"large\" | \"medium\" | \"small\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
+        "signature": "-1606517762-export declare type Size = \"large\" | \"medium\" | \"small\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
       },
       "../../animals/dog.ts": {
         "version": "10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n",

@@ -22,4 +22,4 @@ function foo(a) {
 //// [declFileTypeAnnotationStringLiteral.d.ts]
 declare function foo(a: "hello"): number;
 declare function foo(a: "name"): string;
-declare function foo(a: string): string | number;
+declare function foo(a: string): number | string;

@@ -64,7 +64,7 @@ var M;
 
 //// [declFileTypeAnnotationTypeAlias.d.ts]
 declare module M {
-    type Value = string | number | boolean;
+    type Value = boolean | number | string;
     var x: Value;
     class c {
     }

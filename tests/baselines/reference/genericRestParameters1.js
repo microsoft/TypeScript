@@ -298,7 +298,7 @@ declare const x16: [number, string, boolean];
 declare const x17: [number, string, boolean];
 declare const x18: (string | number | boolean)[];
 declare function g10<U extends string[], V extends [number, number]>(u: U, v: V): void;
-declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
+declare function f11<T extends (boolean | number | string)[]>(...args: T): T;
 declare const z10: [42, "hello", true];
 declare const z11: [42, "hello"];
 declare const z12: [42];
@@ -311,7 +311,7 @@ declare const z18: (string | number | true)[];
 declare function g11<U extends string[], V extends [number, number]>(u: U, v: V): void;
 declare function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T): U;
 declare function callr<T extends unknown[], U>(args: T, f: (...args: T) => U): U;
-declare function f15(a: string, b: number): string | number;
+declare function f15(a: string, b: number): number | string;
 declare function f16<A, B>(a: A, b: B): A | B;
 declare let x20: number;
 declare let x21: string;
@@ -343,7 +343,7 @@ declare type T08<T extends any[]> = ConstructorParameters<new (...args: T) => vo
 declare type T09 = Parameters<Function>;
 declare type Record1 = {
     move: [number, 'left' | 'right'];
-    jump: [number, 'up' | 'down'];
+    jump: [number, 'down' | 'up'];
     stop: string;
     done: [];
 };

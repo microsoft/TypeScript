@@ -462,10 +462,10 @@ assign(a, { o: 2, c: { 0: { a: 2, c: '213123' } } });
 //// [conditionalTypes1.d.ts]
 declare type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;
 declare type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;
-declare type T02 = Exclude<string | number | (() => void), Function>;
-declare type T03 = Extract<string | number | (() => void), Function>;
-declare type T04 = NonNullable<string | number | undefined>;
-declare type T05 = NonNullable<(() => string) | string[] | null | undefined>;
+declare type T02 = Exclude<number | string | (() => void), Function>;
+declare type T03 = Extract<number | string | (() => void), Function>;
+declare type T04 = NonNullable<number | string | undefined>;
+declare type T05 = NonNullable<null | undefined | string[] | (() => string)>;
 declare function f1<T>(x: T, y: NonNullable<T>): void;
 declare function f2<T extends string | undefined>(x: T, y: NonNullable<T>): void;
 declare function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>): void;
@@ -473,14 +473,14 @@ declare function f4<T extends {
     x: string | undefined;
 }>(x: T["x"], y: NonNullable<T["x"]>): void;
 declare type Options = {
-    k: "a";
-    a: number;
+    k: "c";
+    c: boolean;
 } | {
     k: "b";
     b: string;
 } | {
-    k: "c";
-    c: boolean;
+    k: "a";
+    a: number;
 };
 declare type T10 = Exclude<Options, {
     k: "a" | "b";
@@ -489,14 +489,14 @@ declare type T11 = Extract<Options, {
     k: "a" | "b";
 }>;
 declare type T12 = Exclude<Options, {
-    k: "a";
-} | {
     k: "b";
+} | {
+    k: "a";
 }>;
 declare type T13 = Extract<Options, {
-    k: "a";
-} | {
     k: "b";
+} | {
+    k: "a";
 }>;
 declare type T14 = Exclude<Options, {
     q: "a";
@@ -565,9 +565,9 @@ declare type DeepReadonlyObject<T> = {
     readonly [P in NonFunctionPropertyNames<T>]: DeepReadonly<T[P]>;
 };
 declare function f10(part: DeepReadonly<Part>): void;
-declare type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T extends string ? "" : false;
-declare function zeroOf<T extends number | string | boolean>(value: T): ZeroOf<T>;
-declare function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T): void;
+declare type ZeroOf<T extends boolean | number | string> = T extends number ? 0 : T extends string ? "" : false;
+declare function zeroOf<T extends boolean | number | string>(value: T): ZeroOf<T>;
+declare function f20<T extends string>(n: number, b: boolean, x: boolean | number, y: T): void;
 declare function f21<T extends number | string>(x: T, y: ZeroOf<T>): void;
 declare type T35<T extends {
     a: string;
@@ -703,7 +703,7 @@ interface Foo2 {
 interface Bar2 {
     bar: string;
 }
-declare type FooBar = Foo2 | Bar2;
+declare type FooBar = Bar2 | Foo2;
 declare interface ExtractFooBar<FB extends FooBar> {
 }
 declare type Extracted<Struct> = {

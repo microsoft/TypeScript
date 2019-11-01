@@ -902,14 +902,14 @@ declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
 declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
-declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
+declare function f11<T, U = B | T>(a?: T, b?: U): [T, U];
 declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
-declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
-declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
+declare function f17<T = U, U = B | T>(a?: T, b?: U): [T, U];
+declare function f18<T, U = V, V = C | U>(a?: T, b?: U, c?: V): [T, U, V];
 declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 interface i00<T = number> {

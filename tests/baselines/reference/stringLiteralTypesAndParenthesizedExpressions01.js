@@ -17,6 +17,6 @@ var d = (myRandBool ? "foo" : ("bar"));
 //// [stringLiteralTypesAndParenthesizedExpressions01.d.ts]
 declare function myRandBool(): boolean;
 declare let a: "foo";
-declare let b: "foo" | "bar";
+declare let b: "bar" | "foo";
 declare let c: "foo";
-declare let d: "foo" | "bar";
+declare let d: "bar" | "foo";

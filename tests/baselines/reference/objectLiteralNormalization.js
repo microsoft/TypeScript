@@ -126,11 +126,11 @@ declare let a2: {
     b?: undefined;
 };
 declare let b1: {
-    a: string;
-    b: string;
-} | {
     b: string;
     c: string;
+} | {
+    a: string;
+    b: string;
 };
 declare let b2: {
     z: number;

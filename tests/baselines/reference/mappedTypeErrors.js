@@ -267,13 +267,13 @@ declare type T02 = {
 declare type T03 = Record<Date, number>;
 declare type T10 = Pick<Shape, "name">;
 declare type T11 = Pick<Shape, "foo">;
-declare type T12 = Pick<Shape, "name" | "foo">;
+declare type T12 = Pick<Shape, "foo" | "name">;
 declare type T13 = Pick<Shape, keyof Named>;
 declare type T14 = Pick<Shape, keyof Point>;
 declare type T15 = Pick<Shape, never>;
 declare type T16 = Pick<Shape, undefined>;
 declare function f1<T>(x: T): void;
-declare function f2<T extends string | number>(x: T): void;
+declare function f2<T extends number | string>(x: T): void;
 declare function f3<T extends keyof Shape>(x: T): void;
 declare function f4<T extends keyof Named>(x: T): void;
 declare function f10<T>(): void;

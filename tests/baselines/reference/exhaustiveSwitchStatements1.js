@@ -408,7 +408,7 @@ interface Triangle {
     kind: "triangle";
     side: number;
 }
-declare type Shape = Square | Rectangle | Circle | Triangle;
+declare type Shape = Circle | Rectangle | Square | Triangle;
 declare function area(s: Shape): number;
 declare function areaWrapped(s: Shape): number;
 declare enum MyEnum {
@@ -431,7 +431,7 @@ interface Circle2 {
     kind: "circle";
     radius: number;
 }
-declare type Shape2 = Square2 | Circle2;
+declare type Shape2 = Circle2 | Square2;
 declare function withDefault(s1: Shape2, s2: Shape2): string;
 declare function withoutDefault(s1: Shape2, s2: Shape2): string;
 declare function test4(value: 1 | 2): string;

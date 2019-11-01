@@ -92,14 +92,14 @@ var Consts2;
 
 
 //// [stringLiteralTypesOverloads01.d.ts]
-declare type PrimitiveName = 'string' | 'number' | 'boolean';
+declare type PrimitiveName = 'boolean' | 'number' | 'string';
 declare function getFalsyPrimitive(x: "string"): string;
 declare function getFalsyPrimitive(x: "number"): number;
 declare function getFalsyPrimitive(x: "boolean"): boolean;
 declare function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
 declare function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
 declare function getFalsyPrimitive(x: "number" | "string"): number | string;
-declare function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
+declare function getFalsyPrimitive(x: "boolean" | "number" | "string"): boolean | number | string;
 declare namespace Consts1 {
 }
 declare const string: "string";

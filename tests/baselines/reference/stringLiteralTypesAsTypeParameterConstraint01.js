@@ -35,7 +35,7 @@ hResult = h("bar");
 
 //// [stringLiteralTypesAsTypeParameterConstraint01.d.ts]
 declare function foo<T extends "foo">(f: (x: T) => T): (x: T) => T;
-declare function bar<T extends "foo" | "bar">(f: (x: T) => T): (x: T) => T;
+declare function bar<T extends "bar" | "foo">(f: (x: T) => T): (x: T) => T;
 declare let f: (x: "foo") => "foo";
 declare let fResult: "foo";
 declare let g: (x: "foo") => "foo";

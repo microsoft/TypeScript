@@ -466,7 +466,7 @@ declare let p12: Point & {
     bar: number;
 };
 declare type Accessors<T> = {
-    [K in keyof T]: (() => T[K]) | Computed<T[K]>;
+    [K in keyof T]: Computed<T[K]> | (() => T[K]);
 };
 declare type Dictionary<T> = {
     [x: string]: T;

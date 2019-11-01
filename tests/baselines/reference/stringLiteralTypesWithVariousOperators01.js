@@ -60,7 +60,7 @@ var v = abcOrXyz === abcOrXyzOrNumber;
 declare let abc: "ABC";
 declare let xyz: "XYZ";
 declare let abcOrXyz: "ABC" | "XYZ";
-declare let abcOrXyzOrNumber: "ABC" | "XYZ" | number;
+declare let abcOrXyzOrNumber: number | "ABC" | "XYZ";
 declare let a: string;
 declare let b: string;
 declare let c: string;

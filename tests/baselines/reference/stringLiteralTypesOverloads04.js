@@ -14,4 +14,4 @@ f(function (y) {
 
 
 //// [stringLiteralTypesOverloads04.d.ts]
-declare function f(x: (p: "foo" | "bar") => "foo"): any;
+declare function f(x: (p: "bar" | "foo") => "foo"): any;

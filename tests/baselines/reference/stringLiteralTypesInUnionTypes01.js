@@ -38,6 +38,6 @@ y = x;
 
 
 //// [stringLiteralTypesInUnionTypes01.d.ts]
-declare type T = "foo" | "bar" | "baz";
-declare var x: "foo" | "bar" | "baz";
+declare type T = "bar" | "baz" | "foo";
+declare var x: "bar" | "baz" | "foo";
 declare var y: T;
