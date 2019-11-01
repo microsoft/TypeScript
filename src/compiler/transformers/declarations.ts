@@ -973,7 +973,121 @@ namespace ts {
                             input.isTypeOf
                         ));
                     }
+                    case SyntaxKind.UnionType: {
+                        if(input.types.length <=1) return cleanup(input);
+                        const clone = getMutableClone(input);
+                        const types = clone.types.map(n=>n as TypeReferenceNode);
+                        types.sort((a,b) => {
+                            // TODO Undefined values are last, add implementation to getSortableName to support them.
+                            const keyA = getSortableName(a);
+                            if(typeof keyA === "undefined") {
+                                return 1;
+                            }
+                            const keyB = getSortableName(b);
+                            if(typeof keyB === "undefined") {
+                                return -1;
+                            }
+                            return keyA === keyB ? Comparison.EqualTo :
+                                typeof keyA === "string" && (typeof keyB ==="number" || typeof keyB ==="bigint") ? Comparison.LessThan :
+                                typeof keyB === "string" && (typeof keyA ==="number" || typeof keyA ==="bigint") ? Comparison.GreaterThan :
+                                keyA < keyB ? Comparison.LessThan :
+                                Comparison.GreaterThan;
+                        });
+                        clone.types = createNodeArray(types);
+                        visitNodes(clone.types, visitDeclarationSubtree);
+                        return cleanup(clone);
+                    }
                     default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+                }
+            }
+
+            function getSortableName(n: TypeNode): string | number | bigint | undefined {
+                switch(n.kind){
+                    case SyntaxKind.TypePredicate:
+                    case SyntaxKind.TypeReference:
+                        const name = getTypeName((n as TypeReferenceNode).typeName);
+                        if (!name){
+                            return undefined;
+                        }
+                        return "000000_" + name;
+                    case SyntaxKind.LiteralType:
+                        const lt = n as LiteralTypeNode;
+                        return getLiteralTypeName(lt);
+                    case SyntaxKind.TupleType:
+                        const tt = n as TupleTypeNode;
+                        return "000001_" + tt.elementTypes.length + "_" + tt.elementTypes.map(getSortableName).join(", ");
+                    case SyntaxKind.StringKeyword:
+                        return "000001_string";
+                    case SyntaxKind.AnyKeyword:
+                        return "000001_any";
+                    case SyntaxKind.UnknownKeyword:
+                        return "000001_unknown";
+                    case SyntaxKind.NumberKeyword:
+                        return "000001_number";
+                    case SyntaxKind.BigIntKeyword:
+                        return "000001_bigint";
+                    case SyntaxKind.ObjectKeyword:
+                        return "000001_object";
+                    case SyntaxKind.BooleanKeyword:
+                        return "000001_boolean";
+                    case SyntaxKind.SymbolKeyword:
+                        return "000001_symbol";
+                    case SyntaxKind.ThisKeyword:
+                        return "000001_this";
+                    case SyntaxKind.VoidKeyword:
+                        return "000001_void";
+                    case SyntaxKind.UndefinedKeyword:
+                        return "000001_undefined";
+                    case SyntaxKind.NullKeyword:
+                        return "000001_null";
+                    case SyntaxKind.NeverKeyword:
+                        return "000001_never";
+                    case SyntaxKind.ImportType:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeQuery:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.OptionalType:
+                    case SyntaxKind.RestType:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.IntersectionType:
+                    case SyntaxKind.ConditionalType:
+                    case SyntaxKind.InferType:
+                    case SyntaxKind.ParenthesizedType:
+                    case SyntaxKind.ThisType:
+                    case SyntaxKind.TypeOperator:
+                    case SyntaxKind.IndexedAccessType:
+                    case SyntaxKind.MappedType:
+                        return undefined;
+                    default: Debug.assertNever(n as never, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(n as any).kind]}`);
+                }
+            }
+
+            function getLiteralTypeName(n: LiteralTypeNode): string | number | bigint | undefined {
+                const lit = n.literal;
+                switch(lit.kind) {
+                    case SyntaxKind.FalseKeyword:
+                        return "000002_" + "0";
+                    case SyntaxKind.TrueKeyword:
+                        return "000002_" + "1";
+                    case SyntaxKind.NumericLiteral:
+                        return Number ((lit as NumericLiteral).text);
+                    case SyntaxKind.BigIntLiteral:
+                        return BigInt(parsePseudoBigInt((lit as BigIntLiteral).text));
+                    case SyntaxKind.StringLiteral:
+                        return "000003_" + (lit as StringLiteral).text;
+                    default: return undefined;
+                }
+            }
+
+            function getTypeName(n: EntityName): string | undefined {
+                switch(n.kind){
+                    case SyntaxKind.Identifier:
+                        return n.escapedText.toString();
+                    case SyntaxKind.QualifiedName:
+                        return getTypeName(n.left) +"."+ n.right.escapedText.toString();
+                    default: return undefined;
                 }
             }
 
@@ -1560,7 +1674,8 @@ namespace ts {
         | ConditionalTypeNode
         | FunctionTypeNode
         | ConstructorTypeNode
-        | ImportTypeNode;
+        | ImportTypeNode
+        | UnionTypeNode;
 
     function isProcessedComponent(node: Node): node is ProcessedComponent {
         switch (node.kind) {
@@ -1582,6 +1697,7 @@ namespace ts {
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.ImportType:
+            case SyntaxKind.UnionType:
                 return true;
         }
         return false;
