@@ -14,13 +14,38 @@ var d = {
 };
 const bar = d['hello'];
 
-var e = {
-  set: (key: string) => 'foobar',
-  get: (key: string) => 'foobar'
-};
-e['hello'] = 'modified';
-e['hello'] += 1;
-e['hello'] ++;
+{
+  let e = {
+    set: (key: string) => 'foobar',
+    get: (key: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
+
+{
+  let e = {
+    set: (key: string) => 'foobar',
+    get: (key: string, value: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
+
+{
+  let e = {
+    set: (key: "hello" | "world") => 'foobar',
+    get: (key: "hello" | "world", value: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
 
 const o = { a: 0 };
 
@@ -42,3 +67,15 @@ o[numEnumKey];
 enum StrEnum { a = "a", b = "b" }
 let strEnumKey: StrEnum;
 o[strEnumKey];
+
+
+interface MyMap<K, T> {
+  get(key: K): T;
+  set(key: K, value: T): void;
+}
+
+interface Dog { bark(): void; }
+let rover: Dog = { bark() {} };
+
+declare let map: MyMap<Dog, string>;
+map[rover] = "Rover";
