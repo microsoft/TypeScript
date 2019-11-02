@@ -16,8 +16,8 @@ const bar = d['hello'];
 
 {
   let e = {
-    set: (key: string) => 'foobar',
-    get: (key: string) => 'foobar'
+    get: (key: string) => 'foobar',
+    set: (key: string) => 'foobar'
   };
   e['hello'];
   e['hello'] = 'modified';
@@ -27,8 +27,8 @@ const bar = d['hello'];
 
 {
   let e = {
-    set: (key: string) => 'foobar',
-    get: (key: string, value: string) => 'foobar'
+    get: (key: string) => 'foobar',
+    set: (key: string, value: string) => 'foobar'
   };
   e['hello'];
   e['hello'] = 'modified';
@@ -38,13 +38,27 @@ const bar = d['hello'];
 
 {
   let e = {
-    set: (key: "hello" | "world") => 'foobar',
-    get: (key: "hello" | "world", value: string) => 'foobar'
+    get: (key: "hello" | "world") => 'foobar',
+    set: (key: "hello" | "world", value: string) => 'foobar'
   };
   e['hello'];
   e['hello'] = 'modified';
   e['hello'] += 1;
   e['hello'] ++;
+}
+
+{
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'];
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] = 'modified';
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] += 1;
+  ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] ++;
+}
+
+{
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'];
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] = 'modified';
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] += 1;
+  ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] ++;
 }
 
 const o = { a: 0 };
