@@ -3478,7 +3478,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' has an unsupported extension. The only supported extensions are {1}. Did you mean to enable the 'allowJs' option?": {
+    "File '{0}' has an unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -4322,6 +4322,14 @@
     "Print names of files that are part of the compilation and then stop processing.": {
         "category": "Message",
         "code": 6503
+    },
+    "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
+        "category": "Error",
+        "code": 6504
+    },
+    "File '{0}' is a JSON file. Did you mean to enable the 'resolveJsonModule' option?": {
+        "category": "Error",
+        "code": 6505
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
