@@ -13,13 +13,38 @@ var d = {
 };
 const bar = d['hello'];
 
-var e = {
-  set: (key: string) => 'foobar',
-  get: (key: string) => 'foobar'
-};
-e['hello'] = 'modified';
-e['hello'] += 1;
-e['hello'] ++;
+{
+  let e = {
+    set: (key: string) => 'foobar',
+    get: (key: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
+
+{
+  let e = {
+    set: (key: string) => 'foobar',
+    get: (key: string, value: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
+
+{
+  let e = {
+    set: (key: "hello" | "world") => 'foobar',
+    get: (key: "hello" | "world", value: string) => 'foobar'
+  };
+  e['hello'];
+  e['hello'] = 'modified';
+  e['hello'] += 1;
+  e['hello'] ++;
+}
 
 const o = { a: 0 };
 
@@ -43,6 +68,18 @@ let strEnumKey: StrEnum;
 o[strEnumKey];
 
 
+interface MyMap<K, T> {
+  get(key: K): T;
+  set(key: K, value: T): void;
+}
+
+interface Dog { bark(): void; }
+let rover: Dog = { bark() {} };
+
+declare let map: MyMap<Dog, string>;
+map[rover] = "Rover";
+
+
 //// [noImplicitAnyStringIndexerOnObject.js]
 var a = {}["hello"];
 var b = { '': 'foo' }[''];
@@ -55,13 +92,36 @@ var d = {
     set: function (key) { return 'foobar'; }
 };
 var bar = d['hello'];
-var e = {
-    set: function (key) { return 'foobar'; },
-    get: function (key) { return 'foobar'; }
-};
-e['hello'] = 'modified';
-e['hello'] += 1;
-e['hello']++;
+{
+    var e = {
+        set: function (key) { return 'foobar'; },
+        get: function (key) { return 'foobar'; }
+    };
+    e['hello'];
+    e['hello'] = 'modified';
+    e['hello'] += 1;
+    e['hello']++;
+}
+{
+    var e = {
+        set: function (key) { return 'foobar'; },
+        get: function (key, value) { return 'foobar'; }
+    };
+    e['hello'];
+    e['hello'] = 'modified';
+    e['hello'] += 1;
+    e['hello']++;
+}
+{
+    var e = {
+        set: function (key) { return 'foobar'; },
+        get: function (key, value) { return 'foobar'; }
+    };
+    e['hello'];
+    e['hello'] = 'modified';
+    e['hello'] += 1;
+    e['hello']++;
+}
 var o = { a: 0 };
 o[k];
 o[k2];
@@ -80,3 +140,5 @@ var StrEnum;
 })(StrEnum || (StrEnum = {}));
 var strEnumKey;
 o[strEnumKey];
+var rover = { bark: function () { } };
+map[rover] = "Rover";

@@ -4,22 +4,37 @@ tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(7,1): error TS7052: E
 tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(8,13): error TS7052: Element implicitly has an 'any' type because type '{ get: (key: string) => string; }' has no index signature. Did you mean to call 'get' ?
 tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(13,13): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: string) => string; }'.
   Property 'hello' does not exist on type '{ set: (key: string) => string; }'.
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(19,1): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(20,1): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(21,1): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(26,1): error TS7053: Element implicitly has an 'any' type because expression of type '"a" | "b" | "c"' can't be used to index type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(20,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'get' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(21,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(22,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(23,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(31,3): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: string) => string; get: (key: string, value: string) => string; }'.
+  Property 'hello' does not exist on type '{ set: (key: string) => string; get: (key: string, value: string) => string; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(32,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(33,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(34,3): error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(42,3): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+  Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(43,3): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+  Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(44,3): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+  Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(45,3): error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+  Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(51,1): error TS7053: Element implicitly has an 'any' type because expression of type '"a" | "b" | "c"' can't be used to index type '{ a: number; }'.
   Property 'b' does not exist on type '{ a: number; }'.
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(30,1): error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(55,1): error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{ a: number; }'.
   Property 'c' does not exist on type '{ a: number; }'.
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(33,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(58,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '{ a: number; }'.
   Property '[sym]' does not exist on type '{ a: number; }'.
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(37,1): error TS7053: Element implicitly has an 'any' type because expression of type 'NumEnum' can't be used to index type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(62,1): error TS7053: Element implicitly has an 'any' type because expression of type 'NumEnum' can't be used to index type '{ a: number; }'.
   Property '[NumEnum.a]' does not exist on type '{ a: number; }'.
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(42,1): error TS7053: Element implicitly has an 'any' type because expression of type 'StrEnum' can't be used to index type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(67,1): error TS7053: Element implicitly has an 'any' type because expression of type 'StrEnum' can't be used to index type '{ a: number; }'.
   Property '[StrEnum.b]' does not exist on type '{ a: number; }'.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(79,5): error TS2538: Type 'Dog' cannot be used as an index type.
 
 
-==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (12 errors) ====
+==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (22 errors) ====
     var a = {}["hello"];
             ~~~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{}'.
@@ -44,19 +59,67 @@ tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(42,1): error TS7053: 
 !!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: string) => string; }'.
 !!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: string) => string; }'.
     
-    var e = {
-      set: (key: string) => 'foobar',
-      get: (key: string) => 'foobar'
-    };
-    e['hello'] = 'modified';
-    ~~~~~~~~~~
+    {
+      let e = {
+        set: (key: string) => 'foobar',
+        get: (key: string) => 'foobar'
+      };
+      e['hello'];
+      ~~~~~~~~~~
+!!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'get' ?
+      e['hello'] = 'modified';
+      ~~~~~~~~~~
 !!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
-    e['hello'] += 1;
-    ~~~~~~~~~~
+      e['hello'] += 1;
+      ~~~~~~~~~~
 !!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
-    e['hello'] ++;
-    ~~~~~~~~~~
+      e['hello'] ++;
+      ~~~~~~~~~~
 !!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string) => string; }' has no index signature. Did you mean to call 'set' ?
+    }
+    
+    {
+      let e = {
+        set: (key: string) => 'foobar',
+        get: (key: string, value: string) => 'foobar'
+      };
+      e['hello'];
+      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: string) => string; get: (key: string, value: string) => string; }'.
+!!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: string) => string; get: (key: string, value: string) => string; }'.
+      e['hello'] = 'modified';
+      ~~~~~~~~~~
+!!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+      e['hello'] += 1;
+      ~~~~~~~~~~
+!!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+      e['hello'] ++;
+      ~~~~~~~~~~
+!!! error TS7052: Element implicitly has an 'any' type because type '{ set: (key: string) => string; get: (key: string, value: string) => string; }' has no index signature. Did you mean to call 'set' ?
+    }
+    
+    {
+      let e = {
+        set: (key: "hello" | "world") => 'foobar',
+        get: (key: "hello" | "world", value: string) => 'foobar'
+      };
+      e['hello'];
+      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+!!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+      e['hello'] = 'modified';
+      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+!!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+      e['hello'] += 1;
+      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+!!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+      e['hello'] ++;
+      ~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+!!! error TS7053:   Property 'hello' does not exist on type '{ set: (key: "hello" | "world") => string; get: (key: "hello" | "world", value: string) => string; }'.
+    }
     
     const o = { a: 0 };
     
@@ -93,4 +156,18 @@ tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(42,1): error TS7053: 
     ~~~~~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type 'StrEnum' can't be used to index type '{ a: number; }'.
 !!! error TS7053:   Property '[StrEnum.b]' does not exist on type '{ a: number; }'.
+    
+    
+    interface MyMap<K, T> {
+      get(key: K): T;
+      set(key: K, value: T): void;
+    }
+    
+    interface Dog { bark(): void; }
+    let rover: Dog = { bark() {} };
+    
+    declare let map: MyMap<Dog, string>;
+    map[rover] = "Rover";
+        ~~~~~
+!!! error TS2538: Type 'Dog' cannot be used as an index type.
     
