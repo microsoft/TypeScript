@@ -9742,7 +9742,7 @@ namespace ts {
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
             const propSet = createMap<Symbol>();
             let indexTypes: Type[] | undefined;
-            const isUnion = containingType.flags & TypeFlags.Union;
+            const isUnion = isUnionType(containingType);
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
             let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
@@ -11421,6 +11421,10 @@ namespace ts {
                     orderedRemoveItemAt(types, i);
                 }
             }
+        }
+
+        function isUnionType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union);
         }
 
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
