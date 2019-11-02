@@ -152,9 +152,6 @@ let y22 = nonpartial(x22);
 >nonpartial : <T>(x: Partial<T>) => T
 >x22 : { a: number | undefined; b?: string[] | undefined; }
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
->Awaited : Awaited<T>
-
 type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
 >Awaitified : Awaitified<T>
 
