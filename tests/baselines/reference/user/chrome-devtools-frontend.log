@@ -3344,29 +3344,6 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5836,45): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5843,51): error TS2339: Property 'height' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5844,30): error TS2339: Property 'height' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5845,14): error TS2339: Property 'height' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5883,39): error TS2339: Property 'clearWhenEmpty' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5885,14): error TS2339: Property 'replacedWith' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5887,12): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5888,12): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5888,46): error TS2339: Property 'replacedWith' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5889,46): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5890,38): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5892,14): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5899,14): error TS2339: Property 'addToHistory' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5904,22): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5906,16): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5913,14): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5917,14): error TS2339: Property 'clearOnEnter' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5919,14): error TS2339: Property 'readOnly' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5924,14): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5926,12): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5931,16): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,21): error TS2339: Property 'className' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,41): error TS2339: Property 'title' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,57): error TS2339: Property 'startStyle' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,78): error TS2339: Property 'endStyle' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,97): error TS2339: Property 'css' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5935,16): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6164,32): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6378,11): error TS2339: Property 'setHistory' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6391,10): error TS2339: Property 'linked' does not exist on type 'Doc'.
@@ -3939,6 +3916,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(474,27): 
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(482,40): error TS2339: Property 'upperBound' does not exist on type 'ConsoleViewMessage[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(524,35): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(525,32): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(570,23): error TS2502: 'viewMessage' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(576,96): error TS2339: Property 'peekLast' does not exist on type 'ConsoleViewMessage[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(579,49): error TS2339: Property 'peekLast' does not exist on type 'ConsoleViewMessage[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleView.js(596,40): error TS2339: Property 'ConsoleGroup' does not exist on type '{ new (): Console; prototype: Console; }'.
@@ -4268,6 +4246,7 @@ node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(42
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(448,26): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(481,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(514,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(516,25): error TS2502: 'executionContextId' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(578,54): error TS2339: Property '_pageLoadSequenceNumber' does not exist on type 'ConsoleMessage'.
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(615,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/console_model/ConsoleModel.js(616,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -4368,7 +4347,8 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(230,25
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(267,37): error TS2339: Property 'peekLast' does not exist on type '{ end: number; count: number; }[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(268,21): error TS2345: Argument of type '{ end: number; }' is not assignable to parameter of type '{ end: number; count: number; }'.
   Property 'count' is missing in type '{ end: number; }' but required in type '{ end: number; count: number; }'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(441,25): error TS2339: Property 'peekLast' does not exist on type '{ end: number; count: number; }[]'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(430,36): error TS2502: 'segmentsB' is referenced directly or indirectly in its own type annotation.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(441,25): error TS2339: Property 'peekLast' does not exist on type '{ end: number; count: any; }[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(20,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(32,53): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(40,52): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4658,6 +4638,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(32
   'ViewportDataGridNode<any>' is assignable to the constraint of type 'NODE_TYPE', but 'NODE_TYPE' could be instantiated with a different subtype of constraint '{}'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(43,41): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(87,49): error TS2339: Property 'isScrolledToBottom' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(102,18): error TS2502: 'isFromUser' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(104,51): error TS2339: Property 'isScrolledToBottom' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(108,49): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(133,33): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
@@ -8306,6 +8287,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(580,12): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(581,10): error TS2339: Property 'heapSnapshotNode' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(602,82): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(625,30): error TS2502: 'hasObjectId' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(871,36): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(874,34): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(966,23): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
@@ -9080,6 +9062,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(108,24): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(117,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(126,32): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(137,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
+node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(156,10): error TS2502: 'edit' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMedia.js(160,47): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMetadata.js(197,24): error TS2339: Property 'pushAll' does not exist on type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSMetadata.js(222,24): error TS2339: Property '_instance' does not exist on type 'typeof CSSMetadata'.
@@ -9130,8 +9113,10 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(885,24): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSModel.js(897,33): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(18,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(39,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
+node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(109,10): error TS2502: 'edit' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(168,56): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(9,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
+node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(20,10): error TS2502: 'edit' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(33,32): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(33,98): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(108,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
@@ -9541,6 +9526,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(210,25): e
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(217,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(224,25): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(231,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(348,24): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(408,25): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(415,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkRequest.js(466,25): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
@@ -10336,8 +10322,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(137,21): error TS2345: Argument of type '{ asyncStackHeader: string; }' is not assignable to parameter of type '{ debuggerCallFrame: CallFrame; debuggerModel: DebuggerModel; }'.
   Object literal may only specify known properties, and 'asyncStackHeader' does not exist in type '{ debuggerCallFrame: CallFrame; debuggerModel: DebuggerModel; }'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(163,20): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(171,28): error TS2345: Argument of type '{ debuggerCallFrame: CallFrame; debuggerModel: DebuggerModel; }[]' is not assignable to parameter of type '{ debuggerCallFrame: CallFrame; asyncStackHeader: string; runtimeCallFrame: any; debuggerModel: DebuggerModel; }[]'.
-  Type '{ debuggerCallFrame: CallFrame; debuggerModel: DebuggerModel; }' is not assignable to type '{ debuggerCallFrame: CallFrame; asyncStackHeader: string; runtimeCallFrame: any; debuggerModel: DebuggerModel; }'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(187,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(209,33): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(285,13): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -11297,9 +11281,10 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetwo
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(309,87): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(313,69): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(360,56): error TS2339: Property 'peekLast' does not exist on type 'number[]'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(372,10): error TS2322: Type '{ startLevel: number; name: string; expanded: boolean; style: { padding: number; height: number; collapsible: boolean; color: string; font: string; backgroundColor: string; nestingLevel: number; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; shareHeaderLine: boolean; }; }' is not assignable to type '{ name: string; startLevel: number; expanded: boolean; style: { height: number; padding: number; collapsible: boolean; font: string; color: string; backgroundColor: string; nestingLevel: number; itemsHeight: number; shareHeaderLine: boolean; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; }; }'.
-  Types of property 'style' are incompatible.
-    Property 'itemsHeight' is missing in type '{ padding: number; height: number; collapsible: boolean; color: string; font: string; backgroundColor: string; nestingLevel: number; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; shareHeaderLine: boolean; }' but required in type '{ height: number; padding: number; collapsible: boolean; font: string; color: string; backgroundColor: string; nestingLevel: number; itemsHeight: number; shareHeaderLine: boolean; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(372,9): error TS2345: Argument of type '{ startLevel: number; name: string; expanded: boolean; style: { padding: number; height: number; collapsible: boolean; color: string; font: string; backgroundColor: string; nestingLevel: number; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; shareHeaderLine: boolean; }; }[]' is not assignable to parameter of type '{ name: string; startLevel: number; expanded: boolean; style: { height: number; padding: number; collapsible: boolean; font: string; color: string; backgroundColor: string; nestingLevel: number; itemsHeight: number; shareHeaderLine: boolean; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; }; }[]'.
+  Type '{ startLevel: number; name: string; expanded: boolean; style: { padding: number; height: number; collapsible: boolean; color: string; font: string; backgroundColor: string; nestingLevel: number; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; shareHeaderLine: boolean; }; }' is not assignable to type '{ name: string; startLevel: number; expanded: boolean; style: { height: number; padding: number; collapsible: boolean; font: string; color: string; backgroundColor: string; nestingLevel: number; itemsHeight: number; shareHeaderLine: boolean; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; }; }'.
+    Types of property 'style' are incompatible.
+      Property 'itemsHeight' is missing in type '{ padding: number; height: number; collapsible: boolean; color: string; font: string; backgroundColor: string; nestingLevel: number; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; shareHeaderLine: boolean; }' but required in type '{ height: number; padding: number; collapsible: boolean; font: string; color: string; backgroundColor: string; nestingLevel: number; itemsHeight: number; shareHeaderLine: boolean; useFirstLineForOverview: boolean; useDecoratorsForOverview: boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(391,64): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartNetworkDataProvider.js(408,19): error TS2339: Property 'preciseMillisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartView.js(49,52): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -12151,6 +12136,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(322,39): error
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(325,35): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(350,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(365,13): error TS2339: Property 'consume' does not exist on type 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(411,18): error TS2502: 'index' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(478,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(500,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'variableOffsets' must be of type 'any', but here has type 'Int32Array'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(523,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
@@ -12158,6 +12144,9 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(529,35): error
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(557,33): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(592,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(637,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'index' must be of type 'number', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(135,16): error TS2502: 'from' is referenced directly or indirectly in its own type annotation.
+node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(135,26): error TS2502: 'items' is referenced directly or indirectly in its own type annotation.
+node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(154,14): error TS2502: 'items' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(16,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(17,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(127,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -12894,6 +12883,8 @@ node_modules/chrome-devtools-frontend/front_end/workspace/FileManager.js(42,27):
 node_modules/chrome-devtools-frontend/front_end/workspace/SearchConfig.js(164,20): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(45,25): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(136,21): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(191,15): error TS2502: 'name' is referenced directly or indirectly in its own type annotation.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(191,21): error TS2502: 'url' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(298,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(546,27): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
   'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint '{}'.

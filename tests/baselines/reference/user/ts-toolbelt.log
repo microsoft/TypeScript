@@ -1,0 +1,29 @@
+Exit Code: 1
+Standard output:
+index.ts(18,5): error TS2322: Type '0' is not assignable to type '1 | undefined'.
+index.ts(37,5): error TS2322: Type '0' is not assignable to type '1 | undefined'.
+node_modules/ts-toolbelt/out/index.d.ts(689,60): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(816,331): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(940,56): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(950,75): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(971,92): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(1014,92): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(1906,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(2680,68): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(2739,68): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4187,29): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4637,91): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4637,98): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4637,98): error TS2590: Expression produces a union type that is too complex to represent.
+node_modules/ts-toolbelt/out/index.d.ts(4657,104): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4692,92): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4692,99): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4712,105): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4929,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(4960,9): error TS2502: '0' is referenced directly or indirectly in its own type annotation.
+node_modules/ts-toolbelt/out/index.d.ts(5385,40): error TS2589: Type instantiation is excessively deep and possibly infinite.
+node_modules/ts-toolbelt/out/index.d.ts(5394,59): error TS2589: Type instantiation is excessively deep and possibly infinite.
+
+
+
+Standard error:

@@ -484,7 +484,7 @@ type Test1 = [unknown] extends [{}] ? true : false;  // false
 >false : false
 
 type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
->IsDefinitelyDefined : IsDefinitelyDefined<T>
+>IsDefinitelyDefined : false
 >true : true
 >false : false
 

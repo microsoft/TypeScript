@@ -39,8 +39,8 @@ class Bar<T extends string> {
 >instance : Bar<string>[]
 
   cast(_name: ([T] extends [string] ? string : string)) { }
->cast : (_name: [T] extends [string] ? string : string) => void
->_name : [T] extends [string] ? string : string
+>cast : (_name: string) => void
+>_name : string
   
   pushThis() {
 >pushThis : () => void

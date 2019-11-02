@@ -878,8 +878,8 @@ namespace ts {
         const zeroBigIntType = getLiteralType({ negative: false, base10Value: "0" });
 
         const resolutionTargets: TypeSystemEntity[] = [];
-        const resolutionResults: boolean[] = [];
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
+        let resolutionCycleStartIndex = 0;
 
         let suggestionCount = 0;
         const maximumSuggestionCount = 10;
@@ -6901,17 +6901,11 @@ namespace ts {
          * @param propertyName The property name that should be used to query the target for its type
          */
         function pushTypeResolution(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
-            const resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName);
-            if (resolutionCycleStartIndex >= 0) {
+            if (resolutionCycleStartIndex < resolutionTargets.length && resolutionCycleStartIndex !== -1 || (resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName)) !== -1) {
                 // A cycle was found
-                const { length } = resolutionTargets;
-                for (let i = resolutionCycleStartIndex; i < length; i++) {
-                    resolutionResults[i] = false;
-                }
                 return false;
             }
             resolutionTargets.push(target);
-            resolutionResults.push(/*items*/ true);
             resolutionPropertyNames.push(propertyName);
             return true;
         }
@@ -6955,7 +6949,7 @@ namespace ts {
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
             resolutionPropertyNames.pop();
-            return resolutionResults.pop()!;
+            return resolutionCycleStartIndex > resolutionTargets.length || resolutionCycleStartIndex === -1;
         }
 
         function getDeclarationContainer(node: Node): Node {
@@ -9835,7 +9829,9 @@ namespace ts {
                 // in effect treating `any` like `never` rather than `unknown` in this location.
                 const trueConstraint = getInferredTrueTypeFromConditionalType(type);
                 const falseConstraint = getFalseTypeFromConditionalType(type);
-                type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : getUnionType([trueConstraint, falseConstraint]);
+                const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
+                type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : isTypeAssignableTo(type.checkType, type.extendsType) ? trueConstraint : isIntersectionEmpty(getPermissiveInstantiation(type.checkType), getPermissiveInstantiation(type.extendsType)) ? falseConstraint : getUnionType([trueConstraint, falseConstraint]);
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
             }
             return type.resolvedDefaultConstraint;
         }
@@ -9852,7 +9848,7 @@ namespace ts {
             // Please note: the distributive constraint is a kludge for emulating what a negated type could to do filter
             // a union - once negated types exist and are applied to the conditional false branch, this "constraint"
             // likely doesn't need to exist.
-            if (type.root.isDistributive && type.restrictiveInstantiation !== type) {
+            if (type.root.isDistributive) {
                 const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
                 if (constraint && constraint !== type.checkType) {
@@ -11231,9 +11227,12 @@ namespace ts {
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
-            if (substitute.flags & TypeFlags.AnyOrUnknown || substitute === typeVariable) {
+            const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
+            if (substitute.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(typeVariable, substitute)) {
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                 return typeVariable;
             }
+            resolutionCycleStartIndex = savedResolutionCycleStartIndex;
             const id = `${getTypeId(typeVariable)}>${getTypeId(substitute)}`;
             const cached = substitutionTypes.get(id);
             if (cached) {
@@ -12603,26 +12602,32 @@ namespace ts {
         }
 
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
-            const checkType = type.checkType;
-            const extendsType = type.extendsType;
             const trueType = getTrueTypeFromConditionalType(type);
             const falseType = getFalseTypeFromConditionalType(type);
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
-            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(trueType) === getActualTypeVariable(checkType)) {
-                if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(trueType) === getActualTypeVariable(type.checkType)) {
+                const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
+                if (isTypeAssignableTo(type.checkType, type.extendsType)) { // Always true
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return getSimplifiedType(trueType, writing);
                 }
-                else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
+                else if (isIntersectionEmpty(getPermissiveInstantiation(type.checkType), getPermissiveInstantiation(type.extendsType))) { // Always false
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return neverType;
                 }
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
             }
-            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(falseType) === getActualTypeVariable(checkType)) {
-                if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(falseType) === getActualTypeVariable(type.checkType)) {
+                const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
+                if (isTypeAssignableTo(type.checkType, type.extendsType)) { // Always true
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return neverType;
                 }
-                else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
+                else if (isIntersectionEmpty(getPermissiveInstantiation(type.checkType), getPermissiveInstantiation(type.extendsType))) { // Always false
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return getSimplifiedType(falseType, writing);
                 }
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
             }
             return type;
         }
@@ -12631,7 +12636,7 @@ namespace ts {
          * Invokes union simplification logic to determine if an intersection is considered empty as a union constituent
          */
         function isIntersectionEmpty(type1: Type, type2: Type) {
-            return !!(getUnionType([intersectTypes(type1, type2), neverType]).flags & TypeFlags.Never);
+            return !!(getIntersectionType([type1, type2]).flags & TypeFlags.Never);
         }
 
         function substituteIndexedMappedType(objectType: MappedType, index: Type) {
@@ -12777,17 +12782,22 @@ namespace ts {
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
+                const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return instantiateType(root.falseType, mapper);
                 }
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
                 // that has no constraint. This ensures that, for example, the type
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                if (isTypeAssignableTo(checkType, inferredExtendsType)) {
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return instantiateType(root.trueType, combinedMapper || mapper);
                 }
+                resolutionCycleStartIndex = savedResolutionCycleStartIndex;
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
             const erasedCheckType = getActualTypeVariable(checkType);
@@ -13458,19 +13468,7 @@ namespace ts {
         }
 
         function permissiveMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? wildcardType : type;
-        }
-
-        function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
-                tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
-                (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
-                tp.restrictiveInstantiation
-            );
-        }
-
-        function restrictiveMapper(type: Type) {
-            return type.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>type) : type;
+            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(type) || wildcardType : type;
         }
 
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
@@ -13824,9 +13822,12 @@ namespace ts {
                 }
                 else {
                     const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
-                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
+                    const savedResolutionCycleStartIndex = resolutionCycleStartIndex;
+                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(maybeVariable, sub)) {
+                        resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                         return maybeVariable;
                     }
+                    resolutionCycleStartIndex = savedResolutionCycleStartIndex;
                     return sub;
                 }
             }
@@ -13836,23 +13837,6 @@ namespace ts {
         function getPermissiveInstantiation(type: Type) {
             return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
                 type.permissiveInstantiation || (type.permissiveInstantiation = instantiateType(type, permissiveMapper));
-        }
-
-        function getRestrictiveInstantiation(type: Type) {
-            if (type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never)) {
-                return type;
-            }
-            if (type.restrictiveInstantiation) {
-                return type.restrictiveInstantiation;
-            }
-            type.restrictiveInstantiation = instantiateType(type, restrictiveMapper);
-            // We set the following so we don't attempt to set the restrictive instance of a restrictive instance
-            // which is redundant - we'll produce new type identities, but all type params have already been mapped.
-            // This also gives us a way to detect restrictive instances upon comparisons and _disable_ the "distributeive constraint"
-            // assignability check for them, which is distinctly unsafe, as once you have a restrctive instance, all the type parameters
-            // are constrained to `unknown` and produce tons of false positives/negatives!
-            type.restrictiveInstantiation.restrictiveInstantiation = type.restrictiveInstantiation;
-            return type.restrictiveInstantiation;
         }
 
         function instantiateIndexInfo(info: IndexInfo | undefined, mapper: TypeMapper): IndexInfo | undefined {
