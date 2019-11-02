@@ -1,0 +1,62 @@
+=== tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
+let t: true;
+>t : true
+>true : true
+
+let f: false;
+>f : false
+>false : false
+
+<T extends "a">() => {
+><T extends "a">() => {    t = undefined as T extends "a" ? true : false;    f = undefined as T extends "b" ? true : false;    t = undefined as NonNullable<T> extends "a" ? true : false;    f = undefined as NonNullable<T> extends "b" ? true : false;    t = undefined as [T] extends ["a"] ? true : false;    f = undefined as [T] extends ["b"] ? true : false;} : <T extends "a">() => void
+
+    t = undefined as T extends "a" ? true : false;
+>t = undefined as T extends "a" ? true : false : T extends "a" ? true : false
+>t : true
+>undefined as T extends "a" ? true : false : T extends "a" ? true : false
+>undefined : undefined
+>true : true
+>false : false
+
+    f = undefined as T extends "b" ? true : false;
+>f = undefined as T extends "b" ? true : false : T extends "b" ? true : false
+>f : false
+>undefined as T extends "b" ? true : false : T extends "b" ? true : false
+>undefined : undefined
+>true : true
+>false : false
+
+    t = undefined as NonNullable<T> extends "a" ? true : false;
+>t = undefined as NonNullable<T> extends "a" ? true : false : NonNullable<T> extends "a" ? true : false
+>t : true
+>undefined as NonNullable<T> extends "a" ? true : false : NonNullable<T> extends "a" ? true : false
+>undefined : undefined
+>true : true
+>false : false
+
+    f = undefined as NonNullable<T> extends "b" ? true : false;
+>f = undefined as NonNullable<T> extends "b" ? true : false : NonNullable<T> extends "b" ? true : false
+>f : false
+>undefined as NonNullable<T> extends "b" ? true : false : NonNullable<T> extends "b" ? true : false
+>undefined : undefined
+>true : true
+>false : false
+
+    t = undefined as [T] extends ["a"] ? true : false;
+>t = undefined as [T] extends ["a"] ? true : false : true
+>t : true
+>undefined as [T] extends ["a"] ? true : false : true
+>undefined : undefined
+>true : true
+>false : false
+
+    f = undefined as [T] extends ["b"] ? true : false;
+>f = undefined as [T] extends ["b"] ? true : false : false
+>f : false
+>undefined as [T] extends ["b"] ? true : false : false
+>undefined : undefined
+>true : true
+>false : false
+
+};
+

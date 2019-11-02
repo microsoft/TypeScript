@@ -1,0 +1,28 @@
+=== tests/cases/compiler/comparisonOperatorWithNoRelationshipConditional.ts ===
+<T extends "a">() => {
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 0, 1))
+
+    const a: T extends "a" ? true : false = undefined!;
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 1, 9))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 0, 1))
+>undefined : Symbol(undefined)
+
+    const b: T extends "b" ? true : false = undefined!;
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 2, 9))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 0, 1))
+>undefined : Symbol(undefined)
+
+    a !== false; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "a" ? true : false' and 'false' have no overlap.
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 1, 9))
+
+    false !== a; // !!! error TS2367: This condition will always return 'true' since the types 'false' and 'T extends "a" ? true : false' have no overlap.
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 1, 9))
+
+    b !== true; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "b" ? true : false' and 'true' have no overlap.
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 2, 9))
+
+    true !== b; // !!! error TS2367: This condition will always return 'true' since the types 'true' and 'T extends "b" ? true : false' have no overlap.
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipConditional.ts, 2, 9))
+
+};
+

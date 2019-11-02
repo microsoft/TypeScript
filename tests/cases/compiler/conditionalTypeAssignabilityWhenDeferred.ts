@@ -1,0 +1,13 @@
+let t: true;
+let f: false;
+
+<T extends "a">() => {
+    t = undefined as T extends "a" ? true : false;
+    f = undefined as T extends "b" ? true : false;
+
+    t = undefined as NonNullable<T> extends "a" ? true : false;
+    f = undefined as NonNullable<T> extends "b" ? true : false;
+
+    t = undefined as [T] extends ["a"] ? true : false;
+    f = undefined as [T] extends ["b"] ? true : false;
+};

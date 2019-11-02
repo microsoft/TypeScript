@@ -1,0 +1,44 @@
+=== tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
+let t: true;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 3))
+
+let f: false;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 1, 3))
+
+<T extends "a">() => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    t = undefined as T extends "a" ? true : false;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 3))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    f = undefined as T extends "b" ? true : false;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 1, 3))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    t = undefined as NonNullable<T> extends "a" ? true : false;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 3))
+>undefined : Symbol(undefined)
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    f = undefined as NonNullable<T> extends "b" ? true : false;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 1, 3))
+>undefined : Symbol(undefined)
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    t = undefined as [T] extends ["a"] ? true : false;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 3))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+    f = undefined as [T] extends ["b"] ? true : false;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 1, 3))
+>undefined : Symbol(undefined)
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 1))
+
+};
+

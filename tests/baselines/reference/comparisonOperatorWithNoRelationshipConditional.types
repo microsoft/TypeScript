@@ -1,0 +1,40 @@
+=== tests/cases/compiler/comparisonOperatorWithNoRelationshipConditional.ts ===
+<T extends "a">() => {
+><T extends "a">() => {    const a: T extends "a" ? true : false = undefined!;    const b: T extends "b" ? true : false = undefined!;    a !== false; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "a" ? true : false' and 'false' have no overlap.    false !== a; // !!! error TS2367: This condition will always return 'true' since the types 'false' and 'T extends "a" ? true : false' have no overlap.    b !== true; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "b" ? true : false' and 'true' have no overlap.    true !== b; // !!! error TS2367: This condition will always return 'true' since the types 'true' and 'T extends "b" ? true : false' have no overlap.} : <T extends "a">() => void
+
+    const a: T extends "a" ? true : false = undefined!;
+>a : T extends "a" ? true : false
+>true : true
+>false : false
+>undefined! : undefined
+>undefined : undefined
+
+    const b: T extends "b" ? true : false = undefined!;
+>b : T extends "b" ? true : false
+>true : true
+>false : false
+>undefined! : undefined
+>undefined : undefined
+
+    a !== false; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "a" ? true : false' and 'false' have no overlap.
+>a !== false : boolean
+>a : T extends "a" ? true : false
+>false : false
+
+    false !== a; // !!! error TS2367: This condition will always return 'true' since the types 'false' and 'T extends "a" ? true : false' have no overlap.
+>false !== a : boolean
+>false : false
+>a : T extends "a" ? true : false
+
+    b !== true; // !!! error TS2367: This condition will always return 'true' since the types 'T extends "b" ? true : false' and 'true' have no overlap.
+>b !== true : boolean
+>b : T extends "b" ? true : false
+>true : true
+
+    true !== b; // !!! error TS2367: This condition will always return 'true' since the types 'true' and 'T extends "b" ? true : false' have no overlap.
+>true !== b : boolean
+>true : true
+>b : T extends "b" ? true : false
+
+};
+
