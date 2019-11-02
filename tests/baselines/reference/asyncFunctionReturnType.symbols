@@ -289,3 +289,21 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 72, 110))
 }
 
+// #27711
+
+async function fGeneric<T>(x: T) {
+>fGeneric : Symbol(fGeneric, Decl(asyncFunctionReturnType.ts, 74, 1))
+>T : Symbol(T, Decl(asyncFunctionReturnType.ts, 78, 24))
+>x : Symbol(x, Decl(asyncFunctionReturnType.ts, 78, 27))
+>T : Symbol(T, Decl(asyncFunctionReturnType.ts, 78, 24))
+
+    return x;
+>x : Symbol(x, Decl(asyncFunctionReturnType.ts, 78, 27))
+}
+const expected: Promise<string> = fGeneric(undefined as Promise<string>);
+>expected : Symbol(expected, Decl(asyncFunctionReturnType.ts, 81, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>fGeneric : Symbol(fGeneric, Decl(asyncFunctionReturnType.ts, 74, 1))
+>undefined : Symbol(undefined)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

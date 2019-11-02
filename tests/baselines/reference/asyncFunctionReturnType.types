@@ -221,3 +221,19 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 >key : K
 }
 
+// #27711
+
+async function fGeneric<T>(x: T) {
+>fGeneric : <T>(x: T) => Promise<Awaited<T>>
+>x : T
+
+    return x;
+>x : T
+}
+const expected: Promise<string> = fGeneric(undefined as Promise<string>);
+>expected : Promise<string>
+>fGeneric(undefined as Promise<string>) : Promise<string>
+>fGeneric : <T>(x: T) => Promise<Awaited<T>>
+>undefined as Promise<string> : Promise<string>
+>undefined : undefined
+
