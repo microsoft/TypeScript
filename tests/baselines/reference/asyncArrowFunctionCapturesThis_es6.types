@@ -1,0 +1,15 @@
+=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesThis_es6.ts ===
+class C {
+>C : C
+
+   method() {
+>method : () => void
+
+      var fn = async () => await this;      
+>fn : () => Promise<this extends undefined ? this : this extends PromiseLike<infer ?> ? ? : this>
+>async () => await this : () => Promise<this extends undefined ? this : this extends PromiseLike<infer ?> ? ? : this>
+>await this : this extends undefined ? this : this extends PromiseLike<infer ?> ? ? : this
+>this : this
+   }
+}
+

@@ -4012,7 +4012,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
-                        context.approximateLength += (symbolName(type.symbol).length + 6);
+                        context.approximateLength += 6 + (type.symbol ? symbolName(type.symbol).length : 1);
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
@@ -4947,7 +4947,7 @@ namespace ts {
                         return cached;
                     }
                 }
-                let result = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                let result = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true) : createIdentifier("?");
                 if (!(result.kind & SyntaxKind.Identifier)) {
                     return createIdentifier("(Missing type parameter)");
                 }

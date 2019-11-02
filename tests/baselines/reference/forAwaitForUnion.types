@@ -1,0 +1,11 @@
+=== tests/cases/compiler/forAwaitForUnion.ts ===
+async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
+>f : <T>(source: Iterable<T> | AsyncIterable<T>) => Promise<void>
+>source : Iterable<T> | AsyncIterable<T>
+
+    for await (const x of source) {
+>x : T | (T extends undefined ? T : T extends PromiseLike<infer ?> ? ? : T)
+>source : Iterable<T> | AsyncIterable<T>
+    }
+}
+

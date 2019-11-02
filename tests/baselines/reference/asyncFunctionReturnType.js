@@ -75,6 +75,14 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
     return Promise.resolve<TObj[K]>(obj[key]);
 }
 
+// #27711
+
+async function fGeneric<T>(x: T) {
+    return x;
+}
+const expected: Promise<string> = fGeneric(undefined as Promise<string>);
+
+
 //// [asyncFunctionReturnType.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -172,3 +180,10 @@ function fGenericIndexedTypeForExplicitPromiseOfKProp(obj, key) {
         return Promise.resolve(obj[key]);
     });
 }
+// #27711
+function fGeneric(x) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return x;
+    });
+}
+const expected = fGeneric(undefined);
