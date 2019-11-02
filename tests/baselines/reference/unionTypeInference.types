@@ -221,18 +221,18 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
 
         const awaitedValue = await value;
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
 >value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
 
         if (awaitedValue)
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
 
             await fun(awaitedValue);
 >await fun(awaitedValue) : void
 >fun(awaitedValue) : Promise<void>
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {})
+>awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | ({ [containsPromises]?: true | undefined; } & {})
     }
 }
 

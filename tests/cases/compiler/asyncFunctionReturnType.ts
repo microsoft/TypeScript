@@ -63,7 +63,7 @@ async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(
     return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
 }
 
-async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
+async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<Awaited<TObj[K]>> {
     return obj[key];
 }
 

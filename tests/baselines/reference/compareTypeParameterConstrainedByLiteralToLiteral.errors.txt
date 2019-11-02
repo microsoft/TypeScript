@@ -9,5 +9,6 @@ tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): 
         t === "x";  // Should be error
         ~~~~~~~~~
 !!! error TS2367: This condition will always return 'false' since the types 'T' and '"x"' have no overlap.
+!!! related TS2773 tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts:5:5: Did you forget to use 'await'?
     }
     

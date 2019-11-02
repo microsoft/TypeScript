@@ -1378,6 +1378,11 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
+// The undefined case is for strictNullChecks false, in which case
+// undefined extends PromiseLike<infer U> is true, which would otherwise
+// make Awaited<undefined> -> unknown.
+type Awaited<T> = T extends undefined ? T : T extends PromiseLike<infer U> ? U : T extends { then: Function } ? unknown : T;
+
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
 interface PromiseLike<T> {
