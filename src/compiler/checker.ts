@@ -873,7 +873,6 @@ namespace ts {
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const potentialWeakMapCollisions: Node[] = [];
-        const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
         const suggestionDiagnostics = createDiagnosticCollection();
@@ -29392,82 +29391,30 @@ namespace ts {
                 return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
             }
 
-            const promisedType = getPromisedTypeOfPromise(type);
-            if (promisedType) {
-                if (type.id === promisedType.id || awaitedTypeStack.indexOf(promisedType.id) >= 0) {
-                    // Verify that we don't have a bad actor in the form of a promise whose
-                    // promised type is the same as the promise type, or a mutually recursive
-                    // promise. If so, we return undefined as we cannot guess the shape. If this
-                    // were the actual case in the JavaScript, this Promise would never resolve.
-                    //
-                    // An example of a bad actor with a singly-recursive promise type might
-                    // be:
-                    //
-                    //  interface BadPromise {
-                    //      then(
-                    //          onfulfilled: (value: BadPromise) => any,
-                    //          onrejected: (error: any) => any): BadPromise;
-                    //  }
-                    // The above interface will pass the PromiseLike check, and return a
-                    // promised type of `BadPromise`. Since this is a self reference, we
-                    // don't want to keep recursing ad infinitum.
-                    //
-                    // An example of a bad actor in the form of a mutually-recursive
-                    // promise type might be:
-                    //
-                    //  interface BadPromiseA {
-                    //      then(
-                    //          onfulfilled: (value: BadPromiseB) => any,
-                    //          onrejected: (error: any) => any): BadPromiseB;
-                    //  }
-                    //
-                    //  interface BadPromiseB {
-                    //      then(
-                    //          onfulfilled: (value: BadPromiseA) => any,
-                    //          onrejected: (error: any) => any): BadPromiseA;
-                    //  }
-                    //
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method);
-                    }
-                    return undefined;
-                }
-
-                // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
-                // See the comments above for more information.
-                awaitedTypeStack.push(type.id);
-                const awaitedType = getAwaitedType(promisedType, errorNode, diagnosticMessage, arg0);
-                awaitedTypeStack.pop();
-
-                if (!awaitedType) {
-                    return undefined;
-                }
-
-                return typeAsAwaitable.awaitedTypeOfType = awaitedType;
-            }
-
-            // The type was not a promise, so it could not be unwrapped any further.
-            // As long as the type does not have a callable "then" property, it is
-            // safe to return the type; otherwise, an error will be reported in
-            // the call to getNonThenableType and we will return undefined.
-            //
-            // An example of a non-promise "thenable" might be:
-            //
-            //  await { then(): void {} }
-            //
-            // The "thenable" does not match the minimal definition for a promise. When
-            // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
-            // will never settle. We treat this as an error to help flag an early indicator
-            // of a runtime problem. If the user wants to return this value from an async
-            // function, they would need to wrap it in some other value. If they want it to
-            // be treated as a promise, they can cast to <any>.
-            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
-            if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
-                if (errorNode) {
-                    if (!diagnosticMessage) return Debug.fail();
-                    error(errorNode, diagnosticMessage, arg0);
-                }
-                return undefined;
+            const globalPromiseLikeType = getGlobalPromiseLikeType(/*reportErrors*/ false);
+            if (globalPromiseLikeType !== emptyGenericType) {
+                const promisedType = createTypeParameter();
+                const result = getConditionalType({
+                    node: undefined as unknown as ConditionalTypeNode,
+                    checkType: type,
+                    extendsType: undefinedType,
+                    trueType: type,
+                    falseType: getConditionalType({
+                        node: undefined as unknown as ConditionalTypeNode,
+                        checkType: type,
+                        extendsType: createTypeReference(globalPromiseLikeType, [promisedType]),
+                        trueType: promisedType,
+                        falseType: type,
+                        isDistributive: true,
+                        inferTypeParameters: [promisedType],
+                        outerTypeParameters: [type],
+                        instantiations: createMap()
+                    }, /*mapper*/ undefined),
+                    isDistributive: true,
+                    outerTypeParameters: [type],
+                    instantiations: createMap()
+                }, /*mapper*/ undefined) as PromiseOrAwaitableType;
+                return typeAsAwaitable.awaitedTypeOfType = result.awaitedTypeOfType = result;
             }
 
             return typeAsAwaitable.awaitedTypeOfType = type;

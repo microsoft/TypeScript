@@ -13,5 +13,6 @@ tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts(3,5): error TS236
         n += v[k];
         ~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'T[K]'.
+!!! related TS2773 tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts:3:5: Did you forget to use 'await'?
     }
     

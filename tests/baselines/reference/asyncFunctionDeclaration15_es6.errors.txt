@@ -5,11 +5,10 @@ tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1
 tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(8,23): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(9,23): error TS1064: The return type of an async function or method must be the global Promise<T> type.
 tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(10,23): error TS1064: The return type of an async function or method must be the global Promise<T> type.
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(10,23): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 
 
-==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts (9 errors) ====
+==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts (8 errors) ====
     declare class Thenable { then(): void; }
     declare let a: any;
     declare let obj: { then: string; };
@@ -34,6 +33,8 @@ tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1
     async function fn6(): Thenable { } // error
                           ~~~~~~~~
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type.
+                          ~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
     async function fn7() { return; } // valid: Promise<void>
     async function fn8() { return 1; } // valid: Promise<number>
     async function fn9() { return null; } // valid: Promise<any>
@@ -41,14 +42,10 @@ tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1
     async function fn11() { return a; } // valid: Promise<any>
     async function fn12() { return obj; } // valid: Promise<{ then: string; }>
     async function fn13() { return thenable; } // error
-                   ~~~~
-!!! error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
     async function fn14() { await 1; } // valid: Promise<void>
     async function fn15() { await null; } // valid: Promise<void>
     async function fn16() { await undefined; } // valid: Promise<void>
     async function fn17() { await a; } // valid: Promise<void>
     async function fn18() { await obj; } // valid: Promise<void>
     async function fn19() { await thenable; } // error
-                            ~~~~~~~~~~~~~~
-!!! error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
     
