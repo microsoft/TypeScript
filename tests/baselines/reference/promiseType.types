@@ -1583,3 +1583,8 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >reject : <T = never>(reason?: any) => Promise<T>
 >1 : 1
 
+const expected: undefined = undefined as Awaited<undefined>;
+>expected : undefined
+>undefined as Awaited<undefined> : undefined
+>undefined : undefined
+

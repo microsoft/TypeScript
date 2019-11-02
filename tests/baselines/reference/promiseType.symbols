@@ -1089,3 +1089,8 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 
+const expected: undefined = undefined as Awaited<undefined>;
+>expected : Symbol(expected, Decl(promiseType.ts, 219, 5))
+>undefined : Symbol(undefined)
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
