@@ -901,6 +901,7 @@ namespace ts.NavigationBar {
         return "<function>";
     }
 
+    // See also 'tryGetPropertyAccessOrIdentifierToString'
     function getCalledExpressionName(expr: Expression): string | undefined {
         if (isIdentifier(expr)) {
             return expr.text;
