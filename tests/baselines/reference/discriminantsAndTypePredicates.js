@@ -309,6 +309,27 @@ function looper(getter: () => unknown) {
     }
 }
 
+interface Success {
+    success: true;
+    response: object;
+}
+
+interface Error {
+    success: false;
+    error: object;
+}
+
+function request(): Success | Error {
+    return null as any;
+}
+
+// This does not work:
+let r
+r = request();
+if (r.success) {
+    r.response;
+}
+
 
 //// [discriminantsAndTypePredicates.js]
 // Repro from #10145
@@ -558,4 +579,13 @@ function looper(getter) {
     if (x.kind1 === 'a') {
         x.a; // error
     }
+}
+function request() {
+    return null;
+}
+// This does not work:
+var r;
+r = request();
+if (r.success) {
+    r.response;
 }

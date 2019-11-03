@@ -908,3 +908,46 @@ function looper(getter: () => unknown) {
     }
 }
 
+interface Success {
+>Success : Symbol(Success, Decl(discriminantsAndTypePredicates.ts, 308, 1))
+
+    success: true;
+>success : Symbol(Success.success, Decl(discriminantsAndTypePredicates.ts, 310, 19))
+
+    response: object;
+>response : Symbol(Success.response, Decl(discriminantsAndTypePredicates.ts, 311, 18))
+}
+
+interface Error {
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(discriminantsAndTypePredicates.ts, 313, 1))
+
+    success: false;
+>success : Symbol(Error.success, Decl(discriminantsAndTypePredicates.ts, 315, 17))
+
+    error: object;
+>error : Symbol(Error.error, Decl(discriminantsAndTypePredicates.ts, 316, 19))
+}
+
+function request(): Success | Error {
+>request : Symbol(request, Decl(discriminantsAndTypePredicates.ts, 318, 1))
+>Success : Symbol(Success, Decl(discriminantsAndTypePredicates.ts, 308, 1))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(discriminantsAndTypePredicates.ts, 313, 1))
+
+    return null as any;
+}
+
+// This does not work:
+let r
+>r : Symbol(r, Decl(discriminantsAndTypePredicates.ts, 325, 3))
+
+r = request();
+>r : Symbol(r, Decl(discriminantsAndTypePredicates.ts, 325, 3))
+>request : Symbol(request, Decl(discriminantsAndTypePredicates.ts, 318, 1))
+
+if (r.success) {
+>r : Symbol(r, Decl(discriminantsAndTypePredicates.ts, 325, 3))
+
+    r.response;
+>r : Symbol(r, Decl(discriminantsAndTypePredicates.ts, 325, 3))
+}
+

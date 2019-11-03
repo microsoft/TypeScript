@@ -1036,3 +1036,50 @@ function looper(getter: () => unknown) {
     }
 }
 
+interface Success {
+    success: true;
+>success : true
+>true : true
+
+    response: object;
+>response : object
+}
+
+interface Error {
+    success: false;
+>success : false
+>false : false
+
+    error: object;
+>error : object
+}
+
+function request(): Success | Error {
+>request : () => Success | Error
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+// This does not work:
+let r
+>r : any
+
+r = request();
+>r = request() : Success | Error
+>r : any
+>request() : Success | Error
+>request : () => Success | Error
+
+if (r.success) {
+>r.success : any
+>r : any
+>success : any
+
+    r.response;
+>r.response : any
+>r : any
+>response : any
+}
+

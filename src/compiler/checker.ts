@@ -19004,8 +19004,8 @@ namespace ts {
                 return key = getFlowCacheKey(reference, declaredType, initialType, flowContainer);
             }
 
-            function captureContainingUnion(flow: FlowNode, type: FlowType) {
-                if (flow.flags & (FlowFlags.Assignment | FlowFlags.Condition) && !isIncomplete(type) && type.flags & TypeFlags.Union) {
+            function captureContainingUnion(type: FlowType) {
+                if (!isIncomplete(type) && type.flags & TypeFlags.Union) {
                     containingUnion = type as UnionType;
                 }
             }
@@ -19029,7 +19029,7 @@ namespace ts {
                         for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
                             if (sharedFlowNodes[i] === flow) {
                                 flowDepth--;
-                                captureContainingUnion(flow, sharedFlowTypes[i]);
+                                captureContainingUnion(sharedFlowTypes[i]);
                                 return sharedFlowTypes[i];
                             }
                         }
@@ -19107,7 +19107,7 @@ namespace ts {
                         sharedFlowTypes[sharedFlowCount] = type;
                         sharedFlowCount++;
                     }
-                    captureContainingUnion(flow, type);
+                    captureContainingUnion(type);
                     flowDepth--;
                     return type;
                 }
@@ -19311,6 +19311,7 @@ namespace ts {
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel): FlowType {
                 const antecedentTypes: Type[] = [];
+                const containedUnions: Type[] = [];
                 let subtypeReduction = false;
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents!) {
@@ -19330,6 +19331,7 @@ namespace ts {
                         return type;
                     }
                     pushIfUnique(antecedentTypes, type);
+                    pushIfUnique(containedUnions, containingUnion || type);
                     // If an antecedent type is not a subset of the declared type, we need to perform
                     // subtype reduction. This happens when a "foreign" type is injected into the control
                     // flow using the instanceof operator or a user defined type predicate.
@@ -19340,6 +19342,8 @@ namespace ts {
                         seenIncomplete = true;
                     }
                 }
+                const containingUnionType = createFlowType(getUnionOrEvolvingArrayType(containedUnions, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
+                captureContainingUnion(containingUnionType);
                 return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
             }
 

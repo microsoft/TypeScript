@@ -354,3 +354,24 @@ tests/cases/compiler/discriminantsAndTypePredicates.ts(307,11): error TS2339: Pr
         }
     }
     
+    interface Success {
+        success: true;
+        response: object;
+    }
+    
+    interface Error {
+        success: false;
+        error: object;
+    }
+    
+    function request(): Success | Error {
+        return null as any;
+    }
+    
+    // This does not work:
+    let r
+    r = request();
+    if (r.success) {
+        r.response;
+    }
+    
