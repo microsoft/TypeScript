@@ -49,17 +49,17 @@ declare function isType(x: unknown): x is Type;
 
 function WorksProperly(data: Type) {
     if (data.Name === "TypeA") {
-	// TypeA
-	const value1 = data.Value1;
+        // TypeA
+        const value1 = data.Value1;
     }
 }
 
 function DoesNotWork(data: unknown) {
     if (isType(data)) {
-	if (data.Name === "TypeA") {
-	    // TypeA
-	    const value1 = data.Value1;
-	}
+        if (data.Name === "TypeA") {
+            // TypeA
+            const value1 = data.Value1;
+        }
     }
 }
 
@@ -119,7 +119,7 @@ type BarComplex = { kind: "c", c: number } | { kind: "d", d: number } | string;
 declare function isPrimitiveUnion(x: unknown): x is PrimitiveUnion;
 declare function isFooComplex(x: unknown): x is FooComplex;
 declare function isBarComplex(x: unknown): x is BarComplex;
-declare function isZZYYComplex(x: unknown): x is { kind: "z"; zzz: string} | { kind: "y", yyy: number };
+declare function isZZYYComplex(x: unknown): x is { kind: "z"; zzz: string } | { kind: "y", yyy: number };
 
 function earlyExitsAndStuff(x: unknown) {
     if (!isFooComplex(x) && !isBarComplex(x)) {
@@ -199,7 +199,7 @@ function isC1(a: A1): a is C1 {
 function fn1(a: A1) {
     if (isBorC(a)) {
         if (a.kind === "B") {
-            a.y; // OK
+            a.y;
         }
     }
 }
@@ -209,10 +209,13 @@ function fn2(a: A1) {
         return;
     }
     if (!isC1(a)) {
+        if (a.kind === "B") {
+            a.y;
+        }
         return;
     }
     if (a.kind === "B") {
-        a.y; // OK
+        a.y;
     }
 }
 
@@ -222,23 +225,54 @@ declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd',
 function testComposition(x: unknown) {
     if (isTypeAB(x)) {
         if (x.kind1 === 'a') {
-            x.a;  // Ok
+            x.a;
         }
+        return;
+    }
+    if (x.kind1 === 'a') {
+        x.a;  // Error
     }
     if (isTypeCD(x)) {
         if (x.kind2 === 'c') {
-            x.c;  // Ok
+            x.c;
         }
+        return;
+    }
+    if (x.kind2 === 'c') {
+        x.c;  // Error
     }
     if (isTypeAB(x)) {
         if (isTypeCD(x)) {
             if (x.kind1 === 'a') {
-                x.a;  // Ok
+                x.a;
             }
             if (x.kind2 === 'c') {
-                x.c;  // Error
+                x.c;
             }
         }
+    }
+}
+
+function looper(getter: () => unknown) {
+    let x = getter();
+    while (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a;
+            }
+            if (x.kind2 === 'c') {
+                x.c;
+            }
+        }
+        if (x.kind1 === 'a') {
+            x.a;
+        }
+        if (x.kind2 === 'c') {
+            x.c; // Error
+        }
+    }
+    if (x.kind1 === 'a') {
+        x.a;  // error
     }
 }
 
@@ -392,7 +426,7 @@ function isC1(a) {
 function fn1(a) {
     if (isBorC(a)) {
         if (a.kind === "B") {
-            a.y; // OK
+            a.y;
         }
     }
 }
@@ -401,31 +435,64 @@ function fn2(a) {
         return;
     }
     if (!isC1(a)) {
+        if (a.kind === "B") {
+            a.y;
+        }
         return;
     }
     if (a.kind === "B") {
-        a.y; // OK
+        a.y;
     }
 }
 function testComposition(x) {
     if (isTypeAB(x)) {
         if (x.kind1 === 'a') {
-            x.a; // Ok
+            x.a;
         }
+        return;
+    }
+    if (x.kind1 === 'a') {
+        x.a; // Error
     }
     if (isTypeCD(x)) {
         if (x.kind2 === 'c') {
-            x.c; // Ok
+            x.c;
         }
+        return;
+    }
+    if (x.kind2 === 'c') {
+        x.c; // Error
     }
     if (isTypeAB(x)) {
         if (isTypeCD(x)) {
             if (x.kind1 === 'a') {
-                x.a; // Ok
+                x.a;
             }
             if (x.kind2 === 'c') {
-                x.c; // Error
+                x.c;
             }
         }
+    }
+}
+function looper(getter) {
+    var x = getter();
+    while (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a;
+            }
+            if (x.kind2 === 'c') {
+                x.c;
+            }
+        }
+        if (x.kind1 === 'a') {
+            x.a;
+        }
+        if (x.kind2 === 'c') {
+            x.c; // Error
+        }
+    }
+    if (x.kind1 === 'a') {
+        x.a; // error
     }
 }
