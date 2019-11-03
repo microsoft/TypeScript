@@ -355,6 +355,124 @@ declare function isBarComplex(x: unknown): x is BarComplex;
 >isBarComplex : (x: unknown) => x is BarComplex
 >x : unknown
 
+declare function isZZYYComplex(x: unknown): x is { kind: "z"; zzz: string} | { kind: "y", yyy: number };
+>isZZYYComplex : (x: unknown) => x is { kind: "z"; zzz: string; } | { kind: "y"; yyy: number; }
+>x : unknown
+>kind : "z"
+>zzz : string
+>kind : "y"
+>yyy : number
+
+function earlyExitsAndStuff(x: unknown) {
+>earlyExitsAndStuff : (x: unknown) => PrimitiveUnion
+>x : unknown
+
+    if (!isFooComplex(x) && !isBarComplex(x)) {
+>!isFooComplex(x) && !isBarComplex(x) : boolean
+>!isFooComplex(x) : boolean
+>isFooComplex(x) : boolean
+>isFooComplex : (x: unknown) => x is FooComplex
+>x : unknown
+>!isBarComplex(x) : boolean
+>isBarComplex(x) : boolean
+>isBarComplex : (x: unknown) => x is BarComplex
+>x : unknown
+
+        if (isZZYYComplex(x)) {
+>isZZYYComplex(x) : boolean
+>isZZYYComplex : (x: unknown) => x is { kind: "z"; zzz: string; } | { kind: "y"; yyy: number; }
+>x : unknown
+
+            if (x.kind !== "z") {
+>x.kind !== "z" : boolean
+>x.kind : "z" | "y"
+>x : { kind: "z"; zzz: string; } | { kind: "y"; yyy: number; }
+>kind : "z" | "y"
+>"z" : "z"
+
+                return x.yyy;
+>x.yyy : number
+>x : { kind: "y"; yyy: number; }
+>yyy : number
+            }
+            return x.zzz;
+>x.zzz : string
+>x : { kind: "z"; zzz: string; }
+>zzz : string
+        }
+        return;
+    }
+    if (!!isPrimitiveUnion(x)) {
+>!!isPrimitiveUnion(x) : boolean
+>!isPrimitiveUnion(x) : boolean
+>isPrimitiveUnion(x) : boolean
+>isPrimitiveUnion : (x: unknown) => x is PrimitiveUnion
+>x : string | number | { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+
+        return x;
+>x : PrimitiveUnion
+    }
+    if (!isZZYYComplex(x)) {
+>!isZZYYComplex(x) : boolean
+>isZZYYComplex(x) : boolean
+>isZZYYComplex : (x: unknown) => x is { kind: "z"; zzz: string; } | { kind: "y"; yyy: number; }
+>x : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+
+        if (x.kind === "a") {
+>x.kind === "a" : boolean
+>x.kind : "a" | "b" | "c" | "d"
+>x : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+>kind : "a" | "b" | "c" | "d"
+>"a" : "a"
+
+            let a = x.a;
+>a : number
+>x.a : number
+>x : { kind: "a"; a: number; }
+>a : number
+        }
+        if (x.kind === "b") {
+>x.kind === "b" : boolean
+>x.kind : "a" | "b" | "c" | "d"
+>x : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+>kind : "a" | "b" | "c" | "d"
+>"b" : "b"
+
+            let b = x.b;
+>b : number
+>x.b : number
+>x : { kind: "b"; b: number; }
+>b : number
+        }
+        if (x.kind === "c") {
+>x.kind === "c" : boolean
+>x.kind : "a" | "b" | "c" | "d"
+>x : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+>kind : "a" | "b" | "c" | "d"
+>"c" : "c"
+
+            let c = x.c;
+>c : number
+>x.c : number
+>x : { kind: "c"; c: number; }
+>c : number
+        }
+        if (x.kind === "d") {
+>x.kind === "d" : boolean
+>x.kind : "a" | "b" | "c" | "d"
+>x : { kind: "a"; a: number; } | { kind: "b"; b: number; } | { kind: "c"; c: number; } | { kind: "d"; d: number; }
+>kind : "a" | "b" | "c" | "d"
+>"d" : "d"
+
+            let d = x.d;
+>d : number
+>x.d : number
+>x : { kind: "d"; d: number; }
+>d : number
+        }
+    }
+}
+
 function bluergh(x: unknown) {
 >bluergh : (x: unknown) => void
 >x : unknown
@@ -367,6 +485,8 @@ function bluergh(x: unknown) {
         let a: number | string = x;
 >a : PrimitiveUnion
 >x : PrimitiveUnion
+
+        return;
     }
     if (isFooComplex(x) && typeof x === "object") {
 >isFooComplex(x) && typeof x === "object" : boolean
@@ -462,5 +582,221 @@ function bluergh(x: unknown) {
     }
     x  // unknown
 >x : unknown
+}
+
+type A1 = { x: number };
+>A1 : A1
+>x : number
+
+type B1 = A1 & { kind: "B"; y: number };
+>B1 : B1
+>kind : "B"
+>y : number
+
+type C1 = A1 & { kind: "C"; z: number };
+>C1 : C1
+>kind : "C"
+>z : number
+
+function isBorC(a: A1): a is B1 | C1 {
+>isBorC : (a: A1) => a is B1 | C1
+>a : A1
+
+    return (a as any).kind === "B" || (a as any).kind === "C";
+>(a as any).kind === "B" || (a as any).kind === "C" : boolean
+>(a as any).kind === "B" : boolean
+>(a as any).kind : any
+>(a as any) : any
+>a as any : any
+>a : A1
+>kind : any
+>"B" : "B"
+>(a as any).kind === "C" : boolean
+>(a as any).kind : any
+>(a as any) : any
+>a as any : any
+>a : A1
+>kind : any
+>"C" : "C"
+}
+
+function isB1(a: A1): a is B1 {
+>isB1 : (a: A1) => a is B1
+>a : A1
+
+    return (a as any).kind === "B";
+>(a as any).kind === "B" : boolean
+>(a as any).kind : any
+>(a as any) : any
+>a as any : any
+>a : A1
+>kind : any
+>"B" : "B"
+}
+
+function isC1(a: A1): a is C1 {
+>isC1 : (a: A1) => a is C1
+>a : A1
+
+    return (a as any).kind === "C";
+>(a as any).kind === "C" : boolean
+>(a as any).kind : any
+>(a as any) : any
+>a as any : any
+>a : A1
+>kind : any
+>"C" : "C"
+}
+
+function fn1(a: A1) {
+>fn1 : (a: A1) => void
+>a : A1
+
+    if (isBorC(a)) {
+>isBorC(a) : boolean
+>isBorC : (a: A1) => a is B1 | C1
+>a : A1
+
+        if (a.kind === "B") {
+>a.kind === "B" : boolean
+>a.kind : "B" | "C"
+>a : B1 | C1
+>kind : "B" | "C"
+>"B" : "B"
+
+            a.y; // OK
+>a.y : number
+>a : B1
+>y : number
+        }
+    }
+}
+
+function fn2(a: A1) {
+>fn2 : (a: A1) => void
+>a : A1
+
+    if (!isB1(a)) {
+>!isB1(a) : boolean
+>isB1(a) : boolean
+>isB1 : (a: A1) => a is B1
+>a : A1
+
+        return;
+    }
+    if (!isC1(a)) {
+>!isC1(a) : boolean
+>isC1(a) : boolean
+>isC1 : (a: A1) => a is C1
+>a : B1
+
+        return;
+    }
+    if (a.kind === "B") {
+>a.kind === "B" : boolean
+>a.kind : never
+>a : A1 & { kind: "B"; y: number; } & { kind: "C"; z: number; }
+>kind : never
+>"B" : "B"
+
+        a.y; // OK
+>a.y : number
+>a : A1 & { kind: "B"; y: number; } & { kind: "C"; z: number; }
+>y : number
+    }
+}
+
+declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
+>isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>x : unknown
+>kind1 : "a"
+>a : 1
+>kind1 : "b"
+>b : 2
+
+declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
+>isTypeCD : (x: unknown) => x is { kind2: "c"; c: 3; } | { kind2: "d"; d: 4; }
+>x : unknown
+>kind2 : "c"
+>c : 3
+>kind2 : "d"
+>d : 4
+
+function testComposition(x: unknown) {
+>testComposition : (x: unknown) => void
+>x : unknown
+
+    if (isTypeAB(x)) {
+>isTypeAB(x) : boolean
+>isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>x : unknown
+
+        if (x.kind1 === 'a') {
+>x.kind1 === 'a' : boolean
+>x.kind1 : "a" | "b"
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>kind1 : "a" | "b"
+>'a' : "a"
+
+            x.a;  // Ok
+>x.a : 1
+>x : { kind1: "a"; a: 1; }
+>a : 1
+        }
+    }
+    if (isTypeCD(x)) {
+>isTypeCD(x) : boolean
+>isTypeCD : (x: unknown) => x is { kind2: "c"; c: 3; } | { kind2: "d"; d: 4; }
+>x : unknown
+
+        if (x.kind2 === 'c') {
+>x.kind2 === 'c' : boolean
+>x.kind2 : "c" | "d"
+>x : { kind2: "c"; c: 3; } | { kind2: "d"; d: 4; }
+>kind2 : "c" | "d"
+>'c' : "c"
+
+            x.c;  // Ok
+>x.c : 3
+>x : { kind2: "c"; c: 3; }
+>c : 3
+        }
+    }
+    if (isTypeAB(x)) {
+>isTypeAB(x) : boolean
+>isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>x : unknown
+
+        if (isTypeCD(x)) {
+>isTypeCD(x) : boolean
+>isTypeCD : (x: unknown) => x is { kind2: "c"; c: 3; } | { kind2: "d"; d: 4; }
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+
+            if (x.kind1 === 'a') {
+>x.kind1 === 'a' : boolean
+>x.kind1 : "a" | "b"
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "d"; d: 4; })
+>kind1 : "a" | "b"
+>'a' : "a"
+
+                x.a;  // Ok
+>x.a : 1
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; })
+>a : 1
+            }
+            if (x.kind2 === 'c') {
+>x.kind2 === 'c' : boolean
+>x.kind2 : "c" | "d"
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "d"; d: 4; })
+>kind2 : "c" | "d"
+>'c' : "c"
+
+                x.c;  // Error
+>x.c : 3
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; })
+>c : 3
+            }
+        }
+    }
 }
 

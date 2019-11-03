@@ -178,3 +178,65 @@ function bluergh(x: unknown) {
     }
     x  // unknown
 }
+
+type A1 = { x: number };
+type B1 = A1 & { kind: "B"; y: number };
+type C1 = A1 & { kind: "C"; z: number };
+
+function isBorC(a: A1): a is B1 | C1 {
+    return (a as any).kind === "B" || (a as any).kind === "C";
+}
+
+function isB1(a: A1): a is B1 {
+    return (a as any).kind === "B";
+}
+
+function isC1(a: A1): a is C1 {
+    return (a as any).kind === "C";
+}
+
+function fn1(a: A1) {
+    if (isBorC(a)) {
+        if (a.kind === "B") {
+            a.y; // OK
+        }
+    }
+}
+
+function fn2(a: A1) {
+    if (!isB1(a)) {
+        return;
+    }
+    if (!isC1(a)) {
+        return;
+    }
+    if (a.kind === "B") {
+        a.y; // OK
+    }
+}
+
+declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
+declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
+
+function testComposition(x: unknown) {
+    if (isTypeAB(x)) {
+        if (x.kind1 === 'a') {
+            x.a;  // Ok
+        }
+    }
+    if (isTypeCD(x)) {
+        if (x.kind2 === 'c') {
+            x.c;  // Ok
+        }
+    }
+    if (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a;  // Ok
+            }
+            if (x.kind2 === 'c') {
+                x.c;  // Error
+            }
+        }
+    }
+}

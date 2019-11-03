@@ -119,10 +119,41 @@ type BarComplex = { kind: "c", c: number } | { kind: "d", d: number } | string;
 declare function isPrimitiveUnion(x: unknown): x is PrimitiveUnion;
 declare function isFooComplex(x: unknown): x is FooComplex;
 declare function isBarComplex(x: unknown): x is BarComplex;
+declare function isZZYYComplex(x: unknown): x is { kind: "z"; zzz: string} | { kind: "y", yyy: number };
+
+function earlyExitsAndStuff(x: unknown) {
+    if (!isFooComplex(x) && !isBarComplex(x)) {
+        if (isZZYYComplex(x)) {
+            if (x.kind !== "z") {
+                return x.yyy;
+            }
+            return x.zzz;
+        }
+        return;
+    }
+    if (!!isPrimitiveUnion(x)) {
+        return x;
+    }
+    if (!isZZYYComplex(x)) {
+        if (x.kind === "a") {
+            let a = x.a;
+        }
+        if (x.kind === "b") {
+            let b = x.b;
+        }
+        if (x.kind === "c") {
+            let c = x.c;
+        }
+        if (x.kind === "d") {
+            let d = x.d;
+        }
+    }
+}
 
 function bluergh(x: unknown) {
     if (isPrimitiveUnion(x)) {
         let a: number | string = x;
+        return;
     }
     if (isFooComplex(x) && typeof x === "object") {
         if (x.kind === "a") {
@@ -147,6 +178,68 @@ function bluergh(x: unknown) {
         let a: number | string = x;
     }
     x  // unknown
+}
+
+type A1 = { x: number };
+type B1 = A1 & { kind: "B"; y: number };
+type C1 = A1 & { kind: "C"; z: number };
+
+function isBorC(a: A1): a is B1 | C1 {
+    return (a as any).kind === "B" || (a as any).kind === "C";
+}
+
+function isB1(a: A1): a is B1 {
+    return (a as any).kind === "B";
+}
+
+function isC1(a: A1): a is C1 {
+    return (a as any).kind === "C";
+}
+
+function fn1(a: A1) {
+    if (isBorC(a)) {
+        if (a.kind === "B") {
+            a.y; // OK
+        }
+    }
+}
+
+function fn2(a: A1) {
+    if (!isB1(a)) {
+        return;
+    }
+    if (!isC1(a)) {
+        return;
+    }
+    if (a.kind === "B") {
+        a.y; // OK
+    }
+}
+
+declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
+declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
+
+function testComposition(x: unknown) {
+    if (isTypeAB(x)) {
+        if (x.kind1 === 'a') {
+            x.a;  // Ok
+        }
+    }
+    if (isTypeCD(x)) {
+        if (x.kind2 === 'c') {
+            x.c;  // Ok
+        }
+    }
+    if (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a;  // Ok
+            }
+            if (x.kind2 === 'c') {
+                x.c;  // Error
+            }
+        }
+    }
 }
 
 
@@ -230,9 +323,38 @@ function blah(x) {
     }
     x; // unknown
 }
+function earlyExitsAndStuff(x) {
+    if (!isFooComplex(x) && !isBarComplex(x)) {
+        if (isZZYYComplex(x)) {
+            if (x.kind !== "z") {
+                return x.yyy;
+            }
+            return x.zzz;
+        }
+        return;
+    }
+    if (!!isPrimitiveUnion(x)) {
+        return x;
+    }
+    if (!isZZYYComplex(x)) {
+        if (x.kind === "a") {
+            var a = x.a;
+        }
+        if (x.kind === "b") {
+            var b = x.b;
+        }
+        if (x.kind === "c") {
+            var c = x.c;
+        }
+        if (x.kind === "d") {
+            var d = x.d;
+        }
+    }
+}
 function bluergh(x) {
     if (isPrimitiveUnion(x)) {
         var a = x;
+        return;
     }
     if (isFooComplex(x) && typeof x === "object") {
         if (x.kind === "a") {
@@ -257,4 +379,53 @@ function bluergh(x) {
         var a = x;
     }
     x; // unknown
+}
+function isBorC(a) {
+    return a.kind === "B" || a.kind === "C";
+}
+function isB1(a) {
+    return a.kind === "B";
+}
+function isC1(a) {
+    return a.kind === "C";
+}
+function fn1(a) {
+    if (isBorC(a)) {
+        if (a.kind === "B") {
+            a.y; // OK
+        }
+    }
+}
+function fn2(a) {
+    if (!isB1(a)) {
+        return;
+    }
+    if (!isC1(a)) {
+        return;
+    }
+    if (a.kind === "B") {
+        a.y; // OK
+    }
+}
+function testComposition(x) {
+    if (isTypeAB(x)) {
+        if (x.kind1 === 'a') {
+            x.a; // Ok
+        }
+    }
+    if (isTypeCD(x)) {
+        if (x.kind2 === 'c') {
+            x.c; // Ok
+        }
+    }
+    if (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a; // Ok
+            }
+            if (x.kind2 === 'c') {
+                x.c; // Error
+            }
+        }
+    }
 }
