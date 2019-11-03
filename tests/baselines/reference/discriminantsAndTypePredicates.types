@@ -718,6 +718,13 @@ function fn2(a: A1) {
     }
 }
 
+declare function isTypeObj(x: unknown): x is { kind1: string, a?: number, b?: number };
+>isTypeObj : (x: unknown) => x is { kind1: string; a?: number; b?: number; }
+>x : unknown
+>kind1 : string
+>a : number
+>b : number
+
 declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
 >isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
 >x : unknown
@@ -734,8 +741,116 @@ declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd',
 >kind2 : "d"
 >d : 4
 
-function testComposition(x: unknown) {
->testComposition : (x: unknown) => void
+function testComposition1(x: unknown) {
+>testComposition1 : (x: unknown) => void
+>x : unknown
+
+    if (isTypeAB(x)) {
+>isTypeAB(x) : boolean
+>isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>x : unknown
+
+        if (isTypeCD(x)) {
+>isTypeCD(x) : boolean
+>isTypeCD : (x: unknown) => x is { kind2: "c"; c: 3; } | { kind2: "d"; d: 4; }
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+
+            if (x.kind1 === 'a') {
+>x.kind1 === 'a' : boolean
+>x.kind1 : "a" | "b"
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "d"; d: 4; })
+>kind1 : "a" | "b"
+>'a' : "a"
+
+                x.a;
+>x.a : 1
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; })
+>a : 1
+            }
+            if (x.kind2 === 'c') {
+>x.kind2 === 'c' : boolean
+>x.kind2 : "c" | "d"
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "a"; a: 1; } & { kind2: "d"; d: 4; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "d"; d: 4; })
+>kind2 : "c" | "d"
+>'c' : "c"
+
+                x.c;
+>x.c : 3
+>x : ({ kind1: "a"; a: 1; } & { kind2: "c"; c: 3; }) | ({ kind1: "b"; b: 2; } & { kind2: "c"; c: 3; })
+>c : 3
+            }
+        }
+        if (x.kind1 === 'a') {
+>x.kind1 === 'a' : boolean
+>x.kind1 : "a" | "b"
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>kind1 : "a" | "b"
+>'a' : "a"
+
+            x.a;
+>x.a : 1
+>x : { kind1: "a"; a: 1; }
+>a : 1
+        }
+        if (x.kind2 === 'c') {
+>x.kind2 === 'c' : boolean
+>x.kind2 : any
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>kind2 : any
+>'c' : "c"
+
+            x.c;
+>x.c : any
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>c : any
+        }
+    }
+}
+
+function testComposition2(x: unknown) {
+>testComposition2 : (x: unknown) => void
+>x : unknown
+
+    if (isTypeObj(x)) {
+>isTypeObj(x) : boolean
+>isTypeObj : (x: unknown) => x is { kind1: string; a?: number; b?: number; }
+>x : unknown
+
+        if (isTypeAB(x)) {
+>isTypeAB(x) : boolean
+>isTypeAB : (x: unknown) => x is { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>x : { kind1: string; a?: number; b?: number; }
+
+            if (x.kind1 === "a") {
+>x.kind1 === "a" : boolean
+>x.kind1 : "a" | "b"
+>x : { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>kind1 : "a" | "b"
+>"a" : "a"
+
+                x.a;
+>x.a : 1
+>x : { kind1: "a"; a: 1; }
+>a : 1
+            }
+        }
+        if (x.kind1 === "a") {
+>x.kind1 === "a" : boolean
+>x.kind1 : string
+>x : { kind1: string; a?: number; b?: number; } | { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>kind1 : string
+>"a" : "a"
+
+            x.a; // Error
+>x.a : any
+>x : { kind1: string; a?: number; b?: number; } | { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }
+>a : any
+        }
+    }
+}
+
+function testComposition3(x: unknown) {
+>testComposition3 : (x: unknown) => void
 >x : unknown
 
     if (isTypeAB(x)) {

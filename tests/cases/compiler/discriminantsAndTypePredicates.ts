@@ -218,10 +218,43 @@ function fn2(a: A1) {
     }
 }
 
+declare function isTypeObj(x: unknown): x is { kind1: string, a?: number, b?: number };
 declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
 declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
 
-function testComposition(x: unknown) {
+function testComposition1(x: unknown) {
+    if (isTypeAB(x)) {
+        if (isTypeCD(x)) {
+            if (x.kind1 === 'a') {
+                x.a;
+            }
+            if (x.kind2 === 'c') {
+                x.c;
+            }
+        }
+        if (x.kind1 === 'a') {
+            x.a;
+        }
+        if (x.kind2 === 'c') {
+            x.c;
+        }
+    }
+}
+
+function testComposition2(x: unknown) {
+    if (isTypeObj(x)) {
+        if (isTypeAB(x)) {
+            if (x.kind1 === "a") {
+                x.a;
+            }
+        }
+        if (x.kind1 === "a") {
+            x.a; // Error
+        }
+    }
+}
+
+function testComposition3(x: unknown) {
     if (isTypeAB(x)) {
         if (x.kind1 === 'a') {
             x.a;

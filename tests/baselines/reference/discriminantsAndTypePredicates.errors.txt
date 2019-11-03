@@ -1,16 +1,22 @@
-tests/cases/compiler/discriminantsAndTypePredicates.ts(231,11): error TS2339: Property 'kind1' does not exist on type 'unknown'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(232,11): error TS2339: Property 'a' does not exist on type 'unknown'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(240,11): error TS2339: Property 'kind2' does not exist on type 'unknown'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(241,11): error TS2339: Property 'c' does not exist on type 'unknown'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(269,15): error TS2551: Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'. Did you mean 'kind1'?
+tests/cases/compiler/discriminantsAndTypePredicates.ts(238,15): error TS2551: Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'. Did you mean 'kind1'?
   Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; }'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(270,15): error TS2339: Property 'c' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(239,15): error TS2339: Property 'c' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
   Property 'c' does not exist on type '{ kind1: "a"; a: 1; }'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(273,11): error TS2339: Property 'kind1' does not exist on type 'unknown'.
-tests/cases/compiler/discriminantsAndTypePredicates.ts(274,11): error TS2339: Property 'a' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(252,15): error TS2339: Property 'a' does not exist on type '{ kind1: string; a?: number; b?: number; } | { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
+  Property 'a' does not exist on type '{ kind1: "b"; b: 2; }'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(264,11): error TS2339: Property 'kind1' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(265,11): error TS2339: Property 'a' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(273,11): error TS2339: Property 'kind2' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(274,11): error TS2339: Property 'c' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(302,15): error TS2551: Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'. Did you mean 'kind1'?
+  Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; }'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(303,15): error TS2339: Property 'c' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
+  Property 'c' does not exist on type '{ kind1: "a"; a: 1; }'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(306,11): error TS2339: Property 'kind1' does not exist on type 'unknown'.
+tests/cases/compiler/discriminantsAndTypePredicates.ts(307,11): error TS2339: Property 'a' does not exist on type 'unknown'.
 
 
-==== tests/cases/compiler/discriminantsAndTypePredicates.ts (8 errors) ====
+==== tests/cases/compiler/discriminantsAndTypePredicates.ts (11 errors) ====
     // Repro from #10145
     
     interface A { type: 'A' }
@@ -231,10 +237,52 @@ tests/cases/compiler/discriminantsAndTypePredicates.ts(274,11): error TS2339: Pr
         }
     }
     
+    declare function isTypeObj(x: unknown): x is { kind1: string, a?: number, b?: number };
     declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
     declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
     
-    function testComposition(x: unknown) {
+    function testComposition1(x: unknown) {
+        if (isTypeAB(x)) {
+            if (isTypeCD(x)) {
+                if (x.kind1 === 'a') {
+                    x.a;
+                }
+                if (x.kind2 === 'c') {
+                    x.c;
+                }
+            }
+            if (x.kind1 === 'a') {
+                x.a;
+            }
+            if (x.kind2 === 'c') {
+                  ~~~~~
+!!! error TS2551: Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'. Did you mean 'kind1'?
+!!! error TS2551:   Property 'kind2' does not exist on type '{ kind1: "a"; a: 1; }'.
+                x.c;
+                  ~
+!!! error TS2339: Property 'c' does not exist on type '{ kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
+!!! error TS2339:   Property 'c' does not exist on type '{ kind1: "a"; a: 1; }'.
+            }
+        }
+    }
+    
+    function testComposition2(x: unknown) {
+        if (isTypeObj(x)) {
+            if (isTypeAB(x)) {
+                if (x.kind1 === "a") {
+                    x.a;
+                }
+            }
+            if (x.kind1 === "a") {
+                x.a; // Error
+                  ~
+!!! error TS2339: Property 'a' does not exist on type '{ kind1: string; a?: number; b?: number; } | { kind1: "a"; a: 1; } | { kind1: "b"; b: 2; }'.
+!!! error TS2339:   Property 'a' does not exist on type '{ kind1: "b"; b: 2; }'.
+            }
+        }
+    }
+    
+    function testComposition3(x: unknown) {
         if (isTypeAB(x)) {
             if (x.kind1 === 'a') {
                 x.a;

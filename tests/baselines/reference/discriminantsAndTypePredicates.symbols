@@ -654,163 +654,259 @@ function fn2(a: A1) {
     }
 }
 
+declare function isTypeObj(x: unknown): x is { kind1: string, a?: number, b?: number };
+>isTypeObj : Symbol(isTypeObj, Decl(discriminantsAndTypePredicates.ts, 218, 1))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 220, 27))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 220, 27))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 46))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 61))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 220, 73))
+
 declare function isTypeAB(x: unknown): x is { kind1: 'a', a: 1 } | { kind1: 'b', b: 2 };
->isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 218, 1))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 220, 26))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 220, 26))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 68))
->b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 220, 80))
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 221, 26))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 221, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>b : Symbol(b, Decl(discriminantsAndTypePredicates.ts, 221, 80))
 
 declare function isTypeCD(x: unknown): x is { kind2: 'c', c: 3 } | { kind2: 'd', d: 4 };
->isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 220, 88))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 221, 26))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 221, 26))
->kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
->kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 68))
->d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 221, 80))
+>isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 221, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 222, 26))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 222, 26))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 68))
+>d : Symbol(d, Decl(discriminantsAndTypePredicates.ts, 222, 80))
 
-function testComposition(x: unknown) {
->testComposition : Symbol(testComposition, Decl(discriminantsAndTypePredicates.ts, 221, 88))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+function testComposition1(x: unknown) {
+>testComposition1 : Symbol(testComposition1, Decl(discriminantsAndTypePredicates.ts, 222, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
 
     if (isTypeAB(x)) {
->isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 218, 1))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
 
+        if (isTypeCD(x)) {
+>isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 221, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+
+            if (x.kind1 === 'a') {
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+
+                x.a;
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+            }
+            if (x.kind2 === 'c') {
+>x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
+
+                x.c;
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+            }
+        }
         if (x.kind1 === 'a') {
->x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
 
             x.a;
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+        }
+        if (x.kind2 === 'c') {
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+
+            x.c;
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 224, 26))
+        }
+    }
+}
+
+function testComposition2(x: unknown) {
+>testComposition2 : Symbol(testComposition2, Decl(discriminantsAndTypePredicates.ts, 241, 1))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+
+    if (isTypeObj(x)) {
+>isTypeObj : Symbol(isTypeObj, Decl(discriminantsAndTypePredicates.ts, 218, 1))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+
+        if (isTypeAB(x)) {
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+
+            if (x.kind1 === "a") {
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+
+                x.a;
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+            }
+        }
+        if (x.kind1 === "a") {
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 46), Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 46), Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+
+            x.a; // Error
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 61), Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 61), Decl(discriminantsAndTypePredicates.ts, 221, 57))
+        }
+    }
+}
+
+function testComposition3(x: unknown) {
+>testComposition3 : Symbol(testComposition3, Decl(discriminantsAndTypePredicates.ts, 254, 1))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+
+    if (isTypeAB(x)) {
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+
+        if (x.kind1 === 'a') {
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+
+            x.a;
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
         }
         return;
     }
     if (x.kind1 === 'a') {
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
 
         x.a;  // Error
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
     }
     if (isTypeCD(x)) {
->isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 220, 88))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 221, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
 
         if (x.kind2 === 'c') {
->x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
 
             x.c;
->x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
         }
         return;
     }
     if (x.kind2 === 'c') {
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
 
         x.c;  // Error
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
     }
     if (isTypeAB(x)) {
->isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 218, 1))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
 
         if (isTypeCD(x)) {
->isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 220, 88))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
+>isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 221, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
 
             if (x.kind1 === 'a') {
->x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
 
                 x.a;
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
             }
             if (x.kind2 === 'c') {
->x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
 
                 x.c;
->x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 223, 25))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 256, 26))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
             }
         }
     }
 }
 
 function looper(getter: () => unknown) {
->looper : Symbol(looper, Decl(discriminantsAndTypePredicates.ts, 252, 1))
->getter : Symbol(getter, Decl(discriminantsAndTypePredicates.ts, 254, 16))
+>looper : Symbol(looper, Decl(discriminantsAndTypePredicates.ts, 285, 1))
+>getter : Symbol(getter, Decl(discriminantsAndTypePredicates.ts, 287, 16))
 
     let x = getter();
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->getter : Symbol(getter, Decl(discriminantsAndTypePredicates.ts, 254, 16))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>getter : Symbol(getter, Decl(discriminantsAndTypePredicates.ts, 287, 16))
 
     while (isTypeAB(x)) {
->isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 218, 1))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>isTypeAB : Symbol(isTypeAB, Decl(discriminantsAndTypePredicates.ts, 220, 87))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
 
         if (isTypeCD(x)) {
->isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 220, 88))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>isTypeCD : Symbol(isTypeCD, Decl(discriminantsAndTypePredicates.ts, 221, 88))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
 
             if (x.kind1 === 'a') {
->x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
 
                 x.a;
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
             }
             if (x.kind2 === 'c') {
->x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x.kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>kind2 : Symbol(kind2, Decl(discriminantsAndTypePredicates.ts, 222, 45), Decl(discriminantsAndTypePredicates.ts, 222, 68))
 
                 x.c;
->x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x.c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>c : Symbol(c, Decl(discriminantsAndTypePredicates.ts, 222, 57))
             }
         }
         if (x.kind1 === 'a') {
->x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 45), Decl(discriminantsAndTypePredicates.ts, 220, 68))
+>x.kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
 
             x.a;
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 57))
+>x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
+>a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 221, 57))
         }
         if (x.kind2 === 'c') {
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
 
             x.c; // Error
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
         }
     }
     if (x.kind1 === 'a') {
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
 
         x.a;  // error
->x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 255, 7))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 288, 7))
     }
 }
 

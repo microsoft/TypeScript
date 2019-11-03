@@ -858,6 +858,7 @@ namespace ts {
         const flowLoopTypes: Type[][] = [];
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
+        const sharedFlowUnions: UnionType[] = [];
         const flowNodeReachable: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
@@ -18888,18 +18889,13 @@ namespace ts {
             }
 
             function captureContainingUnion(flow: FlowNode, type: FlowType) {
-                if (flow.flags & (FlowFlags.Assignment | FlowFlags.Condition)) {
-                    if (isIncomplete(type)) {
-                        containingUnion = undefined;
-                        return;
-                    }
-                    if (type.flags & TypeFlags.Union) {
-                        containingUnion = type as UnionType;
-                    }
+                if (flow.flags & (FlowFlags.Assignment | FlowFlags.Condition) && !isIncomplete(type) && type.flags & TypeFlags.Union) {
+                    containingUnion = type as UnionType;
                 }
             }
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
+                containingUnion = undefined;
                 if (flowDepth === 2000) {
                     // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
                     // and disable further control flow analysis in the containing function or module body.
@@ -18917,6 +18913,7 @@ namespace ts {
                         for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
                             if (sharedFlowNodes[i] === flow) {
                                 flowDepth--;
+                                containingUnion = sharedFlowUnions[i];
                                 return sharedFlowTypes[i];
                             }
                         }
@@ -18988,13 +18985,16 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
+                    captureContainingUnion(flow, type);
                     if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
                         sharedFlowNodes[sharedFlowCount] = flow;
                         sharedFlowTypes[sharedFlowCount] = type;
+                        if (containingUnion) {
+                            sharedFlowUnions[sharedFlowCount] = containingUnion;
+                        }
                         sharedFlowCount++;
                     }
-                    captureContainingUnion(flow, type);
                     flowDepth--;
                     return type;
                 }
