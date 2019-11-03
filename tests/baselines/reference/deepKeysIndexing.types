@@ -33,7 +33,7 @@ type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
 
 interface Foo extends DeepObject {
   a: {
->a : { "1": 123; "2": string; "3": boolean; }
+>a : { 1: 123; 2: string; 3: boolean; }
 
     "1": 123;
 >"1" : 123

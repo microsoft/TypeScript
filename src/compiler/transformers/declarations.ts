@@ -285,6 +285,7 @@ namespace ts {
             let combinedStatements: NodeArray<Statement>;
             if (isSourceFileJS(currentSourceFile)) {
                 combinedStatements = createNodeArray(transformDeclarationsForJS(node));
+                refs.forEach(referenceVisitor);
                 emittedImports = filter(combinedStatements, isAnyImportSyntax);
             }
             else {

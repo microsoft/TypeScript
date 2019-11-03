@@ -31,9 +31,29 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(244,9): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(271,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(274,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(307,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(310,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(319,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(322,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(331,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(340,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(343,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(352,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(391,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(394,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(403,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(406,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(415,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(424,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(427,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(436,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(471,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(474,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(488,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(491,13): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (33 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (53 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -401,6 +421,76 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS
         }
     }
     
+    function f15(o: Thing | undefined, value: number) {
+        if (o?.foo === value) {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.foo !== value) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (o?.foo == value) {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.foo != value) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+    }
+    
+    function f16(o: Thing | undefined) {
+        if (o?.foo === undefined) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (o?.foo !== undefined) {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (o?.foo == undefined) {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (o?.foo != undefined) {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    
     function f20(o: Thing | undefined) {
         if (typeof o?.foo === "number") {
             o.foo;
@@ -429,5 +519,172 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS
         if (o?.baz instanceof Error) {
             o.baz;
         }
+    }
+    
+    function f22(o: Thing | undefined) {
+        if (typeof o?.foo === "number") {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (typeof o?.foo !== "number") {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (typeof o?.foo == "number") {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (typeof o?.foo != "number") {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+    }
+    
+    function f23(o: Thing | undefined) {
+        if (typeof o?.foo === "undefined") {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (typeof o?.foo !== "undefined") {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        if (typeof o?.foo == "undefined") {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        else {
+            o.foo;
+        }
+        if (typeof o?.foo != "undefined") {
+            o.foo;
+        }
+        else {
+            o.foo;  // Error
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    
+    declare function assert(x: unknown): asserts x;
+    declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
+    
+    function f30(o: Thing | undefined) {
+        if (!!true) {
+            assert(o?.foo);
+            o.foo;
+        }
+        if (!!true) {
+            assert(o?.foo === 42);
+            o.foo;
+        }
+        if (!!true) {
+            assert(typeof o?.foo === "number");
+            o.foo;
+        }
+        if (!!true) {
+            assertNonNull(o?.foo);
+            o.foo;
+        }
+    }
+    
+    function f40(o: Thing | undefined) {
+        switch (o?.foo) {
+            case "abc":
+                o.foo;
+                break;
+            case 42:
+                o.foo;
+                break;
+            case undefined:
+                o.foo;  // Error
+                ~
+!!! error TS2532: Object is possibly 'undefined'.
+                break;
+            default:
+                o.foo;  // Error
+                ~
+!!! error TS2532: Object is possibly 'undefined'.
+                break;
+        }
+    }
+    
+    function f41(o: Thing | undefined) {
+        switch (typeof o?.foo) {
+            case "string":
+                o.foo;
+                break;
+            case "number":
+                o.foo;
+                break;
+            case "undefined":
+                o.foo;  // Error
+                ~
+!!! error TS2532: Object is possibly 'undefined'.
+                break;
+            default:
+                o.foo;  // Error
+                ~
+!!! error TS2532: Object is possibly 'undefined'.
+                break;
+        }
+    }
+    
+    // Repros from #34570
+    
+    type Shape =
+        | { type: 'rectangle', width: number, height: number }
+        | { type: 'circle', radius: number }
+    
+    function getArea(shape?: Shape) {
+        switch (shape?.type) {
+            case 'circle':
+                return Math.PI * shape.radius ** 2
+            case 'rectangle':
+                return shape.width * shape.height
+            default:
+                return 0
+        }
+    }
+    
+    type Feature = {
+      id: string;
+      geometry?: {
+        type: string;
+        coordinates: number[];
+      };
+    };
+    
+    
+    function extractCoordinates(f: Feature): number[] {
+        if (f.geometry?.type !== 'test') {
+            return [];
+        }
+        return f.geometry.coordinates;
     }
     

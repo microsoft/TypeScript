@@ -307,3 +307,24 @@ function looper(getter: () => unknown) {
         x.a;  // error
     }
 }
+
+interface Success {
+    success: true;
+    response: object;
+}
+
+interface Error {
+    success: false;
+    error: object;
+}
+
+function request(): Success | Error {
+    return null as any;
+}
+
+// This does not work:
+let r
+r = request();
+if (r.success) {
+    r.response;
+}

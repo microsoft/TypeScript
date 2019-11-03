@@ -961,6 +961,11 @@ namespace ts {
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                const start = skipTrivia(sourceFile.text, (<CaseOrDefaultClause>node).pos);
+                const end = (<CaseOrDefaultClause>node).statements.length > 0 ? (<CaseOrDefaultClause>node).statements[0].pos : (<CaseOrDefaultClause>node).end;
+                return createTextSpanFromBounds(start, end);
         }
 
         if (errorNode === undefined) {
@@ -1814,9 +1819,9 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: true): callExpression is RequireOrImportCall & { expression: Identifier, arguments: [StringLiteralLike] };
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression;
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression {
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: true): callExpression is RequireOrImportCall & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: boolean): callExpression is CallExpression;
+    export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
@@ -1830,7 +1835,7 @@ namespace ts {
             return false;
         }
         const arg = args[0];
-        return !checkArgumentIsStringLiteralLike || isStringLiteralLike(arg);
+        return !requireStringLiteralLikeArgument || isStringLiteralLike(arg);
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -2056,26 +2061,30 @@ namespace ts {
             isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
     }
 
-    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
-        return isLiteralLikeElementAccess(node)
-            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
-                isEntityNameExpression(node.expression) ||
-                isBindableStaticElementAccessExpression(node.expression, /*excludeThisKeyword*/ true));
-    }
-
+    /** x.y OR x[0] */
     export function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpression | PropertyAccessExpression {
         return isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node);
     }
 
+    /** x[0] OR x['a'] OR x[Symbol.y] */
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
         return isElementAccessExpression(node) && (
             isStringOrNumericLiteralLike(node.argumentExpression) ||
             isWellKnownSymbolSyntactically(node.argumentExpression));
     }
 
+    /** Any series of property and element accesses. */
     export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
         return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
-        || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+            || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    }
+
+    /** Any series of property and element accesses, ending in a literal element access */
+    export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
+        return isLiteralLikeElementAccess(node)
+            && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
+                isEntityNameExpression(node.expression) ||
+                isBindableStaticAccessExpression(node.expression, /*excludeThisKeyword*/ true));
     }
 
     export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
@@ -2106,7 +2115,7 @@ namespace ts {
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
         }
-        if (isBindableStaticNameExpression(expr.left.expression) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+        if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
@@ -2174,8 +2183,10 @@ namespace ts {
                 // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
                 return AssignmentDeclarationKind.ExportsProperty;
             }
-            // F.G...x = expr
-            return AssignmentDeclarationKind.Property;
+            if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs) && lhs.expression.kind !== SyntaxKind.ThisKeyword)) {
+                // F.G...x = expr
+                return AssignmentDeclarationKind.Property;
+            }
         }
 
         return AssignmentDeclarationKind.None;
@@ -3695,6 +3706,36 @@ namespace ts {
         }, sourceFiles);
     }
 
+    function ensureDirectoriesExist(
+        directoryPath: string,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+        if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+            const parentDirectory = getDirectoryPath(directoryPath);
+            ensureDirectoriesExist(parentDirectory, createDirectory, directoryExists);
+            createDirectory(directoryPath);
+        }
+    }
+
+    export function writeFileEnsuringDirectories(
+        path: string,
+        data: string,
+        writeByteOrderMark: boolean,
+        writeFile: (path: string, data: string, writeByteOrderMark: boolean) => void,
+        createDirectory: (path: string) => void,
+        directoryExists: (path: string) => boolean): void {
+
+        // PERF: Checking for directory existence is expensive.  Instead, assume the directory exists
+        // and fall back to creating it if the file write fails.
+        try {
+            writeFile(path, data, writeByteOrderMark);
+        }
+        catch {
+            ensureDirectoriesExist(getDirectoryPath(normalizePath(path)), createDirectory, directoryExists);
+            writeFile(path, data, writeByteOrderMark);
+        }
+    }
+
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
@@ -4172,6 +4213,23 @@ namespace ts {
 
     export function isEntityNameExpression(node: Node): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
+    }
+
+    export function getFirstIdentifier(node: EntityNameOrEntityNameExpression): Identifier {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return node;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.left;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+            case SyntaxKind.PropertyAccessExpression:
+                do {
+                    node = node.expression;
+                } while (node.kind !== SyntaxKind.Identifier);
+                return node;
+        }
     }
 
     export function isDottedName(node: Expression): boolean {
@@ -5889,6 +5947,40 @@ namespace ts {
                 || kind === SyntaxKind.CallExpression);
     }
 
+    /* @internal */
+    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
+        return isOptionalChain(node) && !!node.questionDotToken;
+    }
+
+    /**
+     * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
+     */
+    /* @internal */
+    export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+        return isOptionalChainRoot(node.parent) && node.parent.expression === node;
+    }
+
+    /**
+     * Determines whether a node is the outermost `OptionalChain` in an ECMAScript `OptionalExpression`:
+     *
+     * 1. For `a?.b.c`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.`)
+     * 2. For `(a?.b.c).d`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.` since parens end the chain)
+     * 3. For `a?.b.c?.d`, both `a?.b.c` and `a?.b.c?.d` are outermost (`c` is the end of the chain starting at `a?.`, and `d` is
+     *   the end of the chain starting at `c?.`)
+     * 4. For `a?.(b?.c).d`, both `b?.c` and `a?.(b?.c)d` are outermost (`c` is the end of the chain starting at `b`, and `d` is
+     *   the end of the chain starting at `a?.`)
+     */
+    /* @internal */
+    export function isOutermostOptionalChain(node: OptionalChain) {
+        return !isOptionalChain(node.parent) // cases 1 and 2
+            || isOptionalChainRoot(node.parent) // case 3
+            || node !== node.parent.expression; // case 4
+    }
+
+    export function isNullishCoalesce(node: Node) {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+    }
+
     export function isNewExpression(node: Node): node is NewExpression {
         return node.kind === SyntaxKind.NewExpression;
     }
@@ -7206,11 +7298,6 @@ namespace ts {
         return node.kind === SyntaxKind.GetAccessor;
     }
 
-    /* @internal */
-    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
-        return isOptionalChain(node) && !!node.questionDotToken;
-    }
-
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
@@ -7288,7 +7375,7 @@ namespace ts {
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
-        getSignatureConstructor(): new (checker: TypeChecker) => Signature;
+        getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
@@ -7309,7 +7396,12 @@ namespace ts {
         }
     }
 
-    function Signature() {}
+    function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
+        this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
+    }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;

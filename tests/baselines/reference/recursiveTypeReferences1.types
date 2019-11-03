@@ -347,7 +347,7 @@ type T10 = T10[];
 >T10 : T10
 
 type T11 = readonly T11[];
->T11 : readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly (readonly any[])[])[])[])[])[])[])[])[])[])[]
+>T11 : T11
 
 type T12 = (T12)[];
 >T12 : T12

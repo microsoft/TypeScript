@@ -132,7 +132,7 @@ namespace ts {
             // Create a temporary variable to store a computed property name (if necessary).
             // If it's not inlineable, then we emit an expression after the class which assigns
             // the property name to the temporary variable.
-            const expr = getPropertyNameExpressionIfNeeded(node.name, !!node.initializer);
+            const expr = getPropertyNameExpressionIfNeeded(node.name, !!node.initializer || !!context.getCompilerOptions().useDefineForClassFields);
             if (expr && !isSimpleInlineableExpression(expr)) {
                 (pendingExpressions || (pendingExpressions = [])).push(expr);
             }
@@ -145,7 +145,7 @@ namespace ts {
             }
 
             const savedPendingExpressions = pendingExpressions;
-            pendingExpressions = undefined!;
+            pendingExpressions = undefined;
 
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);

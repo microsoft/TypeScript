@@ -583,6 +583,7 @@ declare namespace FourSlashInterface {
         readonly quotePreference?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }

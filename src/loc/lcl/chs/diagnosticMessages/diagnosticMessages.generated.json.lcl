@@ -4087,7 +4087,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[函数缺少结束返回语句，返回类型不包括 "undefined"。]]></Val>
+            <Val><![CDATA[函数缺少结束 return 语句，返回类型不包括 "undefined"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4987,7 +4987,7 @@
         <Str Cat="Text">
           <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用内联 JSX 工厂杂注时，不支持 JSX 片段]]></Val>
+            <Val><![CDATA[使用内联 JSX 工厂 pragma 时，不支持 JSX 片段]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

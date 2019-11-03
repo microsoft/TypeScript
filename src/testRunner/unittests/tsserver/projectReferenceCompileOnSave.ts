@@ -1,8 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and compile on save", () => {
-        const projectLocation = "/user/username/projects/myproject";
-        const dependecyLocation = `${projectLocation}/dependency`;
-        const usageLocation = `${projectLocation}/usage`;
+        const dependecyLocation = `${projectRoot}/dependency`;
+        const usageLocation = `${projectRoot}/usage`;
         const dependencyTs: File = {
             path: `${dependecyLocation}/fns.ts`,
             content: `export function fn1() { }
@@ -294,7 +293,7 @@ exports.fn2 = fn2;
 ${appendJs}`
                     },
                     {
-                        path: `${projectLocation}/decls/fns.d.ts`,
+                        path: `${projectRoot}/decls/fns.d.ts`,
                         content: `export declare function fn1(): void;
 export declare function fn2(): void;
 ${appendDts}`

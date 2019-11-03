@@ -15,7 +15,6 @@ namespace ts.projectSystem {
         }
 
         it("works when file is removed and added with different content", () => {
-            const projectRoot = "/user/username/projects/myproject";
             const app: File = {
                 path: `${projectRoot}/app.ts`,
                 content: "console.log('Hello world');"

@@ -317,9 +317,13 @@ namespace ts.moduleSpecifiers {
 
         // If the module could be imported by a directory name, use that directory's name
         const moduleSpecifier = packageNameOnly ? moduleFileName : getDirectoryOrExtensionlessFileName(moduleFileName);
+        const globalTypingsCacheLocation = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
-        if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;
+        const pathToTopLevelNodeModules = getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex));
+        if (!(startsWith(sourceDirectory, pathToTopLevelNodeModules) || globalTypingsCacheLocation && startsWith(getCanonicalFileName(globalTypingsCacheLocation), pathToTopLevelNodeModules))) {
+            return undefined;
+        }
 
         // If the module was found in @types, get the actual Node package name
         const nodeModulesDirectoryName = moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1);

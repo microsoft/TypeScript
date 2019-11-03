@@ -105,31 +105,31 @@ export declare namespace config {
 //// [index.d.ts]
 export = j;
 declare const j: {
-    "name": string;
-    "version": string;
-    "description": string;
-    "main": string;
-    "bin": {
-        "cli": string;
+    name: string;
+    version: string;
+    description: string;
+    main: string;
+    bin: {
+        cli: string;
     };
-    "engines": {
-        "node": string;
+    engines: {
+        node: string;
     };
-    "scripts": {
-        "scriptname": string;
+    scripts: {
+        scriptname: string;
     };
-    "devDependencies": {
+    devDependencies: {
         "@ns/dep": string;
     };
-    "dependencies": {
-        "dep": string;
+    dependencies: {
+        dep: string;
     };
-    "repository": string;
-    "keywords": string[];
-    "author": string;
-    "license": string;
-    "homepage": string;
-    "config": {
-        "o": string[];
+    repository: string;
+    keywords: string[];
+    author: string;
+    license: string;
+    homepage: string;
+    config: {
+        o: string[];
     };
 };

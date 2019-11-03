@@ -66,6 +66,7 @@ namespace ts {
     // Literals
 
     /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // eslint-disable-line @typescript-eslint/unified-signatures
+    /* @internal */ export function createLiteral(value: string | number, isSingleQuote: boolean): StringLiteral | NumericLiteral;
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
     export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
@@ -1811,7 +1812,7 @@ namespace ts {
         const node = <ForOfStatement>createSynthesizedNode(SyntaxKind.ForOfStatement);
         node.awaitModifier = awaitModifier;
         node.initializer = initializer;
-        node.expression = expression;
+        node.expression = isCommaSequence(expression) ? createParen(expression) : expression;
         node.statement = asEmbeddedStatement(statement);
         return node;
     }
@@ -4739,7 +4740,7 @@ namespace ts {
         const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
         const emittedCondition = skipPartiallyEmittedExpressions(condition);
         const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+        if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
             return createParen(condition);
         }
         return condition;
@@ -5389,6 +5390,12 @@ namespace ts {
      * Gets the property name of a BindingOrAssignmentElement
      */
     export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+        const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
+        Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
+        return propertyName;
+    }
+
+    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -5429,8 +5436,6 @@ namespace ts {
                 ? target.expression
                 : target;
         }
-
-        Debug.fail("Invalid property name for binding element.");
     }
 
     function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {

@@ -994,7 +994,6 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
-            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
                 path: `${projects}/a/b/app.js`,
                 content: `

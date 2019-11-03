@@ -56,11 +56,6 @@ namespace ts {
             ]
         ];
         const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as any as [Sources, Sources, Sources];
-        let expectedOutputFiles = [
-            ...outputFiles[project.first],
-            ...outputFiles[project.second],
-            ...outputFiles[project.third]
-        ];
         let initialExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
@@ -75,7 +70,6 @@ namespace ts {
         });
         after(() => {
             outFileFs = undefined!;
-            expectedOutputFiles = undefined!;
             initialExpectedDiagnostics = undefined!;
         });
 
@@ -166,71 +160,37 @@ namespace ts {
             baselineOnly: true
         });
 
-        it("clean projects", () => {
+        function getOutFileFsAfterBuild() {
             const fs = outFileFs.shadow();
-            const expectedOutputs = [
-                ...outputFiles[project.first],
-                ...outputFiles[project.second],
-                ...outputFiles[project.third]
-            ];
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host);
             builder.build();
-            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
-            // Verify they exist
-            verifyOutputsPresent(fs, expectedOutputs);
-            host.clearDiagnostics();
-            builder.clean();
-            host.assertDiagnosticMessages(/*none*/);
-            // Verify they are gone
-            verifyOutputsAbsent(fs, expectedOutputs);
-            // Subsequent clean shouldn't throw / etc
-            builder.clean();
+            fs.makeReadonly();
+            return fs;
+        }
+
+        verifyTscIncrementalEdits({
+            scenario: "outFile",
+            subScenario: "clean projects",
+            fs: getOutFileFsAfterBuild,
+            commandLineArgs: ["--b", "/src/third", "--clean"],
+            incrementalScenarios: [noChangeRun]
         });
 
-        it("verify buildInfo absence results in new build", () => {
-            const { fs, tick } = getFsWithTime(outFileFs);
-            const expectedOutputs = [
-                ...outputFiles[project.first],
-                ...outputFiles[project.second],
-                ...outputFiles[project.third]
-            ];
-            const host = fakes.SolutionBuilderHost.create(fs);
-            let builder = createSolutionBuilder(host);
-            builder.build();
-            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
-            // Verify they exist
-            verifyOutputsPresent(fs, expectedOutputs);
-            // Delete bundle info
-            host.clearDiagnostics();
-
-            tick();
-            host.deleteFile(outputFiles[project.first][ext.buildinfo]);
-            tick();
-
-            builder = createSolutionBuilder(host);
-            builder.build();
-            host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.buildinfo]],
-                [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
-                [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
-            );
+        verifyTsc({
+            scenario: "outFile",
+            subScenario: "verify buildInfo absence results in new build",
+            fs: getOutFileFsAfterBuild,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            modifyFs: fs => fs.unlinkSync(outputFiles[project.first][ext.buildinfo]),
         });
 
-        it("verify that if incremental is set to false, tsbuildinfo is not generated", () => {
-            const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
-            const builder = createSolutionBuilder(host);
-            builder.build();
-            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
-            // Verify they exist - without tsbuildinfo for third project
-            verifyOutputsPresent(fs, expectedOutputFiles.slice(0, expectedOutputFiles.length - 2));
-            verifyOutputsAbsent(fs, [outputFiles[project.third][ext.buildinfo]]);
+        verifyTsc({
+            scenario: "outFile",
+            subScenario: "tsbuildinfo is not generated when incremental is set to false",
+            fs: () => outFileFs,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, ""),
         });
 
         it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
@@ -747,44 +707,26 @@ ${internal} enum internalEnum { a, b, c }`);
             });
         });
 
-        it("non module projects without prepend", () => {
-            const fs = outFileFs.shadow();
-            // No prepend
-            replaceText(fs, sources[project.third][source.config], `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
-            replaceText(fs, sources[project.third][source.config], `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+        verifyTsc({
+            scenario: "outFile",
+            subScenario: "non module projects without prepend",
+            fs: () => outFileFs,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            modifyFs: fs => {
+                // No prepend
+                replaceText(fs, sources[project.third][source.config], `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
+                replaceText(fs, sources[project.third][source.config], `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
 
-            // Non Modules
-            replaceText(fs, sources[project.first][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, sources[project.second][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+                // Non Modules
+                replaceText(fs, sources[project.first][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+                replaceText(fs, sources[project.second][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+                replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
 
-            // Own file emit
-            replaceText(fs, sources[project.first][source.config], `"outFile": "./bin/first-output.js",`, "");
-            replaceText(fs, sources[project.second][source.config], `"outFile": "../2/second-output.js",`, "");
-            replaceText(fs, sources[project.third][source.config], `"outFile": "./thirdjs/output/third-output.js",`, "");
-
-            const host = fakes.SolutionBuilderHost.create(fs);
-            const builder = createSolutionBuilder(host);
-            builder.build();
-            host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], "src/first/first_PART1.js"],
-                [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], "src/second/second_part1.js"],
-                [Diagnostics.Building_project_0, sources[project.second][source.config]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], "src/third/third_part1.js"],
-                [Diagnostics.Building_project_0, sources[project.third][source.config]]
-            );
-            const expectedOutputFiles = flatMap(sources, ([config, ts]) => [
-                removeFileExtension(config) + Extension.TsBuildInfo,
-                ...flatMap(ts, f => [
-                    removeFileExtension(f) + Extension.Js,
-                    removeFileExtension(f) + Extension.Js + ".map",
-                    removeFileExtension(f) + Extension.Dts,
-                    removeFileExtension(f) + Extension.Dts + ".map",
-                ])
-            ]);
-            verifyOutputsPresent(fs, expectedOutputFiles);
+                // Own file emit
+                replaceText(fs, sources[project.first][source.config], `"outFile": "./bin/first-output.js",`, "");
+                replaceText(fs, sources[project.second][source.config], `"outFile": "../2/second-output.js",`, "");
+                replaceText(fs, sources[project.third][source.config], `"outFile": "./thirdjs/output/third-output.js",`, "");
+            },
         });
     });
 }

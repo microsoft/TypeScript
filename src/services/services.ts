@@ -464,6 +464,7 @@ namespace ts {
     }
 
     class SignatureObject implements Signature {
+        flags: SignatureFlags;
         checker: TypeChecker;
         declaration!: SignatureDeclaration;
         typeParameters?: TypeParameter[];
@@ -473,8 +474,6 @@ namespace ts {
         resolvedTypePredicate: TypePredicate | undefined;
         minTypeArgumentCount!: number;
         minArgumentCount!: number;
-        hasRestParameter!: boolean;
-        hasLiteralTypes!: boolean;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
@@ -484,9 +483,11 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         jsDocTags?: JSDocTagInfo[];
 
-        constructor(checker: TypeChecker) {
+        constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
+            this.flags = flags;
         }
+
         getDeclaration(): SignatureDeclaration {
             return this.declaration;
         }
@@ -527,11 +528,11 @@ namespace ts {
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
-            for (const declaration of declarations) {
+            forEachUnique(declarations, declaration => {
                 const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-            }
+            });
         }
         return doc;
     }
@@ -952,9 +953,7 @@ namespace ts {
                     names.push(entry);
                 }
                 else {
-                    if (entry.scriptKind !== ScriptKind.JSON) {
-                        names.push(entry.hostFileName);
-                    }
+                    names.push(entry.hostFileName);
                 }
             });
             return names;
@@ -1638,12 +1637,12 @@ namespace ts {
             return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
-        function getEmitOutput(fileName: string, emitOnlyDtsFiles = false) {
+        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
-            return getFileEmitOutput(program, sourceFile, emitOnlyDtsFiles, cancellationToken, customTransformers);
+            return getFileEmitOutput(program, sourceFile, !!emitOnlyDtsFiles, cancellationToken, customTransformers, forceDtsEmit);
         }
 
         // Signature help

@@ -71,7 +71,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be either 'string' or 'number'.": {
         "category": "Error",
         "code": 1023
     },
@@ -1560,10 +1560,6 @@
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
         "category": "Error",
         "code": 2423
-    },
-    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "Error",
-        "code": 2424
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
         "category": "Error",
@@ -3140,6 +3136,14 @@
         "category": "Error",
         "code": 4108
     },
+    "Type arguments for '{0}' circularly reference themselves.": {
+        "category": "Error",
+        "code": 4109
+    },
+    "Tuple type arguments circularly reference themselves.": {
+        "category": "Error",
+        "code": 4110
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4314,6 +4318,10 @@
     "The expected type comes from the return type of this signature.": {
         "category": "Message",
         "code": 6502
+    },
+    "Print names of files that are part of the compilation and then stop processing.": {
+        "category": "Message",
+        "code": 6503
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
