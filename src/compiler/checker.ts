@@ -26315,8 +26315,7 @@ namespace ts {
                         const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                         const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
                         const func = getContainingFunction(node);
-                        if (func && func.kind !== SyntaxKind.Constructor) {
-                            Debug.assert((getFunctionFlags(func) & FunctionFlags.Async) === 0, "Enclosing function should never be an async function.");
+                        if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
                             const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
                             addRelatedInfo(diagnostic, relatedInfo);
                         }
@@ -27128,28 +27127,10 @@ namespace ts {
             return [ effectiveLeft, effectiveRight ];
         }
 
-        function isYieldExpressionInClass(node: YieldExpression): boolean {
-            let current: Node = node;
-            let parent = node.parent;
-            while (parent) {
-                if (isFunctionLike(parent) && current === (<FunctionLikeDeclaration>parent).body) {
-                    return false;
-                }
-                else if (isClassLike(current)) {
-                    return true;
-                }
-
-                current = parent;
-                parent = parent.parent;
-            }
-
-            return false;
-        }
-
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.flags & NodeFlags.YieldContext) || isYieldExpressionInClass(node)) {
+                if (!(node.flags & NodeFlags.YieldContext)) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
                 }
 
