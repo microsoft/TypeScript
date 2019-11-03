@@ -761,9 +761,7 @@ function testComposition2(x: unknown) {
 >kind1 : Symbol(kind1, Decl(discriminantsAndTypePredicates.ts, 220, 46), Decl(discriminantsAndTypePredicates.ts, 221, 45), Decl(discriminantsAndTypePredicates.ts, 221, 68))
 
             x.a; // Error
->x.a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 61), Decl(discriminantsAndTypePredicates.ts, 221, 57))
 >x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 243, 26))
->a : Symbol(a, Decl(discriminantsAndTypePredicates.ts, 220, 61), Decl(discriminantsAndTypePredicates.ts, 221, 57))
         }
     }
 }

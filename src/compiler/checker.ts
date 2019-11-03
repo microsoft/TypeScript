@@ -858,7 +858,6 @@ namespace ts {
         const flowLoopTypes: Type[][] = [];
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
-        const sharedFlowUnions: UnionType[] = [];
         const flowNodeReachable: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
@@ -18913,7 +18912,7 @@ namespace ts {
                         for (let i = sharedFlowStart; i < sharedFlowCount; i++) {
                             if (sharedFlowNodes[i] === flow) {
                                 flowDepth--;
-                                containingUnion = sharedFlowUnions[i];
+                                captureContainingUnion(flow, sharedFlowTypes[i]);
                                 return sharedFlowTypes[i];
                             }
                         }
@@ -18985,16 +18984,13 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
-                    captureContainingUnion(flow, type);
                     if (flags & FlowFlags.Shared) {
                         // Record visited node and the associated type in the cache.
                         sharedFlowNodes[sharedFlowCount] = flow;
                         sharedFlowTypes[sharedFlowCount] = type;
-                        if (containingUnion) {
-                            sharedFlowUnions[sharedFlowCount] = containingUnion;
-                        }
                         sharedFlowCount++;
                     }
+                    captureContainingUnion(flow, type);
                     flowDepth--;
                     return type;
                 }
