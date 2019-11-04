@@ -2195,9 +2195,6 @@ namespace ts {
                         if (hasJSFileExtension(canonicalFileName)) {
                             fail(Diagnostics.File_0_is_a_JavaScript_file_Did_you_mean_to_enable_the_allowJs_option, fileName);
                         }
-                        else if (fileExtensionIs(canonicalFileName, Extension.Json)) {
-                            fail(Diagnostics.File_0_is_a_JSON_file_Did_you_mean_to_enable_the_resolveJsonModule_option, fileName);
-                        }
                         else {
                             fail(Diagnostics.File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                         }

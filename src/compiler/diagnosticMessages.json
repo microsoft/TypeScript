@@ -4327,10 +4327,6 @@
         "category": "Error",
         "code": 6504
     },
-    "File '{0}' is a JSON file. Did you mean to enable the 'resolveJsonModule' option?": {
-        "category": "Error",
-        "code": 6505
-    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
