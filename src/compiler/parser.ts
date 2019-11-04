@@ -6465,9 +6465,18 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseNamespaceExport(): NamespaceExport {
+            const node = <NamespaceExport>createNode(SyntaxKind.NamespaceExport);
+            node.name = parseIdentifier();
+            return finishNode(node);
+        }
+
         function parseExportDeclaration(node: ExportDeclaration): ExportDeclaration {
             node.kind = SyntaxKind.ExportDeclaration;
             if (parseOptional(SyntaxKind.AsteriskToken)) {
+                if (parseOptional(SyntaxKind.AsKeyword)) {
+                    node.exportClause = parseNamespaceExport();
+                }
                 parseExpected(SyntaxKind.FromKeyword);
                 node.moduleSpecifier = parseModuleSpecifier();
             }

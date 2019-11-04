@@ -6585,6 +6585,7 @@ namespace ts {
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.NamedImports:
                     case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.NamespaceExport:
                     case SyntaxKind.ImportClause:
                         return false;
                     default:
@@ -32561,6 +32562,7 @@ namespace ts {
                 if (node.exportClause) {
                     // export { x, y }
                     // export { x, y } from "foo"
+                    // export * as ns from "foo"
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);

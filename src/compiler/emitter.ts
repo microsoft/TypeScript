@@ -1433,6 +1433,8 @@ namespace ts {
                         return emitImportClause(<ImportClause>node);
                     case SyntaxKind.NamespaceImport:
                         return emitNamespaceImport(<NamespaceImport>node);
+                    case SyntaxKind.NamespaceExport:
+                        return emitNamespaceExport(<NamespaceExport>node);
                     case SyntaxKind.NamedImports:
                         return emitNamedImports(<NamedImports>node);
                     case SyntaxKind.ImportSpecifier:
@@ -3101,6 +3103,14 @@ namespace ts {
             writeTrailingSemicolon();
         }
 
+        function emitNamespaceExport(node: NamespaceExport) {
+            const asPos = emitTokenWithComment(SyntaxKind.AsteriskToken, node.pos, writePunctuation, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.AsKeyword, asPos, writeKeyword, node);
+            writeSpace();
+            emit(node.name);
+        }
+
         function emitNamedExports(node: NamedExports) {
             emitNamedImportsOrExports(node);
         }
@@ -4404,6 +4414,9 @@ namespace ts {
                     break;
                 case SyntaxKind.NamespaceImport:
                     generateNameIfNeeded((<NamespaceImport>node).name);
+                    break;
+                case SyntaxKind.NamespaceExport:
+                    generateNameIfNeeded((<NamespaceExport>node).name);
                     break;
                 case SyntaxKind.NamedImports:
                     forEach((<NamedImports>node).elements, generateNames);

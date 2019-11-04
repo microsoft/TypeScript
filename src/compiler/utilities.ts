@@ -7094,6 +7094,13 @@ namespace ts {
     }
 
     /* @internal */
+    export function isNamedExportBindings(node: Node): node is NamedExportBindings {
+        const kind = node.kind;
+        return kind === SyntaxKind.NamedExports
+            || kind === SyntaxKind.NamespaceExport;
+    }
+
+    /* @internal */
     export function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration | EnumDeclaration {
         return node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration;
     }

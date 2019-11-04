@@ -55,9 +55,10 @@ namespace ts {
                 break;
             // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
             case SyntaxKind.ExportDeclaration:
-                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                const exportDeclaration = (node as ExportDeclaration);
+                if (!exportDeclaration.moduleSpecifier && exportDeclaration.exportClause && exportDeclaration.exportClause.kind === SyntaxKind.NamedExports) {
                     let state = ModuleInstanceState.NonInstantiated;
-                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                    for (const specifier of exportDeclaration.exportClause.elements) {
                         const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
                         if (specifierState > state) {
                             state = specifierState;
@@ -2504,6 +2505,7 @@ namespace ts {
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
+                case SyntaxKind.NamespaceExport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);

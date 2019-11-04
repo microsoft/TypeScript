@@ -105,13 +105,14 @@ namespace ts {
                             hasExportStarsToExportValues = true;
                         }
                         else {
+                            // export * as ns from "mod"
                             // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
                         }
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause!.elements) {
+                        for (const specifier of cast((<ExportDeclaration>node).exportClause, isNamedExports).elements) {
                             if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
                                 exportSpecifiers.add(idText(name), specifier);
