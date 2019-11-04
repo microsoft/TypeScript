@@ -49,10 +49,10 @@ type T2 = undefined | void;
 >T2 : void | undefined
 
 let h: () => T1 & T2;
->h : () => (undefined & void) | undefined
+>h : () => undefined
 
 h;
->h : () => (undefined & void) | undefined
+>h : () => undefined
 
 type T3 = void | undefined;
 >T3 : void | undefined
