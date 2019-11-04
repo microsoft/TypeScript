@@ -9,7 +9,7 @@ let x = b1.a;
 >a : any
 
 import b2 = require('./b.json');
->b2 : { "a": boolean; "b": string; }
+>b2 : { a: boolean; b: string; }
 
 if (x) {
 >x : any
@@ -17,7 +17,7 @@ if (x) {
     let b = b2.b;
 >b : string
 >b2.b : string
->b2 : { "a": boolean; "b": string; }
+>b2 : { a: boolean; b: string; }
 >b : string
 
     x = (b1.b === b);
@@ -33,7 +33,7 @@ if (x) {
 
 === tests/cases/compiler/b.json ===
 {
->{    "a": true,    "b": "hello"} : { "a": boolean; "b": string; }
+>{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
 
     "a": true,
 >"a" : boolean

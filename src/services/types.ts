@@ -52,6 +52,8 @@ namespace ts {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
+        /*@internal*/ getNonOptionalType(): Type;
+        /*@internal*/ isNullableType(): boolean;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
 
@@ -64,6 +66,10 @@ namespace ts {
         isTypeParameter(): this is TypeParameter;
         isClassOrInterface(): this is InterfaceType;
         isClass(): this is InterfaceType;
+    }
+
+    export interface TypeReference {
+        typeArguments?: readonly Type[];
     }
 
     export interface Signature {
@@ -237,6 +243,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */
+        getGlobalTypingsCacheLocation?(): string | undefined;
 
         /*
          * Required for full import and type reference completions.
@@ -385,7 +393,7 @@ namespace ts {
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
-        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
 
@@ -532,7 +540,7 @@ namespace ts {
 
     export interface FileTextChanges {
         fileName: string;
-        textChanges: TextChange[];
+        textChanges: readonly TextChange[];
         isNewFile?: boolean;
     }
 

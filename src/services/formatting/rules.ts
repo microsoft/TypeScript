@@ -59,8 +59,8 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
 

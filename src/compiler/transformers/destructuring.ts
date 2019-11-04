@@ -68,7 +68,8 @@ namespace ts {
         if (value) {
             value = visitNode(value, visitor, isExpression);
 
-            if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText)) {
+            if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
+                bindingOrAssignmentElementContainsNonLiteralComputedName(node)) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
                 value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ false, location);
@@ -147,6 +148,19 @@ namespace ts {
         return false;
     }
 
+    function bindingOrAssignmentElementContainsNonLiteralComputedName(element: BindingOrAssignmentElement): boolean {
+        const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(element);
+        if (propertyName && isComputedPropertyName(propertyName) && !isLiteralExpression(propertyName.expression)) {
+            return true;
+        }
+        const target = getTargetOfBindingOrAssignmentElement(element);
+        return !!target && isBindingOrAssignmentPattern(target) && bindingOrAssignmentPatternContainsNonLiteralComputedName(target);
+    }
+
+    function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: BindingOrAssignmentPattern): boolean {
+        return !!forEach(getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
+    }
+
     /**
      * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
      *
@@ -184,7 +198,8 @@ namespace ts {
 
         if (isVariableDeclaration(node)) {
             let initializer = getInitializerOfBindingOrAssignmentElement(node);
-            if (initializer && isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText)) {
+            if (initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
+                bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
                 initializer = ensureIdentifier(flattenContext, initializer, /*reuseIdentifierExpressions*/ false, initializer);

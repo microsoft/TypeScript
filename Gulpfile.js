@@ -90,8 +90,18 @@ const localize = async () => {
     }
 };
 
+const buildShims = () => buildProject("src/shims");
+const cleanShims = () => cleanProject("src/shims");
+cleanTasks.push(cleanShims);
+
+const buildDebugTools = () => buildProject("src/debug");
+const cleanDebugTools = () => cleanProject("src/debug");
+cleanTasks.push(cleanDebugTools);
+
+const buildShimsAndTools = parallel(buildShims, buildDebugTools);
+
 // Pre-build steps when targeting the LKG compiler
-const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics));
+const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildShimsAndTools));
 
 const buildTsc = () => buildProject("src/tsc");
 task("tsc", series(lkgPreBuild, buildTsc));
@@ -107,7 +117,7 @@ task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watch
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
 
 // Pre-build steps when targeting the built/local compiler.
-const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildTsc));
+const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildShimsAndTools, buildTsc));
 
 // Pre-build steps to use based on supplied options.
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
@@ -589,6 +599,10 @@ task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to
 const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/core.ts"]);
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
+
+const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
+task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));

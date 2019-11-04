@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="cs-CZ" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -4096,7 +4096,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ve funkci chybí koncový návratový příkaz a návratový typ neobsahuje undefined.]]></Val>
+            <Val><![CDATA[Ve funkci chybí koncový příkaz return a návratový typ neobsahuje undefined.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

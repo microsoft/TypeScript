@@ -151,6 +151,36 @@ function f01(x: unknown) {
         x;  // string
 >x : string
     }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false);
+>assert(false) : void
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false && x === undefined);
+>assert(false && x === undefined) : void
+>assert : (value: unknown) => asserts value
+>false && x === undefined : false
+>false : false
+>x === undefined : boolean
+>x : unknown
+>undefined : undefined
+
+        x;  // Unreachable
+>x : unknown
+    }
 }
 
 function f02(x: string | undefined) {
@@ -293,6 +323,21 @@ function f10(x: string | undefined) {
 >x : string
 >length : number
     }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assert(false);
+>Debug.assert(false) : void
+>Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug : typeof Debug
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : string | undefined
+    }
 }
 
 class Test {
@@ -393,6 +438,20 @@ class Test {
 >this : this & Test2
 >z : number
     }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        this.assert(false);
+>this.assert(false) : void
+>this.assert : (value: unknown) => asserts value
+>this : this
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
+    }
 }
 
 class Test2 extends Test {
@@ -434,5 +493,68 @@ declare class Wat {
     set p2(x: asserts this is string);
 >p2 : void
 >x : void
+}
+
+function f20(x: unknown) {
+>f20 : (x: unknown) => void
+>x : unknown
+
+    const assert = (value: unknown): asserts value => {}
+>assert : (value: unknown) => asserts value
+>(value: unknown): asserts value => {} : (value: unknown) => asserts value
+>value : unknown
+
+    assert(typeof x === "string");  // Error
+>assert(typeof x === "string") : void
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const a = [assert];
+>a : ((value: unknown) => asserts value)[]
+>[assert] : ((value: unknown) => asserts value)[]
+>assert : (value: unknown) => asserts value
+
+    a[0](typeof x === "string");  // Error
+>a[0](typeof x === "string") : void
+>a[0] : (value: unknown) => asserts value
+>a : ((value: unknown) => asserts value)[]
+>0 : 0
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t1 = new Test();
+>t1 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t1.assert(typeof x === "string");  // Error
+>t1.assert(typeof x === "string") : void
+>t1.assert : (value: unknown) => asserts value
+>t1 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t2: Test = new Test();
+>t2 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t2.assert(typeof x === "string");
+>t2.assert(typeof x === "string") : void
+>t2.assert : (value: unknown) => asserts value
+>t2 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
 }
 

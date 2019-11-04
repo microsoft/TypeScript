@@ -631,6 +631,7 @@ namespace ts.codefix {
         let filteredCount = 0;
         const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host);
         const allSourceFiles = program.getSourceFiles();
+        const globalTypingsCache = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();
         forEachExternalModule(program.getTypeChecker(), allSourceFiles, (module, sourceFile) => {
             if (sourceFile === undefined) {
                 if (!packageJson || packageJson.allowsImportingAmbientModule(module, allSourceFiles)) {
@@ -640,7 +641,10 @@ namespace ts.codefix {
                     filteredCount++;
                 }
             }
-            else if (sourceFile && sourceFile !== from && isImportablePath(from.fileName, sourceFile.fileName)) {
+            else if (sourceFile &&
+                sourceFile !== from &&
+                isImportablePath(from.fileName, sourceFile.fileName, hostGetCanonicalFileName(host), globalTypingsCache)
+            ) {
                 if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile, allSourceFiles)) {
                     cb(module);
                 }
@@ -669,10 +673,13 @@ namespace ts.codefix {
      * Don't include something from a `node_modules` that isn't actually reachable by a global import.
      * A relative import to node_modules is usually a bad idea.
      */
-    function isImportablePath(fromPath: string, toPath: string): boolean {
+    function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
         // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
         const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
-        return toNodeModules === undefined || startsWith(fromPath, getDirectoryPath(toNodeModules));
+        const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
+        return toNodeModulesParent === undefined
+            || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
+            || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
@@ -718,6 +725,7 @@ namespace ts.codefix {
             readFile: maybeBind(host, host.readFile),
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
             getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || program.getProbableSymlinks,
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
 
         let usesNodeCoreModules: boolean | undefined;

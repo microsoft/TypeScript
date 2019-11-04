@@ -4,6 +4,7 @@
         "outFile": "../../built/local/tsc.js"
     },
     "files": [
+        "executeCommandLine.ts",
         "tsc.ts"
     ],
     "references": [

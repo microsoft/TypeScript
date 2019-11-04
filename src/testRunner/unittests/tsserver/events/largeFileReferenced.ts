@@ -1,6 +1,5 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
-        const projectRoot = "/user/username/projects/project";
 
         function getLargeFile(useLargeTsFile: boolean) {
             return `src/large.${useLargeTsFile ? "ts" : "js"}`;

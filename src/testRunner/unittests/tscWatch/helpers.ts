@@ -1,3 +1,7 @@
+namespace ts {
+    export const projects = `/user/username/projects`;
+    export const projectRoot = `${projects}/myproject`;
+}
 namespace ts.tscWatch {
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = TestFSWithWatch.File;

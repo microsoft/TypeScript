@@ -669,6 +669,11 @@ namespace ts {
                         // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
                         resolution.isInvalidated = true;
                         (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
+
+                        // When its a file with inferred types resolution, invalidate type reference directive resolution
+                        if (containingFilePath.endsWith(inferredTypesContainingFile)) {
+                            resolutionHost.onChangedAutomaticTypeDirectiveNames();
+                        }
                     }
                 });
             });
