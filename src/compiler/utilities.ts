@@ -2253,14 +2253,14 @@ namespace ts {
         }
     }
 
-    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | undefined {
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
                 return node.importClause && tryCast(node.importClause.namedBindings, isNamespaceImport);
             case SyntaxKind.ImportEqualsDeclaration:
                 return node;
             case SyntaxKind.ExportDeclaration:
-                return undefined;
+                return node.exportClause && tryCast(node.exportClause, isNamespaceExport);
             default:
                 return Debug.assertNever(node);
         }
@@ -6238,6 +6238,10 @@ namespace ts {
 
     export function isNamespaceImport(node: Node): node is NamespaceImport {
         return node.kind === SyntaxKind.NamespaceImport;
+    }
+
+    export function isNamespaceExport(node: Node): node is NamespaceExport {
+        return node.kind === SyntaxKind.NamespaceExport;
     }
 
     export function isNamedImports(node: Node): node is NamedImports {

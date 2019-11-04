@@ -747,6 +747,17 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+        function getHelperExpressionForExport(node:ExportDeclaration, innerExpr: Expression) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+                return innerExpr;
+            }
+            if (getExportNeedsImportStarHelper(node)) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            return innerExpr;
+        }
+
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
@@ -967,7 +978,7 @@ namespace ts {
 
             const generatedName = getGeneratedNameForNode(node);
 
-            if (node.exportClause) {
+            if (node.exportClause && isNamedExports(node.exportClause)) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
@@ -1005,6 +1016,49 @@ namespace ts {
                         )
                     );
                 }
+
+                return singleOrMany(statements);
+            }
+            else if (node.exportClause) {
+                const statements: Statement[] = [];
+                // export * as ns from "mod";
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                createVariableDeclarationList([
+                                    createVariableDeclaration(
+                                        generatedName,
+                                        /*type*/ undefined,
+                                        getHelperExpressionForExport(node, createRequireCall(node))
+                                    )
+                                ])
+                            ),
+                            /*location*/ node.exportClause.name),
+                        /* original */ node.exportClause.name
+                    )
+                )
+
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            createExpressionStatement(
+                                createExportExpression(node.exportClause.name, generatedName)
+                            ),
+                            node),
+                            node
+                    )
+                );
+
+                setOriginalNode(
+                    setTextRange(
+                        createExpressionStatement(
+                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                        ),
+                        node),
+                    node
+                );
 
                 return singleOrMany(statements);
             }

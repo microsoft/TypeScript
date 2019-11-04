@@ -37,9 +37,16 @@ namespace ts {
         }
     }
 
+    export function getExportNeedsImportStarHelper(node: ExportDeclaration): boolean {
+        return !!getNamespaceDeclarationNode(node);
+    }
+
     export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean {
         if (!!getNamespaceDeclarationNode(node)) {
             return true;
+        }
+        if (isExportDeclaration(node)) {
+            return false;
         }
         const bindings = node.importClause && node.importClause.namedBindings;
         if (!bindings) {

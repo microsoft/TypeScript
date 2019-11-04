@@ -341,7 +341,7 @@ namespace ts {
                     continue;
                 }
 
-                if (!externalImport.exportClause) {
+                if (!externalImport.exportClause || !isNamedExports(externalImport.exportClause)) {
                     // export * from ...
                     continue;
                 }
@@ -488,7 +488,7 @@ namespace ts {
 
                         case SyntaxKind.ExportDeclaration:
                             Debug.assert(importVariableName !== undefined);
-                            if (entry.exportClause) {
+                            if (entry.exportClause && isNamedExports(entry.exportClause)) {
                                 //  export {a, b as c} from 'foo'
                                 //
                                 // emit as:

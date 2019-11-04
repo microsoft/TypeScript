@@ -5067,18 +5067,18 @@ namespace ts {
 
                 function mergeExportDeclarations(statements: Statement[]) {
                     // Pass 2: Combine all `export {}` declarations
-                    const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
+                    const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause && isNamedExports(d.exportClause)) as ExportDeclaration[];
                     if (length(exports) > 1) {
                         const nonExports = filter(statements, d => !isExportDeclaration(d) || !!d.moduleSpecifier || !d.exportClause);
                         statements = [...nonExports, createExportDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
+                            createNamedExports(flatMap(exports, e => cast(e.exportClause, isNamedExports).elements)),
                             /*moduleSpecifier*/ undefined
                         )];
                     }
                     // Pass 2b: Also combine all `export {} from "..."` declarations as needed
-                    const reexports = filter(statements, d => isExportDeclaration(d) && !!d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
+                    const reexports = filter(statements, d => isExportDeclaration(d) && !!d.moduleSpecifier && !!d.exportClause && isNamedExports(d.exportClause)) as ExportDeclaration[];
                     if (length(reexports) > 1) {
                         const groups = group(reexports, decl => isStringLiteral(decl.moduleSpecifier!) ? ">" + decl.moduleSpecifier.text : ">");
                         if (groups.length !== reexports.length) {
@@ -5090,7 +5090,7 @@ namespace ts {
                                         createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
-                                            createNamedExports(flatMap(group, e => e.exportClause!.elements)),
+                                            createNamedExports(flatMap(group, e => cast(e.exportClause, isNamedExports).elements)),
                                             group[0].moduleSpecifier
                                         )
                                     ];
@@ -5104,8 +5104,8 @@ namespace ts {
                 function inlineExportModifiers(statements: Statement[]) {
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
                     const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
-                    if (exportDecl) {
-                        const replacements = mapDefined(exportDecl.exportClause!.elements, e => {
+                    if (exportDecl && exportDecl.exportClause && isNamedExports(exportDecl.exportClause)) {
+                        const replacements = mapDefined(exportDecl.exportClause.elements, e => {
                             if (!e.propertyName) {
                                 // export {name} - look thru `statements` for `name`, and if all results can take an `export` modifier, do so and filter it
                                 const associated = filter(statements, s => nodeHasName(s, e.name));
@@ -5123,7 +5123,7 @@ namespace ts {
                         else {
                             // some items filtered, others not - update the export declaration
                             // (mutating because why not, we're building a whole new tree here anyway)
-                            exportDecl.exportClause!.elements = createNodeArray(replacements);
+                            exportDecl.exportClause.elements = createNodeArray(replacements);
                         }
                     }
                     return statements;
@@ -32443,7 +32443,7 @@ namespace ts {
             return true;
         }
 
-        function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
+        function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
@@ -32480,6 +32480,10 @@ namespace ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
+            checkAliasSymbol(node);
+        }
+
+        function checkNamespaceExport(node: NamespaceExport) {
             checkAliasSymbol(node);
         }
 
@@ -32563,7 +32567,7 @@ namespace ts {
                     // export { x, y }
                     // export { x, y } from "foo"
                     // export * as ns from "foo"
-                    forEach(node.exportClause.elements, checkExportSpecifier);
+                    isNamedExports(node.exportClause) ? forEach(node.exportClause.elements, checkExportSpecifier) : checkNamespaceExport(node.exportClause);
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
                     const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
@@ -33990,7 +33994,7 @@ namespace ts {
                     return isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (<ExportDeclaration>node).exportClause;
-                    return !!exportClause && some(exportClause.elements, isValueAliasDeclaration);
+                    return !!exportClause && isNamedExports(exportClause) && some(exportClause.elements, isValueAliasDeclaration);
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ?
                         isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol) :
