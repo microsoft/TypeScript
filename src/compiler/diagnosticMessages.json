@@ -4502,7 +4502,7 @@
         "category": "Error",
         "code": 7051
     },
-    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}'?": {
         "category": "Error",
         "code": 7052
     },
