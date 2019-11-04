@@ -2210,7 +2210,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2221,19 +2221,18 @@ namespace ts {
         if (!stringContent) return undefined;
 
         const content = tryParseJson(stringContent) as PackageJsonRaw;
+        if (!content) return false;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
-        if (content) {
-            for (const key of dependencyKeys) {
-                const dependencies = content[key];
-                if (!dependencies) {
-                    continue;
-                }
-                const dependencyMap = createMap<string>();
-                for (const packageName in dependencies) {
-                    dependencyMap.set(packageName, dependencies[packageName]);
-                }
-                info[key] = dependencyMap;
+        for (const key of dependencyKeys) {
+            const dependencies = content[key];
+            if (!dependencies) {
+                continue;
             }
+            const dependencyMap = createMap<string>();
+            for (const packageName in dependencies) {
+                dependencyMap.set(packageName, dependencies[packageName]);
+            }
+            info[key] = dependencyMap;
         }
 
         const dependencyGroups = [

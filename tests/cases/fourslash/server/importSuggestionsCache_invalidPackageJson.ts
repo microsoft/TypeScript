@@ -22,36 +22,16 @@
 ////
 ////readF/**/
 
-verifyExcludes("readFile");
-edit.replaceLine(0, "import { promisify } from 'util';");
-verifyIncludes("readFile");
-edit.deleteLine(0);
-verifyExcludes("readFile");
-
-function verifyIncludes(name: string) {
-  goTo.marker("");
-  verify.completions({
-      includes: {
-          name,
-          source: "fs",
-          hasAction: true,
-          sortText: completion.SortText.AutoImportSuggestions,
-      },
-      preferences: {
-          includeCompletionsForModuleExports: true,
-          includeInsertTextCompletions: true,
-      },
-  });
-}
-
-function verifyExcludes(name: string) {
-  goTo.marker("");
-  verify.completions({
-      excludes: name,
-      preferences: {
-          includeCompletionsForModuleExports: true,
-          includeInsertTextCompletions: true,
-      },
-  });
-}
-
+goTo.marker("");
+verify.completions({
+    includes: {
+        name: "readFile",
+        source: "fs",
+        hasAction: true,
+        sortText: completion.SortText.AutoImportSuggestions,
+    },
+    preferences: {
+        includeCompletionsForModuleExports: true,
+        includeInsertTextCompletions: true,
+    },
+});
