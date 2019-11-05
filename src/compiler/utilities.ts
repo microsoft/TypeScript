@@ -7132,6 +7132,7 @@ namespace ts {
             || kind === SyntaxKind.ModuleDeclaration
             || kind === SyntaxKind.NamespaceExportDeclaration
             || kind === SyntaxKind.NamespaceImport
+            || kind === SyntaxKind.NamespaceExport
             || kind === SyntaxKind.Parameter
             || kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.PropertyDeclaration

@@ -390,6 +390,8 @@ namespace ts {
 
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
+            case SyntaxKind.NamespaceExport:
+                return visitNode(cbNode, (<NamespaceExport>node).name);
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
                 return visitNodes(cbNode, cbNodes, (<NamedImportsOrExports>node).elements);

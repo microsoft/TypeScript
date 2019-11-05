@@ -2845,7 +2845,7 @@ namespace ts {
             }
 
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExports, isNamedExports);
+            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedImportBindings);
             return exportClause
                 ? updateExportDeclaration(
                     node,
@@ -2866,6 +2866,14 @@ namespace ts {
             // Elide the named exports if all of its export specifiers were elided.
             const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
             return some(elements) ? updateNamedExports(node, elements) : undefined;
+        }
+
+        function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
+            return updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier))
+        }
+
+        function visitNamedExportBindings(node: NamedExportBindings): VisitResult<NamedExportBindings> {
+            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node)
         }
 
         /**

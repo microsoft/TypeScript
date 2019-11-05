@@ -5646,6 +5646,14 @@ namespace ts {
                                 createLiteral(getSpecifierForModuleSymbol(target, context))
                             ), ModifierFlags.None);
                             break;
+                        case SyntaxKind.NamespaceExport:
+                            addResult(createExportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                createNamespaceExport(createIdentifier(localName)),
+                                createLiteral(getSpecifierForModuleSymbol(target, context))
+                            ), ModifierFlags.None);
+                            break;
                         case SyntaxKind.ImportSpecifier:
                             addResult(createImportDeclaration(
                                 /*decorators*/ undefined,
@@ -34001,7 +34009,10 @@ namespace ts {
                     return isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (<ExportDeclaration>node).exportClause;
-                    return !!exportClause && isNamedExports(exportClause) && some(exportClause.elements, isValueAliasDeclaration);
+                    return !!exportClause && (
+                        isNamespaceExport(exportClause) ||
+                        some(exportClause.elements, isValueAliasDeclaration)
+                    );
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ?
                         isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol) :
@@ -36191,6 +36202,7 @@ namespace ts {
             case SyntaxKind.ImportClause: // For default import
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.NamespaceExport:
             case SyntaxKind.ImportSpecifier: // For rename import `x as y`
                 return true;
             case SyntaxKind.Identifier:

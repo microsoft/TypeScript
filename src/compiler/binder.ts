@@ -2623,6 +2623,9 @@ namespace ts {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
+            else {
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
+            }
         }
 
         function bindImportClause(node: ImportClause) {
@@ -4153,6 +4156,10 @@ namespace ts {
                 break;
 
             case SyntaxKind.SourceFile:
+                break;
+
+            case SyntaxKind.NamespaceExport:
+                transformFlags |= TransformFlags.AssertESNext;
                 break;
 
             case SyntaxKind.ReturnStatement:
