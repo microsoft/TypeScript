@@ -2241,11 +2241,11 @@
         "category": "Error",
         "code": 2609
     },
-    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+    "'{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.": {
         "category": "Error",
         "code": 2610
     },
-    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+    "'{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.": {
         "category": "Error",
         "code": 2611
     },
