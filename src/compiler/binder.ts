@@ -965,9 +965,6 @@ namespace ts {
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
-            if (!isNarrowingExpression(switchStatement.expression)) {
-                return antecedent;
-            }
             setFlowNodeReferenced(antecedent);
             return flowNodeCreated({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
         }
@@ -1323,6 +1320,7 @@ namespace ts {
             const savedSubtreeTransformFlags = subtreeTransformFlags;
             subtreeTransformFlags = 0;
             const clauses = node.clauses;
+            const isNarrowingSwitch = isNarrowingExpression(node.parent.expression);
             let fallthroughFlow = unreachableFlow;
             for (let i = 0; i < clauses.length; i++) {
                 const clauseStart = i;
@@ -1331,7 +1329,7 @@ namespace ts {
                     i++;
                 }
                 const preCaseLabel = createBranchLabel();
-                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, isNarrowingSwitch ? createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1) : preSwitchCaseFlow!);
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];

@@ -593,3 +593,44 @@ function test4(value: 1 | 2) {
 >x : string
 }
 
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+>Animal : Animal
+>DOG : Animal.DOG
+>CAT : Animal.CAT
+
+declare const zoo: { animal: Animal } | undefined;
+>zoo : { animal: Animal; } | undefined
+>animal : Animal
+
+function expression(): Animal {
+>expression : () => Animal
+
+    switch (zoo?.animal ?? Animal.DOG) {
+>zoo?.animal ?? Animal.DOG : Animal
+>zoo?.animal : Animal | undefined
+>zoo : { animal: Animal; } | undefined
+>animal : Animal | undefined
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+
+        case Animal.DOG: return Animal.DOG
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+>Animal.DOG : Animal.DOG
+>Animal : typeof Animal
+>DOG : Animal.DOG
+
+        case Animal.CAT: return Animal.CAT
+>Animal.CAT : Animal.CAT
+>Animal : typeof Animal
+>CAT : Animal.CAT
+>Animal.CAT : Animal.CAT
+>Animal : typeof Animal
+>CAT : Animal.CAT
+    }
+}
+

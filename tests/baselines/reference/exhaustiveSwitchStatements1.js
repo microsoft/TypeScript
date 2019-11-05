@@ -195,6 +195,19 @@ function test4(value: 1 | 2) {
     return x;
 }
 
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+
+declare const zoo: { animal: Animal } | undefined;
+
+function expression(): Animal {
+    switch (zoo?.animal ?? Animal.DOG) {
+        case Animal.DOG: return Animal.DOG
+        case Animal.CAT: return Animal.CAT
+    }
+}
+
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -379,6 +392,19 @@ function test4(value) {
     }
     return x;
 }
+// Repro from #34661
+var Animal;
+(function (Animal) {
+    Animal[Animal["DOG"] = 0] = "DOG";
+    Animal[Animal["CAT"] = 1] = "CAT";
+})(Animal || (Animal = {}));
+function expression() {
+    var _a, _b;
+    switch ((_b = (_a = zoo) === null || _a === void 0 ? void 0 : _a.animal, (_b !== null && _b !== void 0 ? _b : Animal.DOG))) {
+        case Animal.DOG: return Animal.DOG;
+        case Animal.CAT: return Animal.CAT;
+    }
+}
 
 
 //// [exhaustiveSwitchStatements1.d.ts]
@@ -435,3 +461,11 @@ declare type Shape2 = Square2 | Circle2;
 declare function withDefault(s1: Shape2, s2: Shape2): string;
 declare function withoutDefault(s1: Shape2, s2: Shape2): string;
 declare function test4(value: 1 | 2): string;
+declare enum Animal {
+    DOG = 0,
+    CAT = 1
+}
+declare const zoo: {
+    animal: Animal;
+} | undefined;
+declare function expression(): Animal;

@@ -200,3 +200,16 @@ tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(7,9): error T
         return x;
     }
     
+    // Repro from #34661
+    
+    enum Animal { DOG, CAT }
+    
+    declare const zoo: { animal: Animal } | undefined;
+    
+    function expression(): Animal {
+        switch (zoo?.animal ?? Animal.DOG) {
+            case Animal.DOG: return Animal.DOG
+            case Animal.CAT: return Animal.CAT
+        }
+    }
+    
