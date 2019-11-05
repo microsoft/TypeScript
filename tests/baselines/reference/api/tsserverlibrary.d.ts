@@ -2575,6 +2575,23 @@ declare namespace ts {
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
     }
+    export enum WatchFileKind {
+        FixedPollingInterval = 0,
+        PriorityPollingInterval = 1,
+        DynamicPriorityPolling = 2,
+        UseFsEvents = 3,
+        UseFsEventsOnParentDirectory = 4
+    }
+    export enum WatchDirectoryKind {
+        UseFsEvents = 0,
+        FixedPollingInterval = 1,
+        DynamicPriorityPolling = 2
+    }
+    export enum PollingWatchKind {
+        FixedInterval = 0,
+        PriorityInterval = 1,
+        DynamicPriority = 2
+    }
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     export interface CompilerOptions {
         allowJs?: boolean;
@@ -2659,6 +2676,9 @@ declare namespace ts {
         typeRoots?: string[];
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
+        watchFile?: WatchFileKind;
+        watchDirectory?: WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface TypeAcquisition {

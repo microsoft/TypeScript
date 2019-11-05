@@ -4064,7 +4064,7 @@
         "category": "Message",
         "code": 6201
     },
-        "Project references may not form a circular graph. Cycle detected: {0}": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6202
     },
@@ -4151,6 +4151,18 @@
     "Generates a CPU profile.": {
         "category": "Message",
         "code": 6223
+    },
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+        "category": "Message",
+        "code": 6224
+    },
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+        "category": "Message",
+        "code": 6225
+    },
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+        "category": "Message",
+        "code": 6226
     },
 
     "Projects to reference": {

@@ -913,7 +913,45 @@ namespace ts {
                 type: "object"
             },
             description: Diagnostics.List_of_language_service_plugins
-        }
+        },
+
+
+        // Watch related options
+        {
+            name: "watchFile",
+            type: createMapFromTemplate({
+                FixedPollingInterval: WatchFileKind.FixedPollingInterval,
+                PriorityPollingInterval: WatchFileKind.PriorityPollingInterval,
+                DynamicPriorityPolling: WatchFileKind.DynamicPriorityPolling,
+                UseFsEvents: WatchFileKind.UseFsEvents,
+                UseFsEventsOnParentDirectory: WatchFileKind.UseFsEventsOnParentDirectory,
+            }),
+            paramType: Diagnostics.STRATEGY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
+        },
+        {
+            name: "watchDirectory",
+            type: createMapFromTemplate({
+                UseFsEvents: WatchDirectoryKind.UseFsEvents,
+                FixedPollingInterval: WatchDirectoryKind.FixedPollingInterval,
+                DynamicPriorityPolling: WatchDirectoryKind.DynamicPriorityPolling,
+            }),
+            paramType: Diagnostics.STRATEGY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
+        },
+        {
+            name: "fallbackPolling",
+            type: createMapFromTemplate({
+                FixedPolling: PollingWatchKind.FixedInterval,
+                PriorityPolling: PollingWatchKind.PriorityInterval,
+                DynamicPriority: PollingWatchKind.DynamicPriority,
+            }),
+            paramType: Diagnostics.STRATEGY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
+        },
     ];
 
     /* @internal */
