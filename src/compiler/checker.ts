@@ -9370,25 +9370,6 @@ namespace ts {
             return type.resolvedProperties;
         }
 
-        function getPossiblePropertiesOfUnionType(type: UnionType): Symbol[] {
-            if (type.possiblePropertyCache) {
-                return type.possiblePropertyCache.size ? arrayFrom(type.possiblePropertyCache.values()) : emptyArray;
-            }
-            type.possiblePropertyCache = createSymbolTable();
-            for (const t of type.types) {
-                for (const p of getPropertiesOfType(t)) {
-                    if (!type.possiblePropertyCache.has(p.escapedName)) {
-                        const prop = getUnionOrIntersectionProperty(type, p.escapedName);
-                        if (prop) {
-                            type.possiblePropertyCache.set(p.escapedName, prop);
-                        }
-                    }
-                }
-            }
-            // We can't simply use the normal property cache here, since that will contain cached apparent type members :(
-            return type.possiblePropertyCache.size ? arrayFrom(type.possiblePropertyCache.values()) : emptyArray;
-        }
-
         function getPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
             return type.flags & TypeFlags.UnionOrIntersection ?
@@ -14775,7 +14756,7 @@ namespace ts {
                     const propType = prop && getTypeOfSymbol(prop) || isNumericLiteralName(name) && getIndexTypeOfType(type, IndexKind.Number) || getIndexTypeOfType(type, IndexKind.String) || undefinedType;
                     return append(propTypes, propType);
                 };
-                return getUnionType(reduceLeft(types, appendPropType, undefined) || emptyArray);
+                return getUnionType(reduceLeft(types, appendPropType, /*initial*/ undefined) || emptyArray);
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
@@ -15848,7 +15829,7 @@ namespace ts {
                 }
                 // We only call this for union target types when we're attempting to do excess property checking - in those cases, we want to get _all possible props_
                 // from the target union, across all members
-                const properties = target.flags & TypeFlags.Union ? getPossiblePropertiesOfUnionType(target as UnionType) : getPropertiesOfType(target);
+                const properties = getPropertiesOfType(target);
                 const numericNamesOnly = isTupleType(source) && isTupleType(target);
                 for (const targetProp of excludeProperties(properties, excludedProperties)) {
                     const name = targetProp.escapedName;
@@ -17353,7 +17334,7 @@ namespace ts {
         }
 
         function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
-            const properties = target.flags & TypeFlags.Union ? getPossiblePropertiesOfUnionType(target as UnionType) : getPropertiesOfType(target);
+            const properties = getPropertiesOfType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial)) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
