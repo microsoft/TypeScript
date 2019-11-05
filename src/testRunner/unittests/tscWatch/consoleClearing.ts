@@ -2,8 +2,8 @@ namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: console clearing", () => {
         const currentDirectoryLog = "Current directory: / CaseSensitiveFileNames: false\n";
         const fileWatcherAddedLog = [
-            "FileWatcher:: Added:: WatchInfo: /f.ts 250 Source file\n",
-            "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
+            "FileWatcher:: Added:: WatchInfo: /f.ts 250 undefined Source file\n",
+            "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file\n"
         ];
 
         const file: File = {
@@ -35,9 +35,9 @@ namespace ts.tscWatch {
             host.modifyFile(file.path, "//");
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, hasLog ? [
-                "FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n",
+                "FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file\n",
                 "Scheduling update\n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n"
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file\n"
             ] : undefined, hasLog ? getProgramSynchronizingLog(options) : undefined);
         }
 

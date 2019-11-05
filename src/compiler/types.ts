@@ -5209,6 +5209,7 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
+        optionsForWatch?: boolean;                              // true if this affects the kind of watch being created
     }
 
     /* @internal */

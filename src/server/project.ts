@@ -472,6 +472,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this.getCompilerOptions()),
                 WatchType.FailedLookupLocations,
                 this
             );
@@ -489,6 +490,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this.getCompilerOptions()),
                 WatchType.TypeRoots,
                 this
             );
@@ -1170,6 +1172,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
+                this.projectService.getWatchOptions(this.getCompilerOptions()),
                 WatchType.MissingFile,
                 this
             );
@@ -1213,6 +1216,7 @@ namespace ts.server {
                     generatedFile,
                     () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
                     PollingInterval.High,
+                    this.projectService.getWatchOptions(this.getCompilerOptions()),
                     WatchType.MissingGeneratedFile,
                     this
                 )
@@ -1517,6 +1521,7 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
+                    this.projectService.getWatchOptions(this.getCompilerOptions()),
                     WatchType.PackageJsonFile,
                 ));
             }
@@ -1880,6 +1885,32 @@ namespace ts.server {
                     return result;
                 }
             ) || false;
+        }
+
+        /* @internal */
+        setCompilerOptions(compilerOptions: CompilerOptions) {
+            const oldOptions = this.getCompilerOptions();
+            super.setCompilerOptions(compilerOptions);
+            // If watch options different than older options
+            if (this.isInitialLoadPending() &&
+                !isJsonEqual(getWatchOptions(oldOptions), getWatchOptions(this.getCompilerOptions()))) {
+                const oldWatcher = this.configFileWatcher;
+                this.createConfigFileWatcher();
+                if (oldWatcher) oldWatcher.close();
+            }
+        }
+
+        /* @internal */
+        createConfigFileWatcher() {
+            this.configFileWatcher = this.projectService.watchFactory.watchFile(
+                this.projectService.host,
+                this.getConfigFilePath(),
+                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this.getCompilerOptions()),
+                WatchType.ConfigFile,
+                this
+            );
         }
 
         /**

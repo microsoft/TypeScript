@@ -52,9 +52,9 @@ namespace ts {
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number): void;
 
         /** Used to watch changes in source files, missing files needed to update the program or config file */
-        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: CompilerOptions): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: CompilerOptions): FileWatcher;
         /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
@@ -270,7 +270,7 @@ namespace ts {
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         let configFileWatcher: FileWatcher | undefined;
         if (configFileName) {
-            configFileWatcher = watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
+            configFileWatcher = watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, compilerOptions, WatchType.ConfigFile);
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
@@ -285,8 +285,8 @@ namespace ts {
         // Members for ResolutionCacheHost
         compilerHost.toPath = toPath;
         compilerHost.getCompilationSettings = () => compilerOptions;
-        compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, WatchType.FailedLookupLocations);
-        compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, WatchType.TypeRoots);
+        compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, compilerOptions, WatchType.FailedLookupLocations);
+        compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, compilerOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
         compilerHost.onInvalidatedResolution = scheduleProgramUpdate;
         compilerHost.onChangedAutomaticTypeDirectiveNames = () => {
@@ -469,7 +469,7 @@ namespace ts {
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         hostSourceFile.version = sourceFile.version;
                         if (!hostSourceFile.fileWatcher) {
-                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
+                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, compilerOptions, path, WatchType.SourceFile);
                         }
                     }
                     else {
@@ -482,7 +482,7 @@ namespace ts {
                 }
                 else {
                     if (sourceFile) {
-                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, compilerOptions, path, WatchType.SourceFile);
                         sourceFilesCache.set(path, { sourceFile, version: sourceFile.version, fileWatcher });
                     }
                     else {
@@ -645,7 +645,7 @@ namespace ts {
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath, WatchType.MissingFile);
+            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, compilerOptions, missingFilePath, WatchType.MissingFile);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
@@ -709,6 +709,7 @@ namespace ts {
                     }
                 },
                 flags,
+                compilerOptions,
                 WatchType.WildcardDirectory
             );
         }

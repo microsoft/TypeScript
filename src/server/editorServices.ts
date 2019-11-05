@@ -277,6 +277,7 @@ namespace ts.server {
         preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
+        watchOptions: CompilerOptions;
     }
 
     export interface OpenConfiguredProjectResult {
@@ -576,7 +577,8 @@ namespace ts.server {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
                 preferences: emptyOptions,
                 hostInfo: "Unknown host",
-                extraFileExtensions: []
+                extraFileExtensions: [],
+                watchOptions: {},
             };
 
             this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
@@ -1036,6 +1038,7 @@ namespace ts.server {
                     }
                 },
                 flags,
+                this.getWatchOptions(project.getCompilerOptions()),
                 WatchType.WildcardDirectory,
                 project
             );
@@ -1047,7 +1050,8 @@ namespace ts.server {
             return this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!;
         }
 
-        private onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
+        /*@internal*/
+        onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
             const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (eventKind === FileWatcherEventKind.Deleted) {
                 // Update the cached status
@@ -1387,6 +1391,7 @@ namespace ts.server {
                         configFileName,
                         (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
                         PollingInterval.High,
+                        this.hostConfiguration.watchOptions,
                         WatchType.ConfigFileForInferredRoot
                     ) :
                     noopFileWatcher;
@@ -1729,14 +1734,7 @@ namespace ts.server {
                 this.documentRegistry,
                 cachedDirectoryStructureHost);
             // TODO: We probably should also watch the configFiles that are extended
-            project.configFileWatcher = this.watchFactory.watchFile(
-                this.host,
-                configFileName,
-                (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind),
-                PollingInterval.High,
-                WatchType.ConfigFile,
-                project
-            );
+            project.createConfigFileWatcher();
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
             return project;
@@ -2106,6 +2104,7 @@ namespace ts.server {
                         info.fileName,
                         (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
                         PollingInterval.Medium,
+                        this.hostConfiguration.watchOptions,
                         info.path,
                         WatchType.ClosedScriptInfo
                     );
@@ -2152,6 +2151,7 @@ namespace ts.server {
                     }
                 },
                 WatchDirectoryFlags.Recursive,
+                this.hostConfiguration.watchOptions,
                 WatchType.NodeModulesForClosedScriptInfo
             );
             const result: ScriptInfoInNodeModulesWatcher = {
@@ -2379,6 +2379,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.High,
+                this.hostConfiguration.watchOptions,
                 WatchType.MissingSourceMapFile,
             );
             return fileWatcher;
@@ -2463,7 +2464,20 @@ namespace ts.server {
                     this.reloadProjects();
                     this.logger.info("Host file extension mappings updated");
                 }
+
+                if (args.watchOptions) {
+                    this.hostConfiguration.watchOptions = convertCompilerOptions(args.watchOptions);
+                    this.logger.info(`Host watch options changed to ${this.hostConfiguration.watchOptions}, it will be take effect for next watches.`);
+                }
             }
+        }
+
+        /*@internal*/
+        getWatchOptions(ownOptions: CompilerOptions) {
+            const ownWatchOptions = getWatchOptions(ownOptions);
+            return ownWatchOptions ?
+                { ...this.hostConfiguration.watchOptions, ...ownWatchOptions } :
+                this.hostConfiguration.watchOptions;
         }
 
         closeLog() {
