@@ -1,0 +1,135 @@
+=== tests/cases/compiler/tryCatchFinallyControlFlow.ts ===
+// Repro from #34797
+
+function f1() {
+>f1 : () => number
+
+    let a: number | null = null;
+>a : number | null
+>null : null
+>null : null
+
+    try {
+        a = 123;
+>a = 123 : 123
+>a : number | null
+>123 : 123
+
+        return a;
+>a : number
+    }
+    catch (e) {
+>e : any
+
+        throw e;
+>e : any
+    }
+    finally {
+        if (a != null && a.toFixed(0) == "123") { 
+>a != null && a.toFixed(0) == "123" : boolean
+>a != null : boolean
+>a : number | null
+>null : null
+>a.toFixed(0) == "123" : boolean
+>a.toFixed(0) : string
+>a.toFixed : (fractionDigits?: number | undefined) => string
+>a : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>0 : 0
+>"123" : "123"
+        }
+    }
+}
+
+function f2() {
+>f2 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+
+        throw e;
+>e : any
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // 1
+>x : 1
+}
+
+function f3() {
+>f3 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+
+        return;
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // 1
+>x : 1
+}
+
+function f4() {
+>f4 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // 1 | 2
+>x : 1 | 2
+}
+
