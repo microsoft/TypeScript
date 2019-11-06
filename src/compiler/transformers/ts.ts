@@ -2869,11 +2869,11 @@ namespace ts {
         }
 
         function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
-            return updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier))
+            return updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
         }
 
         function visitNamedExportBindings(node: NamedExportBindings): VisitResult<NamedExportBindings> {
-            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node)
+            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node);
         }
 
         /**

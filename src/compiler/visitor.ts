@@ -822,7 +822,7 @@ namespace ts {
             case SyntaxKind.NamespaceExport:
                 return updateNamespaceExport(<NamespaceExport>node,
                     visitNode((<NamespaceExport>node).name, visitor, isIdentifier)
-                )
+                );
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,

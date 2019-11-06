@@ -752,7 +752,7 @@ namespace ts {
                     case SyntaxKind.ExportDeclaration:
                         // Handle named exports case e.g.:
                         //    export {a, b as B} from "mod";
-                        const exportDeclaration = (<ExportDeclaration>node)
+                        const exportDeclaration = (<ExportDeclaration>node);
                         if (exportDeclaration.exportClause) {
                             if (isNamedExports(exportDeclaration.exportClause)) {
                                 forEach(exportDeclaration.exportClause.elements, visit);

@@ -747,7 +747,7 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
-        function getHelperExpressionForExport(node:ExportDeclaration, innerExpr: Expression) {
+        function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
@@ -1038,7 +1038,7 @@ namespace ts {
                             /*location*/ node.exportClause.name),
                         /* original */ node.exportClause.name
                     )
-                )
+                );
 
                 statements.push(
                     setOriginalNode(

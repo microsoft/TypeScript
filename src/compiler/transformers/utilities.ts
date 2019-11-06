@@ -45,9 +45,6 @@ namespace ts {
         if (!!getNamespaceDeclarationNode(node)) {
             return true;
         }
-        if (isExportDeclaration(node)) {
-            return false;
-        }
         const bindings = node.importClause && node.importClause.namedBindings;
         if (!bindings) {
             return false;
