@@ -204,8 +204,8 @@ namespace ts {
                 return {
                     expression,
                     variable: expression,
-                }
-            };
+                };
+            }
             const variable = createTempVariable(hoistVariableDeclaration);
             expression = createAssignment(variable, expression);
             return {
