@@ -1024,20 +1024,15 @@ namespace ts {
                 // export * as ns from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
                     statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                createVariableStatement(
-                                    /*modifiers*/ undefined,
-                                    createVariableDeclarationList([
-                                        createVariableDeclaration(
-                                            generatedName,
-                                            /*type*/ undefined,
-                                            getHelperExpressionForExport(node, createRequireCall(node))
-                                        )
-                                    ])
-                                ),
-                                /*location*/ node.exportClause.name),
-                            /* original */ node.exportClause.name
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList([
+                                createVariableDeclaration(
+                                    getSynthesizedClone(node.exportClause.name),
+                                    /*type*/ undefined,
+                                    getHelperExpressionForExport(node, createRequireCall(node))
+                                )
+                            ])
                         )
                     );    
                 }
@@ -1046,10 +1041,11 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             createExpressionStatement(
-                                createExportExpression(node.exportClause.name, generatedName)
+                                createExportExpression(getSynthesizedClone(node.exportClause.name), createIdentifier(idText(node.exportClause.name)))
                             ),
-                            node),
                             node
+                        ),
+                        node
                     )
                 );
 
