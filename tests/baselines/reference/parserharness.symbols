@@ -43,9 +43,9 @@ function switchToForwardSlashes(path: string) {
 >path : Symbol(path, Decl(parserharness.ts, 27, 32))
 
     return path.replace(/\\/g, "/");
->path.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>path.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 27, 32))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function filePath(fullPath: string) {
@@ -5850,9 +5850,9 @@ module Harness {
 
                 reportContent = reportContent.replace(htmlTrailer, '');
 >reportContent : Symbol(reportContent, Decl(parserharness.ts, 1955, 15))
->reportContent.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reportContent.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >reportContent : Symbol(reportContent, Decl(parserharness.ts, 1955, 15))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >htmlTrailer : Symbol(htmlTrailer, Decl(parserharness.ts, 1913, 11))
 
             } else {
@@ -5972,15 +5972,15 @@ module Harness {
 
                 expected = expected.replace(/\r\n?/g, '\n')
 >expected : Symbol(expected, Decl(parserharness.ts, 2005, 15))
->expected.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>expected.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >expected : Symbol(expected, Decl(parserharness.ts, 2005, 15))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
                 actual = actual.replace(/\r\n?/g, '\n')
 >actual : Symbol(actual, Decl(parserharness.ts, 1991, 35))
->actual.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>actual.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >actual : Symbol(actual, Decl(parserharness.ts, 1991, 35))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
             }
 
             return { expected: expected, actual: actual };
