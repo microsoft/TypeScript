@@ -178,7 +178,7 @@ namespace ts {
                 ),
                 createToken(SyntaxKind.AmpersandAmpersandToken),
                 createBinary(
-                    expression.variable || expression.expression,
+                    expression.variable,
                     createToken(SyntaxKind.ExclamationEqualsEqualsToken),
                     createVoidZero()
                 )
