@@ -69,7 +69,7 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                ({expression, variable: thisArg} = maybeCaputeInTempVariable(expression));
+                ({expression, variable: thisArg} = maybeCaptureInTempVariable(expression));
             }
 
             expression = updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier));
@@ -87,7 +87,7 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                ({expression, variable: thisArg} = maybeCaputeInTempVariable(expression));
+                ({expression, variable: thisArg} = maybeCaptureInTempVariable(expression));
             }
 
             expression = updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
@@ -117,7 +117,7 @@ namespace ts {
             const left = visitNonOptionalExpression(expression, isCallChain(chain[0]));
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
             const leftExpression = isSyntheticReference(left) ? left.expression : left;
-            const capturedLeft = maybeCaputeInTempVariable(leftExpression);
+            const capturedLeft = maybeCaptureInTempVariable(leftExpression);
             let rightExpression: Expression = capturedLeft.variable;
             let thisArg: Expression | undefined;
             for (let i = 0; i < chain.length; i++) {
@@ -125,7 +125,7 @@ namespace ts {
                 switch (segment.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            ({expression: rightExpression, variable: thisArg} = maybeCaputeInTempVariable(rightExpression));
+                            ({expression: rightExpression, variable: thisArg} = maybeCaptureInTempVariable(rightExpression));
                         }
                         rightExpression = createPropertyAccess(
                             rightExpression,
@@ -134,7 +134,7 @@ namespace ts {
                         break;
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            ({expression: rightExpression, variable: thisArg} = maybeCaputeInTempVariable(rightExpression));
+                            ({expression: rightExpression, variable: thisArg} = maybeCaptureInTempVariable(rightExpression));
                         }
                         rightExpression = createElementAccess(
                             rightExpression,
@@ -186,7 +186,7 @@ namespace ts {
         }
 
         function transformNullishCoalescingExpression(node: BinaryExpression) {
-            const captured = maybeCaputeInTempVariable(visitNode(node.left, visitor, isExpression));
+            const captured = maybeCaptureInTempVariable(visitNode(node.left, visitor, isExpression));
             return createConditional(
                 createNotNullCondition(captured),
                 captured.variable,
@@ -199,7 +199,7 @@ namespace ts {
             variable: Identifier;
         }
 
-        function maybeCaputeInTempVariable(expression: Expression): CapturedExpression {
+        function maybeCaptureInTempVariable(expression: Expression): CapturedExpression {
             if (isIdentifier(expression)) {
                 return {
                     expression,
