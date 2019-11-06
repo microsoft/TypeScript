@@ -21160,7 +21160,7 @@ namespace ts {
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
-            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !tryCast(callTarget, hasTypeArguments)?.typeArguments) {
+            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !hasTypeArguments(callTarget)) {
                 const baseSignature = getBaseSignature(signature.target);
                 return getTypeAtPosition(baseSignature, argIndex);
             }
