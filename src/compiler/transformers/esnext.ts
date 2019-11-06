@@ -145,7 +145,7 @@ namespace ts {
                         if (i === 0 && leftThisArg) {
                             rightExpression = createFunctionCall(
                                 rightExpression,
-                                leftThisArg,
+                                leftThisArg.kind === SyntaxKind.SuperKeyword ? createThis() : leftThisArg,
                                 visitNodes(segment.arguments, visitor, isExpression)
                             );
                         }
@@ -196,11 +196,13 @@ namespace ts {
 
         interface CapturedExpression {
             expression: Expression;
-            variable: Identifier;
+            variable: Expression;
         }
 
         function maybeCaptureInTempVariable(expression: Expression): CapturedExpression {
-            if (isIdentifier(expression)) {
+            // don't capture identifiers and `this` in a temporary variable
+            // `super` cannot be captured as it's no real variable
+            if (isIdentifier(expression) || expression.kind === SyntaxKind.ThisKeyword || expression.kind === SyntaxKind.SuperKeyword) {
                 return {
                     expression,
                     variable: expression,
