@@ -274,6 +274,10 @@ interface URLSearchParams {
      * Returns a list of values in the search params.
      */
     values(): IterableIterator<string>;
+    /**
+     * Returns an encoded stringified version of all the parameters
+     */
+    toString(): string; 
 }
 
 interface VRDisplay {
