@@ -2505,7 +2505,6 @@ namespace ts {
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
-                case SyntaxKind.NamespaceExport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
@@ -2623,8 +2622,8 @@ namespace ts {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
-            else {
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
+            else if (isNamespaceExport(node.exportClause)) {
+                declareSymbol(container.symbol.exports, container.symbol, node.exportClause, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
         }
 
