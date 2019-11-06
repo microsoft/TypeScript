@@ -2189,8 +2189,16 @@ namespace ts {
             refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
-                    if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
+                const canonicalFileName = host.getCanonicalFileName(fileName);
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule, extension => fileExtensionIs(canonicalFileName, extension))) {
+                    if (fail) {
+                        if (hasJSFileExtension(canonicalFileName)) {
+                            fail(Diagnostics.File_0_is_a_JavaScript_file_Did_you_mean_to_enable_the_allowJs_option, fileName);
+                        }
+                        else {
+                            fail(Diagnostics.File_0_has_an_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
+                        }
+                    }
                     return undefined;
                 }
 
@@ -2205,7 +2213,7 @@ namespace ts {
                             fail(Diagnostics.File_0_not_found, fileName);
                         }
                     }
-                    else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
+                    else if (refFile && canonicalFileName === host.getCanonicalFileName(refFile.fileName)) {
                         fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
                     }
                 }

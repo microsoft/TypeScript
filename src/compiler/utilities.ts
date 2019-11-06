@@ -5947,12 +5947,34 @@ namespace ts {
                 || kind === SyntaxKind.CallExpression);
     }
 
+    /* @internal */
+    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
+        return isOptionalChain(node) && !!node.questionDotToken;
+    }
+
     /**
      * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
      */
     /* @internal */
     export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
         return isOptionalChainRoot(node.parent) && node.parent.expression === node;
+    }
+
+    /**
+     * Determines whether a node is the outermost `OptionalChain` in an ECMAScript `OptionalExpression`:
+     *
+     * 1. For `a?.b.c`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.`)
+     * 2. For `(a?.b.c).d`, the outermost chain is `a?.b.c` (`c` is the end of the chain starting at `a?.` since parens end the chain)
+     * 3. For `a?.b.c?.d`, both `a?.b.c` and `a?.b.c?.d` are outermost (`c` is the end of the chain starting at `a?.`, and `d` is
+     *   the end of the chain starting at `c?.`)
+     * 4. For `a?.(b?.c).d`, both `b?.c` and `a?.(b?.c)d` are outermost (`c` is the end of the chain starting at `b`, and `d` is
+     *   the end of the chain starting at `a?.`)
+     */
+    /* @internal */
+    export function isOutermostOptionalChain(node: OptionalChain) {
+        return !isOptionalChain(node.parent) // cases 1 and 2
+            || isOptionalChainRoot(node.parent) // case 3
+            || node !== node.parent.expression; // case 4
     }
 
     export function isNullishCoalesce(node: Node) {
@@ -7274,11 +7296,6 @@ namespace ts {
 
     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
         return node.kind === SyntaxKind.GetAccessor;
-    }
-
-    /* @internal */
-    export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
-        return isOptionalChain(node) && !!node.questionDotToken;
     }
 
     /** True if has jsdoc nodes attached to it. */
