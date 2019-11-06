@@ -174,5 +174,122 @@ namespace ts.tscWatch {
                     `${cwd}/node_modules/reala/node_modules`, `${cwd}/node_modules/realb/node_modules`, `${cwd}/src`], /*recursive*/ false);
             });
         });
+
+        describe("handles watch compiler options", () => {
+            it("with watchFile option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            watchFile: "UseFsEvents"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                // Instead of polling watch (= watchedFiles), uses fsWatch
+                checkWatchedFiles(host, emptyArray);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        f => [{
+                            fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Low,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ true,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+            });
+
+            it("with watchDirectory option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            watchDirectory: "UseFsEvents"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                checkWatchedFilesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        () => [PollingInterval.Low]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            });
+
+            it("with fallbackPolling option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            fallbackPolling: "PriorityInterval"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+                const filePaths = files.map(f => f.path.toLowerCase());
+                checkWatchedFilesDetailed(
+                    host,
+                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                    1,
+                    arrayToMap(
+                        filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                        identity,
+                        f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                    )
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            });
+        });
     });
 }

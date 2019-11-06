@@ -412,6 +412,33 @@ namespace ts {
                     options: { tsBuildInfoFile: "build.tsbuildinfo" }
                 });
         });
+
+        it("parse --watchFile", () => {
+            assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { watchFile: WatchFileKind.UseFsEvents }
+                });
+        });
+
+        it("parse --watchDirectory", () => {
+            assertParseResult(["--watchDirectory", "FixedPollingInterval", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                });
+        });
+
+        it("parse --fallbackPolling", () => {
+            assertParseResult(["--fallbackPolling", "PriorityInterval", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { fallbackPolling: PollingWatchKind.PriorityInterval }
+                });
+        });
     });
 
     describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {

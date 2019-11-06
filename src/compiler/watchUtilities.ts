@@ -456,15 +456,11 @@ namespace ts {
         }, flags, options);
     }
 
-    let watchOptionDeclarations: readonly CommandLineOption[] | undefined;
     export function getWatchOptions(options: CompilerOptions | undefined): CompilerOptions | undefined {
         if (!options) return undefined;
-        if (!watchOptionDeclarations) {
-            watchOptionDeclarations = optionDeclarations.filter(option => !!option.optionsForWatch);
-        }
 
         let result: CompilerOptions | undefined;
-        for (const option of watchOptionDeclarations) {
+        for (const option of optionsForWatch) {
             if (hasProperty(options, option.name)) {
                 (result || (result = {}))[option.name] = options[option.name];
             }
@@ -473,9 +469,10 @@ namespace ts {
     }
 
     export function getFallbackOptions(options: CompilerOptions | undefined): CompilerOptions {
+        const fallbackPolling = options?.fallbackPolling;
         return {
-            watchFile: options?.fallbackPolling !== undefined ?
-                options.fallbackPolling as unknown as WatchFileKind :
+            watchFile: fallbackPolling !== undefined ?
+                fallbackPolling as unknown as WatchFileKind :
                 WatchFileKind.PriorityPollingInterval
         };
     }

@@ -1,3 +1,5 @@
 {
-    "compilerOptions": {}
+    "compilerOptions": {
+        "fallbackPolling": "fixedinterval"
+    }
 }

@@ -73,6 +73,43 @@ namespace ts {
     /* @internal */
     export const libMap = createMapFromEntries(libEntries);
 
+    // Watch related options
+    /* @internal */
+    export const optionsForWatch: CommandLineOption[] = [
+        {
+            name: "watchFile",
+            type: createMapFromTemplate({
+                fixedpollinginterval: WatchFileKind.FixedPollingInterval,
+                prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
+                dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
+                usefsevents: WatchFileKind.UseFsEvents,
+                usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
+            }),
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
+        },
+        {
+            name: "watchDirectory",
+            type: createMapFromTemplate({
+                usefsevents: WatchDirectoryKind.UseFsEvents,
+                fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
+                dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
+            }),
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
+        },
+        {
+            name: "fallbackPolling",
+            type: createMapFromTemplate({
+                fixedinterval: PollingWatchKind.FixedInterval,
+                priorityinterval: PollingWatchKind.PriorityInterval,
+                dynamicpriority: PollingWatchKind.DynamicPriority,
+            }),
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
+        },
+    ];
+
     /* @internal */
     export const commonOptionsWithBuild: CommandLineOption[] = [
         {
@@ -163,6 +200,9 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
+
+        // Watch related options
+        ...optionsForWatch
     ];
 
     /* @internal */
@@ -913,47 +953,6 @@ namespace ts {
                 type: "object"
             },
             description: Diagnostics.List_of_language_service_plugins
-        },
-
-
-        // Watch related options
-        {
-            name: "watchFile",
-            type: createMapFromTemplate({
-                FixedPollingInterval: WatchFileKind.FixedPollingInterval,
-                PriorityPollingInterval: WatchFileKind.PriorityPollingInterval,
-                DynamicPriorityPolling: WatchFileKind.DynamicPriorityPolling,
-                UseFsEvents: WatchFileKind.UseFsEvents,
-                UseFsEventsOnParentDirectory: WatchFileKind.UseFsEventsOnParentDirectory,
-            }),
-            optionsForWatch: true,
-            paramType: Diagnostics.STRATEGY,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
-        },
-        {
-            name: "watchDirectory",
-            type: createMapFromTemplate({
-                UseFsEvents: WatchDirectoryKind.UseFsEvents,
-                FixedPollingInterval: WatchDirectoryKind.FixedPollingInterval,
-                DynamicPriorityPolling: WatchDirectoryKind.DynamicPriorityPolling,
-            }),
-            optionsForWatch: true,
-            paramType: Diagnostics.STRATEGY,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
-        },
-        {
-            name: "fallbackPolling",
-            type: createMapFromTemplate({
-                FixedPolling: PollingWatchKind.FixedInterval,
-                PriorityPolling: PollingWatchKind.PriorityInterval,
-                DynamicPriority: PollingWatchKind.DynamicPriority,
-            }),
-            optionsForWatch: true,
-            paramType: Diagnostics.STRATEGY,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
         },
     ];
 
