@@ -1697,7 +1697,7 @@ namespace ts.Completions {
                     //      - contextToken: GreaterThanToken (before cursor)
                     //      - location: GreaterThanToken (after cursor)
                     //      - same parent (JSXOpeningElement)
-                    return location.parent !== contextToken.parent;
+                    return location.parent.kind !== SyntaxKind.JsxOpeningElement;
                 }
 
                 if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
