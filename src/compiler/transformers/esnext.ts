@@ -64,14 +64,12 @@ namespace ts {
                 return visitOptionalExpression(node, captureThisArg);
             }
 
-            let expression = visitNode(node.expression, visitor, isExpression);
+            let expression: Expression = visitNode(node.expression, visitor, isExpression);
             Debug.assertNotNode(expression, isSyntheticReference);
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                // `a.b` -> { expression: `(_a = a).b`, thisArg: `_a` }
-                thisArg = createTempVariable(hoistVariableDeclaration);
-                expression = createParen(createAssignment(thisArg, expression));
+                ({expression, variable: thisArg} = maybeCaputeInTempVariable(expression));
             }
 
             expression = updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier));
@@ -84,14 +82,12 @@ namespace ts {
                 return visitOptionalExpression(node, captureThisArg);
             }
 
-            let expression = visitNode(node.expression, visitor, isExpression);
+            let expression: Expression = visitNode(node.expression, visitor, isExpression);
             Debug.assertNotNode(expression, isSyntheticReference);
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                // `a[b]` -> { expression: `(_a = a)[b]`, thisArg: `_a` }
-                thisArg = createTempVariable(hoistVariableDeclaration);
-                expression = createParen(createAssignment(thisArg, expression));
+                ({expression, variable: thisArg} = maybeCaputeInTempVariable(expression));
             }
 
             expression = updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
@@ -119,18 +115,17 @@ namespace ts {
         function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean): Expression {
             const { expression, chain } = flattenChain(node);
             const left = visitNonOptionalExpression(expression, isCallChain(chain[0]));
-            const temp = createTempVariable(hoistVariableDeclaration);
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
             const leftExpression = isSyntheticReference(left) ? left.expression : left;
-            let rightExpression: Expression = temp;
+            const capturedLeft = maybeCaputeInTempVariable(leftExpression);
+            let rightExpression: Expression = capturedLeft.variable;
             let thisArg: Expression | undefined;
             for (let i = 0; i < chain.length; i++) {
                 const segment = chain[i];
                 switch (segment.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            thisArg = createTempVariable(hoistVariableDeclaration);
-                            rightExpression = createParen(createAssignment(thisArg, rightExpression));
+                            ({expression: rightExpression, variable: thisArg} = maybeCaputeInTempVariable(rightExpression));
                         }
                         rightExpression = createPropertyAccess(
                             rightExpression,
@@ -139,8 +134,7 @@ namespace ts {
                         break;
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            thisArg = createTempVariable(hoistVariableDeclaration);
-                            rightExpression = createParen(createAssignment(thisArg, rightExpression));
+                            ({expression: rightExpression, variable: thisArg} = maybeCaputeInTempVariable(rightExpression));
                         }
                         rightExpression = createElementAccess(
                             rightExpression,
@@ -168,26 +162,23 @@ namespace ts {
             }
 
             const target = createConditional(
-                createLogicalOr(
-                    createStrictEquality(createAssignment(temp, leftExpression), createNull()),
-                    createStrictEquality(temp, createVoidZero())
-                ),
+                createNotNullCondition(capturedLeft),
+                rightExpression,
                 createVoidZero(),
-                rightExpression
             );
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
-        function createNotNullCondition(node: Expression) {
+        function createNotNullCondition(expression: CapturedExpression) {
             return createBinary(
                 createBinary(
-                    node,
+                    expression.expression,
                     createToken(SyntaxKind.ExclamationEqualsEqualsToken),
                     createNull()
                 ),
                 createToken(SyntaxKind.AmpersandAmpersandToken),
                 createBinary(
-                    node,
+                    expression.variable || expression.expression,
                     createToken(SyntaxKind.ExclamationEqualsEqualsToken),
                     createVoidZero()
                 )
@@ -195,21 +186,32 @@ namespace ts {
         }
 
         function transformNullishCoalescingExpression(node: BinaryExpression) {
-            const expressions: Expression[] = [];
-            let left = visitNode(node.left, visitor, isExpression);
-            if (!isIdentifier(left)) {
-                const temp = createTempVariable(hoistVariableDeclaration);
-                expressions.push(createAssignment(temp, left));
-                left = temp;
-            }
-            expressions.push(
-                createParen(
-                    createConditional(
-                        createNotNullCondition(left),
-                        left,
-                        visitNode(node.right, visitor, isExpression)))
-                );
-            return inlineExpressions(expressions);
+            const captured = maybeCaputeInTempVariable(visitNode(node.left, visitor, isExpression));
+            return createConditional(
+                createNotNullCondition(captured),
+                captured.variable,
+                visitNode(node.right, visitor, isExpression),
+            );
+        }
+
+        interface CapturedExpression {
+            expression: Expression;
+            variable: Identifier;
+        }
+
+        function maybeCaputeInTempVariable(expression: Expression): CapturedExpression {
+            if (isIdentifier(expression)) {
+                return {
+                    expression,
+                    variable: expression,
+                }
+            };
+            const variable = createTempVariable(hoistVariableDeclaration);
+            expression = createAssignment(variable, expression);
+            return {
+                expression,
+                variable,
+            };
         }
     }
 }
