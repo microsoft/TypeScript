@@ -16,13 +16,20 @@ foo.ns.a;
 foo.ns.b;
 
 //// [0.js]
-export const a = 1;
-export const b = 2;
+"use strict";
+exports.__esModule = true;
+exports.a = 1;
+exports.b = 2;
 //// [1.js]
-export * as ns from './0';
-ns.a;
-ns.b;
+"use strict";
+exports.__esModule = true;
+var _0_1 = require("./0");
+exports.ns = _0_1;
+exports.ns.a;
+exports.ns.b;
 //// [2.js]
-import * as foo from './1';
+"use strict";
+exports.__esModule = true;
+var foo = require("./1");
 foo.ns.a;
 foo.ns.b;

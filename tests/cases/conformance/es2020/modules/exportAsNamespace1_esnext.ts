@@ -1,3 +1,4 @@
+// @module: esnext
 // @filename: 0.ts
 export const a = 1;
 export const b = 2;

@@ -1022,23 +1022,25 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
-                statements.push(
-                    setOriginalNode(
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList([
-                                    createVariableDeclaration(
-                                        generatedName,
-                                        /*type*/ undefined,
-                                        getHelperExpressionForExport(node, createRequireCall(node))
-                                    )
-                                ])
-                            ),
-                            /*location*/ node.exportClause.name),
-                        /* original */ node.exportClause.name
-                    )
-                );
+                if (moduleKind !== ModuleKind.AMD) {
+                    statements.push(
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList([
+                                        createVariableDeclaration(
+                                            generatedName,
+                                            /*type*/ undefined,
+                                            getHelperExpressionForExport(node, createRequireCall(node))
+                                        )
+                                    ])
+                                ),
+                                /*location*/ node.exportClause.name),
+                            /* original */ node.exportClause.name
+                        )
+                    );    
+                }
 
                 statements.push(
                     setOriginalNode(
@@ -1049,15 +1051,6 @@ namespace ts {
                             node),
                             node
                     )
-                );
-
-                setOriginalNode(
-                    setTextRange(
-                        createExpressionStatement(
-                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
-                        ),
-                        node),
-                    node
                 );
 
                 return singleOrMany(statements);
