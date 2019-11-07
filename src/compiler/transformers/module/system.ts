@@ -364,7 +364,7 @@ namespace ts {
                             createTrue()
                         )
                     );
-                } 
+                }
             }
 
             const exportedNamesStorageRef = createUniqueName("exportedNames");
@@ -530,7 +530,8 @@ namespace ts {
                                             )
                                         )
                                     );
-                                } else {
+                                }
+                                else {
                                     statements.push(
                                         createExpressionStatement(
                                             createCall(

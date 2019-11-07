@@ -1034,7 +1034,7 @@ namespace ts {
                                 )
                             ])
                         )
-                    );    
+                    );
                 }
 
                 statements.push(
