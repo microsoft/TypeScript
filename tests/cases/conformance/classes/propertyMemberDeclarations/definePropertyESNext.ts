@@ -1,4 +1,4 @@
-// @target: es5
+// @target: esnext
 // @useDefineForClassFields: true
 var x: "p" = "p"
 class A {
@@ -8,4 +8,12 @@ class A {
     ;[x] = 14
     m() { }
     constructor(public readonly y: number) { }
+}
+class B {
+}
+class C extends B {
+    z = 1
+    constructor(public ka: number) {
+        super()
+    }
 }

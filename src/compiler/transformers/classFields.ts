@@ -10,9 +10,9 @@ namespace ts {
     /**
      * Transforms ECMAScript Class Syntax.
      * TypeScript parameter property syntax is transformed in the TypeScript transformer.
-     * For now, this transforms public field declarations using TypeScript class semantics
-     * (where the declarations get elided and initializers are transformed as assignments in the constructor).
-     * Eventually, this transform will change to the ECMAScript semantics (with Object.defineProperty).
+     * For now, this transforms public field declarations using TypeScript class semantics,
+     * where declarations are elided and initializers are transformed as assignments in the constructor.
+     * When --useDefineForClassFields is on, this transforms to ECMAScript semantics, with Object.defineProperty.
      */
     export function transformClassFields(context: TransformationContext) {
         const {
@@ -294,7 +294,8 @@ namespace ts {
         }
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-            const properties = getProperties(node, /*requireInitializer*/ !context.getCompilerOptions().useDefineForClassFields, /*isStatic*/ false);
+            const useDefineForClassFields = context.getCompilerOptions().useDefineForClassFields;
+            const properties = getProperties(node, /*requireInitializer*/ !useDefineForClassFields, /*isStatic*/ false);
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
@@ -325,6 +326,9 @@ namespace ts {
             if (constructor) {
                 indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
             }
+            if (useDefineForClassFields) {
+                addPropertyStatements(statements, properties, createThis());
+            }
 
             // Add the property initializers. Transforms this:
             //
@@ -336,7 +340,7 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
-            if (constructor && constructor.body) {
+            if (constructor?.body) {
                 let parameterPropertyDeclarationCount = 0;
                 for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
                     if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {
@@ -351,7 +355,9 @@ namespace ts {
                     indexOfFirstStatement += parameterPropertyDeclarationCount;
                 }
             }
-            addPropertyStatements(statements, properties, createThis());
+            if (!useDefineForClassFields) {
+                addPropertyStatements(statements, properties, createThis());
+            }
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {

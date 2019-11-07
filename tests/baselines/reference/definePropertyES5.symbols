@@ -21,5 +21,8 @@ class A {
 
     m() { }
 >m : Symbol(A.m, Decl(definePropertyES5.ts, 5, 13))
+
+    constructor(public readonly y: number) { }
+>y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
 }
 

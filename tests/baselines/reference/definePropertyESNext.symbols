@@ -1,0 +1,45 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyESNext.ts ===
+var x: "p" = "p"
+>x : Symbol(x, Decl(definePropertyESNext.ts, 0, 3))
+
+class A {
+>A : Symbol(A, Decl(definePropertyESNext.ts, 0, 16))
+
+    a = 12
+>a : Symbol(A.a, Decl(definePropertyESNext.ts, 1, 9))
+
+    b
+>b : Symbol(A.b, Decl(definePropertyESNext.ts, 2, 10))
+
+    ["computed"] = 13
+>["computed"] : Symbol(A["computed"], Decl(definePropertyESNext.ts, 3, 5))
+>"computed" : Symbol(A["computed"], Decl(definePropertyESNext.ts, 3, 5))
+
+    ;[x] = 14
+>[x] : Symbol(A[x], Decl(definePropertyESNext.ts, 5, 5))
+>x : Symbol(x, Decl(definePropertyESNext.ts, 0, 3))
+
+    m() { }
+>m : Symbol(A.m, Decl(definePropertyESNext.ts, 5, 13))
+
+    constructor(public readonly y: number) { }
+>y : Symbol(A.y, Decl(definePropertyESNext.ts, 7, 16))
+}
+class B {
+>B : Symbol(B, Decl(definePropertyESNext.ts, 8, 1))
+}
+class C extends B {
+>C : Symbol(C, Decl(definePropertyESNext.ts, 10, 1))
+>B : Symbol(B, Decl(definePropertyESNext.ts, 8, 1))
+
+    z = 1
+>z : Symbol(C.z, Decl(definePropertyESNext.ts, 11, 19))
+
+    constructor(public ka: number) {
+>ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
+
+        super()
+>super : Symbol(B, Decl(definePropertyESNext.ts, 8, 1))
+    }
+}
+

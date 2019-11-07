@@ -6,6 +6,7 @@ class A {
     ["computed"] = 13
     ;[x] = 14
     m() { }
+    constructor(public readonly y: number) { }
 }
 
 
@@ -13,7 +14,13 @@ class A {
 var _a;
 var x = "p";
 var A = /** @class */ (function () {
-    function A() {
+    function A(y) {
+        Object.defineProperty(this, "y", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "a", {
             enumerable: true,
             configurable: true,
@@ -38,6 +45,7 @@ var A = /** @class */ (function () {
             writable: true,
             value: 14
         });
+        this.y = y;
     }
     Object.defineProperty(A.prototype, "m", {
         enumerable: false,
