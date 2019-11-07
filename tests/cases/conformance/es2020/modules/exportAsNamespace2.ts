@@ -1,6 +1,6 @@
-// @module: system
-// @declaration: true
 // @filename: 0.ts
+// @declaration: true
+// @esModuleInterop: true
 export const a = 1;
 export const b = 2;
 

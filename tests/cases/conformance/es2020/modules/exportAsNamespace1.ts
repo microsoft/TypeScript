@@ -1,4 +1,5 @@
 // @filename: 0.ts
+// @declaration: true
 export const a = 1;
 export const b = 2;
 

@@ -1,5 +1,6 @@
-// @module: system
+// @module: amd
 // @declaration: true
+// @esModuleInterop: true
 // @filename: 0.ts
 export const a = 1;
 export const b = 2;
