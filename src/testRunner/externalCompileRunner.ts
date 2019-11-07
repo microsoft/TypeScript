@@ -188,7 +188,7 @@ function stripRushStageNumbers(result: string): string {
 }
 
 function stripWebpackHash(result: string): string {
-    return result.replace(/Hash: \w+/g, "Hash: [redacted]")
+    return result.replace(/Hash: \w+/g, "Hash: [redacted]");
 }
 
 function sanitizeSizes(result: string): string {
