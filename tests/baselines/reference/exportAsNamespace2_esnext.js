@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2020/modules/exportAsNamespace1.ts] ////
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace2_esnext.ts] ////
 
 //// [0.ts]
 export const a = 1;
@@ -16,21 +16,14 @@ foo.ns.a;
 foo.ns.b;
 
 //// [0.js]
-"use strict";
-exports.__esModule = true;
-exports.a = 1;
-exports.b = 2;
+export var a = 1;
+export var b = 2;
 //// [1.js]
-"use strict";
-exports.__esModule = true;
-var ns = require("./0");
-exports.ns = ns;
-exports.ns.a;
-exports.ns.b;
+export * as ns from './0';
+ns.a;
+ns.b;
 //// [2.js]
-"use strict";
-exports.__esModule = true;
-var foo = require("./1");
+import * as foo from './1';
 foo.ns.a;
 foo.ns.b;
 

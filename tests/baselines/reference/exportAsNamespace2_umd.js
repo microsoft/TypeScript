@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2020/modules/exportAsNamespace1_umd.ts] ////
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace2_umd.ts] ////
 
 //// [0.ts]
 export const a = 1;
@@ -31,6 +31,13 @@ foo.ns.b;
     exports.b = 2;
 });
 //// [1.js]
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
@@ -42,12 +49,19 @@ foo.ns.b;
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var ns = require("./0");
+    var ns = __importStar(require("./0"));
     exports.ns = ns;
     exports.ns.a;
     exports.ns.b;
 });
 //// [2.js]
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
@@ -59,7 +73,7 @@ foo.ns.b;
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var foo = require("./1");
+    var foo = __importStar(require("./1"));
     foo.ns.a;
     foo.ns.b;
 });

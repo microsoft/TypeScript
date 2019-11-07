@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2020/modules/exportAsNamespace1_amd.ts] ////
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace2_amd.ts] ////
 
 //// [0.ts]
 export const a = 1;
@@ -31,9 +31,17 @@ define(["require", "exports", "./0"], function (require, exports, ns) {
     exports.ns.b;
 });
 //// [2.js]
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 define(["require", "exports", "./1"], function (require, exports, foo) {
     "use strict";
     exports.__esModule = true;
+    foo = __importStar(foo);
     foo.ns.a;
     foo.ns.b;
 });

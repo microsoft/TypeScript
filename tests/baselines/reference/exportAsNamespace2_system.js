@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2020/modules/exportAsNamespace1_system.ts] ////
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace2_system.ts] ////
 
 //// [0.ts]
 export const a = 1;
