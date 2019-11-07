@@ -2362,10 +2362,10 @@ namespace FourSlash {
             if (codeActions?.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions?.length ?? 0}`);
             }
-            const codeAction = ts.first(codeActions!);
+            const codeAction = ts.first(codeActions);
 
             if (codeAction.description !== options.description) {
-                this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${codeActions![0].description}`);
+                this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${codeActions[0].description}`);
             }
             this.applyChanges(codeAction.changes);
 
