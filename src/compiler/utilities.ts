@@ -8131,10 +8131,6 @@ namespace ts {
         return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function hasJSOrJsonFileExtension(fileName: string): boolean {
-        return supportedJSAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
-    }
-
     export function hasTSFileExtension(fileName: string): boolean {
         return some(supportedTSExtensions, extension => fileExtensionIs(fileName, extension));
     }
