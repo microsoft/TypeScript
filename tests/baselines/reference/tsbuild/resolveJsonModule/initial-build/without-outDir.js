@@ -39,7 +39,8 @@ exports["default"] = hello_json_1["default"].hello;
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "experimentalJsonDeclarationEmit": true
   },
   "files": [
     "src/index.ts", "src/hello.json"
@@ -71,6 +72,7 @@ exports["default"] = hello_json_1["default"].hello;
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
       "skipDefaultLibCheck": true,
+      "experimentalJsonDeclarationEmit": true,
       "configFilePath": "./tsconfig_withFiles.json"
     },
     "referencedMap": {

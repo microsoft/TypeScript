@@ -54,6 +54,7 @@ exports["default"] = hello_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "experimentalJsonDeclarationEmit": true,
       "configFilePath": "../tsconfig_withIncludeAndFiles.json"
     },
     "referencedMap": {

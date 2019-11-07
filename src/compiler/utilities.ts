@@ -3633,7 +3633,10 @@ namespace ts {
         return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
     }
 
-    export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+    export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {
+        if (!hasDeclarationFileOutput(fileName, options)) {
+            return undefined;
+        }
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
         const path = outputDir

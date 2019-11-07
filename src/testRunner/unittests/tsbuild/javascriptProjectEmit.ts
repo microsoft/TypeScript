@@ -276,7 +276,8 @@ namespace ts {
                             "checkJs": true,
                             "resolveJsonModule": true,
                             "esModuleInterop": true,
-                            "declaration": true
+                            "declaration": true,
+                            "experimentalJsonDeclarationEmit": true
                         }
                     }`,
             }, symbolLibContent),

@@ -48,6 +48,7 @@ exports.m = common_1["default"];
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
+      "experimentalJsonDeclarationEmit": true,
       "composite": true,
       "configFilePath": "../../src/sub-project/tsconfig.json"
     },
@@ -127,6 +128,7 @@ exports.getVar = getVar;
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
+      "experimentalJsonDeclarationEmit": true,
       "composite": true,
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
@@ -204,6 +206,7 @@ export declare const val: number;
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "declaration": true,
+      "experimentalJsonDeclarationEmit": true,
       "composite": true,
       "configFilePath": "./tsconfig.json"
     },

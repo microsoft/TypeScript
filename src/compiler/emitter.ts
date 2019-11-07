@@ -143,8 +143,19 @@ namespace ts {
     }
 
     /* @internal */
+    export function hasDeclarationFileOutput(filename: string, options: CompilerOptions) {
+        if (fileExtensionIs(filename, Extension.Json) && !options.experimentalJsonDeclarationEmit) {
+            return false;
+        }
+        return true;
+    }
+
+    /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts));
+        if (!hasDeclarationFileOutput(inputFileName, configFile.options)) {
+            return undefined;
+        }
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
             Extension.Dts
@@ -247,7 +258,10 @@ namespace ts {
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
             if (getEmitDeclarations(configFile.options)) {
-                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                const result = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                if (result) {
+                    return result;
+                }
             }
         }
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(configFile.options);

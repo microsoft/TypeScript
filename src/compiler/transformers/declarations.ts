@@ -2,7 +2,7 @@
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : host.getSourceFiles(), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, filter(file ? [file] : host.getSourceFiles(), f => !!getOutputPathsFor(f, host, /*forcedtsPaths*/ false).declarationFilePath), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 

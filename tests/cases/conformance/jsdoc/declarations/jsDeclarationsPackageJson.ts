@@ -4,6 +4,7 @@
 // @resolveJsonModule: true
 // @outDir: ./out
 // @declaration: true
+// @experimentalJsonDeclarationEmit: true
 // @filename: index.js
 const j = require("./package.json");
 module.exports = j;

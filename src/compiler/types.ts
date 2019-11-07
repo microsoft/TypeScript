@@ -5029,6 +5029,7 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
+        /* @internal */ experimentalJsonDeclarationEmit?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }

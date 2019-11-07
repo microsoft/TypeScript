@@ -4140,6 +4140,10 @@
         "category": "Message",
         "code": 6223
     },
+    "Enables experimental declaration emit for json files.": {
+        "category": "Message",
+        "code": 6224
+    },
 
     "Projects to reference": {
         "category": "Message",

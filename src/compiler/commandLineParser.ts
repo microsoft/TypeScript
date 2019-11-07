@@ -686,6 +686,13 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
+        {
+            name: "experimentalJsonDeclarationEmit",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options, // Under "advanced options" so it's hidden from --init
+            description: Diagnostics.Enables_experimental_declaration_emit_for_json_files,
+            affectsEmit: true,
+        },
 
         // Advanced
         {

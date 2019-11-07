@@ -6,7 +6,8 @@
         "composite": true,
         "resolveJsonModule": true,
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "experimentalJsonDeclarationEmit": true
     },
     "references": [
         {

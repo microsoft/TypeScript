@@ -52,6 +52,7 @@ console.log(foo_json_1.foo);
       "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
+      "experimentalJsonDeclarationEmit": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
@@ -94,6 +95,7 @@ export declare const foo: string;
       "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
+      "experimentalJsonDeclarationEmit": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},

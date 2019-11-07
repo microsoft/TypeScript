@@ -1219,8 +1219,8 @@ namespace ts.server {
             };
         }
 
-        private isValidGeneratedFileWatcher(generateFile: string, watcher: GeneratedFileWatcher) {
-            return this.toPath(generateFile) === watcher.generatedFilePath;
+        private isValidGeneratedFileWatcher(generateFile: string | undefined, watcher: GeneratedFileWatcher) {
+            return generateFile !== undefined && this.toPath(generateFile) === watcher.generatedFilePath;
         }
 
         private clearGeneratedFileWatch() {

@@ -855,7 +855,10 @@ namespace ts {
                             else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 for (const fileName of parsedRef.commandLine.fileNames) {
                                     if (!fileExtensionIs(fileName, Extension.Dts)) {
-                                        processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames()), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                        const outputPath = getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames());
+                                        if (outputPath) {
+                                            processSourceFile(outputPath, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                        }
                                     }
                                 }
                             }
@@ -1434,7 +1437,9 @@ namespace ts {
                     const redirectProject = getProjectReferenceRedirectProject(newSourceFile.fileName);
                     if (redirectProject && !(redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out)) {
                         const redirect = getProjectReferenceOutputName(redirectProject, newSourceFile.fileName);
-                        addFileToFilesByName(newSourceFile, toPath(redirect), /*redirectedPath*/ undefined);
+                        if (redirect) {
+                            addFileToFilesByName(newSourceFile, toPath(redirect), /*redirectedPath*/ undefined);
+                        }
                     }
                 }
                 // Set the file as found during node modules search if it was found that way in old progra,
@@ -2356,13 +2361,15 @@ namespace ts {
                         return undefined;
                     }
                     const redirect = getProjectReferenceOutputName(redirectProject, fileName);
-                    fileName = redirect;
-                    // Once we start redirecting to a file, we can potentially come back to it
-                    // via a back-reference from another file in the .d.ts folder. If that happens we'll
-                    // end up trying to add it to the program *again* because we were tracking it via its
-                    // original (un-redirected) name. So we have to map both the original path and the redirected path
-                    // to the source file we're about to find/create
-                    redirectedPath = toPath(redirect);
+                    if (redirect) {
+                        fileName = redirect;
+                        // Once we start redirecting to a file, we can potentially come back to it
+                        // via a back-reference from another file in the .d.ts folder. If that happens we'll
+                        // end up trying to add it to the program *again* because we were tracking it via its
+                        // original (un-redirected) name. So we have to map both the original path and the redirected path
+                        // to the source file we're about to find/create
+                        redirectedPath = toPath(redirect);
+                    }
                 }
             }
 
@@ -2533,7 +2540,9 @@ namespace ts {
                             forEach(resolvedRef.commandLine.fileNames, fileName => {
                                 if (!fileExtensionIs(fileName, Extension.Dts)) {
                                     const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
-                                    mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                                    if (outputDts) {
+                                        mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                                    }
                                 }
                             });
                         }
