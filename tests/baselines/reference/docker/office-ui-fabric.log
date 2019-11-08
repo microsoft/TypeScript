@@ -12,9 +12,25 @@ Standard output:
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Running Webpack
-@uifabric/example-data: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/example-data/webpack.config.js
-@uifabric/example-data: Webpack version: 4.29.5
+@uifabric/example-data: [XX:XX:XX XM] ■ Running webpack-cli as a node process
+@uifabric/example-data: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
+@uifabric/example-data: Webpack version: 4.X.X
+@uifabric/example-data: Hash: [redacted]
+@uifabric/example-data: Version: webpack 4.X.X
+@uifabric/example-data: Child
+@uifabric/example-data:     Hash: [redacted]
+@uifabric/example-data:     Time: ?s
+@uifabric/example-data:     Built at: XX/XX/XX XX:XX:XX XM
+@uifabric/example-data:                   Asset      Size        Chunks             Chunk Names
+@uifabric/example-data:         example-data.js  X KiB  example-data  [emitted]  example-data
+@uifabric/example-data:     example-data.js.map  X KiB  example-data  [emitted]  example-data
+@uifabric/example-data:     Entrypoint example-data = example-data.js example-data.js.map
+@uifabric/example-data:     [./lib/facepile.js] X KiB {example-data} [built]
+@uifabric/example-data:     [./lib/index.js] X KiB {example-data} [built]
+@uifabric/example-data:     [./lib/listItems.js] X KiB {example-data} [built]
+@uifabric/example-data:     [./lib/lorem.js] X KiB {example-data} [built]
+@uifabric/example-data:     [./lib/people.js] X KiB {example-data} [built]
+@uifabric/example-data:     [./lib/testImages.js] X KiB {example-data} [built]
 @uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
 @uifabric/example-data: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
@@ -40,9 +56,6 @@ Standard output:
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
-@uifabric/set-version: [XX:XX:XX XM] ■ Running Webpack
-@uifabric/set-version: [XX:XX:XX XM] ■ Webpack Config Path: null
-@uifabric/set-version: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
 @uifabric/set-version: Done in ?s.
 @uifabric/webpack-utils: yarn run vX.X.X
 @uifabric/webpack-utils: $ just-scripts build
@@ -63,9 +76,60 @@ Standard output:
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
 @uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running Webpack
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Webpack Config Path: /office-ui-fabric-react/packages/merge-styles/webpack.config.js
-@uifabric/merge-styles: Webpack version: 4.29.5
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running webpack-cli as a node process
+@uifabric/merge-styles: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
+@uifabric/merge-styles: Webpack version: 4.X.X
+@uifabric/merge-styles: Hash: [redacted]
+@uifabric/merge-styles: Version: webpack 4.X.X
+@uifabric/merge-styles: Child
+@uifabric/merge-styles:     Hash: [redacted]
+@uifabric/merge-styles:     Time: ?s
+@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
+@uifabric/merge-styles:                   Asset      Size        Chunks             Chunk Names
+@uifabric/merge-styles:         merge-styles.js  X KiB  merge-styles  [emitted]  merge-styles
+@uifabric/merge-styles:     merge-styles.js.map  X KiB  merge-styles  [emitted]  merge-styles
+@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.js merge-styles.js.map
+@uifabric/merge-styles:     [../set-version/lib/index.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [../set-version/lib/setVersion.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/StyleOptionsState.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/Stylesheet.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/concatStyleSets.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/concatStyleSetsWithProps.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/extractStyleParts.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/fontFace.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/index.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/keyframes.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/mergeStyleSets.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/mergeStyles.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/styleToClassName.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/transforms/kebabRules.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:     [./lib/version.js] X KiB {merge-styles} [built]
+@uifabric/merge-styles:         + 5 hidden modules
+@uifabric/merge-styles: Child
+@uifabric/merge-styles:     Hash: [redacted]
+@uifabric/merge-styles:     Time: ?s
+@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
+@uifabric/merge-styles:                       Asset      Size  Chunks             Chunk Names
+@uifabric/merge-styles:         merge-styles.min.js  X KiB       0  [emitted]  merge-styles
+@uifabric/merge-styles:     merge-styles.min.js.map  X KiB       0  [emitted]  merge-styles
+@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.min.js merge-styles.min.js.map
+@uifabric/merge-styles:     [0] ./lib/index.js + 19 modules X KiB {0} [built]
+@uifabric/merge-styles:         | ./lib/index.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/Stylesheet.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/StyleOptionsState.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/mergeStyles.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/concatStyleSets.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/mergeStyleSets.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/concatStyleSetsWithProps.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/fontFace.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/keyframes.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/version.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/extractStyleParts.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/styleToClassName.js X KiB [built]
+@uifabric/merge-styles:         | ../set-version/lib/index.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/transforms/kebabRules.js X KiB [built]
+@uifabric/merge-styles:         | ./lib/transforms/prefixRules.js X KiB [built]
+@uifabric/merge-styles:         |     + 5 hidden modules
 @uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
 @uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
@@ -80,6 +144,7 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
+@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
@@ -111,9 +176,6 @@ Standard output:
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
 @uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/utilities: [XX:XX:XX XM] ■ Running Webpack
-@uifabric/utilities: [XX:XX:XX XM] ■ Webpack Config Path: null
-@uifabric/utilities: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
 @uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
 @uifabric/utilities:  PASS  src/focus.test.tsx
 @uifabric/utilities:  PASS  src/styled.test.tsx
@@ -176,7 +238,15 @@ lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/utilities: Warning: You have changed the public API signature for this project. Please copy the file "temp/utilities.api.md" to "etc/utilities.api.md", or perform a local build (which does this automatically). See the Git repo documentation for more info.
 @uifabric/utilities: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
-@uifabric/utilities: [XX:XX:XX XM] x The public API file is out of date. Please run the API snapshot and commit the updated API file.
+@uifabric/utilities: [XX:XX:XX XM] x Error: The public API file is out of date. Please run the API snapshot and commit the updated API file.
+@uifabric/utilities:     at apiExtractorVerify (/office-ui-fabric-react/node_modules/just-scripts/lib/tasks/apiExtractorTask.js:26:19)
+@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:13:36)
+@uifabric/utilities:     at verify-api-extractor (/office-ui-fabric-react/node_modules/undertaker/lib/set-task.js:13:15)
+@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:10:16)
+@uifabric/utilities:     at bound (domain.js:420:14)
+@uifabric/utilities:     at runBound (domain.js:433:12)
+@uifabric/utilities:     at asyncRunner (/office-ui-fabric-react/node_modules/async-done/index.js:55:18)
+@uifabric/utilities:     at processTicksAndRejections (internal/process/task_queues.js:75:11)
 @uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
 @uifabric/utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @uifabric/utilities: error Command failed with exit code 1.
