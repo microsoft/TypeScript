@@ -222,7 +222,8 @@ function sanitizeVersionSpecifiers(result: string): string {
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
         .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
         .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X")
-        .replace(/webpack \d+\.\d+\.\d+/g, "$1.X.X");
+        .replace(/webpack (\d+)\.\d+\.\d+/g, "webpack $1.X.X")
+        .replace(/Webpack version: (\d+)\.\d+\.\d+/g, "Webpack version: $1.X.X");
 }
 
 /**
