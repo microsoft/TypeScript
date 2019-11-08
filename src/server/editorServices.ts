@@ -362,6 +362,12 @@ namespace ts.server {
         RootOfInferredProjectFalse = "Open file was set as not inferred root",
     }
 
+    const enum ConfigFileActionResult {
+        Continue,
+        Return,
+        Break,
+    }
+
     /*@internal*/
     interface ConfigFileExistenceInfo {
         /**
@@ -1637,7 +1643,7 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
+        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => ConfigFileActionResult | void) {
             if (this.syntaxOnly) {
                 return undefined;
             }
@@ -1658,12 +1664,23 @@ namespace ts.server {
                 if (searchInDirectory) {
                     const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                     const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                    let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
-                    if (result) return tsconfigFileName;
+                    const tsResult = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
+                    if (tsResult === ConfigFileActionResult.Return) {
+                        return tsconfigFileName;
+                    }
 
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                    result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
-                    if (result) return jsconfigFileName;
+                    const jsResult = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
+                    if (jsResult === ConfigFileActionResult.Return) {
+                        return jsconfigFileName;
+                    }
+
+                    if (tsResult === ConfigFileActionResult.Break || jsResult === ConfigFileActionResult.Break) {
+                        break;
+                    }
+
+                    Debug.assert(!tsResult);
+                    Debug.assert(!jsResult);
                 }
 
                 const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
@@ -1678,7 +1695,7 @@ namespace ts.server {
         /*@internal*/
         findDefaultConfiguredProject(info: ScriptInfo) {
             if (!info.isScriptOpen()) return undefined;
-            const configFileName = this.getConfigFileNameForFile(info);
+            const configFileName = this.getConfigFileNameForFile(info, /*stopAtNodeModules*/ false);
             return configFileName &&
                 this.findConfiguredProjectByProjectName(configFileName);
         }
@@ -1693,11 +1710,15 @@ namespace ts.server {
          * If script info is passed in, it is asserted to be open script info
          * otherwise just file name
          */
-        private getConfigFileNameForFile(info: OpenScriptInfoOrClosedOrConfigFileInfo) {
+        private getConfigFileNameForFile(info: OpenScriptInfoOrClosedOrConfigFileInfo, stopAtNodeModules: boolean) {
             if (isOpenScriptInfo(info)) Debug.assert(info.isScriptOpen());
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) =>
-                this.configFileExists(configFileName, canonicalConfigFilePath, info));
+                this.configFileExists(configFileName, canonicalConfigFilePath, info)
+                    ? ConfigFileActionResult.Return
+                    : stopAtNodeModules && isNodeModulesDirectory(getDirectoryPath(canonicalConfigFilePath) as Path)
+                        ? ConfigFileActionResult.Break
+                        : ConfigFileActionResult.Continue);
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
             }
@@ -2706,7 +2727,7 @@ namespace ts.server {
                 // we first detect if there is already a configured project created for it: if so,
                 // we re- read the tsconfig file content and update the project only if we havent already done so
                 // otherwise we create a new one.
-                const configFileName = this.getConfigFileNameForFile(info);
+                const configFileName = this.getConfigFileNameForFile(info, /*stopAtNodeModules*/ true);
                 if (configFileName) {
                     const project = this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
                     if (!updatedProjects.has(configFileName)) {
@@ -2803,7 +2824,7 @@ namespace ts.server {
             if (!this.getScriptInfo(fileName) && !this.host.fileExists(fileName)) return undefined;
 
             const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
-            const configFileName = this.getConfigFileNameForFile(originalFileInfo);
+            const configFileName = this.getConfigFileNameForFile(originalFileInfo, /*stopAtNodeModules*/ false);
             if (!configFileName) return undefined;
 
             const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
@@ -2857,7 +2878,7 @@ namespace ts.server {
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             let defaultConfigProject: ConfiguredProject | undefined;
             if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
-                configFileName = this.getConfigFileNameForFile(info);
+                configFileName = this.getConfigFileNameForFile(info, /*stopAtNodeModules*/ true);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
@@ -2920,7 +2941,7 @@ namespace ts.server {
                     fileName: project.getConfigFilePath(),
                     path: info.path,
                     configFileInfo: true
-                });
+                }, /*stopAtNodeModules*/ true);
                 if (!configFileName) return;
 
                 // find or delay load the project
