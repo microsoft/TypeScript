@@ -1471,7 +1471,8 @@ namespace ts.server {
                     case Ternary.True:
                         const packageJsonFileName = combinePaths(directory, "package.json");
                         watchPackageJsonFile(packageJsonFileName);
-                        result.push(Debug.assertDefined(packageJsonCache.getInDirectory(directory)));
+                        const info = packageJsonCache.getInDirectory(directory);
+                        if (info) result.push(info);
                 }
                 if (rootPath && rootPath === toPath(directory)) {
                     return true;
