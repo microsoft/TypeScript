@@ -420,10 +420,6 @@ namespace ts {
             return cache && cache.get(moduleName);
         }
 
-        function isNodeModulesDirectory(dirPath: Path) {
-            return endsWith(dirPath, "/node_modules");
-        }
-
         function isNodeModulesAtTypesDirectory(dirPath: Path) {
             return endsWith(dirPath, "/node_modules/@types");
         }
