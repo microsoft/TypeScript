@@ -4164,6 +4164,10 @@
         "category": "Message",
         "code": 6226
     },
+    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
+        "category": "Message",
+        "code": 6227
+    },
 
     "Projects to reference": {
         "category": "Message",

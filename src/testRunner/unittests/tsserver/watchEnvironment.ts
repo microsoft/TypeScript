@@ -6,7 +6,11 @@ namespace ts.projectSystem {
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
-                content: "{}"
+                content: JSON.stringify({
+                    compilerOptions: {
+                        synchronousWatchDirectory: true
+                    }
+                })
             };
             const index: File = {
                 path: `${projectSrcFolder}/index.ts`,

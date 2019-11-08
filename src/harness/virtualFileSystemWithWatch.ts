@@ -423,6 +423,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                     this.watchFileWorker.bind(this),
                 getModifiedTime: this.getModifiedTime.bind(this),
                 setTimeout: this.setTimeout.bind(this),
+                clearTimeout: this.clearTimeout.bind(this),
                 fsWatch: this.fsWatch.bind(this),
                 fileExists: this.fileExists.bind(this),
                 useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
