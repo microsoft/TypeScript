@@ -543,3 +543,25 @@ function expression(): Animal {
     }
 }
 
+// Repro from #34840
+
+function foo() {
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 207, 1))
+
+    const foo: number | undefined = 0;
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 212, 9))
+
+    while (true) {
+        const stats = foo;
+>stats : Symbol(stats, Decl(exhaustiveSwitchStatements1.ts, 214, 13))
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 212, 9))
+
+        switch (stats) {
+>stats : Symbol(stats, Decl(exhaustiveSwitchStatements1.ts, 214, 13))
+
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
