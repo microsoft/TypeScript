@@ -162,24 +162,24 @@ namespace ts {
             }
 
             const target = createConditional(
-                createNotNullCondition(capturedLeft),
-                rightExpression,
+                createNotNullCondition(capturedLeft, /*negate*/ true),
                 createVoidZero(),
+                rightExpression,
             );
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
-        function createNotNullCondition(expression: CapturedExpression) {
+        function createNotNullCondition(expression: CapturedExpression, negate?: boolean) {
             return createBinary(
                 createBinary(
                     expression.expression,
-                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createToken(negate ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                     createNull()
                 ),
-                createToken(SyntaxKind.AmpersandAmpersandToken),
+                createToken(negate ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
                 createBinary(
                     expression.variable,
-                    createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    createToken(negate ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                     createVoidZero()
                 )
             );

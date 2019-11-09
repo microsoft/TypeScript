@@ -42,33 +42,33 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-(obj !== null && obj !== void 0 ? obj["a"] : void 0)++;
-(obj !== null && obj !== void 0 ? obj.a["b"] : void 0)++;
-(obj !== null && obj !== void 0 ? obj["a"] : void 0)--;
-(obj !== null && obj !== void 0 ? obj.a["b"] : void 0)--;
-++(obj !== null && obj !== void 0 ? obj["a"] : void 0);
-++(obj !== null && obj !== void 0 ? obj.a["b"] : void 0);
---(obj !== null && obj !== void 0 ? obj["a"] : void 0);
---(obj !== null && obj !== void 0 ? obj.a["b"] : void 0);
-obj !== null && obj !== void 0 ? obj["a"] : void 0 = 1;
-obj !== null && obj !== void 0 ? obj.a["b"] : void 0 = 1;
-obj !== null && obj !== void 0 ? obj["a"] : void 0 += 1;
-obj !== null && obj !== void 0 ? obj.a["b"] : void 0 += 1;
-for (obj !== null && obj !== void 0 ? obj["a"] : void 0 in {})
+(obj === null || obj === void 0 ? void 0 : obj["a"])++;
+(obj === null || obj === void 0 ? void 0 : obj.a["b"])++;
+(obj === null || obj === void 0 ? void 0 : obj["a"])--;
+(obj === null || obj === void 0 ? void 0 : obj.a["b"])--;
+++(obj === null || obj === void 0 ? void 0 : obj["a"]);
+++(obj === null || obj === void 0 ? void 0 : obj.a["b"]);
+--(obj === null || obj === void 0 ? void 0 : obj["a"]);
+--(obj === null || obj === void 0 ? void 0 : obj.a["b"]);
+obj === null || obj === void 0 ? void 0 : obj["a"] = 1;
+obj === null || obj === void 0 ? void 0 : obj.a["b"] = 1;
+obj === null || obj === void 0 ? void 0 : obj["a"] += 1;
+obj === null || obj === void 0 ? void 0 : obj.a["b"] += 1;
+for (obj === null || obj === void 0 ? void 0 : obj["a"] in {})
     ;
-for (obj !== null && obj !== void 0 ? obj.a["b"] : void 0 in {})
+for (obj === null || obj === void 0 ? void 0 : obj.a["b"] in {})
     ;
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    obj !== null && obj !== void 0 ? obj["a"] : void 0 = _a[_i];
+    obj === null || obj === void 0 ? void 0 : obj["a"] = _a[_i];
     ;
 }
 for (var _b = 0, _c = []; _b < _c.length; _b++) {
-    obj !== null && obj !== void 0 ? obj.a["b"] : void 0 = _c[_b];
+    obj === null || obj === void 0 ? void 0 : obj.a["b"] = _c[_b];
     ;
 }
-(obj !== null && obj !== void 0 ? obj["a"] : void 0 = { a: 1 }.a);
-(obj !== null && obj !== void 0 ? obj.a["b"] : void 0 = { a: 1 }.a);
-(obj !== null && obj !== void 0 ? obj["a"] : void 0 = __rest({ a: 1 }, []));
-(obj !== null && obj !== void 0 ? obj.a["b"] : void 0 = __rest({ a: 1 }, []));
-obj !== null && obj !== void 0 ? obj["a"] : void 0 = [].slice(0);
-obj !== null && obj !== void 0 ? obj.a["b"] : void 0 = [].slice(0);
+(obj === null || obj === void 0 ? void 0 : obj["a"] = { a: 1 }.a);
+(obj === null || obj === void 0 ? void 0 : obj.a["b"] = { a: 1 }.a);
+(obj === null || obj === void 0 ? void 0 : obj["a"] = __rest({ a: 1 }, []));
+(obj === null || obj === void 0 ? void 0 : obj.a["b"] = __rest({ a: 1 }, []));
+obj === null || obj === void 0 ? void 0 : obj["a"] = [].slice(0);
+obj === null || obj === void 0 ? void 0 : obj.a["b"] = [].slice(0);

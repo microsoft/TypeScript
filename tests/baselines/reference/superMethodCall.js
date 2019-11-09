@@ -30,7 +30,7 @@ class Base {
 class Derived extends Base {
     method() {
         var _a;
-        return (_a = super.method) !== null && _a !== void 0 ? _a.call(this) : void 0;
+        return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this);
     }
     asyncMethod() {
         const _super = Object.create(null, {
@@ -38,7 +38,7 @@ class Derived extends Base {
         });
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            return (_a = _super.method) !== null && _a !== void 0 ? _a.call(this) : void 0;
+            return (_a = _super.method) === null || _a === void 0 ? void 0 : _a.call(this);
         });
     }
 }
