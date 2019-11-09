@@ -69,9 +69,16 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                // `a.b` -> { expression: `(_a = a).b`, thisArg: `_a` }
-                thisArg = createTempVariable(hoistVariableDeclaration);
-                expression = createParen(createAssignment(thisArg, expression));
+                if (isSuperProperty(node)) {
+                    // `super.b` -> { expression: `a.b`, thisArg: `this` }
+                    thisArg = createThis();
+                    expression = expression;
+                }
+                else {
+                    // `a.b` -> { expression: `(_a = a).b`, thisArg: `_a` }
+                    thisArg = createTempVariable(hoistVariableDeclaration);
+                    expression = createParen(createAssignment(thisArg, expression));
+                }
             }
 
             expression = updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier));
@@ -89,9 +96,16 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                // `a[b]` -> { expression: `(_a = a)[b]`, thisArg: `_a` }
-                thisArg = createTempVariable(hoistVariableDeclaration);
-                expression = createParen(createAssignment(thisArg, expression));
+                if (isSuperProperty(node)) {
+                    // `super.b` -> { expression: `a.b`, thisArg: `this` }
+                    thisArg = createThis();
+                    expression = expression;
+                }
+                else {
+                    // `a[b]` -> { expression: `(_a = a)[b]`, thisArg: `_a` }
+                    thisArg = createTempVariable(hoistVariableDeclaration);
+                    expression = createParen(createAssignment(thisArg, expression));
+                }
             }
 
             expression = updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));

@@ -3593,6 +3593,7 @@ namespace ts {
         // overloads are TypeScript syntax.
         if (node.decorators
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || node.questionToken
             || node.typeParameters
             || node.type
             || !node.body) {
