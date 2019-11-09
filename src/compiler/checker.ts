@@ -19294,9 +19294,6 @@ namespace ts {
                     else if (containsMatchingReferenceDiscriminant(reference, expr)) {
                         type = declaredType;
                     }
-                    else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
-                        return unreachableNeverType;
-                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -19305,11 +19302,17 @@ namespace ts {
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let seenIncomplete = false;
+                let bypassFlow: FlowSwitchClause | undefined;
                 for (const antecedent of flow.antecedents!) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
                         // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
+                        continue;
+                    }
+                    if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (<FlowSwitchClause>antecedent).clauseStart === (<FlowSwitchClause>antecedent).clauseEnd) {
+                        // The antecedent is the bypass branch of a potentially exhaustive switch statement.
+                        bypassFlow = <FlowSwitchClause>antecedent;
                         continue;
                     }
                     const flowType = getTypeAtFlowNode(antecedent);
@@ -19330,6 +19333,25 @@ namespace ts {
                     }
                     if (isIncomplete(flowType)) {
                         seenIncomplete = true;
+                    }
+                }
+                if (bypassFlow) {
+                    const flowType = getTypeAtFlowNode(bypassFlow.antecedent);
+                    const type = getTypeFromFlowType(flowType);
+                    // If the bypass flow contributes a type we haven't seen yet and the switch statement
+                    // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
+                    // the risk of circularities, we only want to perform them when they make a difference.
+                    if (!contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.switchStatement)) {
+                        if (type === declaredType && declaredType === initialType) {
+                            return type;
+                        }
+                        antecedentTypes.push(type);
+                        if (!isTypeSubsetOf(type, declaredType)) {
+                            subtypeReduction = true;
+                        }
+                        if (isIncomplete(flowType)) {
+                            seenIncomplete = true;
+                        }
                     }
                 }
                 return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);

@@ -210,3 +210,16 @@ function expression(): Animal {
         case Animal.CAT: return Animal.CAT
     }
 }
+
+// Repro from #34840
+
+function foo() {
+    const foo: number | undefined = 0;
+    while (true) {
+        const stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}

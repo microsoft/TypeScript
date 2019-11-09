@@ -634,3 +634,31 @@ function expression(): Animal {
     }
 }
 
+// Repro from #34840
+
+function foo() {
+>foo : () => void
+
+    const foo: number | undefined = 0;
+>foo : number | undefined
+>0 : 0
+
+    while (true) {
+>true : true
+
+        const stats = foo;
+>stats : number
+>foo : number
+
+        switch (stats) {
+>stats : number
+
+            case 1: break;
+>1 : 1
+
+            case 2: break;
+>2 : 2
+        }
+    }
+}
+

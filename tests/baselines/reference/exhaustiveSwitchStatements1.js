@@ -208,6 +208,19 @@ function expression(): Animal {
     }
 }
 
+// Repro from #34840
+
+function foo() {
+    const foo: number | undefined = 0;
+    while (true) {
+        const stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -405,6 +418,17 @@ function expression() {
         case Animal.CAT: return Animal.CAT;
     }
 }
+// Repro from #34840
+function foo() {
+    var foo = 0;
+    while (true) {
+        var stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
 
 
 //// [exhaustiveSwitchStatements1.d.ts]
@@ -469,3 +493,4 @@ declare const zoo: {
     animal: Animal;
 } | undefined;
 declare function expression(): Animal;
+declare function foo(): void;
