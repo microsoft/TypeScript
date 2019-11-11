@@ -36,9 +36,11 @@ class C extends B {
 >C : C
 >B : B
 
-    z = 1
+    z = this.ka
 >z : number
->1 : 1
+>this.ka : number
+>this : this
+>ka : number
 
     constructor(public ka: number) {
 >ka : number
@@ -47,5 +49,10 @@ class C extends B {
 >super() : void
 >super : typeof B
     }
+    ki = this.ka
+>ki : number
+>this.ka : number
+>this : this
+>ka : number
 }
 

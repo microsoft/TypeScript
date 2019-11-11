@@ -32,8 +32,11 @@ class C extends B {
 >C : Symbol(C, Decl(definePropertyESNext.ts, 10, 1))
 >B : Symbol(B, Decl(definePropertyESNext.ts, 8, 1))
 
-    z = 1
+    z = this.ka
 >z : Symbol(C.z, Decl(definePropertyESNext.ts, 11, 19))
+>this.ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
+>this : Symbol(C, Decl(definePropertyESNext.ts, 10, 1))
+>ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
 
     constructor(public ka: number) {
 >ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
@@ -41,5 +44,10 @@ class C extends B {
         super()
 >super : Symbol(B, Decl(definePropertyESNext.ts, 8, 1))
     }
+    ki = this.ka
+>ki : Symbol(C.ki, Decl(definePropertyESNext.ts, 15, 5))
+>this.ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
+>this : Symbol(C, Decl(definePropertyESNext.ts, 10, 1))
+>ka : Symbol(C.ka, Decl(definePropertyESNext.ts, 13, 16))
 }
 

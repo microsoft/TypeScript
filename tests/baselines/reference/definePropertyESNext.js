@@ -11,10 +11,11 @@ class A {
 class B {
 }
 class C extends B {
-    z = 1
+    z = this.ka
     constructor(public ka: number) {
         super()
     }
+    ki = this.ka
 }
 
 
@@ -35,9 +36,10 @@ class B {
 }
 class C extends B {
     ka;
-    z = 1;
+    z = this.ka;
     constructor(ka) {
         super();
         this.ka = ka;
     }
+    ki = this.ka;
 }

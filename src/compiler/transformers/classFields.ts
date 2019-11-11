@@ -326,10 +326,6 @@ namespace ts {
             if (constructor) {
                 indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
             }
-            if (useDefineForClassFields) {
-                addPropertyStatements(statements, properties, createThis());
-            }
-
             // Add the property initializers. Transforms this:
             //
             //  public x = 1;
@@ -341,23 +337,18 @@ namespace ts {
             //  }
             //
             if (constructor?.body) {
-                let parameterPropertyDeclarationCount = 0;
-                for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {
-                        parameterPropertyDeclarationCount++;
-                    }
-                    else {
-                        break;
-                    }
+                let afterParameterProperties = findIndex(constructor.body.statements, s => !isParameterPropertyDeclaration(getOriginalNode(s), constructor), indexOfFirstStatement);
+                if (afterParameterProperties === -1) {
+                    afterParameterProperties = constructor.body.statements.length;
                 }
-                if (parameterPropertyDeclarationCount > 0) {
-                    addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, parameterPropertyDeclarationCount));
-                    indexOfFirstStatement += parameterPropertyDeclarationCount;
+                if (afterParameterProperties > indexOfFirstStatement) {
+                    if (!useDefineForClassFields) {
+                        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, afterParameterProperties - indexOfFirstStatement));
+                    }
+                    indexOfFirstStatement = afterParameterProperties;
                 }
             }
-            if (!useDefineForClassFields) {
-                addPropertyStatements(statements, properties, createThis());
-            }
+            addPropertyStatements(statements, properties, createThis());
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {
@@ -427,7 +418,9 @@ namespace ts {
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
 
-            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : createVoidZero();
+            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
+                : hasModifier(getOriginalNode(property), ModifierFlags.ParameterPropertyModifier) && isIdentifier(propertyName) ? propertyName
+                : createVoidZero();
             if (emitAssignment) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
                 return createAssignment(memberAccess, initializer);

@@ -1,12 +1,13 @@
 //// [definePropertyES5.ts]
 var x: "p" = "p"
 class A {
-    a = 12
+    a = this.y
     b
     ["computed"] = 13
     ;[x] = 14
     m() { }
     constructor(public readonly y: number) { }
+    z = this.y
 }
 
 
@@ -19,13 +20,13 @@ var A = /** @class */ (function () {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: void 0
+            value: y
         });
         Object.defineProperty(this, "a", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: 12
+            value: this.y
         });
         Object.defineProperty(this, "b", {
             enumerable: true,
@@ -45,7 +46,12 @@ var A = /** @class */ (function () {
             writable: true,
             value: 14
         });
-        this.y = y;
+        Object.defineProperty(this, "z", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: this.y
+        });
     }
     Object.defineProperty(A.prototype, "m", {
         enumerable: false,
