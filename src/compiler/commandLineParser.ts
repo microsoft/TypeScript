@@ -1088,11 +1088,11 @@ namespace ts {
     }
 
     /** Tuple with error messages for 'unknown compiler option', 'option requires type' */
-    type ParseCommandLineWorkerDiagnostics = [DiagnosticMessage, DiagnosticMessage];
+    type ParseCommandLineWorkerDiagnostics = [DiagnosticMessage, DiagnosticMessage, DiagnosticMessage];
 
     function parseCommandLineWorker(
         getOptionNameMap: () => OptionNameMap,
-        [unknownOptionDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
+        [unknownOptionDiagnostic, unknownDidYouMeanDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
         commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
         const options = {} as OptionsBase;
@@ -1160,7 +1160,13 @@ namespace ts {
                         }
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(unknownOptionDiagnostic, s));
+                        const possibleOption = getSpellingSuggestion(s, optionDeclarations, opt => `--${opt.name}`);
+                        if (possibleOption) {
+                            errors.push(createCompilerDiagnostic(unknownDidYouMeanDiagnostic, s, possibleOption.name));
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic(unknownOptionDiagnostic, s));
+                        }
                     }
                 }
                 else {
@@ -1206,6 +1212,7 @@ namespace ts {
     export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
         return parseCommandLineWorker(getOptionNameMap, [
             Diagnostics.Unknown_compiler_option_0,
+            Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
             Diagnostics.Compiler_option_0_expects_an_argument
         ], commandLine, readFile);
     }
@@ -1241,6 +1248,7 @@ namespace ts {
         const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
         const { options, fileNames: projects, errors } = parseCommandLineWorker(returnBuildOptionNameMap, [
             Diagnostics.Unknown_build_option_0,
+            Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
             Diagnostics.Build_option_0_requires_a_value_of_type_1
         ], args);
         const buildOptions = options as BuildOptions;

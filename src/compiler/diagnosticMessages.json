@@ -3177,6 +3177,10 @@
         "category": "Error",
         "code": 5024
     },
+    "Unknown compiler option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5025
+    },
     "Could not write file '{0}': {1}.": {
         "category": "Error",
         "code": 5033
