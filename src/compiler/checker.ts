@@ -10852,7 +10852,8 @@ namespace ts {
                     }
                     isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                 }
-                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
+                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                if (isRequireAlias || isImportTypeWithQualifier) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
