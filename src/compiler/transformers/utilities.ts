@@ -314,7 +314,7 @@ namespace ts {
      */
     function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
         return isPropertyDeclaration(member)
-            && (!!member.initializer || !requireInitializer)
+            && (!!member.initializer || !requireInitializer && !(getOriginalNode(member).flags & NodeFlags.Ambient))
             && hasStaticModifier(member) === isStatic;
     }
 
