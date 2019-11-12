@@ -10818,7 +10818,8 @@ namespace ts {
                     isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                 }
                 const isDelayedMergeClass = symbol !== valueType.symbol && getMergedSymbol(symbol) === valueType.symbol;
-                if (isRequireAlias || node.kind === SyntaxKind.ImportType || isDelayedMergeClass) {
+                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                if (isRequireAlias || isImportTypeWithQualifier || isDelayedMergeClass) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
