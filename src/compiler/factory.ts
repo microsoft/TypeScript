@@ -2327,10 +2327,11 @@ namespace ts {
             : node;
     }
 
-    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression) {
+    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression, isTypeOnly = false) {
         const node = <ExportDeclaration>createSynthesizedNode(SyntaxKind.ExportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
+        node.isTypeOnly = isTypeOnly;
         node.exportClause = exportClause;
         node.moduleSpecifier = moduleSpecifier;
         return node;
@@ -2341,12 +2342,14 @@ namespace ts {
         decorators: readonly Decorator[] | undefined,
         modifiers: readonly Modifier[] | undefined,
         exportClause: NamedExports | undefined,
-        moduleSpecifier: Expression | undefined) {
+        moduleSpecifier: Expression | undefined,
+        isTypeOnly = false) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
+            || node.isTypeOnly !== isTypeOnly
             || node.exportClause !== exportClause
             || node.moduleSpecifier !== moduleSpecifier
-            ? updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier), node)
+            ? updateNode(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier, isTypeOnly), node)
             : node;
     }
 

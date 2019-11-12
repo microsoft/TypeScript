@@ -2458,6 +2458,7 @@ namespace ts {
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
+        isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
         exportClause?: NamedExports;
         /** If this is not a StringLiteral it will be a grammar error. */

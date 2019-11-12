@@ -540,7 +540,7 @@ namespace ts {
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
-            if (symbolFlags & SymbolFlags.Alias) {
+            if (symbolFlags & (SymbolFlags.Alias | SymbolFlags.TypeAlias)) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                 }
@@ -2464,9 +2464,10 @@ namespace ts {
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    return bindImportOrExportSpecifier(node as ImportSpecifier | ExportSpecifier);
                 case SyntaxKind.NamespaceExportDeclaration:
                     return bindNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportClause:
@@ -2553,6 +2554,14 @@ namespace ts {
                     setValueDeclaration(symbol, node);
                 }
             }
+        }
+
+        function bindImportOrExportSpecifier(node: ImportSpecifier | ExportSpecifier) {
+            // TODO: look for `type` keyword on specifiers, import declaration
+            const isTypeOnly = tryCast(node, isExportSpecifier)?.parent.parent.isTypeOnly;
+            const includeFlags = isTypeOnly ? SymbolFlags.TypeAlias : SymbolFlags.Alias;
+            const excludeFlags = isTypeOnly ? SymbolFlags.TypeAliasExcludes : SymbolFlags.AliasExcludes;
+            return declareSymbolAndAddToSymbolTable(<Declaration>node, includeFlags, excludeFlags);
         }
 
         function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {

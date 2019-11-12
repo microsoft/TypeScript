@@ -1483,7 +1483,10 @@ namespace ts {
                     if (token() === SyntaxKind.DefaultKeyword) {
                         return lookAhead(nextTokenCanFollowDefaultKeyword);
                     }
-                    return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
+                    if (token() === SyntaxKind.TypeKeyword) {
+                        return lookAhead(nextTokenCanFollowExportModifier);
+                    }
+                    return canFollowExportModifier();
                 case SyntaxKind.DefaultKeyword:
                     return nextTokenCanFollowDefaultKeyword();
                 case SyntaxKind.StaticKeyword:
@@ -1494,6 +1497,18 @@ namespace ts {
                 default:
                     return nextTokenIsOnSameLineAndCanFollowModifier();
             }
+        }
+
+        function canFollowExportModifier(): boolean {
+            return token() !== SyntaxKind.AsteriskToken
+                && token() !== SyntaxKind.AsKeyword
+                && token() !== SyntaxKind.OpenBraceToken
+                && canFollowModifier();
+        }
+
+        function nextTokenCanFollowExportModifier(): boolean {
+            nextToken();
+            return canFollowExportModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -5421,10 +5436,13 @@ namespace ts {
                         return token() === SyntaxKind.StringLiteral || token() === SyntaxKind.AsteriskToken ||
                             token() === SyntaxKind.OpenBraceToken || tokenIsIdentifierOrKeyword(token());
                     case SyntaxKind.ExportKeyword:
-                        nextToken();
-                        if (token() === SyntaxKind.EqualsToken || token() === SyntaxKind.AsteriskToken ||
-                            token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.DefaultKeyword ||
-                            token() === SyntaxKind.AsKeyword) {
+                        let currentToken = nextToken();
+                        if (currentToken === SyntaxKind.TypeKeyword) {
+                            currentToken = lookAhead(nextToken);
+                        }
+                        if (currentToken === SyntaxKind.EqualsToken || currentToken === SyntaxKind.AsteriskToken ||
+                            currentToken === SyntaxKind.OpenBraceToken || currentToken === SyntaxKind.DefaultKeyword ||
+                            currentToken === SyntaxKind.AsKeyword) {
                             return true;
                         }
                         continue;
@@ -6459,6 +6477,7 @@ namespace ts {
 
         function parseExportDeclaration(node: ExportDeclaration): ExportDeclaration {
             node.kind = SyntaxKind.ExportDeclaration;
+            node.isTypeOnly = parseOptional(SyntaxKind.TypeKeyword);
             if (parseOptional(SyntaxKind.AsteriskToken)) {
                 parseExpected(SyntaxKind.FromKeyword);
                 node.moduleSpecifier = parseModuleSpecifier();

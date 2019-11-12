@@ -2838,6 +2838,10 @@ namespace ts {
          * @param node The export declaration node.
          */
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+            if (node.isTypeOnly) {
+                return undefined;
+            }
+
             if (!node.exportClause) {
                 // Elide a star export if the module it references does not export a value.
                 return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier!) ? node : undefined;

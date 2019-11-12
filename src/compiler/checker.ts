@@ -2444,7 +2444,7 @@ namespace ts {
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
             const symbol = getSymbolOfNode(node);
-            const target = resolveAlias(symbol);
+            const target = resolveSymbol(symbol);
             if (target) {
                 const markAlias = target === unknownSymbol ||
                     ((target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
@@ -8069,9 +8069,17 @@ namespace ts {
                 if (!declaration) {
                     return Debug.fail("Type alias symbol with no valid declaration found");
                 }
-                const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
-                // If typeNode is missing, we will error in checkJSDocTypedefTag.
-                let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
+
+                let type: Type;
+                if (isTypeOnlyExportSpecifier(declaration)) {
+                    const resolvedSymbol = resolveName(declaration, symbol.escapedName, SymbolFlags.Type, undefined, undefined, true);
+                    type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : errorType;
+                }
+                else {
+                    const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
+                    // If typeNode is missing, we will error in checkJSDocTypedefTag.
+                    type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
+                }
 
                 if (popTypeResolution()) {
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
@@ -32691,7 +32699,9 @@ namespace ts {
         }
 
         function checkExportSpecifier(node: ExportSpecifier) {
-            checkAliasSymbol(node);
+            if (!isTypeOnlyExportSpecifier(node)) {
+                checkAliasSymbol(node);
+            }
             if (getEmitDeclarations(compilerOptions)) {
                 collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
             }
