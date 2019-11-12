@@ -14531,25 +14531,24 @@ namespace ts {
              * if we have found an elaboration, or we should ignore
              * any other elaborations when relating the `source` and
              * `target` types.
-             *
-             * @param source
-             * @param target
-             * @param reportErrors
              */
             function tryElaborateArrayLikeErrors(source: Type, target: Type, reportErrors: boolean): boolean {
-                if (isTupleLikeType(source)) {
-                    const sourceTuple: TupleType | undefined  = (source as TupleTypeReference).target;
-                    if (sourceTuple && sourceTuple.readonly && isArrayOrTupleLikeType(target) &&
-                        (!isReadonlyArrayType(target) || isTupleType(target) && !target.target.readonly)) {
+                if (isTupleType(source)) {
+                    // If source is a readonly tuple
+                    // and target is an array or tuple
+                    // and target is not a readonly array
+                    // and target is not a readonly tuple
+                    if (source.target?.readonly && (isTupleType(target) || isArrayType(target)) &&
+                        !isReadonlyArrayType(target) && !(isTupleType(target) && target.target.readonly)) {
                         if (reportErrors) {
                             reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
                         }
                         return false;
                     }
-                    return isArrayLikeType(target);
+                    return isTupleType(target) || isArrayType(target);
                 }
-                if (isTupleLikeType(target)) {
-                    return isArrayLikeType(source);
+                if (isTupleType(target)) {
+                    return isArrayType(source);
                 }
                 if (isReadonlyArrayType(source) && isArrayType(target) && !isReadonlyArrayType(target)) {
                     if (reportErrors) {
