@@ -693,13 +693,9 @@ node_modules/npm/lib/run-script.js(35,22): error TS2339: Property 'localPrefix' 
 node_modules/npm/lib/run-script.js(46,26): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(56,20): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(66,28): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/run-script.js(77,12): error TS2769: No overload matches this call.
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Type 'string' is not assignable to type 'never'.
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Type 'string' is not assignable to type 'never'.
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Type 'string' is not assignable to type 'never'.
+node_modules/npm/lib/run-script.js(77,22): error TS2322: Type 'string' is not assignable to type 'never'.
+node_modules/npm/lib/run-script.js(77,33): error TS2322: Type 'string' is not assignable to type 'never'.
+node_modules/npm/lib/run-script.js(77,36): error TS2322: Type 'string' is not assignable to type 'never'.
 node_modules/npm/lib/run-script.js(94,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(99,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/run-script.js(148,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -879,11 +875,7 @@ node_modules/npm/lib/utils/spawn.js(45,10): error TS2339: Property 'stdout' does
 node_modules/npm/lib/utils/spawn.js(46,10): error TS2339: Property 'stderr' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/spawn.js(47,10): error TS2339: Property 'kill' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/temp-filename.js(6,29): error TS2339: Property 'tmp' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/usage.js(8,21): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
-  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
+node_modules/npm/lib/utils/usage.js(8,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
 node_modules/npm/lib/version.js(24,27): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(82,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(97,12): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -982,11 +974,10 @@ node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(6,20): er
 node_modules/npm/test/need-npm5-update/need-outdated/update-symlink.js(8,22): error TS2307: Cannot find module '../common-tap.js'.
 node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(69,52): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<string>[]): string[]', gave the following error.
-    Type 'number' is not assignable to type 'string'.
-  Overload 2 of 2, '(...items: (string | ConcatArray<string>)[]): string[]', gave the following error.
-    Type 'number' is not assignable to type 'string'.
+node_modules/npm/test/need-npm5-update/outdated-depth-deep.js(69,28): error TS2345: Argument of type '[(string | number)[]]' is not assignable to parameter of type 'ConcatArray<string>[] | (string | ConcatArray<string>)[]'.
+  Type '[(string | number)[]]' is not assignable to type '(string | ConcatArray<string>)[]'.
+    Type '(string | number)[]' is not assignable to type 'string | ConcatArray<string>'.
+      Type '(string | number)[]' is not assignable to type 'string'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/outdated-depth-integer.js(55,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
