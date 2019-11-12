@@ -3639,7 +3639,8 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
-            || !node.body) {
+            || !node.body
+            || node.questionToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -3686,7 +3687,7 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
         // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
-        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type) {
+        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type || node.questionToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
