@@ -3301,6 +3301,10 @@
         "category": "Error",
         "code": 5076
     },
+    "Unknown build option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5077
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4751,7 +4755,10 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 17018
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000

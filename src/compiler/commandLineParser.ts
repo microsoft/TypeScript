@@ -1212,13 +1212,13 @@ namespace ts {
         }
     }
 
-    const defaultDiagnostics = {
+    const compilerOptionsDefaultDiagnostics = {
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
         optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument
     };
     export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
-        return parseCommandLineWorker(getOptionNameMap, defaultDiagnostics, commandLine, readFile);
+        return parseCommandLineWorker(getOptionNameMap, compilerOptionsDefaultDiagnostics, commandLine, readFile);
     }
 
     /** @internal */
@@ -1252,7 +1252,7 @@ namespace ts {
         const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
         const { options, fileNames: projects, errors } = parseCommandLineWorker(returnBuildOptionNameMap, {
           unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
-          unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
+          unknownDidYouMeanDiagnostic: Diagnostics.Unknown_build_option_0_Did_you_mean_1,
           optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1
         }, args);
         const buildOptions = options as BuildOptions;
@@ -1401,19 +1401,28 @@ namespace ts {
                         name: "compilerOptions",
                         type: "object",
                         elementOptions: commandLineOptionsToMap(optionDeclarations),
-                        extraKeyDiagnosticMessage: Diagnostics.Unknown_compiler_option_0
+                        extraKeyDiagnostics: {
+                            unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
+                            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1
+                        },
                     },
                     {
                         name: "typingOptions",
                         type: "object",
                         elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
-                        extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
+                        extraKeyDiagnostics: {
+                            unknownOptionDiagnostic: Diagnostics.Unknown_type_acquisition_option_0,
+                            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1
+                        },
                     },
                     {
                         name: "typeAcquisition",
                         type: "object",
                         elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
-                        extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
+                        extraKeyDiagnostics: {
+                            unknownOptionDiagnostic: Diagnostics.Unknown_type_acquisition_option_0,
+                            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1
+                        }
                     },
                     {
                         name: "extends",
@@ -1519,7 +1528,7 @@ namespace ts {
         function convertObjectLiteralExpressionToJson(
             node: ObjectLiteralExpression,
             knownOptions: Map<CommandLineOption> | undefined,
-            extraKeyDiagnosticMessage: DiagnosticMessage | undefined,
+            extraKeyDiagnostics: DidYouMeanOptionalDiagnostics | undefined,
             parentOption: string | undefined
         ): any {
             const result: any = returnValue ? {} : undefined;
@@ -1539,8 +1548,19 @@ namespace ts {
                 const textOfKey = getTextOfPropertyName(element.name);
                 const keyText = textOfKey && unescapeLeadingUnderscores(textOfKey);
                 const option = keyText && knownOptions ? knownOptions.get(keyText) : undefined;
-                if (keyText && extraKeyDiagnosticMessage && !option) {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
+                if (keyText && extraKeyDiagnostics && !option) {
+                    if (knownOptions) {
+                        const possibleOption = getSpellingSuggestion(keyText, arrayFrom(knownOptions.keys()), identity);
+                        if (possibleOption) {
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnostics.unknownDidYouMeanDiagnostic, keyText, possibleOption));
+                        }
+                        else {
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnostics.unknownOptionDiagnostic, keyText));
+                        }
+                    }
+                    else {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnostics.unknownOptionDiagnostic, keyText));
+                    }
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
                 if (typeof keyText !== "undefined") {
@@ -1642,9 +1662,9 @@ namespace ts {
                     // vs what we set in the json
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
-                        const { elementOptions, extraKeyDiagnosticMessage, name: optionName } = <TsConfigOnlyOption>option;
+                        const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
                         return convertObjectLiteralExpressionToJson(objectLiteralExpression,
-                            elementOptions, extraKeyDiagnosticMessage, optionName);
+                            elementOptions, extraKeyDiagnostics, optionName);
                     }
                     else {
                         return convertObjectLiteralExpressionToJson(
@@ -2480,12 +2500,7 @@ namespace ts {
         basePath: string, errors: Push<Diagnostic>, configFileName?: string): CompilerOptions {
 
         const options = getDefaultCompilerOptions(configFileName);
-
-        const diagnostics = {
-            unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
-            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 ,
-        };
-        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, diagnostics, errors);
+        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, compilerOptionsDefaultDiagnostics, errors);
         if (configFileName) {
             options.configFilePath = normalizeSlashes(configFileName);
         }
@@ -2503,8 +2518,8 @@ namespace ts {
         const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
 
         const diagnostics = {
-            unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
-            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 ,
+            unknownOptionDiagnostic: Diagnostics.Unknown_type_acquisition_option_0,
+            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1 ,
         };
         convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, diagnostics, errors);
 
@@ -2512,14 +2527,8 @@ namespace ts {
     }
 
 
-    interface ConvertOptionsDiagnostics {
-        unknownOptionDiagnostic: DiagnosticMessage,
-        unknownDidYouMeanDiagnostic: DiagnosticMessage,
-    }
-
-
     function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
-        defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: ConvertOptionsDiagnostics, errors: Push<Diagnostic>) {
+        defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: DidYouMeanOptionalDiagnostics, errors: Push<Diagnostic>) {
 
         if (!jsonOptions) {
             return;
