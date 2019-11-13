@@ -2339,10 +2339,25 @@ namespace ts {
             return resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
         }
 
+        /**
+         * Creates a type alias symbol with a target symbol for type-only imports and exports.
+         * The symbol for `A` in `export type { A }` or `export type { A } from "./mod"` has
+         * `TypeFlags.Alias` so that alias resolution works as usual, but once the target `A`
+         * has been resolved, we essentially want to pretend we have a type alias to that target.
+         */
+        function createSyntheticTypeAlias(sourceNode: Declaration, target: Symbol) {
+            const symbol = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
+            symbol.declarations = [sourceNode];
+            symbol.valueDeclaration = sourceNode;
+            symbol.immediateTarget = target;
+            return symbol;
+        }
+
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
-            return node.parent.parent.moduleSpecifier ?
+            const target = node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
+            return target && isTypeOnlyExportSpecifier(node) ? createSyntheticTypeAlias(node, target) : target;
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
@@ -2444,7 +2459,7 @@ namespace ts {
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
             const symbol = getSymbolOfNode(node);
-            const target = resolveSymbol(symbol);
+            const target = resolveAlias(symbol);
             if (target) {
                 const markAlias = target === unknownSymbol ||
                     ((target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
@@ -8065,17 +8080,16 @@ namespace ts {
                     return errorType;
                 }
 
-                const declaration = find(symbol.declarations, isTypeAlias);
-                if (!declaration) {
-                    return Debug.fail("Type alias symbol with no valid declaration found");
-                }
-
                 let type: Type;
-                if (isTypeOnlyExportSpecifier(declaration)) {
-                    const resolvedSymbol = resolveName(declaration, symbol.escapedName, SymbolFlags.Type, undefined, undefined, true);
-                    type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : errorType;
+                let declaration;
+                if (isTransientSymbol(symbol) && symbol.immediateTarget) {
+                    // Symbol is synthetic type alias for type-only import or export.
+                    // See `createSyntheticTypeAlias`.
+                    type = getTypeOfSymbol(symbol.immediateTarget);
+                    declaration = symbol.valueDeclaration;
                 }
                 else {
+                    declaration = Debug.assertDefined(find(symbol.declarations, isTypeAlias), "Type alias symbol with no valid declaration found");
                     const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                     // If typeNode is missing, we will error in checkJSDocTypedefTag.
                     type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
@@ -8093,7 +8107,7 @@ namespace ts {
                 }
                 else {
                     type = errorType;
-                    error(isJSDocEnumTag(declaration) ? declaration : declaration.name || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
                 links.declaredType = type;
             }

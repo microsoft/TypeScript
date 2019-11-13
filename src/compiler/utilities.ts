@@ -2294,8 +2294,8 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocEnumTag;
     }
 
-    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | TypeAliasDeclaration | ExportSpecifier {
-        return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node) || isTypeOnlyExportSpecifier(node);
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | TypeAliasDeclaration {
+        return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
     export function isTypeOnlyExportSpecifier(node: Node): node is ExportSpecifier {
