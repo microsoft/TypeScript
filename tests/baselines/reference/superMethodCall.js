@@ -25,7 +25,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class Base {
-    method?() { }
+    method() { }
 }
 class Derived extends Base {
     method() {

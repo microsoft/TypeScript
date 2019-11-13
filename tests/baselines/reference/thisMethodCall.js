@@ -9,7 +9,7 @@ class C {
 //// [thisMethodCall.js]
 "use strict";
 class C {
-    method?() { }
+    method() { }
     other() {
         var _a;
         (_a = this.method) === null || _a === void 0 ? void 0 : _a.call(this);
