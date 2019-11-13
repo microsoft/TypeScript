@@ -31788,8 +31788,11 @@ namespace ts {
             // Base class instance member variables and accessors can be overridden by
             // derived class instance member variables and accessors, but not by other kinds of members.
 
+            let errorInfo: undefined | DiagnosticMessageChain;
             // NOTE: assignability is checked in checkClassDeclaration
             const baseProperties = getPropertiesOfType(baseType);
+            // derived class inherits base without override/redeclaration
+            const derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol)!;
             basePropertyCheck: for (const baseProperty of baseProperties) {
                 const base = getTargetSymbol(baseProperty);
 
@@ -31806,9 +31809,6 @@ namespace ts {
                 // we compare the Symbols obtained. Since getTargetSymbol returns the symbol on the *uninstantiated*
                 // type declaration, derived and base resolve to the same symbol even in the case of generic classes.
                 if (derived === base) {
-                    // derived class inherits base without override/redeclaration
-                    const derivedClassDecl = getClassLikeDeclarationOfSymbol(type.symbol)!;
-
                     // It is an error to inherit an abstract member without implementing it or being declared abstract.
                     // If there is no declaration for the derived class (as in the case of class expressions),
                     // then the class cannot be declared abstract.
@@ -31817,21 +31817,32 @@ namespace ts {
                         // (The class may have more than one base type via declaration merging with an interface with the
                         // same name.)
                         for (const otherBaseType of getBaseTypes(type)) {
-                            if (otherBaseType === baseType) continue;
-                            const baseSymbol = getPropertyOfObjectType(otherBaseType, base.escapedName);
-                            const derivedElsewhere = baseSymbol && getTargetSymbol(baseSymbol);
-                            if (derivedElsewhere && derivedElsewhere !== base) {
-                                continue basePropertyCheck;
+                            if (otherBaseType !== baseType) {
+                                const baseSymbol = getPropertyOfObjectType(otherBaseType, base.escapedName);
+                                const derivedElsewhere = baseSymbol && getTargetSymbol(baseSymbol);
+                                console.log(base, derivedElsewhere);
+                                if (derivedElsewhere && derivedElsewhere !== base) {
+                                    continue basePropertyCheck;
+                                }
                             }
                         }
 
                         if (derivedClassDecl.kind === SyntaxKind.ClassExpression) {
-                            error(derivedClassDecl, Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
-                                symbolToString(baseProperty), typeToString(baseType));
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
+                                symbolToString(baseProperty),
+                                typeToString(baseType)
+                            );
                         }
                         else {
-                            error(derivedClassDecl, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                                typeToString(type), symbolToString(baseProperty), typeToString(baseType));
+                            errorInfo = chainDiagnosticMessages(
+                                errorInfo,
+                                Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
+                                typeToString(type),
+                                symbolToString(baseProperty),
+                                typeToString(baseType)
+                            );
                         }
                     }
                 }
@@ -31907,6 +31918,9 @@ namespace ts {
 
                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                 }
+            }
+            if (errorInfo) {
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(derivedClassDecl, errorInfo));
             }
         }
 
