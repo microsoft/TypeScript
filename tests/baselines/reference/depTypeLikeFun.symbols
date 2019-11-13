@@ -1,0 +1,286 @@
+=== tests/cases/compiler/depTypeLikeFun.ts ===
+type F = {
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+
+  t: number,
+>t : Symbol(t, Decl(depTypeLikeFun.ts, 0, 10))
+
+  f: boolean,
+>f : Symbol(f, Decl(depTypeLikeFun.ts, 1, 12))
+}
+
+type G = {
+>G : Symbol(G, Decl(depTypeLikeFun.ts, 3, 1))
+
+  a: number,
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 5, 10))
+
+  b: boolean,
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 6, 12))
+
+  c: string,
+>c : Symbol(c, Decl(depTypeLikeFun.ts, 7, 13))
+}
+
+type Complex<X extends "t" | "f"> = {
+>Complex : Symbol(Complex, Decl(depTypeLikeFun.ts, 9, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 11, 13))
+
+    a: { t: number, f: boolean }[X],
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 11, 37))
+>t : Symbol(t, Decl(depTypeLikeFun.ts, 12, 8))
+>f : Symbol(f, Decl(depTypeLikeFun.ts, 12, 19))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 11, 13))
+
+    b: { t: boolean, f: number }[X],
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 12, 36))
+>t : Symbol(t, Decl(depTypeLikeFun.ts, 13, 8))
+>f : Symbol(f, Decl(depTypeLikeFun.ts, 13, 20))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 11, 13))
+}
+
+function f1<X extends "t" | "f">(x: X): F[X] {
+>f1 : Symbol(f1, Decl(depTypeLikeFun.ts, 14, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 16, 12))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 16, 33))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 16, 12))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 16, 12))
+
+    if (x === "t") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 16, 33))
+
+        // no error
+        return 1;
+    } else {
+        // no error
+        return true;
+    }
+}
+
+function f2<X extends "t" | "f">(x: X): F[X] {
+>f2 : Symbol(f2, Decl(depTypeLikeFun.ts, 24, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 26, 12))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 26, 33))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 26, 12))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 26, 12))
+
+    if (x === "t") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 26, 33))
+
+        // error
+        return true;
+    } else {
+        // error
+        return 1;
+    }
+}
+
+function f3<X extends "a" | "b" | "c">(x: X): G[X] {
+>f3 : Symbol(f3, Decl(depTypeLikeFun.ts, 34, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 36, 12))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 36, 39))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 36, 12))
+>G : Symbol(G, Decl(depTypeLikeFun.ts, 3, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 36, 12))
+
+    if (x === "a") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 36, 39))
+
+        // no error
+        return 1;
+    } else {
+        if (x === "b") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 36, 39))
+
+            // no error
+            return true;
+        } else {
+            // no error
+            return "z";
+        }
+    }
+}
+
+function f4<X extends "t" | "f", Y extends "t" | "f">(x: X, y: Y): F[X] {
+>f4 : Symbol(f4, Decl(depTypeLikeFun.ts, 49, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 51, 12))
+>Y : Symbol(Y, Decl(depTypeLikeFun.ts, 51, 32))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 51, 54))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 51, 12))
+>y : Symbol(y, Decl(depTypeLikeFun.ts, 51, 59))
+>Y : Symbol(Y, Decl(depTypeLikeFun.ts, 51, 32))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 51, 12))
+
+    if (y === "t") {
+>y : Symbol(y, Decl(depTypeLikeFun.ts, 51, 59))
+
+        // error
+        return 1;
+    } else {
+        // error
+        return true;
+    }
+}
+
+function f5<T extends "t" | "f">(str: T, ft: F[T]): F[T] {
+>f5 : Symbol(f5, Decl(depTypeLikeFun.ts, 59, 1))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 61, 12))
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 61, 33))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 61, 12))
+>ft : Symbol(ft, Decl(depTypeLikeFun.ts, 61, 40))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 61, 12))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 61, 12))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 61, 33))
+
+        // error
+        const n: number = ft;
+>n : Symbol(n, Decl(depTypeLikeFun.ts, 64, 13))
+>ft : Symbol(ft, Decl(depTypeLikeFun.ts, 61, 40))
+
+        // no error
+        return 1;
+    } else {
+        // no error
+        return true;
+    }
+}
+
+declare var obj: F;
+>obj : Symbol(obj, Decl(depTypeLikeFun.ts, 73, 11))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+
+function f6<T extends "t" | "f">(str: T, str2: T): F[T] {
+>f6 : Symbol(f6, Decl(depTypeLikeFun.ts, 73, 19))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 74, 12))
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 74, 33))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 74, 12))
+>str2 : Symbol(str2, Decl(depTypeLikeFun.ts, 74, 40))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 74, 12))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 74, 12))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 74, 33))
+
+        // error
+        obj[str2] = 2;
+>obj : Symbol(obj, Decl(depTypeLikeFun.ts, 73, 11))
+>str2 : Symbol(str2, Decl(depTypeLikeFun.ts, 74, 40))
+
+        // no error
+        return 1;
+    } else {
+        // no error
+        return true;
+    }
+}
+
+class C7<X  extends "t" | "f"> {
+>C7 : Symbol(C7, Decl(depTypeLikeFun.ts, 84, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 86, 9))
+
+  f7(x: X): F[X] {
+>f7 : Symbol(C7.f7, Decl(depTypeLikeFun.ts, 86, 32))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 87, 5))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 86, 9))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 86, 9))
+
+      if (x === "t") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 87, 5))
+
+          // error
+          return 1;
+      } else {
+          // error
+          return true;
+      }
+  }
+}
+
+function f8<X extends "t" | "f">(x: X): Complex<X> {
+>f8 : Symbol(f8, Decl(depTypeLikeFun.ts, 96, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 98, 12))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 98, 33))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 98, 12))
+>Complex : Symbol(Complex, Decl(depTypeLikeFun.ts, 9, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 98, 12))
+
+    if (x === "t") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 98, 33))
+
+        // no error
+        return { a: 1, b: true };
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 101, 16))
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 101, 22))
+
+    } else {
+        // no error
+        return { a: true, b: 1 };
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 104, 16))
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 104, 25))
+    }
+}
+
+function f9<X extends "t" | "f">(x: X): Complex<X> {
+>f9 : Symbol(f9, Decl(depTypeLikeFun.ts, 106, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 108, 12))
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 108, 33))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 108, 12))
+>Complex : Symbol(Complex, Decl(depTypeLikeFun.ts, 9, 1))
+>X : Symbol(X, Decl(depTypeLikeFun.ts, 108, 12))
+
+  if (x === "t") {
+>x : Symbol(x, Decl(depTypeLikeFun.ts, 108, 33))
+
+      // error
+      return { a: true, b: 1 };
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 111, 14))
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 111, 23))
+
+  } else {
+      // error
+      return { a: 1, b: true };
+>a : Symbol(a, Decl(depTypeLikeFun.ts, 114, 14))
+>b : Symbol(b, Decl(depTypeLikeFun.ts, 114, 20))
+  }
+}
+
+function f10<T extends "t" | "f">(str: T): (ft: F[T]) => F[T] {
+>f10 : Symbol(f10, Decl(depTypeLikeFun.ts, 116, 1))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 118, 13))
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 118, 34))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 118, 13))
+>ft : Symbol(ft, Decl(depTypeLikeFun.ts, 118, 44))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 118, 13))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 118, 13))
+
+  if (str === "t") {
+>str : Symbol(str, Decl(depTypeLikeFun.ts, 118, 34))
+
+    // error
+    return (ft: number) => {
+>ft : Symbol(ft, Decl(depTypeLikeFun.ts, 121, 12))
+
+        return 1;
+    };
+  } else {
+    // error
+    return (ft: F[T]) => {
+>ft : Symbol(ft, Decl(depTypeLikeFun.ts, 126, 12))
+>F : Symbol(F, Decl(depTypeLikeFun.ts, 0, 0))
+>T : Symbol(T, Decl(depTypeLikeFun.ts, 118, 13))
+
+        return true;
+    };
+  }
+}

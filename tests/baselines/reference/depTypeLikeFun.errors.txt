@@ -1,0 +1,208 @@
+tests/cases/compiler/depTypeLikeFun.ts(30,9): error TS2322: Type 'true' is not assignable to type 'number'.
+tests/cases/compiler/depTypeLikeFun.ts(33,9): error TS2322: Type '1' is not assignable to type 'boolean'.
+tests/cases/compiler/depTypeLikeFun.ts(55,9): error TS2322: Type '1' is not assignable to type 'F[X]'.
+  Type '1' is not assignable to type 'never'.
+tests/cases/compiler/depTypeLikeFun.ts(58,9): error TS2322: Type 'true' is not assignable to type 'F[X]'.
+  Type 'true' is not assignable to type 'never'.
+tests/cases/compiler/depTypeLikeFun.ts(65,15): error TS2322: Type 'F[T]' is not assignable to type 'number'.
+  Type 'number | boolean' is not assignable to type 'number'.
+    Type 'false' is not assignable to type 'number'.
+tests/cases/compiler/depTypeLikeFun.ts(78,9): error TS2322: Type '2' is not assignable to type 'F[T]'.
+  Type '2' is not assignable to type 'never'.
+tests/cases/compiler/depTypeLikeFun.ts(91,11): error TS2322: Type '1' is not assignable to type 'F[X]'.
+  Type '1' is not assignable to type 'never'.
+tests/cases/compiler/depTypeLikeFun.ts(94,11): error TS2322: Type 'true' is not assignable to type 'F[X]'.
+  Type 'true' is not assignable to type 'never'.
+tests/cases/compiler/depTypeLikeFun.ts(112,7): error TS2322: Type '{ a: true; b: 1; }' is not assignable to type 'Complex<X>'.
+  Types of property 'a' are incompatible.
+    Type 'true' is not assignable to type 'number'.
+tests/cases/compiler/depTypeLikeFun.ts(115,7): error TS2322: Type '{ a: 1; b: true; }' is not assignable to type 'Complex<X>'.
+  Types of property 'a' are incompatible.
+    Type '1' is not assignable to type 'boolean'.
+tests/cases/compiler/depTypeLikeFun.ts(122,5): error TS2322: Type '(ft: number) => 1' is not assignable to type '(ft: F[T]) => F[T]'.
+  Types of parameters 'ft' and 'ft' are incompatible.
+    Type 'F[T]' is not assignable to type 'number'.
+      Type 'number | boolean' is not assignable to type 'number'.
+        Type 'false' is not assignable to type 'number'.
+tests/cases/compiler/depTypeLikeFun.ts(127,5): error TS2322: Type '(ft: F[T]) => true' is not assignable to type '(ft: F[T]) => F[T]'.
+  Type 'true' is not assignable to type 'F[T]'.
+    Type 'true' is not assignable to type 'never'.
+
+
+==== tests/cases/compiler/depTypeLikeFun.ts (12 errors) ====
+    type F = {
+      t: number,
+      f: boolean,
+    }
+    
+    type G = {
+      a: number,
+      b: boolean,
+      c: string,
+    }
+    
+    type Complex<X extends "t" | "f"> = {
+        a: { t: number, f: boolean }[X],
+        b: { t: boolean, f: number }[X],
+    }
+    
+    function f1<X extends "t" | "f">(x: X): F[X] {
+        if (x === "t") {
+            // no error
+            return 1;
+        } else {
+            // no error
+            return true;
+        }
+    }
+    
+    function f2<X extends "t" | "f">(x: X): F[X] {
+        if (x === "t") {
+            // error
+            return true;
+            ~~~~~~~~~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'number'.
+        } else {
+            // error
+            return 1;
+            ~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'boolean'.
+        }
+    }
+    
+    function f3<X extends "a" | "b" | "c">(x: X): G[X] {
+        if (x === "a") {
+            // no error
+            return 1;
+        } else {
+            if (x === "b") {
+                // no error
+                return true;
+            } else {
+                // no error
+                return "z";
+            }
+        }
+    }
+    
+    function f4<X extends "t" | "f", Y extends "t" | "f">(x: X, y: Y): F[X] {
+        if (y === "t") {
+            // error
+            return 1;
+            ~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'F[X]'.
+!!! error TS2322:   Type '1' is not assignable to type 'never'.
+        } else {
+            // error
+            return true;
+            ~~~~~~~~~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'F[X]'.
+!!! error TS2322:   Type 'true' is not assignable to type 'never'.
+        }
+    }
+    
+    function f5<T extends "t" | "f">(str: T, ft: F[T]): F[T] {
+        if (str === "t") {
+            // error
+            const n: number = ft;
+                  ~
+!!! error TS2322: Type 'F[T]' is not assignable to type 'number'.
+!!! error TS2322:   Type 'number | boolean' is not assignable to type 'number'.
+!!! error TS2322:     Type 'false' is not assignable to type 'number'.
+            // no error
+            return 1;
+        } else {
+            // no error
+            return true;
+        }
+    }
+    
+    declare var obj: F;
+    function f6<T extends "t" | "f">(str: T, str2: T): F[T] {
+        if (str === "t") {
+            // error
+            obj[str2] = 2;
+            ~~~~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'F[T]'.
+!!! error TS2322:   Type '2' is not assignable to type 'never'.
+            // no error
+            return 1;
+        } else {
+            // no error
+            return true;
+        }
+    }
+    
+    class C7<X  extends "t" | "f"> {
+      f7(x: X): F[X] {
+          if (x === "t") {
+              // error
+              return 1;
+              ~~~~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'F[X]'.
+!!! error TS2322:   Type '1' is not assignable to type 'never'.
+          } else {
+              // error
+              return true;
+              ~~~~~~~~~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'F[X]'.
+!!! error TS2322:   Type 'true' is not assignable to type 'never'.
+          }
+      }
+    }
+    
+    function f8<X extends "t" | "f">(x: X): Complex<X> {
+        if (x === "t") {
+            // no error
+            return { a: 1, b: true };
+        } else {
+            // no error
+            return { a: true, b: 1 };
+        }
+    }
+    
+    function f9<X extends "t" | "f">(x: X): Complex<X> {
+      if (x === "t") {
+          // error
+          return { a: true, b: 1 };
+          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: true; b: 1; }' is not assignable to type 'Complex<X>'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'true' is not assignable to type 'number'.
+      } else {
+          // error
+          return { a: 1, b: true };
+          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ a: 1; b: true; }' is not assignable to type 'Complex<X>'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type '1' is not assignable to type 'boolean'.
+      }
+    }
+    
+    function f10<T extends "t" | "f">(str: T): (ft: F[T]) => F[T] {
+      if (str === "t") {
+        // error
+        return (ft: number) => {
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+            return 1;
+    ~~~~~~~~~~~~~~~~~
+        };
+    ~~~~~~
+!!! error TS2322: Type '(ft: number) => 1' is not assignable to type '(ft: F[T]) => F[T]'.
+!!! error TS2322:   Types of parameters 'ft' and 'ft' are incompatible.
+!!! error TS2322:     Type 'F[T]' is not assignable to type 'number'.
+!!! error TS2322:       Type 'number | boolean' is not assignable to type 'number'.
+!!! error TS2322:         Type 'false' is not assignable to type 'number'.
+      } else {
+        // error
+        return (ft: F[T]) => {
+        ~~~~~~~~~~~~~~~~~~~~~~
+            return true;
+    ~~~~~~~~~~~~~~~~~~~~
+        };
+    ~~~~~~
+!!! error TS2322: Type '(ft: F[T]) => true' is not assignable to type '(ft: F[T]) => F[T]'.
+!!! error TS2322:   Type 'true' is not assignable to type 'F[T]'.
+!!! error TS2322:     Type 'true' is not assignable to type 'never'.
+      }
+    }

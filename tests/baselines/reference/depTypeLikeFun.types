@@ -1,0 +1,299 @@
+=== tests/cases/compiler/depTypeLikeFun.ts ===
+type F = {
+>F : F
+
+  t: number,
+>t : number
+
+  f: boolean,
+>f : boolean
+}
+
+type G = {
+>G : G
+
+  a: number,
+>a : number
+
+  b: boolean,
+>b : boolean
+
+  c: string,
+>c : string
+}
+
+type Complex<X extends "t" | "f"> = {
+>Complex : Complex<X>
+
+    a: { t: number, f: boolean }[X],
+>a : { t: number; f: boolean; }[X]
+>t : number
+>f : boolean
+
+    b: { t: boolean, f: number }[X],
+>b : { t: boolean; f: number; }[X]
+>t : boolean
+>f : number
+}
+
+function f1<X extends "t" | "f">(x: X): F[X] {
+>f1 : <X extends "t" | "f">(x: X) => F[X]
+>x : X
+
+    if (x === "t") {
+>x === "t" : boolean
+>x : X
+>"t" : "t"
+
+        // no error
+        return 1;
+>1 : 1
+
+    } else {
+        // no error
+        return true;
+>true : true
+    }
+}
+
+function f2<X extends "t" | "f">(x: X): F[X] {
+>f2 : <X extends "t" | "f">(x: X) => F[X]
+>x : X
+
+    if (x === "t") {
+>x === "t" : boolean
+>x : X
+>"t" : "t"
+
+        // error
+        return true;
+>true : true
+
+    } else {
+        // error
+        return 1;
+>1 : 1
+    }
+}
+
+function f3<X extends "a" | "b" | "c">(x: X): G[X] {
+>f3 : <X extends "a" | "b" | "c">(x: X) => G[X]
+>x : X
+
+    if (x === "a") {
+>x === "a" : boolean
+>x : X
+>"a" : "a"
+
+        // no error
+        return 1;
+>1 : 1
+
+    } else {
+        if (x === "b") {
+>x === "b" : boolean
+>x : X
+>"b" : "b"
+
+            // no error
+            return true;
+>true : true
+
+        } else {
+            // no error
+            return "z";
+>"z" : "z"
+        }
+    }
+}
+
+function f4<X extends "t" | "f", Y extends "t" | "f">(x: X, y: Y): F[X] {
+>f4 : <X extends "t" | "f", Y extends "t" | "f">(x: X, y: Y) => F[X]
+>x : X
+>y : Y
+
+    if (y === "t") {
+>y === "t" : boolean
+>y : Y
+>"t" : "t"
+
+        // error
+        return 1;
+>1 : 1
+
+    } else {
+        // error
+        return true;
+>true : true
+    }
+}
+
+function f5<T extends "t" | "f">(str: T, ft: F[T]): F[T] {
+>f5 : <T extends "t" | "f">(str: T, ft: F[T]) => F[T]
+>str : T
+>ft : F[T]
+
+    if (str === "t") {
+>str === "t" : boolean
+>str : T
+>"t" : "t"
+
+        // error
+        const n: number = ft;
+>n : number
+>ft : F[T]
+
+        // no error
+        return 1;
+>1 : 1
+
+    } else {
+        // no error
+        return true;
+>true : true
+    }
+}
+
+declare var obj: F;
+>obj : F
+
+function f6<T extends "t" | "f">(str: T, str2: T): F[T] {
+>f6 : <T extends "t" | "f">(str: T, str2: T) => F[T]
+>str : T
+>str2 : T
+
+    if (str === "t") {
+>str === "t" : boolean
+>str : T
+>"t" : "t"
+
+        // error
+        obj[str2] = 2;
+>obj[str2] = 2 : 2
+>obj[str2] : F[T]
+>obj : F
+>str2 : T
+>2 : 2
+
+        // no error
+        return 1;
+>1 : 1
+
+    } else {
+        // no error
+        return true;
+>true : true
+    }
+}
+
+class C7<X  extends "t" | "f"> {
+>C7 : C7<X>
+
+  f7(x: X): F[X] {
+>f7 : (x: X) => F[X]
+>x : X
+
+      if (x === "t") {
+>x === "t" : boolean
+>x : X
+>"t" : "t"
+
+          // error
+          return 1;
+>1 : 1
+
+      } else {
+          // error
+          return true;
+>true : true
+      }
+  }
+}
+
+function f8<X extends "t" | "f">(x: X): Complex<X> {
+>f8 : <X extends "t" | "f">(x: X) => Complex<X>
+>x : X
+
+    if (x === "t") {
+>x === "t" : boolean
+>x : X
+>"t" : "t"
+
+        // no error
+        return { a: 1, b: true };
+>{ a: 1, b: true } : { a: 1; b: true; }
+>a : 1
+>1 : 1
+>b : true
+>true : true
+
+    } else {
+        // no error
+        return { a: true, b: 1 };
+>{ a: true, b: 1 } : { a: true; b: 1; }
+>a : true
+>true : true
+>b : 1
+>1 : 1
+    }
+}
+
+function f9<X extends "t" | "f">(x: X): Complex<X> {
+>f9 : <X extends "t" | "f">(x: X) => Complex<X>
+>x : X
+
+  if (x === "t") {
+>x === "t" : boolean
+>x : X
+>"t" : "t"
+
+      // error
+      return { a: true, b: 1 };
+>{ a: true, b: 1 } : { a: true; b: 1; }
+>a : true
+>true : true
+>b : 1
+>1 : 1
+
+  } else {
+      // error
+      return { a: 1, b: true };
+>{ a: 1, b: true } : { a: 1; b: true; }
+>a : 1
+>1 : 1
+>b : true
+>true : true
+  }
+}
+
+function f10<T extends "t" | "f">(str: T): (ft: F[T]) => F[T] {
+>f10 : <T extends "t" | "f">(str: T) => (ft: F[T]) => F[T]
+>str : T
+>ft : F[T]
+
+  if (str === "t") {
+>str === "t" : boolean
+>str : T
+>"t" : "t"
+
+    // error
+    return (ft: number) => {
+>(ft: number) => {        return 1;    } : (ft: number) => 1
+>ft : number
+
+        return 1;
+>1 : 1
+
+    };
+  } else {
+    // error
+    return (ft: F[T]) => {
+>(ft: F[T]) => {        return true;    } : (ft: F[T]) => true
+>ft : F[T]
+
+        return true;
+>true : true
+
+    };
+  }
+}
