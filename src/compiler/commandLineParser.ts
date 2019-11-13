@@ -1087,12 +1087,15 @@ namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    /** Tuple with error messages for 'unknown compiler option', 'option requires type' */
-    type ParseCommandLineWorkerDiagnostics = [DiagnosticMessage, DiagnosticMessage, DiagnosticMessage];
+    interface ParseCommandLineWorkerDiagnostics {
+        unknownOptionDiagnostic: DiagnosticMessage,
+        unknownDidYouMeanDiagnostic: DiagnosticMessage,
+        optionTypeMismatchDiagnostic: DiagnosticMessage
+    }
 
     function parseCommandLineWorker(
         getOptionNameMap: () => OptionNameMap,
-        [unknownOptionDiagnostic, unknownDidYouMeanDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
+        diagnostics: ParseCommandLineWorkerDiagnostics,
         commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
         const options = {} as OptionsBase;
@@ -1123,7 +1126,7 @@ namespace ts {
                         else {
                             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
                             if (!args[i] && opt.type !== "boolean") {
-                                errors.push(createCompilerDiagnostic(optionTypeMismatchDiagnostic, opt.name));
+                                errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name));
                             }
 
                             switch (opt.type) {
@@ -1162,10 +1165,10 @@ namespace ts {
                     else {
                         const possibleOption = getSpellingSuggestion(s, optionDeclarations, opt => `--${opt.name}`);
                         if (possibleOption) {
-                            errors.push(createCompilerDiagnostic(unknownDidYouMeanDiagnostic, s, possibleOption.name));
+                            errors.push(createCompilerDiagnostic(diagnostics.unknownDidYouMeanDiagnostic, s, possibleOption.name));
                         }
                         else {
-                            errors.push(createCompilerDiagnostic(unknownOptionDiagnostic, s));
+                            errors.push(createCompilerDiagnostic(diagnostics.unknownOptionDiagnostic, s));
                         }
                     }
                 }
@@ -1209,12 +1212,13 @@ namespace ts {
         }
     }
 
+    const defaultDiagnostics = {
+        unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
+        unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
+        optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument
+    };
     export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
-        return parseCommandLineWorker(getOptionNameMap, [
-            Diagnostics.Unknown_compiler_option_0,
-            Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
-            Diagnostics.Compiler_option_0_expects_an_argument
-        ], commandLine, readFile);
+        return parseCommandLineWorker(getOptionNameMap, defaultDiagnostics, commandLine, readFile);
     }
 
     /** @internal */
@@ -1246,11 +1250,11 @@ namespace ts {
     export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
         let buildOptionNameMap: OptionNameMap | undefined;
         const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
-        const { options, fileNames: projects, errors } = parseCommandLineWorker(returnBuildOptionNameMap, [
-            Diagnostics.Unknown_build_option_0,
-            Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
-            Diagnostics.Build_option_0_requires_a_value_of_type_1
-        ], args);
+        const { options, fileNames: projects, errors } = parseCommandLineWorker(returnBuildOptionNameMap, {
+          unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
+          unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
+          optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1
+        }, args);
         const buildOptions = options as BuildOptions;
 
         if (projects.length === 0) {
@@ -2476,7 +2480,12 @@ namespace ts {
         basePath: string, errors: Push<Diagnostic>, configFileName?: string): CompilerOptions {
 
         const options = getDefaultCompilerOptions(configFileName);
-        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
+
+        const diagnostics = {
+            unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
+            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 ,
+        };
+        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, diagnostics, errors);
         if (configFileName) {
             options.configFilePath = normalizeSlashes(configFileName);
         }
@@ -2492,13 +2501,25 @@ namespace ts {
 
         const options = getDefaultTypeAcquisition(configFileName);
         const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
-        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
+
+        const diagnostics = {
+            unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
+            unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 ,
+        };
+        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, diagnostics, errors);
 
         return options;
     }
 
+
+    interface ConvertOptionsDiagnostics {
+        unknownOptionDiagnostic: DiagnosticMessage,
+        unknownDidYouMeanDiagnostic: DiagnosticMessage,
+    }
+
+
     function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
-        defaultOptions: CompilerOptions | TypeAcquisition, diagnosticMessage: DiagnosticMessage, errors: Push<Diagnostic>) {
+        defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: ConvertOptionsDiagnostics, errors: Push<Diagnostic>) {
 
         if (!jsonOptions) {
             return;
@@ -2512,7 +2533,13 @@ namespace ts {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
-                errors.push(createCompilerDiagnostic(diagnosticMessage, id));
+                const possibleOption = getSpellingSuggestion(id, <CommandLineOption[]>optionDeclarations, opt => opt.name);
+                if (possibleOption) {
+                    errors.push(createCompilerDiagnostic(diagnostics.unknownDidYouMeanDiagnostic, id, possibleOption.name));
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(diagnostics.unknownOptionDiagnostic, id));
+                }
             }
         }
     }
