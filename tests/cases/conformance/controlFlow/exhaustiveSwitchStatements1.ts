@@ -223,3 +223,19 @@ function foo() {
         }
     }
 }
+
+// Repro from #35070
+
+type O = {
+    a: number,
+    b: number
+};
+type K = keyof O | 'c';
+function ff(o: O, k: K) {
+    switch(k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c';  // Error
+    return o[k];
+}
