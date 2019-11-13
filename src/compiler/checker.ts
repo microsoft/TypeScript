@@ -2345,7 +2345,20 @@ namespace ts {
          * `TypeFlags.Alias` so that alias resolution works as usual, but once the target `A`
          * has been resolved, we essentially want to pretend we have a type alias to that target.
          */
-        function createSyntheticTypeAlias(sourceNode: Declaration, target: Symbol) {
+        function createSyntheticTypeAlias(sourceNode: ExportSpecifier | ImportSpecifier, target: Symbol) {
+            if (!(target.flags & SymbolFlags.Type)) {
+                const nameText = idText(sourceNode.name);
+                addRelatedInfo(
+                    error(
+                        sourceNode.name,
+                        Diagnostics.Type_only_0_must_be_a_type_but_1_is_a_value,
+                        isExportSpecifier(sourceNode) ? "export" : "import",
+                        nameText),
+                    createDiagnosticForNode(
+                        target.valueDeclaration ?? target.declarations[0],
+                        Diagnostics._0_is_declared_here,
+                        nameText));
+            }
             const symbol = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
             symbol.declarations = [sourceNode];
             symbol.valueDeclaration = sourceNode;
@@ -32713,9 +32726,7 @@ namespace ts {
         }
 
         function checkExportSpecifier(node: ExportSpecifier) {
-            if (!isTypeOnlyExportSpecifier(node)) {
-                checkAliasSymbol(node);
-            }
+            checkAliasSymbol(node);
             if (getEmitDeclarations(compilerOptions)) {
                 collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
             }
