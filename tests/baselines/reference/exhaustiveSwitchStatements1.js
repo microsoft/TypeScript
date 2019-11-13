@@ -208,6 +208,35 @@ function expression(): Animal {
     }
 }
 
+// Repro from #34840
+
+function foo() {
+    const foo: number | undefined = 0;
+    while (true) {
+        const stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
+// Repro from #35070
+
+type O = {
+    a: number,
+    b: number
+};
+type K = keyof O | 'c';
+function ff(o: O, k: K) {
+    switch(k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c';  // Error
+    return o[k];
+}
+
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -405,6 +434,25 @@ function expression() {
         case Animal.CAT: return Animal.CAT;
     }
 }
+// Repro from #34840
+function foo() {
+    var foo = 0;
+    while (true) {
+        var stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+function ff(o, k) {
+    switch (k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c'; // Error
+    return o[k];
+}
 
 
 //// [exhaustiveSwitchStatements1.d.ts]
@@ -469,3 +517,10 @@ declare const zoo: {
     animal: Animal;
 } | undefined;
 declare function expression(): Animal;
+declare function foo(): void;
+declare type O = {
+    a: number;
+    b: number;
+};
+declare type K = keyof O | 'c';
+declare function ff(o: O, k: K): number;

@@ -7310,11 +7310,7 @@ namespace ts {
                 if (!declaration.statements.length) {
                     return emptyObjectType;
                 }
-                const type = getWidenedLiteralType(checkExpression(declaration.statements[0].expression));
-                if (type.flags & TypeFlags.Object) {
-                    return getRegularTypeOfObjectLiteral(type);
-                }
-                return type;
+                return getWidenedType(getWidenedLiteralType(checkExpression(declaration.statements[0].expression)));
             }
 
             // Handle variable, parameter or property
@@ -10852,7 +10848,8 @@ namespace ts {
                     }
                     isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                 }
-                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
+                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                if (isRequireAlias || isImportTypeWithQualifier) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
@@ -14806,7 +14803,7 @@ namespace ts {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
-                                    if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration)) {
+                                    if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && getSourceFileOfNode(errorNode) === getSourceFileOfNode(prop.valueDeclaration.name)) {
                                         // Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
                                         // since `children` is a SyntaxKind.PropertySignature instead of a SyntaxKind.JsxAttribute.
                                         errorNode = prop.valueDeclaration.name;
@@ -14817,7 +14814,7 @@ namespace ts {
                                     // use the property's value declaration if the property is assigned inside the literal itself
                                     const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
                                     let suggestion;
-                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
+                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration) && getSourceFileOfNode(objectLiteralDeclaration) === getSourceFileOfNode(errorNode)) {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
@@ -19294,9 +19291,6 @@ namespace ts {
                     else if (containsMatchingReferenceDiscriminant(reference, expr)) {
                         type = declaredType;
                     }
-                    else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
-                        return unreachableNeverType;
-                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -19305,11 +19299,17 @@ namespace ts {
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let seenIncomplete = false;
+                let bypassFlow: FlowSwitchClause | undefined;
                 for (const antecedent of flow.antecedents!) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
                         // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
+                        continue;
+                    }
+                    if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (<FlowSwitchClause>antecedent).clauseStart === (<FlowSwitchClause>antecedent).clauseEnd) {
+                        // The antecedent is the bypass branch of a potentially exhaustive switch statement.
+                        bypassFlow = <FlowSwitchClause>antecedent;
                         continue;
                     }
                     const flowType = getTypeAtFlowNode(antecedent);
@@ -19330,6 +19330,25 @@ namespace ts {
                     }
                     if (isIncomplete(flowType)) {
                         seenIncomplete = true;
+                    }
+                }
+                if (bypassFlow) {
+                    const flowType = getTypeAtFlowNode(bypassFlow);
+                    const type = getTypeFromFlowType(flowType);
+                    // If the bypass flow contributes a type we haven't seen yet and the switch statement
+                    // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
+                    // the risk of circularities, we only want to perform them when they make a difference.
+                    if (!contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.switchStatement)) {
+                        if (type === declaredType && declaredType === initialType) {
+                            return type;
+                        }
+                        antecedentTypes.push(type);
+                        if (!isTypeSubsetOf(type, declaredType)) {
+                            subtypeReduction = true;
+                        }
+                        if (isIncomplete(flowType)) {
+                            seenIncomplete = true;
+                        }
                     }
                 }
                 return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
