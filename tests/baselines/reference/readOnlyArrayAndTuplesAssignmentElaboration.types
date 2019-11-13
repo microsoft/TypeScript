@@ -1,0 +1,16 @@
+=== tests/cases/compiler/readOnlyArrayAndTuplesAssignmentElaboration.ts ===
+// @strict
+// #Repro from #35060
+
+const x: readonly [] = null! as readonly [0];
+>x : readonly []
+>null! as readonly [0] : readonly [0]
+>null! : null
+>null : null
+
+const y: readonly [1] = null! as readonly [0];
+>y : readonly [1]
+>null! as readonly [0] : readonly [0]
+>null! : null
+>null : null
+

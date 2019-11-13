@@ -1,0 +1,21 @@
+tests/cases/compiler/readOnlyArrayAndTuplesAssignmentElaboration.ts(4,7): error TS4111: The type 'readonly [0]' is 'readonly' and is incompatible with type 'readonly []'.
+  Types of property 'length' are incompatible.
+    Type '1' is not assignable to type '0'.
+tests/cases/compiler/readOnlyArrayAndTuplesAssignmentElaboration.ts(5,7): error TS4111: The type 'readonly [0]' is 'readonly' and is incompatible with type 'readonly [1]'.
+  Type '0' is not assignable to type '1'.
+
+
+==== tests/cases/compiler/readOnlyArrayAndTuplesAssignmentElaboration.ts (2 errors) ====
+    // @strict
+    // #Repro from #35060
+    
+    const x: readonly [] = null! as readonly [0];
+          ~
+!!! error TS4111: The type 'readonly [0]' is 'readonly' and is incompatible with type 'readonly []'.
+!!! error TS4111:   Types of property 'length' are incompatible.
+!!! error TS4111:     Type '1' is not assignable to type '0'.
+    const y: readonly [1] = null! as readonly [0];
+          ~
+!!! error TS4111: The type 'readonly [0]' is 'readonly' and is incompatible with type 'readonly [1]'.
+!!! error TS4111:   Type '0' is not assignable to type '1'.
+    

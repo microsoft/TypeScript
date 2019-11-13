@@ -14537,6 +14537,13 @@ namespace ts {
                 if (isTupleLikeType(source)) {
                     const sourceTuple: TupleType | undefined  = (source as TupleTypeReference).target;
                     if (sourceTuple && sourceTuple.readonly && isArrayOrTupleLikeType(target) &&
+                        (isReadonlyArrayType(target) || isTupleType(target) && target.target.readonly)) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.The_type_0_is_readonly_and_is_incompatible_with_type_1, typeToString(source), typeToString(target));
+                        }
+                        return false;
+                    }
+                    else if (sourceTuple && sourceTuple.readonly && isArrayOrTupleLikeType(target) &&
                         (!isReadonlyArrayType(target) || isTupleType(target) && !target.target.readonly)) {
                         if (reportErrors) {
                             reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
@@ -14551,6 +14558,12 @@ namespace ts {
                 if (isReadonlyArrayType(source) && isArrayType(target) && !isReadonlyArrayType(target)) {
                     if (reportErrors) {
                         reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
+                    }
+                    return false;
+                }
+                if (isReadonlyArrayType(source) && isArrayType(target) && isReadonlyArrayType(target)) {
+                    if (reportErrors) {
+                        reportError(Diagnostics.The_type_0_is_readonly_and_is_incompatible_with_type_1, typeToString(source), typeToString(target));
                     }
                     return false;
                 }

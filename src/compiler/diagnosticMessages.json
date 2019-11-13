@@ -3148,6 +3148,10 @@
         "category": "Error",
         "code": 4110
     },
+    "The type '{0}' is 'readonly' and is incompatible with type '{1}'.": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
