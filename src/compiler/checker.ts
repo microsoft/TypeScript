@@ -19333,7 +19333,7 @@ namespace ts {
                     }
                 }
                 if (bypassFlow) {
-                    const flowType = getTypeAtFlowNode(bypassFlow.antecedent);
+                    const flowType = getTypeAtFlowNode(bypassFlow);
                     const type = getTypeFromFlowType(flowType);
                     // If the bypass flow contributes a type we haven't seen yet and the switch statement
                     // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
