@@ -3277,7 +3277,7 @@ interface CSSStyleDeclaration {
     item(index: number): string;
     removeProperty(propertyName: string): string;
     setProperty(propertyName: string, value: string | null, priority?: string | null): void;
-    [index: number]: string;
+    [key: string]: string;
 }
 
 declare var CSSStyleDeclaration: {
