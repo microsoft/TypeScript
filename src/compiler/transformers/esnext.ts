@@ -58,7 +58,7 @@ namespace ts {
             return updateParen(node, expression);
         }
 
-        function visitNonOptionalPropertyAccessExpression(node: PropertyAccessExpression, captureThisArg: boolean): Expression {
+        function visitNonOptionalPropertyOrElementAccessExpression(node: AccessExpression, captureThisArg: boolean): Expression {
             if (isOptionalChain(node)) {
                 // If `node` is an optional chain, then it is the outermost chain of an optional expression.
                 return visitOptionalExpression(node, captureThisArg);
@@ -69,28 +69,18 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                ({expression, variable: thisArg} = maybeCaptureInTempVariable(expression));
+                if (shouldCaptureInTempVariable(expression)) {
+                    thisArg = createTempVariable(hoistVariableDeclaration);
+                    expression = createAssignment(thisArg, expression);
+                }
+                else {
+                    thisArg = expression;
+                }
             }
 
-            expression = updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier));
-            return thisArg ? createSyntheticReferenceExpression(expression, thisArg) : expression;
-        }
-
-        function visitNonOptionalElementAccessExpression(node: ElementAccessExpression, captureThisArg: boolean): Expression {
-            if (isOptionalChain(node)) {
-                // If `node` is an optional chain, then it is the outermost chain of an optional expression.
-                return visitOptionalExpression(node, captureThisArg);
-            }
-
-            let expression: Expression = visitNode(node.expression, visitor, isExpression);
-            Debug.assertNotNode(expression, isSyntheticReference);
-
-            let thisArg: Expression | undefined;
-            if (captureThisArg) {
-                ({expression, variable: thisArg} = maybeCaptureInTempVariable(expression));
-            }
-
-            expression = updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
+            expression = node.kind === SyntaxKind.PropertyAccessExpression
+                ? updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier))
+                : updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
             return thisArg ? createSyntheticReferenceExpression(expression, thisArg) : expression;
         }
 
@@ -105,8 +95,8 @@ namespace ts {
         function visitNonOptionalExpression(node: Expression, captureThisArg: boolean): Expression {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg);
-                case SyntaxKind.PropertyAccessExpression: return visitNonOptionalPropertyAccessExpression(node as PropertyAccessExpression, captureThisArg);
-                case SyntaxKind.ElementAccessExpression: return visitNonOptionalElementAccessExpression(node as ElementAccessExpression, captureThisArg);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression: return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg);
                 case SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
                 default: return visitNode(node, visitor, isExpression);
             }
@@ -116,30 +106,31 @@ namespace ts {
             const { expression, chain } = flattenChain(node);
             const left = visitNonOptionalExpression(expression, isCallChain(chain[0]));
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
-            const leftExpression = isSyntheticReference(left) ? left.expression : left;
-            const capturedLeft = maybeCaptureInTempVariable(leftExpression);
-            let rightExpression: Expression = capturedLeft.variable;
+            let leftExpression = isSyntheticReference(left) ? left.expression : left;
+            let capturedLeft: Expression = leftExpression;
+            if (shouldCaptureInTempVariable(leftExpression)) {
+                capturedLeft = createTempVariable(hoistVariableDeclaration);
+                leftExpression = createAssignment(capturedLeft, leftExpression);
+            }
+            let rightExpression = capturedLeft;
             let thisArg: Expression | undefined;
             for (let i = 0; i < chain.length; i++) {
                 const segment = chain[i];
                 switch (segment.kind) {
                     case SyntaxKind.PropertyAccessExpression:
-                        if (i === chain.length - 1 && captureThisArg) {
-                            ({expression: rightExpression, variable: thisArg} = maybeCaptureInTempVariable(rightExpression));
-                        }
-                        rightExpression = createPropertyAccess(
-                            rightExpression,
-                            visitNode(segment.name, visitor, isIdentifier)
-                        );
-                        break;
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            ({expression: rightExpression, variable: thisArg} = maybeCaptureInTempVariable(rightExpression));
+                            if (shouldCaptureInTempVariable(rightExpression)) {
+                                thisArg = createTempVariable(hoistVariableDeclaration);
+                                rightExpression = createAssignment(thisArg, rightExpression);
+                            }
+                            else {
+                                thisArg = rightExpression;
+                            }
                         }
-                        rightExpression = createElementAccess(
-                            rightExpression,
-                            visitNode(segment.argumentExpression, visitor, isExpression)
-                        );
+                        rightExpression = segment.kind === SyntaxKind.PropertyAccessExpression
+                            ? createPropertyAccess(rightExpression, visitNode(segment.name, visitor, isIdentifier))
+                            : createElementAccess(rightExpression, visitNode(segment.argumentExpression, visitor, isExpression));
                         break;
                     case SyntaxKind.CallExpression:
                         if (i === 0 && leftThisArg) {
@@ -162,58 +153,49 @@ namespace ts {
             }
 
             const target = createConditional(
-                createNotNullCondition(capturedLeft, /*negate*/ true),
+                createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true),
                 createVoidZero(),
                 rightExpression,
             );
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
-        function createNotNullCondition(expression: CapturedExpression, negate?: boolean) {
+        function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {
             return createBinary(
                 createBinary(
-                    expression.expression,
-                    createToken(negate ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                    left,
+                    createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                     createNull()
                 ),
-                createToken(negate ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
+                createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
                 createBinary(
-                    expression.variable,
-                    createToken(negate ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                    right,
+                    createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
                     createVoidZero()
                 )
             );
         }
 
         function transformNullishCoalescingExpression(node: BinaryExpression) {
-            const captured = maybeCaptureInTempVariable(visitNode(node.left, visitor, isExpression));
+            let left = visitNode(node.left, visitor, isExpression);
+            let right = left;
+            if (shouldCaptureInTempVariable(left)) {
+                right = createTempVariable(hoistVariableDeclaration);
+                left = createAssignment(right, left);
+            }
             return createConditional(
-                createNotNullCondition(captured),
-                captured.variable,
+                createNotNullCondition(left, right),
+                right,
                 visitNode(node.right, visitor, isExpression),
             );
         }
 
-        interface CapturedExpression {
-            expression: Expression;
-            variable: Expression;
-        }
-
-        function maybeCaptureInTempVariable(expression: Expression): CapturedExpression {
+        function shouldCaptureInTempVariable(expression: Expression): boolean {
             // don't capture identifiers and `this` in a temporary variable
             // `super` cannot be captured as it's no real variable
-            if (isIdentifier(expression) || expression.kind === SyntaxKind.ThisKeyword || expression.kind === SyntaxKind.SuperKeyword) {
-                return {
-                    expression,
-                    variable: expression,
-                };
-            }
-            const variable = createTempVariable(hoistVariableDeclaration);
-            expression = createAssignment(variable, expression);
-            return {
-                expression,
-                variable,
-            };
+            return !isIdentifier(expression) &&
+                expression.kind !== SyntaxKind.ThisKeyword &&
+                expression.kind !== SyntaxKind.SuperKeyword;
         }
     }
 }
