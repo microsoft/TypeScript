@@ -3075,6 +3075,10 @@ namespace ts {
         function emitExportDeclaration(node: ExportDeclaration) {
             let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                nextPos = emitTokenWithComment(SyntaxKind.TypeKeyword, nextPos, writeKeyword, node);
+                writeSpace();
+            }
             if (node.exportClause) {
                 emit(node.exportClause);
             }

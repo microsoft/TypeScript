@@ -32604,7 +32604,7 @@ namespace ts {
                     && node.kind === SyntaxKind.ExportSpecifier
                     && !(target.flags & SymbolFlags.Value)
                     && !(node.flags & NodeFlags.Ambient)) {
-                    error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
+                    error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_an_explicit_type_only_export);
                 }
             }
         }

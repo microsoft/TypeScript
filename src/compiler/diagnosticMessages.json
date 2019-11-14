@@ -635,7 +635,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+    "Re-exporting a type when the '--isolatedModules' flag is provided requires using an explicit type-only export.": {
         "category": "Error",
         "code": 1205
     },
@@ -1054,6 +1054,14 @@
     "Type-only {0} must be a type, but '{1}' is a value.": {
         "category": "Error",
         "code": 1361
+    },
+    "Convert to type-only export": {
+        "category": "Message",
+        "code": 1362
+    },
+    "Convert all re-exported types to type-only exports": {
+        "category": "Message",
+        "code": 1363
     },
 
     "The types of '{0}' are incompatible between these types.": {
