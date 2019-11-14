@@ -14533,13 +14533,15 @@ namespace ts {
              * `target` types.
              */
             function tryElaborateArrayLikeErrors(source: Type, target: Type, reportErrors: boolean): boolean {
+                /**
+                 * The spec for elaboration is:
+                 * - If the source is a readonly tuple and the target is a mutable array or tuple, elaborate on mutability and skip property elaborations.
+                 * - If the source is a tuple then skip property elaborations if the target is an array or tuple.
+                 * - If the source is a readonly array and the target is a mutable array or tuple, elaborate on mutability and skip property elaborations.
+                 * - If the source an array then skip property elaborations if the target is a tuple.
+                 */
                 if (isTupleType(source)) {
-                    // If source is a readonly tuple
-                    // and target is an array or tuple
-                    // and target is not a readonly array
-                    // and target is not a readonly tuple
-                    if (source.target?.readonly && (isTupleType(target) || isArrayType(target)) &&
-                        !isReadonlyArrayType(target) && !(isTupleType(target) && target.target.readonly)) {
+                    if (source.target.readonly && isMutableArrayOrTuple(target)) {
                         if (reportErrors) {
                             reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
                         }
@@ -14547,14 +14549,14 @@ namespace ts {
                     }
                     return isTupleType(target) || isArrayType(target);
                 }
-                if (isTupleType(target)) {
-                    return isArrayType(source);
-                }
-                if (isReadonlyArrayType(source) && isArrayType(target) && !isReadonlyArrayType(target)) {
+                if (isReadonlyArrayType(source) && isMutableArrayOrTuple(target)) {
                     if (reportErrors) {
                         reportError(Diagnostics.The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1, typeToString(source), typeToString(target));
                     }
                     return false;
+                }
+                if (isTupleType(target)) {
+                    return isArrayType(source);
                 }
                 return true;
             }
@@ -16565,6 +16567,10 @@ namespace ts {
 
         function isReadonlyArrayType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && (<TypeReference>type).target === globalReadonlyArrayType;
+        }
+        
+        function isMutableArrayOrTuple(type: Type): boolean {
+            return isArrayType(type) && !isReadonlyArrayType(type) || isTupleType(type) && !type.target.readonly;
         }
 
         function getElementTypeOfArrayType(type: Type): Type | undefined {

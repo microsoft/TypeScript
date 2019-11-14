@@ -35,7 +35,7 @@ tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(57,7): error TS2322: Ty
 tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(60,7): error TS2322: Type '[1]' is not assignable to type 'boolean[]'.
   Type '1' is not assignable to type 'boolean'.
 tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(63,7): error TS2741: Property '0' is missing in type 'readonly number[]' but required in type 'readonly [1]'.
-tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(66,7): error TS2740: Type 'readonly number[]' is missing the following properties from type '[1]': 0, pop, push, reverse, and 4 more.
+tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(66,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type '[1]'.
 tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(69,7): error TS2741: Property '0' is missing in type 'number[]' but required in type 'readonly [1]'.
 tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(72,7): error TS2741: Property '0' is missing in type 'number[]' but required in type '[1]'.
 
@@ -164,7 +164,7 @@ tests/cases/compiler/readonlyTupleAndArrayElaboration.ts(72,7): error TS2741: Pr
     const at3: readonly number[] = [1];
     const at4: [1] = at3;
           ~~~
-!!! error TS2740: Type 'readonly number[]' is missing the following properties from type '[1]': 0, pop, push, reverse, and 4 more.
+!!! error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type '[1]'.
     
     const at5: number[] = [1];
     const at6: readonly [1] = at5;
