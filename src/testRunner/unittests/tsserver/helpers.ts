@@ -67,13 +67,15 @@ namespace ts.projectSystem {
         getLogFileName: returnUndefined,
     };
 
-    export function createHasErrorMessageLogger() {
+    export function createHasErrorMessageLogger(expectsError?: true) {
         let hasErrorMsg = false;
         const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
         const logger: server.Logger = {
             close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
             msg: (s, type) => {
-                Debug.fail(`Error: ${s}, type: ${type}`);
+                if (!expectsError) {
+                    Debug.fail(`Error: ${s}, type: ${type}`);
+                }
                 hasErrorMsg = true;
             }
         };
