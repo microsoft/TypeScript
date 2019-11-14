@@ -2741,6 +2741,7 @@ namespace ts {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
+            emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
         }

@@ -67,6 +67,17 @@ namespace ts {
                 `class A extends B implements C implements D {}`,
                 ScriptTarget.ES2017
             )));
+
+            // github #35093
+            printsCorrectly("definiteAssignmentAssertions", {}, printer => printer.printFile(createSourceFile(
+                "source.ts",
+                `class A {
+                    prop!: string;
+                }
+                
+                let x!: string;`,
+                ScriptTarget.ES2017
+            )));
         });
 
         describe("printBundle", () => {

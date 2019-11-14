@@ -4080,6 +4080,8 @@ declare namespace ts {
     function createDebuggerStatement(): DebuggerStatement;
     function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
     function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
+    function createTypeScriptVariableDeclaration(name: string | BindingName, exclaimationToken?: Token<SyntaxKind.ExclamationToken>, type?: TypeNode, initializer?: Expression): VariableDeclaration;
+    function updateTypeScriptVariableDeclaration(node: VariableDeclaration, name: BindingName, exclaimationToken: Token<SyntaxKind.ExclamationToken> | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
     function createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
     function updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
     function createFunctionDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;

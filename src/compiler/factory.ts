@@ -1936,6 +1936,7 @@ namespace ts {
         return <DebuggerStatement>createSynthesizedNode(SyntaxKind.DebuggerStatement);
     }
 
+    /* @deprecated Use createTypeScriptVariableDeclaration instead and handle definite assignment assertions */
     export function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
         const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
         node.name = asName(name);
@@ -1944,11 +1945,30 @@ namespace ts {
         return node;
     }
 
+    /* @deprecated Use updateTypeScriptVariableDeclaration instead and handle definite assignment assertions */
     export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.name !== name
             || node.type !== type
             || node.initializer !== initializer
             ? updateNode(createVariableDeclaration(name, type, initializer), node)
+            : node;
+    }
+
+    export function createTypeScriptVariableDeclaration(name: string | BindingName, exclaimationToken?: Token<SyntaxKind.ExclamationToken>, type?: TypeNode, initializer?: Expression) {
+        const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
+        node.name = asName(name);
+        node.type = type;
+        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
+        node.exclamationToken = exclaimationToken;
+        return node;
+    }
+
+    export function updateTypeScriptVariableDeclaration(node: VariableDeclaration, name: BindingName, exclaimationToken: Token<SyntaxKind.ExclamationToken> | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+        return node.name !== name
+            || node.type !== type
+            || node.initializer !== initializer
+            || node.exclamationToken !== exclaimationToken
+            ? updateNode(createTypeScriptVariableDeclaration(name, exclaimationToken, type, initializer), node)
             : node;
     }
 
