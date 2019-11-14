@@ -757,7 +757,7 @@ namespace ts.tscWatch {
             const watch = createWatchOfConfigFile(configFile.path, host);
             checkOutputErrorsInitial(host, [
                 getUnknownCompilerOption(watch(), configFile, "foo"),
-                getUnknownCompilerOption(watch(), configFile, "allowJS")
+                getUnknownDidYouMeanCompilerOption(watch(), configFile, "allowJS", "allowJs")
             ]);
         });
 

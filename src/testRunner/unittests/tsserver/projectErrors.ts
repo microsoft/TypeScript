@@ -496,14 +496,14 @@ declare module '@custom/plugin' {
     });
 
     describe("unittests:: tsserver:: Project Errors for Configure file diagnostics events", () => {
-        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
-            const d = Diagnostics.Unknown_compiler_option_0;
+        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string, didYouMean?: string): ConfigFileDiagnostic {
+            const d = didYouMean ? Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 : Diagnostics.Unknown_compiler_option_0;
             const start = configFile.content.indexOf(prop) - 1; // start at "prop"
             return {
                 fileName: configFile.path,
                 start,
                 length: prop.length + 2,
-                messageText: formatStringFromArgs(d.message, [prop]),
+                messageText: formatStringFromArgs(d.message, didYouMean ? [prop, didYouMean] : [prop]),
                 category: d.category,
                 code: d.code,
                 reportsUnnecessary: undefined
@@ -543,7 +543,7 @@ declare module '@custom/plugin' {
             openFilesForSession([file], serverEventManager.session);
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
                 getUnknownCompilerOptionDiagnostic(configFile, "foo"),
-                getUnknownCompilerOptionDiagnostic(configFile, "allowJS")
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS", "allowJs")
             ]);
         });
 

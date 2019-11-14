@@ -3177,6 +3177,10 @@
         "category": "Error",
         "code": 5024
     },
+    "Unknown compiler option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5025
+    },
     "Could not write file '{0}': {1}.": {
         "category": "Error",
         "code": 5033
@@ -3296,6 +3300,10 @@
     "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
         "category": "Error",
         "code": 5076
+    },
+    "Unknown build option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5077
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4747,7 +4755,10 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 17018
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
