@@ -1221,11 +1221,8 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
                     // These are not allowed inside a generator now, but eventually they may be allowed
-                    // as local types. Regardless, any yield statements contained within them should be
-                    // skipped in this traversal.
+                    // as local types. Regardless, skip them to avoid the work.
                     return;
                 default:
                     if (isFunctionLike(node)) {
