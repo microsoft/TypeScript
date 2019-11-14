@@ -8670,14 +8670,23 @@ namespace ts {
             return result;
         }
 
-        function getOptionalCallSignature(signature: Signature) {
-            return signatureIsOptionalCall(signature) ? signature :
-                (signature.optionalCallSignatureCache || (signature.optionalCallSignatureCache = createOptionalCallSignature(signature)));
+        function getOptionalCallSignature(signature: Signature, callChainFlags: SignatureFlags): Signature {
+            if ((signature.flags & SignatureFlags.CallChainFlags) === callChainFlags) {
+                return signature;
+            }
+            if (!signature.optionalCallSignatureCache) {
+                signature.optionalCallSignatureCache = {};
+            }
+            const key = callChainFlags === SignatureFlags.IsInnerCallChain ? "inner" : "outer";
+            return signature.optionalCallSignatureCache[key]
+                || (signature.optionalCallSignatureCache[key] = createOptionalCallSignature(signature, callChainFlags));
         }
 
-        function createOptionalCallSignature(signature: Signature) {
+        function createOptionalCallSignature(signature: Signature, callChainFlags: SignatureFlags) {
+            Debug.assert(callChainFlags === SignatureFlags.IsInnerCallChain || callChainFlags === SignatureFlags.IsOuterCallChain,
+                "An optional call signature can either be for an inner call chain or an outer call chain, but not both.");
             const result = cloneSignature(signature);
-            result.flags |= SignatureFlags.IsOptionalCall;
+            result.flags |= callChainFlags;
             return result;
         }
 
@@ -10292,8 +10301,11 @@ namespace ts {
                     signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
-                if (signatureIsOptionalCall(signature)) {
+                if (signature.flags & SignatureFlags.IsInnerCallChain) {
                     type = addOptionalTypeMarker(type);
+                }
+                else if (signature.flags & SignatureFlags.IsOuterCallChain) {
+                    type = getOptionalType(type);
                 }
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
@@ -16744,8 +16756,8 @@ namespace ts {
             return strictNullChecks ? filterType(type, isNotOptionalTypeMarker) : type;
         }
 
-        function propagateOptionalTypeMarker(type: Type, wasOptional: boolean) {
-            return wasOptional ? addOptionalTypeMarker(type) : type;
+        function propagateOptionalTypeMarker(type: Type, node: OptionalChain, wasOptional: boolean) {
+            return wasOptional ? isOutermostOptionalChain(node) ? getOptionalType(type) : addOptionalTypeMarker(type) : type;
         }
 
         function getOptionalExpressionType(exprType: Type, expression: Expression) {
@@ -22812,7 +22824,7 @@ namespace ts {
         function checkPropertyAccessChain(node: PropertyAccessChain) {
             const leftType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(leftType, node.expression);
-            return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name), nonOptionalType !== leftType);
+            return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name), node, nonOptionalType !== leftType);
         }
 
         function checkQualifiedName(node: QualifiedName) {
@@ -23244,7 +23256,7 @@ namespace ts {
         function checkElementAccessChain(node: ElementAccessChain) {
             const exprType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(exprType, node.expression);
-            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression)), nonOptionalType !== exprType);
+            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression)), node, nonOptionalType !== exprType);
         }
 
         function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type): Type {
@@ -23349,7 +23361,7 @@ namespace ts {
         // interface B extends A { (x: 'foo'): string }
         // const b: B;
         // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-        function reorderCandidates(signatures: readonly Signature[], result: Signature[], isOptionalCall: boolean): void {
+        function reorderCandidates(signatures: readonly Signature[], result: Signature[], callChainFlags: SignatureFlags): void {
             let lastParent: Node | undefined;
             let lastSymbol: Symbol | undefined;
             let cutoffIndex = 0;
@@ -23391,7 +23403,7 @@ namespace ts {
                     spliceIndex = index;
                 }
 
-                result.splice(spliceIndex, 0, isOptionalCall ? getOptionalCallSignature(signature) : signature);
+                result.splice(spliceIndex, 0, callChainFlags ? getOptionalCallSignature(signature, callChainFlags) : signature);
             }
         }
 
@@ -24057,7 +24069,7 @@ namespace ts {
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, isOptionalCall: boolean, fallbackError?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -24076,7 +24088,7 @@ namespace ts {
 
             const candidates = candidatesOutArray || [];
             // reorderCandidates fills up the candidates array directly
-            reorderCandidates(signatures, candidates, isOptionalCall);
+            reorderCandidates(signatures, candidates, callChainFlags);
             if (!candidates.length) {
                 if (reportErrors) {
                     diagnostics.add(getDiagnosticForCallNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
@@ -24463,22 +24475,25 @@ namespace ts {
                     const baseTypeNode = getEffectiveBaseTypeNode(getContainingClass(node)!);
                     if (baseTypeNode) {
                         const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments, baseTypeNode);
-                        return resolveCall(node, baseConstructors, candidatesOutArray, checkMode, /*isOptional*/ false);
+                        return resolveCall(node, baseConstructors, candidatesOutArray, checkMode, SignatureFlags.None);
                     }
                 }
                 return resolveUntypedCall(node);
             }
 
-            let isOptional: boolean;
+            let callChainFlags: SignatureFlags;
             let funcType = checkExpression(node.expression);
             if (isCallChain(node)) {
                 const nonOptionalType = getOptionalExpressionType(funcType, node.expression);
-                isOptional = nonOptionalType !== funcType;
+                callChainFlags = nonOptionalType === funcType ? SignatureFlags.None :
+                    isOutermostOptionalChain(node) ? SignatureFlags.IsOuterCallChain :
+                    SignatureFlags.IsInnerCallChain;
                 funcType = nonOptionalType;
             }
             else {
-                isOptional = false;
+                callChainFlags = SignatureFlags.None;
             }
+
             funcType = checkNonNullTypeWithReporter(
                 funcType,
                 node.expression,
@@ -24554,7 +24569,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, isOptional);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
@@ -24625,7 +24640,7 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, /*isOptional*/ false);
+                return resolveCall(node, constructSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -24634,7 +24649,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*isOptional*/ false);
+                const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
                 if (!noImplicitAny) {
                     if (signature.declaration && !isJSConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                         error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
@@ -24849,7 +24864,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*isOptional*/ false);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
         }
 
         /**
@@ -24912,7 +24927,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, /*isOptional*/ false, headMessage);
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessage);
         }
 
         function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
@@ -24964,7 +24979,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, signatures, candidatesOutArray, checkMode, /*isOptional*/ false);
+            return resolveCall(node, signatures, candidatesOutArray, checkMode, SignatureFlags.None);
         }
 
         /**
@@ -27437,6 +27452,20 @@ namespace ts {
             }
         }
 
+        function getReturnTypeOfSingleNonGenericCallSignature(funcType: Type) {
+            const signature = getSingleCallSignature(funcType);
+            if (signature && !signature.typeParameters) {
+                return getReturnTypeOfSignature(signature);
+            }
+        }
+
+        function getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr: CallChain) {
+            const funcType = checkExpression(expr.expression);
+            const nonOptionalType = getOptionalExpressionType(funcType, expr.expression);
+            const returnType = getReturnTypeOfSingleNonGenericCallSignature(funcType);
+            return returnType && propagateOptionalTypeMarker(returnType, expr, nonOptionalType !== funcType);
+        }
+
         /**
          * Returns the type of an expression. Unlike checkExpression, this function is simply concerned
          * with computing the type and may not fully check all contained sub-expressions for errors.
@@ -27448,21 +27477,10 @@ namespace ts {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-                let isOptional: boolean;
-                let funcType: Type;
-                if (isCallChain(expr)) {
-                    funcType = checkExpression(expr.expression);
-                    const nonOptionalType = getOptionalExpressionType(funcType, expr.expression);
-                    isOptional = funcType !== nonOptionalType;
-                    funcType = checkNonNullType(nonOptionalType, expr.expression);
-                }
-                else {
-                    isOptional = false;
-                    funcType = checkNonNullExpression(expr.expression);
-                }
-                const signature = getSingleCallSignature(funcType);
-                if (signature && !signature.typeParameters) {
-                    return propagateOptionalTypeMarker(getReturnTypeOfSignature(signature), isOptional);
+                const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
+                    getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
+                if (type) {
+                    return type;
                 }
             }
             else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
@@ -36175,7 +36193,4 @@ namespace ts {
         return !!(s.flags & SignatureFlags.HasLiteralTypes);
     }
 
-    export function signatureIsOptionalCall(s: Signature) {
-        return !!(s.flags & SignatureFlags.IsOptionalCall);
-    }
 }
