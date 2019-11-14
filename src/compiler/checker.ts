@@ -16568,7 +16568,7 @@ namespace ts {
         function isReadonlyArrayType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && (<TypeReference>type).target === globalReadonlyArrayType;
         }
-        
+
         function isMutableArrayOrTuple(type: Type): boolean {
             return isArrayType(type) && !isReadonlyArrayType(type) || isTupleType(type) && !type.target.readonly;
         }
