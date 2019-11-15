@@ -934,124 +934,47 @@ namespace ts {
             return sourceFile;
         }
 
-        function setContextFlag(val: boolean, flag: NodeFlags) {
-            if (val) {
-                contextFlags |= flag;
-            }
-            else {
-                contextFlags &= ~flag;
-            }
-        }
+        const setContextFlag = (flag: NodeFlags) => (val: boolean) => {
+                if (val) contextFlags |= flag;
+                else contextFlags &= ~flag;
+        };
+        const setDisallowInContext = setContextFlag(NodeFlags.DisallowInContext);
+        const setYieldContext = setContextFlag(NodeFlags.YieldContext);
+        const setDecoratorContext = setContextFlag(NodeFlags.DecoratorContext);
+        const setAwaitContext = setContextFlag(NodeFlags.AwaitContext);
 
-        function setDisallowInContext(val: boolean) {
-            setContextFlag(val, NodeFlags.DisallowInContext);
-        }
+        const withContext = (context: NodeFlags, inside: boolean) => <T>(func: () => T): T => {
+            // contextFlagsToChange will contain only the context flags that are/n't currently set
+            // that we need to temporarily flip.  We don't just blindly reset to the previous flags
+            // to ensure that we do not mutate cached flags for the incremental parser
+            // (ThisNodeHasError, ThisNodeOrAnySubNodesHasError, and HasAggregatedChildData).
+            const contextFlagsToChange = context & (inside ? ~contextFlags : contextFlags);
+            // 0 => no need to do anything
+            if (!contextFlagsToChange) return func();
+            // flip the requested context flags
+            setContextFlag(contextFlagsToChange)(/*val*/ inside);
+            const result = func();
+            // restore the context flags we just cleared
+            setContextFlag(contextFlagsToChange)(/*val*/ !inside);
+            return result;
+        };
+        const doOutsideOfContext = <T>(context: NodeFlags, func: () => T): T => withContext(context, /*inside*/ false)(func);
+        const doInsideOfContext = <T>(context: NodeFlags, func: () => T): T => withContext(context, /*inside*/ true)(func);
 
-        function setYieldContext(val: boolean) {
-            setContextFlag(val, NodeFlags.YieldContext);
-        }
+        const allowIn = withContext(NodeFlags.DisallowInContext, /*inside*/ false);
+        const disallowIn = withContext(NodeFlags.DisallowInContext, /*inside*/ true);
+        const allowYield = withContext(NodeFlags.YieldContext, /*inside*/ true);
+        const allowDecorator = withContext(NodeFlags.DecoratorContext, /*inside*/ true);
+        const allowAwait = withContext(NodeFlags.AwaitContext, /*inside*/ true);
+        const disallowAwait = withContext(NodeFlags.AwaitContext, /*inside*/ false);
+        const allowYieldAwait = withContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, /*inside*/ true);
+        const disallowYieldAwait = withContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, /*inside*/ false);
 
-        function setDecoratorContext(val: boolean) {
-            setContextFlag(val, NodeFlags.DecoratorContext);
-        }
-
-        function setAwaitContext(val: boolean) {
-            setContextFlag(val, NodeFlags.AwaitContext);
-        }
-
-        function doOutsideOfContext<T>(context: NodeFlags, func: () => T): T {
-            // contextFlagsToClear will contain only the context flags that are
-            // currently set that we need to temporarily clear
-            // We don't just blindly reset to the previous flags to ensure
-            // that we do not mutate cached flags for the incremental
-            // parser (ThisNodeHasError, ThisNodeOrAnySubNodesHasError, and
-            // HasAggregatedChildData).
-            const contextFlagsToClear = context & contextFlags;
-            if (contextFlagsToClear) {
-                // clear the requested context flags
-                setContextFlag(/*val*/ false, contextFlagsToClear);
-                const result = func();
-                // restore the context flags we just cleared
-                setContextFlag(/*val*/ true, contextFlagsToClear);
-                return result;
-            }
-
-            // no need to do anything special as we are not in any of the requested contexts
-            return func();
-        }
-
-        function doInsideOfContext<T>(context: NodeFlags, func: () => T): T {
-            // contextFlagsToSet will contain only the context flags that
-            // are not currently set that we need to temporarily enable.
-            // We don't just blindly reset to the previous flags to ensure
-            // that we do not mutate cached flags for the incremental
-            // parser (ThisNodeHasError, ThisNodeOrAnySubNodesHasError, and
-            // HasAggregatedChildData).
-            const contextFlagsToSet = context & ~contextFlags;
-            if (contextFlagsToSet) {
-                // set the requested context flags
-                setContextFlag(/*val*/ true, contextFlagsToSet);
-                const result = func();
-                // reset the context flags we just set
-                setContextFlag(/*val*/ false, contextFlagsToSet);
-                return result;
-            }
-
-            // no need to do anything special as we are already in all of the requested contexts
-            return func();
-        }
-
-        function allowInAnd<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.DisallowInContext, func);
-        }
-
-        function disallowInAnd<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.DisallowInContext, func);
-        }
-
-        function doInYieldContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.YieldContext, func);
-        }
-
-        function doInDecoratorContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.DecoratorContext, func);
-        }
-
-        function doInAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.AwaitContext, func);
-        }
-
-        function doOutsideOfAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.AwaitContext, func);
-        }
-
-        function doInYieldAndAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
-        }
-
-        function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
-        }
-
-        function inContext(flags: NodeFlags) {
-            return (contextFlags & flags) !== 0;
-        }
-
-        function inYieldContext() {
-            return inContext(NodeFlags.YieldContext);
-        }
-
-        function inDisallowInContext() {
-            return inContext(NodeFlags.DisallowInContext);
-        }
-
-        function inDecoratorContext() {
-            return inContext(NodeFlags.DecoratorContext);
-        }
-
-        function inAwaitContext() {
-            return inContext(NodeFlags.AwaitContext);
-        }
+        const inContext = (flags: NodeFlags) => () => (contextFlags & flags) !== 0;
+        const inYieldContext = inContext(NodeFlags.YieldContext);
+        const inDisallowInContext = inContext(NodeFlags.DisallowInContext);
+        const inDecoratorContext = inContext(NodeFlags.DecoratorContext);
+        const inAwaitContext = inContext(NodeFlags.AwaitContext);
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
             parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
@@ -1455,7 +1378,7 @@ namespace ts {
             // We parse any expression (including a comma expression). But the grammar
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -2289,7 +2212,7 @@ namespace ts {
 
         function parseTemplateSpan(): TemplateSpan {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
-            span.expression = allowInAnd(parseExpression);
+            span.expression = allowIn(parseExpression);
 
             let literal: TemplateMiddle | TemplateTail;
             if (token() === SyntaxKind.CloseBraceToken) {
@@ -3864,8 +3787,8 @@ namespace ts {
             }
 
             return isAsync
-                ? doInAwaitContext(parseAssignmentExpressionOrHigher)
-                : doOutsideOfAwaitContext(parseAssignmentExpressionOrHigher);
+                ? allowAwait(parseAssignmentExpressionOrHigher)
+                : disallowAwait(parseAssignmentExpressionOrHigher);
         }
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
@@ -4642,7 +4565,7 @@ namespace ts {
                 indexedAccess.argumentExpression = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.An_element_access_expression_should_take_an_argument);
             }
             else {
-                const argument = allowInAnd(parseExpression);
+                const argument = allowIn(parseExpression);
                 if (isStringOrNumericLiteralLike(argument)) {
                     argument.text = internIdentifier(argument.text);
                 }
@@ -4888,7 +4811,7 @@ namespace ts {
         function parseParenthesizedExpression(): ParenthesizedExpression {
             const node = <ParenthesizedExpression>createNodeWithJSDoc(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
@@ -4962,13 +4885,13 @@ namespace ts {
                 const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
                 if (equalsToken) {
                     (<ShorthandPropertyAssignment>node).equalsToken = equalsToken;
-                    (<ShorthandPropertyAssignment>node).objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                    (<ShorthandPropertyAssignment>node).objectAssignmentInitializer = allowIn(parseAssignmentExpressionOrHigher);
                 }
             }
             else {
                 node.kind = SyntaxKind.PropertyAssignment;
                 parseExpected(SyntaxKind.ColonToken);
-                (<PropertyAssignment>node).initializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                (<PropertyAssignment>node).initializer = allowIn(parseAssignmentExpressionOrHigher);
             }
             return finishNode(node);
         }
@@ -5004,9 +4927,9 @@ namespace ts {
             const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
             node.name =
-                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                isGenerator && isAsync ? allowYieldAwait(parseOptionalIdentifier) :
+                isGenerator ? allowYield(parseOptionalIdentifier) :
+                isAsync ? allowAwait(parseOptionalIdentifier) :
                 parseOptionalIdentifier();
 
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
@@ -5109,7 +5032,7 @@ namespace ts {
             const node = <IfStatement>createNode(SyntaxKind.IfStatement);
             parseExpected(SyntaxKind.IfKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.thenStatement = parseStatement();
             node.elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
@@ -5122,7 +5045,7 @@ namespace ts {
             node.statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
@@ -5137,7 +5060,7 @@ namespace ts {
             const node = <WhileStatement>createNode(SyntaxKind.WhileStatement);
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
             return finishNode(node);
@@ -5155,7 +5078,7 @@ namespace ts {
                     initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
                 }
                 else {
-                    initializer = disallowInAnd(parseExpression);
+                    initializer = disallowIn(parseExpression);
                 }
             }
             let forOrForInOrForOfStatement: IterationStatement;
@@ -5163,14 +5086,14 @@ namespace ts {
                 const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
                 forOfStatement.awaitModifier = awaitToken;
                 forOfStatement.initializer = initializer;
-                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+                forOfStatement.expression = allowIn(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
             }
             else if (parseOptional(SyntaxKind.InKeyword)) {
                 const forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 forInStatement.initializer = initializer;
-                forInStatement.expression = allowInAnd(parseExpression);
+                forInStatement.expression = allowIn(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forInStatement;
             }
@@ -5179,11 +5102,11 @@ namespace ts {
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token() !== SyntaxKind.SemicolonToken && token() !== SyntaxKind.CloseParenToken) {
-                    forStatement.condition = allowInAnd(parseExpression);
+                    forStatement.condition = allowIn(parseExpression);
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token() !== SyntaxKind.CloseParenToken) {
-                    forStatement.incrementor = allowInAnd(parseExpression);
+                    forStatement.incrementor = allowIn(parseExpression);
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forStatement;
@@ -5211,7 +5134,7 @@ namespace ts {
 
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!canParseSemicolon()) {
-                node.expression = allowInAnd(parseExpression);
+                node.expression = allowIn(parseExpression);
             }
 
             parseSemicolon();
@@ -5222,7 +5145,7 @@ namespace ts {
             const node = <WithStatement>createNode(SyntaxKind.WithStatement);
             parseExpected(SyntaxKind.WithKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return finishNode(node);
@@ -5231,7 +5154,7 @@ namespace ts {
         function parseCaseClause(): CaseClause {
             const node = <CaseClause>createNode(SyntaxKind.CaseClause);
             parseExpected(SyntaxKind.CaseKeyword);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
             node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
             return finishNode(node);
@@ -5253,7 +5176,7 @@ namespace ts {
             const node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement);
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = allowInAnd(parseExpression);
+            node.expression = allowIn(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const caseBlock = <CaseBlock>createNode(SyntaxKind.CaseBlock);
             parseExpected(SyntaxKind.OpenBraceToken);
@@ -5274,7 +5197,7 @@ namespace ts {
             // grammar walker.
             const node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement);
             parseExpected(SyntaxKind.ThrowKeyword);
-            node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
+            node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowIn(parseExpression);
             parseSemicolon();
             return finishNode(node);
         }
@@ -5326,7 +5249,7 @@ namespace ts {
             // out an expression, seeing if it is identifier and then seeing if it is followed by
             // a colon.
             const node = <ExpressionStatement | LabeledStatement>createNodeWithJSDoc(SyntaxKind.Unknown);
-            const expression = allowInAnd(parseExpression);
+            const expression = allowIn(parseExpression);
             if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
                 node.kind = SyntaxKind.LabeledStatement;
                 (<LabeledStatement>node).label = <Identifier>expression;
@@ -5973,7 +5896,7 @@ namespace ts {
                     break;
                 }
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
-                decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
+                decorator.expression = allowDecorator(parseLeftHandSideExpressionOrHigher);
                 finishNode(decorator);
                 (list || (list = [])).push(decorator);
             }
@@ -6196,7 +6119,7 @@ namespace ts {
         function parseEnumMember(): EnumMember {
             const node = <EnumMember>createNodeWithJSDoc(SyntaxKind.EnumMember);
             node.name = parsePropertyName();
-            node.initializer = allowInAnd(parseInitializer);
+            node.initializer = allowIn(parseInitializer);
             return finishNode(node);
         }
 
@@ -6205,7 +6128,7 @@ namespace ts {
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
+                node.members = disallowYieldAwait(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
