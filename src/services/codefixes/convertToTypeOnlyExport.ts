@@ -22,13 +22,13 @@ namespace ts.codefix {
         if (exportDeclaration?.exportClause?.elements.length === 1) {
             changes.replaceNode(
                 sourceFile,
-                exportDeclaration!,
+                exportDeclaration,
                 updateExportDeclaration(
-                    exportDeclaration!,
-                    exportDeclaration!.decorators,
-                    exportDeclaration!.modifiers,
-                    exportDeclaration!.exportClause,
-                    exportDeclaration!.moduleSpecifier,
+                    exportDeclaration,
+                    exportDeclaration.decorators,
+                    exportDeclaration.modifiers,
+                    exportDeclaration.exportClause,
+                    exportDeclaration.moduleSpecifier,
                     /*isTypeOnly*/ true));
         }
         else {
