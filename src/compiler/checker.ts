@@ -28447,6 +28447,12 @@ namespace ts {
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                                 case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
                                     reportOperatorError();
+                                    break;
+                                case SyntaxKind.AsteriskAsteriskToken:
+                                case SyntaxKind.AsteriskAsteriskEqualsToken:
+                                    if (languageVersion < ScriptTarget.ES2016) {
+                                        error(errorNode, Diagnostics.Exponentiation_cannot_be_performed_on_bigint_values_unless_the_target_option_is_set_to_es2016_or_later);
+                                    }
                             }
                             resultType = bigintType;
                         }

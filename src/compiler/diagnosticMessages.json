@@ -2967,6 +2967,10 @@
         "category": "Error",
         "code": 2790
     },
+    "Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.": {
+        "category": "Error",
+        "code": 2791
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
