@@ -232,7 +232,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly Statement[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile, lastNodeInsertedAtStart: Node, adjustSuffix: boolean }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -485,16 +485,22 @@ namespace ts.textChanges {
             const clsStart = cls.getStart(sourceFile);
             const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
                 + this.formatContext.options.indentSize!;
-            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, { indentation, ...this.getInsertNodeAtStartPrefixSuffix(sourceFile, cls) });
+            const adjustSuffix = !(positionsAreOnSameLine as any)(...getClassOrObjectBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
+            const isFirst = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile, lastNodeInsertedAtStart: newElement, adjustSuffix });
+            if (!isFirst) {
+                const classWithNodeInsertedAfterStart = this.classesWithNodesInsertedAtStart.get(String(getNodeId(cls)));
+                if (classWithNodeInsertedAfterStart) {
+                    classWithNodeInsertedAfterStart.lastNodeInsertedAtStart = newElement;
+                }
+            }
+            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, { indentation, ...this.getInsertNodeAtStartPrefixSuffix(cls, isFirst) });
         }
 
-        private getInsertNodeAtStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): { prefix: string, suffix: string } {
+        private getInsertNodeAtStartPrefixSuffix(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, isFirst: boolean): { prefix: string, suffix: string } {
             const comma = isObjectLiteralExpression(cls) ? "," : "";
             if (getMembersOrProperties(cls).length === 0) {
-                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile })) {
-                    // For `class C {\n}`, don't add the trailing "\n"
-                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassOrObjectBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
-                    return { prefix: this.newLineCharacter, suffix: comma + (shouldSuffix ? this.newLineCharacter : "") };
+                if (isFirst) {
+                    return { prefix: this.newLineCharacter, suffix: comma + this.newLineCharacter };
                 }
                 else {
                     return { prefix: "", suffix: comma + this.newLineCharacter };
@@ -723,11 +729,22 @@ namespace ts.textChanges {
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
-            this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
+            this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile, lastNodeInsertedAtStart, adjustSuffix }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
                 // For `class C { }` remove the whitespace inside the braces.
                 if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
                     this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                }
+
+                // Remove trailing newline from the last node that we inserted at the start of the class
+                if (adjustSuffix) {
+                    this.changes.forEach(change => {
+                        if (change.kind === ChangeKind.ReplaceWithSingleNode && change.node === lastNodeInsertedAtStart) {
+                            if (change.options?.suffix) {
+                                change.options.suffix = removeSuffix(change.options.suffix, this.newLineCharacter);
+                            }
+                        }
+                    });
                 }
             });
         }
