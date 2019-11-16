@@ -155,7 +155,7 @@ namespace ts {
             }
 
             const target = isDelete
-                ? createConditional(createNotNullCondition(leftExpression, capturedLeft, /*negate*/ true), createTrue(), createDelete(rightExpression))
+                ? createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createTrue(), createDelete(rightExpression))
                 : createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createVoidZero(), rightExpression);
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
         }
@@ -200,7 +200,7 @@ namespace ts {
 
         function visitDeleteExpression(node: DeleteExpression) {
             return isOptionalChain(skipParentheses(node.expression))
-                ? setOriginalNode(visitNonOptionalExpression(node.expression, /*caputeThisArg*/ false, /*isDelete*/ true), node)
+                ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
                 : updateDelete(node, visitNode(node.expression, visitor, isExpression));
         }
     }
