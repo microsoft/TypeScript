@@ -2219,7 +2219,7 @@ namespace ts {
 
             function maybeTypeOnly(symbol: Symbol | undefined) {
                 if (symbol && node.isTypeOnly && node.name) {
-                    return createSyntheticTypeAlias(node.name, symbol);
+                    return createTypeOnlyImportOrExport(node.name, symbol);
                 }
                 return symbol;
             }
@@ -2343,7 +2343,7 @@ namespace ts {
         function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
             const resolved = getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
             if (resolved && node.parent.parent.isTypeOnly) {
-                return createSyntheticTypeAlias(node.name, resolved);
+                return createTypeOnlyImportOrExport(node.name, resolved);
             }
             return resolved;
         }
@@ -2358,8 +2358,9 @@ namespace ts {
          * `TypeFlags.Alias` so that alias resolution works as usual, but once the target `A`
          * has been resolved, we essentially want to pretend we have a type alias to that target.
          */
-        function createSyntheticTypeAlias(sourceNode: ExportSpecifier | Identifier, target: Symbol) {
-            if (!(target.flags & SymbolFlags.Type)) {
+        function createTypeOnlyImportOrExport(sourceNode: ExportSpecifier | Identifier, target: Symbol) {
+            const symbol = createTypeOnlySymbol(target);
+            if (!symbol) {
                 const identifier = isExportSpecifier(sourceNode) ? sourceNode.name : sourceNode;
                 const nameText = idText(identifier);
                 addRelatedInfo(
@@ -2373,18 +2374,46 @@ namespace ts {
                         Diagnostics._0_is_declared_here,
                         nameText));
             }
-            const symbol = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
-            symbol.declarations = [sourceNode];
-            symbol.valueDeclaration = sourceNode;
-            symbol.immediateTarget = target;
+
             return symbol;
+        }
+
+        function createTypeOnlySymbol(target: Symbol): Symbol | undefined {
+            if (target.flags & SymbolFlags.ValueModule) {
+                return createNamespaceModuleForModule(target);
+            }
+            if (target.flags & SymbolFlags.NamespaceModule || !(target.flags & SymbolFlags.Value)) {
+                return target;
+            }
+            if (target.flags & SymbolFlags.Type) {
+                const alias = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
+                alias.declarations = emptyArray;
+                alias.immediateTarget = target;
+                return alias;
+            }
+        }
+
+        function createNamespaceModuleForModule(moduleSymbol: Symbol) {
+            Debug.assert(!!(moduleSymbol.flags & SymbolFlags.ValueModule));
+            const filtered = createSymbol(SymbolFlags.NamespaceModule, moduleSymbol.escapedName);
+            filtered.declarations = moduleSymbol.declarations;
+            if (moduleSymbol.exports) {
+                filtered.exports = createSymbolTable();
+                moduleSymbol.exports.forEach((exportSymbol, key) => {
+                    const typeOnlyExport = createTypeOnlySymbol(exportSymbol);
+                    if (typeOnlyExport) {
+                        filtered.exports!.set(key, typeOnlyExport);
+                    }
+                });
+            }
+            return filtered;
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
             const target = node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
-            return target && isTypeOnlyExportSpecifier(node) ? createSyntheticTypeAlias(node, target) : target;
+            return target && isTypeOnlyExportSpecifier(node) ? createTypeOnlyImportOrExport(node, target) : target;
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {

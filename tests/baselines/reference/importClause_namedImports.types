@@ -24,10 +24,10 @@ declare let a: A;
 >a : typeof import("/abc").A
 
 declare let b: B;
->b : any
+>b : B
 
 b.b;
->b.b : any
->b : any
->b : any
+>b.b : string
+>b : B
+>b : string
 

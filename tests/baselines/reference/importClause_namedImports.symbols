@@ -25,5 +25,7 @@ declare let b: B;
 >B : Symbol(B, Decl(d.ts, 0, 16))
 
 b.b;
+>b.b : Symbol(b, Decl(abc.ts, 1, 18))
 >b : Symbol(b, Decl(d.ts, 3, 11))
+>b : Symbol(b, Decl(abc.ts, 1, 18))
 
