@@ -32616,6 +32616,7 @@ namespace ts {
                 // Don't allow to re-export something with no value side when `--isolatedModules` is set.
                 if (compilerOptions.isolatedModules
                     && node.kind === SyntaxKind.ExportSpecifier
+                    && !node.parent.parent.isTypeOnly
                     && !(target.flags & SymbolFlags.Value)
                     && !(node.flags & NodeFlags.Ambient)) {
                     error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_an_explicit_type_only_export);
