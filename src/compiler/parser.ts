@@ -6322,9 +6322,9 @@ namespace ts {
             const afterImportPos = scanner.getStartPos();
 
             let identifier: Identifier | undefined;
-            if (isIdentifier()) {
+            if (isIdentifier() && (token() !== SyntaxKind.TypeKeyword || lookAhead(nextTokenAfterImportedIdentifierProducesImportDeclaration))) {
                 identifier = parseIdentifier();
-                if (token() !== SyntaxKind.CommaToken && token() !== SyntaxKind.FromKeyword) {
+                if (!tokenAfterImportedIdentifierProducesImportDeclaration()) {
                     return parseImportEqualsDeclaration(<ImportEqualsDeclaration>node, identifier);
                 }
             }
@@ -6335,8 +6335,9 @@ namespace ts {
             //  import ImportClause from ModuleSpecifier ;
             //  import ModuleSpecifier;
             if (identifier || // import id
-                token() === SyntaxKind.AsteriskToken || // import *
-                token() === SyntaxKind.OpenBraceToken) { // import {
+                token() === SyntaxKind.AsteriskToken ||  // import *
+                token() === SyntaxKind.OpenBraceToken || // import {
+                token() === SyntaxKind.TypeKeyword) {    // import type
                 (<ImportDeclaration>node).importClause = parseImportClause(identifier, afterImportPos);
                 parseExpected(SyntaxKind.FromKeyword);
             }
@@ -6344,6 +6345,17 @@ namespace ts {
             (<ImportDeclaration>node).moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
             return finishNode(node);
+        }
+
+        function tokenAfterImportedIdentifierProducesImportDeclaration() {
+            // In `import id ___`, the current token decides whether to produce
+            // an ImportDeclaration or ImportEqualsDeclaration.
+            return token() === SyntaxKind.CommaToken || token() === SyntaxKind.FromKeyword;
+        }
+
+        function nextTokenAfterImportedIdentifierProducesImportDeclaration() {
+            nextToken();
+            return tokenAfterImportedIdentifierProducesImportDeclaration();
         }
 
         function parseImportEqualsDeclaration(node: ImportEqualsDeclaration, identifier: Identifier): ImportEqualsDeclaration {
@@ -6364,6 +6376,14 @@ namespace ts {
             //  ImportedDefaultBinding, NamedImports
 
             const importClause = <ImportClause>createNode(SyntaxKind.ImportClause, fullStart);
+            if (token() === SyntaxKind.TypeKeyword) {
+                importClause.isTypeOnly = true;
+                nextToken();
+                if (isIdentifier()) {
+                    identifier = parseIdentifier();
+                }
+            }
+
             if (identifier) {
                 // ImportedDefaultBinding:
                 //  ImportedBinding

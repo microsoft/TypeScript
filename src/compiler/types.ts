@@ -2440,6 +2440,7 @@ namespace ts {
     export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent: ImportDeclaration;
+        isTypeOnly: boolean;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
