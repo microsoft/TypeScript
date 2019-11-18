@@ -732,11 +732,8 @@ namespace FourSlash {
             if (!range) {
                 this.raiseError(`goToDefinitionsAndBoundSpan failed - found a TextSpan ${JSON.stringify(defs.textSpan)} when it wasn't expected.`);
             }
-            else if (defs.textSpan.start !== range.pos || defs.textSpan.length !== range.end - range.pos) {
-                const expected: ts.TextSpan = {
-                    start: range.pos, length: range.end - range.pos
-                };
-                this.raiseError(`goToDefinitionsAndBoundSpan failed - expected to find TextSpan ${JSON.stringify(expected)} but got ${JSON.stringify(defs.textSpan)}`);
+            else {
+                this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
             }
         }
 
@@ -3080,6 +3077,142 @@ namespace FourSlash {
             Harness.IO.log(stringify(codeFixes));
         }
 
+        public verifyCallHierarchy(options: false | FourSlashInterface.VerifyCallHierarchyOptions | Range) {
+            const callHierarchyItem = this.languageService.prepareCallHierarchy(this.activeFile.fileName, this.currentCaretPosition)!;
+            this.assertCallHierarchyItemMatches(callHierarchyItem, options);
+        }
+
+        public verifyCallHierarchyIncomingCalls(options: FourSlashInterface.Sequence<FourSlashInterface.VerifyCallHierarchyIncomingCallOptions | Range>) {
+            const incomingCalls = this.languageService.provideCallHierarchyIncomingCalls(this.activeFile.fileName, this.currentCaretPosition)!;
+            this.assertCallHierarchyIncomingCallsMatch(incomingCalls, options);
+        }
+
+        public verifyCallHierarchyOutgoingCalls(options: FourSlashInterface.Sequence<FourSlashInterface.VerifyCallHierarchyOutgoingCallOptions | Range>) {
+            const outgoingCalls = this.languageService.provideCallHierarchyOutgoingCalls(this.activeFile.fileName, this.currentCaretPosition)!;
+            this.assertCallHierarchyOutgoingCallsMatch(outgoingCalls, options);
+        }
+
+        private assertSequence<T, U>(actual: readonly T[] | undefined, expected: FourSlashInterface.Sequence<U>, equate: (actual: T, expected: U) => boolean | undefined, assertion: (actual: T, expected: U, message?: string) => void, message?: string, stringifyActual: (actual: T) => string = stringifyFallback, stringifyExpected: (expected: U) => string = stringifyFallback) {
+            // normalize expected input
+            if (!expected) {
+                expected = { exact: true, values: ts.emptyArray };
+            }
+            else if (ts.isArray(expected)) {
+                expected = { exact: false, values: expected };
+            }
+
+            if (expected.exact) {
+                if (actual === undefined || actual.length === 0) {
+                    if (expected.values.length !== 0) {
+                        this.raiseError(`${prefixMessage(message)}Expected sequence to have exactly ${expected.values.length} item${expected.values.length > 1 ? "s" : ""} but got ${actual ? "an empty array" : "undefined"} instead.\nExpected:\n${stringifyArray(expected.values, stringifyExpected)}`);
+                    }
+                    return;
+                }
+                if (expected.values.length === 0) {
+                    this.raiseError(`${prefixMessage(message)}Expected sequence to be empty but got ${actual.length} item${actual.length > 1 ? "s" : ""} instead.\nActual:\n${stringifyArray(actual, stringifyActual)}`);
+                    return;
+                }
+            }
+            else if (actual === undefined || actual.length === 0) {
+                if (expected.values.length !== 0) {
+                    this.raiseError(`${prefixMessage(message)}Expected sequence to have at least ${expected.values.length} item${expected.values.length > 1 ? "s" : ""} but got ${actual ? "an empty array" : "undefined"} instead.\nExpected:\n${stringifyArray(expected.values, stringifyExpected)}`);
+                }
+                return;
+            }
+
+            let expectedIndex = 0;
+            let actualIndex = 0;
+            while (expectedIndex < expected.values.length && actualIndex < actual.length) {
+                const actualItem = actual[actualIndex];
+                actualIndex++;
+                const expectedItem = expected.values[expectedIndex];
+                const result = expected.exact || equate(actualItem, expectedItem);
+                if (result) {
+                    assertion(actualItem, expectedItem, message);
+                    expectedIndex++;
+                }
+                else if (expected.exact) {
+                    this.raiseError(`${prefixMessage(message)}Expected item at index ${expectedIndex} to be ${stringifyExpected(expectedItem)} but got ${stringifyActual(actualItem)} instead.`);
+                }
+                else if (result === undefined) {
+                    this.raiseError(`${prefixMessage(message)}Unable to compare items`);
+                }
+            }
+
+            if (expectedIndex < expected.values.length) {
+                const expectedItem = expected.values[expectedIndex];
+                this.raiseError(`${prefixMessage(message)}Expected array to contain ${stringifyExpected(expectedItem)} but it was not found.`);
+            }
+        }
+
+        private assertCallHierarchyItemMatches(callHierarchyItem: ts.CallHierarchyItem | undefined, options: false | FourSlashInterface.VerifyCallHierarchyOptions | Range, message?: string) {
+            if (!options) {
+                assert.isUndefined(callHierarchyItem, this.messageAtLastKnownMarker(`${prefixMessage(message)}Expected location to not have a call hierarchy`));
+            }
+            else {
+                assert.isDefined(callHierarchyItem, this.messageAtLastKnownMarker(`${prefixMessage(message)}Expected location to have a call hierarchy`));
+                if (!callHierarchyItem) return;
+                if (isRange(options)) {
+                    options = { selectionRange: options };
+                }
+                if (options.kind !== undefined) {
+                    assert.equal(callHierarchyItem.kind, options.kind, this.messageAtLastKnownMarker(`${prefixMessage(message)}Invalid kind`));
+                }
+                if (options.range) {
+                    assert.equal(callHierarchyItem.file, options.range.fileName, this.messageAtLastKnownMarker(`${prefixMessage(message)}Incorrect file for call hierarchy item`));
+                    this.assertTextSpanEqualsRange(callHierarchyItem.span, options.range, `${prefixMessage(message)}Incorrect range for declaration`);
+                }
+                if (options.selectionRange) {
+                    assert.equal(callHierarchyItem.file, options.selectionRange.fileName, this.messageAtLastKnownMarker(`${prefixMessage(message)}Incorrect file for call hierarchy item`));
+                    this.assertTextSpanEqualsRange(callHierarchyItem.selectionSpan, options.selectionRange, `${prefixMessage(message)}Incorrect selectionRange for declaration`);
+                }
+                if (options.incoming !== undefined) {
+                    const incomingCalls = this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start);
+                    this.assertCallHierarchyIncomingCallsMatch(incomingCalls, options.incoming, message);
+                }
+                if (options.outgoing !== undefined) {
+                    const outgoingCalls = this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start);
+                    this.assertCallHierarchyOutgoingCallsMatch(outgoingCalls, options.outgoing, message);
+                }
+            }
+        }
+
+        private assertCallHierarchyIncomingCallsMatch(incomingCalls: ts.CallHierarchyIncomingCall[], options: FourSlashInterface.Sequence<FourSlashInterface.VerifyCallHierarchyIncomingCallOptions | Range>, message?: string) {
+            this.assertSequence(incomingCalls, options,
+                (actual, expected) => {
+                    expected = normalizeCallHierarchyIncomingCallOptions(expected);
+                    const from = normalizeCallHierarchyOptions(expected.from);
+                    return from.selectionRange && textSpanEqualsRange(actual.from.selectionSpan, from.selectionRange);
+                },
+                (actual, expected, message) => {
+                    expected = normalizeCallHierarchyIncomingCallOptions(expected);
+                    const from = normalizeCallHierarchyOptions(expected.from);
+                    this.assertCallHierarchyItemMatches(actual.from, from, message);
+                    if (expected.fromRanges !== undefined) this.assertSequence(actual.fromSpans, expected.fromRanges, textSpanEqualsRange, ts.noop, `${prefixMessage(message)}Invalid fromRange`);
+                }, `${prefixMessage(message)}Invalid incoming calls`);
+        }
+
+        private assertCallHierarchyOutgoingCallsMatch(outgoingCalls: ts.CallHierarchyOutgoingCall[], options: FourSlashInterface.Sequence<FourSlashInterface.VerifyCallHierarchyOutgoingCallOptions | Range>, message?: string) {
+            this.assertSequence(outgoingCalls, options,
+                (actual, expected) => {
+                    expected = normalizeCallHierarchyOutgoingCallOptions(expected);
+                    const to = normalizeCallHierarchyOptions(expected.to);
+                    return to.selectionRange && textSpanEqualsRange(actual.to.selectionSpan, to.selectionRange);
+                },
+                (actual, expected, message) => {
+                    expected = normalizeCallHierarchyOutgoingCallOptions(expected);
+                    const to = normalizeCallHierarchyOptions(expected.to);
+                    this.assertCallHierarchyItemMatches(actual.to, to, message);
+                    if (expected.fromRanges !== undefined) this.assertSequence(actual.fromSpans, expected.fromRanges, textSpanEqualsRange, ts.noop, `${prefixMessage(message)}Invalid fromRange`);
+                }, `${prefixMessage(message)}Invalid outgoing calls`);
+        }
+
+        private assertTextSpanEqualsRange(span: ts.TextSpan, range: Range, message?: string) {
+            if (!textSpanEqualsRange(span, range)) {
+                this.raiseError(`${prefixMessage(message)}Expected to find TextSpan ${JSON.stringify({ start: range.pos, length: range.end - range.pos })} but got ${JSON.stringify(span)} instead.`);
+            }
+        }
+
         private getLineContent(index: number) {
             const text = this.getFileContent(this.activeFile.fileName);
             const pos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
@@ -3213,6 +3346,40 @@ namespace FourSlash {
         }
     }
 
+    function prefixMessage(message: string | undefined) {
+        return message ? `${message} - ` : "";
+    }
+
+    function stringifyArray<T>(values: readonly T[], stringify: (value: T) => string, indent = "  ") {
+        return values.length ? `${indent}[\n${indent}  ${values.map(stringify).join(`,\n${indent}  `)}\n${indent}]` : `${indent}[]`;
+    }
+
+    function stringifyFallback(value: unknown) {
+        return JSON.stringify(value);
+    }
+
+    function textSpanEqualsRange(span: ts.TextSpan, range: Range) {
+        return span.start === range.pos && span.length === range.end - range.pos;
+    }
+
+    function isRange(value: object): value is Range {
+        return ts.hasProperty(value, "pos")
+            && ts.hasProperty(value, "end")
+            && ts.hasProperty(value, "fileName");
+    }
+
+    function normalizeCallHierarchyOptions(options: Range | FourSlashInterface.VerifyCallHierarchyOptions) {
+        return isRange(options) ? { selectionRange: options } : options;
+    }
+
+    function normalizeCallHierarchyIncomingCallOptions(options: Range | FourSlashInterface.VerifyCallHierarchyIncomingCallOptions) {
+        return isRange(options) ? { from: options } : options;
+    }
+
+    function normalizeCallHierarchyOutgoingCallOptions(options: Range | FourSlashInterface.VerifyCallHierarchyOutgoingCallOptions) {
+        return isRange(options) ? { to: options } : options;
+    }
+
     function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {
         forEachTextChange(textChanges, change => {
             const update = (p: number): number => updatePosition(p, change.span.start, ts.textSpanEnd(change.span), change.newText);
@@ -3274,7 +3441,7 @@ namespace FourSlash {
     function runCode(code: string, state: TestState): void {
         // Compile and execute the test
         const wrappedCode =
-            `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {
+            `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, sequence, verifyOperationIsCancelled) {
 ${code}
 })`;
         try {
@@ -3288,7 +3455,7 @@ ${code}
             const cancellation = new FourSlashInterface.Cancellation(state);
             // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
-            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
+            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, FourSlashInterface.Sequence, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -4285,6 +4452,18 @@ namespace FourSlashInterface {
 
         public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
             this.state.getEditsForFileRename(options);
+        }
+
+        public callHierarchy(options: false | FourSlash.Range | VerifyCallHierarchyOptions) {
+            this.state.verifyCallHierarchy(options);
+        }
+
+        public callHierarchyIncomingCalls(options: Sequence<VerifyCallHierarchyIncomingCallOptions | FourSlash.Range>) {
+            this.state.verifyCallHierarchyIncomingCalls(options);
+        }
+
+        public callHierarchyOutgoingCalls(options: Sequence<VerifyCallHierarchyOutgoingCallOptions | FourSlash.Range>) {
+            this.state.verifyCallHierarchyOutgoingCalls(options);
         }
 
         public moveToNewFile(options: MoveToNewFileOptions): void {
@@ -5352,4 +5531,48 @@ namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
+
+    export type Sequence<T> =
+        | false // Indicates the actual result must be undefined or contain no elements
+        | readonly T[] // Indicates the actual result must at least contain the specified elements, in any order
+        | {
+            readonly exact?: boolean; // Indicates the actual result must contain all of the elements in `values` (no more and no fewer).
+            readonly values: readonly T[];
+        };
+
+    export namespace Sequence {
+        export function atLeast<T>(array: readonly T[]): Sequence<T> {
+            return { exact: false, values: array };
+        }
+
+        export function exact<T>(array: readonly T[]): Sequence<T> {
+            return { exact: true, values: array };
+        }
+
+        export function one<T>(value: T): Sequence<T> {
+            return { exact: true, values: [value] };
+        }
+
+        export function none<T>(): Sequence<T> {
+            return false;
+        }
+    }
+
+    export interface VerifyCallHierarchyOptions {
+        readonly range?: FourSlash.Range;
+        readonly kind?: ts.ScriptElementKind;
+        readonly selectionRange?: FourSlash.Range;
+        readonly incoming?: Sequence<VerifyCallHierarchyIncomingCallOptions | FourSlash.Range>;
+        readonly outgoing?: Sequence<VerifyCallHierarchyOutgoingCallOptions | FourSlash.Range>;
+    }
+
+    export interface VerifyCallHierarchyIncomingCallOptions {
+        readonly from: VerifyCallHierarchyOptions | FourSlash.Range;
+        readonly fromRanges?: Sequence<FourSlash.Range>;
+    }
+
+    export interface VerifyCallHierarchyOutgoingCallOptions {
+        readonly to: VerifyCallHierarchyOptions | FourSlash.Range;
+        readonly fromRanges?: Sequence<FourSlash.Range>;
+    }
 }

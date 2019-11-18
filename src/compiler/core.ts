@@ -1330,8 +1330,10 @@ namespace ts {
         return result;
     }
 
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+    export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
     export function clone<T>(object: T): T {

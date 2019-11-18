@@ -6,7 +6,8 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-declare let Promise: PromiseConstructor;
+// eslint-disable-next-line no-var
+declare var Promise: PromiseConstructor;
 
 // These utilities are common to multiple language service features.
 /* @internal */
@@ -195,25 +196,56 @@ namespace ts {
         return false;
     }
 
-    export function isCallExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTargetWorker(node, isCallExpression);
+    export function isCallExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isCallExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
     }
 
-    export function isNewExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTargetWorker(node, isNewExpression);
+    export function isNewExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
     }
 
-    export function isCallOrNewExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTargetWorker(node, isCallOrNewExpression);
+    export function isCallOrNewExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isCallOrNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
     }
 
-    function isCallOrNewExpressionTargetWorker<T extends CallExpression | NewExpression>(node: Node, pred: (node: Node) => node is T): boolean {
-        const target = climbPastPropertyAccess(node);
-        return !!target && !!target.parent && pred(target.parent) && target.parent.expression === target;
+    export function isTaggedTemplateTag(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isTaggedTemplateExpression, selectTagOfTaggedTemplateExpression, includeElementAccess, skipPastOuterExpressions);
+    }
+
+    export function isDecoratorTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isDecorator, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
+    }
+
+    export function isJsxOpeningLikeElementTagName(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+        return isCalleeWorker(node, isJsxOpeningLikeElement, selectTagNameOfJsxOpeningLikeElement, includeElementAccess, skipPastOuterExpressions);
+    }
+
+    function selectExpressionOfCallOrNewExpressionOrDecorator(node: CallExpression | NewExpression | Decorator) {
+        return node.expression;
+    }
+
+    function selectTagOfTaggedTemplateExpression(node: TaggedTemplateExpression) {
+        return node.tag;
+    }
+
+    function selectTagNameOfJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
+        return node.tagName;
+    }
+
+    function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(node: Node, pred: (node: Node) => node is T, calleeSelector: (node: T) => Expression, includeElementAccess: boolean, skipPastOuterExpressions: boolean) {
+        let target = includeElementAccess ? climbPastPropertyOrElementAccess(node) : climbPastPropertyAccess(node);
+        if (skipPastOuterExpressions) {
+            target = skipOuterExpressions(target);
+        }
+        return !!target && !!target.parent && pred(target.parent) && calleeSelector(target.parent) === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
         return isRightSideOfPropertyAccess(node) ? node.parent : node;
+    }
+
+    export function climbPastPropertyOrElementAccess(node: Node) {
+        return isRightSideOfPropertyAccess(node) || isArgumentExpressionOfElementAccess(node) ? node.parent : node;
     }
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
@@ -256,6 +288,10 @@ namespace ts {
 
     export function isRightSideOfPropertyAccess(node: Node) {
         return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
+    }
+
+    export function isArgumentExpressionOfElementAccess(node: Node) {
+        return node && node.parent && node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node;
     }
 
     export function isNameOfModuleDeclaration(node: Node) {
