@@ -2210,9 +2210,18 @@ namespace ts {
                 }
                 else if (hasSyntheticDefault) {
                     // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
-                    return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+                    return maybeTypeOnly(
+                        resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) ||
+                        resolveSymbol(moduleSymbol, dontResolveAlias));
                 }
-                return exportDefaultSymbol;
+                return maybeTypeOnly(exportDefaultSymbol);
+            }
+
+            function maybeTypeOnly(symbol: Symbol | undefined) {
+                if (symbol && node.isTypeOnly && node.name) {
+                    return createSyntheticTypeAlias(node.name, symbol);
+                }
+                return symbol;
             }
         }
 
@@ -2345,12 +2354,13 @@ namespace ts {
          * `TypeFlags.Alias` so that alias resolution works as usual, but once the target `A`
          * has been resolved, we essentially want to pretend we have a type alias to that target.
          */
-        function createSyntheticTypeAlias(sourceNode: ExportSpecifier | ImportSpecifier, target: Symbol) {
+        function createSyntheticTypeAlias(sourceNode: ExportSpecifier | Identifier, target: Symbol) {
             if (!(target.flags & SymbolFlags.Type)) {
-                const nameText = idText(sourceNode.name);
+                const identifier = isExportSpecifier(sourceNode) ? sourceNode.name : sourceNode;
+                const nameText = idText(identifier);
                 addRelatedInfo(
                     error(
-                        sourceNode.name,
+                        identifier,
                         Diagnostics.Type_only_0_must_be_a_type_but_1_is_a_value,
                         isExportSpecifier(sourceNode) ? "export" : "import",
                         nameText),

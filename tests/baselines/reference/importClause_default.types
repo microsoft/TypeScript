@@ -1,0 +1,15 @@
+=== /a.ts ===
+export default class A {}
+>A : A
+
+=== /b.ts ===
+import type A from './a';
+>A : any
+
+new A();
+>new A() : any
+>A : any
+
+let a: A;
+>a : typeof import("/a").default
+
