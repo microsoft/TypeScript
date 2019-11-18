@@ -2341,7 +2341,11 @@ namespace ts {
         }
 
         function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
-            return getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
+            const resolved = getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
+            if (resolved && node.parent.parent.isTypeOnly) {
+                return createSyntheticTypeAlias(node.name, resolved);
+            }
+            return resolved;
         }
 
         function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol {
@@ -2361,7 +2365,7 @@ namespace ts {
                 addRelatedInfo(
                     error(
                         identifier,
-                        Diagnostics.Type_only_0_must_be_a_type_but_1_is_a_value,
+                        Diagnostics.Type_only_0_must_reference_a_type_but_1_is_a_value,
                         isExportSpecifier(sourceNode) ? "export" : "import",
                         nameText),
                     createDiagnosticForNode(

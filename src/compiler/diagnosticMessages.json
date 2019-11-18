@@ -1051,7 +1051,7 @@
         "category": "Error",
         "code": 1360
     },
-    "Type-only {0} must be a type, but '{1}' is a value.": {
+    "Type-only {0} must reference a type, but '{1}' is a value.": {
         "category": "Error",
         "code": 1361
     },
