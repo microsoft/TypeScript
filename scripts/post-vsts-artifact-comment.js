@@ -33,7 +33,7 @@ async function main() {
     // so that the playgrounds deployment process can find these comments.
 
     await gh.issues.createComment({
-        number: +process.env.SOURCE_ISSUE,
+        issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
         body: `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
@@ -50,8 +50,7 @@ and then running \`npm install\`.
 
     // Temporarily disable until we get access controls set up right
     // Send a ping to https://github.com/orta/make-monaco-builds#pull-request-builds
-    // await gh.request("POST /repos/orta/make-monaco-builds/dispatches", 
-    // { event_type: +process.env.SOURCE_ISSUE, headers: { "Accept": "application/vnd.github.everest-preview+json" }})
+    await gh.request("POST /repos/orta/make-monaco-builds/dispatches", { event_type: process.env.SOURCE_ISSUE, headers: { Accept: "application/vnd.github.everest-preview+json" }});
 }
 
 main().catch(async e => {
