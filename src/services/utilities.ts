@@ -2066,7 +2066,7 @@ namespace ts {
         syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
         syntaxRequiresTrailingSemicolonOrASI);
 
-    export function isASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
+    function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         const lastToken = node.getLastToken(sourceFile);
         if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
             return false;
@@ -2107,6 +2107,17 @@ namespace ts {
         const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
         const endLine = sourceFile.getLineAndCharacterOfPosition(nextToken.getStart(sourceFile)).line;
         return startLine !== endLine;
+    }
+
+    export function positionIsASICandidate(pos: number, context: Node, sourceFile: SourceFileLike): boolean {
+        const contextAncestor = findAncestor(context, ancestor => {
+            if (ancestor.end !== pos) {
+                return "quit";
+            }
+            return syntaxMayBeASICandidate(ancestor.kind);
+        });
+
+        return !!contextAncestor && nodeIsASICandidate(contextAncestor, sourceFile);
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
