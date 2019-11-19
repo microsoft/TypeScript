@@ -2752,7 +2752,7 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
-            if (namespaceSymbol) {
+            if (namespaceSymbol && namespaceSymbol.valueDeclaration) {
                 // Ensure the namespace symbol becomes class-like
                 addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
             }
