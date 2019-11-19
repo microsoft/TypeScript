@@ -1863,8 +1863,8 @@ interface txAuthGenericArg {
     contentType: string;
 }
 
-interface EventListener {
-    (evt: Event): void;
+interface EventListener<T extends Event> {
+    (evt: T): void;
 }
 
 type XPathNSResolver = ((prefix: string | null) => string | null) | { lookupNamespaceURI(prefix: string | null): string | null; };
@@ -5457,8 +5457,8 @@ declare var Event: {
     readonly NONE: number;
 };
 
-interface EventListenerObject {
-    handleEvent(evt: Event): void;
+interface EventListenerObject<T extends Event> {
+    handleEvent(evt: T): void;
 }
 
 interface EventSourceEventMap {
@@ -5491,9 +5491,9 @@ interface EventSource extends EventTarget {
     readonly CONNECTING: number;
     readonly OPEN: number;
     addEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject<MessageEvent>, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject<MessageEvent>, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventSource: {
@@ -19076,7 +19076,7 @@ declare var webkitRTCPeerConnection: {
     new(configuration: RTCConfiguration): webkitRTCPeerConnection;
 };
 
-declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
+declare type EventListenerOrEventListenerObject<T extends Event> = EventListener<T> | EventListenerObject<T>;
 
 declare namespace WebAssembly {
     interface CompileError {
