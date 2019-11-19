@@ -2360,19 +2360,21 @@ namespace ts {
          */
         function createTypeOnlyImportOrExport(sourceNode: ExportSpecifier | Identifier, target: Symbol) {
             const symbol = createTypeOnlySymbol(target);
-            if (!symbol) {
+            if (!symbol && target !== unknownSymbol) {
                 const identifier = isExportSpecifier(sourceNode) ? sourceNode.name : sourceNode;
                 const nameText = idText(identifier);
-                addRelatedInfo(
-                    error(
-                        identifier,
-                        Diagnostics.Type_only_0_must_reference_a_type_but_1_is_a_value,
-                        isExportSpecifier(sourceNode) ? "export" : "import",
-                        nameText),
-                    createDiagnosticForNode(
-                        target.valueDeclaration ?? target.declarations[0],
+                const diagnostic = error(
+                    identifier,
+                    Diagnostics.Type_only_0_must_reference_a_type_but_1_is_a_value,
+                    isExportSpecifier(sourceNode) ? "export" : "import",
+                    nameText);
+                const targetDeclaration = target.valueDeclaration ?? target.declarations?.[0];
+                if (targetDeclaration) {
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(
+                        targetDeclaration,
                         Diagnostics._0_is_declared_here,
                         nameText));
+                }
             }
 
             return symbol;
@@ -2413,7 +2415,7 @@ namespace ts {
             const target = node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
-            return target && isTypeOnlyExportSpecifier(node) ? createTypeOnlyImportOrExport(node, target) : target;
+            return target && node.parent.parent.isTypeOnly ? createTypeOnlyImportOrExport(node, target) : target;
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {

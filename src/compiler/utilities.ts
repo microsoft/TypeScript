@@ -2298,11 +2298,6 @@ namespace ts {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
-    export function isTypeOnlyExportSpecifier(node: Node): node is ExportSpecifier {
-        // TODO: check specifier itself
-        return isExportSpecifier(node) && node.parent.parent.isTypeOnly;
-    }
-
     function getSourceOfAssignment(node: Node): Node | undefined {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&
