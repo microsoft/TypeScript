@@ -7,6 +7,11 @@
       export type Type = string;
       export class Class {}
       export const Value = "";
+      export namespace nested {
+        export class NestedClass {
+          a!: string;
+        }
+      }
     }
     
     export default ns;
@@ -21,4 +26,5 @@
 !!! error TS2708: Cannot use namespace 'ns' as a value.
     let c: ns.Class;
     let t: ns.Type = "";
+    let n: ns.nested.NestedClass = { a: '' };
     

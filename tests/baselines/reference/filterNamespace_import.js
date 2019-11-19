@@ -5,6 +5,11 @@ namespace ns {
   export type Type = string;
   export class Class {}
   export const Value = "";
+  export namespace nested {
+    export class NestedClass {
+      a!: string;
+    }
+  }
 }
 
 export default ns;
@@ -15,6 +20,7 @@ ns.Class; // Error
 ns.Value; // Error
 let c: ns.Class;
 let t: ns.Type = "";
+let n: ns.nested.NestedClass = { a: '' };
 
 
 //// [ns.js]
@@ -29,6 +35,15 @@ var ns;
     }());
     ns.Class = Class;
     ns.Value = "";
+    var nested;
+    (function (nested) {
+        var NestedClass = /** @class */ (function () {
+            function NestedClass() {
+            }
+            return NestedClass;
+        }());
+        nested.NestedClass = NestedClass;
+    })(nested = ns.nested || (ns.nested = {}));
 })(ns || (ns = {}));
 exports["default"] = ns;
 //// [a.js]
@@ -38,3 +53,4 @@ ns.Class; // Error
 ns.Value; // Error
 var c;
 var t = "";
+var n = { a: '' };

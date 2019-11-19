@@ -11,6 +11,17 @@ namespace ns {
   export const Value = "";
 >Value : ""
 >"" : ""
+
+  export namespace nested {
+>nested : typeof nested
+
+    export class NestedClass {
+>NestedClass : NestedClass
+
+      a!: string;
+>a : string
+    }
+  }
 }
 
 export default ns;
@@ -38,4 +49,12 @@ let t: ns.Type = "";
 >t : string
 >ns : any
 >"" : ""
+
+let n: ns.nested.NestedClass = { a: '' };
+>n : import("/ns").default.nested.NestedClass
+>ns : any
+>nested : any
+>{ a: '' } : { a: string; }
+>a : string
+>'' : ""
 
