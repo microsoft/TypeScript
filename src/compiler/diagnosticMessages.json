@@ -3241,7 +3241,7 @@
         "category": "Error",
         "code": 5061
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character.": {
+    "Substitution '{0}' in pattern '{1}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5062
     },
