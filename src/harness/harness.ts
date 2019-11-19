@@ -1412,10 +1412,65 @@ namespace Harness {
         [key: string]: string;
     }
 
-    function splitVaryBySettingValue(text: string): string[] | undefined {
+    function splitVaryBySettingValue(text: string, varyBy: string): string[] | undefined {
         if (!text) return undefined;
-        const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
-        return entries && entries.length > 1 ? entries : undefined;
+
+        let star = false;
+        const includes: string[] = [];
+        const excludes: string[] = [];
+        for (let s of text.split(/,/g)) {
+            s = s.trim().toLowerCase();
+            if (s.length === 0) continue;
+            if (s === "*") {
+                star = true;
+            }
+            else if (ts.startsWith(s, "-") || ts.startsWith(s, "!")) {
+                excludes.push(s.slice(1));
+            }
+            else {
+                includes.push(s);
+            }
+        }
+
+        // do nothing if the setting has no variations
+        if (includes.length <= 1 && !star && excludes.length === 0) {
+            return undefined;
+        }
+
+        const variations: { key: string, value?: string | number }[] = [];
+        const values = getVaryByStarSettingValues(varyBy);
+
+        // add (and deduplicate) all included entries
+        for (const include of includes) {
+            const value = values?.get(include);
+            if (ts.findIndex(variations, v => v.key === include || value !== undefined && v.value === value) === -1) {
+                variations.push({ key: include, value });
+            }
+        }
+
+        if (star && values) {
+            // add all entries
+            for (const [key, value] of ts.arrayFrom(values.entries())) {
+                if (ts.findIndex(variations, v => v.key === key || v.value === value) === -1) {
+                    variations.push({ key, value });
+                }
+            }
+        }
+
+        // remove all excluded entries
+        for (const exclude of excludes) {
+            const value = values?.get(exclude);
+            let index: number;
+            while ((index = ts.findIndex(variations, v => v.key === exclude || value !== undefined && v.value === value)) >= 0) {
+                ts.orderedRemoveItemAt(variations, index);
+            }
+        }
+
+        if (variations.length === 0) {
+            throw new Error(`Variations in test option '@${varyBy}' resulted in an empty set.`);
+        }
+
+        return ts.map(variations, v => v.key);
     }
 
     function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
@@ -1433,17 +1488,37 @@ namespace Harness {
         }
     }
 
+    let booleanVaryByStarSettingValues: ts.Map<string | number> | undefined;
+
+    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyMap<string | number> | undefined {
+        const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
+        if (option) {
+            if (typeof option.type === "object") {
+                return option.type;
+            }
+            if (option.type === "boolean") {
+                return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = ts.createMapFromTemplate({
+                    true: 1,
+                    false: 0
+                }));
+            }
+        }
+    }
+
     /**
      * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
      */
-    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: readonly string[]): FileBasedTestConfiguration[] | undefined {
         let varyByEntries: [string, string[]][] | undefined;
+        let variationCount = 1;
         for (const varyByKey of varyBy) {
             if (ts.hasProperty(settings, varyByKey)) {
                 // we only consider variations when there are 2 or more variable entries.
-                const entries = splitVaryBySettingValue(settings[varyByKey]);
+                const entries = splitVaryBySettingValue(settings[varyByKey], varyByKey);
                 if (entries) {
                     if (!varyByEntries) varyByEntries = [];
+                    variationCount *= entries.length;
+                    if (variationCount > 25) throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
                     varyByEntries.push([varyByKey, entries]);
                 }
             }
