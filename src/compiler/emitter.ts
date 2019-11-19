@@ -313,6 +313,13 @@ namespace ts {
             }
             // Transform the source files
             const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+            if (transform.diagnostics) {
+                emitterDiagnostics.addRange(transform.diagnostics);
+            }
+
+            if (transform.compilerDiagnostics) {
+                emitterDiagnostics.addRange(transform.compilerDiagnostics);
+            }
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,

@@ -386,51 +386,21 @@ namespace Utils {
     const maxHarnessFrames = 1;
 
     export function filterStack(error: Error, stackTraceLimit = Infinity) {
-        const stack = <string>(<any>error).stack;
-        if (stack) {
-            const lines = stack.split(/\r\n?|\n/g);
-            const filtered: string[] = [];
-            let frameCount = 0;
-            let harnessFrameCount = 0;
-            for (let line of lines) {
-                if (isStackFrame(line)) {
-                    if (frameCount >= stackTraceLimit
-                        || isMocha(line)
-                        || isNode(line)) {
-                        continue;
+        let harnessFrameCount = 0;
+        return ts.Debug.filterStack(error, {
+            stackTraceLimit,
+            excludeNode: true,
+            excludeMocha: true,
+            exclude: frame => {
+                if (frame.fileName && isHarness(frame.fileName)) {
+                    if (harnessFrameCount >= maxHarnessFrames) {
+                        return true;
                     }
-
-                    if (isHarness(line)) {
-                        if (harnessFrameCount >= maxHarnessFrames) {
-                            continue;
-                        }
-
-                        harnessFrameCount++;
-                    }
-
-                    line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
-                    frameCount++;
+                    harnessFrameCount++;
                 }
-
-                filtered.push(line);
+                return false;
             }
-
-            (<any>error).stack = filtered.join(Harness.IO.newLine());
-        }
-
-        return error;
-    }
-
-    function isStackFrame(line: string) {
-        return /^\s+at\s/.test(line);
-    }
-
-    function isMocha(line: string) {
-        return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
-    }
-
-    function isNode(line: string) {
-        return /\((timers|events|node|module)\.js:/.test(line);
+        });
     }
 
     function isHarness(line: string) {

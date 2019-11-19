@@ -269,14 +269,35 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const program = await ts.createAsyncProgram({
-            rootNames: project.fileNames || [],
-            options: compilerOptions,
-            host,
-            plugins
-        });
-        const emitResult = await program.emitAsync();
-        const errors = ts.getPreEmitDiagnostics(program);
-        return new CompilationResult(host, compilerOptions, program, emitResult, errors);
+        const defaultRewriteFrame = ts.Debug.filterStack.defaultRewriteFrame;
+        ts.Debug.filterStack.defaultRewriteFrame = frame => {
+            if (frame.fileName) {
+                frame.fileName = ts.normalizeSlashes(frame.fileName);
+                const file = frame.fileName
+                    .replace(/^.*[/](src[/](?:compat|compiler|harness|server|services|shims|testRunner|tsc|tsserver(?:library)?|typescriptServices|typingsInstaller(?:Core)?|watchGuard)[/])/, "$1")
+                    .replace(/^.*[/]((?:built[/]local|lib)[/])(?=(?:cancellationToken|tsc|tsserver(library)?|typescript(Services)?|typingsInstaller|watchGuard|run)\.js)/, "$1");
+                if (file !== frame.fileName) {
+                    // set positions to 0 so that we don't have to accept diff changes due to unrelated additions/subtractions to related files.
+                    frame.fileName = file;
+                    frame.lineNumber = 0;
+                    frame.columnNumber = 0;
+                }
+            }
+            return frame;
+        };
+        try {
+            const program = await ts.createAsyncProgram({
+                rootNames: project.fileNames || [],
+                options: compilerOptions,
+                host,
+                plugins
+            });
+            const emitResult = await program.emitAsync();
+            const errors = ts.sortAndDeduplicateDiagnostics(ts.concatenate(ts.getPreEmitDiagnostics(program), emitResult.diagnostics));
+            return new CompilationResult(host, compilerOptions, program, emitResult, errors);
+        }
+        finally {
+            ts.Debug.filterStack.defaultRewriteFrame = defaultRewriteFrame;
+        }
     }
 }

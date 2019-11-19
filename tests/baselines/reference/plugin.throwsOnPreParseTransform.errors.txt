@@ -1,0 +1,42 @@
+error TS5081: Plugin 'typescript-plugin-transform' failed while executing a transformer provided by the 'preParse' hook: Error: Not yet implemented.
+    at preprocess (tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:6:15)
+    at src/compiler/plugin.ts:1:1
+    ... skipping 6 frames ...
+    at fulfilled (built/local/run.js:1:1)
+
+
+!!! error TS5081: Plugin 'typescript-plugin-transform' failed while executing a transformer provided by the 'preParse' hook: Error: Not yet implemented.
+!!! error TS5081:     at preprocess (tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:6:15)
+!!! error TS5081:     at src/compiler/plugin.ts:1:1
+!!! error TS5081:     ... skipping 6 frames ...
+!!! error TS5081:     at fulfilled (built/local/run.js:1:1)
+==== tests/cases/conformance/plugins/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {},
+        "plugins": [
+            "transform"
+        ]
+    }
+    
+==== tests/cases/conformance/plugins/main.ts (0 errors) ====
+    const a = undefined;
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/package.json (0 errors) ====
+    {
+        "name": "typescript-plugin-transform",
+        "version": "1.0.0",
+        "main": "index.js",
+        "typescriptPlugin": {
+            "activationEvents": ["preParse"]
+        }
+    }
+    
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js (0 errors) ====
+    exports.preParse = function() {
+        return {
+            preprocessors: [preprocess]
+        };
+        function preprocess() {
+            throw new Error("Not yet implemented.");
+        }
+    };
+    

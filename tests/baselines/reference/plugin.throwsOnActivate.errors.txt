@@ -1,0 +1,39 @@
+error TS5080: Plugin 'typescript-plugin-transform' failed while executing the 'activate' hook: Error: Not yet implemented.
+    at Object.exports.activate (tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:2:11)
+    at src/compiler/plugin.ts:1:1
+    ... skipping 63 frames ...
+    at processImmediate (timers.js:658:5)
+
+
+!!! error TS5080: Plugin 'typescript-plugin-transform' failed while executing the 'activate' hook: Error: Not yet implemented.
+!!! error TS5080:     at Object.exports.activate (tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:2:11)
+!!! error TS5080:     at src/compiler/plugin.ts:1:1
+!!! error TS5080:     ... skipping 63 frames ...
+!!! error TS5080:     at processImmediate (timers.js:658:5)
+==== tests/cases/conformance/plugins/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {},
+        "plugins": [
+            "transform"
+        ]
+    }
+    
+==== tests/cases/conformance/plugins/main.ts (0 errors) ====
+    const a = undefined;
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/package.json (0 errors) ====
+    {
+        "name": "typescript-plugin-transform",
+        "version": "1.0.0",
+        "main": "index.js",
+        "typescriptPlugin": {
+            "activationEvents": ["preParse"]
+        }
+    }
+    
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js (0 errors) ====
+    exports.activate = function () {
+        throw new Error("Not yet implemented.");
+    };
+    exports.preParse = function() {
+    };
+    

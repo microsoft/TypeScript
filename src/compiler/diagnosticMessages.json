@@ -3192,7 +3192,7 @@
         "category": "Error",
         "code": 5078
     },
-    "Plugin '{0}' could not be loaded": {
+    "Plugin '{0}' could not be loaded: {1}": {
         "category": "Error",
         "code": 5079
     },
@@ -3200,9 +3200,13 @@
         "category": "Error",
         "code": 5080
     },
-    "Plugins are not supported in the current host environment.": {
+    "Plugin '{0}' failed while executing a transformer provided by the '{1}' hook: {2}": {
         "category": "Error",
         "code": 5081
+    },
+    "Plugins are not supported in the current host environment.": {
+        "category": "Error",
+        "code": 5082
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

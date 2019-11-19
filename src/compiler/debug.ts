@@ -371,5 +371,216 @@ namespace ts {
             const deprecation = createDeprecation(getFunctionName(func), options);
             return wrapFunction(deprecation, func);
         }
+
+        export interface FilterStackOptions {
+            stackTraceLimit?: number;
+            exclude?: (frame: StackFrame) => boolean;
+            excludeNode?: boolean;
+            excludeTypeScript?: boolean;
+            excludeMocha?: boolean;
+            excludeBuiltin?: boolean;
+            rewriteFrame?: (frame: StackFrame) => StackFrame;
+        }
+
+        export interface StackFrame {
+            typeName?: string;
+            functionName?: string;
+            methodName?: string;
+            fileName?: string;
+            lineNumber?: number;
+            columnNumber?: number;
+            evalOrigin?: StackFrame;
+            isConstructor?: boolean;
+            isAsync?: boolean;
+        }
+
+        export function filterStack(stack: string, options: FilterStackOptions): string;
+        export function filterStack(error: Error, options: FilterStackOptions): Error;
+        export function filterStack(error: Error | string, { stackTraceLimit = Infinity, exclude, excludeBuiltin, excludeNode, excludeMocha, excludeTypeScript, rewriteFrame = filterStack.defaultRewriteFrame }: FilterStackOptions) {
+            const stack = typeof error === "string" ? error : error.stack;
+            if (stack) {
+                const lines = stack.split(/\r\n?|\n/g);
+                const filtered: string[] = [];
+                let frameCount = 0;
+                let lastFrameWasExcluded = false;
+                let excludedFrameCount = 0;
+                let lastExcludedFrame: string | undefined;
+                for (let line of lines) {
+                    let frame = parseStackFrame(line);
+                    if (frame) {
+                        if (frame.fileName && frame.fileName !== "native" && frame.fileName !== "unknown location" && frame.fileName !== "<anonymous>") {
+                            frame.fileName = frame.fileName.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                            if (rewriteFrame) {
+                                frame = rewriteFrame(frame);
+                            }
+                        }
+                        if (frameCount >= stackTraceLimit ||
+                            excludeNode && isNodeStackFrame(frame) ||
+                            excludeMocha && isMochaStackFrame(frame) ||
+                            excludeTypeScript && isTypeScriptStackFrame(frame) ||
+                            excludeBuiltin && isBuiltinStackFrame(frame) ||
+                            exclude && exclude(frame)) {
+                            if (lastFrameWasExcluded) {
+                                excludedFrameCount++;
+                                lastExcludedFrame = formatStackFrame(frame);
+                                continue;
+                            }
+                            lastFrameWasExcluded = true;
+                        }
+                        else {
+                            if (excludedFrameCount > 0) {
+                                filtered.push(`    ... skipping ${excludedFrameCount} frame${excludedFrameCount > 1 ? "s" : ""} ...`);
+                                excludedFrameCount = 0;
+                            }
+                            lastFrameWasExcluded = false;
+                        }
+                        frameCount++;
+                        line = formatStackFrame(frame);
+                    }
+                    filtered.push(line);
+                }
+                if (excludedFrameCount > 0) {
+                    excludedFrameCount--;
+                    if (excludedFrameCount > 0) {
+                        filtered.push(`    ... skipping ${excludedFrameCount} frame${excludedFrameCount > 1 ? "s" : ""} ...`);
+                    }
+                    if (lastExcludedFrame) {
+                        filtered.push(lastExcludedFrame);
+                    }
+                }
+
+                if (typeof error === "string") {
+                    error = filtered.join("\n");
+                }
+                else {
+                    error.stack = filtered.join("\n");
+                }
+            }
+
+            return error;
+        }
+
+        export namespace filterStack {
+            export let defaultRewriteFrame = (frame: StackFrame) => frame;
+        }
+
+        const evalLocationRegExp = /^eval at (.*)$/;
+        const fileLocationRegExp = /^(native|unknown location|<anonymous>|(?:(?:[a-zA-Z]|file|https?):)?[^:]+)(?::(\d+)(?::(\d+))?)?$/;
+        const positionRegExp = /^(async )?(new )?((?:[^.]+\.)+)?((?:(?! [\[(]).)*)(?: \[as ([^\]]+)\])? \((.*)\)$/;
+
+        function parseStackFrameLocation(location: string): StackFrame | undefined {
+            // location format:
+            //     fileName:lineNumber:columnNumber
+            //     native
+            //     unknown location
+            //     <anonymous>
+            let match: RegExpExecArray | null;
+            if (match = evalLocationRegExp.exec(location)) {
+                const evalOrigin = parseStackFrame(match[1]);
+                return evalOrigin && { evalOrigin };
+            }
+            if (match = fileLocationRegExp.exec(location)) {
+                const [, fileName, line, character] = match;
+                return {
+                    fileName,
+                    lineNumber: line !== undefined ? parseInt(line, 10) - 1 : undefined,
+                    columnNumber: character !== undefined ? parseInt(character, 10) - 1 : undefined
+                };
+            }
+        }
+
+        function parseStackFrame(line: string): StackFrame | undefined {
+            // https://v8.dev/docs/stack-trace-api
+            //
+            // frame format:
+            //     at {position}
+            // position format:
+            //     {async |new }{thisType.}{functionName}{ [as methodName]} ({location})
+            //     {location}
+            let match = /^    at (.*)$/.exec(line);
+            if (!match) return undefined;
+
+            const position = match[1];
+            if (match = positionRegExp.exec(position)) {
+                const [, asyncModifier, newModifier, typeName, functionName, methodName, locationPart] = match;
+                const isAsync = !!asyncModifier;
+                const isConstructor = !!newModifier;
+                const location = parseStackFrameLocation(locationPart);
+                return { typeName: typeName && typeName.slice(0, -1), functionName, methodName, ...location, isConstructor, isAsync };
+            }
+
+            const location = parseStackFrameLocation(position);
+            if (location && (location.evalOrigin || location.fileName && isRootedDiskPath(location.fileName))) {
+                return location;
+            }
+        }
+
+        function formatStackFrame(frame: StackFrame) {
+            let s = "    at ";
+            if (frame.functionName) {
+                if (frame.isAsync) {
+                    s += "async ";
+                }
+                else if (frame.isConstructor) {
+                    s += "new ";
+                }
+                if (frame.typeName) {
+                    s += `${frame.typeName}.`;
+                }
+                s += frame.functionName;
+                if (frame.methodName) {
+                    s += ` [as ${frame.methodName}]`;
+                }
+                s += ` (${formatLocation(frame)})`;
+            }
+            else {
+                s += formatLocation(frame);
+            }
+            return s;
+        }
+
+        function formatLocation(frame: StackFrame) {
+            if (frame.fileName) {
+                let s = frame.fileName;
+                if (frame.lineNumber !== undefined) {
+                    s += `:${frame.lineNumber + 1}`;
+                    if (frame.columnNumber !== undefined) {
+                        s += `:${frame.columnNumber + 1}`;
+                    }
+                }
+                return s;
+            }
+            else if (frame.evalOrigin) {
+                return `eval at ${formatStackFrame(frame.evalOrigin)}`;
+            }
+            else {
+                return "unknown location";
+            }
+        }
+
+        function isMochaStackFrame(frame: StackFrame) {
+            return !!frame.fileName && /[/](node_modules|components)[/]mocha(js)?[/]|[/]mocha\.js$/.test(normalizeSlashes(frame.fileName));
+        }
+
+        function isNodeStackFrame(frame: StackFrame) {
+            return !!frame.fileName && /(timers|events|node|module)\.js$/.test(frame.fileName);
+        }
+
+        function isTypeScriptStackFrame(frame: StackFrame) {
+            if (frame.fileName) {
+                const file = normalizeSlashes(frame.fileName);
+                if (/([/]|^)(built[/]local|lib)[/](cancellationToken|tsc|tsserver(library)?|typescript(Services)?|typingsInstaller|watchGuard|run)\.js/.test(file)) {
+                    return true;
+                }
+                if (/([/]|^)src[/](compat|compiler|harness|server|services|shims|testRunner|tsc|tsserver|tsserverlibrary|typescriptServices|typingsInstaller(Core)?|watchGuard)[/]/.test(file)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function isBuiltinStackFrame(frame: StackFrame) {
+            return (frame.fileName === "native" || frame.fileName === "<anonymous>") && !!frame.functionName;
+        }
     }
 }

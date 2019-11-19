@@ -1,0 +1,35 @@
+error TS5079: Plugin 'typescript-plugin-transform' could not be loaded: Error: Not yet implemented.
+    at tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:1:6
+    at ModuleLoader.require (src/harness/fakes.ts:1:1)
+    ... skipping 37 frames ...
+    at fulfilled (built/local/run.js:1:1)
+
+
+!!! error TS5079: Plugin 'typescript-plugin-transform' could not be loaded: Error: Not yet implemented.
+!!! error TS5079:     at tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js:1:6
+!!! error TS5079:     at ModuleLoader.require (src/harness/fakes.ts:1:1)
+!!! error TS5079:     ... skipping 37 frames ...
+!!! error TS5079:     at fulfilled (built/local/run.js:1:1)
+==== tests/cases/conformance/plugins/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {},
+        "plugins": [
+            "transform"
+        ]
+    }
+    
+==== tests/cases/conformance/plugins/main.ts (0 errors) ====
+    const a = undefined;
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/package.json (0 errors) ====
+    {
+        "name": "typescript-plugin-transform",
+        "version": "1.0.0",
+        "main": "index.js",
+        "typescriptPlugin": {
+            "activationEvents": ["preEmit"]
+        }
+    }
+    
+==== tests/cases/conformance/plugins/node_modules/typescript-plugin-transform/index.js (0 errors) ====
+    throw new Error("Not yet implemented.");
+    

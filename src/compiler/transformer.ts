@@ -132,6 +132,7 @@ namespace ts {
 
     export interface NodeTransformer<T extends Node> {
         diagnostics: DiagnosticWithLocation[];
+        /*@internal*/ compilerDiagnostics: Diagnostic[];
         transformNodes(nodes: ReadonlyArray<T>): T[];
         transformNode(node: T): T;
         markComplete(): void;
@@ -182,6 +183,7 @@ namespace ts {
         let onEmitNode: TransformationContext["onEmitNode"] = noEmitNotification;
         let state = TransformationState.Uninitialized;
         const diagnostics: DiagnosticWithLocation[] = [];
+        const compilerDiagnostics: Diagnostic[] = [];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -216,9 +218,10 @@ namespace ts {
                 onEmitNode = value;
             },
             addDiagnostic(diag) {
-                if (diagnostics) {
-                    diagnostics.push(diag);
-                }
+                diagnostics.push(diag);
+            },
+            addCompilerDiagnostic(diag) {
+                compilerDiagnostics.push(diag);
             }
         };
 
@@ -236,6 +239,7 @@ namespace ts {
 
         return {
             diagnostics,
+            compilerDiagnostics,
             transformNode,
             transformNodes,
             markComplete: () => { state = TransformationState.Completed; },
@@ -510,7 +514,8 @@ namespace ts {
             substituteNode: tx.substituteNode,
             emitNodeWithNotification: tx.emitNodeWithNotification,
             dispose,
-            diagnostics: tx.diagnostics
+            diagnostics: tx.diagnostics,
+            compilerDiagnostics: tx.compilerDiagnostics,
         };
 
         function dispose() {
@@ -548,5 +553,6 @@ namespace ts {
         startLexicalEnvironment: noop,
         suspendLexicalEnvironment: noop,
         addDiagnostic: noop,
+        addCompilerDiagnostic: noop
     };
 }

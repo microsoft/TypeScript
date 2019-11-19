@@ -10,7 +10,7 @@ namespace ts {
     type HookReturnType<K extends Hook> = HookReturnTypes[K];
     type HostHook = Exclude<Hook, "activate" | "deactivate">;
     type HostHookReturnType<K extends Hook> = Replace<HookReturnType<K>, void, CompilerPluginResult>;
-    type HostHookAggregate<K extends HostHook> = (state: HostHookReturnType<K>, userCodeResult: HookReturnType<K>, args: ArgumentsHolder<K>) => HostHookReturnType<K>;
+    type HostHookAggregate<K extends HostHook> = (state: HostHookReturnType<K>, userCodeResult: HookReturnType<K>, args: ArgumentsHolder<K>, compilerPlugin: CompilerPlugin, hook: HostHook) => HostHookReturnType<K>;
 
     interface ArgumentsHolder<K extends Hook> {
         arguments: HookParameters<K>;
@@ -37,7 +37,7 @@ namespace ts {
     /**
      * Resolves the supplied plugins (and their dependencies) relative to an initial directory.
      */
-    export function getPlugins(host: ModuleLoaderHost, initialDir: string, plugins: ReadonlyArray<string | [string, any?]>) {
+    export function getPlugins(host: ModuleLoaderHost, initialDir: string, plugins: ReadonlyArray<string | [string, any?]>): GetPluginsResult {
         interface ResolvedModule {
             getModule(): RequireResult;
             moduleName: string;
@@ -220,7 +220,10 @@ namespace ts {
      * Creates a `CompilerPluginHost` used to manage plugin lifetime.
      */
     export function createPluginHost(compilerPlugins: ReadonlyArray<CompilerPlugin>, compilerHost: CompilerHost, compilerOptions: CompilerOptions): CompilerPluginHost {
-        interface Plugin {
+    /**
+     * Wrap a user-defined `TransformerFactory` so that we can catch errors during transformation and measure execution time.
+     */
+    interface Plugin {
             state: "unloaded" | "inactive" | "active" | "active-failed" | "failed"; // Tracks whether the plugin has been activated.
             compilerPlugin: CompilerPlugin;
             context: CompilerPluginContext;
@@ -237,11 +240,11 @@ namespace ts {
 
         return {
             deactivate,
-            preParse: (...args) => executeHostHook("preParse", args, (state, result, argsHolder) => {
+            preParse: (...args) => executeHostHook("preParse", args, (state, result, argsHolder, compilerPlugin) => {
                 state.diagnostics = concatenate(state.diagnostics, result.diagnostics);
                 state.rootNames = result.rootNames || state.rootNames;
                 state.projectReferences = result.projectReferences || state.projectReferences;
-                state.preprocessors = concatenate(state.preprocessors, result.preprocessors);
+                state.preprocessors = concatenate(state.preprocessors, map(result.preprocessors, preprocessor => wrapTransformerFactory(preprocessor, compilerPlugin, "preParse")));
                 const previousArgs = argsHolder.arguments[0];
                 if (state.projectReferences !== previousArgs.projectReferences ||
                     state.rootNames !== previousArgs.rootNames) {
@@ -252,9 +255,9 @@ namespace ts {
                 }
                 return state;
             }, {}),
-            preEmit: (...args) => executeHostHook("preEmit", args, (state, result) => {
+            preEmit: (...args) => executeHostHook("preEmit", args, (state, result, _, compilerPlugin) => {
                 state.diagnostics = concatenate(state.diagnostics, result.diagnostics);
-                state.customTransformers = combineCustomTransformers(state.customTransformers, result.customTransformers);
+                state.customTransformers = combineCustomTransformers(state.customTransformers, result.customTransformers && wrapCustomTransformers(result.customTransformers, compilerPlugin, "preEmit"));
                 return state;
             }, {})
         };
@@ -402,20 +405,108 @@ namespace ts {
                     state.diagnostics = concatenate(state.diagnostics, [userCodeResult.error]);
                 }
                 else if (userCodeResult.result) {
-                    state = aggregate(state, userCodeResult.result, argsHolder);
+                    state = aggregate(state, userCodeResult.result, argsHolder, plugin.compilerPlugin, hook);
                 }
             }
             return state;
         }
     }
 
+    function formatPluginError(error: { message?: string, stack?: string }) {
+        return error.stack ? Debug.filterStack(error.stack, { excludeTypeScript: true, excludeMocha: true, excludeBuiltin: true, excludeNode: true }) :
+            error.message || error.toString();
+    }
+
     function createLoadDiagnostic(compilerPlugin: CompilerPlugin, error: { message?: string, stack?: string }) {
         debugger;
-        return createCompilerDiagnostic(Diagnostics.Plugin_0_could_not_be_loaded, compilerPlugin.name, error.stack || error.message || error.toString());
+        return createCompilerDiagnostic(Diagnostics.Plugin_0_could_not_be_loaded_Colon_1, compilerPlugin.name, formatPluginError(error));
     }
 
     function createUserCodeDiagnostic(compilerPlugin: CompilerPlugin, hook: Hook, error: { message?: string, stack?: string }) {
         debugger;
-        return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_the_1_hook_Colon_2, compilerPlugin.name, hook, error.stack || error.message || error.toString());
+        return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_the_1_hook_Colon_2, compilerPlugin.name, hook, formatPluginError(error));
+    }
+
+    function createTransformerDiagnostic(compilerPlugin: CompilerPlugin, hook: Hook, error: { message?: string, stack?: string }) {
+        debugger;
+        return createCompilerDiagnostic(Diagnostics.Plugin_0_failed_while_executing_a_transformer_provided_by_the_1_hook_Colon_2, compilerPlugin.name, hook, formatPluginError(error));
+    }
+
+    /**
+     * Wrap a user-defined `CustomTransformers` so that we can catch errors during transformation and measure execution time.
+     */
+    function wrapCustomTransformers(customTransformers: CustomTransformers, compilerPlugin: CompilerPlugin, hook: Hook): CustomTransformers {
+        const result: CustomTransformers = {};
+        if (customTransformers.before) {
+            result.before = customTransformers.before.map(transformer => wrapTransformerFactory(transformer, compilerPlugin, hook));
+        }
+        if (customTransformers.after) {
+            result.after = customTransformers.after.map(transformer => wrapTransformerFactory(transformer, compilerPlugin, hook));
+        }
+        if (customTransformers.afterDeclarations) {
+            result.afterDeclarations = customTransformers.afterDeclarations.map(transformer => wrapTransformerFactory(transformer, compilerPlugin, hook));
+        }
+        return result;
+    }
+
+    /**
+     * Wrap a user-defined `TransformerFactory` so that we can catch errors during transformation and measure execution time.
+     */
+    function wrapTransformerFactory<T extends Node>(factory: TransformerFactory<T>, compilerPlugin: CompilerPlugin, hook: Hook): TransformerFactory<T>;
+    function wrapTransformerFactory<T extends Node>(factory: TransformerFactory<T> | CustomTransformerFactory, compilerPlugin: CompilerPlugin, hook: Hook): TransformerFactory<T> | CustomTransformerFactory;
+    function wrapTransformerFactory<T extends Node>(factory: TransformerFactory<T> | CustomTransformerFactory, compilerPlugin: CompilerPlugin, hook: Hook) {
+        return (context: TransformationContext): Transformer<T> | CustomTransformer => {
+            try {
+                const transformer = factory(context);
+                return typeof transformer === "function"
+                    ? wrapTransformer(transformer, context, compilerPlugin, hook)
+                    : wrapCustomTransformer(transformer, context, compilerPlugin, hook);
+            }
+            catch (e) {
+                context.addCompilerDiagnostic(createTransformerDiagnostic(compilerPlugin, hook, e));
+                return identity;
+            }
+        };
+    }
+
+    /**
+     * Wrap a user-defined `Transformer` so that we can catch errors during transformation and measure execution time.
+     */
+    function wrapTransformer<T extends Node>(transformer: Transformer<T>, context: TransformationContext, compilerPlugin: CompilerPlugin, hook: Hook): Transformer<T> {
+        return node => {
+            try {
+                return transformer(node);
+            }
+            catch (e) {
+                context.addCompilerDiagnostic(createTransformerDiagnostic(compilerPlugin, hook, e));
+                return node;
+            }
+        };
+    }
+
+    /**
+     * Wrap a user-defined `CustomTransformer` so that we can catch errors during transformation and measure execution time.
+     */
+    function wrapCustomTransformer(customTransformer: CustomTransformer, context: TransformationContext, compilerPlugin: CompilerPlugin, hook: Hook): CustomTransformer {
+        return {
+            transformBundle(node) {
+                try {
+                    return customTransformer.transformBundle(node);
+                }
+                catch (e) {
+                    context.addCompilerDiagnostic(createTransformerDiagnostic(compilerPlugin, hook, e));
+                    return node;
+                }
+            },
+            transformSourceFile(node) {
+                try {
+                    return customTransformer.transformSourceFile(node);
+                }
+                catch (e) {
+                    context.addCompilerDiagnostic(createTransformerDiagnostic(compilerPlugin, hook, e));
+                    return node;
+                }
+            }
+        };
     }
 }

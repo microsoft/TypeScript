@@ -6645,6 +6645,7 @@ namespace ts {
         onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
 
         /* @internal */ addDiagnostic(diag: DiagnosticWithLocation): void;
+        /* @internal */ addCompilerDiagnostic(diag: Diagnostic): void;
     }
 
     export interface TransformationResult<T extends Node> {
@@ -6653,6 +6654,9 @@ namespace ts {
 
         /** Gets diagnostics for the transformation. */
         diagnostics?: DiagnosticWithLocation[];
+
+        /*@internal*/
+        compilerDiagnostics?: Diagnostic[];
 
         /**
          * Gets a substitute for a node, if one is available; otherwise, returns the original node.
@@ -7038,6 +7042,7 @@ namespace ts {
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.
         add(diagnostic: Diagnostic): void;
+        addRange(diagnostics: Diagnostic[]): void;
 
         // Returns the first existing diagnostic that is equivalent to the given one (sans related information)
         lookup(diagnostic: Diagnostic): Diagnostic | undefined;

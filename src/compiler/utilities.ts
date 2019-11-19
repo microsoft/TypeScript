@@ -3100,6 +3100,7 @@ namespace ts {
 
         return {
             add,
+            addRange,
             lookup,
             getGlobalDiagnostics,
             getDiagnostics,
@@ -3149,6 +3150,10 @@ namespace ts {
             }
 
             insertSorted(diagnostics, diagnostic, compareDiagnostics);
+        }
+
+        function addRange(diagnostics: Diagnostic[]) {
+            forEach(diagnostics, add);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {

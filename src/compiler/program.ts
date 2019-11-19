@@ -323,9 +323,13 @@ namespace ts {
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
+            ...getPluginPreParseDiagnostics(program, cancellationToken),
+            ...getPluginPreprocessDiagnostics(program, sourceFile, cancellationToken),
             ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             ...program.getGlobalDiagnostics(cancellationToken),
-            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+            ...getPluginPreEmitGlobalDiagnostics(program, cancellationToken),
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            ...getPluginPreEmitDiagnostics(program, sourceFile, cancellationToken)
         ];
 
         if (getEmitDeclarations(program.getCompilerOptions())) {
@@ -727,19 +731,19 @@ namespace ts {
         return result;
     }
 
-    function getPluginPreParseDiagnostics(program: BaseProgram, cancellationToken?: CancellationToken) {
+    function getPluginPreParseDiagnostics(program: BaseProgram | BuilderProgram, cancellationToken?: CancellationToken) {
         return isAsyncProgram(program) ? program.getPluginPreParseDiagnostics(cancellationToken) : emptyArray;
     }
 
-    function getPluginPreprocessDiagnostics(program: BaseProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
+    function getPluginPreprocessDiagnostics(program: BaseProgram | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
         return isAsyncProgram(program) ? program.getPluginPreprocessDiagnostics(sourceFile, cancellationToken) : emptyArray;
     }
 
-    function getPluginPreEmitGlobalDiagnostics(program: BaseProgram, cancellationToken?: CancellationToken) {
+    function getPluginPreEmitGlobalDiagnostics(program: BaseProgram | BuilderProgram, cancellationToken?: CancellationToken) {
         return isAsyncProgram(program) ? program.getPluginPreEmitGlobalDiagnostics(cancellationToken) : emptyArray;
     }
 
-    function getPluginPreEmitDiagnostics(program: BaseProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
+    function getPluginPreEmitDiagnostics(program: BaseProgram | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken) {
         return isAsyncProgram(program) ? program.getPluginPreEmitDiagnostics(sourceFile, cancellationToken) : emptyArray;
     }
 
@@ -1620,11 +1624,6 @@ namespace ts {
                 // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
                 // get any preEmit diagnostics, not just the ones
                 if (options.noEmitOnError) {
-                    if (isAsyncProgram(program)) {
-                        program.getPluginPreParseDiagnostics(cancellationToken);
-                        program.getPluginPreprocessDiagnostics(sourceFile, cancellationToken);
-                        program.getPluginPreEmitDiagnostics(sourceFile, cancellationToken);
-                    }
                     const diagnostics = [
                         ...program.getOptionsDiagnostics(cancellationToken),
                         ...getPluginPreParseDiagnostics(program, cancellationToken),
@@ -3421,6 +3420,7 @@ namespace ts {
         });
 
         let preprocessDiagnostics: DiagnosticWithLocation[] | undefined;
+        let preprocessCompilerDiagnostics: Diagnostic[] | undefined;
         let preprocessTransformer: NodeTransformer<SourceFile> | undefined;
         let preprocessedNodes: Node[] | undefined;
         if (preParseResult) {
@@ -3441,6 +3441,7 @@ namespace ts {
                     /*allowDtsFiles*/ true
                 );
                 preprocessDiagnostics = preprocessTransformer.diagnostics;
+                preprocessCompilerDiagnostics = preprocessTransformer.compilerDiagnostics;
                 preprocessedNodes = [];
                 changeCompilerHostToUsePreprocessor(host, node => {
                     disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
@@ -3453,9 +3454,11 @@ namespace ts {
         const { baseProgram, emitWorker, dropTypeCheckers } = createBaseProgram(createProgramOptions, host);
 
         if (preprocessDiagnostics) {
-            for (const diagnostic of preprocessDiagnostics) {
-                pluginPreprocessDiagnostics!.add(diagnostic);
-            }
+            pluginPreprocessDiagnostics!.addRange(preprocessDiagnostics);
+        }
+
+        if (preprocessCompilerDiagnostics) {
+            pluginPreprocessDiagnostics!.addRange(preprocessCompilerDiagnostics);
         }
 
         const program = baseProgram as AsyncProgram;
@@ -3485,7 +3488,10 @@ namespace ts {
 
         function getPluginPreprocessDiagnostics(sourceFile?: SourceFile) {
             if (!pluginHost) return emptyArray;
-            return getDiagnosticsHelper(program, sourceFile, getPluginPreprocessDiagnosticsForFile);
+            return concatenate(
+                pluginPreprocessDiagnostics!.getGlobalDiagnostics(),
+                getDiagnosticsHelper(program, sourceFile, getPluginPreprocessDiagnosticsForFile)
+            );
         }
 
         function getPluginPreprocessDiagnosticsForFile(sourceFile: SourceFile) {
@@ -3546,7 +3552,7 @@ namespace ts {
         }
     }
 
-    export function isAsyncProgram(baseProgram: BaseProgram | Program | AsyncProgram): baseProgram is AsyncProgram {
+    export function isAsyncProgram(baseProgram: BaseProgram | Program | AsyncProgram | BuilderProgram): baseProgram is AsyncProgram {
         return typeof (baseProgram as AsyncProgram).emitAsync === "function";
     }
 
