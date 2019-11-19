@@ -1,6 +1,7 @@
 === /a.ts ===
-export default class A {}
+export default class A { a!: string }
 >A : A
+>a : string
 
 === /b.ts ===
 import type A from './a';
@@ -10,6 +11,9 @@ new A();
 >new A() : any
 >A : any
 
-let a: A;
->a : typeof import("/a").default
+let a: A = { a: '' };
+>a : import("/a").default
+>{ a: '' } : { a: string; }
+>a : string
+>'' : ""
 

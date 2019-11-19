@@ -10,7 +10,7 @@ import { A } from './a';
 >A : any
 
 declare const a: A;
->a : typeof A
+>a : A
 
 new A();
 >new A() : any

@@ -21,7 +21,7 @@ new A();
 >A : any
 
 declare let a: A;
->a : typeof import("/abc").A
+>a : import("/abc").A
 
 declare let b: B;
 >b : B

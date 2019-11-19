@@ -11,7 +11,7 @@ import { A } from './b';
 >A : any
 
 declare const a: A;
->a : typeof import("/a").A
+>a : import("/a").A
 
 new A();
 >new A() : any

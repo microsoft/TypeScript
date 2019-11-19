@@ -2382,7 +2382,7 @@ namespace ts {
             if (target.flags & SymbolFlags.ValueModule) {
                 return createNamespaceModuleForModule(target);
             }
-            if (target.flags & SymbolFlags.NamespaceModule || !(target.flags & SymbolFlags.Value)) {
+            if (!(target.flags & SymbolFlags.Value)) {
                 return target;
             }
             if (target.flags & SymbolFlags.Type) {
@@ -8141,7 +8141,7 @@ namespace ts {
                 if (isTransientSymbol(symbol) && symbol.immediateTarget) {
                     // Symbol is synthetic type alias for type-only import or export.
                     // See `createSyntheticTypeAlias`.
-                    type = getTypeOfSymbol(symbol.immediateTarget);
+                    type = getDeclaredTypeOfSymbol(symbol.immediateTarget);
                     declaration = symbol.valueDeclaration;
                 }
                 else {
