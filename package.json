@@ -114,7 +114,6 @@
         "gulp": "gulp",
         "jake": "gulp",
         "lint": "gulp lint",
-        "lint:ci": "gulp lint --ci",
         "lint:compiler": "gulp lint-compiler",
         "lint:scripts": "gulp lint-scripts",
         "setup-hooks": "node scripts/link-hooks.js",

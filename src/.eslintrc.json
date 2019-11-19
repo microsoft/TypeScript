@@ -1,5 +1,9 @@
 {
     "extends": "../.eslintrc.json",
+    "parserOptions": {
+        "tsconfigRootDir": "src",
+        "project": "./tsconfig-base.json"
+    },
     "overrides": [
         {
             "files": ["lib/*.d.ts"],
@@ -7,6 +11,9 @@
                 "@typescript-eslint/interface-name-prefix": "off",
                 "@typescript-eslint/prefer-function-type": "off",
                 "@typescript-eslint/unified-signatures": "off",
+
+                "@typescript-eslint/no-unnecessary-qualifier": "error",
+                "@typescript-eslint/no-unnecessary-type-assertion": "error",
 
                 // scripts/eslint/rules
                 "no-keywords": "off",
