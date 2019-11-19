@@ -8285,6 +8285,7 @@ namespace ts {
     export function matchPatternOrExact(patternStrings: readonly string[], candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
         for (const patternString of patternStrings) {
+            if (!hasZeroOrOneAsteriskCharacter(patternString)) continue;
             const pattern = tryParsePattern(patternString);
             if (pattern) {
                 patterns.push(pattern);
