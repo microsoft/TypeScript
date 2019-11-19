@@ -1518,7 +1518,7 @@ namespace Harness {
                 if (entries) {
                     if (!varyByEntries) varyByEntries = [];
                     variationCount *= entries.length;
-                    if (variationCount > 25) throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`)
+                    if (variationCount > 25) throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
                     varyByEntries.push([varyByKey, entries]);
                 }
             }
