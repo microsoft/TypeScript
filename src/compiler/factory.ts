@@ -2266,7 +2266,7 @@ namespace ts {
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly = false) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly: boolean) {
         return node.name !== name
             || node.namedBindings !== namedBindings
             || node.isTypeOnly !== isTypeOnly
@@ -2345,7 +2345,7 @@ namespace ts {
         modifiers: readonly Modifier[] | undefined,
         exportClause: NamedExports | undefined,
         moduleSpecifier: Expression | undefined,
-        isTypeOnly = false) {
+        isTypeOnly: boolean) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.isTypeOnly !== isTypeOnly

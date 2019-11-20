@@ -2785,10 +2785,13 @@ namespace ts {
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+            if (node.isTypeOnly) {
+                return undefined;
+            }
             // Elide the import clause if we elide both its name and its named bindings.
             const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
             const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-            return (name || namedBindings) ? updateImportClause(node, name, namedBindings) : undefined;
+            return (name || namedBindings) ? updateImportClause(node, name, namedBindings, /*isTypeOnly*/ false) : undefined;
         }
 
         /**
@@ -2860,7 +2863,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     exportClause,
-                    node.moduleSpecifier)
+                    node.moduleSpecifier,
+                    node.isTypeOnly)
                 : undefined;
         }
 
