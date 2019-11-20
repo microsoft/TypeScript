@@ -4,7 +4,7 @@ export class A {}
 
 === /b.ts ===
 export type { A } from './a';
->A : any
+>A : import("/a").A
 
 === /c.ts ===
 import { A } from './b';

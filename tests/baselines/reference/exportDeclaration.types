@@ -3,7 +3,7 @@ class A {}
 >A : A
 
 export type { A };
->A : any
+>A : A
 
 === /b.ts ===
 import { A } from './a';

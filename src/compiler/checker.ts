@@ -33435,10 +33435,10 @@ namespace ts {
         function isTypeDeclarationName(name: Node): boolean {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
-                (<NamedDeclaration>name.parent).name === name;
+                name.parent.name === name;
         }
 
-        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration {
+        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
@@ -33446,6 +33446,11 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return true;
+                case SyntaxKind.ImportClause:
+                    return (node as ImportClause).isTypeOnly;
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                    return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
                 default:
                     return false;
             }
@@ -33831,7 +33836,10 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
-                return symbol ? getTypeOfSymbol(symbol) : errorType;
+                if (symbol) {
+                    return isTypeOnlyImportOrExportName(node) ? getDeclaredTypeOfSymbol(symbol) : getTypeOfSymbol(symbol);
+                }
+                return errorType;
             }
 
             if (isBindingPattern(node)) {

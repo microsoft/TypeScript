@@ -12,8 +12,8 @@ export const C = "";
 
 === /d.ts ===
 import type { A, B, C } from './abc';
->A : any
->B : any
+>A : import("/abc").A
+>B : B
 >C : any
 
 new A();
