@@ -844,6 +844,7 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
+        const flowLoopContainingUnionCache: (UnionType | undefined)[] = [];
         const flowAssignmentTypes: Type[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
@@ -19004,8 +19005,8 @@ namespace ts {
                 return key = getFlowCacheKey(reference, declaredType, initialType, flowContainer);
             }
 
-            function captureContainingUnion(type: FlowType) {
-                if (!isIncomplete(type) && type.flags & TypeFlags.Union) {
+            function captureContainingUnion(type: FlowType, flags?: FlowFlags) {
+                if ((flags === undefined || (flags & FlowFlags.BranchLabel) === 0) && !isIncomplete(type) && type.flags & TypeFlags.Union) {
                     containingUnion = type as UnionType;
                 }
             }
@@ -19107,7 +19108,7 @@ namespace ts {
                         sharedFlowTypes[sharedFlowCount] = type;
                         sharedFlowCount++;
                     }
-                    captureContainingUnion(type);
+                    captureContainingUnion(type, flags);
                     flowDepth--;
                     return type;
                 }
@@ -19328,6 +19329,7 @@ namespace ts {
                     // are the same), there is no reason to process more antecedents since the only
                     // possible outcome is subtypes that will be removed in the final union type anyway.
                     if (type === declaredType && declaredType === initialType) {
+                        containingUnion = undefined;
                         return type;
                     }
                     pushIfUnique(antecedentTypes, type);
@@ -19342,8 +19344,13 @@ namespace ts {
                         seenIncomplete = true;
                     }
                 }
-                const containingUnionType = createFlowType(getUnionOrEvolvingArrayType(containedUnions, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
-                captureContainingUnion(containingUnionType);
+                containingUnion = undefined;
+                captureContainingUnion(
+                    createFlowType(
+                        getUnionOrEvolvingArrayType(containedUnions, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal),
+                        seenIncomplete
+                    )
+                );
                 return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
             }
 
@@ -19359,6 +19366,7 @@ namespace ts {
                 }
                 const cached = cache.get(key);
                 if (cached) {
+                    containingUnion = flowLoopContainingUnionCache[id];
                     return cached;
                 }
                 // If this flow loop junction and reference are already being processed, return
@@ -19379,12 +19387,14 @@ namespace ts {
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let firstAntecedentType: FlowType | undefined;
+                let unionContainedAtTop: UnionType | undefined;
                 for (const antecedent of flow.antecedents!) {
                     let flowType;
                     if (!firstAntecedentType) {
                         // The first antecedent of a loop junction is always the non-looping control
                         // flow path that leads to the top.
                         flowType = firstAntecedentType = getTypeAtFlowNode(antecedent);
+                        unionContainedAtTop = containingUnion;
                     }
                     else {
                         // All but the first antecedent are the looping control flow paths that lead
@@ -19400,6 +19410,7 @@ namespace ts {
                         // the resulting type and bail out.
                         const cached = cache.get(key);
                         if (cached) {
+                            containingUnion = flowLoopContainingUnionCache[id];
                             return cached;
                         }
                     }
@@ -19422,8 +19433,10 @@ namespace ts {
                 // is incomplete.
                 const result = getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal);
                 if (isIncomplete(firstAntecedentType!)) {
+                    containingUnion = undefined;
                     return createFlowType(result, /*incomplete*/ true);
                 }
+                containingUnion = flowLoopContainingUnionCache[id] = unionContainedAtTop;
                 cache.set(key, result);
                 return result;
             }
