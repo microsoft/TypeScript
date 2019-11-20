@@ -2374,11 +2374,10 @@ declare namespace ts {
         ContainsSpread = 1024,
         ReverseMapped = 2048,
         JsxAttributes = 4096,
-        MarkerType = 8192,
-        JSLiteral = 16384,
-        FreshLiteral = 32768,
-        ArrayLiteral = 65536,
-        ObjectRestType = 131072,
+        JSLiteral = 8192,
+        FreshLiteral = 16384,
+        ArrayLiteral = 32768,
+        ObjectRestType = 65536,
         ClassOrInterface = 3,
     }
     export interface ObjectType extends Type {
