@@ -3305,6 +3305,10 @@
         "category": "Error",
         "code": 5077
     },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5078
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

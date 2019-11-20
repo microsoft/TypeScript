@@ -1,5 +1,5 @@
 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-  'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): erro
             this.x = a;
             ~~~~~~
 !!! error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2719:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         }
     }
     
