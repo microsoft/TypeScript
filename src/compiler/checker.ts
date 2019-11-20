@@ -2387,6 +2387,17 @@ namespace ts {
             if (!(target.flags & SymbolFlags.Value)) {
                 return target;
             }
+            // if (target.flags & SymbolFlags.Class) {
+
+            // }
+            // if (target.flags & SymbolFlags.Enum) {
+
+            // }
+            // if (target.flags & SymbolFlags.EnumMember) {
+
+            // }
+            // Debug.assert(!(target.flags & SymbolFlags.Type));
+
             if (target.flags & SymbolFlags.Type) {
                 const alias = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
                 alias.declarations = emptyArray;
@@ -8129,6 +8140,10 @@ namespace ts {
             return <InterfaceType>links.declaredType;
         }
 
+        function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
+            return isTransientSymbol(symbol) && !!symbol.immediateTarget;
+        }
+
         function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -8140,7 +8155,7 @@ namespace ts {
 
                 let type: Type;
                 let declaration;
-                if (isTransientSymbol(symbol) && symbol.immediateTarget) {
+                if (isTypeOnlyAlias(symbol)) {
                     // Symbol is synthetic type alias for type-only import or export.
                     // See `createSyntheticTypeAlias`.
                     type = getDeclaredTypeOfSymbol(symbol.immediateTarget);
@@ -10875,6 +10890,9 @@ namespace ts {
             symbol = getExpandoSymbol(symbol) || symbol;
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol);
+            }
+            if (isTypeOnlyAlias(symbol)) {
+                return getTypeReferenceType(node, symbol.immediateTarget);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
                 return getTypeFromTypeAliasReference(node, symbol);
