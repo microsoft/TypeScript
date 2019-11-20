@@ -60,7 +60,7 @@ namespace ts.codefix {
                 symbol.members.forEach(member => {
                     const memberElement = createClassElement(member, /*modifiers*/ undefined);
                     if (memberElement) {
-                        memberElements.push(memberElement);
+                        memberElements.push(...memberElement);
                     }
                 });
             }
@@ -68,32 +68,57 @@ namespace ts.codefix {
             // all static members are stored in the "exports" array of symbol
             if (symbol.exports) {
                 symbol.exports.forEach(member => {
-                    const memberElement = createClassElement(member, [createToken(SyntaxKind.StaticKeyword)]);
-                    if (memberElement) {
-                        memberElements.push(memberElement);
+                    if (member.name === "prototype") {
+                        const firstDeclaration = member.declarations[0];
+                        // only one "x.prototype = { ... }" will pass
+                        if (member.declarations.length === 1 &&
+                            isPropertyAccessExpression(firstDeclaration) &&
+                            isBinaryExpression(firstDeclaration.parent) &&
+                            firstDeclaration.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
+                            isObjectLiteralExpression(firstDeclaration.parent.right)
+                        ) {
+                            const prototypes = firstDeclaration.parent.right;
+                            const memberElement = createClassElement(prototypes.symbol, /** modifiers */ undefined);
+                            if (memberElement) {
+                                memberElements.push(...memberElement);
+                            }
+                        }
+                    }
+                    else {
+                        const memberElement = createClassElement(member, [createToken(SyntaxKind.StaticKeyword)]);
+                        if (memberElement) {
+                            memberElements.push(...memberElement);
+                        }
                     }
                 });
             }
 
             return memberElements;
 
-            function shouldConvertDeclaration(_target: PropertyAccessExpression, source: Expression) {
+            function shouldConvertDeclaration(_target: PropertyAccessExpression | ObjectLiteralExpression, source: Expression) {
                 // Right now the only thing we can convert are function expressions - other values shouldn't get
                 // transformed. We can update this once ES public class properties are available.
-                return isFunctionLike(source);
+                if (isPropertyAccessExpression(_target)) {
+                    return isFunctionLike(source);
+                }
+                else {
+                    return every(_target.properties, x => isPropertyAssignment(x) && isFunctionLike(x.initializer) && !!x.name);
+                }
             }
 
-            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement | undefined {
+            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement[] {
                 // Right now the only thing we can convert are function expressions, which are marked as methods
-                if (!(symbol.flags & SymbolFlags.Method)) {
-                    return;
+                // or { x: y } type prototype assignments, which are marked as ObjectLiteral
+                const members: ClassElement[] = [];
+                if (!(symbol.flags & SymbolFlags.Method) && !(symbol.flags & SymbolFlags.ObjectLiteral)) {
+                    return members;
                 }
 
-                const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression;
+                const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression | ObjectLiteralExpression;
                 const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
 
                 if (!shouldConvertDeclaration(memberDeclaration, assignmentBinaryExpression.right)) {
-                    return;
+                    return members;
                 }
 
                 // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
@@ -102,50 +127,67 @@ namespace ts.codefix {
                 changes.delete(sourceFile, nodeToDelete);
 
                 if (!assignmentBinaryExpression.right) {
-                    return createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
-                        /*type*/ undefined, /*initializer*/ undefined);
+                    members.push(createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
+                        /*type*/ undefined, /*initializer*/ undefined));
+                    return members;
                 }
 
                 switch (assignmentBinaryExpression.right.kind) {
-                    case SyntaxKind.FunctionExpression: {
-                        const functionExpression = assignmentBinaryExpression.right as FunctionExpression;
-                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
-                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
-                            /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
-                        copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
-                        return method;
-                    }
-
-                    case SyntaxKind.ArrowFunction: {
-                        const arrowFunction = assignmentBinaryExpression.right as ArrowFunction;
-                        const arrowFunctionBody = arrowFunction.body;
-                        let bodyBlock: Block;
-
-                        // case 1: () => { return [1,2,3] }
-                        if (arrowFunctionBody.kind === SyntaxKind.Block) {
-                            bodyBlock = arrowFunctionBody as Block;
-                        }
-                        // case 2: () => [1,2,3]
-                        else {
-                            bodyBlock = createBlock([createReturn(arrowFunctionBody)]);
-                        }
-                        const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
-                        const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
-                            /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
-                        copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
-                        return method;
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                        return createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>assignmentBinaryExpression.right, (<PropertyAccessExpression>memberDeclaration).name);
+                    case SyntaxKind.ObjectLiteralExpression: {
+                        return map(
+                            (<ObjectLiteralExpression>assignmentBinaryExpression.right).properties,
+                            property => createFunctionLikeExpressionMember(members, <FunctionExpression | ArrowFunction>(<PropertyAssignment>property).initializer, property.name!)
+                        ).reduce((x, y) => x.concat(y));
                     }
 
                     default: {
                         // Don't try to declare members in JavaScript files
                         if (isSourceFileJS(sourceFile)) {
-                            return;
+                            return members;
                         }
-                        const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
+                        const prop = createProperty(/*decorators*/ undefined, modifiers, (<PropertyAccessExpression>memberDeclaration).name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
                         copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
-                        return prop;
+                        members.push(prop);
+                        return members;
                     }
+                }
+
+                type MethodName = Parameters<typeof createMethod>[3];
+
+                function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: MethodName) {
+                    if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
+                    else return createArrowFunctionExpressionMember(members, expression, name);
+                }
+
+                function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: MethodName) {
+                    const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
+                    const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
+    /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+                    copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
+                    return members.concat(method);
+                }
+
+                function createArrowFunctionExpressionMember(members: readonly ClassElement[], arrowFunction: ArrowFunction, name: MethodName) {
+                    const arrowFunctionBody = arrowFunction.body;
+                    let bodyBlock: Block;
+
+                    // case 1: () => { return [1,2,3] }
+                    if (arrowFunctionBody.kind === SyntaxKind.Block) {
+                        bodyBlock = arrowFunctionBody as Block;
+                    }
+                    // case 2: () => [1,2,3]
+                    else {
+                        bodyBlock = createBlock([createReturn(arrowFunctionBody)]);
+                    }
+                    const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
+                    const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
+                        /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
+                    copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
+                    return members.concat(method);
                 }
             }
         }
