@@ -117,7 +117,7 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
+                    if (suggestion.symbol.declarations && suggestion.symbol.declarations[0]) {
                         suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
                             ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
                             : suggestion.symbol.declarations[0].symbol);
