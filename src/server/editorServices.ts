@@ -1005,7 +1005,7 @@ namespace ts.server {
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
@@ -1014,6 +1014,13 @@ namespace ts.server {
 
                     if (isPathIgnored(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
+
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    ) {
+                        this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
+                        project.onAddPackageJson(fileOrDirectoryPath);
+                    }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list
@@ -1134,7 +1141,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
+                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? projectRootPath || this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             if (info.containingProjects[0] !== project) {
@@ -1496,6 +1503,8 @@ namespace ts.server {
 
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
+            const scriptInfo = Debug.assertDefined(this.getScriptInfo(info.path));
+            if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
             const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
@@ -1524,6 +1533,14 @@ namespace ts.server {
             } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
+        }
+
+        /*@internal*/
+        findDefaultConfiguredProject(info: ScriptInfo) {
+            if (!info.isScriptOpen()) return undefined;
+            const configFileName = this.getConfigFileNameForFile(info);
+            return configFileName &&
+                this.findConfiguredProjectByProjectName(configFileName);
         }
 
         /**
@@ -1777,6 +1794,12 @@ namespace ts.server {
                 configFileErrors.push(...parsedCommandLine.errors);
             }
 
+            this.logger.info(`Config: ${configFilename} : ${JSON.stringify({
+                rootNames: parsedCommandLine.fileNames,
+                options: parsedCommandLine.options,
+                projectReferences: parsedCommandLine.projectReferences
+            }, /*replacer*/ undefined, " ")}`);
+
             Debug.assert(!!parsedCommandLine.fileNames);
             const compilerOptions = parsedCommandLine.options;
 
@@ -1818,7 +1841,7 @@ namespace ts.server {
                 let scriptInfo: ScriptInfo | NormalizedPath;
                 let path: Path;
                 // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
-                if (!isDynamic && !project.fileExists(newRootFile)) {
+                if (!isDynamic && !project.fileExistsWithCache(newRootFile)) {
                     path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
                     const existingValue = projectRootFilesMap.get(path)!;
                     if (isScriptInfo(existingValue)) {
@@ -1851,7 +1874,7 @@ namespace ts.server {
                 projectRootFilesMap.forEach((value, path) => {
                     if (!newRootScriptInfoMap.has(path)) {
                         if (isScriptInfo(value)) {
-                            project.removeFile(value, project.fileExists(path), /*detachFromProject*/ true);
+                            project.removeFile(value, project.fileExistsWithCache(path), /*detachFromProject*/ true);
                         }
                         else {
                             projectRootFilesMap.delete(path);
@@ -1922,7 +1945,9 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
+            if (!this.useInferredProjectPerProjectRoot ||
+                // Its a dynamic info opened without project root
+                (info.isDynamic && projectRootPath === undefined)) {
                 return undefined;
             }
 
@@ -2207,7 +2232,7 @@ namespace ts.server {
                 const isDynamic = isDynamicFileName(fileName);
                 Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
-                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
+                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
@@ -2218,7 +2243,7 @@ namespace ts.server {
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
                 }
-                else if (!isRootedDiskPath(fileName) && !isDynamic) {
+                else if (!isRootedDiskPath(fileName) && (!isDynamic || this.currentDirectory !== currentDirectory)) {
                     // File that is opened by user but isn't rooted disk path
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
@@ -2584,7 +2609,9 @@ namespace ts.server {
 
         /*@internal*/
         getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
-            const originalLocation = project.getSourceMapper().tryGetSourcePosition(location);
+            const originalLocation = project.isSourceOfProjectReferenceRedirect(location.fileName) ?
+                location :
+                project.getSourceMapper().tryGetSourcePosition(location);
             if (!originalLocation) return undefined;
 
             const { fileName } = originalLocation;
@@ -2595,7 +2622,8 @@ namespace ts.server {
             if (!configFileName) return undefined;
 
             const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName} for location: ${location.fileName}`);
+                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            if (configuredProject === project) return originalLocation;
             updateProjectIfDirty(configuredProject);
             // Keep this configured project as referenced from project
             addOriginalConfiguredProject(configuredProject);

@@ -173,8 +173,7 @@ namespace ts {
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
         // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
-        // With --isolatedModules, emitting changed file doesnt emit dependent files so we cant know of dependent files to retrieve errors so dont cache the errors
-        if (!compilerOptions.outFile && !compilerOptions.out && !compilerOptions.isolatedModules) {
+        if (!compilerOptions.outFile && !compilerOptions.out) {
             state.semanticDiagnosticsPerFile = createMap<readonly Diagnostic[]>();
         }
         state.changedFilesSet = createMap<true>();
@@ -252,12 +251,13 @@ namespace ts {
             state.seenAffectedFiles = createMap<true>();
         }
 
+        state.emittedBuildInfo = !state.changedFilesSet.size && !state.affectedFilesPendingEmit;
         return state;
     }
 
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
         if (!diagnostics.length) return emptyArray;
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -426,7 +426,7 @@ namespace ts {
                 const options = program.getCompilerOptions();
                 forEach(program.getSourceFiles(), f =>
                     program.isSourceFileDefaultLibrary(f) &&
-                    !skipTypeChecking(f, options) &&
+                    !skipTypeChecking(f, options, program) &&
                     removeSemanticDiagnosticsOf(state, f.path)
                 );
             }
@@ -483,14 +483,41 @@ namespace ts {
         return !state.semanticDiagnosticsFromOldState.size;
     }
 
+    function isChangedSignagure(state: BuilderProgramState, path: Path) {
+        const newSignature = Debug.assertDefined(state.currentAffectedFilesSignatures).get(path);
+        const oldSignagure = Debug.assertDefined(state.fileInfos.get(path)).signature;
+        return newSignature !== oldSignagure;
+    }
+
     /**
      * Iterate on referencing modules that export entities from affected file
      */
     function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
         // If there was change in signature (dts output) for the changed file,
         // then only we need to handle pending file emit
-        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+        if (!state.exportedModulesMap || !state.changedFilesSet.has(affectedFile.path)) {
             return;
+        }
+
+        if (!isChangedSignagure(state, affectedFile.path)) return;
+
+        // Since isolated modules dont change js files, files affected by change in signature is itself
+        // But we need to cleanup semantic diagnostics and queue dts emit for affected files
+        if (state.compilerOptions.isolatedModules) {
+            const seenFileNamesMap = createMap<true>();
+            seenFileNamesMap.set(affectedFile.path, true);
+            const queue = BuilderState.getReferencedByPaths(state, affectedFile.resolvedPath);
+            while (queue.length > 0) {
+                const currentPath = queue.pop()!;
+                if (!seenFileNamesMap.has(currentPath)) {
+                    seenFileNamesMap.set(currentPath, true);
+                    const result = fn(state, currentPath);
+                    if (result && isChangedSignagure(state, currentPath)) {
+                        const currentSourceFile = Debug.assertDefined(state.program).getSourceFileByPath(currentPath)!;
+                        queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
+                    }
+                }
+            }
         }
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
@@ -656,7 +683,7 @@ namespace ts {
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
         const currentDirectory = Debug.assertDefined(state.program).getCurrentDirectory();
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getOutputPathForBuildInfo(state.compilerOptions)!, currentDirectory));
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
@@ -1092,7 +1119,7 @@ namespace ts {
 
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: convertFromReusableCompilerOptions(program.options, toAbsolutePath),
+            compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
             referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
             exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
@@ -1128,40 +1155,6 @@ namespace ts {
         function toAbsolutePath(path: string) {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
         }
-    }
-
-    function convertFromReusableCompilerOptions(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
-        const result: CompilerOptions = {};
-        const optionsNameMap = getOptionNameMap().optionNameMap;
-
-        for (const name in options) {
-            if (hasProperty(options, name)) {
-                result[name] = convertFromReusableCompilerOptionValue(
-                    optionsNameMap.get(name.toLowerCase()),
-                    options[name] as CompilerOptionsValue,
-                    toAbsolutePath
-                );
-            }
-        }
-        if (result.configFilePath) {
-            result.configFilePath = toAbsolutePath(result.configFilePath);
-        }
-        return result;
-    }
-
-    function convertFromReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
-        if (option) {
-            if (option.type === "list") {
-                const values = value as readonly (string | number)[];
-                if (option.element.isFilePath && values.length) {
-                    return values.map(toAbsolutePath);
-                }
-            }
-            else if (option.isFilePath) {
-                return toAbsolutePath(value as string);
-            }
-        }
-        return value;
     }
 
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {

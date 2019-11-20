@@ -1,7 +1,7 @@
 Exit Code: 1
 Standard output:
-node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
-node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
+node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
+node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
 node_modules/npm/bin/npm-cli.js(47,7): error TS2339: Property 'argv' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(48,11): error TS2339: Property 'deref' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(48,21): error TS2339: Property 'argv' does not exist on type 'typeof EventEmitter'.
@@ -533,8 +533,8 @@ node_modules/npm/lib/ls.js(522,18): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(528,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(538,12): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(544,56): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(5,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
-node_modules/npm/lib/npm.js(12,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
+node_modules/npm/lib/npm.js(5,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
+node_modules/npm/lib/npm.js(12,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
 node_modules/npm/lib/npm.js(30,14): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"log"' is not assignable to parameter of type 'Signals'.
@@ -584,7 +584,7 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/npm": typeof internal.EventEmitter; }' have no overlap.
+node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": typeof internal.EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -723,7 +723,6 @@ node_modules/npm/lib/search/all-package-metadata.js(239,20): error TS2339: Prope
 node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
-node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Property 'getWindowSize' does not exist on type 'WriteStream'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.
@@ -848,7 +847,7 @@ node_modules/npm/lib/utils/locker.js(28,20): error TS2339: Property 'config' doe
 node_modules/npm/lib/utils/locker.js(29,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/locker.js(65,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/map-to-registry.js(98,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
+node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
 node_modules/npm/lib/utils/metrics-launch.js(12,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(13,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(14,30): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1153,6 +1152,8 @@ node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find 
 node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/check-permissions.js(26,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+node_modules/npm/test/tap/check-permissions.js(42,7): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks'.

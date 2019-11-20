@@ -2,140 +2,236 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.10.0 (pre-LTS)
+Node.js version is 12.13.0 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-XX of XX: [@azure/core-http] completed successfully in ? seconds
-XX of XX: [@azure/identity] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
-XX of XX: [@azure/core-arm] completed successfully in ? seconds
-XX of XX: [@azure/core-paging] completed successfully in ? seconds
-XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
-XX of XX: [@azure/event-hubs] completed successfully in ? seconds
-XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-XX of XX: [@azure/app-configuration] completed successfully in ? seconds
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
+XX of XX: [@azure/logger] completed successfully in ? seconds
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:lib" exited with 1.
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/core-paging] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
+Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/eventProcessorHost.d.ts:36:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/eventProcessorHost.d.ts:66:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:22:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
+XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
+Warning: dist-esm/ChangeFeedIterator.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:21:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:25:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:31:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:35:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:45:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Conflict/Conflict.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:39:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:44:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:51:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Database/Database.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Item/Item.d.ts:20:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Offer/Offer.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Permission/Permission.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:48:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Script/Scripts.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/StoredProcedure/StoredProcedure.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/StoredProcedure/StoredProcedureResponse.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Trigger/Trigger.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/User/User.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunction.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunctionResponse.d.ts:15:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/queryMetrics/queryMetrics.d.ts:26:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:7:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
-tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js)
-@azure/cosmos-sign (imported by dist-esm/auth.js)
-universal-user-agent (imported by dist-esm/common/platform.js)
-uuid/v4 (imported by dist-esm/ClientContext.js, dist-esm/client/Item/Items.js)
-binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
-priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
-semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
-debug (imported by dist-esm/common/logger.js)
-node-abort-controller (imported by dist-esm/request/RequestHandler.js)
-node-fetch (imported by dist-esm/request/RequestHandler.js)
-atob (imported by dist-esm/session/sessionContainer.js)
-crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
-fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
-(!) Missing global variable names
+os-name (imported by dist-esm/utils/user-agent.js)
+(!) Missing global variable name
 Use output.globals to specify browser global variable names corresponding to external modules
-universal-user-agent (guessing 'userAgent')
-tslib (guessing 'tslib')
-@azure/cosmos-sign (guessing 'cosmosSign')
-debug (guessing 'debugLib')
-binary-search-bounds (guessing 'bs')
-priorityqueuejs (guessing 'PriorityQueue')
-semaphore (guessing 'semaphore')
-crypto-hash (guessing 'cryptoHash')
-fast-json-stable-stringify (guessing 'stableStringify')
-uuid/v4 (guessing 'uuid')
-node-abort-controller (guessing 'AbortController')
-node-fetch (guessing 'fetch')
-atob (guessing 'atob')
-(!) Circular dependency: dist-esm/queryExecutionContext/index.js -> dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/index.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/index.js
-(!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
-(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
+os-name (guessing 'osName')
 created dist/index.js in ?s
-XX of XX: [@azure/eventhubs-checkpointstore-blob] completed successfully in ? seconds
-XX of XX: [@azure/keyvault-certificates] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/storage-file] completed successfully in ? seconds
-XX of XX: [@azure/storage-queue] completed successfully in ? seconds
-XX of XX: [@azure/template] completed successfully in ? seconds
+Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:153:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:159:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:165:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (22)
+SUCCESS (7)
 ================================
 @azure/abort-controller (? seconds)
-@azure/core-auth (? seconds)
 @azure/core-tracing (? seconds)
-@azure/core-http (? seconds)
-@azure/identity (? seconds)
-@azure/core-amqp (? seconds)
-@azure/core-arm (? seconds)
+@azure/logger (? seconds)
+@azure/core-asynciterator-polyfill (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
-@azure/event-hubs (? seconds)
-@azure/event-processor-host (? seconds)
-@azure/keyvault-keys (? seconds)
-@azure/keyvault-secrets (? seconds)
-@azure/app-configuration (? seconds)
-@azure/core-asynciterator-polyfill (? seconds)
-@azure/eventhubs-checkpointstore-blob (? seconds)
-@azure/keyvault-certificates (? seconds)
-@azure/storage-blob (? seconds)
-@azure/storage-file (? seconds)
-@azure/storage-queue (? seconds)
-@azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (2)
+SUCCESS WITH WARNINGS (4)
 ================================
+@azure/core-auth (? seconds)
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
+@azure/event-processor-host (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
+Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/eventProcessorHost.d.ts:36:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/eventProcessorHost.d.ts:66:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:22:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
 @azure/cosmos (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
+Warning: dist-esm/ChangeFeedIterator.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:21:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:25:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:31:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:35:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/ChangeFeedResponse.d.ts:45:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Conflict/Conflict.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:39:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/client/Container/Container.d.ts:44:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+[...14 lines omitted...]
+Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunctionResponse.d.ts:15:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/queryMetrics/queryMetrics.d.ts:26:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:7:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/FeedResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/LocationRouting.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
+Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
-tslib (imported by dist-esm/auth.js, dist-esm/queryIterator.js, dist-esm/CosmosClient.js, dist-esm/plugins/Plugin.js, dist-esm/ClientContext.js, dist-esm/globalEndpointManager.js, dist-esm/client/Conflict/Conflict.js, dist-esm/client/Container/Container.js, dist-esm/client/Container/Containers.js, dist-esm/client/Database/Database.js, dist-esm/client/Database/Databases.js, dist-esm/client/Item/Item.js, dist-esm/client/Item/Items.js, dist-esm/client/Offer/Offer.js, dist-esm/client/Permission/Permission.js, dist-esm/client/Permission/Permissions.js, dist-esm/client/StoredProcedure/StoredProcedure.js, dist-esm/client/StoredProcedure/StoredProcedures.js, dist-esm/client/Trigger/Trigger.js, dist-esm/client/Trigger/Triggers.js, dist-esm/client/User/User.js, dist-esm/client/User/Users.js, dist-esm/client/UserDefinedFunction/UserDefinedFunction.js, dist-esm/client/UserDefinedFunction/UserDefinedFunctions.js, dist-esm/queryExecutionContext/defaultQueryExecutionContext.js, dist-esm/queryExecutionContext/documentProducer.js, dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/queryExecutionContext/pipelinedQueryExecutionContext.js, dist-esm/request/request.js, dist-esm/request/RequestHandler.js, dist-esm/ChangeFeedIterator.js, dist-esm/routing/smartRoutingMapProvider.js, dist-esm/queryExecutionContext/EndpointComponent/OffsetLimitEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/AggregateEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderByEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js, dist-esm/retry/retryUtility.js, dist-esm/routing/partitionKeyRangeCache.js, dist-esm/retry/endpointDiscoveryRetryPolicy.js, dist-esm/retry/defaultRetryPolicy.js, dist-esm/retry/sessionRetryPolicy.js, dist-esm/retry/resourceThrottleRetryPolicy.js)
-@azure/cosmos-sign (imported by dist-esm/auth.js)
-universal-user-agent (imported by dist-esm/common/platform.js)
-uuid/v4 (imported by dist-esm/ClientContext.js, dist-esm/client/Item/Items.js)
-binary-search-bounds (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js, dist-esm/routing/inMemoryCollectionRoutingMap.js)
-priorityqueuejs (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
-semaphore (imported by dist-esm/queryExecutionContext/parallelQueryExecutionContextBase.js)
-debug (imported by dist-esm/common/logger.js)
-node-abort-controller (imported by dist-esm/request/RequestHandler.js)
-node-fetch (imported by dist-esm/request/RequestHandler.js)
-atob (imported by dist-esm/session/sessionContainer.js)
-crypto-hash (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
-fast-json-stable-stringify (imported by dist-esm/queryExecutionContext/EndpointComponent/OrderedDistinctEndpointComponent.js, dist-esm/queryExecutionContext/EndpointComponent/UnorderedDistinctEndpointComponent.js)
-(!) Missing global variable names
+os-name (imported by dist-esm/utils/user-agent.js)
+(!) Missing global variable name
 Use output.globals to specify browser global variable names corresponding to external modules
-universal-user-agent (guessing 'userAgent')
-tslib (guessing 'tslib')
-@azure/cosmos-sign (guessing 'cosmosSign')
-debug (guessing 'debugLib')
-binary-search-bounds (guessing 'bs')
-priorityqueuejs (guessing 'PriorityQueue')
-semaphore (guessing 'semaphore')
-crypto-hash (guessing 'cryptoHash')
-fast-json-stable-stringify (guessing 'stableStringify')
-uuid/v4 (guessing 'uuid')
-node-abort-controller (guessing 'AbortController')
-node-fetch (guessing 'fetch')
-atob (guessing 'atob')
-(!) Circular dependency: dist-esm/queryExecutionContext/index.js -> dist-esm/queryExecutionContext/headerUtils.js -> dist-esm/queryMetrics/index.js -> dist-esm/queryMetrics/clientSideMetrics.js -> dist-esm/queryExecutionContext/index.js
-(!) Circular dependency: dist-esm/index.js -> dist-esm/CosmosClient.js -> dist-esm/client/Database/index.js -> dist-esm/client/Database/Database.js -> dist-esm/client/Container/index.js -> dist-esm/client/Container/Container.js -> dist-esm/client/Script/Scripts.js -> dist-esm/index.js
-(!) Circular dependency: dist-esm/request/RequestHandler.js -> dist-esm/retry/retryUtility.js -> dist-esm/request/RequestHandler.js
+os-name (guessing 'osName')
 created dist/index.js in ?s
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
+Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:153:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:159:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:165:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
+Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
 ================================
-rush rebuild ( ? seconds)
+BLOCKED (15)
+================================
+@azure/identity
+@azure/core-amqp
+@azure/core-arm
+@azure/core-lro
+@azure/event-hubs
+@azure/app-configuration
+@azure/cognitiveservices-inkrecognizer
+@azure/eventhubs-checkpointstore-blob
+@azure/keyvault-certificates
+@azure/keyvault-keys
+@azure/keyvault-secrets
+@azure/storage-blob
+@azure/storage-file-share
+@azure/storage-queue
+@azure/template
+================================
+FAILURE (1)
+================================
+@azure/core-http ( ? seconds)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! Exit status 2
+npm ERR!
+npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:tsc" exited with 2.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
+npm ERR! Exit status 1
+npm ERR!
+npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
+ERROR: "build:lib" exited with 1.
+================================
+Error: Project(s) failed to build
+rush rebuild - Errors! ( ? seconds)
 
 
 
 Standard error:
+XX of XX: [@azure/core-auth] completed with warnings in ? seconds
+XX of XX: [@azure/core-http] failed to build!
+XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
+XX of XX: [@azure/cognitiveservices-inkrecognizer] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-lro] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
+XX of XX: [@azure/identity] blocked by [@azure/core-http]!
+XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
+XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-queue] blocked by [@azure/core-http]!
+XX of XX: [@azure/storage-file-share] blocked by [@azure/core-http]!
+XX of XX: [@azure/template] blocked by [@azure/core-http]!
+XX of XX: [@azure/event-processor-host] completed with warnings in ? seconds
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-Project(s) succeeded with warnings
+[@azure/core-http] Returned error code: 1

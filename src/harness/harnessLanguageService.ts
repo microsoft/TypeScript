@@ -203,6 +203,12 @@ namespace Harness.LanguageService {
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
 
+        public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
+            const script: ScriptInfo = this.getScriptInfo(fileName)!;
+            assert.isOk(script);
+            return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        }
+
         useCaseSensitiveFileNames() {
             return !this.vfs.ignoreCase;
         }
@@ -212,6 +218,10 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
         isKnownTypesPackageName(name: string): boolean {
             return !!this.typesRegistry && this.typesRegistry.has(name);
+        }
+
+        getGlobalTypingsCacheLocation() {
+            return "/Library/Caches/typescript";
         }
 
         installPackage = ts.notImplemented;
@@ -790,7 +800,7 @@ namespace Harness.LanguageService {
             return mockHash(s);
         }
 
-        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+        require(_initialDir: string, _moduleName: string): ts.RequireResult {
             switch (_moduleName) {
                 // Adds to the Quick Info a fixed string and a string from the config file
                 // and replaces the first display part

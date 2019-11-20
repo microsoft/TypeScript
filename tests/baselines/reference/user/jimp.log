@@ -1,7 +1,0 @@
-Exit Code: 1
-Standard output:
-index.ts(1,23): error TS2307: Cannot find module 'jimp'.
-
-
-
-Standard error:

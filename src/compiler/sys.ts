@@ -522,6 +522,23 @@ namespace ts {
         }
     }
 
+    /**
+     * patch writefile to create folder before writing the file
+     */
+    /*@internal*/
+    export function patchWriteFileEnsuringDirectory(sys: System) {
+        // patch writefile to create folder before writing the file
+        const originalWriteFile = sys.writeFile;
+        sys.writeFile = (path, data, writeBom) =>
+            writeFileEnsuringDirectories(
+                path,
+                data,
+                !!writeBom,
+                (path, data, writeByteOrderMark) => originalWriteFile.call(sys, path, data, writeByteOrderMark),
+                path => sys.createDirectory(path),
+                path => sys.directoryExists(path));
+    }
+
     /*@internal*/
     export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
 
@@ -640,6 +657,8 @@ namespace ts {
         createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
+        /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -651,6 +670,9 @@ namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        // For testing
+        /*@internal*/ now?(): Date;
+        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
     }
 
     export interface FileWatcher {
@@ -665,6 +687,7 @@ namespace ts {
     declare const process: any;
     declare const global: any;
     declare const __filename: string;
+    declare const __dirname: string;
 
     export function getNodeMajorVersion(): number | undefined {
         if (typeof process === "undefined") {
@@ -715,8 +738,9 @@ namespace ts {
         const byteOrderMarkIndicator = "\uFEFF";
 
         function getNodeSystem(): System {
-            const _fs = require("fs");
-            const _path = require("path");
+            const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
+            const _fs: typeof import("fs") = require("fs");
+            const _path: typeof import("path") = require("path");
             const _os = require("os");
             // crypto can be absent on reduced node installations
             let _crypto: typeof import("crypto") | undefined;
@@ -726,6 +750,8 @@ namespace ts {
             catch {
                 _crypto = undefined;
             }
+            let activeSession: import("inspector").Session | "stopping" | undefined;
+            let profilePath = "./profile.cpuprofile";
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -814,8 +840,10 @@ namespace ts {
                     return 0;
                 },
                 exit(exitCode?: number): void {
-                    process.exit(exitCode);
+                    disableCPUProfiler(() => process.exit(exitCode));
                 },
+                enableCPUProfiler,
+                disableCPUProfiler,
                 realpath,
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
@@ -839,8 +867,103 @@ namespace ts {
                 bufferFrom,
                 base64decode: input => bufferFrom(input, "base64").toString("utf8"),
                 base64encode: input => bufferFrom(input).toString("base64"),
+                require: (baseDir, moduleName) => {
+                    try {
+                        const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
+                        return { module: require(modulePath), modulePath, error: undefined };
+                    }
+                    catch (error) {
+                        return { module: undefined, modulePath: undefined, error };
+                    }
+                }
             };
             return nodeSystem;
+
+            /**
+             * Uses the builtin inspector APIs to capture a CPU profile
+             * See https://nodejs.org/api/inspector.html#inspector_example_usage for details
+             */
+            function enableCPUProfiler(path: string, cb: () => void) {
+                if (activeSession) {
+                    cb();
+                    return false;
+                }
+                const inspector: typeof import("inspector") = require("inspector");
+                if (!inspector || !inspector.Session) {
+                    cb();
+                    return false;
+                }
+                const session = new inspector.Session();
+                session.connect();
+
+                session.post("Profiler.enable", () => {
+                    session.post("Profiler.start", () => {
+                        activeSession = session;
+                        profilePath = path;
+                        cb();
+                    });
+                });
+                return true;
+            }
+
+            /**
+             * Strips non-TS paths from the profile, so users with private projects shouldn't
+             * need to worry about leaking paths by submitting a cpu profile to us
+             */
+            function cleanupPaths(profile: import("inspector").Profiler.Profile) {
+                let externalFileCounter = 0;
+                const remappedPaths = createMap<string>();
+                const normalizedDir = normalizeSlashes(__dirname);
+                // Windows rooted dir names need an extra `/` prepended to be valid file:/// urls
+                const fileUrlRoot = `file://${getRootLength(normalizedDir) === 1 ? "" : "/"}${normalizedDir}`;
+                for (const node of profile.nodes) {
+                    if (node.callFrame.url) {
+                        const url = normalizeSlashes(node.callFrame.url);
+                        if (containsPath(fileUrlRoot, url, useCaseSensitiveFileNames)) {
+                            node.callFrame.url = getRelativePathToDirectoryOrUrl(fileUrlRoot, url, fileUrlRoot, createGetCanonicalFileName(useCaseSensitiveFileNames), /*isAbsolutePathAnUrl*/ true);
+                        }
+                        else if (!nativePattern.test(url)) {
+                            node.callFrame.url = (remappedPaths.has(url) ? remappedPaths : remappedPaths.set(url, `external${externalFileCounter}.js`)).get(url)!;
+                            externalFileCounter++;
+                        }
+                    }
+                }
+                return profile;
+            }
+
+            function disableCPUProfiler(cb: () => void) {
+                if (activeSession && activeSession !== "stopping") {
+                    const s = activeSession;
+                    activeSession.post("Profiler.stop", (err, { profile }) => {
+                        if (!err) {
+                            try {
+                                if (_fs.statSync(profilePath).isDirectory()) {
+                                    profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
+                                }
+                            }
+                            catch {
+                                // do nothing and ignore fallible fs operation
+                            }
+                            try {
+                                _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
+                            }
+                            catch {
+                                // do nothing and ignore fallible fs operation
+                            }
+                            _fs.writeFileSync(profilePath, JSON.stringify(cleanupPaths(profile)));
+                        }
+                        activeSession = undefined;
+                        s.disconnect();
+                        cb();
+                    });
+                    activeSession = "stopping";
+                    return true;
+                }
+                else {
+                    cb();
+                    return false;
+                }
+            }
 
             function bufferFrom(input: string, encoding?: string): Buffer {
                 // See https://github.com/Microsoft/TypeScript/issues/25652
@@ -899,6 +1022,7 @@ namespace ts {
                     return watchDirectoryUsingFsWatch;
                 }
 
+                // defer watchDirectoryRecursively as it depends on `ts.createMap()` which may not be usable yet.
                 const watchDirectory = tscWatchDirectory === "RecursiveDirectoryUsingFsWatchFile" ?
                     createWatchDirectoryUsing(fsWatchFile) :
                     tscWatchDirectory === "RecursiveDirectoryUsingDynamicPriorityPolling" ?
@@ -1365,17 +1489,6 @@ namespace ts {
             };
         }
 
-        function recursiveCreateDirectory(directoryPath: string, sys: System) {
-            const basePath = getDirectoryPath(directoryPath);
-            const shouldCreateParent = basePath !== "" && directoryPath !== basePath && !sys.directoryExists(basePath);
-            if (shouldCreateParent) {
-                recursiveCreateDirectory(basePath, sys);
-            }
-            if (shouldCreateParent || !sys.directoryExists(directoryPath)) {
-                sys.createDirectory(directoryPath);
-            }
-        }
-
         let sys: System | undefined;
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
@@ -1387,14 +1500,7 @@ namespace ts {
         }
         if (sys) {
             // patch writefile to create folder before writing the file
-            const originalWriteFile = sys.writeFile;
-            sys.writeFile = (path, data, writeBom) => {
-                const directoryPath = getDirectoryPath(normalizeSlashes(path));
-                if (directoryPath && !sys!.directoryExists(directoryPath)) {
-                    recursiveCreateDirectory(directoryPath, sys!);
-                }
-                originalWriteFile.call(sys, path, data, writeBom);
-            };
+            patchWriteFileEnsuringDirectory(sys);
         }
         return sys!;
     })();

@@ -610,7 +610,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
@@ -895,7 +895,7 @@ namespace ts {
             const members: ClassElement[] = [];
             const constructor = getFirstConstructorWithBody(node);
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
@@ -1907,7 +1907,7 @@ namespace ts {
 
         function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
             if (!some(parametersWithPropertyAssignments)) {
                 return visitFunctionBody(body, visitor, context);
             }
@@ -2452,7 +2452,12 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+        function shouldEmitModuleDeclaration(nodeIn: ModuleDeclaration) {
+            const node = getParseTreeNode(nodeIn, isModuleDeclaration);
+            if (!node) {
+                // If we can't find a parse tree node, assume the node is instantiated.
+                return true;
+            }
             return isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules);
         }
 
@@ -3249,9 +3254,10 @@ namespace ts {
 
                 const substitute = createLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
+                    const originalNode = getOriginalNode(node, isAccessExpression);
+                    const propertyName = isPropertyAccessExpression(originalNode)
+                        ? declarationNameToString(originalNode.name)
+                        : getTextOfNode(originalNode.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }
