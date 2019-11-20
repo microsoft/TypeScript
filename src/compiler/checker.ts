@@ -2387,17 +2387,6 @@ namespace ts {
             if (!(target.flags & SymbolFlags.Value)) {
                 return target;
             }
-            // if (target.flags & SymbolFlags.Class) {
-
-            // }
-            // if (target.flags & SymbolFlags.Enum) {
-
-            // }
-            // if (target.flags & SymbolFlags.EnumMember) {
-
-            // }
-            // Debug.assert(!(target.flags & SymbolFlags.Type));
-
             if (target.flags & SymbolFlags.Type) {
                 const alias = createSymbol(SymbolFlags.TypeAlias, target.escapedName);
                 alias.declarations = emptyArray;
