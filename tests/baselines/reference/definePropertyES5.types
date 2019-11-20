@@ -25,5 +25,8 @@ class A {
 
     m() { }
 >m : () => void
+
+    declare notEmitted: boolean;
+>notEmitted : boolean
 }
 
