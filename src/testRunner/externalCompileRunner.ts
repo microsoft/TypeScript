@@ -58,9 +58,11 @@ namespace Harness {
                         if (!fs.existsSync(submoduleDir)) {
                             exec("git", ["clone", config.cloneUrl, directoryName], { cwd });
                         }
-                        exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                        exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                        exec("git", ["pull", "-f"], { cwd: submoduleDir });
+                        else {
+                            exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                            exec("git", ["clean", "-f"], { cwd: submoduleDir });
+                            exec("git", ["pull", "-f"], { cwd: submoduleDir });
+                        }
 
                         types = config.types;
 
