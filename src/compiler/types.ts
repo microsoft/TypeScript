@@ -4271,7 +4271,6 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: readonly Type[];     // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
@@ -4348,19 +4347,18 @@ namespace ts {
         ContainsSpread   = 1 << 10, // Object literal contains spread operation
         ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 12, // Jsx attributes type
-        MarkerType       = 1 << 13, // Marker type used for variance probing
-        JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral     = 1 << 15, // Fresh object literal
-        ArrayLiteral     = 1 << 16, // Originates in an array literal
-        ObjectRestType   = 1 << 17, // Originates in object rest declaration
+        JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 14, // Fresh object literal
+        ArrayLiteral     = 1 << 15, // Originates in an array literal
+        ObjectRestType   = 1 << 16, // Originates in object rest declaration
         /* @internal */
-        PrimitiveUnion   = 1 << 18, // Union of only primitive types
+        PrimitiveUnion   = 1 << 17, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 19, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,

@@ -15189,12 +15189,14 @@ namespace ts {
                 // is more predictable than other, interned types, which may or may not have an alias depending on
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
-                    source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
+                    source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
+                    // Compute variances eagerly to ensure reliability flags are properly propagated.
                     const variances = getAliasVariances(source.aliasSymbol);
-                    const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, isIntersectionConstituent);
-                    if (varianceResult !== undefined) {
-                        return varianceResult;
+                    if (!(containsMarkerType(source.aliasTypeArguments) || containsMarkerType(target.aliasTypeArguments))) {
+                        const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, isIntersectionConstituent);
+                        if (varianceResult !== undefined) {
+                            return varianceResult;
+                        }
                     }
                 }
 
@@ -15383,7 +15385,7 @@ namespace ts {
                         return Ternary.False;
                     }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
-                        !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
+                        !(containsMarkerType(getTypeArguments(<TypeReference>source)) || containsMarkerType(getTypeArguments(<TypeReference>target)))) {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
@@ -16157,21 +16159,24 @@ namespace ts {
             return false;
         }
 
-        // Return a type reference where the source type parameter is replaced with the target marker
-        // type, and flag the result as a marker type reference.
-        function getMarkerTypeReference(type: GenericType, source: TypeParameter, target: Type) {
-            const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
-            result.objectFlags |= ObjectFlags.MarkerType;
-            return result;
+        function containsMarkerType(types: readonly Type[] | undefined) {
+            return some(types, t => t === markerSuperType || t === markerSubType || t === markerOtherType);
+        }
+
+        function getVariances(type: GenericType): VarianceFlags[] {
+            // Arrays and tuples are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
+            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
+                return emptyArray;
+            }
+            return getVariancesWorker(type, type, createTypeReference);
         }
 
         function getAliasVariances(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
-                const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
-                type.aliasTypeArgumentsContainsMarker = true;
-                return type;
-            });
+            return getVariancesWorker(symbol, getSymbolLinks(symbol), getTypeAliasInstantiation);
+        }
+
+        function getTypeArgumentsWithMarker(typeParameters: TypeParameter[], source: TypeParameter, marker: TypeParameter) {
+            return map(typeParameters, makeUnaryTypeMapper(source, marker));
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -16180,12 +16185,13 @@ namespace ts {
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton if we're not in strictFunctionTypes mode or if the function
         // has been invoked recursively for the given generic type.
-        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
+        function getVariancesWorker<T extends GenericType | Symbol>(target: T, cache: GenericType | SymbolLinks, getInstance: (target: T, typeArguments: readonly Type[]) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
                 // The emptyArray singleton is used to signal a recursive invocation.
                 cache.variances = emptyArray;
                 variances = [];
+                const typeParameters = cache.typeParameters || emptyArray;
                 for (const tp of typeParameters) {
                     let unmeasurable = false;
                     let unreliable = false;
@@ -16194,15 +16200,15 @@ namespace ts {
                     // We first compare instantiations where the type parameter is replaced with
                     // marker types that have a known subtype relationship. From this we can infer
                     // invariance, covariance, contravariance or bivariance.
-                    const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
-                    const typeWithSub = createMarkerType(cache, tp, markerSubType);
+                    const typeWithSuper = getInstance(target, getTypeArgumentsWithMarker(typeParameters, tp, markerSuperType));
+                    const typeWithSub = getInstance(target, getTypeArgumentsWithMarker(typeParameters, tp, markerSubType));
                     let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
                         (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
                     // If the instantiations appear to be related bivariantly it may be because the
                     // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
                     // type). To determine this we compare instantiations where the type parameter is
                     // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
+                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(getInstance(target, getTypeArgumentsWithMarker(typeParameters, tp, markerOtherType)), typeWithSuper)) {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
@@ -16219,14 +16225,6 @@ namespace ts {
                 cache.variances = variances;
             }
             return variances;
-        }
-
-        function getVariances(type: GenericType): VarianceFlags[] {
-            // Arrays and tuples are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
-            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
-                return emptyArray;
-            }
-            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
