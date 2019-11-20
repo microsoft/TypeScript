@@ -2227,7 +2227,8 @@ namespace ts {
 
         function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSpecifier = node.parent.parent.moduleSpecifier;
-            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
+            const moduleSymbol = resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
+            return moduleSymbol && node.parent.isTypeOnly ? createTypeOnlySymbol(moduleSymbol) : moduleSymbol;
         }
 
         // This function creates a synthetic symbol that combines the value side of one symbol with the
