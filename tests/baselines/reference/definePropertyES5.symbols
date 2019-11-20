@@ -5,11 +5,14 @@ var x: "p" = "p"
 class A {
 >A : Symbol(A, Decl(definePropertyES5.ts, 0, 16))
 
-    a = 12
+    a = this.y
 >a : Symbol(A.a, Decl(definePropertyES5.ts, 1, 9))
+>this.y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
+>this : Symbol(A, Decl(definePropertyES5.ts, 0, 16))
+>y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
 
     b
->b : Symbol(A.b, Decl(definePropertyES5.ts, 2, 10))
+>b : Symbol(A.b, Decl(definePropertyES5.ts, 2, 14))
 
     ["computed"] = 13
 >["computed"] : Symbol(A["computed"], Decl(definePropertyES5.ts, 3, 5))
@@ -21,5 +24,14 @@ class A {
 
     m() { }
 >m : Symbol(A.m, Decl(definePropertyES5.ts, 5, 13))
+
+    constructor(public readonly y: number) { }
+>y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
+
+    z = this.y
+>z : Symbol(A.z, Decl(definePropertyES5.ts, 7, 46))
+>this.y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
+>this : Symbol(A, Decl(definePropertyES5.ts, 0, 16))
+>y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
 }
 
