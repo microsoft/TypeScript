@@ -1131,6 +1131,62 @@ var x = 10;`
             checkProjectActualFiles(project, [file.path, libFile.path]);
         });
 
+        describe("dynamic file with projectRootPath", () => {
+            const file: File = {
+                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                content: "var x = 10;"
+            };
+            const configFile: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const configProjectFile: File = {
+                path: `${projectRoot}/a.ts`,
+                content: "let y = 10;"
+            };
+            it("with useInferredProjectPerProjectRoot", () => {
+                const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+                const session = createSession(host, { useInferredProjectPerProjectRoot: true });
+                openFilesForSession([{ file: file.path, projectRootPath: projectRoot }], session);
+
+                const projectService = session.getProjectService();
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
+
+                session.executeCommandSeq<protocol.OutliningSpansRequest>({
+                    command: protocol.CommandTypes.GetOutliningSpans,
+                    arguments: {
+                        file: file.path
+                    }
+                });
+
+                // Without project root
+                const file2Path = file.path.replace("#1", "#2");
+                projectService.openClientFile(file2Path, file.content);
+                checkNumberOfProjects(projectService, { inferredProjects: 2 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
+                checkProjectActualFiles(projectService.inferredProjects[1], [file2Path, libFile.path]);
+            });
+
+            it("fails when useInferredProjectPerProjectRoot is false", () => {
+                const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+                const projectService = createProjectService(host);
+                try {
+                    projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, projectRoot);
+                }
+                catch (e) {
+                    assert.strictEqual(
+                        e.message.replace(/\r?\n/, "\n"),
+                        `Debug Failure. False expression: \nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
+                    );
+                }
+                const file2Path = file.path.replace("#1", "#2");
+                projectService.openClientFile(file2Path, file.content);
+                projectService.checkNumberOfProjects({ inferredProjects: 1 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file2Path, libFile.path]);
+            });
+        });
+
         it("files opened, closed affecting multiple projects", () => {
             const file: File = {
                 path: "/a/b/projects/config/file.ts",

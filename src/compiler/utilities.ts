@@ -4244,9 +4244,12 @@ namespace ts {
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
         if (isPropertyAccessExpression(expr)) {
-            return tryGetPropertyAccessOrIdentifierToString(expr.expression) + "." + expr.name;
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined) {
+                return baseStr + "." + expr.name;
+            }
         }
-        if (isIdentifier(expr)) {
+        else if (isIdentifier(expr)) {
             return unescapeLeadingUnderscores(expr.escapedText);
         }
         return undefined;
@@ -8129,10 +8132,6 @@ namespace ts {
 
     export function hasJSFileExtension(fileName: string): boolean {
         return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
-    }
-
-    export function hasJSOrJsonFileExtension(fileName: string): boolean {
-        return supportedJSAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
     }
 
     export function hasTSFileExtension(fileName: string): boolean {
