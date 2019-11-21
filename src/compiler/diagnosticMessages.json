@@ -4587,7 +4587,6 @@
         "category": "Error",
         "code": 8013
     },
-
     "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
