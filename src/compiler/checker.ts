@@ -13622,15 +13622,15 @@ namespace ts {
             return false;
         }
 
-        function getMaybeNonPrimitiveIndexedAccessTypeOrUndefined(object: Type, nameType: Type) {
-            const idx = getIndexedAccessTypeOrUndefined(object, nameType);
+        function getBestMatchIndexedAccessTypeOrUndefined(source: Type, target: Type, nameType: Type) {
+            const idx = getIndexedAccessTypeOrUndefined(target, nameType);
             if (idx) {
                 return idx;
             }
-            if (object.flags & TypeFlags.Union) {
-                const candidate = filterType(object, t => !(t.flags & TypeFlags.Primitive));
-                if (!(candidate.flags & TypeFlags.Never)) {
-                    return getIndexedAccessTypeOrUndefined(candidate, nameType);
+            if (target.flags & TypeFlags.Union) {
+                const best = getBestMatchingType(source, target as UnionType);
+                if (best) {
+                    return getIndexedAccessTypeOrUndefined(best, nameType);
                 }
             }
         }
@@ -13653,7 +13653,7 @@ namespace ts {
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
-                const targetPropType = getMaybeNonPrimitiveIndexedAccessTypeOrUndefined(target, nameType);
+                const targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
                 if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
                 const sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (sourcePropType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
@@ -14784,7 +14784,7 @@ namespace ts {
                 let reducedTarget = target;
                 let checkTypes: Type[] | undefined;
                 if (target.flags & TypeFlags.Union) {
-                    reducedTarget = findMatchingDiscriminantType(source, <UnionType>target) || filterPrimitivesIfContainsNonPrimitive(<UnionType>target);
+                    reducedTarget = findMatchingDiscriminantType(source, <UnionType>target, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(<UnionType>target);
                     checkTypes = reducedTarget.flags & TypeFlags.Union ? (<UnionType>reducedTarget).types : [reducedTarget];
                 }
                 for (const prop of getPropertiesOfType(source)) {
@@ -14876,101 +14876,10 @@ namespace ts {
                     }
                 }
                 if (reportErrors) {
-                    const bestMatchingType =
-                        findMatchingDiscriminantType(source, target) ||
-                        findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
-                        findBestTypeForObjectLiteral(source, target) ||
-                        findBestTypeForInvokable(source, target) ||
-                        findMostOverlappyType(source, target);
-
+                    const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
                     isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
                 return Ternary.False;
-            }
-
-            function findMatchingTypeReferenceOrTypeAliasReference(source: Type, unionTarget: UnionOrIntersectionType) {
-                const sourceObjectFlags = getObjectFlags(source);
-                if (sourceObjectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
-                    return find(unionTarget.types, target => {
-                        if (target.flags & TypeFlags.Object) {
-                            const overlapObjFlags = sourceObjectFlags & getObjectFlags(target);
-                            if (overlapObjFlags & ObjectFlags.Reference) {
-                                return (source as TypeReference).target === (target as TypeReference).target;
-                            }
-                            if (overlapObjFlags & ObjectFlags.Anonymous) {
-                                return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
-                            }
-                        }
-                        return false;
-                    });
-                }
-            }
-
-            function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
-                if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && forEachType(unionTarget, isArrayLikeType)) {
-                    return find(unionTarget.types, t => !isArrayLikeType(t));
-                }
-            }
-
-            function findBestTypeForInvokable(source: Type, unionTarget: UnionOrIntersectionType) {
-                let signatureKind = SignatureKind.Call;
-                const hasSignatures = getSignaturesOfType(source, signatureKind).length > 0 ||
-                    (signatureKind = SignatureKind.Construct, getSignaturesOfType(source, signatureKind).length > 0);
-                if (hasSignatures) {
-                    return find(unionTarget.types, t => getSignaturesOfType(t, signatureKind).length > 0);
-                }
-            }
-
-            function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
-                let bestMatch: Type | undefined;
-                let matchingCount = 0;
-                for (const target of unionTarget.types) {
-                    const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
-                    if (overlap.flags & TypeFlags.Index) {
-                        // perfect overlap of keys
-                        bestMatch = target;
-                        matchingCount = Infinity;
-                    }
-                    else if (overlap.flags & TypeFlags.Union) {
-                        // We only want to account for literal types otherwise.
-                        // If we have a union of index types, it seems likely that we
-                        // needed to elaborate between two generic mapped types anyway.
-                        const len = length(filter((overlap as UnionType).types, isUnitType));
-                        if (len >= matchingCount) {
-                            bestMatch = target;
-                            matchingCount = len;
-                        }
-                    }
-                    else if (isUnitType(overlap) && 1 >= matchingCount) {
-                        bestMatch = target;
-                        matchingCount = 1;
-                    }
-                }
-                return bestMatch;
-            }
-
-            function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
-                if (maybeTypeOfKind(type, TypeFlags.NonPrimitive)) {
-                    const result = filterType(type, t => !(t.flags & TypeFlags.Primitive));
-                    if (!(result.flags & TypeFlags.Never)) {
-                        return result;
-                    }
-                }
-                return type;
-            }
-
-            // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
-            function findMatchingDiscriminantType(source: Type, target: Type) {
-                if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
-                    const sourceProperties = getPropertiesOfType(source);
-                    if (sourceProperties) {
-                        const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
-                        if (sourcePropertiesFiltered) {
-                            return discriminateTypeByDiscriminableItems(<UnionType>target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
-                        }
-                    }
-                }
-                return undefined;
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
@@ -16117,6 +16026,14 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
+            return findMatchingDiscriminantType(source, target, isRelatedTo) ||
+                findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
+                findBestTypeForObjectLiteral(source, target) ||
+                findBestTypeForInvokable(source, target) ||
+                findMostOverlappyType(source, target);
         }
 
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary): Type | undefined;
@@ -36188,6 +36105,91 @@ namespace ts {
                 return grammarErrorOnNode(nodeArguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
             }
             return false;
+        }
+
+        function findMatchingTypeReferenceOrTypeAliasReference(source: Type, unionTarget: UnionOrIntersectionType) {
+            const sourceObjectFlags = getObjectFlags(source);
+            if (sourceObjectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous) && unionTarget.flags & TypeFlags.Union) {
+                return find(unionTarget.types, target => {
+                    if (target.flags & TypeFlags.Object) {
+                        const overlapObjFlags = sourceObjectFlags & getObjectFlags(target);
+                        if (overlapObjFlags & ObjectFlags.Reference) {
+                            return (source as TypeReference).target === (target as TypeReference).target;
+                        }
+                        if (overlapObjFlags & ObjectFlags.Anonymous) {
+                            return !!(source as AnonymousType).aliasSymbol && (source as AnonymousType).aliasSymbol === (target as AnonymousType).aliasSymbol;
+                        }
+                    }
+                    return false;
+                });
+            }
+        }
+
+        function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
+            if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && forEachType(unionTarget, isArrayLikeType)) {
+                return find(unionTarget.types, t => !isArrayLikeType(t));
+            }
+        }
+
+        function findBestTypeForInvokable(source: Type, unionTarget: UnionOrIntersectionType) {
+            let signatureKind = SignatureKind.Call;
+            const hasSignatures = getSignaturesOfType(source, signatureKind).length > 0 ||
+                (signatureKind = SignatureKind.Construct, getSignaturesOfType(source, signatureKind).length > 0);
+            if (hasSignatures) {
+                return find(unionTarget.types, t => getSignaturesOfType(t, signatureKind).length > 0);
+            }
+        }
+
+        function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
+            let bestMatch: Type | undefined;
+            let matchingCount = 0;
+            for (const target of unionTarget.types) {
+                const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
+                if (overlap.flags & TypeFlags.Index) {
+                    // perfect overlap of keys
+                    bestMatch = target;
+                    matchingCount = Infinity;
+                }
+                else if (overlap.flags & TypeFlags.Union) {
+                    // We only want to account for literal types otherwise.
+                    // If we have a union of index types, it seems likely that we
+                    // needed to elaborate between two generic mapped types anyway.
+                    const len = length(filter((overlap as UnionType).types, isUnitType));
+                    if (len >= matchingCount) {
+                        bestMatch = target;
+                        matchingCount = len;
+                    }
+                }
+                else if (isUnitType(overlap) && 1 >= matchingCount) {
+                    bestMatch = target;
+                    matchingCount = 1;
+                }
+            }
+            return bestMatch;
+        }
+
+        function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
+            if (maybeTypeOfKind(type, TypeFlags.NonPrimitive)) {
+                const result = filterType(type, t => !(t.flags & TypeFlags.Primitive));
+                if (!(result.flags & TypeFlags.Never)) {
+                    return result;
+                }
+            }
+            return type;
+        }
+
+        // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
+        function findMatchingDiscriminantType(source: Type, target: Type, isRelatedTo: (source: Type, target: Type) => Ternary) {
+            if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
+                const sourceProperties = getPropertiesOfType(source);
+                if (sourceProperties) {
+                    const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
+                    if (sourcePropertiesFiltered) {
+                        return discriminateTypeByDiscriminableItems(<UnionType>target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
+                    }
+                }
+            }
+            return undefined;
         }
     }
 
