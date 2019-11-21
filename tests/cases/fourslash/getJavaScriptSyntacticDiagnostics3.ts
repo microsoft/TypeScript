@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////class C<[|T|]> { }
+////class C<T> { }
 
 verify.baselineSyntacticDiagnostics();

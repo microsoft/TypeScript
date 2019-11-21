@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////var v: [|() => number|];
+////var v: () => number;
 
 verify.baselineSyntacticDiagnostics();

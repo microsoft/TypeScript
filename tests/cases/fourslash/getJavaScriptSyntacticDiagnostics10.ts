@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////function F<[|T|]>() { }
+////function F<T>() { }
 
 verify.baselineSyntacticDiagnostics();

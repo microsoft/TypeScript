@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////[|export = b;|]
+////export = b;
 
 verify.baselineSyntacticDiagnostics();

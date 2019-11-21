@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////[|declare|] var v;
+////declare var v;
 
 verify.baselineSyntacticDiagnostics();

@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////Foo<[|number|]>();
+////Foo<number>();
 
 verify.baselineSyntacticDiagnostics();

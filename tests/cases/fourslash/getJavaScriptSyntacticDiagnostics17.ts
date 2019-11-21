@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////function F(a: [|number|]) { }
+////function F(a: number) { }
 
 verify.baselineSyntacticDiagnostics();

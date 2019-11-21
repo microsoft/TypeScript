@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////interface [|I|] { }
+////interface I { }
 
 verify.baselineSyntacticDiagnostics();

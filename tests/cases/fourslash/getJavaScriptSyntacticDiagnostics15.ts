@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////function F([|public|] p) { }
+////function F(public p) { }
 
 verify.baselineSyntacticDiagnostics();

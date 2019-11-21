@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////[|import a = b;|]
+////import a = b;
 
 verify.baselineSyntacticDiagnostics();

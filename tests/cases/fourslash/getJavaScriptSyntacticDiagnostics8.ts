@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////type [|a|] = b;
+////type a = b;
 
 verify.baselineSyntacticDiagnostics();

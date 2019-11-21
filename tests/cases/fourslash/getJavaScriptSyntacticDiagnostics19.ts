@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////enum [|E|] { }
+////enum E { }
 
 verify.baselineSyntacticDiagnostics();
