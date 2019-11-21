@@ -41,9 +41,9 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/tabsTitleControl.ts(997,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(270,5): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(278,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(272,5): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(280,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/parts/quickopen/browser/quickOpenWidget.ts(414,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
@@ -103,9 +103,9 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/tabsTitleControl.ts(997,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(270,5): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(278,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(272,5): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(280,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/parts/quickopen/browser/quickOpenWidget.ts(414,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
