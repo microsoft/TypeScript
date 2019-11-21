@@ -1906,7 +1906,7 @@ namespace ts {
                         case SyntaxKind.Parameter:
                             // Check modifiers of parameter declaration
                             if (nodes === (<ParameterDeclaration>parent).modifiers) {
-                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_Typescript_files));
+                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                                 return;
                             }
                             break;

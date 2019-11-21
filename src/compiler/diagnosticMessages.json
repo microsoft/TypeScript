@@ -4579,7 +4579,7 @@
         "category": "Error",
         "code": 8011
     },
-    "Parameter modifiers can only be used in Typescript files.": {
+    "Parameter modifiers can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8012
     },
