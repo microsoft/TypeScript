@@ -65,6 +65,7 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/editor/contrib/rename/renameInputField.ts(93,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/codeAction/codeActionCommands.ts(118,30): Expected 3 arguments, but got 2.
 [XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/checkbox/checkbox.ts(223,3): Type 'string | null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/codeEditor/browser/suggestEnabledInput/suggestEnabledInput.ts(229,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
@@ -127,6 +128,7 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/editor/contrib/rename/renameInputField.ts(93,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/editor/contrib/codeAction/codeActionCommands.ts(118,30): Expected 3 arguments, but got 2.
 [XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/checkbox/checkbox.ts(223,3): Type 'string | null' is not assignable to type 'string'.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
@@ -134,7 +136,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 
 Standard error:
 [XX:XX:XX] 'compile' errored after 
-[XX:XX:XX] Error: Found 32 errors
+[XX:XX:XX] Error: Found 33 errors
     at Stream.<anonymous> (/vscode/build/lib/reporter.js:74:29)
     at _end (/vscode/node_modules/through/index.js:65:9)
     at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)
