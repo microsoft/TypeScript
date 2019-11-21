@@ -1141,7 +1141,7 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? this.currentDirectory : getDirectoryPath(info.path));
+                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? projectRootPath || this.currentDirectory : getDirectoryPath(info.path));
 
             project.addRoot(info);
             if (info.containingProjects[0] !== project) {
@@ -1503,6 +1503,8 @@ namespace ts.server {
 
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
+            const scriptInfo = Debug.assertDefined(this.getScriptInfo(info.path));
+            if (scriptInfo.isDynamic) return undefined;
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
             const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
@@ -1943,7 +1945,9 @@ namespace ts.server {
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-            if (info.isDynamic || !this.useInferredProjectPerProjectRoot) {
+            if (!this.useInferredProjectPerProjectRoot ||
+                // Its a dynamic info opened without project root
+                (info.isDynamic && projectRootPath === undefined)) {
                 return undefined;
             }
 
@@ -2228,7 +2232,7 @@ namespace ts.server {
                 const isDynamic = isDynamicFileName(fileName);
                 Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
-                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
+                Debug.assert(!isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
@@ -2239,7 +2243,7 @@ namespace ts.server {
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
                 }
-                else if (!isRootedDiskPath(fileName) && !isDynamic) {
+                else if (!isRootedDiskPath(fileName) && (!isDynamic || this.currentDirectory !== currentDirectory)) {
                     // File that is opened by user but isn't rooted disk path
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }

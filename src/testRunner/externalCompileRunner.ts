@@ -166,8 +166,10 @@ function sanitizeDockerfileOutput(result: string): string {
         normalizeNewlines,
         stripANSIEscapes,
         stripRushStageNumbers,
+        stripWebpackHash,
         sanitizeVersionSpecifiers,
         sanitizeTimestamps,
+        sanitizeSizes,
         sanitizeUnimportantGulpOutput,
         stripAbsoluteImportPaths,
     ].reduce((result, f) => f(result), result);
@@ -185,6 +187,14 @@ function stripRushStageNumbers(result: string): string {
     return result.replace(/\d+ of \d+:/g, "XX of XX:");
 }
 
+function stripWebpackHash(result: string): string {
+    return result.replace(/Hash: \w+/g, "Hash: [redacted]");
+}
+
+function sanitizeSizes(result: string): string {
+    return result.replace(/\d+(\.\d+)? ((Ki|M)B|bytes)/g, "X KiB");
+}
+
 /**
  * Gulp's output order within a `parallel` block is nondeterministic (and there's no way to configure it to execute in series),
  * so we purge as much of the gulp output as we can
@@ -200,6 +210,7 @@ function sanitizeTimestamps(result: string): string {
     return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
         .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
         .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
+        .replace(/\d+\/\d+\/\d+ \d+:\d+:\d+ (AM|PM)/g, "XX/XX/XX XX:XX:XX XM")
         .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
         .replace(/\d+(\.\d+)? min(utes?)?/g, "")
         .replace(/\d+(\.\d+)? ?m?s/g, "?s")
@@ -210,7 +221,9 @@ function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
         .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
-        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X")
+        .replace(/webpack (\d+)\.\d+\.\d+/g, "webpack $1.X.X")
+        .replace(/Webpack version: (\d+)\.\d+\.\d+/g, "Webpack version: $1.X.X");
 }
 
 /**

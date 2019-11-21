@@ -4352,14 +4352,15 @@ namespace ts {
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
         ArrayLiteral     = 1 << 16, // Originates in an array literal
+        ObjectRestType   = 1 << 17, // Originates in object rest declaration
         /* @internal */
-        PrimitiveUnion   = 1 << 17, // Union of only primitive types
+        PrimitiveUnion   = 1 << 18, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 19, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4483,8 +4484,6 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
-        /* @internal */
-        possiblePropertyCache?: SymbolTable;       // Cache of _all_ resolved properties less any from aparent members
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4673,14 +4672,17 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
-        HasRestParameter = 1 << 0,      // Indicates last parameter is rest parameter
-        HasLiteralTypes = 1 << 1,       // Indicates signature is specialized
-        IsOptionalCall = 1 << 2,        // Indicates signature comes from a CallChain
+        HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
+        HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
+        IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
+        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
 
-        // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
+        // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
         // instantiating the return type.
         PropagatingFlags = HasRestParameter | HasLiteralTypes,
+
+        CallChainFlags = IsInnerCallChain | IsOuterCallChain,
     }
 
     export interface Signature {
@@ -4712,7 +4714,7 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
-        optionalCallSignatureCache?: Signature; // Optional chained call version of signature (deferred)
+        optionalCallSignatureCache?: { inner?: Signature, outer?: Signature }; // Optional chained call version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
@@ -5196,10 +5198,16 @@ namespace ts {
     }
 
     /* @internal */
+    export interface DidYouMeanOptionalDiagnostics {
+        unknownOptionDiagnostic: DiagnosticMessage,
+        unknownDidYouMeanDiagnostic: DiagnosticMessage,
+    }
+
+    /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
         elementOptions?: Map<CommandLineOption>;
-        extraKeyDiagnosticMessage?: DiagnosticMessage;
+        extraKeyDiagnostics?: DidYouMeanOptionalDiagnostics;
     }
 
     /* @internal */
@@ -6454,7 +6462,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

@@ -2066,7 +2066,7 @@ namespace ts {
         syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
         syntaxRequiresTrailingSemicolonOrASI);
 
-    export function isASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
+    function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         const lastToken = node.getLastToken(sourceFile);
         if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
             return false;
@@ -2107,6 +2107,17 @@ namespace ts {
         const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
         const endLine = sourceFile.getLineAndCharacterOfPosition(nextToken.getStart(sourceFile)).line;
         return startLine !== endLine;
+    }
+
+    export function positionIsASICandidate(pos: number, context: Node, sourceFile: SourceFileLike): boolean {
+        const contextAncestor = findAncestor(context, ancestor => {
+            if (ancestor.end !== pos) {
+                return "quit";
+            }
+            return syntaxMayBeASICandidate(ancestor.kind);
+        });
+
+        return !!contextAncestor && nodeIsASICandidate(contextAncestor, sourceFile);
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
@@ -2210,7 +2221,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2218,11 +2229,10 @@ namespace ts {
         type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
         const stringContent = host.readFile(fileName);
-        const content = stringContent && tryParseJson(stringContent) as PackageJsonRaw;
-        if (!content) {
-            return undefined;
-        }
+        if (!stringContent) return undefined;
 
+        const content = tryParseJson(stringContent) as PackageJsonRaw;
+        if (!content) return false;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
         for (const key of dependencyKeys) {
             const dependencies = content[key];

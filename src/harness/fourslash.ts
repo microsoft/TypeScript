@@ -2358,9 +2358,9 @@ namespace FourSlash {
             if (!details) {
                 return this.raiseError(`No completions were found for the given name, source, and preferences.`);
             }
-            const codeActions = details.codeActions!;
-            if (codeActions.length !== 1) {
-                this.raiseError(`Expected one code action, got ${codeActions.length}`);
+            const codeActions = details.codeActions;
+            if (codeActions?.length !== 1) {
+                this.raiseError(`Expected one code action, got ${codeActions?.length ?? 0}`);
             }
             const codeAction = ts.first(codeActions);
 

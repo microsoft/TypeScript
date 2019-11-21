@@ -167,8 +167,6 @@ namespace ts {
         return node;
     }
 
-    let flowNodeCreated: <T extends FlowNode>(node: T) => T = initFlowNode;
-
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
@@ -199,6 +197,7 @@ namespace ts {
         let currentReturnTarget: FlowLabel | undefined;
         let currentTrueTarget: FlowLabel | undefined;
         let currentFalseTarget: FlowLabel | undefined;
+        let currentExceptionTarget: FlowLabel | undefined;
         let preSwitchCaseFlow: FlowNode | undefined;
         let activeLabels: ActiveLabel[] | undefined;
         let hasExplicitReturn: boolean;
@@ -271,6 +270,7 @@ namespace ts {
             currentReturnTarget = undefined;
             currentTrueTarget = undefined;
             currentFalseTarget = undefined;
+            currentExceptionTarget = undefined;
             activeLabels = undefined!;
             hasExplicitReturn = false;
             emitFlags = NodeFlags.None;
@@ -624,11 +624,11 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
             if (containerFlags & ContainerFlags.IsControlFlowContainer) {
-                const saveFlowNodeCreated = flowNodeCreated;
                 const saveCurrentFlow = currentFlow;
                 const saveBreakTarget = currentBreakTarget;
                 const saveContinueTarget = currentContinueTarget;
                 const saveReturnTarget = currentReturnTarget;
+                const saveExceptionTarget = currentExceptionTarget;
                 const saveActiveLabels = activeLabels;
                 const saveHasExplicitReturn = hasExplicitReturn;
                 const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) &&
@@ -644,11 +644,11 @@ namespace ts {
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
                 currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
+                currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
                 hasExplicitReturn = false;
-                flowNodeCreated = initFlowNode;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
@@ -674,9 +674,9 @@ namespace ts {
                 currentBreakTarget = saveBreakTarget;
                 currentContinueTarget = saveContinueTarget;
                 currentReturnTarget = saveReturnTarget;
+                currentExceptionTarget = saveExceptionTarget;
                 activeLabels = saveActiveLabels;
                 hasExplicitReturn = saveHasExplicitReturn;
-                flowNodeCreated = saveFlowNodeCreated;
             }
             else if (containerFlags & ContainerFlags.IsInterface) {
                 seenThisKeyword = false;
@@ -961,30 +961,26 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags, antecedent, node: expression });
+            return initFlowNode({ flags, antecedent, node: expression });
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
-            if (!isNarrowingExpression(switchStatement.expression)) {
-                return antecedent;
-            }
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
+            return initFlowNode({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
         }
 
-        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+        function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Node): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
+            const result = initFlowNode({ flags, antecedent, node });
+            if (currentExceptionTarget) {
+                addAntecedent(currentExceptionTarget, result);
+            }
+            return result;
         }
 
         function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.Call, antecedent, node });
-        }
-
-        function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
-            setFlowNodeReferenced(antecedent);
-            return flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
+            return initFlowNode({ flags: FlowFlags.Call, antecedent, node });
         }
 
         function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1192,93 +1188,56 @@ namespace ts {
 
         function bindTryStatement(node: TryStatement): void {
             const preFinallyLabel = createBranchLabel();
-            const preTryFlow = currentFlow;
-            const tryPriors: FlowNode[] = [];
-            const oldFlowNodeCreated = flowNodeCreated;
-            // We hook the creation of all flow nodes within the `try` scope and store them so we can add _all_ of them
-            // as possible antecedents of the start of the `catch` or `finally` blocks.
-            // Don't bother intercepting the call if there's no finally or catch block that needs the information
-            if (node.catchClause || node.finallyBlock) {
-                flowNodeCreated = node => (tryPriors.push(node), initFlowNode(node));
-            }
+            // We conservatively assume that *any* code in the try block can cause an exception, but we only need
+            // to track code that causes mutations (because only mutations widen the possible control flow type of
+            // a variable). The currentExceptionTarget is the target label for control flows that result from
+            // exceptions. We add all mutation flow nodes as antecedents of this label such that we can analyze them
+            // as possible antecedents of the start of catch or finally blocks. Furthermore, we add the current
+            // control flow to represent exceptions that occur before any mutations.
+            const saveExceptionTarget = currentExceptionTarget;
+            currentExceptionTarget = createBranchLabel();
+            addAntecedent(currentExceptionTarget, currentFlow);
             bind(node.tryBlock);
-            flowNodeCreated = oldFlowNodeCreated;
             addAntecedent(preFinallyLabel, currentFlow);
-
             const flowAfterTry = currentFlow;
             let flowAfterCatch = unreachableFlow;
-
             if (node.catchClause) {
-                currentFlow = preTryFlow;
-                if (tryPriors.length) {
-                    const preCatchFlow = createBranchLabel();
-                    addAntecedent(preCatchFlow, currentFlow);
-                    for (const p of tryPriors) {
-                        addAntecedent(preCatchFlow, p);
-                    }
-                    currentFlow = finishFlowLabel(preCatchFlow);
-                }
-
+                // Start of catch clause is the target of exceptions from try block.
+                currentFlow = finishFlowLabel(currentExceptionTarget);
+                // The currentExceptionTarget now represents control flows from exceptions in the catch clause.
+                // Effectively, in a try-catch-finally, if an exception occurs in the try block, the catch block
+                // acts like a second try block.
+                currentExceptionTarget = createBranchLabel();
+                addAntecedent(currentExceptionTarget, currentFlow);
                 bind(node.catchClause);
                 addAntecedent(preFinallyLabel, currentFlow);
-
                 flowAfterCatch = currentFlow;
             }
+            const exceptionTarget = finishFlowLabel(currentExceptionTarget);
+            currentExceptionTarget = saveExceptionTarget;
             if (node.finallyBlock) {
-                // We add the nodes within the `try` block to the `finally`'s antecedents if there's no catch block
-                // (If there is a `catch` block, it will have all these antecedents instead, and the `finally` will
-                // have the end of the `try` block and the end of the `catch` block)
-                let preFinallyPrior = preTryFlow;
-                if (!node.catchClause) {
-                    if (tryPriors.length) {
-                        const preFinallyFlow = createBranchLabel();
-                        addAntecedent(preFinallyFlow, preTryFlow);
-                        for (const p of tryPriors) {
-                            addAntecedent(preFinallyFlow, p);
-                        }
-                        preFinallyPrior = finishFlowLabel(preFinallyFlow);
-                    }
-                }
-
-                // in finally flow is combined from pre-try/flow from try/flow from catch
-                // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
-
-                // also for finally blocks we inject two extra edges into the flow graph.
-                // first -> edge that connects pre-try flow with the label at the beginning of the finally block, it has lock associated with it
-                // second -> edge that represents post-finally flow.
-                // these edges are used in following scenario:
-                // let a; (1)
-                // try { a = someOperation(); (2)}
-                // finally { (3) console.log(a) } (4)
-                // (5) a
-
-                // flow graph for this case looks roughly like this (arrows show ):
-                // (1-pre-try-flow) <--.. <-- (2-post-try-flow)
-                //  ^                                ^
-                //  |*****(3-pre-finally-label) -----|
-                //                ^
-                //                |-- ... <-- (4-post-finally-label) <--- (5)
-                // In case when we walk the flow starting from inside the finally block we want to take edge '*****' into account
-                // since it ensures that finally is always reachable. However when we start outside the finally block and go through label (5)
-                // then edge '*****' should be discarded because label 4 is only reachable if post-finally label-4 is reachable
-                // Simply speaking code inside finally block is treated as reachable as pre-try-flow
-                // since we conservatively assume that any line in try block can throw or return in which case we'll enter finally.
-                // However code after finally is reachable only if control flow was not abrupted in try/catch or finally blocks - it should be composed from
-                // final flows of these blocks without taking pre-try flow into account.
-                //
-                // extra edges that we inject allows to control this behavior
-                // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = initFlowNode({ flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} });
+                // Possible ways control can reach the finally block:
+                // 1) Normal completion of try block of a try-finally or try-catch-finally
+                // 2) Normal completion of catch block (following exception in try block) of a try-catch-finally
+                // 3) Exception in try block of a try-finally
+                // 4) Exception in catch block of a try-catch-finally
+                // When analyzing a control flow graph that starts inside a finally block we want to consider all
+                // four possibilities above. However, when analyzing a control flow graph that starts outside (past)
+                // the finally block, we only want to consider the first two (if we're past a finally block then it
+                // must have completed normally). To make this possible, we inject two extra nodes into the control
+                // flow graph: An after-finally with an antecedent of the control flow at the end of the finally
+                // block, and a pre-finally with an antecedent that represents all exceptional control flows. The
+                // 'lock' property of the pre-finally references the after-finally, and the after-finally has a
+                // boolean 'locked' property that we set to true when analyzing a control flow that contained the
+                // the after-finally node. When the lock associated with a pre-finally is locked, the antecedent of
+                // the pre-finally (i.e. the exceptional control flows) are skipped.
+                const preFinallyFlow: PreFinallyFlow = initFlowNode({ flags: FlowFlags.PreFinally, antecedent: exceptionTarget, lock: {} });
                 addAntecedent(preFinallyLabel, preFinallyFlow);
-
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
-                // if flow after finally is unreachable - keep it
-                // otherwise check if flows after try and after catch are unreachable
-                // if yes - convert current flow to unreachable
-                // i.e.
-                // try { return "1" } finally { console.log(1); }
-                // console.log(2); // this line should be unreachable even if flow falls out of finally block
+                // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
+                // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
+                // result in an unreachable current control flow.
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
                     if ((flowAfterTry.flags & FlowFlags.Unreachable) && (flowAfterCatch.flags & FlowFlags.Unreachable)) {
                         currentFlow = flowAfterTry === reportedUnreachableFlow || flowAfterCatch === reportedUnreachableFlow
@@ -1287,7 +1246,7 @@ namespace ts {
                     }
                 }
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    const afterFinallyFlow: AfterFinallyFlow = flowNodeCreated({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
+                    const afterFinallyFlow: AfterFinallyFlow = initFlowNode({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
                     preFinallyFlow.lock = afterFinallyFlow;
                     currentFlow = afterFinallyFlow;
                 }
@@ -1323,6 +1282,7 @@ namespace ts {
             const savedSubtreeTransformFlags = subtreeTransformFlags;
             subtreeTransformFlags = 0;
             const clauses = node.clauses;
+            const isNarrowingSwitch = isNarrowingExpression(node.parent.expression);
             let fallthroughFlow = unreachableFlow;
             for (let i = 0; i < clauses.length; i++) {
                 const clauseStart = i;
@@ -1331,7 +1291,7 @@ namespace ts {
                     i++;
                 }
                 const preCaseLabel = createBranchLabel();
-                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
+                addAntecedent(preCaseLabel, isNarrowingSwitch ? createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1) : preSwitchCaseFlow!);
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];
@@ -1409,7 +1369,7 @@ namespace ts {
 
         function bindAssignmentTargetFlow(node: Expression) {
             if (isNarrowableReference(node)) {
-                currentFlow = createFlowAssignment(currentFlow, node);
+                currentFlow = createFlowMutation(FlowFlags.Assignment, currentFlow, node);
             }
             else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (const e of (<ArrayLiteralExpression>node).elements) {
@@ -1492,7 +1452,7 @@ namespace ts {
                     if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
                         const elementAccess = <ElementAccessExpression>node.left;
                         if (isNarrowableOperand(elementAccess.expression)) {
-                            currentFlow = createFlowArrayMutation(currentFlow, node);
+                            currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
                         }
                     }
                 }
@@ -1530,7 +1490,7 @@ namespace ts {
                 }
             }
             else {
-                currentFlow = createFlowAssignment(currentFlow, node);
+                currentFlow = createFlowMutation(FlowFlags.Assignment, currentFlow, node);
             }
         }
 
@@ -1554,10 +1514,6 @@ namespace ts {
             if (host && host.kind !== SyntaxKind.MethodDeclaration) {
                 addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
             }
-        }
-
-        function isOutermostOptionalChain(node: OptionalChain) {
-            return !isOptionalChain(node.parent) || isOptionalChainRoot(node.parent) || node !== node.parent.expression;
         }
 
         function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
@@ -1649,7 +1605,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>node.expression;
                 if (isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
-                    currentFlow = createFlowArrayMutation(currentFlow, node);
+                    currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
                 }
             }
         }
@@ -2796,7 +2752,7 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
-            if (namespaceSymbol) {
+            if (namespaceSymbol && namespaceSymbol.valueDeclaration) {
                 // Ensure the namespace symbol becomes class-like
                 addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
             }
@@ -3639,7 +3595,8 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
-            || !node.body) {
+            || !node.body
+            || node.questionToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -3686,7 +3643,7 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
         // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
-        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type) {
+        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type || node.questionToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 

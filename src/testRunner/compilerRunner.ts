@@ -112,6 +112,30 @@ class CompilerBaselineRunner extends RunnerBase {
 }
 
 class CompilerTest {
+    private static varyBy: readonly string[] = [
+        "module",
+        "target",
+        "jsx",
+        "removeComments",
+        "importHelpers",
+        "importHelpers",
+        "downlevelIteration",
+        "isolatedModules",
+        "strict",
+        "noImplicitAny",
+        "strictNullChecks",
+        "strictFunctionTypes",
+        "strictBindCallApply",
+        "strictPropertyInitialization",
+        "noImplicitThis",
+        "alwaysStrict",
+        "allowSyntheticDefaultImports",
+        "esModuleInterop",
+        "emitDecoratorMetadata",
+        "skipDefaultLibCheck",
+        "preserveConstEnums",
+        "skipLibCheck",
+    ];
     private fileName: string;
     private justName: string;
     private configuredName: string;
@@ -220,7 +244,7 @@ class CompilerTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
         const content = Harness.IO.readFile(file)!;
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
-        const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
+        const configurations = Harness.getFileBasedTestConfigurations(settings, CompilerTest.varyBy);
         return { file, configurations, content };
     }
 
