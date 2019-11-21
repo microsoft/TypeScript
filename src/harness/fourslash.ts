@@ -221,7 +221,7 @@ namespace FourSlash {
             }
         }
 
-        constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
+        constructor(private originalInputFileName: string, private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             let compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
@@ -1475,7 +1475,7 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            const baselineFile = this.getBaselineFileName().replace("breakpointValidation", "bpSpan");
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile().replace("breakpointValidation", "bpSpan");
             Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
@@ -1554,8 +1554,20 @@ namespace FourSlash {
             return result;
         }
 
+        public baselineSyntacticDiagnostics() {
+            const files = ts.map(this.testData.files, ({ content, fileName }) => ({
+                content, unitName: fileName
+            }));
+            const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
+
+            const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
+                + Harness.IO.newLine() +
+                Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        }
+
         public baselineQuickInfo() {
-            const baselineFile = this.getBaselineFileName();
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1567,7 +1579,7 @@ namespace FourSlash {
 
         public baselineSmartSelection() {
             const n = "\n";
-            const baselineFile = this.getBaselineFileName();
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
             const markers = this.getMarkers();
             const fileContent = this.activeFile.content;
             const text = markers.map(marker => {
@@ -1652,9 +1664,13 @@ namespace FourSlash {
             Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
         }
 
-        private getBaselineFileName() {
+        private getBaselineFileNameForInternalFourslashFile() {
             return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
                 ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
+        }
+
+        private getBaselineFileNameForContainingTestFile() {
+            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ".baseline");
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -3263,7 +3279,7 @@ namespace FourSlash {
 
         // Parse out the files and their metadata
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
-        const state = new TestState(absoluteBasePath, testType, testData);
+        const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
         const output = ts.transpileModule(content, { reportDiagnostics: true, compilerOptions: { target: ts.ScriptTarget.ES2015 } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
@@ -4120,6 +4136,10 @@ namespace FourSlashInterface {
 
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
+        }
+
+        public baselineSyntacticDiagnostics() {
+            this.state.baselineSyntacticDiagnostics();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {

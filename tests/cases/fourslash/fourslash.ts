@@ -310,6 +310,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
+        baselineSyntacticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;

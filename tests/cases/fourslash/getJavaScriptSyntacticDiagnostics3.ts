@@ -4,7 +4,4 @@
 // @Filename: a.js
 ////class C<[|T|]> { }
 
-verify.getSyntacticDiagnostics([{
-    message: "'type parameter declarations' can only be used in a .ts file.",
-    code: 8004
-}]);
+verify.baselineSyntacticDiagnostics();
