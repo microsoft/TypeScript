@@ -1055,13 +1055,21 @@
         "category": "Error",
         "code": 1361
     },
+    "Type-only import can specify a default import or named bindings, but not both.": {
+        "category": "Error",
+        "code": 1362
+    },
     "Convert to type-only export": {
         "category": "Message",
-        "code": 1362
+        "code": 1363
     },
     "Convert all re-exported types to type-only exports": {
         "category": "Message",
-        "code": 1363
+        "code": 1364
+    },
+    "Split into two separate import declarations": {
+        "category": "Message",
+        "code": 1365
     },
 
     "The types of '{0}' are incompatible between these types.": {

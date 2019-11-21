@@ -1817,6 +1817,18 @@ namespace ts {
                     }
 
                     switch (node.kind) {
+                        case SyntaxKind.ImportClause:
+                            if ((node as ImportClause).isTypeOnly) {
+                                diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_can_only_be_used_in_a_ts_file, "import type"));
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.ExportDeclaration:
+                            if ((node as ExportDeclaration).isTypeOnly) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "export type"));
+                                return;
+                            }
+                            break;
                         case SyntaxKind.ImportEqualsDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                             return;

@@ -32679,7 +32679,7 @@ namespace ts {
             }
             if (checkExternalImportOrExportDeclaration(node)) {
                 const importClause = node.importClause;
-                if (importClause) {
+                if (importClause && checkGrammarImportClause(importClause)) {
                     if (importClause.name) {
                         checkImportBinding(importClause);
                     }
@@ -36322,6 +36322,13 @@ namespace ts {
                 });
             }
             return ambientModulesCache;
+        }
+
+        function checkGrammarImportClause(node: ImportClause): boolean {
+            if (node.isTypeOnly && node.name && node.namedBindings) {
+                return grammarErrorOnNode(node, Diagnostics.Type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+            }
+            return false;
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
