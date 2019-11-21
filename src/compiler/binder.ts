@@ -3807,7 +3807,7 @@ namespace ts {
         }
 
         // Type annotations are TypeScript syntax.
-        if (node.type) {
+        if (node.type || node.exclamationToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
