@@ -56,6 +56,7 @@ namespace ts {
     /** Array that is only intended to be pushed to, never read. */
     export interface Push<T> {
         push(...values: T[]): void;
+        /* @internal*/ readonly length: number;
     }
 
     /* @internal */
@@ -70,6 +71,9 @@ namespace ts {
         EqualTo     = 0,
         GreaterThan = 1
     }
+
+    /* @internal */
+    export type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
 }
 
 /* @internal */

@@ -2,10 +2,11 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
+            factory,
             hoistVariableDeclaration,
         } = context;
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -55,9 +56,9 @@ namespace ts {
             if (isSyntheticReference(expression)) {
                 // `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
                 // `(a[b])` -> { expression `((_a = a)[b])`, thisArg: `_a` }
-                return createSyntheticReferenceExpression(updateParen(node, expression.expression), expression.thisArg);
+                return factory.createSyntheticReferenceExpression(factory.updateParen(node, expression.expression), expression.thisArg);
             }
-            return updateParen(node, expression);
+            return factory.updateParen(node, expression);
         }
 
         function visitNonOptionalPropertyOrElementAccessExpression(node: AccessExpression, captureThisArg: boolean, isDelete: boolean): Expression {
@@ -72,8 +73,8 @@ namespace ts {
             let thisArg: Expression | undefined;
             if (captureThisArg) {
                 if (shouldCaptureInTempVariable(expression)) {
-                    thisArg = createTempVariable(hoistVariableDeclaration);
-                    expression = createAssignment(thisArg, expression);
+                    thisArg = factory.createTempVariable(hoistVariableDeclaration);
+                    expression = factory.createAssignment(thisArg, expression);
                 }
                 else {
                     thisArg = expression;
@@ -81,9 +82,9 @@ namespace ts {
             }
 
             expression = node.kind === SyntaxKind.PropertyAccessExpression
-                ? updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier))
-                : updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
-            return thisArg ? createSyntheticReferenceExpression(expression, thisArg) : expression;
+                ? factory.updatePropertyAccess(node, expression, visitNode(node.name, visitor, isIdentifier))
+                : factory.updateElementAccess(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
+            return thisArg ? factory.createSyntheticReferenceExpression(expression, thisArg) : expression;
         }
 
         function visitNonOptionalCallExpression(node: CallExpression, captureThisArg: boolean): Expression {
@@ -111,8 +112,8 @@ namespace ts {
             let leftExpression = isSyntheticReference(left) ? left.expression : left;
             let capturedLeft: Expression = leftExpression;
             if (shouldCaptureInTempVariable(leftExpression)) {
-                capturedLeft = createTempVariable(hoistVariableDeclaration);
-                leftExpression = createAssignment(capturedLeft, leftExpression);
+                capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
+                leftExpression = factory.createAssignment(capturedLeft, leftExpression);
             }
             let rightExpression = capturedLeft;
             let thisArg: Expression | undefined;
@@ -123,27 +124,27 @@ namespace ts {
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
                             if (shouldCaptureInTempVariable(rightExpression)) {
-                                thisArg = createTempVariable(hoistVariableDeclaration);
-                                rightExpression = createAssignment(thisArg, rightExpression);
+                                thisArg = factory.createTempVariable(hoistVariableDeclaration);
+                                rightExpression = factory.createAssignment(thisArg, rightExpression);
                             }
                             else {
                                 thisArg = rightExpression;
                             }
                         }
                         rightExpression = segment.kind === SyntaxKind.PropertyAccessExpression
-                            ? createPropertyAccess(rightExpression, visitNode(segment.name, visitor, isIdentifier))
-                            : createElementAccess(rightExpression, visitNode(segment.argumentExpression, visitor, isExpression));
+                            ? factory.createPropertyAccess(rightExpression, visitNode(segment.name, visitor, isIdentifier))
+                            : factory.createElementAccess(rightExpression, visitNode(segment.argumentExpression, visitor, isExpression));
                         break;
                     case SyntaxKind.CallExpression:
                         if (i === 0 && leftThisArg) {
-                            rightExpression = createFunctionCall(
+                            rightExpression = factory.createFunctionCallCall(
                                 rightExpression,
-                                leftThisArg.kind === SyntaxKind.SuperKeyword ? createThis() : leftThisArg,
+                                leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
                                 visitNodes(segment.arguments, visitor, isExpression)
                             );
                         }
                         else {
-                            rightExpression = createCall(
+                            rightExpression = factory.createCall(
                                 rightExpression,
                                 /*typeArguments*/ undefined,
                                 visitNodes(segment.arguments, visitor, isExpression)
@@ -155,23 +156,23 @@ namespace ts {
             }
 
             const target = isDelete
-                ? createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createTrue(), createDelete(rightExpression))
-                : createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createVoidZero(), rightExpression);
-            return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
+                ? factory.createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDelete(rightExpression))
+                : factory.createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
+            return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
         function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {
-            return createBinary(
-                createBinary(
+            return factory.createBinary(
+                factory.createBinary(
                     left,
-                    createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                    createNull()
+                    factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                    factory.createNull()
                 ),
-                createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
-                createBinary(
+                factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
+                factory.createBinary(
                     right,
-                    createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                    createVoidZero()
+                    factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                    factory.createVoidZero()
                 )
             );
         }
@@ -180,12 +181,14 @@ namespace ts {
             let left = visitNode(node.left, visitor, isExpression);
             let right = left;
             if (shouldCaptureInTempVariable(left)) {
-                right = createTempVariable(hoistVariableDeclaration);
-                left = createAssignment(right, left);
+                right = factory.createTempVariable(hoistVariableDeclaration);
+                left = factory.createAssignment(right, left);
             }
-            return createConditional(
+            return factory.createConditional(
                 createNotNullCondition(left, right),
+                /*questionToken*/ undefined,
                 right,
+                /*colonToken*/ undefined,
                 visitNode(node.right, visitor, isExpression),
             );
         }
@@ -201,7 +204,7 @@ namespace ts {
         function visitDeleteExpression(node: DeleteExpression) {
             return isOptionalChain(skipParentheses(node.expression))
                 ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
-                : updateDelete(node, visitNode(node.expression, visitor, isExpression));
+                : factory.updateDelete(node, visitNode(node.expression, visitor, isExpression));
         }
     }
 }

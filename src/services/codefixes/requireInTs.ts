@@ -15,8 +15,8 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program) {
         const { statement, name, required } = getInfo(sourceFile, pos);
         changes.replaceNode(sourceFile, statement, getAllowSyntheticDefaultImports(program.getCompilerOptions())
-            ? createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(name, /*namedBindings*/ undefined), required)
-            : createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, name, createExternalModuleReference(required)));
+            ? factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(name, /*namedBindings*/ undefined), required)
+            : factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, name, factory.createExternalModuleReference(required)));
     }
 
     interface Info { readonly statement: VariableStatement; readonly name: Identifier; readonly required: StringLiteralLike; }

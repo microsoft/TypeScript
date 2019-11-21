@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "argument"
             },
+            "comment": "Description",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 18,
@@ -43,8 +44,7 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": "Description"
+            "isBracketed": false
         },
         "length": 1,
         "pos": 8,

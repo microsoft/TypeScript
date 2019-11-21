@@ -87,7 +87,7 @@ namespace ts {
             `
         }], {before: [
             context => node => visitNode(node, function visitor(node: Node): Node {
-                if (isStringLiteral(node) && node.text === "change") return createLiteral("changed");
+                if (isStringLiteral(node) && node.text === "change") return factory.createStringLiteral("changed");
                 return visitEachChild(node, visitor, context);
             })
         ]}, {
@@ -143,7 +143,7 @@ namespace ts {
                     context => {
                         const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
                             if (isIdentifier(node) && node.text === "original") {
-                                const newNode = createIdentifier("changed");
+                                const newNode = factory.createIdentifier("changed");
                                 setSourceMapRange(newNode, {
                                     pos: 0,
                                     end: 7,
@@ -156,7 +156,7 @@ namespace ts {
                         });
                         return {
                             transformSourceFile,
-                            transformBundle: node => createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
+                            transformBundle: node => factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
                         };
                     }
                 ]

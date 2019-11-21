@@ -60,10 +60,10 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string, target: ScriptTarget) {
         if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
-            changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+            changes.replaceNode(sourceFile, node.parent, factory.createElementAccess(node.parent.expression, factory.createStringLiteral(suggestion)));
         }
         else {
-            changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+            changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
         }
     }
 

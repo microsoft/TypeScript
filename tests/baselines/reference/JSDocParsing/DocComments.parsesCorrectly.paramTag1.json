@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
+            "comment": "Description text follows",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -43,8 +44,7 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": "Description text follows"
+            "isBracketed": false
         },
         "length": 1,
         "pos": 8,

@@ -1,10 +1,71 @@
 /* @internal */
 namespace ts {
+    export enum LogLevel {
+        Off,
+        Error,
+        Warning,
+        Info,
+        Verbose
+    }
+
+    export interface LoggingHost {
+        log(level: LogLevel, s: string): void;
+    }
+
+    export interface DeprecationOptions {
+        message?: string;
+        error?: boolean;
+        since?: Version | string;
+        warnAfter?: Version | string;
+        errorAfter?: Version | string;
+        typeScriptVersion?: Version | string;
+    }
+
     export namespace Debug {
+        let typeScriptVersion: Version | undefined;
+
         /* eslint-disable prefer-const */
         export let currentAssertionLevel = AssertionLevel.None;
+        export let currentLogLevel = LogLevel.Warning;
         export let isDebugging = false;
+        export let loggingHost: LoggingHost | undefined;
         /* eslint-enable prefer-const */
+
+        export function getTypeScriptVersion() {
+            return typeScriptVersion ?? (typeScriptVersion = new Version(version));
+        }
+
+        export function shouldLog(level: LogLevel): boolean {
+            return currentLogLevel <= level;
+        }
+
+        function logMessage(level: LogLevel, s: string): void {
+            if (loggingHost && shouldLog(level)) {
+                loggingHost.log(level, s);
+            }
+        }
+
+        export function log(s: string): void {
+            logMessage(LogLevel.Info, s);
+        }
+
+        export namespace log {
+            export function error(s: string): void {
+                logMessage(LogLevel.Error, s);
+            }
+
+            export function warn(s: string): void {
+                logMessage(LogLevel.Warning, s);
+            }
+
+            export function log(s: string): void {
+                logMessage(LogLevel.Info, s);
+            }
+
+            export function trace(s: string): void {
+                logMessage(LogLevel.Verbose, s);
+            }
+        }
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -295,7 +356,7 @@ namespace ts {
                                 if (nodeIsSynthesized(this)) return "";
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
                             }
                         }
                     });
@@ -320,5 +381,92 @@ namespace ts {
             isDebugInfoEnabled = true;
         }
 
+        function formatDeprecationMessage(name: string, error: boolean | undefined, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+            let deprecationMessage = error ? "DeprecationError: " : "DeprecationWarning: ";
+            deprecationMessage += `'${name}' `;
+            deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
+            deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
+            deprecationMessage += message ? ` ${formatStringFromArgs(message, [name], 0)}` : "";
+            return deprecationMessage;
+        }
+
+        function createErrorDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+            const deprecationMessage = formatDeprecationMessage(name, /*error*/ true, errorAfter, since, message);
+            return () => {
+                throw new TypeError(deprecationMessage);
+            };
+        }
+
+        function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+            let hasWrittenDeprecation = false;
+            return () => {
+                if (!hasWrittenDeprecation) {
+                    log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
+                    hasWrittenDeprecation = true;
+                }
+            };
+        }
+
+        function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
+        function createDeprecation(name: string, options?: DeprecationOptions): () => void;
+        function createDeprecation(name: string, options: DeprecationOptions = {}) {
+            const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
+            const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
+            const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
+            const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;
+            const error = options.error || errorAfter && version.compareTo(errorAfter) <= 0;
+            const warn = !warnAfter || version.compareTo(warnAfter) >= 0;
+            return error ? createErrorDeprecation(name, errorAfter, since, options.message) :
+                warn ? createWarningDeprecation(name, errorAfter, since, options.message) :
+                noop;
+        }
+
+        function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
+            return function (this: unknown) {
+                deprecation();
+                return func.apply(this, arguments);
+            } as F;
+        }
+
+        function wrapAccessor(deprecation: () => void, desc: PropertyDescriptor) {
+            if (desc.configurable) {
+                const newDesc: PropertyDescriptor = { ...desc, enumerable: false };
+                if (desc.get) newDesc.get = wrapFunction(deprecation, desc.get);
+                if (desc.set) newDesc.set = wrapFunction(deprecation, desc.set);
+                return newDesc;
+            }
+        }
+
+        function wrapValue(deprecation: () => void, desc: PropertyDescriptor) {
+            if (typeof desc.value === "function" && (desc.configurable || desc.writable)) {
+                const newDesc: PropertyDescriptor = { ...desc };
+                if (desc.configurable) {
+                    desc.enumerable = false;
+                }
+                newDesc.value = wrapFunction(deprecation, newDesc.value);
+                return newDesc;
+            }
+        }
+
+        export function deprecateExport<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(ns: T, key: K, options?: DeprecationOptions) {
+            const desc = Object.getOwnPropertyDescriptor(ns, key);
+            if (!desc) return;
+            const deprecation = createDeprecation(key, options);
+            const newDesc = desc.get || desc.set ? wrapAccessor(deprecation, desc) : wrapValue(deprecation, desc);
+            if (newDesc) {
+                Object.defineProperty(ns, key, newDesc);
+            }
+        }
+
+        export function deprecateExports<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(object: T, keys: readonly K[], options?: DeprecationOptions) {
+            for (const key of keys) {
+                deprecateExport(object, key, options);
+            }
+        }
+
+        export function deprecateFunction<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
+            const deprecation = createDeprecation(getFunctionName(func), options);
+            return wrapFunction(deprecation, func);
+        }
     }
 }

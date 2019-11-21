@@ -126,7 +126,7 @@ namespace ts.codefix {
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ "");
                         addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     return parent;
@@ -232,13 +232,13 @@ namespace ts.codefix {
         }
         else {
             const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
-            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, sourceFile, declaration, type, program, host, formatContext, preferences);
                 }
             }
-            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -263,7 +263,7 @@ namespace ts.codefix {
 
     function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
-            createJSDocThisTag(createJSDocTypeExpression(typeNode)),
+            factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
     }
 
@@ -300,8 +300,8 @@ namespace ts.codefix {
                 if (!parent) {
                     return;
                 }
-                const typeExpression = createJSDocTypeExpression(typeNode);
-                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
+                const typeExpression = factory.createJSDocTypeExpression(typeNode);
+                const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
             else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, sourceFile, declaration, type, program, host, formatContext, preferences)) {
@@ -328,7 +328,7 @@ namespace ts.codefix {
                     declaration.pos,
                     preferences,
                 );
-                if (action.codeAction.changes.length && changes.tryInsertTypeAnnotation(sourceFile, declaration, createTypeReferenceNode(typeNode.qualifier, typeNode.typeArguments))) {
+                if (action.codeAction.changes.length && changes.tryInsertTypeAnnotation(sourceFile, declaration, factory.createTypeReferenceNode(typeNode.qualifier, typeNode.typeArguments))) {
                     for (const change of action.codeAction.changes) {
                         const file = sourceFile.fileName === change.fileName ? sourceFile : Debug.assertDefined(program.getSourceFile(change.fileName));
                         changes.pushRaw(file, change);
@@ -353,7 +353,7 @@ namespace ts.codefix {
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             const name = getSynthesizedClone(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ undefined, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -366,7 +366,7 @@ namespace ts.codefix {
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
@@ -389,11 +389,11 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, newParam.isBracketed, newParam.typeExpression, /*isNameFirst*/ undefined, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:
-                return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
     }
 

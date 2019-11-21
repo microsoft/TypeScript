@@ -28,7 +28,7 @@
             "command": "gulp",
             "args": ["tests"],
             "group": "build",
-            "problemMatcher": ["$gulp-tsc"]
+            "problemMatcher": ["$tsc"]
         }
     ]
 }

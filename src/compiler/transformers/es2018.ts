@@ -7,6 +7,8 @@ namespace ts {
 
     export function transformES2018(context: TransformationContext) {
         const {
+            factory,
+            getEmitHelperFactory: emitHelpers,
             resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration
@@ -35,7 +37,7 @@ namespace ts {
         /** A set of node IDs for generated super accessors. */
         const substitutedSuperAccessors: boolean[] = [];
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -149,7 +151,7 @@ namespace ts {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 return setOriginalNode(
                     setTextRange(
-                        createYield(createAwaitHelper(context, visitNode(node.expression, visitor, isExpression))),
+                        factory.createYield(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
                         /*location*/ node
                     ),
                     node
@@ -165,14 +167,19 @@ namespace ts {
 
                     return setOriginalNode(
                         setTextRange(
-                            createYield(
-                                createAwaitHelper(context,
-                                    updateYield(
+                            factory.createYield(
+                                /*asteriskToken*/ undefined,
+                                emitHelpers().createAwaitHelper(
+                                    factory.updateYield(
                                         node,
                                         node.asteriskToken,
-                                        createAsyncDelegatorHelper(
-                                            context,
-                                            createAsyncValuesHelper(context, expression, expression),
+                                        setTextRange(
+                                            emitHelpers().createAsyncDelegatorHelper(
+                                                setTextRange(
+                                                    emitHelpers().createAsyncValuesHelper(expression),
+                                                    expression
+                                                )
+                                            ),
                                             expression
                                         )
                                     )
@@ -186,11 +193,12 @@ namespace ts {
 
                 return setOriginalNode(
                     setTextRange(
-                        createYield(
+                        factory.createYield(
+                            /*asteriskToken*/ undefined,
                             createDownlevelAwait(
                                 node.expression
                                     ? visitNode(node.expression, visitor, isExpression)
-                                    : createVoidZero()
+                                    : factory.createVoidZero()
                             )
                         ),
                         node
@@ -204,8 +212,8 @@ namespace ts {
 
         function visitReturnStatement(node: ReturnStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-                return updateReturn(node, createDownlevelAwait(
-                    node.expression ? visitNode(node.expression, visitor, isExpression) : createVoidZero()
+                return factory.updateReturn(node, createDownlevelAwait(
+                    node.expression ? visitNode(node.expression, visitor, isExpression) : factory.createVoidZero()
                 ));
             }
 
@@ -218,7 +226,7 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
+                return factory.restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -229,7 +237,7 @@ namespace ts {
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
                     if (chunkObject) {
-                        objects.push(createObjectLiteral(chunkObject));
+                        objects.push(factory.createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
                     const target = e.expression;
@@ -237,12 +245,12 @@ namespace ts {
                 }
                 else {
                     chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
-                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        ? factory.createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
                         : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {
-                objects.push(createObjectLiteral(chunkObject));
+                objects.push(factory.createObjectLiteral(chunkObject));
             }
 
             return objects;
@@ -273,17 +281,17 @@ namespace ts {
                 // end up with `{ a: 1, b: 2, c: 3 }`
                 const objects = chunkObjectLiteralElements(node.properties);
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
-                    objects.unshift(createObjectLiteral());
+                    objects.unshift(factory.createObjectLiteral());
                 }
                 let expression: Expression = objects[0];
                 if (objects.length > 1) {
                     for (let i = 1; i < objects.length; i++) {
-                        expression = createAssignHelper(context, [expression, objects[i]]);
+                        expression = emitHelpers().createAssignHelper([expression, objects[i]]);
                     }
                     return expression;
                 }
                 else {
-                    return createAssignHelper(context, objects);
+                    return emitHelpers().createAssignHelper(objects);
                 }
             }
             return visitEachChild(node, visitor, context);
@@ -313,7 +321,7 @@ namespace ts {
                 );
             }
             else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
-                return updateBinary(
+                return factory.updateBinary(
                     node,
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
@@ -326,19 +334,19 @@ namespace ts {
             if (node.variableDeclaration &&
                 isBindingPattern(node.variableDeclaration.name) &&
                 node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                const name = getGeneratedNameForNode(node.variableDeclaration.name);
-                const updatedDecl = updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*type*/ undefined, name);
+                const name = factory.getGeneratedNameForNode(node.variableDeclaration.name);
+                const updatedDecl = factory.updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*exclamationToken*/ undefined, /*type*/ undefined, name);
                 const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
                 let block = visitNode(node.block, visitor, isBlock);
                 if (some(visitedBindings)) {
-                    block = updateBlock(block, [
-                        createVariableStatement(/*modifiers*/ undefined, visitedBindings),
+                    block = factory.updateBlock(block, [
+                        factory.createVariableStatement(/*modifiers*/ undefined, visitedBindings),
                         ...block.statements,
                     ]);
                 }
-                return updateCatchClause(
+                return factory.updateCatchClause(
                     node,
-                    updateVariableDeclaration(node.variableDeclaration, name, /*type*/ undefined, /*initializer*/ undefined),
+                    factory.updateVariableDeclaration(node.variableDeclaration, name, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
                     block);
             }
             return visitEachChild(node, visitor, context);
@@ -387,7 +395,7 @@ namespace ts {
         }
 
         function visitForStatement(node: ForStatement): VisitResult<Statement> {
-            return updateFor(
+            return factory.updateFor(
                 node,
                 visitNode(node.initializer, visitorNoDestructuringValue, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
@@ -413,7 +421,7 @@ namespace ts {
                 return transformForAwaitOfStatement(node, outermostLabeledStatement);
             }
             else {
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+                return factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
             }
         }
 
@@ -422,8 +430,8 @@ namespace ts {
             if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
                 let bodyLocation: TextRange | undefined;
                 let statementsLocation: TextRange | undefined;
-                const temp = createTempVariable(/*recordTempVariable*/ undefined);
-                const statements: Statement[] = [createForOfBindingStatement(initializerWithoutParens, temp)];
+                const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
+                const statements: Statement[] = [createForOfBindingStatement(factory, initializerWithoutParens, temp)];
                 if (isBlock(node.statement)) {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
@@ -434,13 +442,13 @@ namespace ts {
                     bodyLocation = node.statement;
                     statementsLocation = node.statement;
                 }
-                return updateForOf(
+                return factory.updateForOf(
                     node,
                     node.awaitModifier,
                     setTextRange(
-                        createVariableDeclarationList(
+                        factory.createVariableDeclarationList(
                             [
-                                setTextRange(createVariableDeclaration(temp), node.initializer)
+                                setTextRange(factory.createVariableDeclaration(temp), node.initializer)
                             ],
                             NodeFlags.Let
                         ),
@@ -448,8 +456,8 @@ namespace ts {
                     ),
                     node.expression,
                     setTextRange(
-                        createBlock(
-                            setTextRange(createNodeArray(statements), statementsLocation),
+                        factory.createBlock(
+                            setTextRange(factory.createNodeArray(statements), statementsLocation),
                             /*multiLine*/ true
                         ),
                         bodyLocation
@@ -460,7 +468,7 @@ namespace ts {
         }
 
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
-            const binding = createForOfBindingStatement(node.initializer, boundValue);
+            const binding = createForOfBindingStatement(factory, node.initializer, boundValue);
 
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;
@@ -477,8 +485,8 @@ namespace ts {
 
             return setEmitFlags(
                 setTextRange(
-                    createBlock(
-                        setTextRange(createNodeArray(statements), statementsLocation),
+                    factory.createBlock(
+                        setTextRange(factory.createNodeArray(statements), statementsLocation),
                         /*multiLine*/ true
                     ),
                     bodyLocation
@@ -489,42 +497,42 @@ namespace ts {
 
         function createDownlevelAwait(expression: Expression) {
             return enclosingFunctionFlags & FunctionFlags.Generator
-                ? createYield(/*asteriskToken*/ undefined, createAwaitHelper(context, expression))
-                : createAwait(expression);
+                ? factory.createYield(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(expression))
+                : factory.createAwait(expression);
         }
 
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined) {
             const expression = visitNode(node.expression, visitor, isExpression);
-            const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
-            const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
-            const errorRecord = createUniqueName("e");
-            const catchVariable = getGeneratedNameForNode(errorRecord);
-            const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
-            const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
-            const getDone = createPropertyAccess(result, "done");
-            const getValue = createPropertyAccess(result, "value");
-            const callReturn = createFunctionCall(returnMethod, iterator, []);
+            const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+            const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+            const errorRecord = factory.createUniqueName("e");
+            const catchVariable = factory.getGeneratedNameForNode(errorRecord);
+            const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
+            const callValues = setTextRange(emitHelpers().createAsyncValuesHelper(expression), node.expression);
+            const callNext = factory.createCall(factory.createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
+            const getDone = factory.createPropertyAccess(result, "done");
+            const getValue = factory.createPropertyAccess(result, "value");
+            const callReturn = factory.createFunctionCallCall(returnMethod, iterator, []);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
 
             const forStatement = setEmitFlags(
                 setTextRange(
-                    createFor(
+                    factory.createFor(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
-                                createVariableDeclarationList([
-                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, callValues), node.expression),
-                                    createVariableDeclaration(result)
+                                factory.createVariableDeclarationList([
+                                    setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, callValues), node.expression),
+                                    factory.createVariableDeclaration(result)
                                 ]),
                                 node.expression
                             ),
                             EmitFlags.NoHoisting
                         ),
-                        /*condition*/ createComma(
-                            createAssignment(result, createDownlevelAwait(callNext)),
-                            createLogicalNot(getDone)
+                        /*condition*/ factory.createComma(
+                            factory.createAssignment(result, createDownlevelAwait(callNext)),
+                            factory.createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
                         /*statement*/ convertForOfStatementHead(node, getValue)
@@ -534,22 +542,22 @@ namespace ts {
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            return createTry(
-                createBlock([
-                    restoreEnclosingLabel(
+            return factory.createTry(
+                factory.createBlock([
+                    factory.restoreEnclosingLabel(
                         forStatement,
                         outermostLabeledStatement
                     )
                 ]),
-                createCatchClause(
-                    createVariableDeclaration(catchVariable),
+                factory.createCatchClause(
+                    factory.createVariableDeclaration(catchVariable),
                     setEmitFlags(
-                        createBlock([
-                            createExpressionStatement(
-                                createAssignment(
+                        factory.createBlock([
+                            factory.createExpressionStatement(
+                                factory.createAssignment(
                                     errorRecord,
-                                    createObjectLiteral([
-                                        createPropertyAssignment("error", catchVariable)
+                                    factory.createObjectLiteral([
+                                        factory.createPropertyAssignment("error", catchVariable)
                                     ])
                                 )
                             )
@@ -557,34 +565,34 @@ namespace ts {
                         EmitFlags.SingleLine
                     )
                 ),
-                createBlock([
-                    createTry(
-                        /*tryBlock*/ createBlock([
+                factory.createBlock([
+                    factory.createTry(
+                        /*tryBlock*/ factory.createBlock([
                             setEmitFlags(
-                                createIf(
-                                    createLogicalAnd(
-                                        createLogicalAnd(
+                                factory.createIf(
+                                    factory.createLogicalAnd(
+                                        factory.createLogicalAnd(
                                             result,
-                                            createLogicalNot(getDone)
+                                            factory.createLogicalNot(getDone)
                                         ),
-                                        createAssignment(
+                                        factory.createAssignment(
                                             returnMethod,
-                                            createPropertyAccess(iterator, "return")
+                                            factory.createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createExpressionStatement(createDownlevelAwait(callReturn))
+                                    factory.createExpressionStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
                         ]),
                         /*catchClause*/ undefined,
                         /*finallyBlock*/ setEmitFlags(
-                            createBlock([
+                            factory.createBlock([
                                 setEmitFlags(
-                                    createIf(
+                                    factory.createIf(
                                         errorRecord,
-                                        createThrow(
-                                            createPropertyAccess(errorRecord, "error")
+                                        factory.createThrow(
+                                            factory.createPropertyAccess(errorRecord, "error")
                                         )
                                     ),
                                     EmitFlags.SingleLine
@@ -601,12 +609,12 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
-                return updateParameter(
+                return factory.updateParameterDeclaration(
                     node,
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
-                    getGeneratedNameForNode(node),
+                    factory.getGeneratedNameForNode(node),
                     /*questionToken*/ undefined,
                     /*type*/ undefined,
                     visitNode(node.initializer, visitor, isExpression)
@@ -618,7 +626,7 @@ namespace ts {
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = FunctionFlags.Normal;
-            const updated = updateConstructor(
+            const updated = factory.updateConstructorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
@@ -632,7 +640,7 @@ namespace ts {
         function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = FunctionFlags.Normal;
-            const updated = updateGetAccessor(
+            const updated = factory.updateGetAccessorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
@@ -648,7 +656,7 @@ namespace ts {
         function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = FunctionFlags.Normal;
-            const updated = updateSetAccessor(
+            const updated = factory.updateSetAccessorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
@@ -663,7 +671,7 @@ namespace ts {
         function visitMethodDeclaration(node: MethodDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = getFunctionFlags(node);
-            const updated = updateMethod(
+            const updated = factory.updateMethodDeclaration(
                 node,
                 /*decorators*/ undefined,
                 enclosingFunctionFlags & FunctionFlags.Generator
@@ -688,7 +696,7 @@ namespace ts {
         function visitFunctionDeclaration(node: FunctionDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = getFunctionFlags(node);
-            const updated = updateFunctionDeclaration(
+            const updated = factory.updateFunctionDeclaration(
                 node,
                 /*decorators*/ undefined,
                 enclosingFunctionFlags & FunctionFlags.Generator
@@ -712,7 +720,7 @@ namespace ts {
         function visitArrowFunction(node: ArrowFunction) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = getFunctionFlags(node);
-            const updated = updateArrowFunction(
+            const updated = factory.updateArrowFunction(
                 node,
                 node.modifiers,
                 /*typeParameters*/ undefined,
@@ -728,7 +736,7 @@ namespace ts {
         function visitFunctionExpression(node: FunctionExpression) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
             enclosingFunctionFlags = getFunctionFlags(node);
-            const updated = updateFunctionExpression(
+            const updated = factory.updateFunctionExpression(
                 node,
                 enclosingFunctionFlags & FunctionFlags.Generator
                     ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifier)
@@ -751,7 +759,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologue(statements, node.body!.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = factory.copyPrologue(node.body!.statements, statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             const savedCapturedSuperProperties = capturedSuperProperties;
@@ -759,17 +767,16 @@ namespace ts {
             capturedSuperProperties = createUnderscoreEscapedMap<true>();
             hasSuperElementAccess = false;
 
-            const returnStatement = createReturn(
-                createAsyncGeneratorHelper(
-                    context,
-                    createFunctionExpression(
+            const returnStatement = factory.createReturn(
+                emitHelpers().createAsyncGeneratorHelper(
+                    factory.createFunctionExpression(
                         /*modifiers*/ undefined,
-                        createToken(SyntaxKind.AsteriskToken),
-                        node.name && getGeneratedNameForNode(node.name),
+                        factory.createToken(SyntaxKind.AsteriskToken),
+                        node.name && factory.getGeneratedNameForNode(node.name),
                         /*typeParameters*/ undefined,
                         /*parameters*/ [],
                         /*type*/ undefined,
-                        updateBlock(
+                        factory.updateBlock(
                             node.body!,
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
@@ -784,7 +791,7 @@ namespace ts {
 
             if (emitSuperHelpers) {
                 enableSubstitutionForAsyncMethodsWithSuper();
-                const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
                 substitutedSuperAccessors[getNodeId(variableStatement)] = true;
                 insertStatementsAfterStandardPrologue(statements, [variableStatement]);
             }
@@ -792,7 +799,7 @@ namespace ts {
             statements.push(returnStatement);
 
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
-            const block = updateBlock(node.body!, statements);
+            const block = factory.updateBlock(node.body!, statements);
 
             if (emitSuperHelpers && hasSuperElementAccess) {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
@@ -817,15 +824,15 @@ namespace ts {
             const statements: Statement[] = [];
             const body = visitNode(node.body, visitor, isConciseBody);
             if (isBlock(body)) {
-                statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+                statementOffset = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
-                const block = convertToFunctionBody(body, /*multiLine*/ true);
+                const block = factory.converters.convertToFunctionBlock(body, /*multiLine*/ true);
                 insertStatementsAfterStandardPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
-                return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
+                return factory.updateBlock(block, setTextRange(factory.createNodeArray(statements), block.statements));
             }
             return body;
         }
@@ -833,7 +840,7 @@ namespace ts {
         function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
             for (const parameter of node.parameters) {
                 if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                    const temp = getGeneratedNameForNode(parameter);
+                    const temp = factory.getGeneratedNameForNode(parameter);
                     const declarations = flattenDestructuringBinding(
                         parameter,
                         visitor,
@@ -844,9 +851,9 @@ namespace ts {
                         /*skipInitializer*/ true,
                     );
                     if (some(declarations)) {
-                        const statement = createVariableStatement(
+                        const statement = factory.createVariableStatement(
                             /*modifiers*/ undefined,
-                            createVariableDeclarationList(
+                            factory.createVariableDeclarationList(
                                 declarations
                             )
                         );
@@ -940,8 +947,8 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
-                    createPropertyAccess(
-                        createFileLevelUniqueName("_super"),
+                    factory.createPropertyAccess(
+                        factory.createFileLevelUniqueName("_super"),
                         node.name),
                     node
                 );
@@ -965,11 +972,11 @@ namespace ts {
                 const argumentExpression = isPropertyAccessExpression(expression)
                     ? substitutePropertyAccessExpression(expression)
                     : substituteElementAccessExpression(expression);
-                return createCall(
-                    createPropertyAccess(argumentExpression, "call"),
+                return factory.createCall(
+                    factory.createPropertyAccess(argumentExpression, "call"),
                     /*typeArguments*/ undefined,
                     [
-                        createThis(),
+                        factory.createThis(),
                         ...node.arguments
                     ]
                 );
@@ -989,9 +996,9 @@ namespace ts {
         function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return setTextRange(
-                    createPropertyAccess(
-                        createCall(
-                            createIdentifier("_superIndex"),
+                    factory.createPropertyAccess(
+                        factory.createCall(
+                            factory.createIdentifier("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -1002,8 +1009,8 @@ namespace ts {
             }
             else {
                 return setTextRange(
-                    createCall(
-                        createIdentifier("_superIndex"),
+                    factory.createCall(
+                        factory.createIdentifier("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -1011,136 +1018,5 @@ namespace ts {
                 );
             }
         }
-    }
-
-    export const assignHelper: UnscopedEmitHelper = {
-        name: "typescript:assign",
-        importName: "__assign",
-        scoped: false,
-        priority: 1,
-        text: `
-            var __assign = (this && this.__assign) || function () {
-                __assign = Object.assign || function(t) {
-                    for (var s, i = 1, n = arguments.length; i < n; i++) {
-                        s = arguments[i];
-                        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                            t[p] = s[p];
-                    }
-                    return t;
-                };
-                return __assign.apply(this, arguments);
-            };`
-    };
-
-    export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
-        if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
-            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
-        }
-        context.requestEmitHelper(assignHelper);
-        return createCall(
-            getUnscopedHelperName("__assign"),
-            /*typeArguments*/ undefined,
-            attributesSegments
-        );
-    }
-
-    export const awaitHelper: UnscopedEmitHelper = {
-        name: "typescript:await",
-        importName: "__await",
-        scoped: false,
-        text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
-    };
-
-    function createAwaitHelper(context: TransformationContext, expression: Expression) {
-        context.requestEmitHelper(awaitHelper);
-        return createCall(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [expression]);
-    }
-
-    export const asyncGeneratorHelper: UnscopedEmitHelper = {
-        name: "typescript:asyncGenerator",
-        importName: "__asyncGenerator",
-        scoped: false,
-        text: `
-            var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var g = generator.apply(thisArg, _arguments || []), i, q = [];
-                return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-                function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-                function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-                function fulfill(value) { resume("next", value); }
-                function reject(value) { resume("throw", value); }
-                function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };`
-    };
-
-    function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression, hasLexicalThis: boolean) {
-        context.requestEmitHelper(awaitHelper);
-        context.requestEmitHelper(asyncGeneratorHelper);
-
-        // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
-
-        return createCall(
-            getUnscopedHelperName("__asyncGenerator"),
-            /*typeArguments*/ undefined,
-            [
-                hasLexicalThis ? createThis() : createVoidZero(),
-                createIdentifier("arguments"),
-                generatorFunc
-            ]
-        );
-    }
-
-    export const asyncDelegator: UnscopedEmitHelper = {
-        name: "typescript:asyncDelegator",
-        importName: "__asyncDelegator",
-        scoped: false,
-        text: `
-            var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-                var i, p;
-                return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
-            };`
-    };
-
-    function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
-        context.requestEmitHelper(awaitHelper);
-        context.requestEmitHelper(asyncDelegator);
-        return setTextRange(
-            createCall(
-                getUnscopedHelperName("__asyncDelegator"),
-                /*typeArguments*/ undefined,
-                [expression]
-            ),
-            location
-        );
-    }
-
-    export const asyncValues: UnscopedEmitHelper = {
-        name: "typescript:asyncValues",
-        importName: "__asyncValues",
-        scoped: false,
-        text: `
-            var __asyncValues = (this && this.__asyncValues) || function (o) {
-                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var m = o[Symbol.asyncIterator], i;
-                return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-                function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-                function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-            };`
-    };
-
-    function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
-        context.requestEmitHelper(asyncValues);
-        return setTextRange(
-            createCall(
-                getUnscopedHelperName("__asyncValues"),
-                /*typeArguments*/ undefined,
-                [expression]
-            ),
-            location
-        );
     }
 }

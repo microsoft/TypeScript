@@ -11,6 +11,7 @@
         { "path": "../compiler", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../services", "prepend": true },
-        { "path": "../server", "prepend": true }
+        { "path": "../server", "prepend": true },
+        { "path": "../compat", "prepend": true }
     ]
 }

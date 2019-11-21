@@ -544,11 +544,11 @@ namespace ts.codefix {
     function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: readonly string[]): void {
         if (defaultImport) {
             Debug.assert(!clause.name, "Default imports can't have names");
-            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
+            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), factory.createIdentifier(defaultImport), { suffix: ", " });
         }
 
         if (namedImports.length) {
-            const specifiers = namedImports.map(name => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name)));
+            const specifiers = namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name)));
             if (clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements.length) {
                 for (const spec of specifiers) {
                     changes.insertNodeInListAfter(sourceFile, last(cast(clause.namedBindings, isNamedImports).elements), spec);
@@ -556,7 +556,7 @@ namespace ts.codefix {
             }
             else {
                 if (specifiers.length) {
-                    const namedImports = createNamedImports(specifiers);
+                    const namedImports = factory.createNamedImports(specifiers);
                     if (clause.namedBindings) {
                         changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
                     }
@@ -594,25 +594,26 @@ namespace ts.codefix {
         if (defaultImport !== undefined || namedImports.length) {
             insertImport(changes, sourceFile,
                 makeImport(
-                    defaultImport === undefined ? undefined : createIdentifier(defaultImport),
-                    namedImports.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference));
+                    defaultImport === undefined ? undefined : factory.createIdentifier(defaultImport),
+                    namedImports.map(n => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(n))), moduleSpecifier, quotePreference));
         }
         if (namespaceLikeImport) {
             insertImport(
                 changes,
                 sourceFile,
-                namespaceLikeImport.importKind === ImportKind.Equals ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(namespaceLikeImport.name), createExternalModuleReference(quotedModuleSpecifier)) :
+                namespaceLikeImport.importKind === ImportKind.Equals ? factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier(namespaceLikeImport.name), factory.createExternalModuleReference(quotedModuleSpecifier)) :
                 namespaceLikeImport.importKind === ImportKind.ConstEquals ? createConstEqualsRequireDeclaration(namespaceLikeImport.name, quotedModuleSpecifier) :
-                createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(namespaceLikeImport.name))), quotedModuleSpecifier));
+                factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name))), quotedModuleSpecifier));
         }
     }
 
     function createConstEqualsRequireDeclaration(name: string, quotedModuleSpecifier: StringLiteral): VariableStatement {
-        return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-            createVariableDeclaration(
-                createIdentifier(name),
+        return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+            factory.createVariableDeclaration(
+                factory.createIdentifier(name),
+                /*exclamationToken*/ undefined,
                 /*type*/ undefined,
-                createCall(createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier])
+                factory.createCall(factory.createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier])
             )
         ], NodeFlags.Const));
     }

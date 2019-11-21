@@ -350,8 +350,8 @@ namespace ts {
             getMergedSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation: (symbol, location) => {
-                location = getParseTreeNode(location);
+            getTypeOfSymbolAtLocation: (symbol, locationIn) => {
+                const location = getParseTreeNode(locationIn);
                 return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;
             },
             getSymbolsOfParameterPropertyDeclaration: (parameterIn, parameterName) => {
@@ -389,16 +389,16 @@ namespace ts {
             symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
             symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
             typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
-            getSymbolsInScope: (location, meaning) => {
-                location = getParseTreeNode(location);
+            getSymbolsInScope: (locationIn, meaning) => {
+                const location = getParseTreeNode(locationIn);
                 return location ? getSymbolsInScope(location, meaning) : [];
             },
-            getSymbolAtLocation: node => {
-                node = getParseTreeNode(node);
+            getSymbolAtLocation: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getSymbolAtLocation(node) : undefined;
             },
-            getShorthandAssignmentValueSymbol: node => {
-                node = getParseTreeNode(node);
+            getShorthandAssignmentValueSymbol: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getShorthandAssignmentValueSymbol(node) : undefined;
             },
             getExportSpecifierLocalTargetSymbol: nodeIn => {
@@ -408,8 +408,8 @@ namespace ts {
             getExportSymbolOfSymbol(symbol) {
                 return getMergedSymbol(symbol.exportSymbol || symbol);
             },
-            getTypeAtLocation: node => {
-                node = getParseTreeNode(node);
+            getTypeAtLocation: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
                 return node ? getTypeOfNode(node) : errorType;
             },
             getTypeOfAssignmentPattern: nodeIn => {
@@ -486,9 +486,9 @@ namespace ts {
                 const declaration = getParseTreeNode(declarationIn, isFunctionLike);
                 return declaration ? getSignatureFromDeclaration(declaration) : undefined;
             },
-            isImplementationOfOverload: node => {
-                const parsed = getParseTreeNode(node, isFunctionLike);
-                return parsed ? isImplementationOfOverload(parsed) : undefined;
+            isImplementationOfOverload: nodeIn => {
+                const node = getParseTreeNode(nodeIn, isFunctionLike);
+                return node ? isImplementationOfOverload(node) : undefined;
             },
             getImmediateAliasedSymbol,
             getAliasedSymbol: resolveAlias,
@@ -564,15 +564,16 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: (node, includeGlobalThis) => {
-                node = getParseTreeNode(node);
+            tryGetThisTypeAt: (nodeIn, includeGlobalThis) => {
+                const node = getParseTreeNode(nodeIn);
                 return node && tryGetThisTypeAt(node, includeGlobalThis);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
                 return node && getTypeArgumentConstraint(node);
             },
-            getSuggestionDiagnostics: (file, ct) => {
+            getSuggestionDiagnostics: (fileIn, ct) => {
+                const file = getParseTreeNode(fileIn, isSourceFile) || Debug.fail("Could not determine parsed source file.");
                 if (skipTypeChecking(file, compilerOptions, host)) {
                     return emptyArray;
                 }
@@ -3683,7 +3684,7 @@ namespace ts {
                     withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
                 indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context)),
-                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
                 symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -3740,26 +3741,26 @@ namespace ts {
 
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
-                    return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 if (type.flags & TypeFlags.Unknown) {
-                    return createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                 }
                 if (type.flags & TypeFlags.String) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.StringKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
                 }
                 if (type.flags & TypeFlags.Number) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.NumberKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
                 }
                 if (type.flags & TypeFlags.BigInt) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.BigIntKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword);
                 }
                 if (type.flags & TypeFlags.Boolean) {
                     context.approximateLength += 7;
-                    return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol)!;
@@ -3768,7 +3769,7 @@ namespace ts {
                         ? parentName
                         : appendReferenceToType(
                             parentName as TypeReferenceNode | ImportTypeNode,
-                            createTypeReferenceNode(symbolName(type.symbol), /*typeArguments*/ undefined)
+                            factory.createTypeReferenceNode(symbolName(type.symbol), /*typeArguments*/ undefined)
                         );
                     return enumLiteralName;
                 }
@@ -3777,20 +3778,20 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.StringLiteral) {
                     context.approximateLength += ((<StringLiteralType>type).value.length + 2);
-                    return createLiteralTypeNode(setEmitFlags(createLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
+                    return factory.createLiteralTypeNode(setEmitFlags(factory.createStringLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
                 }
                 if (type.flags & TypeFlags.NumberLiteral) {
                     const value = (<NumberLiteralType>type).value;
                     context.approximateLength += ("" + value).length;
-                    return createLiteralTypeNode(value < 0 ? createPrefix(SyntaxKind.MinusToken, createLiteral(-value)) : createLiteral(value));
+                    return factory.createLiteralTypeNode(value < 0 ? factory.createPrefix(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) : factory.createNumericLiteral(value));
                 }
                 if (type.flags & TypeFlags.BigIntLiteral) {
                     context.approximateLength += (pseudoBigIntToString((<BigIntLiteralType>type).value).length) + 1;
-                    return createLiteralTypeNode((createLiteral((<BigIntLiteralType>type).value)));
+                    return factory.createLiteralTypeNode((factory.createBigIntLiteral((<BigIntLiteralType>type).value)));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     context.approximateLength += (<IntrinsicType>type).intrinsicName.length;
-                    return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
+                    return factory.createLiteralTypeNode((<IntrinsicType>type).intrinsicName === "true" ? factory.createTrue() : factory.createFalse());
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
@@ -3803,31 +3804,31 @@ namespace ts {
                         }
                     }
                     context.approximateLength += 13;
-                    return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
+                    return factory.createTypeOperatorNode(SyntaxKind.UniqueKeyword, factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
                     context.approximateLength += 4;
-                    return createKeywordTypeNode(SyntaxKind.VoidKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.VoidKeyword);
                 }
                 if (type.flags & TypeFlags.Undefined) {
                     context.approximateLength += 9;
-                    return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                 }
                 if (type.flags & TypeFlags.Null) {
                     context.approximateLength += 4;
-                    return createKeywordTypeNode(SyntaxKind.NullKeyword);
+                    return factory.createLiteralTypeNode(factory.createNull());
                 }
                 if (type.flags & TypeFlags.Never) {
                     context.approximateLength += 5;
-                    return createKeywordTypeNode(SyntaxKind.NeverKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.SymbolKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.SymbolKeyword);
                 }
                 if (type.flags & TypeFlags.NonPrimitive) {
                     context.approximateLength += 6;
-                    return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
+                    return factory.createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (isThisTypeParameter(type)) {
                     if (context.flags & NodeBuilderFlags.InObjectTypeLiteral) {
@@ -3839,12 +3840,12 @@ namespace ts {
                         }
                     }
                     context.approximateLength += 4;
-                    return createThis();
+                    return factory.createThisTypeNode();
                 }
 
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
 
@@ -3857,19 +3858,19 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
                         context.approximateLength += (symbolName(type.symbol).length + 6);
-                        return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         type.flags & TypeFlags.TypeParameter &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
-                        return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
+                        return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return type.symbol
                         ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
-                        : createTypeReferenceNode(createIdentifier("?"), /*typeArguments*/ undefined);
+                        : factory.createTypeReferenceNode(factory.createIdentifier("?"), /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3878,7 +3879,7 @@ namespace ts {
                     }
                     const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
-                        const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
+                        const unionOrIntersectionTypeNode = type.flags & TypeFlags.Union ? factory.createUnionTypeNode(typeNodes) : factory.createIntersectionTypeNode(typeNodes);
                         return unionOrIntersectionTypeNode;
                     }
                     else {
@@ -3897,13 +3898,13 @@ namespace ts {
                     const indexedType = (<IndexType>type).type;
                     context.approximateLength += 6;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
-                    return createTypeOperatorNode(indexTypeNode);
+                    return factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     context.approximateLength += 2;
-                    return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
+                    return factory.createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
                     const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
@@ -3914,7 +3915,7 @@ namespace ts {
                     const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     context.approximateLength += 15;
-                    return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
+                    return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
@@ -3924,20 +3925,20 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>createToken(type.declaration.readonlyToken.kind) : undefined;
-                    const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>createToken(type.declaration.questionToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                         // We have a { [P in keyof T]: X }
                         // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
-                        appropriateConstraintTypeNode = createTypeOperatorNode(typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
+                        appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
                     }
                     else {
                         appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
                     }
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
-                    const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                     context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
@@ -4032,7 +4033,7 @@ namespace ts {
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             context.approximateLength += 2;
-                            return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
+                            return setEmitFlags(factory.createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
                         }
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
@@ -4053,7 +4054,7 @@ namespace ts {
                     context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
-                    const typeLiteralNode = createTypeLiteralNode(members);
+                    const typeLiteralNode = factory.createTypeLiteralNode(members);
                     context.approximateLength += 2;
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
@@ -4063,11 +4064,11 @@ namespace ts {
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
-                            return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
+                            return factory.createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
-                        const arrayType = createArrayTypeNode(elementType);
-                        return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
+                        const arrayType = factory.createArrayTypeNode(elementType);
+                        return type.target === globalArrayType ? arrayType : factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
@@ -4077,16 +4078,16 @@ namespace ts {
                             if (tupleConstituentNodes) {
                                 for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                     tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
-                                        createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
-                                        createOptionalTypeNode(tupleConstituentNodes[i]);
+                                        factory.createRestTypeNode(factory.createArrayTypeNode(tupleConstituentNodes[i])) :
+                                        factory.createOptionalTypeNode(tupleConstituentNodes[i]);
                                 }
-                                const tupleTypeNode = createTupleTypeNode(tupleConstituentNodes);
-                                return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
+                                const tupleTypeNode = factory.createTupleTypeNode(tupleConstituentNodes);
+                                return (<TupleType>type.target).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            const tupleTypeNode = createTupleTypeNode([]);
-                            return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
+                            const tupleTypeNode = factory.createTupleTypeNode([]);
+                            return (<TupleType>type.target).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                         }
                         context.encounteredError = true;
                         return undefined!; // TODO: GH#18217
@@ -4148,7 +4149,7 @@ namespace ts {
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.qualifier = root.qualifier ? createQualifiedName(root.qualifier, id) : id;
+                            root.qualifier = root.qualifier ? factory.createQualifiedName(root.qualifier, id) : id;
                         }
                         return root;
                     }
@@ -4160,7 +4161,7 @@ namespace ts {
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.typeName = createQualifiedName(root.typeName, id);
+                            root.typeName = factory.createQualifiedName(root.typeName, id);
                         }
                         return root;
                     }
@@ -4179,7 +4180,7 @@ namespace ts {
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                     if (checkTruncationLength(context)) {
-                        return [createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined)];
+                        return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                     }
                     const typeElements: TypeElement[] = [];
                     for (const signature of resolvedType.callSignatures) {
@@ -4220,7 +4221,7 @@ namespace ts {
                             }
                         }
                         if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                            typeElements.push(createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
                             addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                             break;
                         }
@@ -4234,9 +4235,9 @@ namespace ts {
             function createElidedInformationPlaceholder(context: NodeBuilderContext) {
                 context.approximateLength += 3;
                 if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                    return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
                 }
-                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
 
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
@@ -4262,7 +4263,7 @@ namespace ts {
                 context.enclosingDeclaration = saveEnclosingDeclaration;
                 const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
                 context.approximateLength += (symbolName(propertySymbol).length + 1);
-                const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
                 if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                     const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
                     for (const signature of signatures) {
@@ -4280,20 +4281,19 @@ namespace ts {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
-                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                     }
                     context.flags = savedFlags;
 
-                    const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                    const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                     if (modifiers) {
                         context.approximateLength += 9;
                     }
-                    const propertySignature = createPropertySignature(
+                    const propertySignature = factory.createPropertySignature(
                         modifiers,
                         propertyName,
                         optionalToken,
-                        propertyTypeNode,
-                        /*initializer*/ undefined);
+                        propertyTypeNode);
 
                     typeElements.push(preserveCommentsOn(propertySignature));
                 }
@@ -4318,12 +4318,12 @@ namespace ts {
                 if (some(types)) {
                     if (checkTruncationLength(context)) {
                         if (!isBareList) {
-                            return [createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                            return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
                         }
                         else if (types.length > 2) {
                             return [
                                 typeToTypeNodeHelper(types[0], context),
-                                createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                                factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                                 typeToTypeNodeHelper(types[types.length - 1], context)
                             ];
                         }
@@ -4333,7 +4333,7 @@ namespace ts {
                     for (const type of types) {
                         i++;
                         if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                            result.push(createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                            result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
                             const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                             if (typeNode) {
                                 result.push(typeNode);
@@ -4353,9 +4353,9 @@ namespace ts {
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
                 const name = getNameFromIndexInfo(indexInfo) || "x";
-                const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
+                const indexerTypeNode = factory.createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
-                const indexingParameter = createParameter(
+                const indexingParameter = factory.createParameterDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
@@ -4368,14 +4368,14 @@ namespace ts {
                     context.encounteredError = true;
                 }
                 context.approximateLength += (name.length + 4);
-                return createIndexSignature(
+                return factory.createIndexSignature(
                     /*decorators*/ undefined,
-                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
+                    indexInfo.isReadonly ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
                     [indexingParameter],
                     typeNode);
             }
 
-            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind, context: NodeBuilderContext): SignatureDeclaration {
+            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext): SignatureDeclaration {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -4395,13 +4395,13 @@ namespace ts {
                 const typePredicate = getTypePredicateOfSignature(signature);
                 if (typePredicate) {
                     const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                        createToken(SyntaxKind.AssertsKeyword) :
+                        factory.createToken(SyntaxKind.AssertsKeyword) :
                         undefined;
                     const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                        setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                        createThisTypeNode();
+                        setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                        factory.createThisTypeNode();
                     const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
-                    returnTypeNode = createTypePredicateNodeWithModifier(assertsModifier, parameterName, typeNode);
+                    returnTypeNode = factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(signature);
@@ -4413,10 +4413,14 @@ namespace ts {
                     }
                 }
                 else if (!returnTypeNode) {
-                    returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
-                return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
+                const node = factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
+                if (typeArguments) {
+                    node.typeArguments = factory.createNodeArray(typeArguments);
+                }
+                return node;
             }
 
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
@@ -4426,7 +4430,7 @@ namespace ts {
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+                return factory.createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
@@ -4448,7 +4452,7 @@ namespace ts {
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
                 const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
-                const dotDotDotToken = isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration ? parameterDeclaration.name ?
                     parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
                     parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
@@ -4456,8 +4460,8 @@ namespace ts {
                     symbolName(parameterSymbol) :
                     symbolName(parameterSymbol);
                 const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
-                const questionToken = isOptional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                const parameterNode = createParameter(
+                const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
+                const parameterNode = factory.createParameterDeclaration(
                     /*decorators*/ undefined,
                     modifiers,
                     dotDotDotToken,
@@ -4586,7 +4590,7 @@ namespace ts {
                 let typeParameterNodes: NodeArray<TypeParameterDeclaration> | undefined;
                 const targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeAlias)) {
-                    typeParameterNodes = createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
+                    typeParameterNodes = factory.createNodeArray(map(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), tp => typeParameterToDeclaration(tp, context)));
                 }
                 return typeParameterNodes;
             }
@@ -4695,7 +4699,7 @@ namespace ts {
                             context.tracker.reportLikelyUnsafeImportRequiredError(specifier);
                         }
                     }
-                    const lit = createLiteralTypeNode(createLiteral(specifier));
+                    const lit = factory.createLiteralTypeNode(factory.createStringLiteral(specifier));
                     if (context.tracker.trackExternalModuleSymbolOfImportTypeNode) context.tracker.trackExternalModuleSymbolOfImportTypeNode(chain[0]);
                     context.approximateLength += specifier.length + 10; // specifier + import("")
                     if (!nonRootParts || isEntityName(nonRootParts)) {
@@ -4703,12 +4707,12 @@ namespace ts {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
                             lastId.typeArguments = undefined;
                         }
-                        return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
+                        return factory.createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                     }
                     else {
                         const splitNode = getTopmostIndexedAccessType(nonRootParts);
                         const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
-                        return createIndexedAccessTypeNode(createImportTypeNode(lit, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
+                        return factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
                     }
                 }
 
@@ -4717,13 +4721,13 @@ namespace ts {
                     return entityName; // Indexed accesses can never be `typeof`
                 }
                 if (isTypeOf) {
-                    return createTypeQueryNode(entityName);
+                    return factory.createTypeQueryNode(entityName);
                 }
                 else {
                     const lastId = isIdentifier(entityName) ? entityName : entityName.right;
                     const lastTypeArgs = lastId.typeArguments;
                     lastId.typeArguments = undefined;
-                    return createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                    return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
                 }
 
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
@@ -4760,14 +4764,14 @@ namespace ts {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
-                            return createIndexedAccessTypeNode(LHS, createLiteralTypeNode(createLiteral(symbolName)));
+                            return factory.createIndexedAccessTypeNode(LHS, factory.createLiteralTypeNode(factory.createStringLiteral(symbolName)));
                         }
                         else {
-                            return createIndexedAccessTypeNode(createTypeReferenceNode(LHS, typeParameterNodes as readonly TypeNode[]), createLiteralTypeNode(createLiteral(symbolName)));
+                            return factory.createIndexedAccessTypeNode(factory.createTypeReferenceNode(LHS, typeParameterNodes as readonly TypeNode[]), factory.createLiteralTypeNode(factory.createStringLiteral(symbolName)));
                         }
                     }
 
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
                     if (index > stopper) {
@@ -4775,7 +4779,7 @@ namespace ts {
                         if (!isEntityName(LHS)) {
                             return Debug.fail("Impossible construct - an export of an indexed access cannot be reachable");
                         }
-                        return createQualifiedName(LHS, identifier);
+                        return factory.createQualifiedName(LHS, identifier);
                     }
                     return identifier;
                 }
@@ -4794,7 +4798,7 @@ namespace ts {
                 }
                 let result = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 if (!(result.kind & SyntaxKind.Identifier)) {
-                    return createIdentifier("(Missing type parameter)");
+                    return factory.createIdentifier("(Missing type parameter)");
                 }
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                     const rawtext = result.escapedText as string;
@@ -4805,7 +4809,7 @@ namespace ts {
                         text = `${rawtext}_${i}`;
                     }
                     if (text !== rawtext) {
-                        result = createIdentifier(text, result.typeArguments);
+                        result = factory.createIdentifier(text, result.typeArguments);
                     }
                     (context.typeParameterNames || (context.typeParameterNames = createMap())).set("" + getTypeId(type), result);
                     (context.typeParameterNamesByText || (context.typeParameterNamesByText = createMap())).set(result.escapedText as string, true);
@@ -4837,10 +4841,10 @@ namespace ts {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
 
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
-                    return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
+                    return index > 0 ? factory.createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
             }
 
@@ -4862,14 +4866,14 @@ namespace ts {
                     }
                     let firstChar = symbolName.charCodeAt(0);
                     if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
+                        return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                     }
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
-                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                         identifier.symbol = symbol;
 
-                        return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
+                        return index > 0 ? factory.createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                     }
                     else {
                         if (firstChar === CharacterCodes.openBracket) {
@@ -4878,17 +4882,17 @@ namespace ts {
                         }
                         let expression: Expression | undefined;
                         if (isSingleOrDoubleQuote(firstChar)) {
-                            expression = createLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
+                            expression = factory.createStringLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
                             (expression as StringLiteral).singleQuote = firstChar === CharacterCodes.singleQuote;
                         }
                         else if (("" + +symbolName) === symbolName) {
-                            expression = createLiteral(+symbolName);
+                            expression = factory.createNumericLiteral(+symbolName);
                         }
                         if (!expression) {
-                            expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                            expression = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                             expression.symbol = symbol;
                         }
-                        return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
+                        return factory.createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
                     }
                 }
             }
@@ -4911,7 +4915,7 @@ namespace ts {
                     return fromNameType;
                 }
                 if (isKnownSymbol(symbol)) {
-                    return createComputedPropertyName(createPropertyAccess(createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
+                    return factory.createComputedPropertyName(factory.createPropertyAccess(factory.createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
                 }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
                 return createPropertyNameNodeForIdentifierOrLiteral(rawName, singleQuote);
@@ -4924,21 +4928,23 @@ namespace ts {
                     if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                         const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
                         if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
-                            return createLiteral(name, !!singleQuote);
+                            return factory.createStringLiteral(name, !!singleQuote);
                         }
                         if (isNumericLiteralName(name) && startsWith(name, "-")) {
-                            return createComputedPropertyName(createLiteral(+name));
+                            return factory.createComputedPropertyName(factory.createNumericLiteral(+name));
                         }
                         return createPropertyNameNodeForIdentifierOrLiteral(name);
                     }
                     if (nameType.flags & TypeFlags.UniqueESSymbol) {
-                        return createComputedPropertyName(symbolToExpression((<UniqueESSymbolType>nameType).symbol, context, SymbolFlags.Value));
+                        return factory.createComputedPropertyName(symbolToExpression((<UniqueESSymbolType>nameType).symbol, context, SymbolFlags.Value));
                     }
                 }
             }
 
             function createPropertyNameNodeForIdentifierOrLiteral(name: string, singleQuote?: boolean) {
-                return isIdentifierText(name, compilerOptions.target) ? createIdentifier(name) : createLiteral(isNumericLiteralName(name) ? +name : name, !!singleQuote);
+                return isIdentifierText(name, compilerOptions.target) ? factory.createIdentifier(name) :
+                    isNumericLiteralName(name) ? factory.createNumericLiteral(+name) :
+                    factory.createStringLiteral(name, !!singleQuote);
             }
 
             function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
@@ -4968,8 +4974,8 @@ namespace ts {
             }
 
             function symbolTableToDeclarationStatements(symbolTable: SymbolTable, context: NodeBuilderContext, bundled?: boolean): Statement[] {
-                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(createProperty, SyntaxKind.MethodDeclaration, /*useAcessors*/ true);
-                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type, initializer) => createPropertySignature(mods, name, question, type, initializer), SyntaxKind.MethodSignature, /*useAcessors*/ false);
+                const serializePropertySymbolForClass = makeSerializePropertySymbol<ClassElement>(factory.createPropertyDeclaration, SyntaxKind.MethodDeclaration, /*useAcessors*/ true);
+                const serializePropertySymbolForInterfaceWorker = makeSerializePropertySymbol<TypeElement>((_decorators, mods, name, question, type) => factory.createPropertySignature(mods, name, question, type), SyntaxKind.MethodSignature, /*useAcessors*/ false);
 
                 // TODO: Use `setOriginalNode` on original declaration names where possible so these declarations see some kind of
                 // declaration mapping
@@ -5044,10 +5050,10 @@ namespace ts {
                         //  the top-level exports and exporting them in the targeted ns, as can occur when a js file has both typedefs and `module.export` assignments
                         const excessExports = filter(statements, s => !!(getModifierFlags(s) & ModifierFlags.Export));
                         if (length(excessExports)) {
-                            ns.body.statements = createNodeArray([...ns.body.statements, createExportDeclaration(
+                            ns.body.statements = factory.createNodeArray([...ns.body.statements, factory.createExportDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => createExportSpecifier(/*alias*/ undefined, id))),
+                                factory.createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => factory.createExportSpecifier(/*alias*/ undefined, id))),
                                 /*moduleSpecifier*/ undefined
                             )]);
                         }
@@ -5070,10 +5076,10 @@ namespace ts {
                     const exports = filter(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration[];
                     if (length(exports) > 1) {
                         const nonExports = filter(statements, d => !isExportDeclaration(d) || !!d.moduleSpecifier || !d.exportClause);
-                        statements = [...nonExports, createExportDeclaration(
+                        statements = [...nonExports, factory.createExportDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
+                            factory.createNamedExports(flatMap(exports, e => e.exportClause!.elements)),
                             /*moduleSpecifier*/ undefined
                         )];
                     }
@@ -5087,10 +5093,10 @@ namespace ts {
                                     // remove group members from statements and then merge group members and add back to statements
                                     statements = [
                                         ...filter(statements, s => group.indexOf(s as ExportDeclaration) === -1),
-                                        createExportDeclaration(
+                                        factory.createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
-                                            createNamedExports(flatMap(group, e => e.exportClause!.elements)),
+                                            factory.createNamedExports(flatMap(group, e => e.exportClause!.elements)),
                                             group[0].moduleSpecifier
                                         )
                                     ];
@@ -5123,7 +5129,7 @@ namespace ts {
                         else {
                             // some items filtered, others not - update the export declaration
                             // (mutating because why not, we're building a whole new tree here anyway)
-                            exportDecl.exportClause!.elements = createNodeArray(replacements);
+                            exportDecl.exportClause!.elements = factory.createNodeArray(replacements);
                         }
                     }
                     return statements;
@@ -5139,7 +5145,7 @@ namespace ts {
                     if (enclosingDeclaration &&
                         ((isSourceFile(enclosingDeclaration) && isExternalOrCommonJsModule(enclosingDeclaration)) || isModuleDeclaration(enclosingDeclaration)) &&
                         (!some(statements, isExternalModuleIndicator) || (!hasScopeMarker(statements) && some(statements, needsScopeMarker)))) {
-                        statements.push(createEmptyExports());
+                        statements.push(createEmptyExports(factory));
                     }
                     return statements;
                 }
@@ -5156,7 +5162,7 @@ namespace ts {
 
                 function addExportModifier(statement: Statement) {
                     const flags = (getModifierFlags(statement) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
-                    statement.modifiers = createNodeArray(createModifiersFromModifierFlags(flags));
+                    statement.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(flags));
                     statement.modifierFlagsCache = 0;
                 }
 
@@ -5275,11 +5281,11 @@ namespace ts {
                         for (const node of symbol.declarations) {
                             const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
                             if (!resolvedModule) continue;
-                            addResult(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, createLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
+                            addResult(factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*exportClause*/ undefined, factory.createStringLiteral(getSpecifierForModuleSymbol(resolvedModule, context))), ModifierFlags.None);
                         }
                     }
                     if (needsPostExportDefault) {
-                        addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
+                        addResult(factory.createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, factory.createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
                     }
                 }
 
@@ -5317,7 +5323,7 @@ namespace ts {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node.modifiers = createNodeArray(createModifiersFromModifierFlags(newModifierFlags | getModifierFlags(node)));
+                        node.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(newModifierFlags | getModifierFlags(node)));
                         node.modifierFlagsCache = 0; // Reset computed flags cache
                     }
                     results.push(node);
@@ -5332,7 +5338,7 @@ namespace ts {
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
                     addResult(setSyntheticLeadingComments(
-                        createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
+                        factory.createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
@@ -5349,8 +5355,8 @@ namespace ts {
                     const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, baseType, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
                     const indexSignatures = serializeIndexSignatures(interfaceType, baseType);
 
-                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
-                    addResult(createInterfaceDeclaration(
+                    const heritageClauses = !length(baseTypes) ? undefined : [factory.createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
+                    addResult(factory.createInterfaceDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         getInternalSymbolName(symbol, symbolName),
@@ -5383,23 +5389,23 @@ namespace ts {
                     }
                     if (length(mergedMembers)) {
                         const localName = getInternalSymbolName(symbol, symbolName);
-                        const nsBody = createModuleBlock([createExportDeclaration(
+                        const nsBody = factory.createModuleBlock([factory.createExportDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createNamedExports(map(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
+                            factory.createNamedExports(map(filter(mergedMembers, n => n.escapedName !== InternalSymbolName.ExportEquals), s => {
                                 const name = unescapeLeadingUnderscores(s.escapedName);
                                 const localName = getInternalSymbolName(s, name);
                                 const aliasDecl = s.declarations && getDeclarationOfAliasSymbol(s);
                                 const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                                 includePrivateSymbol(target || s);
                                 const targetName = target ? getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName)) : localName;
-                                return createExportSpecifier(name === targetName ? undefined : targetName, name);
+                                return factory.createExportSpecifier(name === targetName ? undefined : targetName, name);
                             }))
                         )]);
-                        addResult(createModuleDeclaration(
+                        addResult(factory.createModuleDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createIdentifier(localName),
+                            factory.createIdentifier(localName),
                             nsBody,
                             NodeFlags.Namespace
                         ), ModifierFlags.None);
@@ -5407,17 +5413,19 @@ namespace ts {
                 }
 
                 function serializeEnum(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
-                    addResult(createEnumDeclaration(
+                    addResult(factory.createEnumDeclaration(
                         /*decorators*/ undefined,
-                        createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
+                        factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
                         getInternalSymbolName(symbol, symbolName),
                         map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
                             // TODO: Handle computed names
                             // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
                             // other way to get the possible const value of an enum member that I'm aware of, as the value is cached
                             // _on the declaration_, not on the declaration's symbol...
-                            const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) && getConstantValue(p.declarations[0] as EnumMember);
-                            return createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined : createLiteral(initializedValue));
+                            const initializedValue = p.declarations && p.declarations[0] && isEnumMember(p.declarations[0]) ? getConstantValue(p.declarations[0] as EnumMember) : undefined;
+                            return factory.createEnumMember(unescapeLeadingUnderscores(p.escapedName), initializedValue === undefined ? undefined :
+                                typeof initializedValue === "string" ? factory.createStringLiteral(initializedValue) :
+                                factory.createNumericLiteral(initializedValue));
                         })
                     ), modifierFlags);
                 }
@@ -5444,8 +5452,8 @@ namespace ts {
                             if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
                                 textRange = textRange.parent.parent;
                             }
-                            const statement = setTextRange(createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                                createVariableDeclaration(name, serializeTypeForDeclaration(type, symbol))
+                            const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                                factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, serializeTypeForDeclaration(type, symbol))
                             ], flags)), textRange);
                             addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
                             if (name !== localName && !isPrivate) {
@@ -5471,10 +5479,10 @@ namespace ts {
                                 // ```
                                 // To create an export named `g` that does _not_ shadow the local `g`
                                 addResult(
-                                    createExportDeclaration(
+                                    factory.createExportDeclaration(
                                         /*decorators*/ undefined,
                                         /*modifiers*/ undefined,
-                                        createNamedExports([createExportSpecifier(name, localName)])
+                                        factory.createNamedExports([factory.createExportSpecifier(name, localName)])
                                     ),
                                     ModifierFlags.None
                                 );
@@ -5488,7 +5496,7 @@ namespace ts {
                     for (const sig of signatures) {
                         // Each overload becomes a separate function declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
-                        decl.name = createIdentifier(localName);
+                        decl.name = factory.createIdentifier(localName);
                         addResult(setTextRange(decl, sig.declaration), modifierFlags);
                     }
                     // Module symbol emit will take care of module-y members, provided it has exports
@@ -5522,7 +5530,7 @@ namespace ts {
                         // emit akin to the above would be needed.
 
                         // Add a namespace
-                        const fakespace = createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier(localName), createModuleBlock([]), NodeFlags.Namespace);
+                        const fakespace = factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
                         fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
                         fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
                         fakespace.locals = createSymbolTable(props);
@@ -5544,7 +5552,7 @@ namespace ts {
                         fakespace.parent = undefined!;
                         fakespace.locals = undefined!;
                         fakespace.symbol = undefined!;
-                        fakespace.body = createModuleBlock(declarations);
+                        fakespace.body = factory.createModuleBlock(declarations);
                         addResult(fakespace, modifierFlags); // namespaces can never be default exported
                     }
                 }
@@ -5556,7 +5564,7 @@ namespace ts {
                     const baseTypes = getBaseTypes(classType);
                     const staticType = getTypeOfSymbol(symbol);
                     const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
-                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
+                    const heritageClauses = !length(baseTypes) ? undefined : [factory.createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
                     const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
                     const staticMembers = symbol.flags & (SymbolFlags.Function | SymbolFlags.ValueModule)
@@ -5573,7 +5581,7 @@ namespace ts {
                         c.typeParameters = undefined;
                     }
                     const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
-                    addResult(setTextRange(createClassDeclaration(
+                    addResult(setTextRange(factory.createClassDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         localName,
@@ -5605,51 +5613,51 @@ namespace ts {
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
                             const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
-                            addResult(createImportEqualsDeclaration(
+                            addResult(factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                createIdentifier(localName),
+                                factory.createIdentifier(localName),
                                 isLocalImport
                                     ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
-                                    : createExternalModuleReference(createLiteral(getSpecifierForModuleSymbol(symbol, context)))
+                                    : factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context)))
                             ), isLocalImport ? modifierFlags : ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExportDeclaration:
                             // export as namespace foo
                             // TODO: Not part of a file's local or export symbol tables
                             // Is bound into file.symbol.globalExports instead, which we don't currently traverse
-                            addResult(createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
+                            addResult(factory.createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
                             break;
                         case SyntaxKind.ImportClause:
-                            addResult(createImportDeclaration(
+                            addResult(factory.createImportDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                createImportClause(createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(factory.createIdentifier(localName), /*namedBindings*/ undefined),
                                 // We use `target.parent || target` below as `target.parent` is unset when the target is a module which has been export assigned
                                 // And then made into a default by the `esModuleInterop` or `allowSyntheticDefaultImports` flag
                                 // In such cases, the `target` refers to the module itself already
-                                createLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceImport:
-                            addResult(createImportDeclaration(
+                            addResult(factory.createImportDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                createImportClause(/*importClause*/ undefined, createNamespaceImport(createIdentifier(localName))),
-                                createLiteral(getSpecifierForModuleSymbol(target, context))
+                                factory.createImportClause(/*importClause*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.ImportSpecifier:
-                            addResult(createImportDeclaration(
+                            addResult(factory.createImportDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                createImportClause(/*importClause*/ undefined, createNamedImports([
-                                    createImportSpecifier(
-                                        localName !== verbatimTargetName ? createIdentifier(verbatimTargetName) : undefined,
-                                        createIdentifier(localName)
+                                factory.createImportClause(/*importClause*/ undefined, factory.createNamedImports([
+                                    factory.createImportSpecifier(
+                                        localName !== verbatimTargetName ? factory.createIdentifier(verbatimTargetName) : undefined,
+                                        factory.createIdentifier(localName)
                                     )
                                 ])),
-                                createLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.ExportSpecifier:
@@ -5661,7 +5669,7 @@ namespace ts {
                             serializeExportSpecifier(
                                 unescapeLeadingUnderscores(symbol.escapedName),
                                 specifier ? verbatimTargetName : targetName,
-                                specifier && isStringLiteralLike(specifier) ? createLiteral(specifier.text) : undefined
+                                specifier && isStringLiteralLike(specifier) ? factory.createStringLiteral(specifier.text) : undefined
                             );
                             break;
                         case SyntaxKind.ExportAssignment:
@@ -5685,10 +5693,10 @@ namespace ts {
                 }
 
                 function serializeExportSpecifier(localName: string, targetName: string, specifier?: Expression) {
-                    addResult(createExportDeclaration(
+                    addResult(factory.createExportDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
-                        createNamedExports([createExportSpecifier(localName !== targetName ? targetName : undefined, localName)]),
+                        factory.createNamedExports([factory.createExportSpecifier(localName !== targetName ? targetName : undefined, localName)]),
                         specifier
                     ), ModifierFlags.None);
                 }
@@ -5727,7 +5735,7 @@ namespace ts {
                         const oldTrack = context.tracker.trackSymbol;
                         context.tracker.trackSymbol = noop;
                         if (isExportAssignment) {
-                            results.push(createExportAssignment(
+                            results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 isExportEquals,
@@ -5745,10 +5753,10 @@ namespace ts {
                             else {
                                 // serialize as `import _Ref = t.arg.et; export { _Ref as name }`
                                 const varName = getUnusedName(name, symbol);
-                                addResult(createImportEqualsDeclaration(
+                                addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
-                                    createIdentifier(varName),
+                                    factory.createIdentifier(varName),
                                     symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
                                 ), ModifierFlags.None);
                                 serializeExportSpecifier(name, varName);
@@ -5767,17 +5775,17 @@ namespace ts {
                             serializeAsFunctionNamespaceMerge(typeToSerialize, symbol, varName, isExportAssignment ? ModifierFlags.None : ModifierFlags.Export);
                         }
                         else {
-                            const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                                createVariableDeclaration(varName, serializeTypeForDeclaration(typeToSerialize, symbol))
+                            const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                                factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(typeToSerialize, symbol))
                             ], NodeFlags.Const));
                             addResult(statement, name === varName ? ModifierFlags.Export : ModifierFlags.None);
                         }
                         if (isExportAssignment) {
-                            results.push(createExportAssignment(
+                            results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 isExportEquals,
-                                createIdentifier(varName)
+                                factory.createIdentifier(varName)
                             ));
                         }
                         else if (name !== varName) {
@@ -5810,7 +5818,7 @@ namespace ts {
                     questionOrExclamationToken: QuestionToken | undefined,
                     type: TypeNode | undefined,
                     initializer: Expression | undefined
-                ) => T, methodKind: SyntaxKind, useAccessors: true): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]);
+                ) => T, methodKind: SignatureDeclaration["kind"], useAccessors: true): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]);
                 function makeSerializePropertySymbol<T extends Node>(createProperty: (
                     decorators: readonly Decorator[] | undefined,
                     modifiers: readonly Modifier[] | undefined,
@@ -5818,7 +5826,7 @@ namespace ts {
                     questionOrExclamationToken: QuestionToken | undefined,
                     type: TypeNode | undefined,
                     initializer: Expression | undefined
-                ) => T, methodKind: SyntaxKind, useAccessors: false): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]);
+                ) => T, methodKind: SignatureDeclaration["kind"], useAccessors: false): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | T[]);
                 function makeSerializePropertySymbol<T extends Node>(createProperty: (
                     decorators: readonly Decorator[] | undefined,
                     modifiers: readonly Modifier[] | undefined,
@@ -5826,7 +5834,7 @@ namespace ts {
                     questionOrExclamationToken: QuestionToken | undefined,
                     type: TypeNode | undefined,
                     initializer: Expression | undefined
-                ) => T, methodKind: SyntaxKind, useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
+                ) => T, methodKind: SignatureDeclaration["kind"], useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
                     return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
                         if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                             // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
@@ -5845,11 +5853,11 @@ namespace ts {
                         if (p.flags & SymbolFlags.Accessor && useAccessors) {
                             const result: AccessorDeclaration[] = [];
                             if (p.flags & SymbolFlags.SetAccessor) {
-                                result.push(setTextRange(createSetAccessor(
+                                result.push(setTextRange(factory.createSetAccessorDeclaration(
                                     /*decorators*/ undefined,
-                                    createModifiersFromModifierFlags(staticFlag),
+                                    factory.createModifiersFromModifierFlags(staticFlag),
                                     name,
-                                    [createParameter(
+                                    [factory.createParameterDeclaration(
                                         /*decorators*/ undefined,
                                         /*modifiers*/ undefined,
                                         /*dotDotDotToken*/ undefined,
@@ -5861,9 +5869,9 @@ namespace ts {
                                 ), find(p.declarations, isSetAccessor) || firstPropertyLikeDecl));
                             }
                             if (p.flags & SymbolFlags.GetAccessor) {
-                                result.push(setTextRange(createGetAccessor(
+                                result.push(setTextRange(factory.createGetAccessorDeclaration(
                                     /*decorators*/ undefined,
-                                    createModifiersFromModifierFlags(staticFlag),
+                                    factory.createModifiersFromModifierFlags(staticFlag),
                                     name,
                                     [],
                                     serializeTypeForDeclaration(getTypeOfSymbol(p), p),
@@ -5877,9 +5885,9 @@ namespace ts {
                         else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable)) {
                             return setTextRange(createProperty(
                                 /*decorators*/ undefined,
-                                createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
+                                factory.createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
                                 name,
-                                p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                                p.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                                 serializeTypeForDeclaration(getTypeOfSymbol(p), p),
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
@@ -5895,10 +5903,10 @@ namespace ts {
                                 const decl = signatureToSignatureDeclarationHelper(sig, methodKind, context) as MethodDeclaration;
                                 decl.name = name; // TODO: Clone
                                 if (staticFlag) {
-                                    decl.modifiers = createNodeArray(createModifiersFromModifierFlags(staticFlag));
+                                    decl.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(staticFlag));
                                 }
                                 if (p.flags & SymbolFlags.Optional) {
-                                    decl.questionToken = createToken(SyntaxKind.QuestionToken);
+                                    decl.questionToken = factory.createToken(SyntaxKind.QuestionToken);
                                 }
                                 results.push(setTextRange(decl, sig.declaration));
                             }
@@ -5940,25 +5948,25 @@ namespace ts {
 
                     function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
                         if (isJSDocAllType(node)) {
-                            return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                         }
                         if (isJSDocUnknownType(node)) {
-                            return createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+                            return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                         }
                         if (isJSDocNullableType(node)) {
-                            return createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), createKeywordTypeNode(SyntaxKind.NullKeyword)]);
+                            return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createLiteralTypeNode(factory.createNull())]);
                         }
                         if (isJSDocOptionalType(node)) {
-                            return createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                            return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                         }
                         if (isJSDocNonNullableType(node)) {
                             return visitNode(node.type, visitExistingNodeTreeSymbols);
                         }
                         if ((isExpressionWithTypeArguments(node) || isTypeReferenceNode(node)) && isJSDocIndexSignature(node)) {
-                            return createTypeLiteralNode([createIndexSignature(
+                            return factory.createTypeLiteralNode([factory.createIndexSignature(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
-                                [createParameter(
+                                [factory.createParameterDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     /*dotdotdotToken*/ undefined,
@@ -5972,9 +5980,9 @@ namespace ts {
                         if (isJSDocFunctionType(node)) {
                             if (isJSDocConstructSignature(node)) {
                                 let newTypeNode: TypeNode | undefined;
-                                return createConstructorTypeNode(
+                                return factory.createConstructorTypeNode(
                                     visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
-                                    mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : createParameter(
+                                    mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : factory.createParameterDeclaration(
                                         /*decorators*/ undefined,
                                         /*modifiers*/ undefined,
                                         p.dotDotDotToken,
@@ -5987,9 +5995,9 @@ namespace ts {
                                 );
                             }
                             else {
-                                return createFunctionTypeNode(
+                                return factory.createFunctionTypeNode(
                                     visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
-                                    map(node.parameters, (p, i) => createParameter(
+                                    map(node.parameters, (p, i) => factory.createParameterDeclaration(
                                         /*decorators*/ undefined,
                                         /*modifiers*/ undefined,
                                         p.dotDotDotToken,
@@ -6003,9 +6011,9 @@ namespace ts {
                             }
                         }
                         if (isLiteralImportTypeNode(node)) {
-                            return updateImportTypeNode(
+                            return factory.updateImportTypeNode(
                                 node,
-                                updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
+                                factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
                                 node.qualifier,
                                 visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
                                 node.isTypeOf
@@ -6042,7 +6050,7 @@ namespace ts {
                                         getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory()
                                     };
                                     const newName = getResolvedExternalModuleName(resolverHost, targetFile);
-                                    return createLiteral(newName);
+                                    return factory.createStringLiteral(newName);
                                 }
                             }
                         }
@@ -6058,7 +6066,7 @@ namespace ts {
                     }
                 }
 
-                function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SyntaxKind) {
+                function serializeSignatures(kind: SignatureKind, input: Type, baseType: Type | undefined, outputKind: SignatureDeclaration["kind"]) {
                     const signatures = getSignaturesOfType(input, kind);
                     if (kind === SignatureKind.Construct) {
                         if (!baseType && every(signatures, s => length(s.parameters) === 0)) {
@@ -6119,11 +6127,11 @@ namespace ts {
                         return ref;
                     }
                     const tempName = getUnusedName(`${rootName}_base`);
-                    const statement = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([
-                        createVariableDeclaration(tempName, typeToTypeNodeHelper(staticType, context))
+                    const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                        factory.createVariableDeclaration(tempName, /*exclamationToken*/ undefined, typeToTypeNodeHelper(staticType, context))
                     ], NodeFlags.Const));
                     addResult(statement, ModifierFlags.None);
-                    return createExpressionWithTypeArguments(/*typeArgs*/ undefined, createIdentifier(tempName));
+                    return factory.createExpressionWithTypeArguments(factory.createIdentifier(tempName), /*typeArgs*/ undefined);
                 }
 
                 function trySerializeAsTypeReference(t: Type) {
@@ -6139,7 +6147,7 @@ namespace ts {
                         reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
                     }
                     if (reference) {
-                        return createExpressionWithTypeArguments(typeArgs, reference);
+                        return factory.createExpressionWithTypeArguments(reference, typeArgs);
                     }
                 }
 
@@ -6199,9 +6207,9 @@ namespace ts {
             return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
             function typePredicateToStringWorker(writer: EmitTextWriter) {
-                const predicate = createTypePredicateNodeWithModifier(
-                    typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createToken(SyntaxKind.AssertsKeyword) : undefined,
-                    typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? createIdentifier(typePredicate.parameterName) : createThisTypeNode(),
+                const predicate = factory.createTypePredicateNode(
+                    typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createToken(SyntaxKind.AssertsKeyword) : undefined,
+                    typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
                     typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)! // TODO: GH#18217
                 );
                 const printer = createPrinter({ removeComments: true });
@@ -8235,7 +8243,6 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.NullKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.LiteralType:
                     return true;
@@ -12690,6 +12697,9 @@ namespace ts {
         }
 
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
+            if (node.literal.kind === SyntaxKind.NullKeyword) {
+                return nullType;
+            }
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getRegularTypeOfLiteralType(checkExpression(node.literal));
@@ -12771,14 +12781,16 @@ namespace ts {
                     return voidType;
                 case SyntaxKind.UndefinedKeyword:
                     return undefinedType;
-                case SyntaxKind.NullKeyword:
+                case SyntaxKind.NullKeyword as TypeNodeSyntaxKind:
+                    // TODO(rbuckton): `NullKeyword` is no longer a `TypeNode`, but we defensively allow it here because of incorrect casts in the Language Service.
                     return nullType;
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
                     return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
-                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisKeyword as TypeNodeSyntaxKind:
+                    // TODO(rbuckton): `ThisKeyword` is no longer a `TypeNode`, but we defensively allow it here because of incorrect casts in the Language Service and because of `isPartOfTypeNode`.
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
@@ -12831,9 +12843,10 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
-                // Callers should first ensure this by calling isTypeNode
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
+                // Callers should first ensure this by calling `isPartOfTypeNode`
+                // TODO(rbuckton): These aren't valid TypeNodes, but we treat them as such because of `isPartOfTypeNode`, which returns `true` for things that aren't `TypeNode`s.
+                case SyntaxKind.Identifier as TypeNodeSyntaxKind:
+                case SyntaxKind.QualifiedName as TypeNodeSyntaxKind:
                     const symbol = getSymbolAtLocation(node);
                     return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
                 default:
@@ -22275,7 +22288,7 @@ namespace ts {
                         childrenTypes[0] :
                         (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
                     // Fake up a property declaration for the children
-                    childrenPropSymbol.valueDeclaration = createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined);
+                    childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
                     childrenPropSymbol.valueDeclaration.parent = attributes;
                     childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                     const childPropMap = createSymbolTable();
@@ -24077,14 +24090,14 @@ namespace ts {
             }
 
             if (hasRestParameter || hasSpreadArgument) {
-                spanArray = createNodeArray(args);
+                spanArray = factory.createNodeArray(args);
                 if (hasSpreadArgument && argCount) {
                     const nextArg = elementAt(args, getSpreadArgumentIndex(args) + 1) || undefined;
-                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : Math.min(max, args.length - 1)));
+                    spanArray = factory.createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : Math.min(max, args.length - 1)));
                 }
             }
             else {
-                spanArray = createNodeArray(args.slice(max));
+                spanArray = factory.createNodeArray(args.slice(max));
             }
 
             spanArray.pos = first(spanArray).pos;
@@ -24993,9 +25006,9 @@ namespace ts {
             // file would probably be preferable.
             const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
             const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
-            const declaration = createFunctionTypeNode(/*typeParameters*/ undefined,
-                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
-                returnNode ? createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : createKeywordTypeNode(SyntaxKind.AnyKeyword)
+            const declaration = factory.createFunctionTypeNode(/*typeParameters*/ undefined,
+                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
+                returnNode ? factory.createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
             );
             const parameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "props" as __String);
             parameterSymbol.type = result;
@@ -29227,7 +29240,7 @@ namespace ts {
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
                 }
-                if (!strictNullChecks && (typeNode.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
@@ -31949,7 +31962,7 @@ namespace ts {
         }
 
         function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
-            const reference = createPropertyAccess(createThis(), propName);
+            const reference = factory.createPropertyAccess(factory.createThis(), propName);
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
@@ -34232,7 +34245,7 @@ namespace ts {
         function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
             const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessor);
             if (!declaration) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
@@ -34252,7 +34265,7 @@ namespace ts {
         function createReturnTypeOfSignatureDeclaration(signatureDeclarationIn: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
             const signatureDeclaration = getParseTreeNode(signatureDeclarationIn, isFunctionLike);
             if (!signatureDeclaration) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             const signature = getSignatureFromDeclaration(signatureDeclaration);
             return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
@@ -34261,7 +34274,7 @@ namespace ts {
         function createTypeOfExpression(exprIn: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
             const expr = getParseTreeNode(exprIn, isExpression);
             if (!expr) {
-                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+                return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
             const type = getWidenedType(getRegularTypeOfExpression(expr));
             return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
@@ -34313,8 +34326,12 @@ namespace ts {
 
         function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
             const enumResult = type.flags & TypeFlags.EnumLiteral ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
-                : type === trueType ? createTrue() : type === falseType && createFalse();
-            return enumResult || createLiteral((type as LiteralType).value);
+                : type === trueType ? factory.createTrue() : type === falseType && factory.createFalse();
+            if (enumResult) return enumResult;
+            const literalValue = (type as LiteralType).value;
+            return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
+                typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
+                factory.createStringLiteral(literalValue);
         }
 
         function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
@@ -34346,19 +34363,19 @@ namespace ts {
                 getReferencedImportDeclaration,
                 getReferencedDeclarationWithCollidingName,
                 isDeclarationWithCollidingName,
-                isValueAliasDeclaration: node => {
-                    node = getParseTreeNode(node);
+                isValueAliasDeclaration: nodeIn => {
+                    const node = getParseTreeNode(nodeIn);
                     // Synthesized nodes are always treated like values.
                     return node ? isValueAliasDeclaration(node) : true;
                 },
                 hasGlobalName,
-                isReferencedAliasDeclaration: (node, checkChildren?) => {
-                    node = getParseTreeNode(node);
+                isReferencedAliasDeclaration: (nodeIn, checkChildren?) => {
+                    const node = getParseTreeNode(nodeIn);
                     // Synthesized nodes are always treated as referenced.
                     return node ? isReferencedAliasDeclaration(node, checkChildren) : true;
                 },
-                getNodeCheckFlags: node => {
-                    node = getParseTreeNode(node);
+                getNodeCheckFlags: nodeIn => {
+                    const node = getParseTreeNode(nodeIn);
                     return node ? getNodeCheckFlags(node) : 0;
                 },
                 isTopLevelValueImportEqualsWithEntityName,
