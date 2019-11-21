@@ -2385,6 +2385,9 @@ namespace ts {
             if (target.flags & SymbolFlags.ValueModule) {
                 return createNamespaceModuleForModule(target);
             }
+            if (target.flags & SymbolFlags.Enum) {
+                return createNamespaceModuleForEnum(target);
+            }
             if (!(target.flags & SymbolFlags.Value)) {
                 return target;
             }
@@ -2394,6 +2397,20 @@ namespace ts {
                 alias.immediateTarget = target;
                 return alias;
             }
+        }
+
+        function createNamespaceModuleForEnum(enumSymbol: Symbol) {
+            Debug.assert(!!(enumSymbol.flags & SymbolFlags.Enum));
+            const symbol = createSymbol(SymbolFlags.NamespaceModule | SymbolFlags.TypeAlias, enumSymbol.escapedName);
+            symbol.immediateTarget = enumSymbol;
+            symbol.declarations = enumSymbol.declarations;
+            if (enumSymbol.exports) {
+                symbol.exports = createSymbolTable();
+                enumSymbol.exports.forEach((exportSymbol, key) => {
+                    symbol.exports!.set(key, Debug.assertDefined(createTypeOnlySymbol(exportSymbol)));
+                });
+            }
+            return symbol;
         }
 
         function createNamespaceModuleForModule(moduleSymbol: Symbol) {
