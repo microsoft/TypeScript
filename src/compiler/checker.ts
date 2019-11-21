@@ -2036,7 +2036,12 @@ namespace ts {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
-                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
+                    if (isTypeOnlyEnumAlias(symbol)) {
+                        error(errorLocation, Diagnostics.Type_only_enum_0_cannot_be_used_as_a_value, unescapeLeadingUnderscores(name));
+                    }
+                    else {
+                        error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
+                    }
                     return true;
                 }
             }
@@ -8149,6 +8154,10 @@ namespace ts {
 
         function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
             return isTransientSymbol(symbol) && !!symbol.immediateTarget;
+        }
+
+        function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
+            return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
         }
 
         function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
