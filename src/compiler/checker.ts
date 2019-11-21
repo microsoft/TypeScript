@@ -13622,6 +13622,19 @@ namespace ts {
             return false;
         }
 
+        function getMaybeNonPrimitiveIndexedAccessTypeOrUndefined(object: Type, nameType: Type) {
+            const idx = getIndexedAccessTypeOrUndefined(object, nameType);
+            if (idx) {
+                return idx;
+            }
+            if (object.flags & TypeFlags.Union) {
+                const candidate = filterType(object, t => !(t.flags & TypeFlags.Primitive));
+                if (!(candidate.flags & TypeFlags.Never)) {
+                    return getIndexedAccessTypeOrUndefined(candidate, nameType);
+                }
+            }
+        }
+
         type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
@@ -13640,7 +13653,7 @@ namespace ts {
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
-                const targetPropType = getIndexedAccessTypeOrUndefined(target, nameType);
+                const targetPropType = getMaybeNonPrimitiveIndexedAccessTypeOrUndefined(target, nameType);
                 if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
                 const sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (sourcePropType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
