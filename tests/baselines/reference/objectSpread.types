@@ -293,7 +293,7 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
     }
     let o2 = { ...b && { x: 21 }}
 >o2 : {}
->{ ...b && { x: 21 }} : {} | { x: number; }
+>{ ...b && { x: 21 }} : { x: number; } | {}
 >b && { x: 21 } : false | { x: number; }
 >b : boolean
 >{ x: 21 } : { x: number; }
@@ -334,7 +334,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
     }
     let o2 = { ...nt && { x: nt }}
 >o2 : {}
->{ ...nt && { x: nt }} : {} | { x: number; }
+>{ ...nt && { x: nt }} : { x: number; } | {}
 >nt && { x: nt } : 0 | { x: number; }
 >nt : number
 >{ x: nt } : { x: number; }
@@ -375,7 +375,7 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
     }
     let o2 = { ...st && { x: st }}
 >o2 : {}
->{ ...st && { x: st }} : {} | { x: string; }
+>{ ...st && { x: st }} : { x: string; } | {}
 >st && { x: st } : "" | { x: string; }
 >st : string
 >{ x: st } : { x: string; }
