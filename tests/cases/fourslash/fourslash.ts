@@ -311,6 +311,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         baselineSyntacticDiagnostics(): void;
+        baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;

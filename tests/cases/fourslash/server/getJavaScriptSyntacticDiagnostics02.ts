@@ -3,9 +3,8 @@
 // @allowJs: true
 // @Filename: b.js
 ////var a = "a";
-////var b: [|boolean|] = true;
-////function foo(): [|string|] { }
-////var [|var|] [|=|] [|"c"|];
+////var b: boolean = true;
+////function foo(): string { }
+////var var = "c";
 
-verify.baselineSyntacticDiagnostics();
-verify.getSemanticDiagnostics([]);
+verify.baselineSyntacticAndSemanticDiagnostics()

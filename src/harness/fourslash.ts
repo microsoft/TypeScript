@@ -1555,15 +1555,40 @@ namespace FourSlash {
         }
 
         public baselineSyntacticDiagnostics() {
-            const files = ts.map(this.testData.files, ({ content, fileName }) => ({
+            const files = this.getCompilerTestFiles();
+            const result = this.getSyntacticDiagnosticText(files);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        }
+
+        private getCompilerTestFiles() {
+            return ts.map(this.testData.files, ({ content, fileName }) => ({
                 content, unitName: fileName
             }));
-            const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
+        }
 
-            const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
-                + Harness.IO.newLine() +
-                Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+        public baselineSyntacticAndSemanticDiagnostics() {
+            const files = this.getCompilerTestFiles();
+            const result = this.getSyntacticDiagnosticText(files)
+                + Harness.IO.newLine()
+                + Harness.IO.newLine()
+                + this.getSemanticDiagnosticText(files);
             Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        }
+
+        private getSyntacticDiagnosticText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
+            const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
+                + Harness.IO.newLine()
+                + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+            return result;
+        }
+
+        private getSemanticDiagnosticText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files, file => this.languageService.getSemanticDiagnostics(file.unitName));
+            const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
+                + Harness.IO.newLine()
+                + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+            return result;
         }
 
         public baselineQuickInfo() {
@@ -4140,6 +4165,10 @@ namespace FourSlashInterface {
 
         public baselineSyntacticDiagnostics() {
             this.state.baselineSyntacticDiagnostics();
+        }
+
+        public baselineSyntacticAndSemanticDiagnostics() {
+            this.state.baselineSyntacticAndSemanticDiagnostics();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {
