@@ -1936,8 +1936,8 @@ namespace ts {
         return <DebuggerStatement>createSynthesizedNode(SyntaxKind.DebuggerStatement);
     }
 
-    /* @deprecated Use createTypeScriptVariableDeclaration instead and handle definite assignment assertions */
     export function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
+        /* Internally, one should probably use createTypeScriptVariableDeclaration instead and handle definite assignment assertions */
         const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
         node.name = asName(name);
         node.type = type;
@@ -1945,8 +1945,8 @@ namespace ts {
         return node;
     }
 
-    /* @deprecated Use updateTypeScriptVariableDeclaration instead and handle definite assignment assertions */
     export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
+        /* Internally, one should probably use updateTypeScriptVariableDeclaration instead and handle definite assignment assertions */
         return node.name !== name
             || node.type !== type
             || node.initializer !== initializer
@@ -1954,6 +1954,7 @@ namespace ts {
             : node;
     }
 
+    /* @internal */
     export function createTypeScriptVariableDeclaration(name: string | BindingName, exclaimationToken?: Token<SyntaxKind.ExclamationToken>, type?: TypeNode, initializer?: Expression) {
         const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
         node.name = asName(name);
@@ -1963,6 +1964,7 @@ namespace ts {
         return node;
     }
 
+    /* @internal */
     export function updateTypeScriptVariableDeclaration(node: VariableDeclaration, name: BindingName, exclaimationToken: Token<SyntaxKind.ExclamationToken> | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.name !== name
             || node.type !== type
