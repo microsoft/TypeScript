@@ -4543,59 +4543,51 @@
         "category": "Error",
         "code": 8001
     },
-    "'import ... =' can only be used in a .ts file.": {
+    "'import ... =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8002
     },
-    "'export=' can only be used in a .ts file.": {
+    "'export =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8003
     },
-    "'type parameter declarations' can only be used in a .ts file.": {
+    "Type parameter declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8004
     },
-    "'implements clauses' can only be used in a .ts file.": {
+    "'implements' clauses can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8005
     },
-    "'interface declarations' can only be used in a .ts file.": {
+    "'{0}' declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8006
     },
-    "'module declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8007
-    },
-    "'type aliases' can only be used in a .ts file.": {
+    "Type aliases can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8008
     },
-    "'{0}' can only be used in a .ts file.": {
+    "The '{0}' modifier can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8009
     },
-    "'types' can only be used in a .ts file.": {
+    "Type annotations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8010
     },
-    "'type arguments' can only be used in a .ts file.": {
+    "Type arguments can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8011
     },
-    "'parameter modifiers' can only be used in a .ts file.": {
+    "Parameter modifiers can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8012
     },
-    "'non-null assertions' can only be used in a .ts file.": {
+    "Non-null assertions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8013
     },
-    "'enum declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8015
-    },
-    "'type assertion expressions' can only be used in a .ts file.": {
+    "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
     },
