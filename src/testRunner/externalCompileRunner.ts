@@ -59,9 +59,9 @@ namespace Harness {
                             exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
                         }
                         else {
-                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "clean", "-f"], { cwd: submoduleDir });
-                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "pull", "-f"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "checkout", ":/"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "clean", "--force"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "pull"], { cwd: submoduleDir });
                         }
 
                         types = config.types;
