@@ -702,8 +702,9 @@ namespace ts {
                     visitNode((<TryStatement>node).finallyBlock, visitor, isBlock));
 
             case SyntaxKind.VariableDeclaration:
-                return updateVariableDeclaration(<VariableDeclaration>node,
+                return updateTypeScriptVariableDeclaration(<VariableDeclaration>node,
                     visitNode((<VariableDeclaration>node).name, visitor, isBindingName),
+                    visitNode((<VariableDeclaration>node).exclamationToken, tokenVisitor, isToken),
                     visitNode((<VariableDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<VariableDeclaration>node).initializer, visitor, isExpression));
 
