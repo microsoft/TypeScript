@@ -1576,8 +1576,8 @@ namespace FourSlash {
         }
 
         private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
-            const diagnostics = ts.flatMap(files, file =>
-                this.patchDiagnosticsIfNeeded(file, this.languageService.getSyntacticDiagnostics(file.unitName))
+            const diagnostics = ts.flatMap(files,
+                file => this.languageService.getSyntacticDiagnostics(file.unitName)
             );
             const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
                 + Harness.IO.newLine()
@@ -1586,21 +1586,13 @@ namespace FourSlash {
         }
 
         private getSemanticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
-            const diagnostics = ts.flatMap(files, file =>
-                this.patchDiagnosticsIfNeeded(file, this.languageService.getSemanticDiagnostics(file.unitName))
+            const diagnostics = ts.flatMap(files,
+                file => this.languageService.getSemanticDiagnostics(file.unitName)
             );
             const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
                 + Harness.IO.newLine()
                 + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
             return result;
-        }
-
-        private patchDiagnosticsIfNeeded(file: Harness.Compiler.TestFile, diagnostics: ts.Diagnostic[]) {
-            if (this.testType === FourSlashTestType.Server) {
-                const sourceFile = { fileName: file.unitName, text: file.content } as ts.SourceFile;
-                return ts.map(diagnostics, d => ({ ...d, file: sourceFile }));
-            }
-            return diagnostics;
         }
 
         public baselineQuickInfo() {
