@@ -1556,7 +1556,7 @@ namespace FourSlash {
 
         public baselineSyntacticDiagnostics() {
             const files = this.getCompilerTestFiles();
-            const result = this.getSyntacticDiagnosticText(files);
+            const result = this.getSyntacticDiagnosticBaselineText(files);
             Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
         }
 
@@ -1568,27 +1568,39 @@ namespace FourSlash {
 
         public baselineSyntacticAndSemanticDiagnostics() {
             const files = this.getCompilerTestFiles();
-            const result = this.getSyntacticDiagnosticText(files)
+            const result = this.getSyntacticDiagnosticBaselineText(files)
                 + Harness.IO.newLine()
                 + Harness.IO.newLine()
-                + this.getSemanticDiagnosticText(files);
+                + this.getSemanticDiagnosticBaselineText(files);
             Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
         }
 
-        private getSyntacticDiagnosticText(files: Harness.Compiler.TestFile[]) {
-            const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
+        private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files, file =>
+                this.patchDiagnosticsIfNeeded(file, this.languageService.getSyntacticDiagnostics(file.unitName))
+            );
             const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
                 + Harness.IO.newLine()
                 + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
             return result;
         }
 
-        private getSemanticDiagnosticText(files: Harness.Compiler.TestFile[]) {
-            const diagnostics = ts.flatMap(files, file => this.languageService.getSemanticDiagnostics(file.unitName));
+        private getSemanticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files, file => 
+                this.patchDiagnosticsIfNeeded(file, this.languageService.getSemanticDiagnostics(file.unitName))
+            );
             const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
                 + Harness.IO.newLine()
                 + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
             return result;
+        }
+
+        private patchDiagnosticsIfNeeded(file: Harness.Compiler.TestFile, diagnostics: ts.Diagnostic[]) {
+            if (this.testType === FourSlashTestType.Server) {
+                const sourceFile = { fileName: file.unitName, text: file.content } as ts.SourceFile;
+                return ts.map(diagnostics, d => ({ ...d, file: sourceFile }))
+            }
+            return diagnostics;
         }
 
         public baselineQuickInfo() {
