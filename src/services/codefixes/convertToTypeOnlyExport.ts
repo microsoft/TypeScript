@@ -23,8 +23,10 @@ namespace ts.codefix {
             return;
         }
 
-        if (everyExportSpecifierIsType(exportSpecifier, context)) {
-            const exportDeclaration = exportSpecifier.parent.parent;
+        const exportClause = exportSpecifier.parent;
+        const exportDeclaration = exportClause.parent;
+        const typeExportSpecifiers = getTypeExportSpecifiers(exportSpecifier, context);
+        if (typeExportSpecifiers.length === exportClause.elements.length) {
             changes.replaceNode(
                 sourceFile,
                 exportDeclaration,
@@ -32,26 +34,42 @@ namespace ts.codefix {
                     exportDeclaration,
                     exportDeclaration.decorators,
                     exportDeclaration.modifiers,
-                    exportDeclaration.exportClause,
+                    exportClause,
                     exportDeclaration.moduleSpecifier,
                     /*isTypeOnly*/ true));
         }
         else {
-            // TODO: split export declaration
+            const valueExportDeclaration = updateExportDeclaration(
+                exportDeclaration,
+                exportDeclaration.decorators,
+                exportDeclaration.modifiers,
+                updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
+                exportDeclaration.moduleSpecifier,
+                /*isTypeOnly*/ false);
+            const typeExportDeclaration = createExportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createNamedExports(typeExportSpecifiers),
+                exportDeclaration.moduleSpecifier,
+                /*isTypeOnly*/ true);
+
+            changes.replaceNode(sourceFile, exportDeclaration, valueExportDeclaration);
+            changes.insertNodeAfter(sourceFile, exportDeclaration, typeExportDeclaration);
         }
     }
 
-    function everyExportSpecifierIsType(targetExportSpecifier: ExportSpecifier, context: CodeFixContext) {
-        const exportClause = targetExportSpecifier.parent;
+    function getTypeExportSpecifiers(originExportSpecifier: ExportSpecifier, context: CodeFixContext): readonly ExportSpecifier[] {
+        const exportClause = originExportSpecifier.parent;
         if (exportClause.elements.length === 1) {
-            return true;
+            return exportClause.elements;
         }
+
         const diagnostics = getDiagnosticsWithinSpan(
             createTextSpanFromNode(exportClause),
             context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken));
 
-        return every(
-            exportClause.elements,
-            element => findDiagnosticForNode(element, diagnostics)?.code === errorCode);
+        return filter(exportClause.elements, element => {
+            return element === originExportSpecifier || findDiagnosticForNode(element, diagnostics)?.code === errorCode;
+        });
     }
 }

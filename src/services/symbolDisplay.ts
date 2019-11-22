@@ -20,8 +20,6 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
         if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-
-        if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
         if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
         if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
         if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;

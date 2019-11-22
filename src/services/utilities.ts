@@ -2324,6 +2324,7 @@ namespace ts {
             if (textSpanContainsTextSpan(span, diagnostic)) {
                 result.push(diagnostic);
             }
+            index++;
         }
 
         return result;
