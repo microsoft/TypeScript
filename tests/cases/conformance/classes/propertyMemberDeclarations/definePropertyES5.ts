@@ -7,4 +7,5 @@ class A {
     ["computed"] = 13
     ;[x] = 14
     m() { }
+    declare notEmitted: boolean;
 }
