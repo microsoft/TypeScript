@@ -53,6 +53,18 @@ namespace ts {
         return result;
     }
 
+    export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
+    export function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
+        return isTransientSymbol(symbol) && !!symbol.immediateTarget;
+    }
+
+    export function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
+        return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
+    }
+
     const stringWriter = createSingleLineStringWriter();
 
     function createSingleLineStringWriter(): EmitTextWriter {

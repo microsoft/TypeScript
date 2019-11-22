@@ -978,10 +978,6 @@ namespace ts {
             return symbol;
         }
 
-        function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
-            return (symbol.flags & SymbolFlags.Transient) !== 0;
-        }
-
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             let result: SymbolFlags = 0;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
@@ -8150,14 +8146,6 @@ namespace ts {
                 }
             }
             return <InterfaceType>links.declaredType;
-        }
-
-        function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
-            return isTransientSymbol(symbol) && !!symbol.immediateTarget;
-        }
-
-        function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
-            return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
         }
 
         function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
