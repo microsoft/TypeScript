@@ -1,12 +1,13 @@
-//// [definePropertyESNext.ts]
+//// [defineProperty.ts]
 var x: "p" = "p"
 class A {
-    a = 12
+    a = this.y
     b
     ["computed"] = 13
     ;[x] = 14
     m() { }
     constructor(public readonly y: number) { }
+    z = this.y
     declare notEmitted;
 }
 class B {
@@ -20,11 +21,11 @@ class C extends B {
 }
 
 
-//// [definePropertyESNext.js]
+//// [defineProperty.js]
 var x = "p";
 class A {
     y;
-    a = 12;
+    a = this.y;
     b;
     ["computed"] = 13;
     [x] = 14;
@@ -32,6 +33,7 @@ class A {
     constructor(y) {
         this.y = y;
     }
+    z = this.y;
 }
 class B {
 }
