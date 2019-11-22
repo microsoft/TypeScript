@@ -14553,13 +14553,13 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean): Ternary {
+            function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean): Ternary {
                 // Normalize the source and target types: Turn fresh literal types into regular literal types,
                 // turn deferred type references into regular type references, simplify indexed access and
                 // conditional types, and resolve substitution types to either the substitution (on the source
                 // side) or the type variable (on the target side).
-                source = getNormalizedType(source, /*writing*/ false);
-                target = getNormalizedType(target, /*writing*/ true);
+                let source = getNormalizedType(originalSource, /*writing*/ false);
+                let target = getNormalizedType(originalTarget, /*writing*/ true);
 
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
@@ -14692,6 +14692,8 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
+                    source = originalSource.aliasSymbol ? originalSource : source;
+                    target = originalTarget.aliasSymbol ? originalTarget : target;
                     let maybeSuppress = overrideNextErrorInfo > 0;
                     if (maybeSuppress) {
                         overrideNextErrorInfo--;
