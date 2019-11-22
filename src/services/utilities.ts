@@ -2290,4 +2290,42 @@ namespace ts {
     export function isInsideNodeModules(fileOrDirectory: string): boolean {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
     }
+
+    export function isDiagnosticWithLocation(diagnostic: Diagnostic): diagnostic is DiagnosticWithLocation {
+        return diagnostic.file !== undefined && diagnostic.start !== undefined && diagnostic.length !== undefined;
+    }
+
+    export function findDiagnosticForNode(node: Node, sortedFileDiagnostics: readonly Diagnostic[]): DiagnosticWithLocation | undefined {
+        const span: Partial<TextSpan> = createTextSpanFromNode(node);
+        const index = binarySearchKey(sortedFileDiagnostics, span, identity, compareTextSpans);
+        if (index >= 0) {
+            const diagnostic = sortedFileDiagnostics[index];
+            Debug.assertEqual(diagnostic.file, node.getSourceFile(), "Diagnostics proided to 'findDiagnosticForNode' must be from a single SourceFile");
+            return cast(diagnostic, isDiagnosticWithLocation);
+        }
+    }
+
+    export function getDiagnosticsWithinSpan(span: TextSpan, sortedFileDiagnostics: readonly Diagnostic[]): readonly DiagnosticWithLocation[] {
+        let index = binarySearchKey(sortedFileDiagnostics, span.start, diag => diag.start, compareValues);
+        if (index < 0) {
+            index = ~index;
+        }
+        while (sortedFileDiagnostics[index - 1]?.start === span.start) {
+            index--;
+        }
+
+        const result: DiagnosticWithLocation[] = [];
+        const end = textSpanEnd(span);
+        while (true) {
+            const diagnostic = tryCast(sortedFileDiagnostics[index], isDiagnosticWithLocation);
+            if (!diagnostic || diagnostic.start > end) {
+                break;
+            }
+            if (textSpanContainsTextSpan(span, diagnostic)) {
+                result.push(diagnostic);
+            }
+        }
+
+        return result;
+    }
 }

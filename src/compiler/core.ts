@@ -1584,6 +1584,13 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    /**
+     * Compare two TextSpans, first by `start`, then by `length`.
+     */
+    export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<TextSpan> | undefined): Comparison {
+        return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
+    }
+
     export function min<T>(a: T, b: T, compare: Comparer<T>): T {
         return compare(a, b) === Comparison.LessThan ? a : b;
     }
