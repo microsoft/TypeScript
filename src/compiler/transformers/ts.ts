@@ -1873,6 +1873,9 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
+            if (node.flags & NodeFlags.Ambient) {
+                return undefined;
+            }
             const updated = updateProperty(
                 node,
                 /*decorators*/ undefined,
@@ -2188,9 +2191,10 @@ namespace ts {
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
-            return updateVariableDeclaration(
+            return updateTypeScriptVariableDeclaration(
                 node,
                 visitNode(node.name, visitor, isBindingName),
+                /*exclaimationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
         }

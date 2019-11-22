@@ -8,6 +8,7 @@ class A {
     ;[x] = 14
     m() { }
     constructor(public readonly y: number) { }
+    declare notEmitted;
 }
 class B {
 }

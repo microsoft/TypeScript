@@ -8,6 +8,7 @@ class A {
     m() { }
     constructor(public readonly y: number) { }
     z = this.y
+    declare notEmitted: boolean;
 }
 
 

@@ -33,5 +33,8 @@ class A {
 >this.y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
 >this : Symbol(A, Decl(definePropertyES5.ts, 0, 16))
 >y : Symbol(A.y, Decl(definePropertyES5.ts, 7, 16))
+
+    declare notEmitted: boolean;
+>notEmitted : Symbol(A.notEmitted, Decl(definePropertyES5.ts, 8, 14))
 }
 

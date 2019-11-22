@@ -208,6 +208,35 @@ function expression(): Animal {
     }
 }
 
+// Repro from #34840
+
+function foo() {
+    const foo: number | undefined = 0;
+    while (true) {
+        const stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
+// Repro from #35070
+
+type O = {
+    a: number,
+    b: number
+};
+type K = keyof O | 'c';
+function ff(o: O, k: K) {
+    switch(k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c';  // Error
+    return o[k];
+}
+
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -399,11 +428,30 @@ var Animal;
     Animal[Animal["CAT"] = 1] = "CAT";
 })(Animal || (Animal = {}));
 function expression() {
-    var _a, _b;
-    switch ((_b = (_a = zoo) === null || _a === void 0 ? void 0 : _a.animal, (_b !== null && _b !== void 0 ? _b : Animal.DOG))) {
+    var _a;
+    switch ((_a = zoo === null || zoo === void 0 ? void 0 : zoo.animal) !== null && _a !== void 0 ? _a : Animal.DOG) {
         case Animal.DOG: return Animal.DOG;
         case Animal.CAT: return Animal.CAT;
     }
+}
+// Repro from #34840
+function foo() {
+    var foo = 0;
+    while (true) {
+        var stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+function ff(o, k) {
+    switch (k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c'; // Error
+    return o[k];
 }
 
 
@@ -469,3 +517,10 @@ declare const zoo: {
     animal: Animal;
 } | undefined;
 declare function expression(): Animal;
+declare function foo(): void;
+declare type O = {
+    a: number;
+    b: number;
+};
+declare type K = keyof O | 'c';
+declare function ff(o: O, k: K): number;

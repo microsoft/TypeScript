@@ -36,5 +36,8 @@ class A {
 >this.y : number
 >this : this
 >y : number
+
+    declare notEmitted: boolean;
+>notEmitted : boolean
 }
 

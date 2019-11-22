@@ -28,6 +28,9 @@ class A {
 
     constructor(public readonly y: number) { }
 >y : number
+
+    declare notEmitted;
+>notEmitted : any
 }
 class B {
 >B : B

@@ -1221,11 +1221,8 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
                     // These are not allowed inside a generator now, but eventually they may be allowed
-                    // as local types. Regardless, any yield statements contained within them should be
-                    // skipped in this traversal.
+                    // as local types. Regardless, skip them to avoid the work.
                     return;
                 default:
                     if (isFunctionLike(node)) {
@@ -4244,9 +4241,12 @@ namespace ts {
 
     export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
         if (isPropertyAccessExpression(expr)) {
-            return tryGetPropertyAccessOrIdentifierToString(expr.expression) + "." + expr.name;
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined) {
+                return baseStr + "." + expr.name;
+            }
         }
-        if (isIdentifier(expr)) {
+        else if (isIdentifier(expr)) {
             return unescapeLeadingUnderscores(expr.escapedText);
         }
         return undefined;
@@ -8131,10 +8131,6 @@ namespace ts {
         return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function hasJSOrJsonFileExtension(fileName: string): boolean {
-        return supportedJSAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
-    }
-
     export function hasTSFileExtension(fileName: string): boolean {
         return some(supportedTSExtensions, extension => fileExtensionIs(fileName, extension));
     }
@@ -8286,6 +8282,7 @@ namespace ts {
     export function matchPatternOrExact(patternStrings: readonly string[], candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
         for (const patternString of patternStrings) {
+            if (!hasZeroOrOneAsteriskCharacter(patternString)) continue;
             const pattern = tryParsePattern(patternString);
             if (pattern) {
                 patterns.push(pattern);

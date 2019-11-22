@@ -2500,12 +2500,13 @@ declare namespace ts {
         HomomorphicMappedType = 2,
         PartialHomomorphicMappedType = 4,
         MappedTypeConstraint = 8,
-        ReturnType = 16,
-        LiteralKeyof = 32,
-        NoConstraints = 64,
-        AlwaysStrict = 128,
-        MaxValue = 256,
-        PriorityImpliesCombination = 56,
+        ContravariantConditional = 16,
+        ReturnType = 32,
+        LiteralKeyof = 64,
+        NoConstraints = 128,
+        AlwaysStrict = 256,
+        MaxValue = 512,
+        PriorityImpliesCombination = 104,
         Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
@@ -3174,7 +3175,7 @@ declare namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -8304,7 +8305,7 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;

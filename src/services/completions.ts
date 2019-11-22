@@ -373,7 +373,13 @@ namespace ts.Completions {
         }
         if (origin && originIsPromise(origin) && propertyAccessToConvert) {
             if (insertText === undefined) insertText = name;
-            const awaitText = `(await ${propertyAccessToConvert.expression.getText()})`;
+            const precedingToken = findPrecedingToken(propertyAccessToConvert.pos, sourceFile);
+            let awaitText = "";
+            if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
+                awaitText = ";";
+            }
+
+            awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
             insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
             replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
         }

@@ -97,6 +97,17 @@ namespace ts {
             ]);
         });
 
+        testBaseline("transformDefiniteAssignmentAssertions", () => {
+            return transformSourceFile(`let a!: () => void`, [
+                context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                    if (node.kind === SyntaxKind.VoidKeyword) {
+                        return createIdentifier("undefined");
+                    }
+                    return visitEachChild(node, visitor, context);
+                })
+            ]);
+        });
+
         testBaseline("fromTranspileModule", () => {
             return transpileModule(`var oldName = undefined;`, {
                 transformers: {

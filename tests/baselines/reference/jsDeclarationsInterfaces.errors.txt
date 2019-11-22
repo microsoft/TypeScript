@@ -1,29 +1,29 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(6,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(10,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(31,11): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(35,11): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(39,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(43,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(45,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(49,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(53,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(57,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(61,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(65,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(67,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(71,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(75,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(80,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(84,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(87,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(91,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(95,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(100,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(105,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(107,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(111,18): error TS8006: 'interface declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(115,18): error TS8006: 'interface declarations' can only be used in a .ts file.
+tests/cases/conformance/jsdoc/declarations/index.js(4,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(6,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(10,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(31,11): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(35,11): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(39,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(43,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(45,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(49,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(53,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(57,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(61,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(65,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(67,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(71,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(75,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(80,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(84,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(87,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(91,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(95,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(100,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(105,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(107,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(111,18): error TS1176: Interface declaration cannot have 'implements' clause.
+tests/cases/conformance/jsdoc/declarations/index.js(115,18): error TS1176: Interface declaration cannot have 'implements' clause.
 
 
 ==== tests/cases/conformance/jsdoc/declarations/index.js (26 errors) ====
@@ -32,17 +32,17 @@ tests/cases/conformance/jsdoc/declarations/index.js(115,18): error TS8006: 'inte
     
     export interface A {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export interface B {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         cat: string;
     }
     
     export interface C<T, U> {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         field: T & U;
         optionalField?: T;
         readonly readonlyField: T & U;
@@ -65,135 +65,135 @@ tests/cases/conformance/jsdoc/declarations/index.js(115,18): error TS8006: 'inte
     
     interface G {}
               ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export { G };
     
     interface HH {}
               ~~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export { HH as H };
     
     export interface I {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     export { I as II };
     
     export { J as JJ };
     export interface J {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export interface K extends I,J {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         x: string;
     }
     
     export interface L extends K {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         y: string;
     }
     
     export interface M<T> {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         field: T;
     }
     
     export interface N<U> extends M<U> {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         other: U;
     }
     
     export interface O {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: string;
     }
     
     export interface P extends O {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export interface Q extends O {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: "ok";
     }
     
     export interface R extends O {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: number]: "ok";
     }
     
     export interface S extends O {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: "ok";
         [idx: number]: never;
     }
     
     export interface T {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: number]: string;
     }
     
     export interface U extends T {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     
     export interface V extends T {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: string;
     }
     
     export interface W extends T {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: number]: "ok";
     }
     
     export interface X extends T {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: string;
         [idx: number]: "ok";
     }
     
     export interface Y {
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: {x: number};
         [idx: number]: {x: number, y: number};
     }
     
     export interface Z extends Y {}
                      ~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     
     export interface AA extends Y {
                      ~~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: {x: number, y: number};
     }
     
     export interface BB extends Y {
                      ~~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: number]: {x: 0, y: 0};
     }
     
     export interface CC extends Y {
                      ~~
-!!! error TS8006: 'interface declarations' can only be used in a .ts file.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
         [idx: string]: {x: number, y: number};
         [idx: number]: {x: 0, y: 0};
     }

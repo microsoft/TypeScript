@@ -371,6 +371,16 @@ interface QueuingStrategy<T = any> {
     size?: QueuingStrategySizeCallback<T>;
 }
 
+interface ReadableStreamReadDoneResult<T> {
+    done: true;
+    value?: T;
+}
+
+interface ReadableStreamReadValueResult<T> {
+    done: false;
+    value: T;
+}
+
 interface RegistrationOptions {
     scope?: string;
     type?: WorkerType;
@@ -703,7 +713,7 @@ interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
     keys(): Promise<string[]>;
-    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
     open(cacheName: string): Promise<Cache>;
 }
 
@@ -2760,11 +2770,6 @@ interface ReadableStreamDefaultReader<R = any> {
     releaseLock(): void;
 }
 
-interface ReadableStreamReadResult<T> {
-    done: boolean;
-    value: T;
-}
-
 interface ReadableStreamReader<R = any> {
     cancel(): Promise<void>;
     read(): Promise<ReadableStreamReadResult<R>>;
@@ -3083,6 +3088,8 @@ interface TextDecoderCommon {
 }
 
 interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+    readonly readable: ReadableStream<string>;
+    readonly writable: WritableStream<BufferSource>;
 }
 
 declare var TextDecoderStream: {
@@ -3115,6 +3122,8 @@ interface TextEncoderCommon {
 }
 
 interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<string>;
 }
 
 declare var TextEncoderStream: {
@@ -3202,6 +3211,7 @@ interface URL {
     host: string;
     hostname: string;
     href: string;
+    toString(): string;
     readonly origin: string;
     password: string;
     pathname: string;
@@ -3246,12 +3256,14 @@ interface URLSearchParams {
      */
     set(name: string, value: string): void;
     sort(): void;
+    toString(): string;
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
 }
 
 declare var URLSearchParams: {
     prototype: URLSearchParams;
     new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
+    toString(): string;
 };
 
 interface WEBGL_color_buffer_float {
@@ -5380,12 +5392,12 @@ interface WorkerLocation {
     readonly host: string;
     readonly hostname: string;
     readonly href: string;
+    toString(): string;
     readonly origin: string;
     readonly pathname: string;
     readonly port: string;
     readonly protocol: string;
     readonly search: string;
-    toString(): string;
 }
 
 declare var WorkerLocation: {
@@ -5804,6 +5816,7 @@ type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
+type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
 type VibratePattern = number | number[];
 type AlgorithmIdentifier = string | Algorithm;
 type HashAlgorithmIdentifier = AlgorithmIdentifier;

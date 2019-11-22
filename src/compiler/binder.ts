@@ -2752,7 +2752,7 @@ namespace ts {
 
         function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
             const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
-            if (namespaceSymbol) {
+            if (namespaceSymbol && namespaceSymbol.valueDeclaration) {
                 // Ensure the namespace symbol becomes class-like
                 addDeclarationToSymbol(namespaceSymbol, namespaceSymbol.valueDeclaration, SymbolFlags.Class);
             }
@@ -3595,7 +3595,8 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
-            || !node.body) {
+            || !node.body
+            || node.questionToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -3642,7 +3643,7 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
         // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
-        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type) {
+        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type || node.questionToken || node.exclamationToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -3806,7 +3807,7 @@ namespace ts {
         }
 
         // Type annotations are TypeScript syntax.
-        if (node.type) {
+        if (node.type || node.exclamationToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
