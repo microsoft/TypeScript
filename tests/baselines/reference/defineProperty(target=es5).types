@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyESNext.ts ===
+=== tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts ===
 var x: "p" = "p"
 >x : "p"
 >"p" : "p"
@@ -6,9 +6,11 @@ var x: "p" = "p"
 class A {
 >A : A
 
-    a = 12
+    a = this.y
 >a : number
->12 : 12
+>this.y : number
+>this : this
+>y : number
 
     b
 >b : any
@@ -27,6 +29,12 @@ class A {
 >m : () => void
 
     constructor(public readonly y: number) { }
+>y : number
+
+    z = this.y
+>z : number
+>this.y : number
+>this : this
 >y : number
 
     declare notEmitted;
