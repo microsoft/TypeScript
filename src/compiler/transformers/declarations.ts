@@ -1055,7 +1055,8 @@ namespace ts {
                 // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
                 return statement;
             }
-            const clone = getMutableClone(statement);
+            // TODO(rbuckton): Does this need to be parented?
+            const clone = setParent(setTextRange(factory.cloneNode(statement), statement), statement.parent);
             const modifiers = factory.createModifiersFromModifierFlags(getModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
             clone.modifiers = modifiers.length ? factory.createNodeArray(modifiers) : undefined;
             return clone;

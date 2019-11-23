@@ -24,6 +24,7 @@ namespace ts {
          * - This is raised *after* the child has been attached to the parent.
          * - This is raised *before* the transform flags of the child have been aggregated into the parent.
          * - The `parent` pointer for the child will likely be `undefined`.
+         * - NOTE: This may be raised *after* `onFinishNode` if the child is an *extraneous child* attached to a node purely for the purposes of reporting diagnostics.
          */
         onSetChild?(parent: Node, child: Node): void;
         /**
@@ -32,8 +33,9 @@ namespace ts {
          * - This is raised *after* the array of children has been attached to the parent.
          * - This is raised *before* the transform flags of the child have been aggregated into the parent.
          * - The `parent` pointer for each child in the array will likely be `undefined`.
+         * - NOTE: This may be raised *after* `onFinishNode` if the child is an *extraneous child* attached to a node purely for the purposes of reporting diagnostics.
          */
-        onSetChildren?(parent: Node, children: NodeArray<Node>): void;
+        onSetChildren?(parent: Node, children: readonly Node[]): void;
         /**
          * Observes when a `Node` is "finished" (i.e. its child nodes have been attached).
          * - This is raised *after* transform flags for the node have been aggregated.
@@ -76,10 +78,11 @@ namespace ts {
         const createSourceFileNode = observeResult(baseFactory.createBaseSourceFileNode, treeStateObserver && treeStateObserver.onCreateNode);
         const setChild = observeArguments(setChildWorker, treeStateObserver && treeStateObserver.onSetChild);
         const setChildren = observeArguments(setChildrenWorker, treeStateObserver && treeStateObserver.onSetChildren);
+        const setChildrenArray = observeArguments(setChildrenArrayWorker, treeStateObserver && treeStateObserver.onSetChildren);
         const finish = observeResult(finishWorker, treeStateObserver && treeStateObserver.onFinishNode);
         const finishJSDoc = observeResult(identity, treeStateObserver && treeStateObserver.onFinishNode);
-        const update = observeArguments(updateWorker, treeStateObserver && treeStateObserver.onUpdateNode);
-        const reuse = observeResult(reuseWorker, treeStateObserver && treeStateObserver.onReuseNode);
+        const update = observeArguments(updateNodeWorker, treeStateObserver && treeStateObserver.onUpdateNode);
+        const reuse = observeResult(identity, treeStateObserver && treeStateObserver.onReuseNode);
 
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
@@ -421,6 +424,14 @@ namespace ts {
             updateSourceFile,
             createBundle,
             updateBundle,
+            createUnparsedSource,
+            createUnparsedPrologue,
+            createUnparsedPrepend,
+            createUnparsedTextLike,
+            createUnparsedSyntheticReference,
+            createInputFiles,
+            createSyntheticExpression,
+            createSyntaxList,
             createNotEmittedStatement,
             createPartiallyEmittedExpression,
             updatePartiallyEmittedExpression,
@@ -430,6 +441,7 @@ namespace ts {
             createMergeDeclarationMarker,
             createSyntheticReferenceExpression,
             updateSyntheticReferenceExpression,
+            cloneNode,
 
             // Lazily load factory methods for common operator factories and utilities
             get createSignatureDeclaration() { return lazyFactory().createSignatureDeclaration; },
@@ -1209,7 +1221,7 @@ namespace ts {
                     markTypeScriptClassSyntax(node);
                 }
                 markClassFields(node);
-                if (questionOrExclamationToken) {
+                if (questionOrExclamationToken || hasModifier(node, ModifierFlags.Ambient)) {
                     markTypeScript(node);
                 }
             }
@@ -4523,6 +4535,94 @@ namespace ts {
                 : reuse(node);
         }
 
+        // @api
+        function createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]) {
+            const node = createBaseNode<UnparsedSource>(SyntaxKind.UnparsedSource);
+            setChildrenArray(node, node.prologues = prologues);
+            setChildrenArray(node, node.syntheticReferences = syntheticReferences);
+            setChildrenArray(node, node.texts = texts);
+            node.fileName = "";
+            node.text = "";
+            node.helpers = undefined;
+            node.referencedFiles = emptyArray;
+            node.typeReferenceDirectives = undefined;
+            node.libReferenceDirectives = emptyArray;
+            node.hasNoDefaultLib = undefined;
+            node.sourceMapPath = undefined;
+            node.sourceMapText = undefined;
+            node.oldFileOfCurrentEmit = undefined;
+            node.parsedSourceMap = undefined;
+            node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
+            return node;
+        }
+
+        function createBaseUnparsedNode<T extends UnparsedNode>(kind: T["kind"], data?: string): T {
+            const node = createBaseNode<T>(kind);
+            node.data = data;
+            return node;
+        }
+
+        // @api
+        function createUnparsedPrologue(data?: string): UnparsedPrologue {
+            return createBaseUnparsedNode(SyntaxKind.UnparsedPrologue, data);
+        }
+
+        // @api
+        function createUnparsedPrepend(data: string | undefined, texts: readonly UnparsedTextLike[]): UnparsedPrepend {
+            const node = createBaseUnparsedNode<UnparsedPrepend>(SyntaxKind.UnparsedPrepend, data);
+            setChildrenArray(node, node.texts = texts);
+            return node;
+        }
+
+        // @api
+        function createUnparsedTextLike(data: string | undefined, internal: boolean): UnparsedTextLike {
+            return createBaseUnparsedNode(internal ? SyntaxKind.UnparsedInternalText : SyntaxKind.UnparsedText, data);
+        }
+
+        // @api
+        function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference): UnparsedSyntheticReference {
+            const node = createBaseNode<UnparsedSyntheticReference>(SyntaxKind.UnparsedSyntheticReference);
+            node.data = section.data;
+            node.section = section;
+            return node;
+        }
+
+        // @api
+        function createInputFiles(): InputFiles {
+            const node = createBaseNode<InputFiles>(SyntaxKind.InputFiles);
+            node.javascriptPath = undefined;
+            node.javascriptText = "";
+            node.javascriptMapPath = undefined;
+            node.javascriptMapText = undefined;
+            node.declarationPath = undefined;
+            node.declarationText = "";
+            node.declarationMapPath = undefined;
+            node.declarationMapText = undefined;
+            node.buildInfoPath = undefined;
+            node.buildInfo = undefined;
+            node.oldFileOfCurrentEmit = undefined;
+            return node;
+        }
+
+        //
+        // Synthetic Nodes (used by checker)
+        //
+
+        // @api
+        function createSyntheticExpression(type: Type, isSpread = false) {
+            const node = createBaseNode<SyntheticExpression>(SyntaxKind.SyntheticExpression);
+            node.type = type;
+            node.isSpread = isSpread;
+            return node;
+        }
+
+        // @api
+        function createSyntaxList(children: Node[]) {
+            const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
+            node._children = children;
+            return node;
+        }
+
         //
         // Transformation nodes
         //
@@ -4629,8 +4729,37 @@ namespace ts {
         function updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression) {
             return node.expression !== expression
                 || node.thisArg !== thisArg
-                ? updateNode(createSyntheticReferenceExpression(expression, thisArg), node)
+                ? update(createSyntheticReferenceExpression(expression, thisArg), node)
                 : node;
+        }
+
+        // @api
+        function cloneNode<T extends Node | undefined>(node: T): T;
+        function cloneNode<T extends Node>(node: T) {
+            // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
+            // the original node. We also need to exclude specific properties and only include own-
+            // properties (to skip members already defined on the shared prototype).
+            if (node === undefined) {
+                return node;
+            }
+
+            const clone = node.kind === SyntaxKind.SourceFile ? createSourceFileNode(node.kind) as T:
+                node.kind === SyntaxKind.Identifier ? createIdentifierNode(node.kind) as T:
+                !isNodeKind(node.kind) ? createTokenNode(node.kind) as T:
+                createBaseNode(node.kind) as T;
+
+            clone.flags |= node.flags;
+            setOriginalNode(clone, node);
+
+            for (const key in node) {
+                if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                clone[key] = node[key];
+            }
+
+            return clone;
         }
 
         function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
@@ -4662,18 +4791,14 @@ namespace ts {
         }
 
         function setChildWorker(parent: Node, child: Node | undefined): void {
-            if (!skipTransformationFlags) {
-                if (child) {
-                    parent.transformFlags |= propagateChildFlags(child);
-                }
+            if (!skipTransformationFlags && child) {
+                parent.transformFlags |= propagateChildFlags(child);
             }
         }
 
         function setChildrenWorker(parent: Node, children: NodeArray<Node> | undefined): void {
-            if (!skipTransformationFlags) {
-                if (children) {
-                    parent.transformFlags |= propagateChildrenFlags(children);
-                }
+            if (!skipTransformationFlags && children) {
+                parent.transformFlags |= propagateChildrenFlags(children);
             }
         }
 
@@ -4683,14 +4808,18 @@ namespace ts {
             }
             return node;
         }
+    }
 
-        function updateWorker<T extends Node>(updated: T, original: T) {
-            return updateNode(updated, original);
-        }
+    function setChildrenArrayWorker(_parent: Node, _children: readonly Node[] | undefined): void {
+        // does nothing
+    }
 
-        function reuseWorker<T extends Node>(node: T) {
-            return node;
+    function updateNodeWorker<T extends Node>(updated: T, original: T): T {
+        if (updated !== original) {
+            setOriginalNode(updated, original);
+            setTextRange(updated, original);
         }
+        return updated;
     }
 
     function createLazyFactoryMembers(
@@ -5117,7 +5246,8 @@ namespace ts {
         function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
             const nodeName = getNameOfDeclaration(node);
             if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
-                const name = getMutableClone(nodeName);
+                // TODO(rbuckton): Does this need to be parented?
+                const name = setParent(setTextRange(factory.cloneNode(nodeName), nodeName), nodeName.parent);
                 emitFlags |= getEmitFlags(nodeName);
                 if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
                 if (!allowComments) emitFlags |= EmitFlags.NoComments;
@@ -5190,7 +5320,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
-            const qualifiedName = factory.createPropertyAccess(ns, nodeIsSynthesized(name) ? name : getSynthesizedClone(name));
+            const qualifiedName = factory.createPropertyAccess(ns, nodeIsSynthesized(name) ? name : factory.cloneNode(name));
             setTextRange(qualifiedName, name);
             let emitFlags: EmitFlags = 0;
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
@@ -5516,152 +5646,106 @@ namespace ts {
         }
     }
 
-    export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, createBaseNodeFactory(), {
+    const baseFactory = createBaseNodeFactory();
+
+    export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, baseFactory, {
         onCreateNode: node => node.flags |= NodeFlags.Synthesized
     });
-
-    /* @internal */
-    export function createSynthesizedNode(kind: SyntaxKind): Node {
-        const node = createNode(kind, -1, -1);
-        node.flags |= NodeFlags.Synthesized;
-        return node;
-    }
-
-    /**
-     * Creates a shallow, memberwise clone of a node with no source map location.
-     */
-    /* @internal */
-    export function getSynthesizedClone<T extends Node>(node: T): T {
-        // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
-        // the original node. We also need to exclude specific properties and only include own-
-        // properties (to skip members already defined on the shared prototype).
-
-        if (node === undefined) {
-            return node;
-        }
-
-        const clone = <T>createSynthesizedNode(node.kind);
-        clone.flags |= node.flags;
-        setOriginalNode(clone, node);
-
-        for (const key in node) {
-            if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
-                continue;
-            }
-
-            (<any>clone)[key] = (<any>node)[key];
-        }
-
-        return clone;
-    }
-
-    /**
-     * Creates a shallow, memberwise clone of a node for mutation.
-     */
-    export function getMutableClone<T extends Node>(node: T): T {
-        const clone = getSynthesizedClone(node);
-        clone.pos = node.pos;
-        clone.end = node.end;
-        clone.parent = node.parent;
-        return clone;
-    }
-
-    /* @internal */
-    export function updateNode<T extends Node>(updated: T, original: T): T {
-        if (updated !== original) {
-            setOriginalNode(updated, original);
-            setTextRange(updated, original);
-        }
-        return updated;
-    }
-
-    // TODO(rbuckton): Move this to factory
-    function createUnparsedSource() {
-        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
-        node.prologues = emptyArray;
-        node.referencedFiles = emptyArray;
-        node.libReferenceDirectives = emptyArray;
-        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
-        return node;
-    }
 
     export function createUnparsedSourceFile(text: string): UnparsedSource;
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
-        const node = createUnparsedSource();
         let stripInternal: boolean | undefined;
         let bundleFileInfo: BundleFileInfo | undefined;
+        let fileName: string;
+        let text: string | undefined;
+        let length: number | (() => number);
+        let sourceMapPath: string | undefined;
+        let sourceMapText: string | undefined;
+        let getText: (() => string) | undefined;
+        let getSourceMapText: (() => string | undefined) | undefined;
+        let oldFileOfCurrentEmit: boolean | undefined;
+
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
-            node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
-            Object.defineProperties(node, {
-                text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
-                sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
-            });
-
-
+            fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
+            sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
+            getText = () => mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText;
+            getSourceMapText = () => mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText;
+            length = () => getText!().length;
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
-                node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
                 Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
                 stripInternal = mapTextOrStripInternal as boolean | undefined;
                 bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
-                if (node.oldFileOfCurrentEmit) {
-                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
-                    return node;
-                }
+                oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
             }
         }
         else {
-            node.fileName = "";
-            node.text = textOrInputFiles;
-            node.sourceMapPath = mapPathOrType;
-            node.sourceMapText = mapTextOrStripInternal as string;
+            fileName = "";
+            text = textOrInputFiles;
+            length = textOrInputFiles.length;
+            sourceMapPath = mapPathOrType;
+            sourceMapText = mapTextOrStripInternal as string;
         }
-        Debug.assert(!node.oldFileOfCurrentEmit);
-        parseUnparsedSourceFile(node, bundleFileInfo, stripInternal);
+        const node = oldFileOfCurrentEmit ?
+            parseOldFileOfCurrentEmit(Debug.assertDefined(bundleFileInfo)) :
+            parseUnparsedSourceFile(bundleFileInfo, stripInternal, length);
+        node.fileName = fileName;
+        node.sourceMapPath = sourceMapPath;
+        node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
+        if (getText && getSourceMapText) {
+            Object.defineProperty(node, "text", { get: getText });
+            Object.defineProperty(node, "sourceMapText", { get: getSourceMapText });
+        }
+        else {
+            Debug.assert(!oldFileOfCurrentEmit);
+            node.text = text ?? "";
+            node.sourceMapText = sourceMapText;
+        }
+
         return node;
     }
 
-    function parseUnparsedSourceFile(node: UnparsedSource, bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined) {
+    function parseUnparsedSourceFile(bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined, length: number | (() => number)) {
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelper[] | undefined;
         let referencedFiles: FileReference[] | undefined;
         let typeReferenceDirectives: string[] | undefined;
         let libReferenceDirectives: FileReference[] | undefined;
+        let prependChildren: UnparsedTextLike[] | undefined;
         let texts: UnparsedSourceText[] | undefined;
+        let hasNoDefaultLib: boolean | undefined;
 
         for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
             switch (section.kind) {
                 case BundleFileSectionKind.Prologue:
-                    (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
+                    prologues = append(prologues, setTextRange(factory.createUnparsedPrologue(section.data), section));
                     break;
                 case BundleFileSectionKind.EmitHelpers:
-                    (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
+                    helpers = append(helpers, getAllUnscopedEmitHelpers().get(section.data)!);
                     break;
                 case BundleFileSectionKind.NoDefaultLib:
-                    node.hasNoDefaultLib = true;
+                    hasNoDefaultLib = true;
                     break;
                 case BundleFileSectionKind.Reference:
-                    (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    referencedFiles = append(referencedFiles, { pos: -1, end: -1, fileName: section.data });
                     break;
                 case BundleFileSectionKind.Type:
-                    (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
+                    typeReferenceDirectives = append(typeReferenceDirectives, section.data);
                     break;
                 case BundleFileSectionKind.Lib:
-                    (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    libReferenceDirectives = append(libReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
                     break;
                 case BundleFileSectionKind.Prepend:
-                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
                     let prependTexts: UnparsedTextLike[] | undefined;
                     for (const text of section.texts) {
                         if (!stripInternal || text.kind !== BundleFileSectionKind.Internal) {
-                            (prependTexts || (prependTexts = [])).push(createUnparsedNode(text, node) as UnparsedTextLike);
+                            prependTexts = append(prependTexts, setTextRange(factory.createUnparsedTextLike(text.data, text.kind === BundleFileSectionKind.Internal), text));
                         }
                     }
-                    prependNode.texts = prependTexts || emptyArray;
-                    (texts || (texts = [])).push(prependNode);
+                    prependChildren = addRange(prependChildren, prependTexts);
+                    texts = append(texts, factory.createUnparsedPrepend(section.data, prependTexts ?? emptyArray));
                     break;
                 case BundleFileSectionKind.Internal:
                     if (stripInternal) {
@@ -5671,37 +5755,47 @@ namespace ts {
                     // falls through
 
                 case BundleFileSectionKind.Text:
-                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    texts = append(texts, setTextRange(factory.createUnparsedTextLike(section.data, section.kind === BundleFileSectionKind.Internal), section));
                     break;
                 default:
                     Debug.assertNever(section);
             }
         }
 
-        node.prologues = prologues || emptyArray;
+        if (!texts) {
+            const textNode = factory.createUnparsedTextLike(/*data*/ undefined, /*internal*/ false);
+            textNode.pos = 0;
+            textNode.end = typeof length === "function" ? length() : length;
+            texts = [textNode];
+        }
+
+        const node = parseNodeFactory.createUnparsedSource(prologues ?? emptyArray, /*syntheticReferences*/ undefined, texts);
+        setEachParent(prologues, node);
+        setEachParent(texts, node);
+        setEachParent(prependChildren, node);
+        node.hasNoDefaultLib = hasNoDefaultLib;
         node.helpers = helpers;
         node.referencedFiles = referencedFiles || emptyArray;
         node.typeReferenceDirectives = typeReferenceDirectives;
         node.libReferenceDirectives = libReferenceDirectives || emptyArray;
-        node.texts = texts || [<UnparsedTextLike>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
+        return node;
     }
 
-    function parseOldFileOfCurrentEmit(node: UnparsedSource, bundleFileInfo: BundleFileInfo) {
-        Debug.assert(!!node.oldFileOfCurrentEmit);
+    function parseOldFileOfCurrentEmit(bundleFileInfo: BundleFileInfo) {
         let texts: UnparsedTextLike[] | undefined;
         let syntheticReferences: UnparsedSyntheticReference[] | undefined;
         for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
                 case BundleFileSectionKind.Internal:
                 case BundleFileSectionKind.Text:
-                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    texts = append(texts, setTextRange(factory.createUnparsedTextLike(section.data, section.kind === BundleFileSectionKind.Internal), section));
                     break;
 
                 case BundleFileSectionKind.NoDefaultLib:
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
                 case BundleFileSectionKind.Lib:
-                    (syntheticReferences || (syntheticReferences = [])).push(createUnparsedSyntheticReference(section, node));
+                    syntheticReferences = append(syntheticReferences, setTextRange(factory.createUnparsedSyntheticReference(section), section));
                     break;
 
                 // Ignore
@@ -5714,45 +5808,11 @@ namespace ts {
                     Debug.assertNever(section);
             }
         }
-        node.texts = texts || emptyArray;
+
+        const node = factory.createUnparsedSource(emptyArray, syntheticReferences, texts ?? emptyArray);
+        setEachParent(syntheticReferences, node);
+        setEachParent(texts, node);
         node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
-        node.syntheticReferences = syntheticReferences;
-        return node;
-    }
-
-    function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
-        switch (kind) {
-            case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
-            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
-            case BundleFileSectionKind.Internal: return SyntaxKind.UnparsedInternalText;
-            case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
-
-            case BundleFileSectionKind.EmitHelpers:
-            case BundleFileSectionKind.NoDefaultLib:
-            case BundleFileSectionKind.Reference:
-            case BundleFileSectionKind.Type:
-            case BundleFileSectionKind.Lib:
-                return Debug.fail(`BundleFileSectionKind: ${kind} not yet mapped to SyntaxKind`);
-
-            default:
-                return Debug.assertNever(kind);
-        }
-    }
-
-    // TODO(rbuckton): Move this to factory
-    function createUnparsedNode(section: BundleFileSection, parent: UnparsedSource): UnparsedNode {
-        const node = createNode(mapBundleFileSectionKindToSyntaxKind(section.kind), section.pos, section.end) as UnparsedNode;
-        node.parent = parent;
-        node.data = section.data;
-        return node;
-    }
-
-    // TODO(rbuckton): Move this to factory
-    function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference, parent: UnparsedSource) {
-        const node = createNode(SyntaxKind.UnparsedSyntheticReference, section.pos, section.end) as UnparsedSyntheticReference;
-        node.parent = parent;
-        node.data = section.data;
-        node.section = section;
         return node;
     }
 
@@ -5804,7 +5864,7 @@ namespace ts {
         buildInfo?: BuildInfo,
         oldFileOfCurrentEmit?: boolean
     ): InputFiles {
-        const node = <InputFiles>createNode(SyntaxKind.InputFiles);
+        const node = parseNodeFactory.createInputFiles();
         if (!isString(javascriptTextOrReadFileText)) {
             const cache = createMap<string | false>();
             const textGetter = (path: string | undefined) => {

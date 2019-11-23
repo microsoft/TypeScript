@@ -1,5 +1,20 @@
 namespace ts {
-    // #region Node Factory compat (deprecated since 3.8)
+    // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
+    // and compatible implementations are added here, along with an appropriate deprecation warning using
+    // the `@deprecated` JSDoc tag as well as the `Debug.deprecateExport` API.
+    //
+    // Deprecations fall into one of three categories:
+    //
+    //   * "soft" - Soft deprecations are indicated with the `@deprecated` JSDoc Tag.
+    //   * "warn" - Warning deprecations are indicated with the `@deprecated` JSDoc Tag and a diagnostic message (assuming a compatible host)
+    //   * "error" - Error deprecations are indicated with the `@deprecated` JSDoc tag and will throw a `TypeError` when invoked.
+
+    // DEPRECATION: Node factory top-level exports
+    // DEPRECATION PLAN:
+    //     - soft: 3.8
+    //     - warn: 3.9
+    //     - error: TBD
+    // #region Node factory top-level exports
 
     // #region export const { ... } = factory;
     // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance and exist here purely for backwards compatibility reasons.
@@ -1380,7 +1395,7 @@ namespace ts {
         initializer?: Expression
     ): PropertySignature {
         const node = factory.createPropertySignature(modifiers, name, questionToken, type);
-        node.initializer = initializer;
+        factory.trackExtraneousChildNode(node, node.initializer = initializer);
         return node;
     }
 
@@ -1395,13 +1410,14 @@ namespace ts {
         type: TypeNode | undefined,
         initializer: Expression | undefined
     ) {
-        return node.modifiers !== modifiers
-            || node.name !== name
-            || node.questionToken !== questionToken
-            || node.type !== type
-            || node.initializer !== initializer
-            ? updateNode(createPropertySignature(modifiers, name, questionToken, type, initializer), node)
-            : node;
+        let updated = factory.updatePropertySignature(node, modifiers, name, questionToken, type);
+        if (node.initializer !== initializer) {
+            if (updated === node) {
+                updated = factory.cloneNode(node);
+            }
+            factory.trackExtraneousChildNode(updated, updated.initializer = initializer);
+        }
+        return updated;
     }
 
     /**
@@ -1905,9 +1921,38 @@ namespace ts {
         warnAfter: "3.9"
     });
 
-    // #endregion NodeFactory compat (deprecated in 3.8)
+    Debug.deprecateExport(ts, "createNode", {
+        message: "Use an appropriate `factory` method instead.",
+        since: "3.8",
+        warnAfter: "3.9"
+    });
 
-    // #region Node Test compat (deprecated since 3.8)
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     * @deprecated Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.
+     */
+    export function getMutableClone<T extends Node>(node: T): T {
+        const clone = factory.cloneNode(node);
+        clone.pos = node.pos;
+        clone.end = node.end;
+        clone.parent = node.parent;
+        return clone;
+    }
+
+    Debug.deprecateExport(ts, "getMutableClone", {
+        message: "Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.",
+        since: "3.8",
+        warnAfter: "3.9"
+    });
+
+    // #endregion Node Factory top-level exports
+
+    // DEPRECATION: Renamed node tests
+    // DEPRECATION PLAN:
+    //     - soft: 3.8
+    //     - warn: 3.9
+    //     - error: TBD
+    // #region Renamed node Tests
     /**
      * @deprecated Use `isTypeAssertionExpression` instead.
      */
@@ -1921,5 +1966,5 @@ namespace ts {
         warnAfter: "3.9"
     });
 
-    // #endregion NodeTest compat (deprecated since 3.8)
+    // #endregion Renamed node Tests
 }

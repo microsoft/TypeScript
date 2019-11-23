@@ -1063,7 +1063,8 @@ namespace ts {
             );
 
             const expressions = reduceLeft(properties, reduceProperty, <Expression[]>[], numInitialProperties);
-            expressions.push(multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
+            // TODO(rbuckton): Does this need to be parented?
+            expressions.push(multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
             return factory.inlineExpressions(expressions);
 
             function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
@@ -1252,7 +1253,7 @@ namespace ts {
 
         function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList | undefined {
             for (const variable of node.declarations) {
-                const name = getSynthesizedClone(<Identifier>variable.name);
+                const name = factory.cloneNode(<Identifier>variable.name);
                 setCommentRange(name, variable.name);
                 hoistVariableDeclaration(name);
             }
@@ -1284,7 +1285,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration) {
             return setSourceMapRange(
                 factory.createAssignment(
-                    setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
+                    setSourceMapRange(<Identifier>factory.cloneNode(node.name), node.name),
                     visitNode(node.initializer, visitor, isExpression)
                 ),
                 node
@@ -1570,7 +1571,7 @@ namespace ts {
                         hoistVariableDeclaration(<Identifier>variable.name);
                     }
 
-                    variable = <Identifier>getSynthesizedClone(initializer.declarations[0].name);
+                    variable = <Identifier>factory.cloneNode(initializer.declarations[0].name);
                 }
                 else {
                     variable = visitNode(initializer, visitor, isExpression);
@@ -1964,7 +1965,8 @@ namespace ts {
                     if (declaration) {
                         const name = renamedCatchVariableDeclarations[getOriginalNodeId(declaration)];
                         if (name) {
-                            const clone = getMutableClone(name);
+                            // TODO(rbuckton): Does this need to be parented?
+                            const clone = setParent(setTextRange(factory.cloneNode(name), name), name.parent);
                             setSourceMapRange(clone, node);
                             setCommentRange(clone, node);
                             return clone;

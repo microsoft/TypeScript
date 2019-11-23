@@ -5097,8 +5097,9 @@ namespace ts {
         }
     }
 
-    export function getDotOrQuestionDotToken(node: PropertyAccessExpression) {
-        return node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
+    export function getDotOrQuestionDotToken(node: PropertyAccessExpression): DotToken | QuestionDotToken {
+        return node.questionDotToken ||
+            setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken), node.expression.end, node.name.pos);
     }
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
@@ -5938,11 +5939,32 @@ namespace ts {
 
 namespace ts {
     export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
-        if (location) {
-            range.pos = location.pos;
-            range.end = location.end;
-        }
+        return location ? setTextRangePosEnd(range, location.pos, location.end) : range;
+    }
+
+    /* @internal */
+    export function setTextRangePosEnd<T extends TextRange>(range: T, pos: number, end: number) {
+        range.pos = pos;
+        range.end = end;
         return range;
+    }
+
+    /* @internal */
+    export function setParent<T extends Node>(child: T, parent: T["parent"]): T {
+        if (!child.parent) {
+            child.parent = parent;
+        }
+        return child;
+    }
+
+    /* @internal */
+    export function setEachParent<T extends readonly Node[] | undefined>(children: T, parent: NonNullable<T>[number]["parent"]): T {
+        if (children) {
+            for (const child of children!) {
+                setParent(child, parent);
+            }
+        }
+        return children;
     }
 
     export function isConstTypeReference(node: Node) {

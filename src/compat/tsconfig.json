@@ -7,6 +7,6 @@
         { "path": "../compiler" }
     ],
     "files": [
-        "factory.ts"
+        "deprecations.ts"
     ]
 }

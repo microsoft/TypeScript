@@ -351,7 +351,7 @@ namespace ts.codefix {
             if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
 
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            const name = getSynthesizedClone(param.name);
+            const name = factory.cloneNode(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
             return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ undefined, "");
         });

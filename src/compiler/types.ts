@@ -6541,6 +6541,19 @@ namespace ts {
         createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken): SourceFile;
         updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
 
+        /* @internal */ createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]): UnparsedSource;
+        /* @internal */ createUnparsedPrologue(data?: string): UnparsedPrologue;
+        /* @internal */ createUnparsedPrepend(data: string | undefined, texts: readonly UnparsedSourceText[]): UnparsedPrepend;
+        /* @internal */ createUnparsedTextLike(data: string | undefined, internal: boolean): UnparsedTextLike;
+        /* @internal */ createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference): UnparsedSyntheticReference;
+        /* @internal */ createInputFiles(): InputFiles;
+
+        //
+        // Synthetic Nodes
+        //
+        /* @internal */ createSyntheticExpression(type: Type, isSpread?: boolean): SyntheticExpression;
+        /* @internal */ createSyntaxList(children: Node[]): SyntaxList;
+
         //
         // Transformation nodes
         //
@@ -6719,6 +6732,12 @@ namespace ts {
         /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>): number | undefined;
         /* @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
         /* @internal */ liftToBlock(nodes: readonly Node[]): Statement;
+        /**
+         * Creates a shallow, memberwise clone of a node.
+         * - The result will have its `original` pointer set to `node`.
+         * - The result will have its `pos` and `end` set to `-1`.
+         */
+        /* @internal */ cloneNode<T extends Node | undefined>(node: T): T;
     }
 
     export interface CoreTransformationContext {
@@ -7214,6 +7233,7 @@ namespace ts {
 
     // SyntaxKind.SyntaxList
     export interface SyntaxList extends Node {
+        kind: SyntaxKind.SyntaxList;
         _children: Node[];
     }
 

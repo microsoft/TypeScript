@@ -794,7 +794,7 @@ namespace ts {
                 }
             }
             else {
-                hoistVariableDeclaration(getSynthesizedClone(node.name));
+                hoistVariableDeclaration(factory.cloneNode(node.name));
             }
         }
 
@@ -861,7 +861,7 @@ namespace ts {
          * @param isExportedDeclaration A value indicating whether the variable is exported.
          */
         function createVariableAssignment(name: Identifier, value: Expression, location: TextRange | undefined, isExportedDeclaration: boolean) {
-            hoistVariableDeclaration(getSynthesizedClone(name));
+            hoistVariableDeclaration(factory.cloneNode(name));
             return isExportedDeclaration
                 ? createExportExpression(name, preventSubstitution(setTextRange(factory.createAssignment(name, value), location)))
                 : preventSubstitution(setTextRange(factory.createAssignment(name, value), location));
@@ -1663,7 +1663,7 @@ namespace ts {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
                             factory.createPropertyAssignment(
-                                getSynthesizedClone(name),
+                                factory.cloneNode(name),
                                 factory.createPropertyAccess(
                                     factory.getGeneratedNameForNode(importDeclaration.parent),
                                     factory.createIdentifier("default")
@@ -1675,10 +1675,10 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
                             factory.createPropertyAssignment(
-                                getSynthesizedClone(name),
+                                factory.cloneNode(name),
                                 factory.createPropertyAccess(
                                     factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                                    getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
+                                    factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                                 ),
                             ),
                             /*location*/ node
@@ -1747,7 +1747,7 @@ namespace ts {
                         return setTextRange(
                             factory.createPropertyAccess(
                                 factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                                getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
+                                factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node
                         );

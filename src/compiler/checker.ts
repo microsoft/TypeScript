@@ -4450,12 +4450,12 @@ namespace ts {
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
-                const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(getSynthesizedClone) : undefined;
+                const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(factory.cloneNode) : undefined;
                 const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
                 const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration ? parameterDeclaration.name ?
-                    parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                    parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
+                    parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(factory.cloneNode(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                    parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(factory.cloneNode(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
                     cloneBindingName(parameterDeclaration.name) :
                     symbolName(parameterSymbol) :
                     symbolName(parameterSymbol);
@@ -4479,7 +4479,7 @@ namespace ts {
                             trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
                         const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
-                        const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
+                        const clone = nodeIsSynthesized(visited) ? visited : factory.cloneNode(visited);
                         if (clone.kind === SyntaxKind.BindingElement) {
                             (<BindingElement>clone).initializer = undefined;
                         }
@@ -5935,7 +5935,7 @@ namespace ts {
                         // try to reuse the existing annotation
                         const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                         const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
-                        return transformed === existing ? getMutableClone(existing) : transformed;
+                        return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
                     }
                     const oldFlags = context.flags;
                     if (type.flags & TypeFlags.UniqueESSymbol &&
@@ -6689,13 +6689,10 @@ namespace ts {
             if (parentAccess && parentAccess.flowNode) {
                 const propName = getDestructuringPropertyName(node);
                 if (propName) {
-                    const result = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, node.pos, node.end);
-                    result.parent = node;
-                    result.expression = <LeftHandSideExpression>parentAccess;
-                    const literal = <StringLiteral>createNode(SyntaxKind.StringLiteral, node.pos, node.end);
+                    const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
+                    const result = setTextRange(parseNodeFactory.createElementAccess(parentAccess, literal), node);
                     literal.parent = result;
-                    literal.text = propName;
-                    result.argumentExpression = literal;
+                    result.parent = node;
                     result.flowNode = parentAccess.flowNode;
                     return result;
                 }
@@ -20231,7 +20228,8 @@ namespace ts {
                     if (returnType && returnType.flags & TypeFlags.Union) {
                         const unionTypes = (<UnionTypeNode>funcTypeNode.type).types;
                         if (unionTypes && unionTypes[unionTypes.length - 1].kind === SyntaxKind.UndefinedKeyword) {
-                            const parenedFuncType = getMutableClone(funcTypeNode);
+                            // TODO(rbuckton): Does this need to be parented?
+                            const parenedFuncType = setParent(setTextRange(factory.cloneNode(funcTypeNode), funcTypeNode), funcTypeNode.parent);
                             // Highlight to the end of the second to last constituent of the union
                             parenedFuncType.end = unionTypes[unionTypes.length - 2].end;
                             addRelatedInfo(diag, createDiagnosticForNode(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type));
@@ -23901,10 +23899,9 @@ namespace ts {
         }
 
         function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean) {
-            const result = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, parent.pos, parent.end);
+            const result = parseNodeFactory.createSyntheticExpression(type, isSpread);
+            setTextRange(result, parent);
             result.parent = parent;
-            result.type = type;
-            result.isSpread = isSpread || false;
             return result;
         }
 

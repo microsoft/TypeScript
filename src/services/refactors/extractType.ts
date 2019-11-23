@@ -181,24 +181,21 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
         const { firstStatement, selection, typeParameters } = info;
 
-        const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
-        node.tagName = factory.createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
-        node.fullName = factory.createIdentifier(name);
-        node.name = node.fullName;
-        node.typeExpression = factory.createJSDocTypeExpression(selection);
+        const node = factory.createJSDocTypedefTag(
+            factory.createIdentifier("typedef"),
+            factory.createJSDocTypeExpression(selection),
+            factory.createIdentifier(name));
+        node.name = node.name as Identifier;
 
         const templates: JSDocTemplateTag[] = [];
         forEach(typeParameters, typeParameter => {
             const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
-
-            const template = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag);
-            template.tagName = factory.createIdentifier("template");
-            template.constraint = constraint && cast(constraint, isJSDocTypeExpression);
-
-            const parameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            parameter.name = typeParameter.name;
-            template.typeParameters = factory.createNodeArray([parameter]);
-
+            const parameter = factory.createTypeParameterDeclaration(typeParameter.name);
+            const template = factory.createJSDocTemplateTag(
+                factory.createIdentifier("template"),
+                constraint && cast(constraint, isJSDocTypeExpression),
+                [parameter]
+            );
             templates.push(template);
         });
 

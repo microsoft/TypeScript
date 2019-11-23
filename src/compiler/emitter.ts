@@ -674,30 +674,34 @@ namespace ts {
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
-        const sourceFiles = bundle.sourceFiles.map(fileName => {
-            const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
+        const jsBundle = Debug.assertDefined(bundle.js);
+        const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => "" + prologueInfo.file);
+        return bundle.sourceFiles.map((fileName, index) => {
+            const prologueInfo = prologueMap?.get("" + index);
+            const statements = prologueInfo?.directives.map(directive => {
+                const literal = setTextRange(factory.createStringLiteral(directive.expression.text), directive.expression);
+                const statement = setTextRange(factory.createExpressionStatement(literal), directive);
+                literal.parent = statement;
+                return statement;
+            });
+            const eofToken = factory.createToken(SyntaxKind.EndOfFileToken);
+            const sourceFile = factory.createSourceFile(statements ?? [], eofToken);
             sourceFile.fileName = getRelativePathFromDirectory(
                 host.getCurrentDirectory(),
                 getNormalizedAbsolutePath(fileName, buildInfoDirectory),
                 !host.useCaseSensitiveFileNames()
             );
-            sourceFile.text = "";
-            sourceFile.statements = factory.createNodeArray();
+            sourceFile.text = prologueInfo?.text ?? "";
+            sourceFile.pos = 0;
+            sourceFile.end = prologueInfo?.text.length ?? 0;
+            for (const statement of sourceFile.statements) {
+                statement.parent = sourceFile;
+            }
+            eofToken.pos = sourceFile.end;
+            eofToken.end = sourceFile.end;
+            eofToken.parent = sourceFile;
             return sourceFile;
         });
-        const jsBundle = Debug.assertDefined(bundle.js);
-        forEach(jsBundle.sources && jsBundle.sources.prologues, prologueInfo => {
-            const sourceFile = sourceFiles[prologueInfo.file];
-            sourceFile.text = prologueInfo.text;
-            sourceFile.end = prologueInfo.text.length;
-            sourceFile.statements = factory.createNodeArray(prologueInfo.directives.map(directive => {
-                const statement = createNode(SyntaxKind.ExpressionStatement, directive.pos, directive.end) as PrologueDirective;
-                statement.expression = createNode(SyntaxKind.StringLiteral, directive.expression.pos, directive.expression.end) as StringLiteral;
-                statement.expression.text = directive.expression.text;
-                return statement;
-            }));
-        });
-        return sourceFiles;
     }
 
     /*@internal*/

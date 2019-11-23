@@ -235,7 +235,7 @@ namespace ts {
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
-                        const alias = getSynthesizedClone(temp) as GeneratedIdentifier;
+                        const alias = factory.cloneNode(temp) as GeneratedIdentifier;
                         alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
                         classAliases[getOriginalNodeId(node)] = alias;
                     }
@@ -488,7 +488,7 @@ namespace ts {
                     if (declaration) {
                         const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
                         if (classAlias) {
-                            const clone = getSynthesizedClone(classAlias);
+                            const clone = factory.cloneNode(classAlias);
                             setSourceMapRange(clone, node);
                             setCommentRange(clone, node);
                             return clone;

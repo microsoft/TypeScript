@@ -3106,9 +3106,7 @@ declare namespace ts {
         updateParen(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression;
         createFunctionExpression(modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[] | undefined, type: TypeNode | undefined, body: Block): FunctionExpression;
         updateFunctionExpression(node: FunctionExpression, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block): FunctionExpression;
-        createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
         createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
-        updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
         updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
         createDelete(expression: Expression): DeleteExpression;
         updateDelete(node: DeleteExpression, expression: Expression): DeleteExpression;
@@ -3124,9 +3122,7 @@ declare namespace ts {
         updatePostfix(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression;
         createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
         updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken): BinaryExpression;
-        createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
-        createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
-        updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+        createConditional(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression): ConditionalExpression;
         updateConditional(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
         createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
         updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
@@ -3513,6 +3509,7 @@ declare namespace ts {
         newLength: number;
     }
     export interface SyntaxList extends Node {
+        kind: SyntaxKind.SyntaxList;
         _children: Node[];
     }
     export enum ListFormat {
@@ -3946,10 +3943,6 @@ declare namespace ts {
 }
 declare namespace ts {
     const factory: NodeFactory;
-    /**
-     * Creates a shallow, memberwise clone of a node for mutation.
-     */
-    function getMutableClone<T extends Node>(node: T): T;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
@@ -4208,6 +4201,7 @@ declare namespace ts {
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
 }
 declare namespace ts {
+    /** @deprecated Use an appropriate `factory` method instead. */
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
@@ -9833,20 +9827,6 @@ declare namespace ts {
      */
     updateFunctionExpression: (node: FunctionExpression, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block) => FunctionExpression, 
     /**
-     * @deprecated Use `factory.createArrowFunction` or the factory supplied by your transformation context instead.
-     */
-    createArrowFunction: {
-        (modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
-        (modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
-    }, 
-    /**
-     * @deprecated Use `factory.updateArrowFunction` or the factory supplied by your transformation context instead.
-     */
-    updateArrowFunction: {
-        (node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
-        (node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
-    }, 
-    /**
      * @deprecated Use `factory.createDelete` or the factory supplied by your transformation context instead.
      */
     createDelete: (expression: Expression) => DeleteExpression, 
@@ -9905,10 +9885,7 @@ declare namespace ts {
     /**
      * @deprecated Use `factory.updateConditional` or the factory supplied by your transformation context instead.
      */
-    updateConditional: {
-        (node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
-        (node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
-    }, 
+    updateConditional: (node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression) => ConditionalExpression, 
     /**
      * @deprecated Use `factory.createTemplateExpression` or the factory supplied by your transformation context instead.
      */
@@ -10653,6 +10630,22 @@ declare namespace ts {
      */
     function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: readonly TypeNode[] | undefined, expression: Expression): ExpressionWithTypeArguments;
     /**
+     * @deprecated Use `factory.createArrowFunction` or the factory supplied by your transformation context instead.
+     */
+    function createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
+    /**
+     * @deprecated Use `factory.createArrowFunction` or the factory supplied by your transformation context instead.
+     */
+    function createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
+    /**
+     * @deprecated Use `factory.updateArrowFunction` or the factory supplied by your transformation context instead.
+     */
+    function updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
+    /**
+     * @deprecated Use `factory.updateArrowFunction` or the factory supplied by your transformation context instead.
+     */
+    function updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: ConciseBody): ArrowFunction;
+    /**
      * @deprecated Use `factory.createVariableDeclaration` or the factory supplied by your transformation context instead.
      */
     function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
@@ -10715,6 +10708,11 @@ declare namespace ts {
      * @deprecated Use `factory.createLogicalNot` or the factory supplied by your transformation context instead.
      */
     function createLogicalNot(operand: Expression): PrefixUnaryExpression;
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     * @deprecated Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.
+     */
+    function getMutableClone<T extends Node>(node: T): T;
     /**
      * @deprecated Use `isTypeAssertionExpression` instead.
      */

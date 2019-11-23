@@ -630,7 +630,7 @@ namespace ts {
             // });
             needUMDDynamicImportHelper = true;
             if (isSimpleCopiableExpression(arg)) {
-                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(getSynthesizedClone(arg), arg), EmitFlags.NoComments);
+                const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
                 return factory.createConditional(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
@@ -788,7 +788,7 @@ namespace ts {
                         // import * as n from "mod";
                         variables.push(
                             factory.createVariableDeclaration(
-                                getSynthesizedClone(namespaceDeclaration.name),
+                                factory.cloneNode(namespaceDeclaration.name),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
                                 getHelperExpressionForImport(node, createRequireCall(node))
@@ -812,7 +812,7 @@ namespace ts {
                         if (namespaceDeclaration && isDefaultImport(node)) {
                             variables.push(
                                 factory.createVariableDeclaration(
-                                    getSynthesizedClone(namespaceDeclaration.name),
+                                    factory.cloneNode(namespaceDeclaration.name),
                                     /*exclamationToken*/ undefined,
                                     /*type*/ undefined,
                                     factory.getGeneratedNameForNode(node)
@@ -847,7 +847,7 @@ namespace ts {
                                 setOriginalNode(
                                     setTextRange(
                                         factory.createVariableDeclaration(
-                                            getSynthesizedClone(namespaceDeclaration.name),
+                                            factory.cloneNode(namespaceDeclaration.name),
                                             /*exclamationToken*/ undefined,
                                             /*type*/ undefined,
                                             factory.getGeneratedNameForNode(node)
@@ -923,7 +923,7 @@ namespace ts {
                                     factory.createVariableDeclarationList(
                                         [
                                             factory.createVariableDeclaration(
-                                                getSynthesizedClone(node.name),
+                                                factory.cloneNode(node.name),
                                                 /*exclamationToken*/ undefined,
                                                 /*type*/ undefined,
                                                 createRequireCall(node)
@@ -1520,7 +1520,7 @@ namespace ts {
                 factory.createAssignment(
                     factory.createPropertyAccess(
                         factory.createIdentifier("exports"),
-                        getSynthesizedClone(name)
+                        factory.cloneNode(name)
                     ),
                     value
                 ),
@@ -1664,7 +1664,7 @@ namespace ts {
                     return setTextRange(
                         factory.createPropertyAccess(
                             factory.createIdentifier("exports"),
-                            getSynthesizedClone(node)
+                            factory.cloneNode(node)
                         ),
                         /*location*/ node
                     );
@@ -1686,7 +1686,7 @@ namespace ts {
                         return setTextRange(
                             factory.createPropertyAccess(
                                 factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                                getSynthesizedClone(name)
+                                factory.cloneNode(name)
                             ),
                             /*location*/ node
                         );

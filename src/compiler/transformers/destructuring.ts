@@ -466,7 +466,7 @@ namespace ts {
             return flattenContext.context.factory.createElementAccess(value, argumentExpression);
         }
         else if (isStringOrNumericLiteralLike(propertyName)) {
-            const argumentExpression = getSynthesizedClone(propertyName);
+            const argumentExpression = factory.cloneNode(propertyName);
             argumentExpression.text = argumentExpression.text;
             return flattenContext.context.factory.createElementAccess(value, argumentExpression);
         }

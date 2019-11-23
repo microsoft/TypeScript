@@ -1787,7 +1787,7 @@ namespace ts {
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
-            const clone = getSynthesizedClone(node);
+            const clone = factory.cloneNode(node);
             if (isStringLiteral(clone)) {
                 clone.textSourceNode = node as any;
             }

@@ -156,11 +156,13 @@ namespace ts {
     export function createExpressionFromEntityName(factory: NodeFactory, node: EntityName | Expression): Expression {
         if (isQualifiedName(node)) {
             const left = createExpressionFromEntityName(factory, node.left);
-            const right = getMutableClone(node.right);
+            // TODO(rbuckton): Does this need to be parented?
+            const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
             return setTextRange(factory.createPropertyAccess(left, right), node);
         }
         else {
-            return getMutableClone(node);
+            // TODO(rbuckton): Does this need to be parented?
+            return setParent(setTextRange(factory.cloneNode(node), node), node.parent);
         }
     }
 
@@ -169,10 +171,12 @@ namespace ts {
             return factory.createStringLiteralFromNode(memberName);
         }
         else if (isComputedPropertyName(memberName)) {
-            return getMutableClone(memberName.expression);
+            // TODO(rbuckton): Does this need to be parented?
+            return setParent(setTextRange(factory.cloneNode(memberName.expression), memberName.expression), memberName.expression.parent);
         }
         else {
-            return getMutableClone(memberName);
+            // TODO(rbuckton): Does this need to be parented?
+            return setParent(setTextRange(factory.cloneNode(memberName), memberName), memberName.parent);
         }
     }
 
@@ -243,7 +247,7 @@ namespace ts {
             setTextRange(
                 factory.createAssignment(
                     createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
-                    getSynthesizedClone(property.name)
+                    factory.cloneNode(property.name)
                 ),
                 /*location*/ property
             ),
@@ -525,7 +529,7 @@ namespace ts {
         if (moduleName.kind === SyntaxKind.StringLiteral) {
             return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
                 || tryRenameExternalModule(factory, <StringLiteral>moduleName, sourceFile)
-                || getSynthesizedClone(<StringLiteral>moduleName);
+                || factory.cloneNode(<StringLiteral>moduleName);
         }
 
         return undefined;

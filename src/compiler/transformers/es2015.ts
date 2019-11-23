@@ -1299,7 +1299,7 @@ namespace ts {
         function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
             const statement = factory.createIf(
-                factory.createTypeCheck(getSynthesizedClone(name), "undefined"),
+                factory.createTypeCheck(factory.cloneNode(name), "undefined"),
                 setEmitFlags(
                     setTextRange(
                         factory.createBlock([
@@ -1307,7 +1307,8 @@ namespace ts {
                                 setEmitFlags(
                                     setTextRange(
                                         factory.createAssignment(
-                                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                            // TODO(rbuckton): Does this need to be parented?
+                                            setEmitFlags(setParent(setTextRange(factory.cloneNode(name), name), name.parent), EmitFlags.NoSourceMap),
                                             setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
                                         ),
                                         parameter
@@ -1357,11 +1358,12 @@ namespace ts {
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
-            const declarationName = parameter.name.kind === SyntaxKind.Identifier ? getMutableClone(parameter.name) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+            // TODO(rbuckton): Does this need to be parented?
+            const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
-            const expressionName = parameter.name.kind === SyntaxKind.Identifier ? getSynthesizedClone(parameter.name) : declarationName;
+            const expressionName = parameter.name.kind === SyntaxKind.Identifier ? factory.cloneNode(parameter.name) : declarationName;
             const restIndex = node.parameters.length - 1;
             const temp = factory.createLoopVariable();
 
@@ -1666,7 +1668,8 @@ namespace ts {
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
-            const target = getMutableClone(receiver);
+            // TODO(rbuckton): Does this need to be parented?
+            const target = setParent(setTextRange(factory.cloneNode(receiver), receiver), receiver.parent);
             setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
             setSourceMapRange(target, firstAccessor.name);
 
@@ -2630,7 +2633,8 @@ namespace ts {
 
                 // We need to clone the temporary identifier so that we can write it on a
                 // new line
-                expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
+                // TODO(rbuckton): Does this need to be parented?
+                expressions.push(node.multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
                 return factory.inlineExpressions(expressions);
             }
             return visitEachChild(node, visitor, context);
@@ -3406,7 +3410,7 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                getSynthesizedClone(property.name)
+                factory.cloneNode(property.name)
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
@@ -3526,7 +3530,7 @@ namespace ts {
             return setTextRange(
                 factory.createPropertyAssignment(
                     node.name,
-                    getSynthesizedClone(node.name)
+                    factory.cloneNode(node.name)
                 ),
                 /*location*/ node
             );

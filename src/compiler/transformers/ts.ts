@@ -1737,7 +1737,8 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    const name = getMutableClone(node);
+                    // TODO(rbuckton): Does this need to be parented?
+                    const name = setParent(setTextRange(factory.cloneNode(node), node), node.parent);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentLexicalScope)!; // ensure the parent is set to a parse tree node.
@@ -1807,7 +1808,7 @@ namespace ts {
                 return factory.createStringLiteral(idText(name));
             }
             else {
-                return getSynthesizedClone(name);
+                return factory.cloneNode(name);
             }
         }
 
@@ -1962,10 +1963,12 @@ namespace ts {
                 return undefined;
             }
 
-            const propertyName = getMutableClone(name);
+            // TODO(rbuckton): Does this need to be parented?
+            const propertyName = setParent(setTextRange(factory.cloneNode(name), name), name.parent);
             setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoSourceMap);
 
-            const localName = getMutableClone(name);
+            // TODO(rbuckton): Does this need to be parented?
+            const localName = setParent(setTextRange(factory.cloneNode(name), name), name.parent);
             setEmitFlags(localName, EmitFlags.NoComments);
 
             return startOnNewLine(
@@ -3213,7 +3216,7 @@ namespace ts {
                     if (declaration) {
                         const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
                         if (classAlias) {
-                            const clone = getSynthesizedClone(classAlias);
+                            const clone = factory.cloneNode(classAlias);
                             setSourceMapRange(clone, node);
                             setCommentRange(clone, node);
                             return clone;
