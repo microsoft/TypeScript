@@ -244,7 +244,7 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 >authToken : string
 
     return {
->{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; } | { authToken: string; head: string; body: string; }
+>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
 
         ...this.header,
 >this.header : Header
@@ -277,9 +277,9 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >13 : 13
 
     o = {
->o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+>o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
 >o : { x: number; y: number; }
->{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+>{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
 
         ...o,
 >o : { x: number; y: number; }
@@ -292,8 +292,8 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >14 : 14
     }
     let o2 = { ...b && { x: 21 }}
->o2 : {}
->{ ...b && { x: 21 }} : { x: number; } | {}
+>o2 : { x?: number; }
+>{ ...b && { x: 21 }} : { x?: number; }
 >b && { x: 21 } : false | { x: number; }
 >b : boolean
 >{ x: 21 } : { x: number; }
@@ -318,9 +318,9 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >16 : 16
 
     o = {
->o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+>o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
 >o : { x: number; y: number; }
->{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+>{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
 
         ...o,
 >o : { x: number; y: number; }
@@ -333,8 +333,8 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >nt : number
     }
     let o2 = { ...nt && { x: nt }}
->o2 : {}
->{ ...nt && { x: nt }} : { x: number; } | {}
+>o2 : { x?: number; }
+>{ ...nt && { x: nt }} : { x?: number; }
 >nt && { x: nt } : 0 | { x: number; }
 >nt : number
 >{ x: nt } : { x: number; }
@@ -359,9 +359,9 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >17 : 17
 
     o = {
->o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+>o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; }
 >o : { x: string; y: number; }
->{        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+>{        ...o,        ...st && { x: st }    } : { x: string; y: number; }
 
         ...o,
 >o : { x: string; y: number; }
@@ -374,8 +374,8 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >st : string
     }
     let o2 = { ...st && { x: st }}
->o2 : {}
->{ ...st && { x: st }} : { x: string; } | {}
+>o2 : { x?: string; }
+>{ ...st && { x: st }} : { x?: string; }
 >st && { x: st } : "" | { x: string; }
 >st : string
 >{ x: st } : { x: string; }
