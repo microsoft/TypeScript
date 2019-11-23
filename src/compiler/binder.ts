@@ -1346,7 +1346,7 @@ namespace ts {
                 const call = <CallExpression>node.expression;
                 if (isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
-                    hasNonLocalEffect = true;
+                    // Experiment: hasNonLocalEffect = true;
                 }
             }
         }
