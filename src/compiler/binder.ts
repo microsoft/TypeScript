@@ -201,6 +201,7 @@ namespace ts {
         let preSwitchCaseFlow: FlowNode | undefined;
         let activeLabels: ActiveLabel[] | undefined;
         let hasExplicitReturn: boolean;
+        let hasNonLocalEffect: boolean;
 
         // state used for emit helpers
         let emitFlags: NodeFlags;
@@ -1129,17 +1130,24 @@ namespace ts {
         }
 
         function bindIfStatement(node: IfStatement): void {
+            const initialFlow = currentFlow;
+            const saveHasNonLocalEffect = hasNonLocalEffect;
+            hasNonLocalEffect = false;
             const thenLabel = createBranchLabel();
             const elseLabel = createBranchLabel();
             const postIfLabel = createBranchLabel();
             bindCondition(node.expression, thenLabel, elseLabel);
             currentFlow = finishFlowLabel(thenLabel);
             bind(node.thenStatement);
+            if (currentFlow.flags & FlowFlags.Unreachable) hasNonLocalEffect = true;
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(elseLabel);
             bind(node.elseStatement);
+            if (currentFlow.flags & FlowFlags.Unreachable) hasNonLocalEffect = true;
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(postIfLabel);
+            if (!hasNonLocalEffect) currentFlow = initialFlow;
+            hasNonLocalEffect = hasNonLocalEffect || saveHasNonLocalEffect;
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
@@ -1151,6 +1159,7 @@ namespace ts {
                 }
             }
             currentFlow = unreachableFlow;
+            hasNonLocalEffect = true;
         }
 
         function findActiveLabel(name: __String) {
@@ -1169,6 +1178,7 @@ namespace ts {
             if (flowLabel) {
                 addAntecedent(flowLabel, currentFlow);
                 currentFlow = unreachableFlow;
+                hasNonLocalEffect = true;
             }
         }
 
@@ -1336,6 +1346,7 @@ namespace ts {
                 const call = <CallExpression>node.expression;
                 if (isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
+                    hasNonLocalEffect = true;
                 }
             }
         }
@@ -1370,6 +1381,7 @@ namespace ts {
         function bindAssignmentTargetFlow(node: Expression) {
             if (isNarrowableReference(node)) {
                 currentFlow = createFlowMutation(FlowFlags.Assignment, currentFlow, node);
+                hasNonLocalEffect = true;
             }
             else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
                 for (const e of (<ArrayLiteralExpression>node).elements) {
@@ -1453,6 +1465,7 @@ namespace ts {
                         const elementAccess = <ElementAccessExpression>node.left;
                         if (isNarrowableOperand(elementAccess.expression)) {
                             currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
+                            hasNonLocalEffect = true;
                         }
                     }
                 }
@@ -1467,6 +1480,9 @@ namespace ts {
         }
 
         function bindConditionalExpressionFlow(node: ConditionalExpression) {
+            const initialFlow = currentFlow;
+            const saveHasNonLocalEffect = hasNonLocalEffect;
+            hasNonLocalEffect = false;
             const trueLabel = createBranchLabel();
             const falseLabel = createBranchLabel();
             const postExpressionLabel = createBranchLabel();
@@ -1480,6 +1496,8 @@ namespace ts {
             bind(node.whenFalse);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(postExpressionLabel);
+            if (!hasNonLocalEffect) currentFlow = initialFlow;
+            hasNonLocalEffect = hasNonLocalEffect || saveHasNonLocalEffect;
         }
 
         function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
@@ -1606,6 +1624,7 @@ namespace ts {
                 const propertyAccess = <PropertyAccessExpression>node.expression;
                 if (isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
                     currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
+                    hasNonLocalEffect = true;
                 }
             }
         }
