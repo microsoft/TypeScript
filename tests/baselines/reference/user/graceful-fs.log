@@ -4,6 +4,7 @@ node_modules/graceful-fs/clone.js(12,9): error TS2403: Subsequent variable decla
 node_modules/graceful-fs/clone.js(15,38): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
+node_modules/graceful-fs/clone.js(18,10): error TS2454: Variable 'copy' is used before being assigned.
 node_modules/graceful-fs/graceful-fs.js(26,3): error TS2322: Type '(msg: string, ...param: any[]) => void' is not assignable to type '() => void'.
 node_modules/graceful-fs/graceful-fs.js(29,37): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
 node_modules/graceful-fs/graceful-fs.js(48,3): error TS2741: Property '__promisify__' is missing in type '(fd: any, cb: any) => void' but required in type 'typeof close'.
