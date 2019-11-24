@@ -1511,6 +1511,7 @@ declare module "react" {
             allowFullScreen?: boolean;
             allowTransparency?: boolean;
             frameBorder?: number | string;
+            loading?: "lazy" | "eager" | "auto";
             height?: number | string;
             marginHeight?: number;
             marginWidth?: number;
@@ -1527,6 +1528,7 @@ declare module "react" {
             alt?: string;
             crossOrigin?: "anonymous" | "use-credentials" | "";
             decoding?: "async" | "auto" | "sync";
+            loading?: "lazy" | "eager" | "auto";
             height?: number | string;
             sizes?: string;
             src?: string;
