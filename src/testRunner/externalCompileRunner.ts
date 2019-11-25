@@ -69,7 +69,7 @@ namespace Harness {
                         cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
                     }
                     if (fs.existsSync(path.join(cwd, "package.json"))) {
-                        if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
+                        if (!process.env.SOURCE_ISSUE && fs.existsSync(path.join(cwd, "package-lock.json"))) {
                             fs.unlinkSync(path.join(cwd, "package-lock.json"));
                         }
                         if (fs.existsSync(path.join(cwd, "node_modules"))) {
