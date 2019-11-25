@@ -36,7 +36,7 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = 20;
 });
 var globalConst = 10;
-define("file3", ["require", "exports"], function (require, exports) {
+define("file3", ["require", "exports", "file1"], function (require, exports) {
     "use strict";
     "myPrologue";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -237,7 +237,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >"myPrologue3"
   >
 2 >const 
@@ -256,7 +256,7 @@ sourceFile:../lib/global.ts
 emittedFile:/src/app/module.js
 sourceFile:file3.ts
 -------------------------------------------------------------------
->>>define("file3", ["require", "exports"], function (require, exports) {
+>>>define("file3", ["require", "exports", "file1"], function (require, exports) {
 >>>    "use strict";
 >>>    "myPrologue";
 1->^^^^
@@ -370,7 +370,7 @@ sourceFile:file4.ts
         },
         {
           "pos": 523,
-          "end": 743,
+          "end": 752,
           "kind": "text"
         }
       ],
@@ -464,8 +464,8 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (523-743)
-define("file3", ["require", "exports"], function (require, exports) {
+text: (523-752)
+define("file3", ["require", "exports", "file1"], function (require, exports) {
     "use strict";
     "myPrologue";
     Object.defineProperty(exports, "__esModule", { value: true });

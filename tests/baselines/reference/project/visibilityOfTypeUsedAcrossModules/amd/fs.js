@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./commands"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var RM = /** @class */ (function () {

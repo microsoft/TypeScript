@@ -8,7 +8,7 @@ define("subfolder/b", ["require", "exports"], function (require, exports) {
     }());
     exports.B = B;
 });
-define("a", ["require", "exports"], function (require, exports) {
+define("a", ["require", "exports", "subfolder/b"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var A = /** @class */ (function () {
@@ -18,7 +18,7 @@ define("a", ["require", "exports"], function (require, exports) {
     }());
     exports.A = A;
 });
-define("subfolder/c", ["require", "exports"], function (require, exports) {
+define("subfolder/c", ["require", "exports", "a"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var C = /** @class */ (function () {
