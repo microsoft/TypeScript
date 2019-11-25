@@ -829,6 +829,7 @@ namespace ts {
         let flowInvocationCount = 0;
         let lastFlowNode: FlowNode | undefined;
         let lastFlowNodeReachable: boolean;
+        let flowTypeCache: Type[] | undefined;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -844,7 +845,6 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
-        const flowAssignmentTypes: Type[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -19173,23 +19173,9 @@ namespace ts {
 
             function getInitialOrAssignedType(flow: FlowAssignment) {
                 const node = flow.node;
-                if (flow.flags & FlowFlags.Cached) {
-                    const cached = flowAssignmentTypes[getNodeId(node)];
-                    if (cached) {
-                        return cached;
-                    }
-                }
-                const startInvocationCount = flowInvocationCount;
-                const type = getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                return getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
                     getInitialType(<VariableDeclaration | BindingElement>node) :
                     getAssignedType(node), reference);
-                // We cache the assigned type when getFlowTypeOfReference was recursively invoked in the
-                // resolution of the assigned type and we're not within loop analysis.
-                if (flowInvocationCount !== startInvocationCount && flowLoopCount === flowLoopStart) {
-                    flow.flags |= FlowFlags.Cached;
-                    flowAssignmentTypes[getNodeId(node)] = type;
-                }
-                return type;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
@@ -19469,7 +19455,10 @@ namespace ts {
                         flowLoopKeys[flowLoopCount] = key;
                         flowLoopTypes[flowLoopCount] = antecedentTypes;
                         flowLoopCount++;
+                        const saveFlowTypeCache = flowTypeCache;
+                        flowTypeCache = undefined;
                         flowType = getTypeAtFlowNode(antecedent);
+                        flowTypeCache = saveFlowTypeCache;
                         flowLoopCount--;
                         // If we see a value appear in the cache it is a sign that control flow analysis
                         // was restarted and completed by checkExpressionCached. We can simply pick up
@@ -27322,8 +27311,11 @@ namespace ts {
                 // analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
                 // to the top of the stack ensures all transient types are computed from a known point.
                 const saveFlowLoopStart = flowLoopStart;
+                const saveFlowTypeCache = flowTypeCache;
                 flowLoopStart = flowLoopCount;
+                flowTypeCache = undefined;
                 links.resolvedType = checkExpression(node, checkMode);
+                flowTypeCache = saveFlowTypeCache;
                 flowLoopStart = saveFlowLoopStart;
             }
             return links.resolvedType;
@@ -27336,7 +27328,7 @@ namespace ts {
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
             const initializer = getEffectiveInitializer(declaration)!;
-            const type = getTypeOfExpression(initializer, /*cache*/ true);
+            const type = getQuickTypeOfExpression(initializer) || checkExpressionCached(initializer);
             const padded = isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
                 isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
                 padTupleType(type, declaration.name) : type;
@@ -27590,10 +27582,32 @@ namespace ts {
         /**
          * Returns the type of an expression. Unlike checkExpression, this function is simply concerned
          * with computing the type and may not fully check all contained sub-expressions for errors.
-         * A cache argument of true indicates that if the function performs a full type check, it is ok
-         * to cache the result.
          */
-        function getTypeOfExpression(node: Expression, cache?: boolean) {
+        function getTypeOfExpression(node: Expression) {
+            // Don't bother caching types that require no flow analysis and are quick to compute.
+            const quickType = getQuickTypeOfExpression(node);
+            if (quickType) {
+                return quickType;
+            }
+            // If a type has been cached for the node, return it.
+            if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
+                const cachedType = flowTypeCache[getNodeId(node)];
+                if (cachedType) {
+                    return cachedType;
+                }
+            }
+            const startInvocationCount = flowInvocationCount;
+            const type = checkExpression(node);
+            // If control flow analysis was required to determine the type, it is worth caching.
+            if (flowInvocationCount !== startInvocationCount) {
+                const cache = flowTypeCache || (flowTypeCache = []);
+                cache[getNodeId(node)] = type;
+                node.flags |= NodeFlags.TypeCached;
+            }
+            return type;
+        }
+
+        function getQuickTypeOfExpression(node: Expression) {
             const expr = skipParentheses(node);
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
@@ -27607,10 +27621,11 @@ namespace ts {
             else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
                 return getTypeFromTypeNode((<TypeAssertion>expr).type);
             }
-            // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
-            // should have a parameter that indicates whether full error checking is required such that
-            // we can perform the optimizations locally.
-            return cache ? checkExpressionCached(node) : checkExpression(node);
+            else if (node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral ||
+                node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) {
+                return checkExpression(node);
+            }
+            return undefined;
         }
 
         /**
