@@ -32,9 +32,12 @@ exports.__esModule = true;
 "use strict";
 //visibilityOfCrossModuleTypeUsage
 exports.__esModule = true;
+require("./visibilityOfCrossModuleTypeUsage_fs");
+require("./visibilityOfCrossModuleTypeUsage_server");
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
 "use strict";
 exports.__esModule = true;
+require("./visibilityOfCrossModuleTypeUsage_commands");
 function run(configuration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 }

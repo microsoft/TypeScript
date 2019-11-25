@@ -15,3 +15,6 @@ import foo from "foo";
 //// [user.js]
 "use strict";
 exports.__esModule = true;
+///<reference path="declarations1.d.ts" />
+///<reference path="declarations1.d.ts" />
+require("foo");

@@ -23,6 +23,7 @@ exports.c = c;
 exports.__esModule = true;
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
+require("./server"); // unreferenced
 
 
 //// [server.d.ts]

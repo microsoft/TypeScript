@@ -32,9 +32,12 @@ exports.__esModule = true;
 //// [type-b.js]
 "use strict";
 exports.__esModule = true;
+require("./types");
+require("./type-a");
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+require("./type-b");
 var Broken = /** @class */ (function () {
     function Broken() {
     }

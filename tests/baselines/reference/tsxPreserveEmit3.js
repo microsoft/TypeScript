@@ -18,7 +18,7 @@ import {React} from "./test";
 
 //// [file.jsx]
 //// [react-consumer.jsx]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./test"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

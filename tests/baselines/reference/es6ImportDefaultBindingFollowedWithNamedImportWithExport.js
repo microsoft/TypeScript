@@ -31,7 +31,7 @@ define(["require", "exports"], function (require, exports) {
     exports.default = {};
 });
 //// [client.js]
-define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
+define(["require", "exports", "server", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.x1 = server_1.a;

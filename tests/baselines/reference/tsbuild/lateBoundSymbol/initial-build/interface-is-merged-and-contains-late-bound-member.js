@@ -18,6 +18,7 @@ exports.__esModule = true;
 //// [/src/src/main.js]
 "use strict";
 exports.__esModule = true;
+require("./hkt");
 var sym = Symbol();
 var x = 10;
 

@@ -20,12 +20,12 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
 });
 //// [exporter.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./w1"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });
 //// [consumer.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./exporter"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     function w() {

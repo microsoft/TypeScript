@@ -2,6 +2,7 @@
 //@module: commonjs
 //@reactNamespace: Element
 //@jsx: react
+//@removeUnusedImports: true
 
 // @filename: foo.tsx
 import Element = require("react");

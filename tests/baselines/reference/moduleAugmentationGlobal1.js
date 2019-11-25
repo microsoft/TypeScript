@@ -29,6 +29,7 @@ exports.A = A;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
+require("./f1");
 var x = [1];
 var y = x.getA().x;
 

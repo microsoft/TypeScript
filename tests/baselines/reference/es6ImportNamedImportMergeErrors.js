@@ -29,5 +29,11 @@ exports.z1 = exports.a;
 //// [es6ImportNamedImportMergeErrors_1.js]
 "use strict";
 exports.__esModule = true;
+require("./es6ImportNamedImportMergeErrors_0");
+require("./es6ImportNamedImportMergeErrors_0");
+require("./es6ImportNamedImportMergeErrors_0"); // should be error
 var x = 10;
+require("./es6ImportNamedImportMergeErrors_0"); // should be error
 var x44 = 10;
+require("./es6ImportNamedImportMergeErrors_0"); // should be error
+require("./es6ImportNamedImportMergeErrors_0"); // should be error

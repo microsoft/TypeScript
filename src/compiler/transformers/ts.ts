@@ -2756,7 +2756,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced.
+         * Visits an import declaration, eliding it if it is not referenced and `removeUnusedImports` is enabled.
          *
          * @param node The import declaration node.
          */
@@ -2766,10 +2766,14 @@ namespace ts {
                 //  import "foo";
                 return node;
             }
+            if (node.importClause.isTypeOnly) {
+                // Always elide type-only imports
+                return undefined;
+            }
 
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-            return importClause
+            return importClause || !compilerOptions.removeUnusedImports
                 ? updateImportDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -2911,10 +2915,24 @@ namespace ts {
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             if (isExternalModuleImportEqualsDeclaration(node)) {
-                // Elide external module `import=` if it is not referenced.
-                return resolver.isReferencedAliasDeclaration(node)
-                    ? visitEachChild(node, visitor, context)
-                    : undefined;
+                const isReferenced = resolver.isReferencedAliasDeclaration(node);
+                // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
+                if (!isReferenced && !compilerOptions.removeUnusedImports) {
+                    return setOriginalNode(
+                        setTextRange(
+                            createImportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*importClause*/ undefined,
+                                node.moduleReference.expression,
+                            ),
+                            node,
+                        ),
+                        node,
+                    );
+                }
+
+                return isReferenced ? visitEachChild(node, visitor, context) : undefined;
             }
 
             if (!shouldEmitImportEqualsDeclaration(node)) {

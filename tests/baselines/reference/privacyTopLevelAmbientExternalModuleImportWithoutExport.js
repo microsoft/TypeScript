@@ -73,7 +73,7 @@ define(["require", "exports"], function (require, exports) {
     exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
-define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
+define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require1"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
     "use strict";
     exports.__esModule = true;
     // Usage of privacy error imports

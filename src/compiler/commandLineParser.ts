@@ -818,6 +818,13 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
+            name: "removeUnusedImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Do_not_emit_imports_that_are_unused_or_used_only_for_types
+        },
+        {
             name: "preserveConstEnums",
             type: "boolean",
             affectsEmit: true,

@@ -26,6 +26,7 @@ exports.__esModule = true;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+require("./a");
 function f(i) {
     i.x;
 }

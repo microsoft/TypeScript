@@ -13,3 +13,4 @@ import { Foo } from "@types/foo-bar";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+require("@types/foo-bar");

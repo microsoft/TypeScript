@@ -129,6 +129,7 @@ exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
 exports.__esModule = true;
+require("./importDecl_require");
 function foo2() { return null; }
 exports.foo2 = foo2;
 //// [importDecl_1.js]

@@ -34,6 +34,8 @@ var Car = /** @class */ (function () {
 module.exports = Car;
 //// [arrayOfExportedClass_1.js]
 "use strict";
+///<reference path='arrayOfExportedClass_0.ts'/>
+require("./arrayOfExportedClass_0");
 var Road = /** @class */ (function () {
     function Road() {
     }

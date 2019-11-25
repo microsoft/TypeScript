@@ -19,7 +19,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
 });
 //// [exportAssignedTypeAsTypeAnnotation_1.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "exportAssignedTypeAsTypeAnnotation_0"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var t2; // should not raise a 'container type' error

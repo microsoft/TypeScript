@@ -67,4 +67,5 @@ exports.b = 1;
 //// [main.js]
 "use strict";
 exports.__esModule = true;
+require("./observable");
 require("./x");

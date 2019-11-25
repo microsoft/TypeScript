@@ -45,6 +45,7 @@ export declare function createDog(): Dog;
 //// [/src/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require(".");
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({

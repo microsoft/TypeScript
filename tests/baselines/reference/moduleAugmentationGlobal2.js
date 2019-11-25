@@ -29,6 +29,8 @@ exports.A = A;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
+// change the shape of Array<T>
+require("./f1");
 var x = [1];
 var y = x.getCountAsString().toLowerCase();
 

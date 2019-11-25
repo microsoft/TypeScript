@@ -15,6 +15,7 @@ exitCode:: ExitStatus.Success
 //// [/src/src/main.js]
 "use strict";
 exports.__esModule = true;
+require("./hkt");
 var sym = Symbol();
 
 

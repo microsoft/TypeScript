@@ -19,3 +19,4 @@ exports.assertNever = assertNever;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+require("./a");

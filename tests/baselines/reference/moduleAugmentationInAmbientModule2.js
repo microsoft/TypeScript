@@ -31,6 +31,7 @@ x.foo().x;
 "use strict";
 /// <reference path="O.d.ts" />
 exports.__esModule = true;
+require("Observable");
 require("Map");
 var x;
 x.foo().x;

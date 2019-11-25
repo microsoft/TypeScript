@@ -1,5 +1,6 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
+//@removeUnusedImports: true
 
 // @filename: b.ts
 export class Member {}

@@ -16,7 +16,7 @@ import * as http from 'intern/dojo/node!http';
 
 //// [a.js]
 /// <reference path="a.d.ts"/>
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "intern/dojo/node!http"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

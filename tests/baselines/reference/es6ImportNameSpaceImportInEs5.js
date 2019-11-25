@@ -18,6 +18,7 @@ exports.a = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 var nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
 var x = nameSpaceBinding.a;
+require("./es6ImportNameSpaceImportInEs5_0"); // elide this
 
 
 //// [es6ImportNameSpaceImportInEs5_0.d.ts]

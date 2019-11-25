@@ -54,7 +54,7 @@ System.register([], function (exports_1, context_1) {
     };
 });
 //// [file2.js]
-System.register(["./file3"], function (exports_1, context_1) {
+System.register(["./file3", "./file4"], function (exports_1, context_1) {
     "use strict";
     var moduleCStar, file3_1, file3_2;
     var __moduleName = context_1 && context_1.id;
@@ -64,6 +64,8 @@ System.register(["./file3"], function (exports_1, context_1) {
                 moduleCStar = moduleCStar_1;
                 file3_1 = moduleCStar_1;
                 file3_2 = moduleCStar_1;
+            },
+            function (_1) {
             }
         ],
         execute: function () {

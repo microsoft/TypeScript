@@ -94,6 +94,7 @@ exports.VisualizationModel = VisualizationModel;
 //// [extendingClassFromAliasAndUsageInIndexer_main.js]
 "use strict";
 exports.__esModule = true;
+require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 var moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 var moduleATyped = moduleA;

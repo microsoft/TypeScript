@@ -11,3 +11,4 @@ import { foo } from './0';
 export function foo() { return "foo"; }
 //// [1.js]
 import ;
+import './0';

@@ -13,5 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./other");
 const X = 42;
 console.log('X is ' + X);

@@ -65,6 +65,7 @@ exports.x11 = x11;
 //// [client.js]
 "use strict";
 exports.__esModule = true;
+require("./server");
 var server_1 = require("./server");
 exports.x1 = new server_1.a();
 var server_2 = require("./server");

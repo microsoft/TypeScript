@@ -8,11 +8,14 @@ import { C } from "projB";
 
 
 //// [out.js]
-System.register("a", [], function (exports_1, context_1) {
+System.register("a", ["node_modules/projB/index"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
-        setters: [],
+        setters: [
+            function (_1) {
+            }
+        ],
         execute: function () {
         }
     };

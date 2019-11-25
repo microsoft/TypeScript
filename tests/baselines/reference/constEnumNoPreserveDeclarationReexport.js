@@ -23,6 +23,9 @@ StillEnum.Foo;
 //// [usages.js]
 "use strict";
 exports.__esModule = true;
+require("./ConstEnum");
+require("./ImportExport");
+require("./ReExport");
 0 /* Foo */;
 0 /* Foo */;
 0 /* Foo */;

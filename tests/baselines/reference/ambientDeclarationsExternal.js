@@ -28,6 +28,8 @@ var n: number;
 //// [consumer.js]
 "use strict";
 exports.__esModule = true;
+/// <reference path="decls.ts" />
+require("equ");
 // Ambient external module members are always exported with or without export keyword when module lacks export assignment
 var imp3 = require("equ2");
 var n = imp3.x;

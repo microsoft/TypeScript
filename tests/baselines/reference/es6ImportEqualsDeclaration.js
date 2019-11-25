@@ -10,3 +10,4 @@ import a = require("server");
 //// [server.js]
 var a = 10;
 //// [client.js]
+import "server";

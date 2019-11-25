@@ -16,3 +16,5 @@ exports.x = exports.a;
 //// [es6ImportNamedImport_1.js]
 "use strict";
 exports.__esModule = true;
+require("./es6ImportNamedImportNoExportMember_0");
+require("./es6ImportNamedImportNoExportMember_0");

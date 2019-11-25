@@ -12,3 +12,4 @@ import * as b from './b.json';
 //// [out/file1.js]
 "use strict";
 exports.__esModule = true;
+require("./b.json");

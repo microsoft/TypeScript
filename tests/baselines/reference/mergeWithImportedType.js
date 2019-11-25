@@ -17,3 +17,4 @@ var E;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
+require("./f1");

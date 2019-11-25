@@ -7,7 +7,7 @@ import {x} from "./b"
 export let x = 1;
 
 //// [a.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "./b"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

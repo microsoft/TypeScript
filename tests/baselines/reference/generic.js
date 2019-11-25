@@ -24,6 +24,7 @@ exports.A = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+require("./a");
 var a = { a: "" };
 var b = { a: 3 };
 var c = {};

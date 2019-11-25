@@ -14,6 +14,7 @@ module.exports = a;
 //// [es6ImportDefaultBindingInEs5_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./es6ImportDefaultBindingInEs5_0");
 
 
 //// [es6ImportDefaultBindingInEs5_0.d.ts]

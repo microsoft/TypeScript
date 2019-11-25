@@ -42,6 +42,7 @@ exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./defaultPath");
 Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
 Promise.resolve().then(() => require(getSpecifier()));
 var p1 = Promise.resolve().then(() => require(ValidSomeCondition() ? "./0" : "externalModule"));

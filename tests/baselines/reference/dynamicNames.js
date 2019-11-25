@@ -164,6 +164,7 @@ exports.s0 = Symbol();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const module_1 = require("./module");
+require("./module");
 var N;
 (function (N) {
     N.c2 = "a";

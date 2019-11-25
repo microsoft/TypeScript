@@ -17,3 +17,5 @@ import { x } from "js";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+/// <reference path="declarations.d.ts" />
+require("js");

@@ -59,9 +59,12 @@ exports.C = C;
 //// [user.js]
 "use strict";
 exports.__esModule = true;
+require("./exportEqualsT");
 // OK, has a value side
 var exportValue_1 = require("./exportValue");
 exports.C = exportValue_1.C;
 // OK, even though the namespace it exports is only types.
 var NS = require("./exportT");
 exports.NS = NS;
+// Error, not clear (to an isolated module) whether `T4` is a type.
+require("./exportT");

@@ -57,5 +57,7 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInVarAssignment_main.js]
 "use strict";
 exports.__esModule = true;
+require("./aliasUsageInVarAssignment_backbone");
+require("./aliasUsageInVarAssignment_moduleA");
 var i;
 var m = i;

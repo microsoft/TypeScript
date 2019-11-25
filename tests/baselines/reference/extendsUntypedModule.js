@@ -31,6 +31,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var foo_1 = require("foo");
+require("bar"); // error: unused
 var A = /** @class */ (function (_super) {
     __extends(A, _super);
     function A() {

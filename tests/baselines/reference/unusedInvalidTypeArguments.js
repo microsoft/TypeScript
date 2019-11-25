@@ -84,6 +84,7 @@ exports.D = D;
 //// [interface.js]
 "use strict";
 exports.__esModule = true;
+require("unknown");
 //// [call.js]
 "use strict";
 exports.__esModule = true;

@@ -18,3 +18,6 @@ import { z } from "@be/bop/e/z";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+require("@cow/boy");
+require("@be/bop");
+require("@be/bop/e/z");

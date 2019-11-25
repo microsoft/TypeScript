@@ -50,7 +50,7 @@ define(["require", "exports", "./observable"], function (require, exports, obser
     observable_1.Observable.prototype.map = function () { };
 });
 //// [main.js]
-define(["require", "exports", "./map1", "./map2"], function (require, exports) {
+define(["require", "exports", "./observable", "./map1", "./map2"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var x;

@@ -37,6 +37,8 @@ exports.MyClass2 = library_a_1.MyClass;
 //// [/src/bin/app.js]
 "use strict";
 exports.__esModule = true;
+require("./library-a");
+require("./library-b");
 var x;
 var y;
 x = y;

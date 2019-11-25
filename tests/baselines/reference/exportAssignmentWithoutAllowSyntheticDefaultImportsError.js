@@ -10,3 +10,4 @@ import bar from './bar';
 //// [bar.js]
 function bar() { }
 //// [foo.js]
+import './bar';

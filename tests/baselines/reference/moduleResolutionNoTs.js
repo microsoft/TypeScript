@@ -32,3 +32,10 @@ exports["default"] = 0;
 //// [user.js]
 "use strict";
 exports.__esModule = true;
+require("./x.ts");
+require("./y.tsx");
+require("./z.d.ts");
+// Making sure the suggested fixes are valid:
+require("./x");
+require("./y");
+require("./z");

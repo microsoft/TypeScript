@@ -18,3 +18,4 @@ exports.__esModule = true;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+require("./a");

@@ -31,6 +31,8 @@ var y = as.return;
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./t1");
 //// [t4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./t1");

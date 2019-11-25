@@ -10,3 +10,4 @@ import j = require("./j.json");
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+require("./j.json");

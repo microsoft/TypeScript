@@ -66,12 +66,12 @@ define("b", ["require", "exports"], function (require, exports) {
     }());
     exports.B = B;
 });
-define("e", ["require", "exports", "a"], function (require, exports, a_1) {
+define("e", ["require", "exports", "a", "C"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
     a_1.A.prototype.getCls = function () { return undefined; };
 });
-define("main", ["require", "exports", "D", "e"], function (require, exports) {
+define("main", ["require", "exports", "a", "D", "e"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var a;

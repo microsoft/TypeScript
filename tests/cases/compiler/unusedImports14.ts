@@ -1,6 +1,7 @@
 //@noUnusedLocals:true
 //@module: commonjs
 //@jsx: react
+//@removeUnusedImports: true
 
 // @filename: foo.tsx
 import React = require("react");

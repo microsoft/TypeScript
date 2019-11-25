@@ -34,6 +34,7 @@ exports.__esModule = true;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+require("./model");
 exports.func = function (account, acc2) { };
 
 

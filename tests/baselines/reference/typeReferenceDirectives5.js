@@ -16,6 +16,8 @@ export interface A {
 //// [app.js]
 "use strict";
 exports.__esModule = true;
+/// <reference types="lib"/>
+require("./ref");
 
 
 //// [app.d.ts]

@@ -30,6 +30,8 @@ exports.C = C;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./defaultPath");
+require("./anotherModule");
 let p1 = Promise.resolve().then(() => require("./defaultPath"));
 let p2 = Promise.resolve().then(() => require("./defaultPath"));
 let p3 = Promise.resolve().then(() => require("./defaultPath"));

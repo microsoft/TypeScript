@@ -32,6 +32,8 @@ exports.A = A;
 //// [f2.js]
 "use strict";
 exports.__esModule = true;
+// change the shape of Array<T>
+require("./f1");
 //// [f3.js]
 "use strict";
 exports.__esModule = true;

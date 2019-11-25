@@ -21,3 +21,4 @@ import { ISpinButton } from "troublesome-lib";
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+require("troublesome-lib");

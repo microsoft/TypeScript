@@ -49,4 +49,5 @@ var flags;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+require("./a");
 var flags = "Type" /* Type */;

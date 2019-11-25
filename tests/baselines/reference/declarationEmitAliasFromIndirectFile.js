@@ -30,6 +30,7 @@ export default fp.l10ns;
 //// [app.js]
 "use strict";
 exports.__esModule = true;
+require("./instance");
 var fp = { l10ns: {} };
 exports["default"] = fp.l10ns;
 

@@ -7,7 +7,7 @@ export declare var a: {
 
 
 //// [badExternalModuleReference.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "garbage"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

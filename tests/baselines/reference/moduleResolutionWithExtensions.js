@@ -32,10 +32,13 @@ exports["default"] = 0;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+require("./a");
 // '.js' extension: stripped and replaced with '.ts'
 //// [d.js]
 "use strict";
 exports.__esModule = true;
+require("./a.js");
 //// [jquery_user_1.js]
 "use strict";
 exports.__esModule = true;
+require("./jquery.js");

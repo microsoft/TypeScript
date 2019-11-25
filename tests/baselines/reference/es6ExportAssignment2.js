@@ -11,3 +11,4 @@ import * as a from "a";
 //// [a.js]
 var a = 10;
 //// [b.js]
+import "a";

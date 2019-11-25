@@ -7,3 +7,4 @@ import foo = require(x); // invalid
 "use strict";
 exports.__esModule = true;
 var x = "filename";
+require(); // invalid

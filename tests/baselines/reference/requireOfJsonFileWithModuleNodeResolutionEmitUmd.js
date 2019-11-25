@@ -21,9 +21,10 @@ import * as b from './b.json';
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./b.json"], factory);
     }
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    require("./b.json");
 });

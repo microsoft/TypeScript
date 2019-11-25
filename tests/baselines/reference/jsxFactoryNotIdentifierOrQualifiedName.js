@@ -70,6 +70,7 @@ function toCamelCase(text) {
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./Element");
 let c;
 class A {
     view() {

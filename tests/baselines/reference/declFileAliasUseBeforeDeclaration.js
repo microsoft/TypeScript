@@ -21,6 +21,7 @@ exports.Foo = Foo;
 exports.__esModule = true;
 function bar(a) { }
 exports.bar = bar;
+require("./declFileAliasUseBeforeDeclaration_foo");
 
 
 //// [declFileAliasUseBeforeDeclaration_foo.d.ts]

@@ -1,5 +1,6 @@
 //@noUnusedLocals:true
 //@noUnusedParameters:true
+//@removeUnusedImports: true
 
 module A {
     export class Calculator {

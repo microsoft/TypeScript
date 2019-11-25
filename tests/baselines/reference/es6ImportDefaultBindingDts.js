@@ -24,6 +24,7 @@ exports.default = c;
 Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = require("./server");
 exports.x = new server_1.default();
+require("./server"); // elide this import since defaultBinding2 is not used
 
 
 //// [server.d.ts]

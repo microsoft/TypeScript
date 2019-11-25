@@ -25,7 +25,7 @@ define(["require", "exports"], function (require, exports) {
     })(CharCode = exports.CharCode || (exports.CharCode = {}));
 });
 //// [file.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "defs/cc"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var User = /** @class */ (function () {

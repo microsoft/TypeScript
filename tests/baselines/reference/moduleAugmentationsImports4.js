@@ -67,7 +67,7 @@ define("b", ["require", "exports"], function (require, exports) {
     }());
     exports.B = B;
 });
-define("main", ["require", "exports", "D", "E"], function (require, exports) {
+define("main", ["require", "exports", "a", "D", "E"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var a;

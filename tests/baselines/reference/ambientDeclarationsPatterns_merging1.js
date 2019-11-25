@@ -20,6 +20,8 @@ import { everywhere, onlyInA } from "b.foo"; // Error
 //// [testA.js]
 "use strict";
 exports.__esModule = true;
+require("a.foo");
 //// [testB.js]
 "use strict";
 exports.__esModule = true;
+require("b.foo"); // Error

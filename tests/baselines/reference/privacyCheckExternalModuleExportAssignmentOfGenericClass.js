@@ -25,6 +25,7 @@ module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
 "use strict";
 exports.__esModule = true;
+require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.d.ts]

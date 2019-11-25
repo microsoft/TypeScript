@@ -10,3 +10,4 @@ var x = import { foo } from './0';
 export function foo() { return "foo"; }
 //// [1.js]
 var x = ;
+import './0';

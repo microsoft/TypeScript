@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
 });
 //// [world.js]
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "helloInterface", "helloNamespace"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     HelloInterface.world;

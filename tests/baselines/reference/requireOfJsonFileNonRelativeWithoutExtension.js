@@ -25,3 +25,5 @@ import e = require("e"); // Should fail
 //// [out/file1.js]
 "use strict";
 exports.__esModule = true;
+require("d.json"); // Should fail
+require("e"); // Should fail

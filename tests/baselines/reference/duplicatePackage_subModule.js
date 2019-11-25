@@ -30,5 +30,6 @@ const o: Foo = a.o;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+require("foo/Foo");
 var a = require("a");
 var o = a.o;

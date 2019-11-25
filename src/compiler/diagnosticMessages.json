@@ -635,7 +635,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Re-exporting a type when the '--isolatedModules' flag is provided requires using an explicit type-only export.": {
+    "Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.": {
         "category": "Error",
         "code": 1205
     },
@@ -1074,6 +1074,10 @@
     "Split into two separate import declarations": {
         "category": "Message",
         "code": 1366
+    },
+    "Do not emit imports that are unused or used only for types": {
+        "category": "Message",
+        "code": 1367
     },
 
     "The types of '{0}' are incompatible between these types.": {

@@ -1,6 +1,7 @@
 // @module: commonjs
 // @declaration: true
 // @Filename: unusedImportDeclaration_testerB.ts
+// @removeUnusedImports: true
 class TesterB {
     me: string;
 }

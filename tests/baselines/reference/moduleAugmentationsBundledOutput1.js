@@ -87,13 +87,13 @@ define("m3", ["require", "exports"], function (require, exports) {
     }());
     exports.C2 = C2;
 });
-define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
+define("m4", ["require", "exports", "m1", "m3"], function (require, exports, m1_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     m1_2.Cls.prototype.baz1 = function () { return undefined; };
     m1_2.Cls.prototype.baz2 = function () { return undefined; };
 });
-define("test", ["require", "exports", "m2", "m4"], function (require, exports) {
+define("test", ["require", "exports", "m1", "m2", "m4"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var c;

@@ -61,6 +61,7 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInGenericFunction_main.js]
 "use strict";
 exports.__esModule = true;
+require("./aliasUsageInGenericFunction_backbone");
 var moduleA = require("./aliasUsageInGenericFunction_moduleA");
 function foo(x) {
     return x;

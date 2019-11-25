@@ -23,6 +23,7 @@ Library.foo; // should be an error
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+require("./file1");
 var Lib;
 (function (Lib) {
     Lib.foo = "";

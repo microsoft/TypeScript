@@ -74,6 +74,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 var C = /** @class */ (function () {
     function C() {

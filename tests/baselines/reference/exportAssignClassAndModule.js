@@ -29,6 +29,8 @@ module.exports = Foo;
 //// [exportAssignClassAndModule_1.js]
 "use strict";
 exports.__esModule = true;
+///<reference path='exportAssignClassAndModule_0.ts'/>
+require("./exportAssignClassAndModule_0");
 var z;
 var zz;
 zz.x;

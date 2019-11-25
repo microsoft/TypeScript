@@ -1782,7 +1782,7 @@ namespace ts {
         }
     }
 
-    export function isExternalModuleImportEqualsDeclaration(node: Node) {
+    export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
 

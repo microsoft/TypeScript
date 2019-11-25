@@ -42,3 +42,5 @@ import { makeSharedOption } from "@shared/lib/app"; // Includes option as module
 //// [/project/src/app.js]
 "use strict";
 exports.__esModule = true;
+require("anotherLib"); // Include the lib that recursively includes option as relative module resolution in this directory
+require("@shared/lib/app"); // Includes option as module in shared folder but as module in node_modules folder

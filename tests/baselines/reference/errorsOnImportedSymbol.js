@@ -20,5 +20,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [errorsOnImportedSymbol_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./errorsOnImportedSymbol_0");
 var x = new Sammy.Sammy();
 var y = Sammy.Sammy();

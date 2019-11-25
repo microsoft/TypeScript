@@ -14,7 +14,7 @@ define("b", [], {
     "a": true,
     "b": "hello"
 });
-define("file1", ["require", "exports"], function (require, exports) {
+define("file1", ["require", "exports", "b"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });
