@@ -13,6 +13,6 @@ goTo.file("/b.ts");
 verify.codeFix({
   index: 0,
   description: ts.Diagnostics.Convert_to_type_only_export.message,
-  errorCode: ts.Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_an_explicit_type_only_export.code,
+  errorCode: ts.Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code,
   newFileContent: "export type { A, B } from './a';"
 });

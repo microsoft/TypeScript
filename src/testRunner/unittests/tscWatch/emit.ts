@@ -629,8 +629,8 @@ namespace ts.tscWatch {
             };
             const strictAndEsModule = `"use strict";\nexports.__esModule = true;\n`;
             verifyEmittedFileContents("\n", [file3, file2, file1], [
-                `${strictAndEsModule}var v = 1 /* V */;\n`,
-                strictAndEsModule,
+                `${strictAndEsModule}require("./file2");\nvar v = 1 /* V */;\n`,
+                `${strictAndEsModule}require("./file1");\n`,
                 strictAndEsModule
             ], modifyFiles);
 
