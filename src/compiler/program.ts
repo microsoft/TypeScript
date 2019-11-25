@@ -1004,15 +1004,9 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function isValidSourceFileForEmit(file: SourceFile) {
-            // source file is allowed to be emitted and its not source of project reference redirect
-            return sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect) &&
-                !isSourceOfProjectReferenceRedirect(file.fileName);
-        }
-
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
-                const emittedFiles = filter(files, file => isValidSourceFileForEmit(file));
+                const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
                 if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
@@ -1471,6 +1465,7 @@ namespace ts {
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
+                isSourceOfProjectReferenceRedirect,
                 getProbableSymlinks,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
@@ -2953,7 +2948,7 @@ namespace ts {
                 const rootPaths = arrayToSet(rootNames, toPath);
                 for (const file of files) {
                     // Ignore file that is not emitted
-                    if (isValidSourceFileForEmit(file) && !rootPaths.has(file.path)) {
+                    if (sourceFileMayBeEmitted(file, program) && !rootPaths.has(file.path)) {
                         addProgramDiagnosticAtRefPath(
                             file,
                             rootPaths,

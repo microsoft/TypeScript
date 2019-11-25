@@ -23,7 +23,7 @@ namespace ts {
         forceDtsEmit = false,
         onlyBuildInfo?: boolean,
         includeBuildInfo?: boolean) {
-        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
+        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
             const prepends = host.getPrependNodes();
@@ -274,7 +274,7 @@ namespace ts {
         forEachEmittedFile(
             host,
             emitSourceFileOrBundle,
-            getSourceFilesToEmit(host, targetSourceFile),
+            getSourceFilesToEmit(host, targetSourceFile, forceDtsEmit),
             forceDtsEmit,
             onlyBuildInfo,
             !targetSourceFile
@@ -754,6 +754,7 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             getResolvedProjectReferenceToRedirect: returnUndefined,
+            isSourceOfProjectReferenceRedirect: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
