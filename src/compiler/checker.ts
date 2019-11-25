@@ -10831,7 +10831,8 @@ namespace ts {
                 }
                 const isDelayedMergeClass = symbol !== valueType.symbol && getMergedSymbol(symbol) === valueType.symbol;
                 const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
-                if (isRequireAlias || isImportTypeWithQualifier || isDelayedMergeClass) {
+                // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
+                if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier || isDelayedMergeClass)) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
