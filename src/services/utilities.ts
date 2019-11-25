@@ -1321,12 +1321,12 @@ namespace ts {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined, isTypeOnly)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
