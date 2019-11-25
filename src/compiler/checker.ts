@@ -10840,7 +10840,8 @@ namespace ts {
                     isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                 }
                 const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
-                if (isRequireAlias || isImportTypeWithQualifier) {
+                // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
+                if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
