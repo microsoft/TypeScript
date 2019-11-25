@@ -91,7 +91,7 @@ namespace ts.codefix {
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
             default:
-                const visited = visitEachChild(node, transformJSDocType, nullTransformationContext); // TODO: GH#18217
+                const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }

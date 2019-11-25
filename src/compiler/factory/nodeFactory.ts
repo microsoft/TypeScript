@@ -5306,6 +5306,7 @@ namespace ts {
     /**
      * Gets the transform flags to exclude when unioning the transform flags of a subtree.
      */
+    /* @internal */
     export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
         if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
             return TransformFlags.TypeExcludes;

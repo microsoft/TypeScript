@@ -5198,6 +5198,8 @@ namespace ts {
         deactivate(): Promise<CompilerPluginDeactivationResult>;
     }
 
+    export type CompilerPluginHookResult<T> = PromiseLike<T> | T;
+
     /**
      * Describes the supported shape of the main module for a compiler plugin.
      */
@@ -5205,19 +5207,19 @@ namespace ts {
         /**
          * The `activate` hook is invoked when a plugin is activated for the first time within a `Program`.
          */
-        activate?(context: CompilerPluginContext, args: CompilerPluginActivationArgs): PromiseLike<CompilerPluginActivationResult | void> | CompilerPluginActivationResult | void;
+        activate?(context: CompilerPluginContext, args: CompilerPluginActivationArgs): CompilerPluginHookResult<CompilerPluginActivationResult | void>;
         /**
          * The `preParse` hook is invoked when a new `Program` is about to be created before any files are parsed.
          */
-        preParse?(context: CompilerPluginContext, args: CompilerPluginPreParseArgs): PromiseLike<CompilerPluginPreParseResult | void> | CompilerPluginPreParseResult | void;
+        preParse?(context: CompilerPluginContext, args: CompilerPluginPreParseArgs): CompilerPluginHookResult<CompilerPluginPreParseResult | void>;
         /**
          * The `preEmit` hook is invoked after type check has completed and immediately before emit.
          */
-        preEmit?(context: CompilerPluginContext, args: CompilerPluginPreEmitArgs): PromiseLike<CompilerPluginPreEmitResult | void> | CompilerPluginPreEmitResult | void;
+        preEmit?(context: CompilerPluginContext, args: CompilerPluginPreEmitArgs): CompilerPluginHookResult<CompilerPluginPreEmitResult | void>;
         /**
          * The `deactivate` hook is invoked when a plugin should be deactivated so that it can free up any shared resources.
          */
-        deactivate?(context: CompilerPluginContext): PromiseLike<void> | void;
+        deactivate?(context: CompilerPluginContext): CompilerPluginHookResult<void>;
     }
 
     export interface CompilerPluginResult {
@@ -5242,13 +5244,6 @@ namespace ts {
         rootNames?: ReadonlyArray<string>;
         projectReferences?: ReadonlyArray<ProjectReference>;
         preprocessors?: ReadonlyArray<TransformerFactory<SourceFile>>;
-    }
-
-    export interface CompilerPluginPostCreateProgramArgs {
-        readonly program: AsyncProgram;
-    }
-
-    export interface CompilerPluginPostCreateProgramResult extends CompilerPluginResult {
     }
 
     export interface CompilerPluginPreEmitArgs {
