@@ -1,0 +1,627 @@
+=== tests/cases/compiler/controlFlowManyConsecutiveConditionsNoTimeout.ts ===
+export enum Choice {
+>Choice : Choice
+
+    One,
+>One : Choice.One
+
+    Two,
+>Two : Choice.Two
+}
+
+const choice: Choice = Choice.One;
+>choice : Choice
+>Choice.One : Choice.One
+>Choice : typeof Choice
+>One : Choice.One
+
+const choiceOne = Choice.One;
+>choiceOne : Choice.One
+>Choice.One : Choice.One
+>Choice : typeof Choice
+>One : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+if (choice === choiceOne) {} 
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+while (true) {
+>true : true
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {}
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+
+    if (choice === choiceOne) {} 
+>choice === choiceOne : boolean
+>choice : Choice.One
+>choiceOne : Choice.One
+}
+
