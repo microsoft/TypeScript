@@ -1087,6 +1087,10 @@
         "category": "Message",
         "code": 1369
     },
+    "Only ES2015 imports may use 'import type'.": {
+        "category": "Error",
+        "code": 1370
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

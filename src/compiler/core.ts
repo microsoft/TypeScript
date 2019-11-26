@@ -1996,10 +1996,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
-        return arg => {
+    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+        return (...args) => {
             for (const f of fs) {
-                if (f(arg)) {
+                if (f(...args)) {
                     return true;
                 }
             }
