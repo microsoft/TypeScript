@@ -5,21 +5,21 @@ namespace ts.tscWatch {
             files: ["index.ts"]
         };
         const mainFile: File = {
-            path: `${tscWatch.projectRoot}/index.ts`,
+            path: `${projectRoot}/index.ts`,
             content: "import settings from './settings.json';"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify(configFileJson)
         };
         const settingsJson: File = {
-            path: `${tscWatch.projectRoot}/settings.json`,
+            path: `${projectRoot}/settings.json`,
             content: JSON.stringify({ content: "Print this" })
         };
 
         it("verify that module resolution with json extension works when returned without extension", () => {
             const files = [libFile, mainFile, config, settingsJson];
-            const host = createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot });
+            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
             const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host);
             const parsedCommandResult = parseJsonConfigFileContent(configFileJson, host, config.path);
             compilerHost.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
@@ -43,17 +43,17 @@ namespace ts.tscWatch {
             files: ["index.ts"]
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify(configFileJson)
         };
         const mainFile: File = {
-            path: `${tscWatch.projectRoot}/index.ts`,
+            path: `${projectRoot}/index.ts`,
             content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}"
         };
 
         it("verify that the error count is correctly passed down to the watch status reporter", () => {
             const files = [libFile, mainFile, config];
-            const host = createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot });
+            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
             let watchedErrorCount;
             const reportWatchStatus: WatchStatusReporter = (_, __, ___, errorCount) => {
                 watchedErrorCount = errorCount;
