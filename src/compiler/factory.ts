@@ -2270,7 +2270,7 @@ namespace ts {
         return node.name !== name
             || node.namedBindings !== namedBindings
             || node.isTypeOnly !== isTypeOnly
-            ? updateNode(createImportClause(name, namedBindings), node)
+            ? updateNode(createImportClause(name, namedBindings, isTypeOnly), node)
             : node;
     }
 

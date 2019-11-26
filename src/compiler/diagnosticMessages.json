@@ -1075,9 +1075,13 @@
         "category": "Message",
         "code": 1366
     },
+    "Split all invalid type-only imports": {
+        "category": "Message",
+        "code": 1377
+    },
     "Do not emit imports that are unused or used only for types": {
         "category": "Message",
-        "code": 1367
+        "code": 1368
     },
 
     "The types of '{0}' are incompatible between these types.": {
