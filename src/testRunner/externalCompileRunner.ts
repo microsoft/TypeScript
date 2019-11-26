@@ -56,12 +56,12 @@ namespace Harness {
                         ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
                         const submoduleDir = path.join(cwd, directoryName);
                         if (!fs.existsSync(submoduleDir)) {
-                            exec("git", ["clone", config.cloneUrl, directoryName], { cwd });
+                            exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
                         }
                         else {
-                            exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                            exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                            exec("git", ["pull", "-f"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "clean", "-f"], { cwd: submoduleDir });
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "pull", "-f"], { cwd: submoduleDir });
                         }
 
                         types = config.types;
