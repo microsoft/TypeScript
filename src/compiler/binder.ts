@@ -10,7 +10,7 @@ namespace ts {
     interface ActiveLabel {
         name: __String;
         breakTarget: FlowLabel;
-        continueTarget: FlowLabel;
+        continueTarget: FlowLabel | undefined;
         referenced: boolean;
     }
 
@@ -1063,8 +1063,20 @@ namespace ts {
             currentContinueTarget = saveContinueTarget;
         }
 
+        function setContinueTarget(node: Node, label: FlowLabel) {
+            if (activeLabels) {
+                let index = activeLabels.length;
+                while (node.parent.kind === SyntaxKind.LabeledStatement) {
+                    index--;
+                    activeLabels[index].continueTarget = label;
+                    node = node.parent;
+                }
+            }
+            return label;
+        }
+
         function bindWhileStatement(node: WhileStatement): void {
-            const preWhileLabel = createLoopLabel();
+            const preWhileLabel = setContinueTarget(node, createLoopLabel());
             const preBodyLabel = createBranchLabel();
             const postWhileLabel = createBranchLabel();
             addAntecedent(preWhileLabel, currentFlow);
@@ -1078,13 +1090,8 @@ namespace ts {
 
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createLoopLabel();
-            const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
-                ? lastOrUndefined(activeLabels!)
-                : undefined;
-            // if do statement is wrapped in labeled statement then target labels for break/continue with or without
-            // label should be the same
-            const preConditionLabel = enclosingLabeledStatement ? enclosingLabeledStatement.continueTarget : createBranchLabel();
-            const postDoLabel = enclosingLabeledStatement ? enclosingLabeledStatement.breakTarget : createBranchLabel();
+            const preConditionLabel = setContinueTarget(node, createBranchLabel());
+            const postDoLabel = createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
             bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
@@ -1095,7 +1102,7 @@ namespace ts {
         }
 
         function bindForStatement(node: ForStatement): void {
-            const preLoopLabel = createLoopLabel();
+            const preLoopLabel = setContinueTarget(node, createLoopLabel());
             const preBodyLabel = createBranchLabel();
             const postLoopLabel = createBranchLabel();
             bind(node.initializer);
@@ -1110,7 +1117,7 @@ namespace ts {
         }
 
         function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
-            const preLoopLabel = createLoopLabel();
+            const preLoopLabel = setContinueTarget(node, createLoopLabel());
             const postLoopLabel = createBranchLabel();
             bind(node.expression);
             addAntecedent(preLoopLabel, currentFlow);
@@ -1313,11 +1320,11 @@ namespace ts {
             bindEach(node.statements);
         }
 
-        function pushActiveLabel(name: __String, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
+        function pushActiveLabel(name: __String, breakTarget: FlowLabel): ActiveLabel {
             const activeLabel: ActiveLabel = {
                 name,
                 breakTarget,
-                continueTarget,
+                continueTarget: undefined,
                 referenced: false
             };
             (activeLabels || (activeLabels = [])).push(activeLabel);
@@ -1341,21 +1348,16 @@ namespace ts {
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {
-            const preStatementLabel = createLoopLabel();
             const postStatementLabel = createBranchLabel();
             bind(node.label);
-            addAntecedent(preStatementLabel, currentFlow);
-            const activeLabel = pushActiveLabel(node.label.escapedText, postStatementLabel, preStatementLabel);
+            const activeLabel = pushActiveLabel(node.label.escapedText, postStatementLabel);
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
                 errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
             }
-            if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
-                // do statement sets current flow inside bindDoStatement
-                addAntecedent(postStatementLabel, currentFlow);
-                currentFlow = finishFlowLabel(postStatementLabel);
-            }
+            addAntecedent(postStatementLabel, currentFlow);
+            currentFlow = finishFlowLabel(postStatementLabel);
         }
 
         function bindDestructuringTargetFlow(node: Expression) {
