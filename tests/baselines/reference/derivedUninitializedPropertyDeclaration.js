@@ -113,9 +113,7 @@ var BDBang = /** @class */ (function (_super) {
 var BOther = /** @class */ (function (_super) {
     __extends(BOther, _super);
     function BOther() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.property = 'y'; // initialiser not allowed with declare
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     BOther.prototype.m = function () { return 2; }; // not allowed on methods
     return BOther;

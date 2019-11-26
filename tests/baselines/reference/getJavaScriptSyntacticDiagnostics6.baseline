@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics6.ts':
+/tests/cases/fourslash/a.js(1,11): error TS1176: Interface declaration cannot have 'implements' clause.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    interface I { }
+              ~
+!!! error TS1176: Interface declaration cannot have 'implements' clause.

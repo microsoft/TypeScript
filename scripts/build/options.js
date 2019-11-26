@@ -4,8 +4,8 @@ const os = require("os");
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["debug", "dirty", "inspect", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
+    boolean: ["debug", "dirty", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
+    string: ["browser", "tests", "inspect", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         "b": "browser",
         "d": "debug", "debug-brk": "debug",
@@ -49,7 +49,6 @@ if (module.exports.built) {
  * @typedef TypedOptions
  * @property {boolean} debug
  * @property {boolean} dirty
- * @property {boolean} inspect
  * @property {boolean} light
  * @property {boolean} colors
  * @property {boolean} lint
@@ -59,6 +58,7 @@ if (module.exports.built) {
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
+ * @property {string} inspect
  * @property {string} runners
  * @property {string|number} workers
  * @property {string} host

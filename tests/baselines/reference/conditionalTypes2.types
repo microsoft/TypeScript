@@ -446,3 +446,84 @@ const w: What = { a: 4 };
 >a : number
 >4 : 4
 
+// Repro from #33568
+
+declare function save(_response: IRootResponse<string>): void;
+>save : (_response: IResponse<string>) => void
+>_response : IResponse<string>
+
+exportCommand(save);
+>exportCommand(save) : void
+>exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
+>save : (_response: IResponse<string>) => void
+
+declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
+>exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
+>functionToCall : IExportCallback<TResponse>
+
+interface IExportCallback<TResponse> {
+	(response: IRootResponse<TResponse>): void;
+>response : IRootResponse<TResponse>
+}
+
+type IRootResponse<TResponse> =
+>IRootResponse : IRootResponse<TResponse>
+
+	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
+
+interface IRecord {
+	readonly Id: string;
+>Id : string
+}
+
+declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
+>IRecordResponse : IRecordResponse<T>
+
+	sendRecord(): void;
+>sendRecord : () => void
+
+};
+
+declare type IResponse<T> = {
+>IResponse : IResponse<T>
+
+	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
+>sendValue : (name: { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends string ? PropertyName : never; }[Extract<keyof T, string>]) => void
+>name : { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends string ? PropertyName : never; }[Extract<keyof T, string>]
+
+};
+
+declare type GetPropertyNamesOfType<T, RestrictToType> = {
+>GetPropertyNamesOfType : { [PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never; }[Extract<keyof T, string>]
+
+	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
+}[Extract<keyof T, string>];
+
+declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
+>GetAllPropertiesOfType : Pick<T, { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends RestrictToType ? PropertyName : never; }[Extract<keyof T, string>]>
+
+	T,
+	GetPropertyNamesOfType<Required<T>, RestrictToType>
+>;
+
+// Repro from #33568
+
+declare function ff(x: Foo3<string>): void;
+>ff : (x: { x: string; }) => void
+>x : { x: string; }
+
+declare function gg<T>(f: (x: Foo3<T>) => void): void;
+>gg : <T>(f: (x: Foo3<T>) => void) => void
+>f : (x: Foo3<T>) => void
+>x : Foo3<T>
+
+type Foo3<T> = T extends number ? { n: T } : { x: T };
+>Foo3 : Foo3<T>
+>n : T
+>x : T
+
+gg(ff);
+>gg(ff) : void
+>gg : <T>(f: (x: Foo3<T>) => void) => void
+>ff : (x: { x: string; }) => void
+

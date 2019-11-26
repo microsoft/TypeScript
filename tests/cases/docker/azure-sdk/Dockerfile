@@ -6,7 +6,7 @@ RUN git pull
 RUN rush update
 WORKDIR /azure-sdk/sdk/core/core-http
 # Sync up all TS versions used internally so they're all linked from a known location
-RUN rush add -p "typescript@3.5.1" --exact --dev -m
+RUN rush add -p "typescript@3.5.1" --dev -m
 # Relink installed TSes to built TS
 WORKDIR /azure-sdk/common/temp/node_modules/.registry.npmjs.org/typescript/3.5.1/node_modules
 RUN rm -rf typescript

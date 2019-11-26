@@ -567,6 +567,7 @@ namespace ts {
         /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
 
         BlockScoped = Let | Const,
 
@@ -2699,8 +2700,6 @@ namespace ts {
         Shared         = 1 << 11, // Referenced as antecedent more than once
         PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
-        /** @internal */
-        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
 
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition,
@@ -4740,11 +4739,12 @@ namespace ts {
         HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
         PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
         MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
-        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
+        ContravariantConditional     = 1 << 4,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 5,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 6,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 7,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 8,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 9,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
