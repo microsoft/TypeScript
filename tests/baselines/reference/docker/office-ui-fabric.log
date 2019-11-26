@@ -20,7 +20,7 @@ Standard output:
 @uifabric/example-data: Child
 @uifabric/example-data:     Hash: eb7eacffb3eced977b0a
 @uifabric/example-data:     Time: ?s
-@uifabric/example-data:     Built at: 11/25/2019 10:11:42 PM
+@uifabric/example-data:     Built at: 11/26/2019 12:17:20 AM
 @uifabric/example-data:                   Asset      Size        Chunks             Chunk Names
 @uifabric/example-data:         example-data.js  34.2 KiB  example-data  [emitted]  example-data
 @uifabric/example-data:     example-data.js.map  30.3 KiB  example-data  [emitted]  example-data
@@ -84,7 +84,7 @@ Standard output:
 @uifabric/merge-styles: Child
 @uifabric/merge-styles:     Hash: 479c2418c5e8d5ccdc46
 @uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: 11/25/2019 10:12:13 PM
+@uifabric/merge-styles:     Built at: 11/26/2019 12:17:59 AM
 @uifabric/merge-styles:                   Asset      Size        Chunks             Chunk Names
 @uifabric/merge-styles:         merge-styles.js  63.7 KiB  merge-styles  [emitted]  merge-styles
 @uifabric/merge-styles:     merge-styles.js.map  70.3 KiB  merge-styles  [emitted]  merge-styles
@@ -108,7 +108,7 @@ Standard output:
 @uifabric/merge-styles: Child
 @uifabric/merge-styles:     Hash: 1ad9563ae9311f1249ef
 @uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: 11/25/2019 10:12:13 PM
+@uifabric/merge-styles:     Built at: 11/26/2019 12:17:59 AM
 @uifabric/merge-styles:                       Asset      Size  Chunks             Chunk Names
 @uifabric/merge-styles:         merge-styles.min.js  11.7 KiB       0  [emitted]  merge-styles
 @uifabric/merge-styles:     merge-styles.min.js.map  3.05 KiB       0  [emitted]  merge-styles
@@ -144,7 +144,6 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
-@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
