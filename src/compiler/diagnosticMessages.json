@@ -1083,6 +1083,10 @@
         "category": "Message",
         "code": 1368
     },
+    "Did you mean '{0}'?": {
+        "category": "Message",
+        "code": 1369
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
