@@ -597,7 +597,7 @@ namespace Harness.LanguageService {
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
-            this.factory = new TypeScript.Services.TypeScriptServicesFactory();
+            this.factory = new ts.TypeScriptServicesFactory();
         }
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }

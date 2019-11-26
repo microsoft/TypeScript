@@ -1,7 +1,7 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
         const config: File = {
-            path: `${projectRoot}/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/tsconfig.json`,
             content: `{}`
         };
         function getOutputFileStampAndError(host: WatchedSystem, watch: Watch, file: File) {
@@ -82,7 +82,7 @@ namespace ts.tscWatch {
             const nonLibFiles = [...filesWithNewEmit, ...filesWithOnlyErrorRefresh, ...filesNotTouched];
             const files = [...nonLibFiles, configFile, libFile];
             const compilerOptions = (JSON.parse(configFile.content).compilerOptions || {}) as CompilerOptions;
-            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
+            const host = createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot });
             const watch = createWatchOfConfigFile("tsconfig.json", host);
             checkProgramActualFiles(watch(), [...nonLibFiles.map(f => f.path), libFile.path]);
             checkOutputErrorsInitial(host, getInitialErrors(watch));
@@ -166,7 +166,7 @@ namespace ts.tscWatch {
 
         describe("deep import changes", () => {
             const aFile: File = {
-                path: `${projectRoot}/a.ts`,
+                path: `${tscWatch.projectRoot}/a.ts`,
                 content: `import {B} from './b';
 declare var console: any;
 let b = new B();
@@ -202,7 +202,7 @@ console.log(b.c.d);`
 
             describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
-                    path: `${projectRoot}/b.ts`,
+                    path: `${tscWatch.projectRoot}/b.ts`,
                     content: `import {C} from './c';
 export class B
 {
@@ -210,7 +210,7 @@ export class B
 }`
                 };
                 const cFile: File = {
-                    path: `${projectRoot}/c.ts`,
+                    path: `${tscWatch.projectRoot}/c.ts`,
                     content: `export class C
 {
     d = 1;
@@ -221,7 +221,7 @@ export class B
 
             describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
-                    path: `${projectRoot}/b.d.ts`,
+                    path: `${tscWatch.projectRoot}/b.d.ts`,
                     content: `import {C} from './c';
 export class B
 {
@@ -229,7 +229,7 @@ export class B
 }`
                 };
                 const cFile: File = {
-                    path: `${projectRoot}/c.d.ts`,
+                    path: `${tscWatch.projectRoot}/c.d.ts`,
                     content: `export class C
 {
     d: number;
@@ -241,7 +241,7 @@ export class B
 
         describe("updates errors in file not exporting a deep multilevel import that changes", () => {
             const aFile: File = {
-                path: `${projectRoot}/a.ts`,
+                path: `${tscWatch.projectRoot}/a.ts`,
                 content: `export interface Point {
     name: string;
     c: Coords;
@@ -252,13 +252,13 @@ export interface Coords {
 }`
             };
             const bFile: File = {
-                path: `${projectRoot}/b.ts`,
+                path: `${tscWatch.projectRoot}/b.ts`,
                 content: `import { Point } from "./a";
 export interface PointWrapper extends Point {
 }`
             };
             const cFile: File = {
-                path: `${projectRoot}/c.ts`,
+                path: `${tscWatch.projectRoot}/c.ts`,
                 content: `import { PointWrapper } from "./b";
 export function getPoint(): PointWrapper {
     return {
@@ -271,12 +271,12 @@ export function getPoint(): PointWrapper {
 };`
             };
             const dFile: File = {
-                path: `${projectRoot}/d.ts`,
+                path: `${tscWatch.projectRoot}/d.ts`,
                 content: `import { getPoint } from "./c";
 getPoint().c.x;`
             };
             const eFile: File = {
-                path: `${projectRoot}/e.ts`,
+                path: `${tscWatch.projectRoot}/e.ts`,
                 content: `import "./d";`
             };
             verifyEmitAndErrorUpdates({
@@ -300,14 +300,14 @@ getPoint().c.x;`
 
         describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     files: ["app.ts"],
                     compilerOptions: { baseUrl: "." }
                 })
             };
             const app: File = {
-                path: `${projectRoot}/app.ts`,
+                path: `${tscWatch.projectRoot}/app.ts`,
                 content: `import { Data } from "lib2/public";
 export class App {
     public constructor() {
@@ -316,11 +316,11 @@ export class App {
 }`
             };
             const lib2Public: File = {
-                path: `${projectRoot}/lib2/public.ts`,
+                path: `${tscWatch.projectRoot}/lib2/public.ts`,
                 content: `export * from "./data";`
             };
             const lib2Data: File = {
-                path: `${projectRoot}/lib2/data.ts`,
+                path: `${tscWatch.projectRoot}/lib2/data.ts`,
                 content: `import { ITest } from "lib1/public";
 export class Data {
     public test() {
@@ -332,15 +332,15 @@ export class Data {
 }`
             };
             const lib1Public: File = {
-                path: `${projectRoot}/lib1/public.ts`,
+                path: `${tscWatch.projectRoot}/lib1/public.ts`,
                 content: `export * from "./tools/public";`
             };
             const lib1ToolsPublic: File = {
-                path: `${projectRoot}/lib1/tools/public.ts`,
+                path: `${tscWatch.projectRoot}/lib1/tools/public.ts`,
                 content: `export * from "./tools.interface";`
             };
             const lib1ToolsInterface: File = {
-                path: `${projectRoot}/lib1/tools/tools.interface.ts`,
+                path: `${tscWatch.projectRoot}/lib1/tools/tools.interface.ts`,
                 content: `export interface ITest {
     title: string;
 }`
@@ -371,7 +371,7 @@ export class Data {
 
             describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
-                    path: `${projectRoot}/lib2/data.ts`,
+                    path: `${tscWatch.projectRoot}/lib2/data.ts`,
                     content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
 export class Data {
     public dat?: Data2; public test() {
@@ -383,7 +383,7 @@ export class Data {
 }`
                 };
                 const lib2Data2: File = {
-                    path: `${projectRoot}/lib2/data2.ts`,
+                    path: `${tscWatch.projectRoot}/lib2/data2.ts`,
                     content: `import { Data } from "./data";
 export class Data2 {
     public dat?: Data;

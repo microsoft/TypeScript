@@ -8,9 +8,10 @@ interface PromiseConstructor {
 /* @internal */
 declare let Promise: PromiseConstructor;
 
-// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
+    // These utilities are common to multiple language service features.
+    //#region
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     export const enum SemanticMeaning {
@@ -1477,11 +1478,11 @@ namespace ts {
         }
         return undefined;
     }
-}
 
-// Display-part writer helpers
-/* @internal */
-namespace ts {
+    // #endregion
+
+    // Display-part writer helpers
+    // #region
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
@@ -2290,4 +2291,5 @@ namespace ts {
     export function isInsideNodeModules(fileOrDirectory: string): boolean {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
     }
+    // #endregion
 }
