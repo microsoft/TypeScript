@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+node_modules/schema-utils/declarations/validate.d.ts(39,12): error TS2304: Cannot find name '_default'.
+node_modules/schema-utils/declarations/validate.d.ts(39,41): error TS2304: Cannot find name '_default'.
+
+
+
+Standard error:
