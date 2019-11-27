@@ -3473,7 +3473,6 @@ namespace ts {
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
-        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
         /**
          * True if `contextualType` should not be considered for completions because

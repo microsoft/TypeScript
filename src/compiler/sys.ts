@@ -383,6 +383,11 @@ namespace ts {
     export let sysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
 
     /*@internal*/
+    export function setSysLog(logger: typeof sysLog) {
+        sysLog = logger;
+    }
+
+    /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
