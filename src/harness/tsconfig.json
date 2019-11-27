@@ -31,10 +31,13 @@
 
         "runnerbase.ts",
         "sourceMapRecorder.ts",
+        "harnessGlobals.ts",
+        "harnessUtils.ts",
         "harness.ts",
         "harnessLanguageService.ts",
         "virtualFileSystemWithWatch.ts",
         "fourslash.ts",
+        "fourslashInterface.ts",
         "typeWriter.ts",
         "loggedIO.ts"
     ]

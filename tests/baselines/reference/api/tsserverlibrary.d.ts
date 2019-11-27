@@ -17,8 +17,6 @@ declare namespace ts {
     const versionMajorMinor = "3.8";
     /** The version of the TypeScript compiler release */
     const version: string;
-}
-declare namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -3307,8 +3305,6 @@ declare namespace ts {
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T>;
-}
-declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
@@ -3469,8 +3465,6 @@ declare namespace ts {
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
-}
-declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
     function isBigIntLiteral(node: Node): node is BigIntLiteral;
     function isStringLiteral(node: Node): node is StringLiteral;
@@ -3648,8 +3642,6 @@ declare namespace ts {
     function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral;
     function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
     function isJSDocSignature(node: Node): node is JSDocSignature;
-}
-declare namespace ts {
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -4265,7 +4257,7 @@ declare namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number): ElementAccessExpression | PropertyAccessExpression;
+    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number): PropertyAccessExpression | ElementAccessExpression;
     /**
      * Adds an EmitHelper to a node.
      */
