@@ -1,3 +1,7 @@
+namespace ts {
+    export const projects = `/user/username/projects`;
+    export const projectRoot = `${projects}/myproject`;
+}
 namespace ts.tscWatch {
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = TestFSWithWatch.File;
@@ -267,6 +271,11 @@ namespace ts.tscWatch {
     export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
         const quotedOption = `"${option}"`;
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
+    }
+
+    export function getUnknownDidYouMeanCompilerOption(program: Program, configFile: File, option: string, didYouMean: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0_Did_you_mean_1, option, didYouMean);
     }
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {

@@ -40,6 +40,33 @@ namespace ts {
                 });
         });
 
+        it("Handles 'did you mean?' for misspelt flags", () => {
+            // --declarations --allowTS
+            assertParseResult(["--declarations", "--allowTS"], {
+                errors: [
+                    {
+                        messageText:"Unknown compiler option '--declarations'. Did you mean 'declaration'?",
+                        category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    },
+                    {
+                        messageText: "Unknown compiler option '--allowTS'. Did you mean 'allowJs'?",
+                        category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    }
+                ],
+                fileNames: [],
+                options: {}
+            });
+        });
+
+
         it("Parse multiple options of library flags ", () => {
             // --lib es5,es2015.symbol.wellknown 0.ts
             assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "0.ts"],
@@ -446,6 +473,23 @@ namespace ts {
                 });
         });
 
+        it("parse build with listFilesOnly ", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--listFilesOnly"],
+                {
+                    errors: [{
+                        messageText:"Unknown build option '--listFilesOnly'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    projects: ["."],
+                    buildOptions: {}
+                });
+        });
+
         it("Parse multiple flags with input projects at the end", () => {
             // --lib es5,es2015.symbol.wellknown --target es5 0.ts
             assertParseResult(["--force", "--verbose", "src", "tests"],
@@ -539,4 +583,6 @@ namespace ts {
             verifyInvalidCombination("watch", "dry");
         });
     });
+
+
 }

@@ -339,42 +339,40 @@ declare module "fs" {
         });
 
         it("works when renaming node_modules folder that already contains @types folder", () => {
-            const currentDirectory = "/user/username/projects/myproject";
             const file: File = {
-                path: `${currentDirectory}/a.ts`,
+                path: `${projectRoot}/a.ts`,
                 content: `import * as q from "qqq";`
             };
             const module: File = {
-                path: `${currentDirectory}/node_modules2/@types/qqq/index.d.ts`,
+                path: `${projectRoot}/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}"
             };
             const files = [file, module, libFile];
-            const host = createWatchedSystem(files, { currentDirectory });
+            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
             const watch = createWatchOfFilesAndCompilerOptions([file.path], host);
 
             checkProgramActualFiles(watch(), [file.path, libFile.path]);
             checkOutputErrorsInitial(host, [getDiagnosticModuleNotFoundOfFile(watch(), file, "qqq")]);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, [`${currentDirectory}/node_modules`, `${currentDirectory}/node_modules/@types`], /*recursive*/ true);
+            checkWatchedDirectories(host, [`${projectRoot}/node_modules`, `${projectRoot}/node_modules/@types`], /*recursive*/ true);
 
-            host.renameFolder(`${currentDirectory}/node_modules2`, `${currentDirectory}/node_modules`);
+            host.renameFolder(`${projectRoot}/node_modules2`, `${projectRoot}/node_modules`);
             host.runQueuedTimeoutCallbacks();
-            checkProgramActualFiles(watch(), [file.path, libFile.path, `${currentDirectory}/node_modules/@types/qqq/index.d.ts`]);
+            checkProgramActualFiles(watch(), [file.path, libFile.path, `${projectRoot}/node_modules/@types/qqq/index.d.ts`]);
             checkOutputErrorsIncremental(host, emptyArray);
         });
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
-            const projectPath = "/user/username/projects/project";
             const npmCacheFile: File = {
-                path: `${projectPath}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                 content: JSON.stringify({ something: 10 })
             };
             const file1: File = {
-                path: `${projectPath}/test.ts`,
+                path: `${projectRoot}/test.ts`,
                 content: `import { x } from "somemodule";`
             };
             const file2: File = {
-                path: `${projectPath}/node_modules/somemodule/index.d.ts`,
+                path: `${projectRoot}/node_modules/somemodule/index.d.ts`,
                 content: `export const x = 10;`
             };
             const files = [libFile, file1, file2];
@@ -390,7 +388,7 @@ declare module "fs" {
             });
             it("when watching node_modules as part of wild card directories in config project", () => {
                 const config: File = {
-                    path: `${projectPath}/tsconfig.json`,
+                    path: `${projectRoot}/tsconfig.json`,
                     content: "{}"
                 };
                 const host = createWatchedSystem(files.concat(config));
@@ -446,7 +444,6 @@ declare namespace myapp {
     });
 
     describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch with modules linked to sibling folder", () => {
-        const projectRoot = "/user/username/projects/project";
         const mainPackageRoot = `${projectRoot}/main`;
         const linkedPackageRoot = `${projectRoot}/linked-package`;
         const mainFile: File = {

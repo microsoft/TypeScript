@@ -285,6 +285,7 @@ namespace ts {
             let combinedStatements: NodeArray<Statement>;
             if (isSourceFileJS(currentSourceFile)) {
                 combinedStatements = createNodeArray(transformDeclarationsForJS(node));
+                refs.forEach(referenceVisitor);
                 emittedImports = filter(combinedStatements, isAnyImportSyntax);
             }
             else {
@@ -936,7 +937,7 @@ namespace ts {
                         }
                         shouldEnterSuppressNewDiagnosticsContextContext = true;
                         suppressNewDiagnosticContexts = true; // Variable declaration types also suppress new diagnostic contexts, provided the contexts wouldn't be made for binding pattern types
-                        return cleanup(updateVariableDeclaration(input, input.name, ensureType(input, input.type), ensureNoInitializer(input)));
+                        return cleanup(updateTypeScriptVariableDeclaration(input, input.name, /*exclaimationToken*/ undefined, ensureType(input, input.type), ensureNoInitializer(input)));
                     }
                     case SyntaxKind.TypeParameter: {
                         if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {

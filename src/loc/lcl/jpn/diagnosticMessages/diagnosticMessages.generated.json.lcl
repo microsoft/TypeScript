@@ -1228,7 +1228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An AMD module cannot have multiple name assignments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[AMD モジュールに複数の名前を割り当てることはできません。]]></Val>
+            <Val><![CDATA[AMD モジュールに複数の名前を代入することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1336,7 +1336,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment can only be used in a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートの割り当てはモジュールでのみ使用可能です。]]></Val>
+            <Val><![CDATA[エクスポートの代入はモジュールでのみ使用可能です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1345,7 +1345,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot be used in a module with other exported elements.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートの割り当ては、エクスポートされた他の要素を含むモジュールでは使用できません。]]></Val>
+            <Val><![CDATA[エクスポートの代入は、エクスポートされた他の要素を含むモジュールでは使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1354,7 +1354,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot be used in a namespace.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートの割り当ては、名前空間では使用できません。]]></Val>
+            <Val><![CDATA[エクスポートの代入は、名前空間では使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1363,7 +1363,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot have modifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートの割り当てに修飾子を指定することはできません。]]></Val>
+            <Val><![CDATA[エクスポートの代入に修飾子を指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3610,7 +3610,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ECMAScript モジュールを対象にする場合は、エクスポート割り当てを使用できません。代わりに 'export default' または別のモジュール書式の使用をご検討ください。]]></Val>
+            <Val><![CDATA[ECMAScript モジュールを対象にする場合は、エクスポート代入を使用できません。代わりに 'export default' または別のモジュール書式の使用をご検討ください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3619,7 +3619,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export assignment is not supported when '--module' flag is 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[割り当てのエクスポートは、'--module' フラグが 'system' の場合にはサポートされません。]]></Val>
+            <Val><![CDATA[代入のエクスポートは、'--module' フラグが 'system' の場合にはサポートされません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3703,7 +3703,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exports and export assignments are not permitted in module augmentations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートとエクスポートの割り当てはモジュールの拡張では許可されていません。]]></Val>
+            <Val><![CDATA[エクスポートとエクスポートの代入はモジュールの拡張では許可されていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4390,7 +4390,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ECMAScript モジュールを対象にする場合は、インポート割り当てを使用できません。代わりに 'import * as ns from "mod"'、'import {a} from "mod"'、'import d from "mod"' などのモジュール書式の使用をご検討ください。]]></Val>
+            <Val><![CDATA[ECMAScript モジュールを対象にする場合は、インポート代入を使用できません。代わりに 'import * as ns from "mod"'、'import {a} from "mod"'、'import d from "mod"' などのモジュール書式の使用をご検討ください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6622,7 +6622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property assignment expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティの割り当てが必要です。]]></Val>
+            <Val><![CDATA[プロパティの代入が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7870,7 +7870,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートの割り当ての式は、環境コンテキストの識別子または修飾名にする必要があります。]]></Val>
+            <Val><![CDATA[エクスポートの代入の式は、環境コンテキストの識別子または修飾名にする必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8170,7 +8170,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment must be a variable or a property access.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[オブジェクトの残り部分の割り当ての対象は、変数またはプロパティ アクセスである必要があります。]]></Val>
+            <Val><![CDATA[オブジェクトの残り部分の代入の対象は、変数またはプロパティ アクセスである必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9535,7 +9535,7 @@
         <Str Cat="Text">
           <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['=' は、非構造化割り当て内のオブジェクト リテラル プロパティでのみ使用できます。]]></Val>
+            <Val><![CDATA['=' は、非構造化代入内のオブジェクト リテラル プロパティでのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9601,7 +9601,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 列挙型は、プロパティまたはインデックスのアクセス式、インポート宣言またはエクスポートの割り当ての右辺、型のクエリにのみ使用できます。]]></Val>
+            <Val><![CDATA['const' 列挙型は、プロパティまたはインデックスのアクセス式、インポート宣言またはエクスポートの代入の右辺、型のクエリにのみ使用できます。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>

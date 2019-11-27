@@ -11,7 +11,7 @@ namespace Harness.Parallel.Host {
         const isatty = tty.isatty(1) && tty.isatty(2);
         const path = require("path") as typeof import("path");
         const { fork } = require("child_process") as typeof import("child_process");
-        const { statSync, readFileSync } = require("fs") as typeof import("fs");
+        const { statSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
         const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
@@ -147,7 +147,7 @@ namespace Harness.Parallel.Host {
                 }
 
                 cursor.hide();
-                readline.moveCursor(process.stdout, -process.stdout.columns!, -this._lineCount);
+                readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
                 let lineCount = 0;
                 const numProgressBars = this._progressBars.length;
                 for (let i = 0; i < numProgressBars; i++) {
@@ -156,7 +156,7 @@ namespace Harness.Parallel.Host {
                         process.stdout.write(this._progressBars[i].text + os.EOL);
                     }
                     else {
-                        readline.moveCursor(process.stdout, -process.stdout.columns!, +1);
+                        readline.moveCursor(process.stdout, -process.stdout.columns, +1);
                     }
 
                     lineCount++;
@@ -184,31 +184,6 @@ namespace Harness.Parallel.Host {
 
         function hashName(runner: TestRunnerKind | "unittest", test: string) {
             return `tsrunner-${runner}://${test}`;
-        }
-
-        function skipCostlyTests(tasks: Task[]) {
-            if (statSync("tests/.test-cost.json")) {
-                const costs = JSON.parse(readFileSync("tests/.test-cost.json", "utf8")) as {
-                    totalTime: number,
-                    totalEdits: number,
-                    data: { name: string, time: number, edits: number, costs: number }[]
-                };
-                let skippedEdits = 0;
-                let skippedTime = 0;
-                const skippedTests = new Set<string>();
-                let i = 0;
-                for (; i < costs.data.length && (skippedEdits / costs.totalEdits) < (skipPercent / 100); i++) {
-                    skippedEdits += costs.data[i].edits;
-                    skippedTime += costs.data[i].time;
-                    skippedTests.add(costs.data[i].name);
-                }
-                console.log(`Skipped ${i} expensive tests; estimated time savings of ${(skippedTime / costs.totalTime * 100).toFixed(2)}% with --skipPercent=${skipPercent.toFixed(2)} chance of missing a test.`);
-                return tasks.filter(t => !skippedTests.has(t.file));
-            }
-            else {
-                console.log("No cost analysis discovered.");
-                return tasks;
-            }
         }
 
         function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
@@ -250,7 +225,6 @@ namespace Harness.Parallel.Host {
             }
             tasks.sort((a, b) => a.size - b.size);
             tasks = tasks.concat(newTasks);
-            tasks = skipCostlyTests(tasks);
             const batchCount = workerCount;
             const packfraction = 0.9;
             const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test

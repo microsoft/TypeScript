@@ -221,7 +221,7 @@ namespace FourSlash {
             }
         }
 
-        constructor(private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
+        constructor(private originalInputFileName: string, private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             let compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
@@ -775,7 +775,9 @@ namespace FourSlash {
         private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter })!;
             if (!actualCompletions) {
-                if (ts.hasProperty(options, "exact") && options.exact === undefined) return;
+                if (ts.hasProperty(options, "exact") && (options.exact === undefined || ts.isArray(options.exact) && !options.exact.length)) {
+                    return;
+                }
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -1473,7 +1475,7 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            const baselineFile = this.getBaselineFileName().replace("breakpointValidation", "bpSpan");
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile().replace("breakpointValidation", "bpSpan");
             Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
@@ -1552,8 +1554,49 @@ namespace FourSlash {
             return result;
         }
 
+        public baselineSyntacticDiagnostics() {
+            const files = this.getCompilerTestFiles();
+            const result = this.getSyntacticDiagnosticBaselineText(files);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        }
+
+        private getCompilerTestFiles() {
+            return ts.map(this.testData.files, ({ content, fileName }) => ({
+                content, unitName: fileName
+            }));
+        }
+
+        public baselineSyntacticAndSemanticDiagnostics() {
+            const files = this.getCompilerTestFiles();
+            const result = this.getSyntacticDiagnosticBaselineText(files)
+                + Harness.IO.newLine()
+                + Harness.IO.newLine()
+                + this.getSemanticDiagnosticBaselineText(files);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        }
+
+        private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files,
+                file => this.languageService.getSyntacticDiagnostics(file.unitName)
+            );
+            const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
+                + Harness.IO.newLine()
+                + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+            return result;
+        }
+
+        private getSemanticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
+            const diagnostics = ts.flatMap(files,
+                file => this.languageService.getSemanticDiagnostics(file.unitName)
+            );
+            const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
+                + Harness.IO.newLine()
+                + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
+            return result;
+        }
+
         public baselineQuickInfo() {
-            const baselineFile = this.getBaselineFileName();
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1565,7 +1608,7 @@ namespace FourSlash {
 
         public baselineSmartSelection() {
             const n = "\n";
-            const baselineFile = this.getBaselineFileName();
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
             const markers = this.getMarkers();
             const fileContent = this.activeFile.content;
             const text = markers.map(marker => {
@@ -1650,9 +1693,13 @@ namespace FourSlash {
             Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
         }
 
-        private getBaselineFileName() {
+        private getBaselineFileNameForInternalFourslashFile() {
             return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
                 ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
+        }
+
+        private getBaselineFileNameForContainingTestFile() {
+            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ".baseline");
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -2356,9 +2403,9 @@ namespace FourSlash {
             if (!details) {
                 return this.raiseError(`No completions were found for the given name, source, and preferences.`);
             }
-            const codeActions = details.codeActions!;
-            if (codeActions.length !== 1) {
-                this.raiseError(`Expected one code action, got ${codeActions.length}`);
+            const codeActions = details.codeActions;
+            if (codeActions?.length !== 1) {
+                this.raiseError(`Expected one code action, got ${codeActions?.length ?? 0}`);
             }
             const codeAction = ts.first(codeActions);
 
@@ -3261,7 +3308,7 @@ namespace FourSlash {
 
         // Parse out the files and their metadata
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
-        const state = new TestState(absoluteBasePath, testType, testData);
+        const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
         const output = ts.transpileModule(content, { reportDiagnostics: true, compilerOptions: { target: ts.ScriptTarget.ES2015 } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
@@ -4120,6 +4167,14 @@ namespace FourSlashInterface {
             this.state.baselineSmartSelection();
         }
 
+        public baselineSyntacticDiagnostics() {
+            this.state.baselineSyntacticDiagnostics();
+        }
+
+        public baselineSyntacticAndSemanticDiagnostics() {
+            this.state.baselineSyntacticAndSemanticDiagnostics();
+        }
+
         public nameOrDottedNameSpanTextIs(text: string) {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
@@ -4894,12 +4949,14 @@ namespace FourSlashInterface {
             "declare",
             "keyof",
             "module",
+            "namespace",
             "never",
             "readonly",
             "number",
             "object",
             "string",
             "symbol",
+            "type",
             "unique",
             "unknown",
             "bigint",
@@ -5091,12 +5148,14 @@ namespace FourSlashInterface {
             "declare",
             "keyof",
             "module",
+            "namespace",
             "never",
             "readonly",
             "number",
             "object",
             "string",
             "symbol",
+            "type",
             "unique",
             "unknown",
             "bigint",

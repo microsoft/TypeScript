@@ -7,7 +7,7 @@
 
 12:04:00 AM - Building project '/src/core/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/core/anotherModule.d.ts]

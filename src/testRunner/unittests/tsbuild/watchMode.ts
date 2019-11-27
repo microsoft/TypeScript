@@ -283,8 +283,8 @@ function foo() { }`, /*local*/ true);
                 });
 
                 it("builds when new file is added, and its subsequent updates", () => {
-                    const additinalFiles: readonly [SubProject, string][] = [[SubProject.core, newFileWithoutExtension]];
-                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
+                    const additionalFiles: readonly [SubProject, string][] = [[SubProject.core, newFileWithoutExtension]];
+                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additionalFiles);
                     verifyChange(newFile.content);
 
                     // Another change requeues and builds it

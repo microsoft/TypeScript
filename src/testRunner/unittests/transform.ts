@@ -97,6 +97,17 @@ namespace ts {
             ]);
         });
 
+        testBaseline("transformDefiniteAssignmentAssertions", () => {
+            return transformSourceFile(`let a!: () => void`, [
+                context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                    if (node.kind === SyntaxKind.VoidKeyword) {
+                        return createIdentifier("undefined");
+                    }
+                    return visitEachChild(node, visitor, context);
+                })
+            ]);
+        });
+
         testBaseline("fromTranspileModule", () => {
             return transpileModule(`var oldName = undefined;`, {
                 transformers: {
@@ -445,6 +456,35 @@ namespace Foo {
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
+        });
+
+        testBaseline("transformUpdateModuleMember", () => {
+            return transpileModule(`
+module MyModule {
+    const myVariable = 1;
+    function foo(param: string) {}
+}
+`, {
+                transformers: {
+                    before: [renameVariable],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function renameVariable(context: TransformationContext) {
+                    return (sourceFile: SourceFile): SourceFile => {
+                        return visitNode(sourceFile, rootTransform, isSourceFile);
+                    };
+                    function rootTransform<T extends Node>(node: T): Node {
+                        if (isVariableDeclaration(node)) {
+                            return updateVariableDeclaration(node, createIdentifier("newName"), /* type */ undefined, node.initializer);
+                        }
+                        return visitEachChild(node, rootTransform, context);
+                    }
+            }
         });
 
         // https://github.com/Microsoft/TypeScript/issues/24709
