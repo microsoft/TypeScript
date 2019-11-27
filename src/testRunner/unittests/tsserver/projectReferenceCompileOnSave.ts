@@ -410,7 +410,7 @@ ${appendDts}`
     describe("unittests:: tsserver:: with project references and compile on save with external projects", () => {
         it("compile on save emits same output as project build", () => {
             const tsbaseJson: File = {
-                path: `${projectRoot}/tsbase.json`,
+                path: `${tscWatch.projectRoot}/tsbase.json`,
                 content: JSON.stringify({
                     compileOnSave: true,
                     compilerOptions: {
@@ -419,7 +419,7 @@ ${appendDts}`
                     }
                 })
             };
-            const buttonClass = `${projectRoot}/buttonClass`;
+            const buttonClass = `${tscWatch.projectRoot}/buttonClass`;
             const buttonConfig: File = {
                 path: `${buttonClass}/tsconfig.json`,
                 content: JSON.stringify({
@@ -440,7 +440,7 @@ ${appendDts}`
 }`
             };
 
-            const siblingClass = `${projectRoot}/SiblingClass`;
+            const siblingClass = `${tscWatch.projectRoot}/SiblingClass`;
             const siblingConfig: File = {
                 path: `${siblingClass}/tsconfig.json`,
                 content: JSON.stringify({
