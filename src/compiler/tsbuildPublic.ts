@@ -1760,7 +1760,7 @@ namespace ts {
                 invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full);
             },
             PollingInterval.High,
-            parsed?.options,
+            parsed?.watchOptions,
             WatchType.ConfigFile,
             resolved
         ));
@@ -1821,7 +1821,7 @@ namespace ts {
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
                 },
                 flags,
-                parsed?.options,
+                parsed?.watchOptions,
                 WatchType.WildcardDirectory,
                 resolved
             )
@@ -1839,7 +1839,7 @@ namespace ts {
                     input,
                     () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
                     PollingInterval.Low,
-                    parsed?.options,
+                    parsed?.watchOptions,
                     path as Path,
                     WatchType.SourceFile,
                     resolved

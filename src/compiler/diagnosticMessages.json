@@ -3309,6 +3309,14 @@
         "category": "Error",
         "code": 5077
     },
+    "Unknown watch option '{0}'.": {
+        "category": "Error",
+        "code": 5078
+    },
+    "Unknown watch option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5079
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

@@ -171,7 +171,7 @@ namespace ts.server.typingsInstaller {
             }
 
             // start watching files
-            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath, req.compilerOptions);
+            this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch, req.projectRootPath, req.watchOptions);
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
@@ -399,7 +399,7 @@ namespace ts.server.typingsInstaller {
             }
         }
 
-        private watchFiles(projectName: string, files: string[], projectRootPath: Path, options: CompilerOptions | undefined) {
+        private watchFiles(projectName: string, files: string[], projectRootPath: Path, options: WatchOptions | undefined) {
             if (!files.length) {
                 // shut down existing watchers
                 this.closeWatchers(projectName);

@@ -170,6 +170,7 @@ namespace ts.server {
     }
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
+    const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
     const indentStyle = createMapFromTemplate({
         none: IndentStyle.None,
         block: IndentStyle.Block,
@@ -247,6 +248,18 @@ namespace ts.server {
         return <any>protocolOptions;
     }
 
+    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined {
+        let result: WatchOptions | undefined;
+        watchOptionsConverters.forEach((mappedValues, id) => {
+            const propertyValue = protocolOptions[id];
+            if (propertyValue === undefined) return;
+            (result || (result = {}))[id] = isString(propertyValue) ?
+                mappedValues.get(propertyValue.toLowerCase()) :
+                propertyValue;
+        });
+        return result;
+    }
+
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
         return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
@@ -277,7 +290,7 @@ namespace ts.server {
         preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
-        watchOptions: CompilerOptions;
+        watchOptions?: WatchOptions;
     }
 
     export interface OpenConfiguredProjectResult {
@@ -484,6 +497,8 @@ namespace ts.server {
 
         private compilerOptionsForInferredProjects: CompilerOptions | undefined;
         private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
+        private watchOptionsForInferredProjects: WatchOptions | undefined;
+        private watchOptionsForInferredProjectsPerProjectRoot = createMap<WatchOptions | false>();
         /**
          * Project size for configured or external projects
          */
@@ -578,7 +593,6 @@ namespace ts.server {
                 preferences: emptyOptions,
                 hostInfo: "Unknown host",
                 extraFileExtensions: [],
-                watchOptions: {},
             };
 
             this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
@@ -792,6 +806,7 @@ namespace ts.server {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
+            const watchOptions = convertWatchOptions(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -799,9 +814,11 @@ namespace ts.server {
             const canonicalProjectRootPath = projectRootPath && this.toCanonicalFileName(projectRootPath);
             if (canonicalProjectRootPath) {
                 this.compilerOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, compilerOptions);
+                this.watchOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, watchOptions || false);
             }
             else {
                 this.compilerOptionsForInferredProjects = compilerOptions;
+                this.watchOptionsForInferredProjects = watchOptions;
             }
 
             for (const project of this.inferredProjects) {
@@ -817,6 +834,7 @@ namespace ts.server {
                     project.projectRootPath === canonicalProjectRootPath :
                     !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
+                    project.setWatchOptions(watchOptions);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
                     project.markAsDirty();
                     this.delayUpdateProjectGraph(project);
@@ -1038,7 +1056,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                this.getWatchOptions(project.getCompilerOptions()),
+                this.getWatchOptions(project),
                 WatchType.WildcardDirectory,
                 project
             );
@@ -1656,6 +1674,7 @@ namespace ts.server {
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
             const compilerOptions = convertCompilerOptions(options);
+            const watchOptions = convertWatchOptions(options);
             const project = new ExternalProject(
                 projectFileName,
                 this,
@@ -1663,7 +1682,10 @@ namespace ts.server {
                 compilerOptions,
                 /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave,
-                /*projectFilePath*/ undefined, this.currentPluginConfigOverrides);
+                /*projectFilePath*/ undefined,
+                this.currentPluginConfigOverrides,
+                watchOptions
+            );
             project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProject(project, files, externalFilePropertyReader, typeAcquisition);
@@ -1821,12 +1843,13 @@ namespace ts.server {
             }
             else {
                 project.setCompilerOptions(compilerOptions);
+                project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
                 project.watchWildcards(createMapFromTemplate(parsedCommandLine.wildcardDirectories!)); // TODO: GH#18217
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
-            this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave);
+            this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
@@ -1887,8 +1910,9 @@ namespace ts.server {
             project.markAsDirty();
         }
 
-        private updateRootAndOptionsOfNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean | undefined) {
+        private updateRootAndOptionsOfNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean | undefined, watchOptions: WatchOptions | undefined) {
             project.setCompilerOptions(newOptions);
+            project.setWatchOptions(watchOptions);
             // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
             // therefore if it is undefined, it should not be updated.
             if (compileOnSave !== undefined) {
@@ -2016,7 +2040,14 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
+            let watchOptions: WatchOptions | false | undefined;
+            if (projectRootPath) {
+                watchOptions = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
+            }
+            if (watchOptions === undefined) {
+                watchOptions = this.watchOptionsForInferredProjects;
+            }
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2467,18 +2498,18 @@ namespace ts.server {
                 }
 
                 if (args.watchOptions) {
-                    this.hostConfiguration.watchOptions = convertCompilerOptions(args.watchOptions);
-                    this.logger.info(`Host watch options changed to ${this.hostConfiguration.watchOptions}, it will be take effect for next watches.`);
+                    this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions);
+                    this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
                 }
             }
         }
 
         /*@internal*/
-        getWatchOptions(ownOptions: CompilerOptions) {
-            const ownWatchOptions = getWatchOptions(ownOptions);
-            return ownWatchOptions ?
-                { ...this.hostConfiguration.watchOptions, ...ownWatchOptions } :
-                this.hostConfiguration.watchOptions;
+        getWatchOptions(project: Project) {
+            const projectOptions = project.getWatchOptions();
+            return projectOptions && this.hostConfiguration.watchOptions ?
+                { ...this.hostConfiguration.watchOptions, ...projectOptions } :
+                projectOptions || this.hostConfiguration.watchOptions;
         }
 
         closeLog() {
@@ -3185,6 +3216,7 @@ namespace ts.server {
                 externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
+                    const watchOptions = convertWatchOptions(proj.options);
                     const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader);
                     if (lastFileExceededProgramSize) {
                         externalProject.disableLanguageService(lastFileExceededProgramSize);
@@ -3194,7 +3226,7 @@ namespace ts.server {
                     }
                     // external project already exists and not config files were added - update the project and return;
                     // The graph update here isnt postponed since any file open operation needs all updated external projects
-                    this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave);
+                    this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptions);
                     externalProject.updateGraph();
                     return;
                 }

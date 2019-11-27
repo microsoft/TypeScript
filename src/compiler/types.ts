@@ -5047,13 +5047,16 @@ namespace ts {
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
 
-        // Watch options
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+    }
+
+    export interface WatchOptions {
         watchFile?: WatchFileKind;
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
 
-        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export interface TypeAcquisition {
@@ -5143,6 +5146,7 @@ namespace ts {
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         projectReferences?: readonly ProjectReference[];
+        watchOptions?: WatchOptions;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -5223,7 +5227,8 @@ namespace ts {
     }
 
     /* @internal */
-    export interface DidYouMeanOptionalDiagnostics {
+    export interface DidYouMeanOptionsDiagnostics {
+        optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
     }
@@ -5232,7 +5237,7 @@ namespace ts {
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
         elementOptions?: Map<CommandLineOption>;
-        extraKeyDiagnostics?: DidYouMeanOptionalDiagnostics;
+        extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
     }
 
     /* @internal */

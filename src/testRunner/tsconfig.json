@@ -83,6 +83,7 @@
         "unittests/config/projectReferences.ts",
         "unittests/config/showConfig.ts",
         "unittests/config/tsconfigParsing.ts",
+        "unittests/config/tsconfigParsingWatchOptions.ts",
         "unittests/evaluation/asyncArrow.ts",
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/awaiter.ts",

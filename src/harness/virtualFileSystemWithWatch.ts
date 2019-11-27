@@ -228,7 +228,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export interface FallbackPollingOptions {
         fallbackPollingInterval: PollingInterval;
-        fallbackOptions: CompilerOptions | undefined;
+        fallbackOptions: WatchOptions | undefined;
     }
     export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
     export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
@@ -331,7 +331,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     export interface TestFsWatcher {
         cb: FsWatchCallback;
         fallbackPollingInterval: PollingInterval;
-        fallbackOptions: CompilerOptions | undefined;
+        fallbackOptions: WatchOptions | undefined;
     }
 
     export interface ReloadWatchInvokeOptions {
@@ -708,7 +708,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             cb: FsWatchCallback,
             recursive: boolean,
             fallbackPollingInterval: PollingInterval,
-            fallbackOptions: CompilerOptions | undefined): FileWatcher {
+            fallbackOptions: WatchOptions | undefined): FileWatcher {
             return this.runWithFallbackPolling ?
                 this.watchFile(
                     fileOrDirectory,

@@ -7,7 +7,7 @@ namespace ts.projectSystem {
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: {
+                    watchOptions: {
                         synchronousWatchDirectory: true
                     }
                 })
@@ -399,7 +399,7 @@ namespace ts.projectSystem {
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: {
+                    watchOptions: {
                         watchFile: "UseFsEvents"
                     }
                 })
@@ -460,7 +460,7 @@ namespace ts.projectSystem {
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: {
+                    watchOptions: {
                         watchDirectory: "UseFsEvents"
                     }
                 })
@@ -506,7 +506,7 @@ namespace ts.projectSystem {
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: {
+                    watchOptions: {
                         fallbackPolling: "PriorityInterval"
                     }
                 })

@@ -825,7 +825,7 @@ namespace ts.server {
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: CompilerOptions): FileWatcher {
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
         try {
             return originalWatchDirectory(path, callback, recursive, options);
         }

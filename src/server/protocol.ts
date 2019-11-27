@@ -1432,6 +1432,7 @@ namespace ts.server.protocol {
         watchFile?: WatchFileKind | ts.WatchFileKind;
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
+        synchronousWatchDirectory?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
 

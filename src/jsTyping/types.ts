@@ -14,6 +14,7 @@ declare namespace ts.server {
         readonly fileNames: string[];
         readonly projectRootPath: Path;
         readonly compilerOptions: CompilerOptions;
+        readonly watchOptions?: WatchOptions;
         readonly typeAcquisition: TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
         readonly cachePath?: string;
