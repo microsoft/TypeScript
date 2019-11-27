@@ -5719,7 +5719,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface SourceFileMapBeEmittedHost {
+    export interface SourceFileMayBeEmittedHost {
         getCompilerOptions(): CompilerOptions;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
@@ -5727,7 +5727,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMapBeEmittedHost {
+    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
         getSourceFiles(): readonly SourceFile[];
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
