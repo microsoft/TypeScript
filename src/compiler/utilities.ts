@@ -4964,6 +4964,11 @@ namespace ts {
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
 
+    /* @internal */
+    export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
+        localizedDiagnosticMessages = messages;
+    }
+
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }

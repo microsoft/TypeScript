@@ -371,7 +371,7 @@ namespace ts {
             }
             try {
                 // this is a global mutation (or live binding update)!
-                localizedDiagnosticMessages = JSON.parse(fileContents!);
+                setLocalizedDiagnosticMessages(JSON.parse(fileContents!));
             }
             catch {
                 if (errors) {
