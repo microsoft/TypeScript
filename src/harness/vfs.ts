@@ -1,4 +1,3 @@
-// tslint:disable:no-null-keyword
 namespace vfs {
     /**
      * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -32,6 +31,10 @@ namespace vfs {
 
     let devCount = 0; // A monotonically increasing count of device ids
     let inoCount = 0; // A monotonically increasing count of inodes
+
+    export interface DiffOptions {
+        includeChangedFileWithSameContent?: boolean;
+    }
 
     /**
      * Represents a virtual POSIX-like file system.
@@ -653,7 +656,7 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string, encoding?: string | null): string | Buffer;
-        public readFileSync(path: string, encoding: string | null = null) {
+        public readFileSync(path: string, encoding: string | null = null) { // eslint-disable-line no-null/no-null
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             if (isDirectory(node)) throw createIOError("EISDIR");
@@ -668,6 +671,7 @@ namespace vfs {
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
+        // eslint-disable-next-line no-null/no-null
         public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
             if (this.isReadonly) throw createIOError("EROFS");
 
@@ -693,21 +697,25 @@ namespace vfs {
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
-        public diff(base = this.shadowRoot) {
+        public diff(base = this.shadowRoot, options: DiffOptions = {}) {
             const differences: FileSet = {};
-            const hasDifferences = base ? FileSystem.rootDiff(differences, this, base) : FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
+            const hasDifferences = base ?
+                FileSystem.rootDiff(differences, this, base, options) :
+                FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
             return hasDifferences ? differences : undefined;
         }
 
         /**
-         * Generates a `FileSet` patch containing all the entries in `chagned` that are not in `base`.
+         * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
          */
-        public static diff(changed: FileSystem, base: FileSystem) {
+        public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
             const differences: FileSet = {};
-            return FileSystem.rootDiff(differences, changed, base) ? differences : undefined;
+            return FileSystem.rootDiff(differences, changed, base, options) ?
+                differences :
+                undefined;
         }
 
-        private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined) {
+        private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined, options: DiffOptions) {
             if (changedLinks && !baseLinks) return FileSystem.trackCreatedInodes(container, changed, changedLinks);
             if (baseLinks && !changedLinks) return FileSystem.trackDeletedInodes(container, baseLinks);
             if (changedLinks && baseLinks) {
@@ -724,10 +732,10 @@ namespace vfs {
                     const baseNode = baseLinks.get(basename);
                     if (baseNode) {
                         if (isDirectory(changedNode) && isDirectory(baseNode)) {
-                            return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                            return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
                         }
                         if (isFile(changedNode) && isFile(baseNode)) {
-                            return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode) || hasChanges;
+                            return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
                         }
                         if (isSymlink(changedNode) && isSymlink(baseNode)) {
                             return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) || hasChanges;
@@ -740,7 +748,7 @@ namespace vfs {
             return false;
         }
 
-        private static rootDiff(container: FileSet, changed: FileSystem, base: FileSystem) {
+        private static rootDiff(container: FileSet, changed: FileSystem, base: FileSystem, options: DiffOptions) {
             while (!changed._lazy.links && changed._shadowRoot) changed = changed._shadowRoot;
             while (!base._lazy.links && base._shadowRoot) base = base._shadowRoot;
 
@@ -750,10 +758,10 @@ namespace vfs {
             // no difference if the root links are empty and unshadowed
             if (!changed._lazy.links && !changed._shadowRoot && !base._lazy.links && !base._shadowRoot) return false;
 
-            return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks());
+            return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks(), options);
         }
 
-        private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode) {
+        private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode, options: DiffOptions) {
             while (!changedNode.links && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
             while (!baseNode.links && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 
@@ -770,7 +778,7 @@ namespace vfs {
 
             // no difference if both nodes have identical children
             const children: FileSet = {};
-            if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode))) {
+            if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode), options)) {
                 return false;
             }
 
@@ -778,7 +786,7 @@ namespace vfs {
             return true;
         }
 
-        private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode) {
+        private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
             while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
             while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 
@@ -800,7 +808,11 @@ namespace vfs {
             if (changedBuffer === baseBuffer) return false;
 
             // no difference if both buffers are identical
-            if (Buffer.compare(changedBuffer, baseBuffer) === 0) return false;
+            if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
+                if (!options.includeChangedFileWithSameContent) return false;
+                container[basename] = new SameFileContentFile(changedBuffer);
+                return true;
+            }
 
             container[basename] = new File(changedBuffer);
             return true;
@@ -1115,6 +1127,8 @@ namespace vfs {
                 const value = normalizeFileSetEntry(files[key]);
                 const path = dirname ? vpath.resolve(dirname, key) : key;
                 vpath.validate(path, vpath.ValidationFlags.Absolute);
+
+                // eslint-disable-next-line no-null/no-null
                 if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
                     if (this.stringComparer(vpath.dirname(path), path) === 0) {
                         throw new TypeError("Roots cannot be deleted.");
@@ -1158,7 +1172,7 @@ namespace vfs {
 
     export interface FileSystemCreateOptions extends FileSystemOptions {
         // Sets the documents to add to the file system.
-        documents?: ReadonlyArray<documents.TextDocument>;
+        documents?: readonly documents.TextDocument[];
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";
@@ -1305,7 +1319,6 @@ namespace vfs {
         public isSocket() { return (this.mode & S_IFMT) === S_IFSOCK; }
     }
 
-    // tslint:disable-next-line:variable-name
     export const IOErrorMessages = Object.freeze({
         EACCES: "access denied",
         EIO: "an I/O error occurred",
@@ -1357,6 +1370,12 @@ namespace vfs {
             this.data = data;
             this.encoding = encoding;
             this.meta = meta;
+        }
+    }
+
+    export class SameFileContentFile extends File {
+        constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+            super(data, metaAndEncoding);
         }
     }
 
@@ -1510,6 +1529,7 @@ namespace vfs {
         return builtLocalCS;
     }
 
+    /* eslint-disable no-null/no-null */
     function normalizeFileSetEntry(value: FileSet[string]) {
         if (value === undefined ||
             value === null ||
@@ -1528,15 +1548,16 @@ namespace vfs {
     export function formatPatch(patch: FileSet): string;
     export function formatPatch(patch: FileSet | undefined): string | null;
     export function formatPatch(patch: FileSet | undefined) {
-        // tslint:disable-next-line:no-null-keyword
         return patch ? formatPatchWorker("", patch) : null;
     }
+    /* eslint-enable no-null/no-null */
 
     function formatPatchWorker(dirname: string, container: FileSet): string {
         let text = "";
         for (const name of Object.keys(container)) {
             const entry = normalizeFileSetEntry(container[name]);
             const file = dirname ? vpath.combine(dirname, name) : name;
+            // eslint-disable-next-line no-null/no-null
             if (entry === null || entry === undefined || entry instanceof Unlink || entry instanceof Rmdir) {
                 text += `//// [${file}] unlink\r\n`;
             }
@@ -1545,6 +1566,9 @@ namespace vfs {
             }
             else if (entry instanceof Directory) {
                 text += formatPatchWorker(file, entry.files);
+            }
+            else if (entry instanceof SameFileContentFile) {
+                text += `//// [${file}] file written with same contents\r\n`;
             }
             else if (entry instanceof File) {
                 const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
@@ -1564,7 +1588,7 @@ namespace vfs {
     }
 
     export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
     }
 
@@ -1582,4 +1606,3 @@ namespace vfs {
         }
     }
 }
-// tslint:enable:no-null-keyword

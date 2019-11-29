@@ -5,9 +5,6 @@
 // @module: es2015
 // @moduleResolution: node
 
-// @Filename: /node_modules/@types/react/index.d.ts
-////export = React;
-////export as namespace React;
 ////declare namespace React {
 ////    export class Component { render(): JSX.Element | null; }
 ////}
@@ -16,10 +13,6 @@
 ////        interface Element {}
 ////    }
 ////}
-
-
-// @filename: a.tsx
-//// import React from 'react';
 ////
 //// export default function Component([|props |]) {
 ////     if (props.isLoading) {
@@ -37,4 +30,4 @@
 //// }
 
 
-verify.rangeAfterCodeFix("props: { isLoading: any; update: (arg0: any) => void; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("props: { isLoading: any; update: (arg0: any) => any; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

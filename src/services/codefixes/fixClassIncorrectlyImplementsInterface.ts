@@ -1,7 +1,9 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.Class_0_incorrectly_implements_interface_1.code,
-                        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code];
+    const errorCodes = [
+        Diagnostics.Class_0_incorrectly_implements_interface_1.code,
+        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
+    ];
     const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
         errorCodes,
@@ -28,7 +30,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)));
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
@@ -52,6 +54,7 @@ namespace ts.codefix {
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
         const classType = checker.getTypeAtLocation(classDeclaration);
+        const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
@@ -60,12 +63,22 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            }
+        }
+
+        // Either adds the node at the top of the class, or if there's a constructor right after that
+        function insertInterfaceMemberNode(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+            if (constructor) {
+                changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
+            }
+            else {
+                changeTracker.insertNodeAtClassStart(sourceFile, cls, newElement);
             }
         }
     }

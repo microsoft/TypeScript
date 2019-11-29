@@ -40,6 +40,33 @@ namespace ts {
                 });
         });
 
+        it("Handles 'did you mean?' for misspelt flags", () => {
+            // --declarations --allowTS
+            assertParseResult(["--declarations", "--allowTS"], {
+                errors: [
+                    {
+                        messageText:"Unknown compiler option '--declarations'. Did you mean 'declaration'?",
+                        category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    },
+                    {
+                        messageText: "Unknown compiler option '--allowTS'. Did you mean 'allowJs'?",
+                        category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    }
+                ],
+                fileNames: [],
+                options: {}
+            });
+        });
+
+
         it("Parse multiple options of library flags ", () => {
             // --lib es5,es2015.symbol.wellknown 0.ts
             assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "0.ts"],
@@ -83,14 +110,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -109,14 +136,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -135,14 +162,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -161,14 +188,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -187,14 +214,14 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
-                            file: undefined,
-                            start: undefined,
-                            length: undefined,
-                        }],
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
                     fileNames: ["0.ts"],
                     options: {}
                 });
@@ -446,6 +473,23 @@ namespace ts {
                 });
         });
 
+        it("parse build with listFilesOnly ", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--listFilesOnly"],
+                {
+                    errors: [{
+                        messageText:"Unknown build option '--listFilesOnly'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    projects: ["."],
+                    buildOptions: {}
+                });
+        });
+
         it("Parse multiple flags with input projects at the end", () => {
             // --lib es5,es2015.symbol.wellknown --target es5 0.ts
             assertParseResult(["--force", "--verbose", "src", "tests"],
@@ -539,4 +583,6 @@ namespace ts {
             verifyInvalidCombination("watch", "dry");
         });
     });
+
+
 }

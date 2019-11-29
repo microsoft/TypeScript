@@ -10,6 +10,7 @@ interface ExecResult {
 
 interface UserConfig {
     types: string[];
+    cloneUrl: string;
     path?: string;
 }
 
@@ -26,7 +27,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(600_000); // 10 minutes
@@ -36,7 +37,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         });
     }
     private runTest(directoryName: string) {
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
@@ -49,13 +50,17 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
-                    const submoduleDir = path.join(cwd, directoryName);
-                    exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
-                    exec("git", ["clean", "-f"], { cwd: submoduleDir });
-                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: submoduleDir });
-
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
+                    ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
+                    const submoduleDir = path.join(cwd, directoryName);
+                    if (!fs.existsSync(submoduleDir)) {
+                        exec("git", ["clone", config.cloneUrl, directoryName], { cwd });
+                    }
+                    exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                    exec("git", ["clean", "-f"], { cwd: submoduleDir });
+                    exec("git", ["pull", "-f"], { cwd: submoduleDir });
+
                     types = config.types;
 
                     cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
@@ -95,7 +100,7 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
         return "user";
     }
     report(result: ExecResult) {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
@@ -115,7 +120,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.getTestFiles();
 
-        // tslint:disable-next-line:no-this-assignment
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(cls.timeout); // 20 minutes
@@ -145,7 +150,7 @@ class DockerfileRunner extends ExternalCompileRunnerBase {
         }
     }
     report(result: ExecResult) {
-        // tslint:disable-next-line:no-null-keyword
+        // eslint-disable-next-line no-null/no-null
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${sanitizeDockerfileOutput(result.stdout.toString())}
@@ -161,8 +166,10 @@ function sanitizeDockerfileOutput(result: string): string {
         normalizeNewlines,
         stripANSIEscapes,
         stripRushStageNumbers,
+        stripWebpackHash,
         sanitizeVersionSpecifiers,
         sanitizeTimestamps,
+        sanitizeSizes,
         sanitizeUnimportantGulpOutput,
         stripAbsoluteImportPaths,
     ].reduce((result, f) => f(result), result);
@@ -180,6 +187,14 @@ function stripRushStageNumbers(result: string): string {
     return result.replace(/\d+ of \d+:/g, "XX of XX:");
 }
 
+function stripWebpackHash(result: string): string {
+    return result.replace(/Hash: \w+/g, "Hash: [redacted]");
+}
+
+function sanitizeSizes(result: string): string {
+    return result.replace(/\d+(\.\d+)? ((Ki|M)B|bytes)/g, "X KiB");
+}
+
 /**
  * Gulp's output order within a `parallel` block is nondeterministic (and there's no way to configure it to execute in series),
  * so we purge as much of the gulp output as we can
@@ -195,6 +210,7 @@ function sanitizeTimestamps(result: string): string {
     return result.replace(/\[\d?\d:\d\d:\d\d (A|P)M\]/g, "[XX:XX:XX XM]")
         .replace(/\[\d?\d:\d\d:\d\d\]/g, "[XX:XX:XX]")
         .replace(/\/\d+-\d+-[\d_TZ]+-debug.log/g, "\/XXXX-XX-XXXXXXXXX-debug.log")
+        .replace(/\d+\/\d+\/\d+ \d+:\d+:\d+ (AM|PM)/g, "XX/XX/XX XX:XX:XX XM")
         .replace(/\d+(\.\d+)? sec(onds?)?/g, "? seconds")
         .replace(/\d+(\.\d+)? min(utes?)?/g, "")
         .replace(/\d+(\.\d+)? ?m?s/g, "?s")
@@ -205,7 +221,9 @@ function sanitizeVersionSpecifiers(result: string): string {
     return result
         .replace(/\d+.\d+.\d+-insiders.\d\d\d\d\d\d\d\d/g, "X.X.X-insiders.xxxxxxxx")
         .replace(/Rush Multi-Project Build Tool (\d+)\.\d+\.\d+/g, "Rush Multi-Project Build Tool $1.X.X")
-        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X");
+        .replace(/([@v\()])\d+\.\d+\.\d+/g, "$1X.X.X")
+        .replace(/webpack (\d+)\.\d+\.\d+/g, "webpack $1.X.X")
+        .replace(/Webpack version: (\d+)\.\d+\.\d+/g, "Webpack version: $1.X.X");
 }
 
 /**
@@ -254,7 +272,8 @@ class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     report(result: ExecResult, cwd: string) {
         const stdout = removeExpectedErrors(result.stdout.toString(), cwd);
         const stderr = result.stderr.toString();
-        // tslint:disable-next-line:no-null-keyword
+
+        // eslint-disable-next-line no-null/no-null
         return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
 ${stdout.replace(/\r\n/g, "\n")}

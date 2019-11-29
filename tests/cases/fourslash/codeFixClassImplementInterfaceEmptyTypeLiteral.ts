@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+////
 //// interface I {
 ////     x: {};
 //// }
@@ -8,6 +9,15 @@
 ////    |]constructor() { }
 //// }
 
-verify.rangeAfterCodeFix(`
-x: {};
-`);
+verify.codeFix({
+  description: "Implement interface 'I'",
+  newFileContent:`
+interface I {
+    x: {};
+}
+
+class C implements I {
+   constructor() { }
+    x: {};
+}`,
+});

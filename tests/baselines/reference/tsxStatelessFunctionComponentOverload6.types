@@ -12,7 +12,7 @@ export interface ClickableProps {
 
 export interface ButtonProps extends ClickableProps {
     onClick: React.MouseEventHandler<any>;
->onClick : React.EventHandler<React.MouseEvent<any>>
+>onClick : React.MouseEventHandler<any>
 >React : any
 }
 

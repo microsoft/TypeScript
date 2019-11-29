@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -117,7 +115,7 @@ namespace ts.server {
         terminal: false,
     });
 
-    class Logger implements server.Logger { // tslint:disable-line no-unnecessary-qualifier
+    class Logger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         private fd = -1;
         private seq = 0;
         private inGroup = false;
@@ -183,13 +181,13 @@ namespace ts.server {
             switch (type) {
                 case Msg.Info:
                     perfLogger.logInfoEvent(s);
-                break;
+                    break;
                 case Msg.Perf:
                     perfLogger.logPerfEvent(s);
-                break;
+                    break;
                 default: // Msg.Err
                     perfLogger.logErrEvent(s);
-                break;
+                    break;
             }
 
             if (!this.canWrite) return;
@@ -212,7 +210,7 @@ namespace ts.server {
         private write(s: string) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
-                // tslint:disable-next-line no-null-keyword
+                // eslint-disable-next-line no-null/no-null
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
@@ -394,76 +392,76 @@ namespace ts.server {
                     break;
                 }
                 case EventInitializationFailed: {
-                        const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                            message: response.message
-                        };
-                        const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                        this.event(body, eventName);
-                        break;
-                    }
+                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                        message: response.message
+                    };
+                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                    this.event(body, eventName);
+                    break;
+                }
                 case EventBeginInstallTypes: {
-                        const body: protocol.BeginInstallTypesEventBody = {
-                            eventId: response.eventId,
-                            packages: response.packagesToInstall,
-                        };
-                        const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                        this.event(body, eventName);
-                        break;
-                    }
+                    const body: protocol.BeginInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                    };
+                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                    this.event(body, eventName);
+                    break;
+                }
                 case EventEndInstallTypes: {
-                        if (this.telemetryEnabled) {
-                            const body: protocol.TypingsInstalledTelemetryEventBody = {
-                                telemetryEventName: "typingsInstalled",
-                                payload: {
-                                    installedPackages: response.packagesToInstall.join(","),
-                                    installSuccess: response.installSuccess,
-                                    typingsInstallerVersion: response.typingsInstallerVersion
-                                }
-                            };
-                            const eventName: protocol.TelemetryEventName = "telemetry";
-                            this.event(body, eventName);
-                        }
-
-                        const body: protocol.EndInstallTypesEventBody = {
-                            eventId: response.eventId,
-                            packages: response.packagesToInstall,
-                            success: response.installSuccess,
+                    if (this.telemetryEnabled) {
+                        const body: protocol.TypingsInstalledTelemetryEventBody = {
+                            telemetryEventName: "typingsInstalled",
+                            payload: {
+                                installedPackages: response.packagesToInstall.join(","),
+                                installSuccess: response.installSuccess,
+                                typingsInstallerVersion: response.typingsInstallerVersion
+                            }
                         };
-                        const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                        const eventName: protocol.TelemetryEventName = "telemetry";
                         this.event(body, eventName);
-                        break;
                     }
+
+                    const body: protocol.EndInstallTypesEventBody = {
+                        eventId: response.eventId,
+                        packages: response.packagesToInstall,
+                        success: response.installSuccess,
+                    };
+                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                    this.event(body, eventName);
+                    break;
+                }
                 case ActionInvalidate: {
-                        this.projectService.updateTypingsForProject(response);
-                        break;
-                    }
+                    this.projectService.updateTypingsForProject(response);
+                    break;
+                }
                 case ActionSet: {
-                        if (this.activeRequestCount > 0) {
-                            this.activeRequestCount--;
-                        }
-                        else {
-                            Debug.fail("Received too many responses");
-                        }
-
-                        while (this.requestQueue.length > 0) {
-                            const queuedRequest = this.requestQueue.shift()!;
-                            if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                                this.requestMap.delete(queuedRequest.operationId);
-                                this.scheduleRequest(queuedRequest);
-                                break;
-                            }
-
-                            if (this.logger.hasLevel(LogLevel.verbose)) {
-                                this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
-                            }
-                        }
-
-                        this.projectService.updateTypingsForProject(response);
-
-                        this.event(response, "setTypings");
-
-                        break;
+                    if (this.activeRequestCount > 0) {
+                        this.activeRequestCount--;
                     }
+                    else {
+                        Debug.fail("Received too many responses");
+                    }
+
+                    while (this.requestQueue.length > 0) {
+                        const queuedRequest = this.requestQueue.shift()!;
+                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                            this.requestMap.delete(queuedRequest.operationId);
+                            this.scheduleRequest(queuedRequest);
+                            break;
+                        }
+
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                        }
+                    }
+
+                    this.projectService.updateTypingsForProject(response);
+
+                    this.event(response, "setTypings");
+
+                    break;
+                }
                 default:
                     assertType<never>(response);
             }
@@ -494,6 +492,7 @@ namespace ts.server {
                     // so we defer until the next tick.
                     //
                     // Construction should finish before the next tick fires, so we do not need to do this recursively.
+                    // eslint-disable-next-line no-restricted-globals
                     setImmediate(() => this.event(body, eventName));
                 }
             };
@@ -710,7 +709,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
-            // tslint:disable-next-line:ban
+            // eslint-disable-next-line no-restricted-globals
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -893,10 +892,13 @@ namespace ts.server {
         };
     };
 
+    /* eslint-disable no-restricted-globals */
     sys.setTimeout = setTimeout;
     sys.clearTimeout = clearTimeout;
     sys.setImmediate = setImmediate;
     sys.clearImmediate = clearImmediate;
+    /* eslint-enable no-restricted-globals */
+
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc();
     }
@@ -919,14 +921,11 @@ namespace ts.server {
         cancellationToken = nullCancellationToken;
     }
 
-    let eventPort: number | undefined;
-    {
-        const str = findArgument("--eventPort");
-        const v = str === undefined ? undefined : parseInt(str);
-        if (v !== undefined && !isNaN(v)) {
-            eventPort = v;
-        }
+    function parseEventPort(eventPortStr: string | undefined) {
+        const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
+        return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
     }
+    const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
 
     const localeStr = findArgument("--locale");
     if (localeStr) {
@@ -940,7 +939,7 @@ namespace ts.server {
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
-    function parseStringArray(argName: string): ReadonlyArray<string> {
+    function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
             return emptyArray;
@@ -970,7 +969,6 @@ namespace ts.server {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348
-    // tslint:disable-next-line no-unnecessary-type-assertion-2
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();

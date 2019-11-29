@@ -12,7 +12,7 @@ class C1 {
 }
 
 class T<T> {
->T : T<T>
+>T : globalThis.T<T>
 
     constructor(n?: T) { }
 >n : T

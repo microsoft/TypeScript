@@ -79,8 +79,8 @@ var r7 = foo2(b);
 >b : new (x: string) => string
 
 var r8 = foo2(<U>(x: U) => x); // no error expected
->r8 : (x: string) => string
->foo2(<U>(x: U) => x) : (x: string) => string
+>r8 : <U>(x: U) => U
+>foo2(<U>(x: U) => x) : <U>(x: U) => U
 >foo2 : <T extends (x: string) => string>(x: T) => T
 ><U>(x: U) => x : <U>(x: U) => U
 >x : U

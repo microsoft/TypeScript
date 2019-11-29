@@ -124,6 +124,13 @@ namespace ts.server {
             return response;
         }
 
+        /*@internal*/
+        configure(preferences: UserPreferences) {
+            const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -134,11 +141,13 @@ namespace ts.server {
             this.processRequest(CommandNames.Close, args);
         }
 
-        changeFile(fileName: string, start: number, end: number, insertString: string): void {
+        createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
+            return { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
+        }
+
+        changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
             // clear the line map after an edit
             this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-
-            const args: protocol.ChangeRequestArgs = { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
             this.processRequest(CommandNames.Change, args);
         }
 
@@ -281,7 +290,7 @@ namespace ts.server {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
-            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.assertDefined(response.body); // TODO: GH#18217
 
             return {
@@ -365,12 +374,14 @@ namespace ts.server {
         private getDiagnostics(file: string, command: CommandNames): DiagnosticWithLocation[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
+            const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
+            const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
-                    file: undefined!, // TODO: GH#18217
+                    file: fakeSourceFile,
                     start: entry.start,
                     length: entry.length,
                     messageText: entry.message,
@@ -509,14 +520,14 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
             const args: protocol.SignatureHelpRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             const response = this.processResponse<protocol.SignatureHelpResponse>(request);
 
             if (!response.body) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
@@ -588,7 +599,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: readonly number[]): readonly CodeFixAction[] {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
@@ -666,7 +677,7 @@ namespace ts.server {
             };
         }
 
-        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
             return notImplemented();
         }
 

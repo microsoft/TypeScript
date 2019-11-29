@@ -1,445 +1,5 @@
-// Block scoped definitions work poorly for global variables, temporarily enable var
-/* tslint:disable:no-var-keyword */
-
-// this will work in the browser via browserify
-var _chai: typeof chai = require("chai");
-var assert: typeof _chai.assert = _chai.assert;
-{
-    // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
-    // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
-    assert.isFalse = (expr: any, msg: string) => { if (expr !== false) throw new Error(msg); };
-
-    const assertDeepImpl = assert.deepEqual;
-    assert.deepEqual = (a, b, msg) => {
-        if (ts.isArray(a) && ts.isArray(b)) {
-            assertDeepImpl(arrayExtraKeysObject(a), arrayExtraKeysObject(b), "Array extra keys differ");
-        }
-        assertDeepImpl(a, b, msg);
-
-        function arrayExtraKeysObject(a: ReadonlyArray<{} | null | undefined>): object {
-            const obj: { [key: string]: {} | null | undefined } = {};
-            for (const key in a) {
-                if (Number.isNaN(Number(key))) {
-                    obj[key] = a[key];
-                }
-            }
-            return obj;
-        }
-    };
-}
-
-var global: NodeJS.Global = Function("return this").call(undefined); // tslint:disable-line:function-constructor
-
-declare var window: {};
-declare var XMLHttpRequest: new() => XMLHttpRequest;
-interface XMLHttpRequest {
-    readonly readyState: number;
-    readonly responseText: string;
-    readonly status: number;
-    readonly statusText: string;
-    open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
-    send(data?: string): void;
-    setRequestHeader(header: string, value: string): void;
-    getAllResponseHeaders(): string;
-    getResponseHeader(header: string): string | null;
-    overrideMimeType(mime: string): void;
-}
-/* tslint:enable:no-var-keyword prefer-const */
-
-namespace Utils {
-    export function encodeString(s: string): string {
-        return ts.sys.bufferFrom!(s).toString("utf8");
-    }
-
-    export function byteLength(s: string, encoding?: string): number {
-        // stub implementation if Buffer is not available (in-browser case)
-        return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
-    }
-
-    export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
-        const vm = require("vm");
-        if (nodeContext) {
-            vm.runInNewContext(fileContents, nodeContext, fileName);
-        }
-        else {
-            vm.runInThisContext(fileContents, fileName);
-        }
-    }
-
-    /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
-    export function splitContentByNewlines(content: string) {
-        // Split up the input file by line
-        // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
-        // we have to use string-based splitting instead and try to figure out the delimiting chars
-        let lines = content.split("\r\n");
-        if (lines.length === 1) {
-            lines = content.split("\n");
-
-            if (lines.length === 1) {
-                lines = content.split("\r");
-            }
-        }
-        return lines;
-    }
-
-    /** Reads a file under /tests */
-    export function readTestFile(path: string) {
-        if (path.indexOf("tests") < 0) {
-            path = "tests/" + path;
-        }
-
-        let content: string | undefined;
-        try {
-            content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
-        }
-        catch (err) {
-            return undefined;
-        }
-
-        return content;
-    }
-
-    export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
-        const cache = ts.createMap<any>();
-
-        return <any>(function(this: any, ...args: any[]) {
-            const key = memoKey(...args);
-            if (cache.has(key)) {
-                return cache.get(key);
-            }
-            else {
-                const value = f.apply(this, args);
-                cache.set(key, value);
-                return value;
-            }
-        });
-    }
-
-    export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
-
-    export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined): void {
-        if (node) {
-            assert.isFalse(node.pos < 0, "node.pos < 0");
-            assert.isFalse(node.end < 0, "node.end < 0");
-            assert.isFalse(node.end < node.pos, "node.end < node.pos");
-            assert.equal(node.parent, parent, "node.parent !== parent");
-
-            if (parent) {
-                // Make sure each child is contained within the parent.
-                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
-                assert.isFalse(node.end > parent.end, "node.end > parent.end");
-            }
-
-            ts.forEachChild(node, child => {
-                assertInvariants(child, node);
-            });
-
-            // Make sure each of the children is in order.
-            let currentPos = 0;
-            ts.forEachChild(node,
-                child => {
-                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
-                    currentPos = child.end;
-                },
-                array => {
-                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
-                    assert.isFalse(array.end > node.end, "array.end > node.end");
-                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
-
-                    for (const item of array) {
-                        assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = item.end;
-                    }
-
-                    currentPos = array.end;
-                });
-
-            const childNodesAndArrays: any[] = [];
-            ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
-
-            for (const childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
-                    // for now ignore jsdoc comments
-                    childName === "jsDocComment" || childName === "checkJsDirective" || childName === "commonJsModuleIndicator") {
-                    continue;
-                }
-                const child = (<any>node)[childName];
-                if (isNodeOrArray(child)) {
-                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                        "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
-                }
-            }
-        }
-    }
-
-    function isNodeOrArray(a: any): boolean {
-        return a !== undefined && typeof a.pos === "number";
-    }
-
-    export function convertDiagnostics(diagnostics: ReadonlyArray<ts.Diagnostic>) {
-        return diagnostics.map(convertDiagnostic);
-    }
-
-    function convertDiagnostic(diagnostic: ts.Diagnostic) {
-        return {
-            start: diagnostic.start,
-            length: diagnostic.length,
-            messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
-            category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
-            code: diagnostic.code
-        };
-    }
-
-    export function sourceFileToJSON(file: ts.Node): string {
-        return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
-
-        function getKindName(k: number | string): string {
-            if (ts.isString(k)) {
-                return k;
-            }
-
-            // For some markers in SyntaxKind, we should print its original syntax name instead of
-            // the marker name in tests.
-            if (k === (<any>ts).SyntaxKind.FirstJSDocNode ||
-                k === (<any>ts).SyntaxKind.LastJSDocNode ||
-                k === (<any>ts).SyntaxKind.FirstJSDocTagNode ||
-                k === (<any>ts).SyntaxKind.LastJSDocTagNode) {
-                for (const kindName in (<any>ts).SyntaxKind) {
-                    if ((<any>ts).SyntaxKind[kindName] === k) {
-                        return kindName;
-                    }
-                }
-            }
-
-            return (<any>ts).SyntaxKind[k];
-        }
-
-        function getFlagName(flags: any, f: number): any {
-            if (f === 0) {
-                return 0;
-            }
-
-            let result = "";
-            ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
-                if (isFinite(v)) {
-                    v = +v;
-                    if (f === +v) {
-                        result = flags[v];
-                        return true;
-                    }
-                    else if ((f & v) > 0) {
-                        if (result.length) {
-                            result += " | ";
-                        }
-                        result += flags[v];
-                        return false;
-                    }
-                }
-            });
-            return result;
-        }
-
-        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-
-        function serializeNode(n: ts.Node): any {
-            const o: any = { kind: getKindName(n.kind) };
-            if (ts.containsParseError(n)) {
-                o.containsParseError = true;
-            }
-
-            for (const propertyName of Object.getOwnPropertyNames(n) as ReadonlyArray<keyof ts.SourceFile | keyof ts.Identifier>) {
-                switch (propertyName) {
-                    case "parent":
-                    case "symbol":
-                    case "locals":
-                    case "localSymbol":
-                    case "kind":
-                    case "id":
-                    case "nodeCount":
-                    case "symbolCount":
-                    case "identifierCount":
-                    case "scriptSnapshot":
-                        // Blacklist of items we never put in the baseline file.
-                        break;
-
-                    case "originalKeywordKind":
-                        o[propertyName] = getKindName((<any>n)[propertyName]);
-                        break;
-
-                    case "flags":
-                        // Clear the flags that are produced by aggregating child values. That is ephemeral
-                        // data we don't care about in the dump. We only care what the parser set directly
-                        // on the AST.
-                        const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
-                        if (flags) {
-                            o[propertyName] = getNodeFlagName(flags);
-                        }
-                        break;
-
-                    case "parseDiagnostics":
-                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
-                        break;
-
-                    case "nextContainer":
-                        if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
-                        }
-                        break;
-
-                    case "text":
-                        // Include 'text' field for identifiers/literals, but not for source files.
-                        if (n.kind !== ts.SyntaxKind.SourceFile) {
-                            o[propertyName] = (<any>n)[propertyName];
-                        }
-                        break;
-
-                    default:
-                        o[propertyName] = (<any>n)[propertyName];
-                }
-            }
-
-            return o;
-        }
-    }
-
-    export function assertDiagnosticsEquals(array1: ReadonlyArray<ts.Diagnostic>, array2: ReadonlyArray<ts.Diagnostic>) {
-        if (array1 === array2) {
-            return;
-        }
-
-        assert(array1, "array1");
-        assert(array2, "array2");
-
-        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
-
-        for (let i = 0; i < array1.length; i++) {
-            const d1 = array1[i];
-            const d2 = array2[i];
-
-            assert.equal(d1.start, d2.start, "d1.start !== d2.start");
-            assert.equal(d1.length, d2.length, "d1.length !== d2.length");
-            assert.equal(
-                ts.flattenDiagnosticMessageText(d1.messageText, Harness.IO.newLine()),
-                ts.flattenDiagnosticMessageText(d2.messageText, Harness.IO.newLine()), "d1.messageText !== d2.messageText");
-            assert.equal(d1.category, d2.category, "d1.category !== d2.category");
-            assert.equal(d1.code, d2.code, "d1.code !== d2.code");
-        }
-    }
-
-    export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
-        if (node1 === node2) {
-            return;
-        }
-
-        assert(node1, "node1");
-        assert(node2, "node2");
-        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
-        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
-        assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
-
-        // call this on both nodes to ensure all propagated flags have been set (and thus can be
-        // compared).
-        assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-        assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
-
-        ts.forEachChild(node1,
-            child1 => {
-                const childName = findChildName(node1, child1);
-                const child2: ts.Node = (<any>node2)[childName];
-
-                assertStructuralEquals(child1, child2);
-            },
-            array1 => {
-                const childName = findChildName(node1, array1);
-                const array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
-
-                assertArrayStructuralEquals(array1, array2);
-            });
-    }
-
-    function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
-        if (array1 === array2) {
-            return;
-        }
-
-        assert(array1, "array1");
-        assert(array2, "array2");
-        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
-        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
-        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
-
-        for (let i = 0; i < array1.length; i++) {
-            assertStructuralEquals(array1[i], array2[i]);
-        }
-    }
-
-    function findChildName(parent: any, child: any) {
-        for (const name in parent) {
-            if (parent.hasOwnProperty(name) && parent[name] === child) {
-                return name;
-            }
-        }
-
-        throw new Error("Could not find child in parent");
-    }
-
-    const maxHarnessFrames = 1;
-
-    export function filterStack(error: Error, stackTraceLimit = Infinity) {
-        const stack = <string>(<any>error).stack;
-        if (stack) {
-            const lines = stack.split(/\r\n?|\n/g);
-            const filtered: string[] = [];
-            let frameCount = 0;
-            let harnessFrameCount = 0;
-            for (let line of lines) {
-                if (isStackFrame(line)) {
-                    if (frameCount >= stackTraceLimit
-                        || isMocha(line)
-                        || isNode(line)) {
-                        continue;
-                    }
-
-                    if (isHarness(line)) {
-                        if (harnessFrameCount >= maxHarnessFrames) {
-                            continue;
-                        }
-
-                        harnessFrameCount++;
-                    }
-
-                    line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
-                    frameCount++;
-                }
-
-                filtered.push(line);
-            }
-
-            (<any>error).stack = filtered.join(Harness.IO.newLine());
-        }
-
-        return error;
-    }
-
-    function isStackFrame(line: string) {
-        return /^\s+at\s/.test(line);
-    }
-
-    function isMocha(line: string) {
-        return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
-    }
-
-    function isNode(line: string) {
-        return /\((timers|events|node|module)\.js:/.test(line);
-    }
-
-    function isHarness(line: string) {
-        return /[\\/]src[\\/]harness[\\/]|[\\/]run\.js/.test(line);
-    }
-}
-
 namespace Harness {
-    // tslint:disable-next-line:interface-name
+    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;
@@ -461,7 +21,7 @@ namespace Harness {
         getExecutingFilePath(): string;
         getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
+        readDirectory(path: string, extension?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): readonly string[];
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
@@ -601,13 +161,11 @@ namespace Harness {
     }
 
     IO = createNodeIO();
-}
 
-if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable!("NODE_ENV"))) {
-    Harness.IO.tryEnableSourceMapsForHost();
-}
+    if (IO.tryEnableSourceMapsForHost && /^development$/i.test(IO.getEnvironmentVariable!("NODE_ENV"))) {
+        IO.tryEnableSourceMapsForHost();
+    }
 
-namespace Harness {
     export const libFolder = "built/local/";
     const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
     export const tcServicesFile = IO.readFile(tcServicesFileName) + IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`;
@@ -623,8 +181,10 @@ namespace Harness {
     ) => void;
 
     // Settings
+    /* eslint-disable prefer-const */
     export let userSpecifiedRoot = "";
     export let lightMode = false;
+    /* eslint-enable prefer-const */
 
     /** Functionality for compiling TypeScript code */
     export namespace Compiler {
@@ -833,7 +393,7 @@ namespace Harness {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
             }
             if (options.rootDirs) {
-                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory!));
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
@@ -871,8 +431,8 @@ namespace Harness {
             currentDirectory: string;
         }
 
-        export function prepareDeclarationCompilationContext(inputFiles: ReadonlyArray<TestFile>,
-            otherFiles: ReadonlyArray<TestFile>,
+        export function prepareDeclarationCompilationContext(inputFiles: readonly TestFile[],
+            otherFiles: readonly TestFile[],
             result: compiler.CompilationResult,
             harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
             options: ts.CompilerOptions,
@@ -885,7 +445,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.getNumberOfJsFiles()) {
+                else if (result.dts.size !== result.getNumberOfJsFiles(/*includeJson*/ true)) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }
@@ -904,7 +464,7 @@ namespace Harness {
                 if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName)) {
+                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: utils.removeByteOrderMark(declFile.text) });
@@ -951,12 +511,12 @@ namespace Harness {
             return { declInputFiles, declOtherFiles, declResult: output };
         }
 
-        export function minimalDiagnosticsToString(diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function minimalDiagnosticsToString(diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             const host = { getCanonicalFileName, getCurrentDirectory: () => "", getNewLine: () => IO.newLine() };
             return (pretty ? ts.formatDiagnosticsWithColorAndContext : ts.formatDiagnostics)(diagnostics, host);
         }
 
-        export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function getErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
             let outputLines = "";
             const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
@@ -971,7 +531,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1123,10 +683,9 @@ namespace Harness {
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
         }
 
-        export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
+        export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
             Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"),
-                // tslint:disable-next-line no-null-keyword
-                !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty));
+                !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
         }
 
         export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
@@ -1204,9 +763,7 @@ namespace Harness {
                     const [, content] = value;
                     result += content;
                 }
-                /* tslint:disable:no-null-keyword */
-                return result || null;
-                /* tslint:enable:no-null-keyword */
+                return result || null; // eslint-disable-line no-null/no-null
             }
 
             function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -1269,7 +826,7 @@ namespace Harness {
                 return;
             }
             else if (options.sourceMap || declMaps) {
-                if (result.maps.size !== (result.getNumberOfJsFiles() * (declMaps && options.sourceMap ? 2 : 1))) {
+                if (result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
@@ -1277,9 +834,7 @@ namespace Harness {
                 if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                     // We need to return null here or the runBaseLine will actually create a empty file.
                     // Baselining isn't required here because there is no output.
-                    /* tslint:disable:no-null-keyword */
-                    sourceMapCode = null;
-                    /* tslint:enable:no-null-keyword */
+                    sourceMapCode = null; // eslint-disable-line no-null/no-null
                 }
                 else {
                     sourceMapCode = "";
@@ -1292,7 +847,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: ReadonlyArray<TestFile>, toBeCompiled: ReadonlyArray<TestFile>, otherFiles: ReadonlyArray<TestFile>, harnessSettings: TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
             if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1341,7 +896,8 @@ namespace Harness {
                 jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
             }
 
-            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null); // tslint:disable-line no-null-keyword
+            // eslint-disable-next-line no-null/no-null
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
         }
 
         function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
@@ -1349,7 +905,7 @@ namespace Harness {
             return "//// [" + fileName + "]\r\n" + utils.removeTestPathPrefixes(file.text);
         }
 
-        export function collateOutputs(outputFiles: ReadonlyArray<documents.TextDocument>): string {
+        export function collateOutputs(outputFiles: readonly documents.TextDocument[]): string {
             const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";
@@ -1413,10 +969,65 @@ namespace Harness {
         [key: string]: string;
     }
 
-    function splitVaryBySettingValue(text: string): string[] | undefined {
+    function splitVaryBySettingValue(text: string, varyBy: string): string[] | undefined {
         if (!text) return undefined;
-        const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
-        return entries && entries.length > 1 ? entries : undefined;
+
+        let star = false;
+        const includes: string[] = [];
+        const excludes: string[] = [];
+        for (let s of text.split(/,/g)) {
+            s = s.trim().toLowerCase();
+            if (s.length === 0) continue;
+            if (s === "*") {
+                star = true;
+            }
+            else if (ts.startsWith(s, "-") || ts.startsWith(s, "!")) {
+                excludes.push(s.slice(1));
+            }
+            else {
+                includes.push(s);
+            }
+        }
+
+        // do nothing if the setting has no variations
+        if (includes.length <= 1 && !star && excludes.length === 0) {
+            return undefined;
+        }
+
+        const variations: { key: string, value?: string | number }[] = [];
+        const values = getVaryByStarSettingValues(varyBy);
+
+        // add (and deduplicate) all included entries
+        for (const include of includes) {
+            const value = values?.get(include);
+            if (ts.findIndex(variations, v => v.key === include || value !== undefined && v.value === value) === -1) {
+                variations.push({ key: include, value });
+            }
+        }
+
+        if (star && values) {
+            // add all entries
+            for (const [key, value] of ts.arrayFrom(values.entries())) {
+                if (ts.findIndex(variations, v => v.key === key || v.value === value) === -1) {
+                    variations.push({ key, value });
+                }
+            }
+        }
+
+        // remove all excluded entries
+        for (const exclude of excludes) {
+            const value = values?.get(exclude);
+            let index: number;
+            while ((index = ts.findIndex(variations, v => v.key === exclude || value !== undefined && v.value === value)) >= 0) {
+                ts.orderedRemoveItemAt(variations, index);
+            }
+        }
+
+        if (variations.length === 0) {
+            throw new Error(`Variations in test option '@${varyBy}' resulted in an empty set.`);
+        }
+
+        return ts.map(variations, v => v.key);
     }
 
     function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
@@ -1434,17 +1045,37 @@ namespace Harness {
         }
     }
 
+    let booleanVaryByStarSettingValues: ts.Map<string | number> | undefined;
+
+    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyMap<string | number> | undefined {
+        const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
+        if (option) {
+            if (typeof option.type === "object") {
+                return option.type;
+            }
+            if (option.type === "boolean") {
+                return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = ts.createMapFromTemplate({
+                    true: 1,
+                    false: 0
+                }));
+            }
+        }
+    }
+
     /**
      * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
      */
-    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: readonly string[]): FileBasedTestConfiguration[] | undefined {
         let varyByEntries: [string, string[]][] | undefined;
+        let variationCount = 1;
         for (const varyByKey of varyBy) {
             if (ts.hasProperty(settings, varyByKey)) {
                 // we only consider variations when there are 2 or more variable entries.
-                const entries = splitVaryBySettingValue(settings[varyByKey]);
+                const entries = splitVaryBySettingValue(settings[varyByKey], varyByKey);
                 if (entries) {
                     if (!varyByEntries) varyByEntries = [];
+                    variationCount *= entries.length;
+                    if (variationCount > 25) throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
                     varyByEntries.push([varyByKey, entries]);
                 }
             }
@@ -1495,9 +1126,7 @@ namespace Harness {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray | null;
-            /* tslint:disable:no-null-keyword */
-            while ((match = optionRegex.exec(content)) !== null) {
-            /* tslint:enable:no-null-keyword */
+            while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-null/no-null
                 opts[match[1]] = match[2].trim();
             }
 
@@ -1675,9 +1304,8 @@ namespace Harness {
 
             const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-            /* tslint:disable:no-null-keyword */
+            // eslint-disable-next-line no-null/no-null
             if (actual === null) {
-            /* tslint:enable:no-null-keyword */
                 actual = noContent;
             }
 
@@ -1740,7 +1368,8 @@ namespace Harness {
             const gen = generateContent();
             const writtenFiles = ts.createMap<true>();
             const errors: Error[] = [];
-            // tslint:disable-next-line:no-null-keyword
+
+            // eslint-disable-next-line no-null/no-null
             if (gen !== null) {
                 for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];

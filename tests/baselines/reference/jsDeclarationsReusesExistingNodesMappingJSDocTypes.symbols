@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/** @type {?} */
+export const a = null;
+>a : Symbol(a, Decl(index.js, 1, 12))
+
+/** @type {*} */
+export const b = null;
+>b : Symbol(b, Decl(index.js, 4, 12))
+
+/** @type {string?} */
+export const c = null;
+>c : Symbol(c, Decl(index.js, 7, 12))
+
+/** @type {string=} */
+export const d = null;
+>d : Symbol(d, Decl(index.js, 10, 12))
+
+/** @type {string!} */
+export const e = null;
+>e : Symbol(e, Decl(index.js, 13, 12))
+
+/** @type {function(string, number): object} */
+export const f = null;
+>f : Symbol(f, Decl(index.js, 16, 12))
+
+/** @type {function(new: object, string, number)} */
+export const g = null;
+>g : Symbol(g, Decl(index.js, 19, 12))
+
+/** @type {Object.<string, number>} */
+export const h = null;
+>h : Symbol(h, Decl(index.js, 22, 12))
+

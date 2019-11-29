@@ -43,7 +43,7 @@ async function countEverything(): Promise<number> {
         providerB(),
 >providerB : Symbol(providerB, Decl(correctOrderOfPromiseMethod.ts, 11, 9))
 
-    ]);
+    ] as const);
 
     const dataA: A[] = resultA;
 >dataA : Symbol(dataA, Decl(correctOrderOfPromiseMethod.ts, 18, 9))
@@ -69,3 +69,4 @@ async function countEverything(): Promise<number> {
     }
     return 0;
 }
+

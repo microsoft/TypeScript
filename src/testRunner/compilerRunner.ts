@@ -112,6 +112,30 @@ class CompilerBaselineRunner extends RunnerBase {
 }
 
 class CompilerTest {
+    private static varyBy: readonly string[] = [
+        "module",
+        "target",
+        "jsx",
+        "removeComments",
+        "importHelpers",
+        "importHelpers",
+        "downlevelIteration",
+        "isolatedModules",
+        "strict",
+        "noImplicitAny",
+        "strictNullChecks",
+        "strictFunctionTypes",
+        "strictBindCallApply",
+        "strictPropertyInitialization",
+        "noImplicitThis",
+        "alwaysStrict",
+        "allowSyntheticDefaultImports",
+        "esModuleInterop",
+        "emitDecoratorMetadata",
+        "skipDefaultLibCheck",
+        "preserveConstEnums",
+        "skipLibCheck",
+    ];
     private fileName: string;
     private justName: string;
     private configuredName: string;
@@ -168,7 +192,7 @@ class CompilerTest {
             assert.equal(testCaseContent.tsConfig.raw.exclude, undefined, `exclude in tsconfig is not currently supported`);
 
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath!)));
+            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
         }
         else {
             const baseUrl = this.harnessSettings.baseUrl;
@@ -220,7 +244,7 @@ class CompilerTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
         const content = Harness.IO.readFile(file)!;
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
-        const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
+        const configurations = Harness.getFileBasedTestConfigurations(settings, CompilerTest.varyBy);
         return { file, configurations, content };
     }
 
@@ -245,7 +269,7 @@ class CompilerTest {
             const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
             const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                ? null // tslint:disable-line no-null-keyword
+                ? null // eslint-disable-line no-null/no-null
                 : record;
             Harness.Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
