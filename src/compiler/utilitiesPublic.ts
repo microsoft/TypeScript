@@ -370,9 +370,8 @@ namespace ts {
                 return false;
             }
             try {
-                // making clear this is a global mutation!
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-                ts.localizedDiagnosticMessages = JSON.parse(fileContents!);
+                // this is a global mutation (or live binding update)!
+                setLocalizedDiagnosticMessages(JSON.parse(fileContents!));
             }
             catch {
                 if (errors) {

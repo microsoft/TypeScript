@@ -546,7 +546,6 @@ namespace ts {
             getNeverType: () => neverType,
             getOptionalType: () => optionalType,
             isSymbolAccessible,
-            getObjectFlags,
             isArrayType,
             isTupleType,
             isArrayLikeType,
