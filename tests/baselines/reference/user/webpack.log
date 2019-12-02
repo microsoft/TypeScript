@@ -19,8 +19,6 @@ lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFil
 lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
 lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
 lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
-node_modules/schema-utils/declarations/validate.d.ts(39,12): error TS2304: Cannot find name '_default'.
-node_modules/schema-utils/declarations/validate.d.ts(39,41): error TS2304: Cannot find name '_default'.
 
 
 
