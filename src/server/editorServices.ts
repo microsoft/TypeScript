@@ -1808,7 +1808,9 @@ namespace ts.server {
                 /*existingOptions*/ {},
                 configFilename,
                 /*resolutionStack*/[],
-                this.hostConfiguration.extraFileExtensions);
+                this.hostConfiguration.extraFileExtensions,
+                /*extendedConfigCache*/ undefined,
+            );
 
             if (parsedCommandLine.errors.length) {
                 configFileErrors.push(...parsedCommandLine.errors);

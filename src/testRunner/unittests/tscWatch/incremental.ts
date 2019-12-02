@@ -35,7 +35,7 @@ namespace ts.tscWatch {
 
         function incrementalBuild(configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) {
             const reportDiagnostic = createDiagnosticReporter(host);
-            const config = parseConfigFileWithSystem(configFile, optionsToExtend || {}, host, reportDiagnostic);
+            const config = parseConfigFileWithSystem(configFile, optionsToExtend || {}, /*watchOptionsToExtend*/ undefined, host, reportDiagnostic);
             if (config) {
                 performIncrementalCompilation({
                     rootNames: config.fileNames,
@@ -547,7 +547,7 @@ namespace ts.tscWatch {
                     const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
                     incrementalBuild("tsconfig.json", system);
 
-                    const command = parseConfigFileWithSystem("tsconfig.json", {}, system, noop)!;
+                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, noop)!;
                     const builderProgram = createIncrementalProgram({
                         rootNames: command.fileNames,
                         options: command.options,

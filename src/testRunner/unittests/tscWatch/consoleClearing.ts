@@ -86,8 +86,8 @@ namespace ts.tscWatch {
                 const host = createWatchedSystem(files);
                 const reportDiagnostic = createDiagnosticReporter(host);
                 const optionsToExtend: CompilerOptions = {};
-                const configParseResult = parseConfigFileWithSystem(configFile.path, optionsToExtend, host, reportDiagnostic)!;
-                const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, host, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(host));
+                const configParseResult = parseConfigFileWithSystem(configFile.path, optionsToExtend, /*watchOptionsToExtend*/ undefined, host, reportDiagnostic)!;
+                const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, /*watchOptionsToExtend*/ undefined, host, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(host));
                 watchCompilerHost.configFileParsingResult = configParseResult;
                 createWatchProgram(watchCompilerHost);
                 verifyCompilation(host, compilerOptions);

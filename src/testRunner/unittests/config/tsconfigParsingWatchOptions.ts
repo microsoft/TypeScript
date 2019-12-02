@@ -11,24 +11,32 @@ namespace ts {
                 )
             );
         }
-        function getParsedCommandJson(json: object, additionalFiles?: vfs.FileSet) {
+        function getParsedCommandJson(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
             return parseJsonConfigFileContent(
                 json,
                 createParseConfigHost(additionalFiles),
                 "/",
                 /*existingOptions*/ undefined,
-                "tsconfig.json"
+                "tsconfig.json",
+                /*resolutionStack*/ undefined,
+                /*extraFileExtensions*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                existingWatchOptions,
             );
         }
 
-        function getParsedCommandJsonNode(json: object, additionalFiles?: vfs.FileSet) {
+        function getParsedCommandJsonNode(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
             const parsed = parseJsonText("tsconfig.json", JSON.stringify(json));
             return parseJsonSourceFileConfigFileContent(
                 parsed,
                 createParseConfigHost(additionalFiles),
                 "/",
                 /*existingOptions*/ undefined,
-                "tsconfig.json"
+                "tsconfig.json",
+                /*resolutionStack*/ undefined,
+                /*extraFileExtensions*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                existingWatchOptions,
             );
         }
 
@@ -36,19 +44,20 @@ namespace ts {
             json: object;
             expectedOptions: WatchOptions | undefined;
             additionalFiles?: vfs.FileSet;
+            existingWatchOptions?: WatchOptions | undefined;
         }
 
         function verifyWatchOptions(scenario: () => VerifyWatchOptions[]) {
             it("with json api", () => {
-                for (const { json, expectedOptions, additionalFiles } of scenario()) {
-                    const parsed = getParsedCommandJson(json, additionalFiles);
+                for (const { json, expectedOptions, additionalFiles, existingWatchOptions } of scenario()) {
+                    const parsed = getParsedCommandJson(json, additionalFiles, existingWatchOptions);
                     assert.deepEqual(parsed.watchOptions, expectedOptions);
                 }
             });
 
             it("with json source file api", () => {
-                for (const { json, expectedOptions, additionalFiles } of scenario()) {
-                    const parsed = getParsedCommandJsonNode(json, additionalFiles);
+                for (const { json, expectedOptions, additionalFiles, existingWatchOptions } of scenario()) {
+                    const parsed = getParsedCommandJsonNode(json, additionalFiles, existingWatchOptions);
                     assert.deepEqual(parsed.watchOptions, expectedOptions);
                 }
             });
@@ -148,6 +157,21 @@ namespace ts {
                     json: { watchOptions: { synchronousWatchDirectory: true } },
                     expectedOptions: { synchronousWatchDirectory: true }
                 }
+            ]);
+        });
+
+        describe("watch options extending passed in watch options", () => {
+            verifyWatchOptions(() => [
+                {
+                    json: { watchOptions: { watchFile: "UseFsEvents" } },
+                    expectedOptions: { watchFile: WatchFileKind.UseFsEvents, watchDirectory: WatchDirectoryKind.FixedPollingInterval },
+                    existingWatchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                },
+                {
+                    json: {},
+                    expectedOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval },
+                    existingWatchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                },
             ]);
         });
     });

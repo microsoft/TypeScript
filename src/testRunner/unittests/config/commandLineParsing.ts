@@ -6,6 +6,7 @@ namespace ts {
             const parsedCompilerOptions = JSON.stringify(parsed.options);
             const expectedCompilerOptions = JSON.stringify(expectedParsedCommandLine.options);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.deepEqual(parsed.watchOptions, expectedParsedCommandLine.watchOptions);
 
             const parsedErrors = parsed.errors;
             const expectedErrors = expectedParsedCommandLine.errors;
@@ -45,7 +46,7 @@ namespace ts {
             assertParseResult(["--declarations", "--allowTS"], {
                 errors: [
                     {
-                        messageText:"Unknown compiler option '--declarations'. Did you mean 'declaration'?",
+                        messageText: "Unknown compiler option '--declarations'. Did you mean 'declaration'?",
                         category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
                         code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
                         file: undefined,
@@ -413,31 +414,73 @@ namespace ts {
                 });
         });
 
-        it("parse --watchFile", () => {
-            assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: { watchFile: WatchFileKind.UseFsEvents }
-                });
-        });
+        describe("Watch options", () => {
+            it("parse --watchFile", () => {
+                assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { watchFile: WatchFileKind.UseFsEvents }
+                    });
+            });
 
-        it("parse --watchDirectory", () => {
-            assertParseResult(["--watchDirectory", "FixedPollingInterval", "0.ts"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
-                });
-        });
+            it("parse --watchDirectory", () => {
+                assertParseResult(["--watchDirectory", "FixedPollingInterval", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                    });
+            });
 
-        it("parse --fallbackPolling", () => {
-            assertParseResult(["--fallbackPolling", "PriorityInterval", "0.ts"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: { fallbackPolling: PollingWatchKind.PriorityInterval }
-                });
+            it("parse --fallbackPolling", () => {
+                assertParseResult(["--fallbackPolling", "PriorityInterval", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { fallbackPolling: PollingWatchKind.PriorityInterval }
+                    });
+            });
+
+            it("parse --synchronousWatchDirectory", () => {
+                assertParseResult(["--synchronousWatchDirectory", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { synchronousWatchDirectory: true }
+                    });
+            });
+
+            it("errors on missing argument to --fallbackPolling", () => {
+                assertParseResult(["0.ts", "--fallbackPolling"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Watch option 'fallbackPolling' requires a value of type string.",
+                                category: Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
+                                code: Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            },
+                            {
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                                code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { fallbackPolling: undefined }
+                    });
+            });
         });
     });
 
@@ -447,6 +490,7 @@ namespace ts {
             const parsedBuildOptions = JSON.stringify(parsed.buildOptions);
             const expectedBuildOptions = JSON.stringify(expectedParsedBuildCommand.buildOptions);
             assert.equal(parsedBuildOptions, expectedBuildOptions);
+            assert.deepEqual(parsed.watchOptions, expectedParsedBuildCommand.watchOptions);
 
             const parsedErrors = parsed.errors;
             const expectedErrors = expectedParsedBuildCommand.errors;
@@ -469,7 +513,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["."],
-                    buildOptions: {}
+                    buildOptions: {},
+                    watchOptions: undefined
                 });
         });
 
@@ -479,7 +524,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["tests"],
-                    buildOptions: { verbose: true, force: true }
+                    buildOptions: { verbose: true, force: true },
+                    watchOptions: undefined
                 });
         });
 
@@ -496,7 +542,8 @@ namespace ts {
                         length: undefined,
                     }],
                     projects: ["."],
-                    buildOptions: { verbose: true }
+                    buildOptions: { verbose: true },
+                    watchOptions: undefined
                 });
         });
 
@@ -505,7 +552,7 @@ namespace ts {
             assertParseResult(["--listFilesOnly"],
                 {
                     errors: [{
-                        messageText:"Unknown build option '--listFilesOnly'.",
+                        messageText: "Unknown build option '--listFilesOnly'.",
                         category: Diagnostics.Unknown_build_option_0.category,
                         code: Diagnostics.Unknown_build_option_0.code,
                         file: undefined,
@@ -513,7 +560,8 @@ namespace ts {
                         length: undefined,
                     }],
                     projects: ["."],
-                    buildOptions: {}
+                    buildOptions: {},
+                    watchOptions: undefined,
                 });
         });
 
@@ -523,7 +571,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["src", "tests"],
-                    buildOptions: { force: true, verbose: true }
+                    buildOptions: { force: true, verbose: true },
+                    watchOptions: undefined,
                 });
         });
 
@@ -533,7 +582,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["src", "tests"],
-                    buildOptions: { force: true, verbose: true }
+                    buildOptions: { force: true, verbose: true },
+                    watchOptions: undefined,
                 });
         });
 
@@ -543,7 +593,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["src", "tests"],
-                    buildOptions: { force: true, verbose: true }
+                    buildOptions: { force: true, verbose: true },
+                    watchOptions: undefined,
                 });
         });
 
@@ -553,7 +604,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["tests"],
-                    buildOptions: { incremental: true }
+                    buildOptions: { incremental: true },
+                    watchOptions: undefined,
                 });
         });
 
@@ -563,7 +615,8 @@ namespace ts {
                 {
                     errors: [],
                     projects: ["src"],
-                    buildOptions: { locale: "en-us" }
+                    buildOptions: { locale: "en-us" },
+                    watchOptions: undefined,
                 });
         });
 
@@ -580,7 +633,8 @@ namespace ts {
                         length: undefined
                     }],
                     projects: ["build.tsbuildinfo", "tests"],
-                    buildOptions: { }
+                    buildOptions: {},
+                    watchOptions: undefined,
                 });
         });
 
@@ -599,7 +653,8 @@ namespace ts {
                                 length: undefined,
                             }],
                             projects: ["."],
-                            buildOptions: { [flag1]: true, [flag2]: true }
+                            buildOptions: { [flag1]: true, [flag2]: true },
+                            watchOptions: undefined,
                         });
                 });
             }
@@ -609,7 +664,74 @@ namespace ts {
             verifyInvalidCombination("clean", "watch");
             verifyInvalidCombination("watch", "dry");
         });
+
+        describe("Watch options", () => {
+            it("parse --watchFile", () => {
+                assertParseResult(["--watchFile", "UseFsEvents", "--verbose"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: { verbose: true },
+                        watchOptions: { watchFile: WatchFileKind.UseFsEvents }
+                    });
+            });
+
+            it("parse --watchDirectory", () => {
+                assertParseResult(["--watchDirectory", "FixedPollingInterval", "--verbose"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: { verbose: true },
+                        watchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                    });
+            });
+
+            it("parse --fallbackPolling", () => {
+                assertParseResult(["--fallbackPolling", "PriorityInterval", "--verbose"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: { verbose: true },
+                        watchOptions: { fallbackPolling: PollingWatchKind.PriorityInterval }
+                    });
+            });
+
+            it("parse --synchronousWatchDirectory", () => {
+                assertParseResult(["--synchronousWatchDirectory", "--verbose"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: { verbose: true },
+                        watchOptions: { synchronousWatchDirectory: true }
+                    });
+            });
+
+            it("errors on missing argument", () => {
+                assertParseResult(["--verbose", "--fallbackPolling"],
+                    {
+                        errors: [
+                            {
+                                messageText: "Watch option 'fallbackPolling' requires a value of type string.",
+                                category: Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
+                                code: Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            },
+                            {
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                                code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: { verbose: true },
+                        watchOptions: { fallbackPolling: undefined }
+                    });
+            });
+        });
     });
-
-
 }

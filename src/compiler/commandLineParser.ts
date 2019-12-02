@@ -1156,12 +1156,14 @@ namespace ts {
         commandLine: readonly string[],
         readFile?: (path: string) => string | undefined) {
         const options = {} as OptionsBase;
+        let watchOptions: WatchOptions | undefined;
         const fileNames: string[] = [];
         const errors: Diagnostic[] = [];
 
         parseStrings(commandLine);
         return {
             options,
+            watchOptions,
             fileNames,
             errors
         };
@@ -1178,50 +1180,16 @@ namespace ts {
                     const inputOptionName = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
                     const opt = getOptionDeclarationFromName(diagnostics.getOptionNameMap, inputOptionName, /*allowShort*/ true);
                     if (opt) {
-                        if (opt.isTSConfigOnly) {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
-                        }
-                        else {
-                            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                            if (!args[i] && opt.type !== "boolean") {
-                                errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name));
-                            }
-
-                            switch (opt.type) {
-                                case "number":
-                                    options[opt.name] = parseInt(args[i]);
-                                    i++;
-                                    break;
-                                case "boolean":
-                                    // boolean flag has optional value true, false, others
-                                    const optValue = args[i];
-                                    options[opt.name] = optValue !== "false";
-                                    // consume next argument as boolean flag value
-                                    if (optValue === "false" || optValue === "true") {
-                                        i++;
-                                    }
-                                    break;
-                                case "string":
-                                    options[opt.name] = args[i] || "";
-                                    i++;
-                                    break;
-                                case "list":
-                                    const result = parseListTypeOption(opt, args[i], errors);
-                                    options[opt.name] = result || [];
-                                    if (result) {
-                                        i++;
-                                    }
-                                    break;
-                                // If not a primitive, the possible types are specified in what is effectively a map of options.
-                                default:
-                                    options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
-                                    i++;
-                                    break;
-                            }
-                        }
+                        i = parseOptionValue(args, i, diagnostics, opt, options, errors);
                     }
                     else {
-                        errors.push(createUnknownOptionError(inputOptionName, diagnostics, createCompilerDiagnostic, s));
+                        const watchOpt = getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionNameMap, inputOptionName, /*allowShort*/ true);
+                        if (watchOpt) {
+                            i = parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions || (watchOptions = {}), errors);
+                        }
+                        else {
+                            errors.push(createUnknownOptionError(inputOptionName, diagnostics, createCompilerDiagnostic, s));
+                        }
                     }
                 }
                 else {
@@ -1264,6 +1232,58 @@ namespace ts {
         }
     }
 
+    function parseOptionValue(
+        args: readonly string[],
+        i: number,
+        diagnostics: ParseCommandLineWorkerDiagnostics,
+        opt: CommandLineOption,
+        options: OptionsBase,
+        errors: Diagnostic[]
+    ) {
+        if (opt.isTSConfigOnly) {
+            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
+        }
+        else {
+            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
+            if (!args[i] && opt.type !== "boolean") {
+                errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
+            }
+
+            switch (opt.type) {
+                case "number":
+                    options[opt.name] = parseInt(args[i]);
+                    i++;
+                    break;
+                case "boolean":
+                    // boolean flag has optional value true, false, others
+                    const optValue = args[i];
+                    options[opt.name] = optValue !== "false";
+                    // consume next argument as boolean flag value
+                    if (optValue === "false" || optValue === "true") {
+                        i++;
+                    }
+                    break;
+                case "string":
+                    options[opt.name] = args[i] || "";
+                    i++;
+                    break;
+                case "list":
+                    const result = parseListTypeOption(opt, args[i], errors);
+                    options[opt.name] = result || [];
+                    if (result) {
+                        i++;
+                    }
+                    break;
+                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                default:
+                    options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                    i++;
+                    break;
+            }
+        }
+        return i;
+    }
+
     const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         getOptionNameMap,
         optionDeclarations,
@@ -1296,6 +1316,7 @@ namespace ts {
     /*@internal*/
     export interface ParsedBuildCommand {
         buildOptions: BuildOptions;
+        watchOptions: WatchOptions | undefined;
         projects: string[];
         errors: Diagnostic[];
     }
@@ -1315,7 +1336,7 @@ namespace ts {
 
     /*@internal*/
     export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
-        const { options, fileNames: projects, errors } = parseCommandLineWorker(
+        const { options, watchOptions, fileNames: projects, errors } = parseCommandLineWorker(
             buildOptionsDidYouMeanDiagnostics,
             args
         );
@@ -1340,7 +1361,7 @@ namespace ts {
             errors.push(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
         }
 
-        return { buildOptions, projects, errors };
+        return { buildOptions, watchOptions, projects, errors };
     }
 
     /* @internal */
@@ -1374,7 +1395,8 @@ namespace ts {
         configFileName: string,
         optionsToExtend: CompilerOptions,
         host: ParseConfigFileHost,
-        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
+        watchOptionsToExtend?: WatchOptions
     ): ParsedCommandLine | undefined {
         let configFileText: string | undefined;
         try {
@@ -1404,7 +1426,8 @@ namespace ts {
             getNormalizedAbsolutePath(configFileName, cwd),
             /*resolutionStack*/ undefined,
             /*extraFileExtension*/ undefined,
-            extendedConfigCache
+            extendedConfigCache,
+            watchOptionsToExtend
         );
     }
 
@@ -1460,10 +1483,17 @@ namespace ts {
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1,
     };
 
-    const watchOptionsDidYouMeanDiagnostics: DidYouMeanOptionsDiagnostics = {
+
+    let watchOptionNameMapCache: OptionNameMap;
+    function getWatchOptionNameMap(): OptionNameMap {
+        return watchOptionNameMapCache || (watchOptionNameMapCache = createOptionNameMap(optionsForWatch));
+    }
+    const watchOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        getOptionNameMap: getWatchOptionNameMap,
         optionDeclarations: optionsForWatch,
         unknownOptionDiagnostic: Diagnostics.Unknown_watch_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_watch_option_0_Did_you_mean_1,
+        optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1
     };
 
     let _tsconfigRootOptions: TsConfigOnlyOption;
@@ -1826,7 +1856,7 @@ namespace ts {
                 )
             ),
             f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName)
-        ); //TODO
+        ); // TODO
         const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
         const config = {
             compilerOptions: {
@@ -2089,8 +2119,8 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
     /**
@@ -2100,8 +2130,8 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
     /*@internal*/
@@ -2136,24 +2166,29 @@ namespace ts {
         host: ParseConfigHost,
         basePath: string,
         existingOptions: CompilerOptions = {},
+        existingWatchOptions: WatchOptions | undefined,
         configFileName?: string,
         resolutionStack: Path[] = [],
         extraFileExtensions: readonly FileExtensionInfo[] = [],
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>
-    ): ParsedCommandLine { // TODO -- pass options to extend?
+    ): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
 
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
+        const watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
+            extend(existingWatchOptions, parsedConfig.watchOptions) :
+            parsedConfig.watchOptions || existingWatchOptions;
+
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
         let projectReferences: ProjectReference[] | undefined;
         const { fileNames, wildcardDirectories, spec } = getFileNames();
         return {
             options,
-            watchOptions: parsedConfig.watchOptions,
+            watchOptions,
             fileNames,
             projectReferences,
             typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),

@@ -3317,6 +3317,10 @@
         "category": "Error",
         "code": 5079
     },
+    "Watch option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5080
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

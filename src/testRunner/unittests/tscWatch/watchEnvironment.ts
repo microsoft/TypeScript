@@ -406,6 +406,48 @@ namespace ts.tscWatch {
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
             });
+
+            it("with watchFile as watch options to extend", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: "{}"
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true }, { watchFile: WatchFileKind.UseFsEvents });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                // Instead of polling watch (= watchedFiles), uses fsWatch
+                checkWatchedFiles(host, emptyArray);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        f => [{
+                            fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Low,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ true,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+            });
         });
     });
 }
