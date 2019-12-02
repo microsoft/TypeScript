@@ -20,7 +20,7 @@ namespace ts.server {
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
     /* @internal */
     export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";
-    
+
     /* @internal */
     export namespace Arguments {
         export const GlobalCacheLocation = "--globalTypingsCacheLocation";
