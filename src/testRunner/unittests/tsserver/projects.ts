@@ -1137,17 +1137,17 @@ var x = 10;`
                 content: "var x = 10;"
             };
             const configFile: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const configProjectFile: File = {
-                path: `${projectRoot}/a.ts`,
+                path: `${tscWatch.projectRoot}/a.ts`,
                 content: "let y = 10;"
             };
             it("with useInferredProjectPerProjectRoot", () => {
                 const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
                 const session = createSession(host, { useInferredProjectPerProjectRoot: true });
-                openFilesForSession([{ file: file.path, projectRootPath: projectRoot }], session);
+                openFilesForSession([{ file: file.path, projectRootPath: tscWatch.projectRoot }], session);
 
                 const projectService = session.getProjectService();
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1172,7 +1172,7 @@ var x = 10;`
                 const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
                 const projectService = createProjectService(host);
                 try {
-                    projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, projectRoot);
+                    projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, tscWatch.projectRoot);
                 }
                 catch (e) {
                     assert.strictEqual(
@@ -1266,15 +1266,15 @@ var x = 10;`
 
         it("requests are done on file on pendingReload but has svc for previous version", () => {
             const file1: File = {
-                path: `${projectRoot}/src/file1.ts`,
+                path: `${tscWatch.projectRoot}/src/file1.ts`,
                 content: `import { y } from "./file2"; let x = 10;`
             };
             const file2: File = {
-                path: `${projectRoot}/src/file2.ts`,
+                path: `${tscWatch.projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [file1, file2, libFile, config];
@@ -1365,18 +1365,18 @@ var x = 10;`
 
         it("Orphan source files are handled correctly on watch trigger", () => {
             const file1: File = {
-                path: `${projectRoot}/src/file1.ts`,
+                path: `${tscWatch.projectRoot}/src/file1.ts`,
                 content: `export let x = 10;`
             };
             const file2: File = {
-                path: `${projectRoot}/src/file2.ts`,
+                path: `${tscWatch.projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const configContent1 = JSON.stringify({
                 files: ["src/file1.ts", "src/file2.ts"]
             });
             const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: configContent1
             };
             const files = [file1, file2, libFile, config];

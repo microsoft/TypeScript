@@ -1765,7 +1765,11 @@ namespace ts.server {
             const dirPathWithTrailingDirectorySeparator = `${dirPath}${directorySeparator}`;
             return forEachKey(
                 this.mapOfDeclarationDirectories!,
-                declDirPath => dirPath === declDirPath || startsWith(declDirPath, dirPathWithTrailingDirectorySeparator)
+                declDirPath => dirPath === declDirPath ||
+                    // Any parent directory of declaration dir
+                    startsWith(declDirPath, dirPathWithTrailingDirectorySeparator) ||
+                    // Any directory inside declaration dir
+                    startsWith(dirPath, `${declDirPath}/`)
             );
         }
 
@@ -1802,6 +1806,16 @@ namespace ts.server {
             return this.fileOrDirectoryExistsUsingSource(path, /*isFile*/ false);
         }
 
+        /**
+         * Call super.getDirectories only if directory actually present on the host
+         * This is needed to ensure that we arent getting directories that we fake about presence for
+         */
+        getDirectories(path: string): string[] {
+            return !this.useSourceOfProjectReferenceRedirect() || !this.projectReferenceCallbacks || super.directoryExists(path) ?
+                super.getDirectories(path) :
+                [];
+        }
+
         private realpathIfSymlinkedProjectReferenceDts(s: string): string | undefined {
             return this.symlinkedFiles && this.symlinkedFiles.get(this.toPath(s));
         }
@@ -1820,7 +1834,7 @@ namespace ts.server {
             const directoryPath = ensureTrailingDirectorySeparator(this.toPath(directory));
             if (this.symlinkedDirectories.has(directoryPath)) return;
 
-            const real = this.projectService.host.realpath!(directory);
+            const real = normalizePath(this.projectService.host.realpath!(directory));
             let realPath: Path;
             if (real === directory ||
                 (realPath = ensureTrailingDirectorySeparator(this.toPath(real))) === directoryPath) {

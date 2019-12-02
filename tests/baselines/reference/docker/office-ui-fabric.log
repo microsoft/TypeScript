@@ -144,6 +144,7 @@ Standard output:
 @uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
 @uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
 @uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
+@uifabric/merge-styles:  PASS  src/fontFace.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
@@ -242,8 +243,8 @@ lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:13:36)
 @uifabric/utilities:     at verify-api-extractor (/office-ui-fabric-react/node_modules/undertaker/lib/set-task.js:13:15)
 @uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:10:16)
-@uifabric/utilities:     at bound (domain.js:420:14)
-@uifabric/utilities:     at runBound (domain.js:433:12)
+@uifabric/utilities:     at bound (domain.js:419:14)
+@uifabric/utilities:     at runBound (domain.js:432:12)
 @uifabric/utilities:     at asyncRunner (/office-ui-fabric-react/node_modules/async-done/index.js:55:18)
 @uifabric/utilities:     at processTicksAndRejections (internal/process/task_queues.js:75:11)
 @uifabric/utilities: [XX:XX:XX XM] x ------------------------------------

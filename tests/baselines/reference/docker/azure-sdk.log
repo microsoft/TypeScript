@@ -2,83 +2,26 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.13.0 (LTS)
+Node.js version is 12.13.1 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
+XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/logger] completed successfully in ? seconds
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "build:tsc" exited with 2.
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
-npm ERR! Exit status 1
-npm ERR! 
-npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "build:lib" exited with 1.
+XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
+XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
+XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
-Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/eventProcessorHost.d.ts:36:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/eventProcessorHost.d.ts:66:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:22:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
+XX of XX: [@azure/event-hubs] completed successfully in ? seconds
+XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
+XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
+XX of XX: [@azure/core-arm] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
-Warning: dist-esm/ChangeFeedIterator.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:21:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:25:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:31:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:35:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:45:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Conflict/Conflict.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:39:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:44:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:51:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Database/Database.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Item/Item.d.ts:20:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Offer/Offer.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Permission/Permission.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Script/Scripts.d.ts:41:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Script/Scripts.d.ts:48:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Script/Scripts.d.ts:55:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/StoredProcedure/StoredProcedure.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/StoredProcedure/StoredProcedureResponse.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Trigger/Trigger.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/User/User.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunction.d.ts:18:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunctionResponse.d.ts:15:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/queryMetrics/queryMetrics.d.ts:26:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:7:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -87,66 +30,48 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! @azure/keyvault-certificates@X.X.X-preview.10 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.10 extract-api script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:153:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:159:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:165:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
+XX of XX: [@azure/storage-queue] completed successfully in ? seconds
+XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (7)
+SUCCESS (20)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-tracing (? seconds)
+@azure/core-auth (? seconds)
 @azure/logger (? seconds)
+@azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
+@azure/identity (? seconds)
+@azure/core-amqp (? seconds)
+@azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
+@azure/event-hubs (? seconds)
+@azure/event-processor-host (? seconds)
+@azure/keyvault-keys (? seconds)
+@azure/keyvault-secrets (? seconds)
+@azure/core-arm (? seconds)
+@azure/storage-blob (? seconds)
+@azure/storage-queue (? seconds)
+@azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (4)
+SUCCESS WITH WARNINGS (3)
 ================================
-@azure/core-auth (? seconds)
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortController.d.ts:73:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:44:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: /azure-sdk/sdk/core/abort-controller/types/src/AbortSignal.d.ts:53:16 - (TS1086) An accessor cannot be declared in an ambient context.
-@azure/event-processor-host (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/event-processor-host.api.md
-Warning: typings/src/eventProcessorHost.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/eventProcessorHost.d.ts:36:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/eventProcessorHost.d.ts:66:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:22:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:27:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionContext.d.ts:32:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionPump.d.ts:17:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/partitionPump.d.ts:18:9 - (TS1086) An accessor cannot be declared in an ambient context.
 @azure/cosmos (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
-Warning: dist-esm/ChangeFeedIterator.d.ts:27:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:21:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:25:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:31:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:35:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/ChangeFeedResponse.d.ts:45:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Conflict/Conflict.d.ts:17:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:39:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/client/Container/Container.d.ts:44:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-[...14 lines omitted...]
-Warning: dist-esm/client/UserDefinedFunction/UserDefinedFunctionResponse.d.ts:15:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/queryMetrics/queryMetrics.d.ts:26:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:7:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/FeedResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:8:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/LocationRouting.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:9:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:10:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
-Warning: dist-esm/request/ResourceResponse.d.ts:11:9 - (TS1056) Accessors are only available when targeting ECMAScript 5 and higher.
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -157,56 +82,63 @@ os-name (guessing 'osName')
 created dist/index.js in ?s
 @azure/service-bus (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-Warning: typings/src/receiver.d.ts:28:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:34:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:153:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:159:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:165:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/receiver.d.ts:175:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/sender.d.ts:24:9 - (TS1086) An accessor cannot be declared in an ambient context.
-Warning: typings/src/serviceBusMessage.d.ts:453:9 - (TS1086) An accessor cannot be declared in an ambient context.
+@azure/storage-file-share (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
 ================================
-BLOCKED (15)
+FAILURE (3)
 ================================
-@azure/identity
-@azure/core-amqp
-@azure/core-arm
-@azure/core-lro
-@azure/event-hubs
-@azure/app-configuration
-@azure/cognitiveservices-inkrecognizer
-@azure/eventhubs-checkpointstore-blob
-@azure/keyvault-certificates
-@azure/keyvault-keys
-@azure/keyvault-secrets
-@azure/storage-blob
-@azure/storage-file-share
-@azure/storage-queue
-@azure/template
-================================
-FAILURE (1)
-================================
-@azure/core-http ( ? seconds)
+@azure/app-configuration ( ? seconds)
+>>> @azure/app-configuration
+tsc -p . && rollup -c 2>&1 && npm run extract-api
+samples/listRevisions.ts(43,32): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
+      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
+        Types of property 'next' are incompatible.
+          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
+            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
+test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
+      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
+        Types of property 'next' are incompatible.
+          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
+            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
+              Type '{ done?: boolean | undefined; value: ConfigurationSetting; }' is not assignable to type 'IteratorResult<ConfigurationSetting>'.
+                Types of property 'done' are incompatible.
+                  Type 'boolean | undefined' is not assignable to type 'boolean'.
+                    Type 'undefined' is not assignable to type 'boolean'.
+test/testHelpers.ts(90,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
+      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
+        Types of property 'next' are incompatible.
+          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
+            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
+@azure/eventhubs-checkpointstore-blob ( ? seconds)
+>>> @azure/eventhubs-checkpointstore-blob
+tsc -p . && rollup -c 2>&1 && npm run extract-api
+src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type 'AsyncIterable<BlobItem>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '() => PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type '() => AsyncIterator<BlobItem>'.
+      Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type 'AsyncIterator<BlobItem>'.
+        Types of property 'next' are incompatible.
+          Type '() => Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<BlobItem>>'.
+            Type 'Promise<{ done?: boolean | undefined; value: BlobItem; }>' is not assignable to type 'Promise<IteratorResult<BlobItem>>'.
+              Type '{ done?: boolean | undefined; value: BlobItem; }' is not assignable to type 'IteratorResult<BlobItem>'.
+                Types of property 'done' are incompatible.
+                  Type 'boolean | undefined' is not assignable to type 'boolean'.
+                    Type 'undefined' is not assignable to type 'boolean'.
+@azure/keyvault-certificates ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/core-http@X.X.X build:tsc: `tsc -p tsconfig.es.json`
+npm ERR! @azure/keyvault-certificates@X.X.X-preview.10 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X build:tsc script.
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.10 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "build:tsc" exited with 2.
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @azure/core-http@X.X.X build:lib: `run-s build:tsc build:rollup build:minify-browser`
-npm ERR! Exit status 1
-npm ERR!
-npm ERR! Failed at the @azure/core-http@X.X.X build:lib script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "build:lib" exited with 1.
 ================================
 Error: Project(s) failed to build
 rush rebuild - Errors! ( ? seconds)
@@ -214,24 +146,13 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-XX of XX: [@azure/core-auth] completed with warnings in ? seconds
-XX of XX: [@azure/core-http] failed to build!
-XX of XX: [@azure/app-configuration] blocked by [@azure/core-http]!
-XX of XX: [@azure/cognitiveservices-inkrecognizer] blocked by [@azure/core-http]!
-XX of XX: [@azure/core-arm] blocked by [@azure/core-http]!
-XX of XX: [@azure/core-lro] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-keys] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-secrets] blocked by [@azure/core-http]!
-XX of XX: [@azure/storage-blob] blocked by [@azure/core-http]!
-XX of XX: [@azure/keyvault-certificates] blocked by [@azure/core-http]!
-XX of XX: [@azure/identity] blocked by [@azure/core-http]!
-XX of XX: [@azure/core-amqp] blocked by [@azure/core-http]!
-XX of XX: [@azure/event-hubs] blocked by [@azure/core-http]!
-XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/core-http]!
-XX of XX: [@azure/storage-queue] blocked by [@azure/core-http]!
-XX of XX: [@azure/storage-file-share] blocked by [@azure/core-http]!
-XX of XX: [@azure/template] blocked by [@azure/core-http]!
-XX of XX: [@azure/event-processor-host] completed with warnings in ? seconds
+
+XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
+XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
+XX of XX: [@azure/keyvault-certificates] failed to build!
 XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-[@azure/core-http] Returned error code: 1
+XX of XX: [@azure/storage-file-share] completed with warnings in ? seconds
+[@azure/app-configuration] Returned error code: 2
+[@azure/eventhubs-checkpointstore-blob] Returned error code: 2
+[@azure/keyvault-certificates] Returned error code: 2
