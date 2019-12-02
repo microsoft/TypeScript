@@ -27,3 +27,21 @@ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parame
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
 >Generic : Bind1<MyFunctionType>
 
+function assignmentWithComplexRest<T extends any[]>() {
+>assignmentWithComplexRest : <T extends any[]>() => void
+
+    const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+>fn1 : (x: string, ...rest: T) => void
+>x : string
+>rest : T
+>(x, ..._) => x : (x: string, ..._: T) => string
+>x : string
+>_ : T
+>x : string
+
+    const fn2: (...args: never) => void = fn1;
+>fn2 : (...args: never) => void
+>args : never
+>fn1 : (x: string, ...rest: T) => void
+}
+

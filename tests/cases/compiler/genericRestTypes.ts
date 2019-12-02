@@ -12,3 +12,8 @@ type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunc
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
+
+function assignmentWithComplexRest<T extends any[]>() {
+    const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+    const fn2: (...args: never) => void = fn1;
+}

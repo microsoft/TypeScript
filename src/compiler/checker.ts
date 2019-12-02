@@ -25632,7 +25632,7 @@ namespace ts {
 
         function getNonArrayRestType(signature: Signature) {
             const restType = getEffectiveRestType(signature);
-            return restType && !isArrayType(restType) && !isTypeAny(restType) ? restType : undefined;
+            return restType && !isArrayType(restType) && !isTypeAny(restType) && (restType.flags & TypeFlags.Never) === 0 ? restType : undefined;
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
