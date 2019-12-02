@@ -2434,11 +2434,7 @@ namespace ts {
     }
 
     export function hasTypeArguments(node: Node): node is HasTypeArguments {
-        return node.kind === SyntaxKind.CallExpression
-            || node.kind === SyntaxKind.NewExpression
-            || node.kind === SyntaxKind.TaggedTemplateExpression
-            || node.kind === SyntaxKind.JsxOpeningElement
-            || node.kind === SyntaxKind.JsxSelfClosingElement;
+        return !!(node as HasTypeArguments).typeArguments;
     }
 
     export const enum AssignmentKind {
