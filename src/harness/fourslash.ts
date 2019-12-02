@@ -1135,13 +1135,19 @@ namespace FourSlash {
         }
 
         private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
-            assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => ({
-                message: e.message,
-                category,
-                code: e.code,
-                ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]),
-                reportsUnnecessary: e.reportsUnnecessary,
-            })));
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => {
+                const range = e.range || this.getRangesInFile()[0];
+                if (!range) {
+                    this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
+                }
+                return {
+                    message: e.message,
+                    category,
+                    code: e.code,
+                    ...ts.createTextSpanFromRange(range),
+                    reportsUnnecessary: e.reportsUnnecessary,
+                };
+            }));
         }
 
         public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
@@ -2132,6 +2138,10 @@ namespace FourSlash {
 
         public getRanges(): Range[] {
             return this.testData.ranges;
+        }
+
+        public getRangesInFile(fileName = this.activeFile.fileName) {
+            return this.getRanges().filter(r => r.fileName === fileName);
         }
 
         public rangesByText(): ts.Map<Range[]> {

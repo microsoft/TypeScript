@@ -589,21 +589,16 @@ namespace ts {
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
 
                     diagnostics = addRange(diagnostics, suggestionDiagnostics.getDiagnostics(file.fileName));
-                    if (!file.isDeclarationFile && (!unusedIsError(UnusedKind.Local) || !unusedIsError(UnusedKind.Parameter))) {
-                        addUnusedDiagnostics();
-                    }
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (containingNode, kind, diag) => {
+                        if (!containsParseError(containingNode) && !unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                            (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
+                        }
+                    });
+
                     return diagnostics || emptyArray;
                 }
                 finally {
                     cancellationToken = undefined;
-                }
-
-                function addUnusedDiagnostics() {
-                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (containingNode, kind, diag) => {
-                        if (!containsParseError(containingNode) && !unusedIsError(kind)) {
-                            (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
-                        }
-                    });
                 }
             },
 
@@ -29611,7 +29606,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
             // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
-            if (produceDiagnostics && !(node.flags & NodeFlags.Ambient)) {
+            if (produceDiagnostics) {
                 const sourceFile = getSourceFileOfNode(node);
                 let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
                 if (!potentiallyUnusedIdentifiers) {
@@ -29778,8 +29773,6 @@ namespace ts {
         }
 
         function checkUnusedLocalsAndParameters(nodeWithLocals: Node, addDiagnostic: AddUnusedDiagnostic): void {
-            if (nodeWithLocals.flags & NodeFlags.Ambient) return;
-
             // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
             const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
             const unusedDestructures = createMap<[ObjectBindingPattern, BindingElement[]]>();
@@ -33151,7 +33144,10 @@ namespace ts {
             performance.measure("Check", "beforeCheck", "afterCheck");
         }
 
-        function unusedIsError(kind: UnusedKind): boolean {
+        function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
+            if (isAmbient) {
+                return false;
+            }
             switch (kind) {
                 case UnusedKind.Local:
                     return !!compilerOptions.noUnusedLocals;
@@ -33191,7 +33187,7 @@ namespace ts {
 
                 if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
-                        if (!containsParseError(containingNode) && unusedIsError(kind)) {
+                        if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
                             diagnostics.add(diag);
                         }
                     });
