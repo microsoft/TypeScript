@@ -10921,10 +10921,8 @@ namespace ts {
                     case "function":
                         checkNoTypeArguments(node);
                         return globalFunctionType;
-                    case "Array":
                     case "array":
                         return (!typeArgs || !typeArgs.length) && !noImplicitAny ? anyArrayType : undefined;
-                    case "Promise":
                     case "promise":
                         return (!typeArgs || !typeArgs.length) && !noImplicitAny ? createPromiseType(anyType) : undefined;
                     case "Object":
