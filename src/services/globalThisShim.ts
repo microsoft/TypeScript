@@ -39,6 +39,11 @@
 // @ts-ignore
 if (typeof process === "undefined" || process.browser) {
     /// TODO: this is used by VS, clean this up on both sides of the interface
+
+    //@ts-ignore
+    globalThis.TypeScript = globalThis.TypeScript || {};
+    //@ts-ignore
+    globalThis.TypeScript.Services = globalThis.TypeScript.Services || {};
     //@ts-ignore
     globalThis.TypeScript.Services.TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 
