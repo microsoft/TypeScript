@@ -20,6 +20,7 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
@@ -40,7 +41,6 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
@@ -62,8 +62,8 @@ SUCCESS (20)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
-@azure/core-arm (? seconds)
 @azure/storage-blob (? seconds)
+@azure/core-arm (? seconds)
 @azure/storage-queue (? seconds)
 @azure/template (? seconds)
 testhub (? seconds)
