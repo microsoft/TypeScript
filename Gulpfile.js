@@ -481,6 +481,11 @@ task("runtests-parallel").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
+
+task("test-browser-integration", () => exec(process.execPath, ["scripts/puppeteerIntegrationTest.js"]));
+task("test-browser-integration").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
+
+
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
