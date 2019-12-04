@@ -651,6 +651,7 @@ namespace ts {
                 const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName);
                 const overloadStatistics = overloadMeasureGroups.map(measures => ({
                     symbolName: measures[0].symbolName,
+                    kind: measures[0].kind,
                     candidateCount: measures[0].candidateCount,
                     count: measures.length,
                     timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
