@@ -677,11 +677,6 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface DocumentHighlights {
-        fileName: string;
-        highlightSpans: HighlightSpan[];
-    }
-
     export const enum HighlightSpanKind {
         none = "none",
         definition = "definition",
