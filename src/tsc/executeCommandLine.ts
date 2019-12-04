@@ -648,22 +648,23 @@ namespace ts {
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
 
                 const overloadMeasures = performance.getOverloadMeasures();
-                const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName);
-                const overloadStatistics = overloadMeasureGroups.map(measures => ({
-                    nodePos: measures[0].nodePos,
-                    symbolName: measures[0].symbolName,
-                    kind: measures[0].kind,
-                    candidateCount: measures[0].candidateCount,
-                    count: measures.length,
-                    timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
-                    symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
-                    nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
-                    subtypeCount: measures.map(m => m.subtypeCount).reduce((a, b) => a + b, 0),
-                    assignableCount: measures.map(m => m.assignableCount).reduce((a, b) => a + b, 0),
-                    comparableCount: measures.map(m => m.comparableCount).reduce((a, b) => a + b, 0),
-                    identityCount: measures.map(m => m.identityCount).reduce((a, b) => a + b, 0),
-                    enumCount: measures.map(m => m.enumCount).reduce((a, b) => a + b, 0),
-                }));
+                const overloadStatistics = overloadMeasures.slice();
+                // const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName);
+                // const overloadStatistics = overloadMeasureGroups.map(measures => ({
+                //     nodePos: measures[0].nodePos,
+                //     symbolName: measures[0].symbolName,
+                //     kind: measures[0].kind,
+                //     candidateCount: measures[0].candidateCount,
+                //     count: measures.length,
+                //     timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
+                //     symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
+                //     nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
+                //     subtypeCount: measures.map(m => m.subtypeCount).reduce((a, b) => a + b, 0),
+                //     assignableCount: measures.map(m => m.assignableCount).reduce((a, b) => a + b, 0),
+                //     comparableCount: measures.map(m => m.comparableCount).reduce((a, b) => a + b, 0),
+                //     identityCount: measures.map(m => m.identityCount).reduce((a, b) => a + b, 0),
+                //     enumCount: measures.map(m => m.enumCount).reduce((a, b) => a + b, 0),
+                // }));
 
                 const topCount = 5;
 
