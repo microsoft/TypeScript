@@ -24157,11 +24157,11 @@ namespace ts {
             // signature, the subtype pass is useless. So skipping it is an optimization.
 
             if (candidates.length > 1) {
-                const oldCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
+                const oldCounts = { nextSymbolId, nextNodeId, subtype: subtypeRelation.size, assignable: assignableRelation.size, comparable: comparableRelation.size, identity: identityRelation.size, enum: enumRelation.size };
                 performance.mark("beforeChooseOverloadSubtype");
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadSubtype");
-                const newCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
+                const newCounts = { nextSymbolId, nextNodeId, subtype: subtypeRelation.size, assignable: assignableRelation.size, comparable: comparableRelation.size, identity: identityRelation.size, enum: enumRelation.size };
                 performance.measureOverload("beforeChooseOverloadSubtype", "afterChooseOverloadSubtype", {
                     kind: "subtype",
                     nodePos: nodePosToString(node),
@@ -24170,16 +24170,25 @@ namespace ts {
                     succeeded: !!result,
                     symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
                     nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
-                    mergeCount: newCounts.nextMergeId - oldCounts.nextMergeId,
-                    flowCount: newCounts.nextFlowId - oldCounts.nextFlowId,
+                    subtypeCount: newCounts.subtype - oldCounts.subtype,
+                    assignableCount: newCounts.assignable - oldCounts.assignable,
+                    comparableCount: newCounts.comparable - oldCounts.comparable,
+                    identityCount: newCounts.identity - oldCounts.identity,
+                    enumCount: newCounts.enum - oldCounts.enum,
                 });
             }
             if (!result) {
-                const oldCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
+                // const subtypeRelation = createMap<RelationComparisonResult>();
+                // const assignableRelation = createMap<RelationComparisonResult>();
+                // const comparableRelation = createMap<RelationComparisonResult>();
+                // const identityRelation = createMap<RelationComparisonResult>();
+                // const enumRelation = createMap<RelationComparisonResult>();
+
+                const oldCounts = { nextSymbolId, nextNodeId, subtype: subtypeRelation.size, assignable: assignableRelation.size, comparable: comparableRelation.size, identity: identityRelation.size, enum: enumRelation.size };
                 performance.mark("beforeChooseOverloadAssignable");
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadAssignable");
-                const newCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
+                const newCounts = { nextSymbolId, nextNodeId, subtype: subtypeRelation.size, assignable: assignableRelation.size, comparable: comparableRelation.size, identity: identityRelation.size, enum: enumRelation.size };
                 performance.measureOverload("beforeChooseOverloadAssignable", "afterChooseOverloadAssignable", {
                     kind: "assignment",
                     nodePos: nodePosToString(node),
@@ -24188,8 +24197,11 @@ namespace ts {
                     succeeded: !!result,
                     symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
                     nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
-                    mergeCount: newCounts.nextMergeId - oldCounts.nextMergeId,
-                    flowCount: newCounts.nextFlowId - oldCounts.nextFlowId,
+                    subtypeCount: newCounts.subtype - oldCounts.subtype,
+                    assignableCount: newCounts.assignable - oldCounts.assignable,
+                    comparableCount: newCounts.comparable - oldCounts.comparable,
+                    identityCount: newCounts.identity - oldCounts.identity,
+                    enumCount: newCounts.enum - oldCounts.enum,
                 });
             }
             if (result) {

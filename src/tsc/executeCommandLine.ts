@@ -650,6 +650,7 @@ namespace ts {
                 const overloadMeasures = performance.getOverloadMeasures();
                 const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName);
                 const overloadStatistics = overloadMeasureGroups.map(measures => ({
+                    nodePos: measures[0].nodePos,
                     symbolName: measures[0].symbolName,
                     kind: measures[0].kind,
                     candidateCount: measures[0].candidateCount,
@@ -657,8 +658,11 @@ namespace ts {
                     timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
                     symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
                     nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
-                    mergeCount: measures.map(m => m.mergeCount).reduce((a, b) => a + b, 0),
-                    flowCount: measures.map(m => m.flowCount).reduce((a, b) => a + b, 0),
+                    subtypeCount: measures.map(m => m.subtypeCount).reduce((a, b) => a + b, 0),
+                    assignableCount: measures.map(m => m.assignableCount).reduce((a, b) => a + b, 0),
+                    comparableCount: measures.map(m => m.comparableCount).reduce((a, b) => a + b, 0),
+                    identityCount: measures.map(m => m.identityCount).reduce((a, b) => a + b, 0),
+                    enumCount: measures.map(m => m.enumCount).reduce((a, b) => a + b, 0),
                 }));
 
                 const topCount = 5;
@@ -675,23 +679,41 @@ namespace ts {
                 }
                 sys.write(sys.newLine);
 
-                sys.write("Top " + topCount + " by nodes" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.nodeCount - a.nodeCount))) {
+                // sys.write("Top " + topCount + " by nodes" + sys.newLine);
+                // for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.nodeCount - a.nodeCount))) {
+                //     sys.write(JSON.stringify(stat) + sys.newLine);
+                // }
+                // sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by subtype checks" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.subtypeCount - a.subtypeCount))) {
                     sys.write(JSON.stringify(stat) + sys.newLine);
                 }
                 sys.write(sys.newLine);
 
-                sys.write("Top " + topCount + " by merges" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.mergeCount - a.mergeCount))) {
+                sys.write("Top " + topCount + " by assignability checks" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.assignableCount - a.assignableCount))) {
                     sys.write(JSON.stringify(stat) + sys.newLine);
                 }
                 sys.write(sys.newLine);
 
-                sys.write("Top " + topCount + " by flows" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.flowCount - a.flowCount))) {
+                sys.write("Top " + topCount + " by comparability checks" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.comparableCount - a.comparableCount))) {
                     sys.write(JSON.stringify(stat) + sys.newLine);
                 }
                 sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by identity checks" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.identityCount - a.identityCount))) {
+                    sys.write(JSON.stringify(stat) + sys.newLine);
+                }
+                sys.write(sys.newLine);
+
+                // sys.write("Top " + topCount + " by enum checks" + sys.newLine);
+                // for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.enumCount - a.enumCount))) {
+                //     sys.write(JSON.stringify(stat) + sys.newLine);
+                // }
+                // sys.write(sys.newLine);
             }
             else {
                 // Individual component times.
