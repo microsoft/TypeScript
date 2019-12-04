@@ -2321,5 +2321,5 @@ namespace ts {
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
     }
 
-    objectAllocator = getServicesObjectAllocator();
+    setObjectAllocator(getServicesObjectAllocator());
 }
