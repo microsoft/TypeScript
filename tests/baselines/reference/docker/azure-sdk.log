@@ -20,6 +20,7 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
+XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
@@ -32,20 +33,19 @@ os-name (guessing 'osName')
 created dist/index.js in ?s
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X-preview.10 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-certificates@X.X.X-preview.11 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.10 extract-api script.
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.11 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
+XX of XX: [@azure/service-bus] completed successfully in ? seconds
+XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (20)
+SUCCESS (22)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-tracing (? seconds)
@@ -62,13 +62,15 @@ SUCCESS (20)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
-@azure/core-arm (? seconds)
 @azure/storage-blob (? seconds)
+@azure/core-arm (? seconds)
+@azure/service-bus (? seconds)
+@azure/storage-file-share (? seconds)
 @azure/storage-queue (? seconds)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (3)
+SUCCESS WITH WARNINGS (1)
 ================================
 @azure/cosmos (? seconds)
 Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
@@ -80,10 +82,6 @@ os-name (imported by dist-esm/utils/user-agent.js)
 Use output.globals to specify browser global variable names corresponding to external modules
 os-name (guessing 'osName')
 created dist/index.js in ?s
-@azure/service-bus (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/service-bus.api.md
-@azure/storage-file-share (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/storage-file-share.api.md
 ================================
 FAILURE (3)
 ================================
@@ -132,10 +130,10 @@ src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterato
 @azure/keyvault-certificates ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X-preview.10 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-certificates@X.X.X-preview.11 extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.10 extract-api script.
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.11 extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -151,8 +149,6 @@ XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
 XX of XX: [@azure/keyvault-certificates] failed to build!
-XX of XX: [@azure/service-bus] completed with warnings in ? seconds
-XX of XX: [@azure/storage-file-share] completed with warnings in ? seconds
 [@azure/app-configuration] Returned error code: 2
 [@azure/eventhubs-checkpointstore-blob] Returned error code: 2
 [@azure/keyvault-certificates] Returned error code: 2
