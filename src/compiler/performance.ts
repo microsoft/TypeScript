@@ -18,6 +18,19 @@ namespace ts.performance {
     let counts: Map<number>;
     let marks: Map<number>;
     let measures: Map<number>;
+    let overloadMeasures: ChooseOverloadMeasure[];
+
+    export interface ChooseOverloadStats {
+        kind: "subtype" | "assignment",
+        candidateCount: number,
+        nodePos: string,
+        symbolName: string,
+        succeeded: boolean,
+    }
+
+    export interface ChooseOverloadMeasure extends ChooseOverloadStats {
+        timeMs: number
+    }
 
     export interface Timer {
         enter(): void;
@@ -84,6 +97,14 @@ namespace ts.performance {
         }
     }
 
+    export function measureOverload(startMarkName: string, endMarkName: string, stats: ChooseOverloadStats) {
+        if (enabled) {
+            const end = marks.get(endMarkName)!;
+            const start = marks.get(startMarkName)!;
+            overloadMeasures.push({ ...stats, timeMs: (end - start) });
+        }
+    }
+
     /**
      * Gets the number of times a marker was encountered.
      *
@@ -113,11 +134,16 @@ namespace ts.performance {
         });
     }
 
+    export function getOverloadMeasures(): ReadonlyArray<ChooseOverloadMeasure> {
+        return overloadMeasures;
+    }
+
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
         counts = createMap<number>();
         marks = createMap<number>();
         measures = createMap<number>();
+        overloadMeasures = [];
         enabled = true;
         profilerStart = timestamp();
     }

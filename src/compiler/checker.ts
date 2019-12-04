@@ -24156,19 +24156,29 @@ namespace ts {
             // is just important for choosing the best signature. So in the case where there is only one
             // signature, the subtype pass is useless. So skipping it is an optimization.
 
-            const callSiteId = `${ts.getSourceFileOfNode(node).path} [${node.pos}, ${node.end})`;
-
             if (candidates.length > 1) {
                 performance.mark("beforeChooseOverloadSubtype");
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadSubtype");
-                performance.measure("chooseOverload - subtype - " + callSiteId, "beforeChooseOverloadSubtype", "afterChooseOverloadSubtype");
+                performance.measureOverload("beforeChooseOverloadSubtype", "afterChooseOverloadSubtype", {
+                    kind: "subtype",
+                    nodePos: nodePosToString(node),
+                    candidateCount: candidates.length,
+                    symbolName: getSymbolName(result || candidates[0]),
+                    succeeded: !!result,
+                });
             }
             if (!result) {
                 performance.mark("beforeChooseOverloadAssignable");
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadAssignable");
-                performance.measure("chooseOverload - assignable - " + callSiteId, "beforeChooseOverloadAssignable", "afterChooseOverloadAssignable");
+                performance.measureOverload("beforeChooseOverloadAssignable", "afterChooseOverloadAssignable", {
+                    kind: "assignment",
+                    nodePos: nodePosToString(node),
+                    candidateCount: candidates.length,
+                    symbolName: getSymbolName(result || candidates[0]),
+                    succeeded: !!result,
+                });
             }
             if (result) {
                 return result;
@@ -24259,6 +24269,19 @@ namespace ts {
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+
+            function getSymbolName(signature: Signature): string {
+                const decl = signature.declaration;
+                const symbol = decl && getSymbolOfNode(decl);
+                return symbol ? getSymbolNameRecursive(symbol) : "_Unknown_";
+            }
+
+            function getSymbolNameRecursive(symbol: Symbol): string {
+                const name = unescapeLeadingUnderscores(symbol.escapedName);
+                return symbol.parent
+                    ? (getSymbolNameRecursive(symbol.parent) || "_Unknown_") + "." + name
+                    : name;
+            }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidatesForArgumentError = undefined;
