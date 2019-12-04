@@ -1254,4 +1254,31 @@ namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25,
     }
+
+    /** @internal */
+    export interface CodeFixRegistration {
+        errorCodes: readonly number[];
+        getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
+        fixIds?: readonly string[];
+        getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
+    }
+
+    /** @internal */
+    export interface CodeFixContextBase extends textChanges.TextChangesContext {
+        sourceFile: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        preferences: UserPreferences;
+    }
+
+    /** @internal */
+    export interface CodeFixAllContext extends CodeFixContextBase {
+        fixId: {};
+    }
+
+    /** @internal */
+    export interface CodeFixContext extends CodeFixContextBase {
+        errorCode: number;
+        span: TextSpan;
+    }
 }
