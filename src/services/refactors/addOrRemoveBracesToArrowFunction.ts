@@ -36,6 +36,14 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
+
+    // Taken from emitter.ts L4798
+    function formatSynthesizedComment(comment: SynthesizedComment) {
+        return comment.kind === SyntaxKind.MultiLineCommentTrivia
+            ? `/*${comment.text}*/`
+            : `//${comment.text}`;
+    }
+
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
@@ -44,6 +52,11 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
+
+        // These two variables are used if there is a trailing comment after the returnStatement
+        let newEdit: TextChange;
+        const trailingCommentsHolder = createStringLiteral("");
+
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
@@ -56,12 +69,44 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            // Copy the trailing comments after the return statement
+            // Add them to our trailingCommentsHolder to use later
+            copyTrailingComments(returnStatement, trailingCommentsHolder, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+
+
+            // If there are trailing comments
+            if (trailingCommentsHolder && trailingCommentsHolder.emitNode && trailingCommentsHolder.emitNode.trailingComments) {
+
+                // First we format our comment
+                // ex. " trailing comment " -> "/* trailing comment */"
+                const formattedComment = formatSynthesizedComment(trailingCommentsHolder.emitNode.trailingComments[0]);
+
+                // Add one space of padding to the comment
+                const paddedComment = ` ${formattedComment}`;
+
+                // TODO - add some type of check to know if plus 1 is needed
+                // Could be a function that is like getSemiColonPositionModifier, if true, return 1, else return 0
+                // creates a text change from end of function body, with length of comment, for the comment.
+                // create a new range from end of function body to end of return statement
+                // + 1 accounts for the semi-colon
+                // Add function to check if
+                // function hasSemiColon(/* check next token. If semi colon return true, else false */) {
+                //     return true
+                // }
+
+                newEdit = createTextChangeFromStartLength(func.body.end + 1, paddedComment.length, paddedComment);
+            }
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
+        const edits = textChanges.ChangeTracker.with(context, t => {
+            t.replaceNode(file, func.body, body);
+            // Push the raw change into our array of textChanges
+            t.pushRaw(file, { fileName: file.fileName, textChanges: [newEdit] });
+        });
+
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
