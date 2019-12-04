@@ -621,9 +621,11 @@ namespace ts {
 
     function reportStatistics(sys: System, program: Program) {
         let statistics: Statistic[];
+        let overloadStatistics: {name: string, timeMs: number}[];
         const compilerOptions = program.getCompilerOptions();
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
+            overloadStatistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
@@ -681,6 +683,12 @@ namespace ts {
             for (const { name, value } of statistics) {
                 sys.write(padRight(name + ":", nameSize + 2) + padLeft(value.toString(), valueSize) + sys.newLine);
             }
+
+            const sortedOverloadStatistics = overloadStatistics.sort((a, b) => b.timeMs - a.timeMs);
+            for (let i = 0; i < 10 && i < sortedOverloadStatistics.length; i++) {
+                const stat = sortedOverloadStatistics[i];
+                sys.write(`${stat.name}: ${stat.timeMs}ms${sys.newLine}`);
+            }
         }
 
         function reportStatisticalValue(name: string, value: string) {
@@ -691,8 +699,12 @@ namespace ts {
             reportStatisticalValue(name, "" + count);
         }
 
-        function reportTimeStatistic(name: string, time: number) {
-            reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
+        function reportTimeStatistic(name: string, timeMs: number) {
+            if (name.indexOf("chooseOverload") >= 0) {
+                overloadStatistics.push({ name, timeMs });
+                return;
+            }
+            reportStatisticalValue(name, (timeMs / 1000).toFixed(2) + "s");
         }
     }
 
