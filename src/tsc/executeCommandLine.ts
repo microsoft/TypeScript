@@ -654,14 +654,43 @@ namespace ts {
                     candidateCount: measures[0].candidateCount,
                     count: measures.length,
                     timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
+                    symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
+                    nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
+                    mergeCount: measures.map(m => m.mergeCount).reduce((a, b) => a + b, 0),
+                    flowCount: measures.map(m => m.flowCount).reduce((a, b) => a + b, 0),
                 }));
 
-                const sortedOverloadStatistics = overloadStatistics.sort((a, b) => b.timeMs - a.timeMs);
-                for (let i = 0; i < 10 && i < sortedOverloadStatistics.length; i++) {
-                    const stat = sortedOverloadStatistics[i];
-                    // sys.write(`${stat.symbolName}: ${stat.timeMs}ms (count = ${stat.count}) ${sys.newLine}`);
+                const topCount = 5;
+
+                sys.write("Top " + topCount + " by time" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.timeMs - a.timeMs))) {
                     sys.write(JSON.stringify(stat) + sys.newLine);
                 }
+                sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by symbols" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.symbolCount - a.symbolCount))) {
+                    sys.write(JSON.stringify(stat) + sys.newLine);
+                }
+                sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by nodes" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.nodeCount - a.nodeCount))) {
+                    sys.write(JSON.stringify(stat) + sys.newLine);
+                }
+                sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by merges" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.mergeCount - a.mergeCount))) {
+                    sys.write(JSON.stringify(stat) + sys.newLine);
+                }
+                sys.write(sys.newLine);
+
+                sys.write("Top " + topCount + " by flows" + sys.newLine);
+                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.flowCount - a.flowCount))) {
+                    sys.write(JSON.stringify(stat) + sys.newLine);
+                }
+                sys.write(sys.newLine);
             }
             else {
                 // Individual component times.
@@ -679,6 +708,10 @@ namespace ts {
             reportStatistics();
 
             performance.disable();
+        }
+
+        function takeAtMost<T>(count: number, array: readonly T[]): readonly T[] {
+            return array.slice(0, Math.min(array.length, count));
         }
 
         function reportStatistics() {

@@ -24157,27 +24157,39 @@ namespace ts {
             // signature, the subtype pass is useless. So skipping it is an optimization.
 
             if (candidates.length > 1) {
+                const oldCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
                 performance.mark("beforeChooseOverloadSubtype");
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadSubtype");
+                const newCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
                 performance.measureOverload("beforeChooseOverloadSubtype", "afterChooseOverloadSubtype", {
                     kind: "subtype",
                     nodePos: nodePosToString(node),
                     candidateCount: candidates.length,
                     symbolName: getSymbolName(result || candidates[0]),
                     succeeded: !!result,
+                    symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
+                    nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
+                    mergeCount: newCounts.nextMergeId - oldCounts.nextMergeId,
+                    flowCount: newCounts.nextFlowId - oldCounts.nextFlowId,
                 });
             }
             if (!result) {
+                const oldCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
                 performance.mark("beforeChooseOverloadAssignable");
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
                 performance.mark("afterChooseOverloadAssignable");
+                const newCounts = { nextSymbolId, nextNodeId, nextMergeId, nextFlowId };
                 performance.measureOverload("beforeChooseOverloadAssignable", "afterChooseOverloadAssignable", {
                     kind: "assignment",
                     nodePos: nodePosToString(node),
                     candidateCount: candidates.length,
                     symbolName: getSymbolName(result || candidates[0]),
                     succeeded: !!result,
+                    symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
+                    nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
+                    mergeCount: newCounts.nextMergeId - oldCounts.nextMergeId,
+                    flowCount: newCounts.nextFlowId - oldCounts.nextFlowId,
                 });
             }
             if (result) {

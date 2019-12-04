@@ -26,6 +26,10 @@ namespace ts.performance {
         nodePos: string,
         symbolName: string,
         succeeded: boolean,
+        symbolCount: number,
+        nodeCount: number,
+        mergeCount: number,
+        flowCount: number,
     }
 
     export interface ChooseOverloadMeasure extends ChooseOverloadStats {
