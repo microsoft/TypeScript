@@ -138,7 +138,7 @@ namespace ts.performance {
         });
     }
 
-    export function getOverloadMeasures(): ReadonlyArray<ChooseOverloadMeasure> {
+    export function getOverloadMeasures(): readonly ChooseOverloadMeasure[] {
         return overloadMeasures;
     }
 
