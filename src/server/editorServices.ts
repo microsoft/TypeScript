@@ -1625,7 +1625,7 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension, host: this.host }, totalNonTsFileSize));
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension: ts.hasTSFileExtension, host: this.host }, totalNonTsFileSize)); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
@@ -1694,7 +1694,7 @@ namespace ts.server {
                 configFileName: configFileName(),
                 projectType: project instanceof ExternalProject ? "external" : "configured",
                 languageServiceEnabled: project.languageServiceEnabled,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 

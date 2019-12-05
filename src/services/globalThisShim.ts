@@ -4,6 +4,10 @@
 // https://mathiasbynens.be/notes/globalthis
 
 // #region The polyfill starts here.
+/* eslint-disable no-var */
+/* @internal */
+declare var window: {};
+/* eslint-enable no-var */
 ((() => {
     if (typeof globalThis === "object") return;
     try {
@@ -39,6 +43,11 @@
 // @ts-ignore
 if (typeof process === "undefined" || process.browser) {
     /// TODO: this is used by VS, clean this up on both sides of the interface
+
+    //@ts-ignore
+    globalThis.TypeScript = globalThis.TypeScript || {};
+    //@ts-ignore
+    globalThis.TypeScript.Services = globalThis.TypeScript.Services || {};
     //@ts-ignore
     globalThis.TypeScript.Services.TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 

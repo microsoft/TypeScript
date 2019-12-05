@@ -371,7 +371,7 @@ namespace ts {
         const createFilePathWatcher: CreateFileWatcher<WatchFileHost, PollingInterval, FileWatcherEventKind, Path, X, Y> = watchLogLevel === WatchLogLevel.None ? watchFilePath : createFileWatcher;
         const createDirectoryWatcher: CreateFileWatcher<WatchDirectoryHost, WatchDirectoryFlags, undefined, never, X, Y> = getCreateFileWatcher(watchLogLevel, watchDirectory);
         if (watchLogLevel === WatchLogLevel.Verbose && sysLog === noop) {
-            sysLog = s => log(s);
+            setSysLog(s => log(s));
         }
         return {
             watchFile: (host, file, callback, pollingInterval, detailInfo1, detailInfo2) =>

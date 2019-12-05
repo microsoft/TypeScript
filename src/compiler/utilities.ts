@@ -4958,11 +4958,20 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
+    export function setObjectAllocator(alloc: ObjectAllocator) {
+        objectAllocator = alloc;
+    }
+
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
+
+    /* @internal */
+    export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
+        localizedDiagnosticMessages = messages;
+    }
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;

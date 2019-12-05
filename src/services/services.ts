@@ -1145,7 +1145,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
-            localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+            setLocalizedDiagnosticMessages(host.getLocalizedDiagnosticMessages());
         }
 
         function log(message: string) {
@@ -2321,5 +2321,5 @@ namespace ts {
         throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
     }
 
-    objectAllocator = getServicesObjectAllocator();
+    setObjectAllocator(getServicesObjectAllocator());
 }

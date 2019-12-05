@@ -3473,7 +3473,6 @@ namespace ts {
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
-        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
         /**
          * True if `contextualType` should not be considered for completions because
@@ -4233,7 +4232,7 @@ namespace ts {
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
-        ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
