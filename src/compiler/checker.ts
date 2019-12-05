@@ -19506,7 +19506,7 @@ namespace ts {
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
-                    return !(discriminantType.flags & TypeFlags.Never) && isTypeComparableTo(discriminantType, narrowedPropType!);
+                    return !(discriminantType.flags & TypeFlags.Never) && isTypeComparableTo(discriminantType, narrowedPropType);
                 });
             }
 
