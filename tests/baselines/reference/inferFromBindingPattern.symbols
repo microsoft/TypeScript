@@ -1,0 +1,130 @@
+=== tests/cases/conformance/inferFromBindingPattern.ts ===
+declare function f1<T extends string>(): T;
+>f1 : Symbol(f1, Decl(inferFromBindingPattern.ts, 0, 0))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 0, 20))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 0, 20))
+
+declare function f2<T extends string>(): [T];
+>f2 : Symbol(f2, Decl(inferFromBindingPattern.ts, 0, 43))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 1, 20))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 1, 20))
+
+declare function f3<T extends string>(): { x: T };
+>f3 : Symbol(f3, Decl(inferFromBindingPattern.ts, 1, 45))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 2, 20))
+>x : Symbol(x, Decl(inferFromBindingPattern.ts, 2, 42))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 2, 20))
+
+let x1 = f1();         // string
+>x1 : Symbol(x1, Decl(inferFromBindingPattern.ts, 4, 3))
+>f1 : Symbol(f1, Decl(inferFromBindingPattern.ts, 0, 0))
+
+let [x2] = f2();       // string
+>x2 : Symbol(x2, Decl(inferFromBindingPattern.ts, 5, 5))
+>f2 : Symbol(f2, Decl(inferFromBindingPattern.ts, 0, 43))
+
+let { x: x3 } = f3();  // string
+>x : Symbol(x, Decl(inferFromBindingPattern.ts, 2, 42))
+>x3 : Symbol(x3, Decl(inferFromBindingPattern.ts, 6, 5))
+>f3 : Symbol(f3, Decl(inferFromBindingPattern.ts, 1, 45))
+
+// Repro from #30379
+
+function foo<T = number>(): [T] {
+>foo : Symbol(foo, Decl(inferFromBindingPattern.ts, 6, 21))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 10, 13))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 10, 13))
+
+	return [42 as any]
+}
+const [x] = foo();  // [number]
+>x : Symbol(x, Decl(inferFromBindingPattern.ts, 13, 7))
+>foo : Symbol(foo, Decl(inferFromBindingPattern.ts, 6, 21))
+
+// Repro from #35291
+
+interface SelectProps<T, K> {
+>SelectProps : Symbol(SelectProps, Decl(inferFromBindingPattern.ts, 13, 18))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 17, 22))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 17, 24))
+
+  selector?: (obj: T) => K;
+>selector : Symbol(SelectProps.selector, Decl(inferFromBindingPattern.ts, 17, 29))
+>obj : Symbol(obj, Decl(inferFromBindingPattern.ts, 18, 14))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 17, 22))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 17, 24))
+}
+
+type SelectResult<T, K> = [K, T];
+>SelectResult : Symbol(SelectResult, Decl(inferFromBindingPattern.ts, 19, 1))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 21, 18))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 21, 20))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 21, 20))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 21, 18))
+
+interface Person {
+>Person : Symbol(Person, Decl(inferFromBindingPattern.ts, 21, 33))
+
+  name: string;
+>name : Symbol(Person.name, Decl(inferFromBindingPattern.ts, 23, 18))
+
+  surname: string;
+>surname : Symbol(Person.surname, Decl(inferFromBindingPattern.ts, 24, 15))
+}
+
+declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
+>selectJohn : Symbol(selectJohn, Decl(inferFromBindingPattern.ts, 26, 1))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 28, 28))
+>Person : Symbol(Person, Decl(inferFromBindingPattern.ts, 21, 33))
+>props : Symbol(props, Decl(inferFromBindingPattern.ts, 28, 40))
+>SelectProps : Symbol(SelectProps, Decl(inferFromBindingPattern.ts, 13, 18))
+>Person : Symbol(Person, Decl(inferFromBindingPattern.ts, 21, 33))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 28, 28))
+>SelectResult : Symbol(SelectResult, Decl(inferFromBindingPattern.ts, 19, 1))
+>Person : Symbol(Person, Decl(inferFromBindingPattern.ts, 21, 33))
+>K : Symbol(K, Decl(inferFromBindingPattern.ts, 28, 28))
+
+const [person] = selectJohn();
+>person : Symbol(person, Decl(inferFromBindingPattern.ts, 30, 7))
+>selectJohn : Symbol(selectJohn, Decl(inferFromBindingPattern.ts, 26, 1))
+
+const [any, whatever] = selectJohn();
+>any : Symbol(any, Decl(inferFromBindingPattern.ts, 31, 7))
+>whatever : Symbol(whatever, Decl(inferFromBindingPattern.ts, 31, 11))
+>selectJohn : Symbol(selectJohn, Decl(inferFromBindingPattern.ts, 26, 1))
+
+const john = selectJohn();
+>john : Symbol(john, Decl(inferFromBindingPattern.ts, 32, 5))
+>selectJohn : Symbol(selectJohn, Decl(inferFromBindingPattern.ts, 26, 1))
+
+const [personAgain, nufinspecial] = john;
+>personAgain : Symbol(personAgain, Decl(inferFromBindingPattern.ts, 33, 7))
+>nufinspecial : Symbol(nufinspecial, Decl(inferFromBindingPattern.ts, 33, 19))
+>john : Symbol(john, Decl(inferFromBindingPattern.ts, 32, 5))
+
+// Repro from #35291
+
+declare function makeTuple<T1>(arg: T1): [T1];
+>makeTuple : Symbol(makeTuple, Decl(inferFromBindingPattern.ts, 33, 41))
+>T1 : Symbol(T1, Decl(inferFromBindingPattern.ts, 37, 27))
+>arg : Symbol(arg, Decl(inferFromBindingPattern.ts, 37, 31))
+>T1 : Symbol(T1, Decl(inferFromBindingPattern.ts, 37, 27))
+>T1 : Symbol(T1, Decl(inferFromBindingPattern.ts, 37, 27))
+
+declare function stringy<T = string>(arg?: T): T;
+>stringy : Symbol(stringy, Decl(inferFromBindingPattern.ts, 37, 46))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 38, 25))
+>arg : Symbol(arg, Decl(inferFromBindingPattern.ts, 38, 37))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 38, 25))
+>T : Symbol(T, Decl(inferFromBindingPattern.ts, 38, 25))
+
+const isStringTuple = makeTuple(stringy());  // [string]
+>isStringTuple : Symbol(isStringTuple, Decl(inferFromBindingPattern.ts, 40, 5))
+>makeTuple : Symbol(makeTuple, Decl(inferFromBindingPattern.ts, 33, 41))
+>stringy : Symbol(stringy, Decl(inferFromBindingPattern.ts, 37, 46))
+
+const [isAny] = makeTuple(stringy());  // [string]
+>isAny : Symbol(isAny, Decl(inferFromBindingPattern.ts, 41, 7))
+>makeTuple : Symbol(makeTuple, Decl(inferFromBindingPattern.ts, 33, 41))
+>stringy : Symbol(stringy, Decl(inferFromBindingPattern.ts, 37, 46))
+

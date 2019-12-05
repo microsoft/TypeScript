@@ -638,6 +638,7 @@ namespace ts {
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
+        const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
@@ -7156,7 +7157,11 @@ namespace ts {
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAny(element, anyType);
             }
-            return anyType;
+            // When we're including the pattern in the type (an indication we're obtaining a contextual type), we
+            // use the non-inferrable any type. Inference will never directly infer this type, but it is possible
+            // to infer a type that contains it, e.g. for a binding pattern like [foo] or { foo }. In such cases,
+            // widening of the binding pattern type substitutes a regular any for the non-inferrable any.
+            return includePatternInType ? nonInferrableAnyType : anyType;
         }
 
         // Return the type implied by an object binding pattern
@@ -7188,6 +7193,7 @@ namespace ts {
             result.objectFlags |= objectFlags;
             if (includePatternInType) {
                 result.pattern = pattern;
+                result.objectFlags |= ObjectFlags.ContainsObjectOrArrayLiteral;
             }
             return result;
         }
@@ -7206,6 +7212,7 @@ namespace ts {
             if (includePatternInType) {
                 result = cloneTypeReference(result);
                 result.pattern = pattern;
+                result.objectFlags |= ObjectFlags.ContainsObjectOrArrayLiteral;
             }
             return result;
         }
@@ -17025,7 +17032,7 @@ namespace ts {
                     return type.widened;
                 }
                 let result: Type | undefined;
-                if (type.flags & TypeFlags.Nullable) {
+                if (type.flags & (TypeFlags.Any | TypeFlags.Nullable)) {
                     result = anyType;
                 }
                 else if (isObjectLiteralType(type)) {
@@ -17535,7 +17542,8 @@ namespace ts {
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === silentNeverType || (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType))) {
+                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || source === silentNeverType ||
+                        (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType))) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
