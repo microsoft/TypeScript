@@ -1,13 +1,18 @@
 /* @internal */
 namespace ts {
-    // NOTE: Due to how the project-reference merging ends up working, `T` isn't considered referenced until `Map` merges with the definition
-    // in src/compiler/core.ts
-    // @ts-ignore
-    export interface Map<T> {
-        // full type defined in ~/src/compiler/core.ts
+    interface MapShim<T> {
+        readonly size: number;
+        get(key: string): T | undefined;
+        set(key: string, value: T): this;
+        has(key: string): boolean;
+        delete(key: string): boolean;
+        clear(): void;
+        keys(): Iterator<string>;
+        values(): Iterator<T>;
+        entries(): Iterator<[string, T]>;
+        forEach(action: (value: T, key: string) => void): void;
     }
-
-    export function createMapShim(): new <T>() => Map<T> {
+    export function createMapShim(): new <T>() => MapShim<T> {
         /** Create a MapLike with good performance. */
         function createDictionaryObject<T>(): Record<string, T> {
             const map = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -66,7 +71,7 @@ namespace ts {
             }
         }
 
-        return class <T> implements Map<T> {
+        return class <T> implements MapShim<T> {
             private data = createDictionaryObject<MapEntry<T>>();
             public size = 0;
 
