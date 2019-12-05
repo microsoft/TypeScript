@@ -24299,8 +24299,7 @@ namespace ts {
             function getSymbolName(signature: Signature): string {
                 const decl = signature.declaration;
                 const symbol = decl && getSymbolOfNode(decl);
-                const name = symbol ? getSymbolNameRecursive(symbol) : "_Unknown_";
-                return name;
+                return symbol ? getSymbolNameRecursive(symbol) : "_Unknown_";
             }
 
             function getJsxElementName(node: Node): string | undefined {
@@ -24308,11 +24307,24 @@ namespace ts {
             }
 
             function getSymbolNameRecursive(symbol: Symbol): string {
-                const name = unescapeLeadingUnderscores(symbol.escapedName);
-                const distinctName = name.indexOf("__") >= 0 ? `${name}::${getSymbolId(symbol)}` : name;
-                return symbol.parent
-                    ? (getSymbolNameRecursive(symbol.parent) || "_Unknown_") + "." + distinctName
-                    : distinctName;
+                let name = unescapeLeadingUnderscores(symbol.escapedName);
+                if (name === "__type") {
+                    if (symbol.declarations.length === 1) {
+                        const decl = symbol.declarations[0];
+                        if (decl.kind === SyntaxKind.FunctionType) {
+                            const parent = decl.parent;
+                            if (parent && isTypeAliasDeclaration(parent)) {
+                                name = getTextOfNode(parent.name);
+                            }
+                        }
+                    }
+                }
+                if (name.startsWith("__") && !symbol.parent) {
+                    name = name + "::" + getSymbolId(symbol);
+                }
+              return symbol.parent
+                    ? (getSymbolNameRecursive(symbol.parent) || "_Unknown_") + "." + name
+                    : name;
             }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
