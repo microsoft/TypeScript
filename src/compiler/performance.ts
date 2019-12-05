@@ -25,6 +25,7 @@ namespace ts.performance {
         candidateCount: number,
         nodePos: string,
         symbolName: string,
+        jsxName: string | undefined,
         succeeded: boolean,
         symbolCount: number,
         nodeCount: number,

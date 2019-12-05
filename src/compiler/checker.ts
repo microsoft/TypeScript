@@ -24167,6 +24167,7 @@ namespace ts {
                     nodePos: nodePosToString(node),
                     candidateCount: candidates.length,
                     symbolName: getSymbolName(result || candidates[0]),
+                    jsxName: getJsxElementName(node),
                     succeeded: !!result,
                     symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
                     nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
@@ -24194,6 +24195,7 @@ namespace ts {
                     nodePos: nodePosToString(node),
                     candidateCount: candidates.length,
                     symbolName: getSymbolName(result || candidates[0]),
+                    jsxName: getJsxElementName(node),
                     succeeded: !!result,
                     symbolCount: newCounts.nextSymbolId - oldCounts.nextSymbolId,
                     nodeCount: newCounts.nextNodeId - oldCounts.nextNodeId,
@@ -24297,14 +24299,20 @@ namespace ts {
             function getSymbolName(signature: Signature): string {
                 const decl = signature.declaration;
                 const symbol = decl && getSymbolOfNode(decl);
-                return symbol ? getSymbolNameRecursive(symbol) : "_Unknown_";
+                const name = symbol ? getSymbolNameRecursive(symbol) : "_Unknown_";
+                return name;
+            }
+
+            function getJsxElementName(node: Node): string | undefined {
+                return isJsxOpeningLikeElement(node) ? getTextOfNode(node.tagName) : undefined;
             }
 
             function getSymbolNameRecursive(symbol: Symbol): string {
                 const name = unescapeLeadingUnderscores(symbol.escapedName);
+                const distinctName = name.indexOf("__") >= 0 ? `${name}::${getSymbolId(symbol)}` : name;
                 return symbol.parent
-                    ? (getSymbolNameRecursive(symbol.parent) || "_Unknown_") + "." + name
-                    : name;
+                    ? (getSymbolNameRecursive(symbol.parent) || "_Unknown_") + "." + distinctName
+                    : distinctName;
             }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
