@@ -33,7 +33,7 @@
         "sourceMapRecorder.ts",
         "harnessGlobals.ts",
         "harnessUtils.ts",
-        "harness.ts",
+        "harnessIO.ts",
         "harnessLanguageService.ts",
         "virtualFileSystemWithWatch.ts",
         "fourslash.ts",
