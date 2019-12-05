@@ -30,16 +30,16 @@ namespace project {
         outputFiles?: readonly documents.TextDocument[];
     }
 
-    export class ProjectRunner extends RunnerBase {
+    export class ProjectRunner extends Harness.RunnerBase {
         public enumerateTestFiles() {
             const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
-            if (shards === 1) {
+            if (Harness.shards === 1) {
                 return all;
             }
-            return all.filter((_val, idx) => idx % shards === (shardId - 1));
+            return all.filter((_val, idx) => idx % Harness.shards === (Harness.shardId - 1));
         }
 
-        public kind(): TestRunnerKind {
+        public kind(): Harness.TestRunnerKind {
             return "project";
         }
 
@@ -412,7 +412,7 @@ namespace project {
 
         const inputFiles = inputSourceFiles.map<Harness.Compiler.TestFile>(sourceFile => ({
             unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
-                RunnerBase.removeFullPaths(sourceFile.fileName) :
+                Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
                 sourceFile.fileName,
             content: sourceFile.text
         }));

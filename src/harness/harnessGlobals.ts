@@ -2,8 +2,9 @@
 /* eslint-disable no-var */
 
 // this will work in the browser via browserify
+declare var assert: typeof _chai.assert;
 var _chai: typeof chai = require("chai");
-var assert: typeof _chai.assert = _chai.assert;
+globalThis.assert = _chai.assert;
 {
     // chai's builtin `assert.isFalse` is featureful but slow - we don't use those features,
     // so we'll just overwrite it as an alterative to migrating a bunch of code off of chai
