@@ -1,0 +1,24 @@
+tests/cases/compiler/main.js(5,1): error TS2555: Expected at least 2 arguments, but got 0.
+
+
+==== tests/cases/compiler/main.js (1 errors) ====
+    function allRest() { arguments; }
+    allRest();
+    allRest(1, 2, 3);
+    function someRest(x, y) { arguments; }
+    someRest(); // x and y are still required even though they're in a JS file
+    ~~~~~~~~~~
+!!! error TS2555: Expected at least 2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/main.js:4:19: An argument for 'x' was not provided.
+    someRest(1, 2, 3);
+    
+    /**
+     * @param {number} x - a thing
+     */
+    function jsdocced(x) { arguments; }
+    jsdocced(1);
+    
+    function dontDoubleRest(x, ...y) { arguments; }
+    dontDoubleRest(1, 2, 3);
+    
+    

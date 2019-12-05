@@ -10094,17 +10094,11 @@ namespace ts {
                 let thisParameter: Symbol | undefined;
                 let hasThisParameter = false;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
-                const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                const isUntypedSignatureInJSFile = !iife &&
-                    isInJSFile(declaration) &&
-                    isValueSignatureDeclaration(declaration) &&
-                    !hasJSDocParameterTags(declaration) &&
-                    !getJSDocType(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
                 // signature.
-                for (let i = isJSConstructSignature ? 1 : 0; i < declaration.parameters.length; i++) {
+                for (let i = isJSDocConstructSignature(declaration) ? 1 : 0; i < declaration.parameters.length; i++) {
                     const param = declaration.parameters[i];
 
                     let paramSymbol = param.symbol;
@@ -10130,7 +10124,6 @@ namespace ts {
                     const isOptionalParameter = isOptionalJSDocParameterTag(param) ||
                         param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !type ||
-                        isUntypedSignatureInJSFile ||
                         isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;

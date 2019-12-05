@@ -6,7 +6,7 @@ function allRest() { arguments; }
 allRest();
 allRest(1, 2, 3);
 function someRest(x, y) { arguments; }
-someRest(); // x and y are still optional because they are in a JS file
+someRest(); // x and y are still required even though they're in a JS file
 someRest(1, 2, 3);
 
 /**

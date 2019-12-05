@@ -4,15 +4,15 @@
 // @allowJs: true
 
 // @Filename: main.js
-////function allOptional() { arguments; }
-////allOptional(/*1*/);
-////allOptional(1, 2, 3);
-////function someOptional(x, y) { arguments; }
-////someOptional(/*2*/);
-////someOptional(1, 2, 3);
-////someOptional(); // no error here; x and y are optional in JS
+//// function allOptional() { arguments; }
+//// allOptional(/*1*/);
+//// allOptional(1, 2, 3);
+//// function someOptional(x, y) { arguments; }
+//// someOptional(/*2*/);
+//// someOptional(1, 2, 3);
+//// /*missing*/someOptional(); // no error here; x and y are optional in JS
 
-verify.noErrors();
+verify.errorExistsAfterMarker("missing");
 verify.signatureHelp(
     {
         marker: "1",

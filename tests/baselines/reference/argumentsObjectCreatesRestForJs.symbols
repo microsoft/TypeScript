@@ -15,7 +15,7 @@ function someRest(x, y) { arguments; }
 >y : Symbol(y, Decl(main.js, 3, 20))
 >arguments : Symbol(arguments)
 
-someRest(); // x and y are still optional because they are in a JS file
+someRest(); // x and y are still required even though they're in a JS file
 >someRest : Symbol(someRest, Decl(main.js, 2, 17))
 
 someRest(1, 2, 3);

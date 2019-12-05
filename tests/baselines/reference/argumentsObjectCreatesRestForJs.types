@@ -20,7 +20,7 @@ function someRest(x, y) { arguments; }
 >y : any
 >arguments : IArguments
 
-someRest(); // x and y are still optional because they are in a JS file
+someRest(); // x and y are still required even though they're in a JS file
 >someRest() : void
 >someRest : (x: any, y: any, ...args: any[]) => void
 
