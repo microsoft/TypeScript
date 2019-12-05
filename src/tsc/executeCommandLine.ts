@@ -649,72 +649,42 @@ namespace ts {
 
                 const overloadMeasures = performance.getOverloadMeasures();
                 const overloadStatistics = overloadMeasures.slice();
-                // const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName);
-                // const overloadStatistics = overloadMeasureGroups.map(measures => ({
-                //     nodePos: measures[0].nodePos,
-                //     symbolName: measures[0].symbolName,
-                //     kind: measures[0].kind,
-                //     candidateCount: measures[0].candidateCount,
-                //     count: measures.length,
-                //     timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
-                //     symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
-                //     nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
-                //     subtypeCount: measures.map(m => m.subtypeCount).reduce((a, b) => a + b, 0),
-                //     assignableCount: measures.map(m => m.assignableCount).reduce((a, b) => a + b, 0),
-                //     comparableCount: measures.map(m => m.comparableCount).reduce((a, b) => a + b, 0),
-                //     identityCount: measures.map(m => m.identityCount).reduce((a, b) => a + b, 0),
-                //     enumCount: measures.map(m => m.enumCount).reduce((a, b) => a + b, 0),
-                // }));
+                const overloadMeasureGroups = group(overloadMeasures, s => s.kind + "::" + s.symbolName + (s.jsxName ? "::" + s.jsxName : ""));
+                const groupedOverloadStatistics = overloadMeasureGroups.map(measures => ({
+                    symbolName: measures[0].symbolName,
+                    jsxName: measures[0].jsxName,
+                    kind: measures[0].kind,
+                    candidateCount: measures[0].candidateCount,
+                    count: measures.length,
+                    timeMs: measures.map(m => m.timeMs).reduce((a, b) => a + b, 0),
+                    symbolCount: measures.map(m => m.symbolCount).reduce((a, b) => a + b, 0),
+                    nodeCount: measures.map(m => m.nodeCount).reduce((a, b) => a + b, 0),
+                    subtypeCount: measures.map(m => m.subtypeCount).reduce((a, b) => a + b, 0),
+                    assignableCount: measures.map(m => m.assignableCount).reduce((a, b) => a + b, 0),
+                    comparableCount: measures.map(m => m.comparableCount).reduce((a, b) => a + b, 0),
+                    identityCount: measures.map(m => m.identityCount).reduce((a, b) => a + b, 0),
+                    enumCount: measures.map(m => m.enumCount).reduce((a, b) => a + b, 0),
+                }));
 
                 const topCount = 5;
 
-                sys.write("Top " + topCount + " by time" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.timeMs - a.timeMs))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
+                sys.write("Individual callsites" + sys.newLine);
                 sys.write(sys.newLine);
 
-                sys.write("Top " + topCount + " by symbols" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.symbolCount - a.symbolCount))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
+                writeTop(overloadStatistics, topCount, "time", s => s.timeMs);
+                writeTop(overloadStatistics, topCount, "symbols", s => s.symbolCount);
+                writeTop(overloadStatistics, topCount, "subtype checks", s => s.subtypeCount);
+                writeTop(overloadStatistics, topCount, "assignability checks", s => s.assignableCount);
+                writeTop(overloadStatistics, topCount, "identity checks", s => s.identityCount);
+
+                sys.write("Aggregated by function" + sys.newLine);
                 sys.write(sys.newLine);
 
-                // sys.write("Top " + topCount + " by nodes" + sys.newLine);
-                // for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.nodeCount - a.nodeCount))) {
-                //     sys.write(JSON.stringify(stat) + sys.newLine);
-                // }
-                // sys.write(sys.newLine);
-
-                sys.write("Top " + topCount + " by subtype checks" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.subtypeCount - a.subtypeCount))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
-                sys.write(sys.newLine);
-
-                sys.write("Top " + topCount + " by assignability checks" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.assignableCount - a.assignableCount))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
-                sys.write(sys.newLine);
-
-                sys.write("Top " + topCount + " by comparability checks" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.comparableCount - a.comparableCount))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
-                sys.write(sys.newLine);
-
-                sys.write("Top " + topCount + " by identity checks" + sys.newLine);
-                for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.identityCount - a.identityCount))) {
-                    sys.write(JSON.stringify(stat) + sys.newLine);
-                }
-                sys.write(sys.newLine);
-
-                // sys.write("Top " + topCount + " by enum checks" + sys.newLine);
-                // for (const stat of takeAtMost(topCount, overloadStatistics.sort((a, b) => b.enumCount - a.enumCount))) {
-                //     sys.write(JSON.stringify(stat) + sys.newLine);
-                // }
-                // sys.write(sys.newLine);
+                writeTop(groupedOverloadStatistics, topCount, "time", s => s.timeMs);
+                writeTop(groupedOverloadStatistics, topCount, "symbols", s => s.symbolCount);
+                writeTop(groupedOverloadStatistics, topCount, "subtype checks", s => s.subtypeCount);
+                writeTop(groupedOverloadStatistics, topCount, "assignability checks", s => s.assignableCount);
+                writeTop(groupedOverloadStatistics, topCount, "identity checks", s => s.identityCount);
             }
             else {
                 // Individual component times.
@@ -732,6 +702,14 @@ namespace ts {
             reportStatistics();
 
             performance.disable();
+        }
+
+        function writeTop<T>(collection: T[], count: number, propName: string, propFn: (t: T) => number) {
+            sys.write("Top " + count + " by " + propName + sys.newLine);
+            for (const stat of takeAtMost(count, collection.sort((a, b) => propFn(b) - propFn(a)))) {
+                sys.write(JSON.stringify(stat) + sys.newLine);
+            }
+            sys.write(sys.newLine);
         }
 
         function takeAtMost<T>(count: number, array: readonly T[]): readonly T[] {
