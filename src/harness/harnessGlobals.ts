@@ -27,22 +27,4 @@ var assert: typeof _chai.assert = _chai.assert;
         }
     };
 }
-
-var global: NodeJS.Global = Function("return this").call(undefined); // eslint-disable-line no-new-func
-
-declare var window: {};
-declare var XMLHttpRequest: new() => XMLHttpRequest;
-
-interface XMLHttpRequest {
-    readonly readyState: number;
-    readonly responseText: string;
-    readonly status: number;
-    readonly statusText: string;
-    open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
-    send(data?: string): void;
-    setRequestHeader(header: string, value: string): void;
-    getAllResponseHeaders(): string;
-    getResponseHeader(header: string): string | null;
-    overrideMimeType(mime: string): void;
-}
 /* eslint-enable no-var */

@@ -4,6 +4,9 @@
 // https://mathiasbynens.be/notes/globalthis
 
 // #region The polyfill starts here.
+/* eslint-disable no-var */
+declare var window: {};
+/* eslint-enable no-var */
 ((() => {
     if (typeof globalThis === "object") return;
     try {
