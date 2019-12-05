@@ -2147,7 +2147,7 @@ namespace ts.server {
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
-                const response: protocol.StatusResponseBody = { version };
+                const response: protocol.StatusResponseBody = { version: ts.version };
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
