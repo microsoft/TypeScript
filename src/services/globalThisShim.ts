@@ -5,6 +5,7 @@
 
 // #region The polyfill starts here.
 /* eslint-disable no-var */
+/* @internal */
 declare var window: {};
 /* eslint-enable no-var */
 ((() => {
