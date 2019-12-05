@@ -1,4 +1,4 @@
-//// [nullishCoalescingOperator_esnext.ts]
+//// [nullishCoalescingOperator_es2020.ts]
 declare const a1: 'literal' | undefined | null
 declare const a2: '' | undefined | null
 declare const a3: 1 | undefined | null
@@ -37,7 +37,8 @@ let y4 = c && ((a ?? b) as any);
 let y5 = (a ?? b) as any && c;
 let y6 = c && (a ?? b) as any;
 
-//// [nullishCoalescingOperator_esnext.js]
+
+//// [nullishCoalescingOperator_es2020.js]
 "use strict";
 const aa1 = a1 ?? 'whatever';
 const aa2 = a2 ?? 'whatever';
