@@ -1,5 +1,24 @@
 Exit Code: 1
 Standard output:
+lib/Compiler.js(354,20): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(361,22): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(372,22): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(383,24): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(386,25): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(396,23): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(404,24): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(413,20): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(416,21): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(419,22): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(422,23): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(663,7): error TS2554: Expected 1 arguments, but got 0.
+lib/DefinePlugin.js(199,17): error TS2554: Expected 3 arguments, but got 2.
+lib/DefinePlugin.js(228,15): error TS2554: Expected 3 arguments, but got 2.
+lib/DefinePlugin.js(263,16): error TS2554: Expected 3 arguments, but got 2.
+lib/DefinePlugin.js(270,9): error TS2554: Expected 3 arguments, but got 2.
+lib/EvalSourceMapDevToolPlugin.js(125,47): error TS2554: Expected 3 arguments, but got 2.
+lib/FileSystemInfo.js(357,4): error TS2345: Argument of type '({ type, context, path, expected }: any, callback: any) => void' is not assignable to parameter of type 'AsyncFunction<{ type: number; path: string; context?: string; expected?: string; }, Error>'.
+lib/HotModuleReplacementPlugin.js(181,18): error TS2554: Expected 2 arguments, but got 1.
 lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
 lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
 lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.
@@ -19,6 +38,79 @@ lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFil
 lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
 lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
 lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
+lib/MultiCompiler.js(378,14): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(112,2): error TS2554: Expected 3 arguments, but got 2.
+lib/NormalModuleFactory.js(113,2): error TS2554: Expected 3 arguments, but got 2.
+lib/NormalModuleFactory.js(115,2): error TS2554: Expected 3 arguments, but got 1.
+lib/NormalModuleFactory.js(116,2): error TS2554: Expected 3 arguments, but got 1.
+lib/NormalModuleFactory.js(117,2): error TS2554: Expected 3 arguments, but got 1.
+lib/NormalModuleFactory.js(118,2): error TS2554: Expected 3 arguments, but got 1.
+lib/NormalModuleFactory.js(119,2): error TS2554: Expected 3 arguments, but got 1.
+lib/NormalModuleFactory.js(120,2): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(121,2): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(122,2): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(123,2): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(124,2): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(245,33): error TS2554: Expected 2 arguments, but got 1.
+lib/NormalModuleFactory.js(464,7): error TS2554: Expected 1 arguments, but got 0.
+lib/NormalModuleFactory.js(474,13): error TS2554: Expected 1 arguments, but got 0.
+lib/NormalModuleFactory.js(486,7): error TS2554: Expected 1 arguments, but got 0.
+lib/RequireJsStuffPlugin.js(42,8): error TS2554: Expected 3 arguments, but got 2.
+lib/RequireJsStuffPlugin.js(48,8): error TS2554: Expected 3 arguments, but got 2.
+lib/RequireJsStuffPlugin.js(55,8): error TS2554: Expected 3 arguments, but got 2.
+lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+lib/TemplatedPathPlugin.js(122,29): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(125,29): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(126,29): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(132,6): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(151,4): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(182,22): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(183,24): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(185,4): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(190,4): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(223,22): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(229,4): error TS2554: Expected 2 arguments, but got 1.
+lib/TemplatedPathPlugin.js(261,27): error TS2554: Expected 2 arguments, but got 1.
+lib/WarnNoModeSetPlugin.js(20,30): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(408,4): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(436,6): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(452,6): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(478,6): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(483,6): error TS2554: Expected 1 arguments, but got 0.
+lib/cache/ResolverCachePlugin.js(223,26): error TS2554: Expected 2 arguments, but got 1.
+lib/debug/ProfilingPlugin.js(51,9): error TS2554: Expected 2 arguments, but got 1.
+lib/debug/ProfilingPlugin.js(52,9): error TS2554: Expected 2 arguments, but got 1.
+lib/debug/ProfilingPlugin.js(81,15): error TS2554: Expected 2 arguments, but got 1.
+lib/dependencies/AMDDefineDependencyParserPlugin.js(79,31): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/AMDDefineDependencyParserPlugin.js(85,17): error TS2554: Expected 2 arguments, but got 1.
+lib/dependencies/AMDDefineDependencyParserPlugin.js(102,25): error TS2554: Expected 4 arguments, but got 3.
+lib/dependencies/AMDPlugin.js(149,9): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/AMDPlugin.js(178,8): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/AMDPlugin.js(198,8): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(79,31): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(85,17): error TS2554: Expected 2 arguments, but got 1.
+lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(126,30): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/CommonJsPlugin.js(92,9): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/CommonJsPlugin.js(141,8): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/CommonJsRequireDependencyParserPlugin.js(64,17): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/CommonJsRequireDependencyParserPlugin.js(103,20): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/RequireEnsurePlugin.js(52,8): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/RequireIncludeDependencyParserPlugin.js(58,12): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/SystemPlugin.js(70,8): error TS2554: Expected 3 arguments, but got 2.
+lib/dependencies/SystemPlugin.js(79,8): error TS2554: Expected 3 arguments, but got 2.
+lib/stats/DefaultStatsFactoryPlugin.js(1260,5): error TS2345: Argument of type '(stats: any, options: any, context: any) => void' is not assignable to parameter of type '(args_0: StatsFactory, args_1: any) => void'.
+lib/stats/DefaultStatsPrinterPlugin.js(955,10): error TS2554: Expected 3 arguments, but got 2.
+lib/stats/DefaultStatsPrinterPlugin.js(1037,5): error TS2345: Argument of type '(stats: any, options: any, context: any) => void' is not assignable to parameter of type '(args_0: StatsPrinter, args_1: any) => void'.
+lib/stats/DefaultStatsPrinterPlugin.js(1163,15): error TS2554: Expected 3 arguments, but got 2.
+lib/util/deterministicGrouping.js(285,25): error TS2554: Expected 2 arguments, but got 1.
+lib/util/deterministicGrouping.js(286,27): error TS2554: Expected 2 arguments, but got 1.
+lib/util/serialization.js(27,2): error TS2554: Expected 2 arguments, but got 1.
+lib/util/serialization.js(33,29): error TS2554: Expected 2 arguments, but got 1.
+lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(102,14): error TS2554: Expected 1 arguments, but got 0.
+lib/wasm/WebAssemblyModulesPlugin.js(57,14): error TS2554: Expected 1 arguments, but got 0.
+tooling/format-file-header.js(151,34): error TS2556: Expected 2 arguments, but got 0 or more.
+tooling/print-cache-file.js(7,20): error TS2554: Expected 2 arguments, but got 1.
+tooling/print-cache-file.js(12,23): error TS2554: Expected 2 arguments, but got 1.
 
 
 

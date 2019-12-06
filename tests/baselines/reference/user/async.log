@@ -26,6 +26,7 @@ node_modules/async/applyEachSeries.js(36,20): error TS2695: Left side of comma o
 node_modules/async/asyncify.js(43,14): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/asyncify.js(79,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/asyncify.js(87,14): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/asyncify.js(91,17): error TS2554: Expected 3 arguments, but got 2.
 node_modules/async/asyncify.js(103,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/auto.js(13,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/auto.js(14,17): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -89,6 +90,9 @@ node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has na
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
+node_modules/async/dist/async.js(65,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/async/dist/async.js(72,20): error TS2554: Expected 2 arguments, but got 1.
+node_modules/async/dist/async.js(205,17): error TS2554: Expected 3 arguments, but got 2.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
@@ -123,12 +127,15 @@ node_modules/async/dist/async.js(2274,29): error TS2554: Expected 0 arguments, b
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+node_modules/async/dist/async.js(2566,20): error TS2554: Expected 2 arguments, but got 1.
+node_modules/async/dist/async.js(2624,28): error TS2554: Expected 2 arguments, but got 1.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2724,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2724,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2724,30): error TS1003: Identifier expected.
+node_modules/async/dist/async.js(2757,18): error TS2554: Expected 2 arguments, but got 1.
 node_modules/async/dist/async.js(2935,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2935,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2935,30): error TS1003: Identifier expected.
@@ -142,16 +149,19 @@ node_modules/async/dist/async.js(3022,9): error TS2684: The 'this' context of ty
 node_modules/async/dist/async.js(3095,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3100,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3101,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3516,5): error TS2554: Expected 1 arguments, but got 0.
 node_modules/async/dist/async.js(3564,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3640,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3640,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3640,30): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3688,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3817,28): error TS2554: Expected 2 arguments, but got 1.
 node_modules/async/dist/async.js(3827,14): error TS2339: Property 'memo' does not exist on type '(...args: any[]) => void'.
 node_modules/async/dist/async.js(3828,14): error TS2339: Property 'unmemoized' does not exist on type '(...args: any[]) => void'.
 node_modules/async/dist/async.js(3848,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
+node_modules/async/dist/async.js(4240,20): error TS2554: Expected 2 arguments, but got 1.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
   Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
@@ -276,6 +286,7 @@ node_modules/async/forever.js(38,12): error TS2304: Cannot find name 'AsyncFunct
 node_modules/async/forever.js(56,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forever.js(57,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forever.js(57,42): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/forever.js(63,5): error TS2554: Expected 1 arguments, but got 0.
 node_modules/async/groupBy.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/groupBy.js(53,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupByLimit.js(9,22): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -671,6 +682,7 @@ node_modules/async/whilst.js(68,9): error TS2684: The 'this' context of type 'Fu
 node_modules/async/wrapSync.js(43,14): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/wrapSync.js(79,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/wrapSync.js(87,14): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/wrapSync.js(91,17): error TS2554: Expected 3 arguments, but got 2.
 node_modules/async/wrapSync.js(103,10): error TS2695: Left side of comma operator is unused and has no side effects.
 
 

@@ -23,6 +23,8 @@ node_modules/bcryptjs/src/bcrypt/prng/accum.js(53,22): error TS2339: Property 'a
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(65,74): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(66,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(67,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/isaac.js(105,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/bcryptjs/src/bcrypt/prng/isaac.js(137,13): error TS2554: Expected 1 arguments, but got 0.
 node_modules/bcryptjs/src/bcrypt/util.js(4,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/bcryptjs/src/bcrypt/util.js(20,5): error TS2304: Cannot find name 'utfx'.
 node_modules/bcryptjs/src/wrap.js(37,26): error TS2304: Cannot find name 'define'.

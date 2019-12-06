@@ -1,5 +1,12 @@
 Exit Code: 1
 Standard output:
+node_modules/assert/assert.js(244,8): error TS2554: Expected 4 arguments, but got 3.
+node_modules/assert/assert.js(250,8): error TS2554: Expected 4 arguments, but got 3.
+node_modules/assert/assert.js(340,12): error TS2554: Expected 4 arguments, but got 3.
+node_modules/assert/assert.js(371,7): error TS2554: Expected 4 arguments, but got 3.
+node_modules/assert/assert.js(378,7): error TS2554: Expected 4 arguments, but got 3.
+node_modules/assert/assert.js(454,5): error TS2554: Expected 5 arguments, but got 3.
+node_modules/assert/assert.js(465,5): error TS2554: Expected 5 arguments, but got 3.
 node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
 node_modules/assert/test.js(39,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 node_modules/assert/test.js(55,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.

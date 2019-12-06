@@ -1,0 +1,15 @@
+Exit Code: 1
+Standard output:
+src/doc/doc-printer.js(309,33): error TS2554: Expected 5 arguments, but got 4.
+src/doc/doc-printer.js(337,29): error TS2554: Expected 5 arguments, but got 4.
+src/doc/doc-utils.js(88,3): error TS2554: Expected 4 arguments, but got 2.
+src/language-js/loc.js(14,12): error TS2554: Expected 2 arguments, but got 1.
+src/language-js/loc.js(17,12): error TS2554: Expected 2 arguments, but got 1.
+src/main/comments.js(91,22): error TS2554: Expected 3 arguments, but got 2.
+src/main/range-util.js(52,38): error TS2554: Expected 3 arguments, but got 2.
+src/main/range-util.js(171,31): error TS2554: Expected 5 arguments, but got 4.
+src/main/range-util.js(177,29): error TS2554: Expected 5 arguments, but got 4.
+
+
+
+Standard error:

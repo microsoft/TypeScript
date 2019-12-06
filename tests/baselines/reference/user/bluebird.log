@@ -1,6 +1,7 @@
 Exit Code: 1
 Standard output:
 node_modules/bluebird/js/release/assert.js(11,30): error TS2339: Property 'constructor$' does not exist on type 'Error'.
+node_modules/bluebird/js/release/async.js(42,14): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: This condition will always return 'false' since the types 'PromiseConstructor' and 'typeof Promise' have no overlap.
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/debuggability.js(225,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
@@ -8,18 +9,25 @@ node_modules/bluebird/js/release/debuggability.js(232,26): error TS2339: Propert
 node_modules/bluebird/js/release/debuggability.js(258,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
 node_modules/bluebird/js/release/debuggability.js(301,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+node_modules/bluebird/js/release/debuggability.js(557,12): error TS2554: Expected 3 arguments, but got 1.
 node_modules/bluebird/js/release/debuggability.js(562,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/debuggability.js(633,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(704,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/bluebird/js/release/debuggability.js(790,5): error TS2322: Type '(line: any) => boolean' is not assignable to type '() => boolean'.
 node_modules/bluebird/js/release/debuggability.js(807,5): error TS2721: Cannot invoke an object which is possibly 'null'.
 node_modules/bluebird/js/release/debuggability.js(825,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(831,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(870,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(898,9): error TS2322: Type '(line: any) => boolean' is not assignable to type '() => boolean'.
 node_modules/bluebird/js/release/debuggability.js(950,4): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/finally.js(25,5): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/bluebird/js/release/finally.js(83,9): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/bluebird/js/release/finally.js(87,9): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/generators.js(220,16): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/generators.js(218,17): error TS2554: Expected 4 arguments, but got 2.
 node_modules/bluebird/js/release/map.js(37,10): error TS2551: Property '_init$' does not exist on type 'MappingPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/map.js(43,23): error TS2339: Property '_values' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(44,23): error TS2339: Property 'length' does not exist on type 'MappingPromiseArray'.
@@ -53,7 +61,10 @@ node_modules/bluebird/js/release/promise.js(180,21): error TS2551: Property 'isR
 node_modules/bluebird/js/release/promise.js(181,36): error TS2339: Property 'reason' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(189,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(206,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(211,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/bluebird/js/release/promise.js(222,15): error TS2554: Expected 2 arguments, but got 1.
 node_modules/bluebird/js/release/promise.js(236,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(237,9): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(243,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(267,63): error TS2339: Property '_boundTo' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(270,14): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
@@ -64,6 +75,7 @@ node_modules/bluebird/js/release/promise.js(328,10): error TS2339: Property '_fi
 node_modules/bluebird/js/release/promise.js(333,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(350,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(375,42): error TS2339: Property '_isBound' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(464,21): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(468,26): error TS2339: Property '_propagateFrom' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(489,31): error TS2339: Property '_value' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(491,30): error TS2339: Property '_reason' does not exist on type 'Promise'.
@@ -73,7 +85,10 @@ node_modules/bluebird/js/release/promise.js(508,10): error TS2339: Property '_at
 node_modules/bluebird/js/release/promise.js(515,10): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(516,10): error TS2339: Property '_pushContext' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(518,18): error TS2339: Property '_execute' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(519,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/bluebird/js/release/promise.js(521,17): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(524,10): error TS2339: Property '_popContext' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(527,17): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(541,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(593,22): error TS2339: Property '_promiseCancelled' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(607,23): error TS2339: Property '_isResolved' does not exist on type '{}'.
@@ -84,10 +99,10 @@ node_modules/bluebird/js/release/promise.js(677,14): error TS2339: Property '_de
 node_modules/bluebird/js/release/promise.js(694,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(734,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise_array.js(72,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.
-node_modules/bluebird/js/release/promise_array.js(110,76): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/bluebird/js/release/promise_array.js(110,76): error TS2554: Expected 1 arguments, but got 2.
 node_modules/bluebird/js/release/promise_array.js(112,53): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/promisify.js(54,27): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/promisify.js(69,41): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/bluebird/js/release/promisify.js(69,41): error TS2554: Expected 1 arguments, but got 3.
 node_modules/bluebird/js/release/promisify.js(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
 node_modules/bluebird/js/release/promisify.js(249,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/release/promisify.js(252,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
@@ -149,9 +164,10 @@ node_modules/bluebird/js/release/some.js(115,17): error TS2339: Property 'length
 node_modules/bluebird/js/release/some.js(121,12): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/some.js(125,10): error TS2551: Property '_reject' does not exist on type 'SomePromiseArray'. Did you mean '_rejected'?
 node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promise' does not exist on type 'SomePromiseArray'.
+node_modules/bluebird/js/release/timers.js(14,43): error TS2554: Expected 2 arguments, but got 1.
 node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
 node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
-node_modules/bluebird/js/release/using.js(223,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/using.js(223,15): error TS2554: Expected 1 arguments, but got 0.
 node_modules/bluebird/js/release/util.js(279,45): error TS2345: Argument of type 'PropertyDescriptor | { value: any; } | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.

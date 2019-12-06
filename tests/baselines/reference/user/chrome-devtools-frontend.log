@@ -83,6 +83,7 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(986,10): error TS2554: 
 node_modules/chrome-devtools-frontend/front_end/Tests.js(988,10): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1033,32): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1040,30): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1070,12): error TS2555: Expected at least 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1084,27): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1139,33): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1142,31): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
@@ -610,28 +611,72 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(2,125): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(2,145): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(2,203): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(2,313): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(2,436): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(3474,1): error TS2554: Expected 3-4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(5494,9): error TS2339: Property 'stableSort' does not exist on type '{ category: any; group: any; duration: any; }[]'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(5878,60): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(5879,62): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(5878,60): error TS2554: Expected 1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(5879,62): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(6400,21): error TS2339: Property 'valuesArray' does not exist on type 'Map<any, any>'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(8112,74): error TS2339: Property 'name' does not exist on type 'ComputedArtifact'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9093,57): error TS2554: Expected 0-2 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9117,73): error TS2554: Expected 0-2 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(8210,36): error TS2556: Expected 2 arguments, but got 1 or more.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9093,57): error TS2554: Expected 2 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9117,73): error TS2554: Expected 2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9467,15): error TS2339: Property 'axe' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10092,16): error TS2304: Cannot find name 'd41d8cd98f00b204e9800998ecf8427e_LibraryDetectorTests'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10513,19): error TS2488: Type 'NodeListOf<Element>' must have a '[Symbol.iterator]()' method that returns an iterator.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(10811,19): error TS2304: Cannot find name 'getElementsInDocument'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12197,34): error TS2554: Expected 0 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12327,36): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12773,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12882,30): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(12972,1): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(13607,7): error TS2339: Property 'protocolMethod' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(13608,7): error TS2339: Property 'protocolError' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(13997,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14054,6): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14074,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14091,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14095,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14113,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14120,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14127,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14131,6): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14352,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14388,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14415,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14418,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14463,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14464,6): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14465,6): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14479,6): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14504,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14530,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14532,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14549,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14551,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14587,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14616,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14620,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14643,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14668,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14671,6): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14693,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14720,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14738,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14740,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14741,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14761,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14822,13): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14837,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14842,6): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14940,8): error TS2339: Property '____lastLongTask' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14946,8): error TS2339: Property '____lastLongTask' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14946,41): error TS2339: Property '____lastLongTask' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14957,8): error TS2339: Property '____lhPerformanceObserver' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(14975,21): error TS2339: Property '____lastLongTask' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15145,7): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15451,6): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15626,5): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15629,17): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15630,28): error TS2304: Cannot find name 'fs'.
@@ -659,13 +704,22 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15882,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15891,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15894,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16199,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16208,1): error TS2322: Type '(node: any) => boolean' is not assignable to type '() => boolean'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16212,10): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16213,23): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16218,10): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16219,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16733,11): error TS2339: Property 'NodeTimingData' does not exist on type 'typeof Simulator'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,26): error TS2339: Property '__proto__' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,45): error TS2339: Property '__proto__' does not exist on type 'Document'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17354,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17406,22): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17497,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17501,1): error TS2322: Type 'any[]' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17976,1): error TS2322: Type '(err: any, opts: any) => Promise<any>' is not assignable to type '() => Promise<void>'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18010,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19482,18): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19585,1): error TS2322: Type 'Promise<void | { artifacts: any; auditResults: any[]; }>' is not assignable to type 'Promise<void>'.
   Type 'void | { artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
@@ -684,6 +738,13 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20039,15): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20046,8): error TS2339: Property 'getDefaultCategories' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20050,8): error TS2339: Property 'listenForStatus' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20295,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20301,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20391,8): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20422,4): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20429,4): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20505,1): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20516,1): error TS2554: Expected 5 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20785,6): error TS2339: Property 'callback' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20896,6): error TS2339: Property 'onerror' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20987,8): error TS2350: Only a void function can be called with the 'new' keyword.
@@ -720,14 +781,21 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21336,13): error TS2339: Property '_writableState' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21348,6): error TS2339: Property 'once' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21351,6): error TS2339: Property 'once' does not exist on type 'Zlib'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21352,6): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21356,6): error TS2339: Property 'write' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21373,6): error TS2339: Property 'emit' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21379,13): error TS2339: Property '_writableState' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21397,28): error TS2339: Property 'flush' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21419,6): error TS2339: Property 'on' does not exist on type 'Zlib'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21438,6): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21466,6): error TS2339: Property 'push' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21690,5): error TS2339: Property '__proto__' does not exist on type 'Uint8Array'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21691,12): error TS2339: Property 'foo' does not exist on type 'Uint8Array'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21716,6): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21963,15): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22018,15): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22068,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22079,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22168,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22179,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22191,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -736,6 +804,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22222,9): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22242,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22245,58): error TS2339: Property 'length' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22326,12): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22471,13): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22476,13): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22495,20): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -743,6 +812,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22542,38): error TS2339: Property '_arr' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22693,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22715,13): error TS2339: Property 'subarray' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22719,8): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22739,49): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22755,36): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22768,40): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -772,6 +842,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,18): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,37): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23256,26): error TS2339: Property 'length' does not exist on type 'Buffer'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23268,1): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23268,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23459,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23464,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23469,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -795,6 +867,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24079,1): error TS2323: Cannot redeclare exported variable 'Buf16'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24080,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26059,1): error TS2323: Cannot redeclare exported variable 'deflate'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27419,15): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27956,16): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28222,51): error TS2300: Duplicate identifier '_read'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28457,20): error TS2339: Property 'emit' does not exist on type 'Readable'.
@@ -804,10 +877,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28589,5): error TS2339: Property 'removeListener' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28590,5): error TS2339: Property 'removeListener' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28591,5): error TS2339: Property 'removeListener' does not exist on type 'Readable'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28746,19): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28746,19): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28797,6): error TS2339: Property 'emit' does not exist on type 'Readable'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28820,29): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28823,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28833,14): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28855,19): error TS2339: Property 'emit' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29117,47): error TS2300: Duplicate identifier '_transform'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29126,9): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29145,21): error TS2300: Duplicate identifier '_transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29155,13): error TS2339: Property '_readableState' does not exist on type 'Transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29408,43): error TS2300: Duplicate identifier '_write'.
@@ -815,6 +892,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29440,1): error TS2322: Type 'TypeError' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29442,1): error TS2322: Type 'TypeError' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29659,20): error TS2300: Duplicate identifier '_write'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29677,41): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29894,38): error TS2339: Property 'pause' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29895,8): error TS2339: Property 'pause' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29900,8): error TS2339: Property 'on' does not exist on type 'Stream'.
@@ -833,11 +911,13 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29961,8): error TS2339: Property 'on' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29962,8): error TS2339: Property 'on' does not exist on type 'Stream'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30114,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'end' must be of type 'any', but here has type 'number'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30303,14): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30311,40): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
       Type 'string | number' is not assignable to type 'string'.
         Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30331,10): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30729,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30734,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30739,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -1177,6 +1257,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43252,8): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43262,13): error TS2339: Property 'escapeCharacters' does not exist on type 'String'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43262,37): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43312,1): error TS2322: Type '(maxLength: any) => string' is not assignable to type '() => string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43369,8): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43395,8): error TS2339: Property 'isDigitAt' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43442,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
@@ -2747,7 +2828,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60141,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60144,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60162,11): error TS2304: Cannot find name 'WebInspector'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60222,51): error TS2554: Expected 0-2 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60222,51): error TS2554: Expected 2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,11): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,32): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60268,1): error TS2304: Cannot find name 'define'.
@@ -2926,7 +3007,32 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61386,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61407,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62087,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62423,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62435,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62450,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62526,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62552,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62567,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62621,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62645,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62650,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62712,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62723,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62754,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62758,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62814,6): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62832,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'string', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62846,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62876,6): error TS2554: Expected 2 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62989,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63031,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63086,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63102,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63150,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63204,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63460,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63469,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63478,6): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63482,12): error TS2339: Property 'message' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63483,39): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63483,56): error TS2339: Property 'firstRestricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
@@ -2934,9 +3040,50 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63489,18): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63490,25): error TS2339: Property 'firstRestricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63491,17): error TS2339: Property 'message' does not exist on type '{ simple: boolean; paramSet: {}; }'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63522,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63631,16): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63634,16): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63758,10): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63837,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63846,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63851,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63919,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63944,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63962,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64107,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64128,13): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64147,13): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64184,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64258,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64259,11): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64263,22): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64301,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64304,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64372,42): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64392,16): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64424,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64491,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64502,64): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64518,9): error TS2551: Property 'paramSet' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'. Did you mean 'params'?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64534,18): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64536,17): error TS2339: Property 'message' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64566,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64631,99): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64734,27): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64747,27): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64763,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64849,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64887,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64936,64): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64951,37): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64997,15): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65001,12): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65009,12): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65012,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65082,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65087,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65177,6): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65182,22): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65232,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65248,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65283,7): error TS2339: Property 'index' does not exist on type 'Error'.
@@ -2946,11 +3093,34 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65379,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65468,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65533,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65541,6): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65705,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65715,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65750,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65760,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65777,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65787,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65920,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65941,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65944,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65967,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65973,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66003,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66006,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66086,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66090,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66127,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66160,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66191,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66314,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66441,6): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66445,6): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66529,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2739: Type 'string[]' is missing the following properties from type 'RegExpExecArray': index, input
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67167,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,35): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67301,24): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3014,12 +3184,18 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70064,4): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70067,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70068,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70734,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,20): error TS2531: Object is possibly 'null'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70754,1): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70754,15): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70756,10): error TS2531: Object is possibly 'null'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70756,32): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70756,45): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70848,34): error TS2304: Cannot find name 'fs'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BlackboxManager.js(22,21): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -3281,14 +3457,63 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(44,23): error T
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(45,23): error TS2365: Operator '>=' cannot be applied to types 'RegExpMatchArray' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(47,76): error TS2365: Operator '<' cannot be applied to types 'RegExpMatchArray' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(94,25): error TS2339: Property 'createTextRange' does not exist on type 'HTMLElement'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(247,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(306,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(310,20): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(313,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(316,17): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(318,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(320,19): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(324,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(328,13): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(335,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(338,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(341,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(500,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(508,38): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(510,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(515,44): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(516,29): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(683,31): error TS2339: Property 'length' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(684,33): error TS2339: Property 'find' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(689,28): error TS2339: Property 'inclusiveLeft' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(690,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(691,26): error TS2339: Property 'inclusiveRight' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(692,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1221,13): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1228,16): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1229,35): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1233,30): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1283,11): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1292,44): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1362,3): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1445,51): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1448,10): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1449,23): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1521,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1548,5): error TS2554: Expected 7 arguments, but got 6.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1581,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1583,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1597,38): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1600,64): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1600,81): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1603,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1621,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1658,13): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1731,20): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1812,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1866,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1894,57): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1905,37): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1910,37): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1916,57): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2028,11): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2193,45): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2311,32): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2371,49): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2428,8): error TS2551: Property 'lineN' does not exist on type 'LineView'. Did you mean 'line'?
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2429,20): error TS2339: Property 'built' does not exist on type 'LineView'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2438,10): error TS2554: Expected 5 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2601,32): error TS2339: Property 'logicalXDPI' does not exist on type 'Screen'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2602,14): error TS2339: Property 'logicalXDPI' does not exist on type 'Screen'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2602,36): error TS2339: Property 'deviceXDPI' does not exist on type 'Screen'.
@@ -3296,16 +3521,83 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2604,23): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2604,44): error TS2339: Property 'deviceXDPI' does not exist on type 'Screen'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2605,23): error TS2339: Property 'logicalYDPI' does not exist on type 'Screen'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2605,44): error TS2339: Property 'deviceYDPI' does not exist on type 'Screen'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2697,10): error TS2554: Expected 5 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2722,12): error TS2554: Expected 5 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2764,7): error TS2339: Property 'xRel' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2765,22): error TS2339: Property 'outside' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2785,91): error TS2339: Property 'xRel' does not exist on type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2795,48): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2796,42): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2802,19): error TS2554: Expected 5 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2802,48): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2841,15): error TS2554: Expected 5 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2855,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1 | 0'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2866,8): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2870,18): error TS2554: Expected 6 arguments, but got 5.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2886,23): error TS2554: Expected 6 arguments, but got 5.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2895,17): error TS2554: Expected 6 arguments, but got 5.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2920,16): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2941,19): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2946,31): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2960,16): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2961,13): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3035,19): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3036,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3082,35): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3089,42): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3119,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3207,54): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3214,5): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3338,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3338,56): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3357,7): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3385,18): error TS2554: Expected 6 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3386,51): error TS2554: Expected 6 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3398,7): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3410,39): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3501,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3546,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3547,28): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3699,33): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3788,24): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3805,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4057,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4078,11): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4270,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4347,36): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4438,5): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4568,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4580,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4595,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4597,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4604,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4636,19): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4726,3): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4736,5): error TS2554: Expected 4 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5139,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5146,53): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5149,55): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5152,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5157,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5157,43): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5217,3): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5282,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5304,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5305,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5330,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5330,44): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5335,38): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5343,10): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5387,7): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5412,3): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5447,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5448,18): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5634,9): error TS2322: Type 'BranchChunk' is not assignable to type 'this'.
   'BranchChunk' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'BranchChunk'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,35): error TS2339: Property 'line' does not exist on type 'LineWidget'.
@@ -3315,21 +3607,17 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5716,20): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5719,16): error TS2339: Property 'insertAt' does not exist on type 'LineWidget'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5720,75): error TS2339: Property 'insertAt' does not exist on type 'LineWidget'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5721,12): error TS2339: Property 'line' does not exist on type 'LineWidget'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5767,51): error TS2339: Property 'from' does not exist on type 'Pos | { from: Pos; to: Pos; }'.
-  Property 'from' does not exist on type 'Pos'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5767,63): error TS2339: Property 'to' does not exist on type 'Pos | { from: Pos; to: Pos; }'.
-  Property 'to' does not exist on type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5766,22): error TS2554: Expected 2 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5773,23): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5779,37): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5782,18): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5791,33): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5791,46): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5794,12): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5800,12): error TS2339: Property 'parent' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5800,27): error TS2339: Property 'parent' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5836,20): error TS2339: Property 'line' does not exist on type 'Pos | { from: Pos; to: Pos; }'.
-  Property 'line' does not exist on type '{ from: Pos; to: Pos; }'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5836,45): error TS2339: Property 'line' does not exist on type 'Pos | { from: Pos; to: Pos; }'.
-  Property 'line' does not exist on type '{ from: Pos; to: Pos; }'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5817,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5821,12): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5843,51): error TS2339: Property 'height' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5844,30): error TS2339: Property 'height' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5845,14): error TS2339: Property 'height' does not exist on type 'TextMarker'.
@@ -3337,6 +3625,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5883,39): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5885,14): error TS2339: Property 'replacedWith' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5887,12): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5888,12): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5888,25): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5888,46): error TS2339: Property 'replacedWith' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5889,46): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5890,38): error TS2339: Property 'widgetNode' does not exist on type 'TextMarker'.
@@ -3350,28 +3639,181 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5919,14): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5924,14): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5926,12): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5931,16): error TS2339: Property 'collapsed' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5932,9): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,21): error TS2339: Property 'className' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,41): error TS2339: Property 'title' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,57): error TS2339: Property 'startStyle' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,78): error TS2339: Property 'endStyle' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,97): error TS2339: Property 'css' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5935,16): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5971,13): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5975,3): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5986,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5986,55): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6004,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6022,42): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6028,15): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6029,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6038,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6039,22): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6070,15): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6071,38): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6074,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6115,70): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6121,5): error TS2554: Expected 5 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6164,32): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6185,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6186,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6189,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6190,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6218,19): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6219,21): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6357,26): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6378,11): error TS2339: Property 'setHistory' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6391,10): error TS2339: Property 'linked' does not exist on type 'Doc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6412,28): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6413,30): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6416,32): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6446,7): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6450,13): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6464,44): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
   Type 'ArrayBuffer' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6471,11): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6472,11): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6492,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6505,7): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6527,13): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6532,29): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6553,25): error TS2339: Property 'CodeMirror' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6798,25): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6799,47): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6886,41): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6888,41): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6894,11): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6895,25): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6898,11): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6914,57): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6915,55): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6965,17): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6987,44): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6989,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6991,27): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6995,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6998,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7125,25): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7128,59): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7141,7): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7176,3): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7181,39): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7230,7): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7244,13): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7257,16): error TS2554: Expected 5 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7271,27): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7343,11): error TS2339: Property 'copy' does not exist on type '(...args: any[]) => any'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7358,42): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7358,76): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7415,22): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7416,20): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7422,35): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7422,55): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7424,35): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7424,55): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7461,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7501,15): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7614,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7615,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7619,5): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7621,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7630,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7635,9): error TS2554: Expected 5 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7635,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7637,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7642,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7647,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7648,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7654,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7660,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7661,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7672,70): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7675,5): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7687,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7688,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7689,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7691,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7693,7): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7699,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7700,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7702,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7703,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7706,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7707,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7710,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7711,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7712,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7715,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7719,3): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7720,3): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7726,3): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7753,3): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7755,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7766,38): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7777,11): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7816,7): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,32): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7828,15): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7843,11): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7844,17): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7848,7): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7851,56): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7877,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7895,25): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8259,62): error TS2339: Property 'state' does not exist on type 'any[] | Token'.
-  Property 'state' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7902,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7902,63): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7916,7): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7929,31): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7930,30): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7933,31): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7959,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7963,42): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7977,40): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7994,37): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7994,48): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8003,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8004,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8047,18): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8049,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8051,23): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8056,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8091,22): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8096,22): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8106,30): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8106,50): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8130,3): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8183,7): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8194,11): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8218,15): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8233,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8237,30): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8242,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8259,46): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8303,14): error TS2554: Expected 6 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8307,14): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8340,13): error TS2554: Expected 6 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8427,22): error TS2554: Expected 6 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8444,23): error TS2554: Expected 6 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8449,36): error TS2554: Expected 5 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8467,56): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8471,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8471,46): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8500,27): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8537,7): error TS2554: Expected 4 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8614,5): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8629,32): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8658,17): error TS2339: Property 'outside' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8659,54): error TS2339: Property 'hitSide' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8680,19): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8684,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8709,9): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8743,16): error TS2339: Property 'focus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8786,5): error TS2739: Type '{ node: any; offset: number; }' is missing the following properties from type '{ node: any; start: number; end: number; collapse: any; coverStart: any; coverEnd: any; }': start, end, collapse, coverStart, coverEnd
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8795,39): error TS2339: Property 'offset' does not exist on type '{ node: any; start: number; end: number; collapse: any; coverStart: any; coverEnd: any; } | { node: any; offset: number; }'.
@@ -3388,13 +3830,39 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8840,24): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8847,10): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8850,58): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8851,69): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8911,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8913,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8936,36): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8936,54): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8965,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8966,14): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8984,8): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8985,8): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9005,45): error TS2554: Expected 4 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9020,8): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9036,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9076,34): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9076,52): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9103,47): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9120,58): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9127,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9148,18): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9160,23): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9167,23): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9212,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9219,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9241,38): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9271,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9275,19): error TS2554: Expected 6 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9299,12): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9372,12): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9392,33): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9426,13): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9433,43): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9446,9): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9467,11): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9504,20): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9513,23): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9527,40): error TS2339: Property 'getValue' does not exist on type 'CodeMirror$1'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(7,19): error TS2304: Cannot find name 'define'.
@@ -3404,16 +3872,22 @@ node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(12,17): erro
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(14,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(76,7): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(86,31): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(113,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(115,9): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,15): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,48): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
+node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(124,59): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(49,23): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
@@ -3424,6 +3898,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.j
   Types of property 'prototype' are incompatible.
     Type '{ eol: () => boolean; sol: () => boolean; peek: () => any; next: () => any; eat: (match: any) => any; eatWhile: (match: any) => boolean; eatSpace: () => boolean; skipToEnd: typeof skipToEnd; skipTo: typeof skipTo; ... 6 more ...; lookAhead: () => any; }' is not assignable to type '{ backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; match: (pattern: string | RegExp, consume?: boolean, caseInsensitive?: boolean) => void; ... 4 more ...; sol: () => void; }'.
       Property 'hideFirstChars' does not exist on type '{ backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; match: (pattern: string | RegExp, consume?: boolean, caseInsensitive?: boolean) => void; ... 4 more ...; sol: () => void; }'.
+node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(76,1): error TS2322: Type '(mode: any, a1: any, a2: any) => any' is not assignable to type '(mode: any) => void'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(87,12): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(97,21): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(102,12): error TS2339: Property 'registerHelper' does not exist on type 'typeof CodeMirror'.
@@ -3438,6 +3913,10 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error T
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(160,18): error TS2554: Expected 6 arguments, but got 5.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(182,32): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(183,32): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(184,32): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,43): error TS2304: Cannot find name 'define'.
@@ -3447,25 +3926,32 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,19):
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(12,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(41,3): error TS2740: Type 'RegExp' is missing the following properties from type 'string[]': length, pop, push, concat, and 28 more.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(276,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(282,24): error TS2339: Property 'exec' does not exist on type 'string[]'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(283,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2307: Cannot find module '../xml/xml'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(127,26): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(13,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2307: Cannot find module '../clike/clike'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(22,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(26,26): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(135,26): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(146,28): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(172,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(174,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
@@ -3480,19 +3966,89 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error 
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(10,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(218,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(312,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(320,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(327,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(337,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(342,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(346,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(349,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(352,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(367,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(370,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(373,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(377,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(420,41): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(429,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(435,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(446,31): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(449,18): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(456,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(464,39): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(479,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(482,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(496,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(507,39): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(508,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(510,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(518,31): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(520,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(523,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(539,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(551,39): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(552,21): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(573,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(575,31): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(578,21): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(581,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(587,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(591,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(604,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(604,45): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(608,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(614,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(632,31): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(637,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(649,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(658,20): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(162,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(166,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(168,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(170,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(177,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(185,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(189,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(221,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(227,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(228,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(229,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(236,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(248,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(250,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(251,41): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(276,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(277,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(278,50): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(280,41): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(308,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(324,14): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(350,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(356,44): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(364,44): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2307: Cannot find module '../../addon/mode/multiplex'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(9,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,42): error TS2554: Expected 0-1 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,42): error TS2554: Expected 1 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2307: Cannot find module '../xml/xml'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2307: Cannot find module '../css/css'.
@@ -3503,6 +4059,64 @@ node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17)
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(8,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(98,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(100,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(102,14): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(104,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(107,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(110,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(113,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(116,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(123,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(127,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(137,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(168,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(175,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(188,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(356,42): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(357,42): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(358,85): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(360,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(365,19): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(368,36): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(378,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(378,60): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(380,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(383,39): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(387,38): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(389,38): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(390,39): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(391,39): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(394,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(404,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(409,49): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(409,63): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(416,38): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(418,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(420,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(448,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(555,37): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(578,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(579,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(580,34): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(602,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(602,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(608,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(608,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(623,29): error TS2555: Expected at least 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(624,29): error TS2555: Expected at least 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(646,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(669,47): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(669,61): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(670,43): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(670,57): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(686,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(686,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(689,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(722,34): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(734,29): error TS2555: Expected at least 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(750,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(773,18): error TS2554: Expected 6 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,43): error TS2304: Cannot find name 'define'.
@@ -4680,6 +5294,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(44
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(450,19): error TS2339: Property 'scheduleUpdateStructure' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(467,21): error TS2339: Property 'scheduleUpdate' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(477,19): error TS2339: Property '_revealViewportNode' does not exist on type 'DataGrid<any>'.
+node_modules/chrome-devtools-frontend/front_end/data_grid_test_runner/DataGridTestRunner.js(65,22): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(11,36): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(13,77): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/devices/DevicesView.js(19,50): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4840,6 +5455,8 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(24,123)
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(30,429): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(34,12): error TS2339: Property 'length' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(34,41): error TS2339: Property 'length' does not exist on type 'number'.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(35,137): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(39,230): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(39,396): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type 'string', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,186): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'number', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(41,197): error TS2339: Property 'diffs' does not exist on type 'number'.
@@ -5624,6 +6241,8 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(33
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3312,32): error TS2339: Property '_instance' does not exist on type 'typeof StylesSidebarPane'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(15,5): error TS2304: Cannot find name 'eventSender'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(19,37): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(38,22): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(51,24): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(112,55): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(128,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(132,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
@@ -5633,9 +6252,17 @@ node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTes
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(326,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(372,22): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(384,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(387,24): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(429,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(549,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(735,11): error TS2588: Cannot assign to 'name' because it is a constant.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(831,24): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(836,26): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(842,30): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(851,26): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(857,30): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(866,26): error TS2554: Expected 3 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(872,30): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1024,26): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1048,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1052,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
@@ -5892,6 +6519,8 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersVi
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(321,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(93,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(149,19): error TS1110: Type expected.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(203,63): error TS2345: Argument of type '(result: any) => void' is not assignable to parameter of type '() => any'.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(224,88): error TS2345: Argument of type '(response: any) => void' is not assignable to parameter of type '() => any'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(241,12): error TS2339: Property '__defineGetter__' does not exist on type 'Panels'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(300,14): error TS2555: Expected at least 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(314,12): error TS8022: JSDoc '@extends' is not attached to a class.
@@ -5905,6 +6534,9 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(435,8
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(441,18): error TS2339: Property '_id' does not exist on type 'ExtensionSidebarPaneImpl'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(453,58): error TS2339: Property '_id' does not exist on type 'ExtensionSidebarPaneImpl'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(457,79): error TS2339: Property '_id' does not exist on type 'ExtensionSidebarPaneImpl'.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(586,44): error TS2345: Argument of type '(result: any) => void' is not assignable to parameter of type '() => any'.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(597,73): error TS2345: Argument of type '(resources: any) => void' is not assignable to parameter of type '() => any'.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(623,91): error TS2345: Argument of type '(response: any) => void' is not assignable to parameter of type '() => any'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(773,26): error TS2339: Property 'themeName' does not exist on type 'Panels'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(789,21): error TS2339: Property 'exposeWebInspectorNamespace' does not exist on type 'ExtensionDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(790,12): error TS2339: Property 'webInspector' does not exist on type 'Window & typeof globalThis'.
@@ -6178,22 +6810,42 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,48): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn")'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(150,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(154,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(156,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(158,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(162,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(165,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(203,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(205,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(206,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(207,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(211,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(214,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(216,12): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(218,9): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(219,9): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(220,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(222,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(226,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(228,12): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(229,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(402,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(529,15): error TS2339: Property 'parseTopLevel' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(701,40): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1674,55): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2564,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2565,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2568,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2569,36): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2570,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2571,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2573,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2575,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2468,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2521,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2522,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2523,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2524,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2525,11): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2527,11): error TS2554: Expected 4 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,8): error TS2339: Property 'context' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,26): error TS2339: Property 'braceIsBlock' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2581,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
@@ -6210,8 +6862,14 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2611,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,22): error TS2304: Cannot find name 'Packages'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,77): error TS2304: Cannot find name 'Packages'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3012,30): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3070,13): error TS2554: Expected 4 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3102,7): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3125,7): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3353,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3362,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3363,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3370,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,48): error TS2304: Cannot find name 'define'.
@@ -6244,6 +6902,7 @@ node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(46,5
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(320,70): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(321,35): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(366,55): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(555,36): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(590,24): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(624,20): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(653,15): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
@@ -8558,6 +9217,8 @@ node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,67): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(463,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(541,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(603,84): error TS2345: Argument of type '(error: any, result: any) => void' is not assignable to parameter of type '(arg0: any) => any'.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(621,85): error TS2345: Argument of type '(error: any, result: any) => void' is not assignable to parameter of type '(arg0: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(634,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,49): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,67): error TS2339: Property 'context' does not exist on type 'Console'.
@@ -9928,7 +10589,17 @@ node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(888,23): err
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(889,18): error TS2339: Property 'stableSort' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(917,18): error TS2339: Property 'remove' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(17,38): error TS2554: Expected 5 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(35,14): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(35,34): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(45,60): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(67,14): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(88,20): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(136,11): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(147,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(162,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(167,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(175,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sdk_test_runner/PageMockTestRunner.js(181,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityModel.js(14,34): error TS2339: Property 'securityAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityModel.js(15,12): error TS2339: Property 'registerSecurityDispatcher' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityModel.js(34,24): error TS2694: Namespace 'Protocol' has no exported member 'Security'.
@@ -10743,6 +11414,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/XHRBreakpointsSidebarPan
 node_modules/chrome-devtools-frontend/front_end/sources/XHRBreakpointsSidebarPane.js(158,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/XHRBreakpointsSidebarPane.js(159,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/XHRBreakpointsSidebarPane.js(186,41): error TS2339: Property '_checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/AutocompleteTestRunner.js(35,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(81,30): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(110,18): error TS2554: Expected 14 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(132,18): error TS2339: Property 'setBreakpointCallback' does not exist on type 'Window & typeof globalThis'.
@@ -10751,6 +11423,7 @@ node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointMa
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(141,43): error TS2345: Argument of type 'this' is not assignable to parameter of type 'DebuggerModel'.
   Type 'DebuggerModelMock' is missing the following properties from type 'DebuggerModel': _agent, _runtimeModel, _sourceMapIdToScript, _debuggerPausedDetails, and 55 more.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(150,43): error TS2345: Argument of type 'this' is not assignable to parameter of type 'DebuggerModel'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(158,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(170,60): error TS2345: Argument of type 'this' is not assignable to parameter of type 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(179,53): error TS2345: Argument of type 'this' is not assignable to parameter of type 'DebuggerModel'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(250,3): error TS2304: Cannot find name 'uiSourceCode'.
@@ -10759,6 +11432,9 @@ node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointMa
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(317,7): error TS2345: Argument of type '{ get: () => any; set: (breakpoints: any) => void; }' is not assignable to parameter of type 'Setting<any>'.
   Type '{ get: () => any; set: (breakpoints: any) => void; }' is missing the following properties from type 'Setting<any>': _settings, _name, _defaultValue, _eventSupport, and 15 more.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(333,12): error TS2339: Property 'setBreakpointCallback' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(74,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(94,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(106,45): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(125,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(170,17): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(171,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
@@ -10766,8 +11442,11 @@ node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTest
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(218,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(224,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(230,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(242,25): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(344,19): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(396,25): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(426,25): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(477,34): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(709,100): error TS2551: Property '_bookmarkSymbol' does not exist on type 'typeof BreakpointDecoration'. Did you mean 'bookmarkSymbol'?
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(730,102): error TS2551: Property '_bookmarkSymbol' does not exist on type 'typeof BreakpointDecoration'. Did you mean 'bookmarkSymbol'?
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/EditorTestRunner.js(13,22): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -10801,11 +11480,15 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,107): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,128): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,140): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,369): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,486): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,506): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,564): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,673): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,793): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(166,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(185,14): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(293,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(337,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(392,1): error TS2323: Cannot redeclare exported variable 'EventEmitter'.
@@ -10840,10 +11523,24 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2732,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2766,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2925,9): error TS2322: Type 'number' is not assignable to type 'number[]'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2970,1): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3019,18): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3044,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3059,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3075,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3078,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3081,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3087,14): error TS2339: Property 'browser' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3088,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3095,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3123,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3124,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3125,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3151,54): error TS2339: Property 'theme' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3176,14): error TS2339: Property 'emit' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3179,14): error TS2339: Property 'emit' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3189,14): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3211,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3218,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3266,19): error TS2339: Property 'utfMouse' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3288,18): error TS2339: Property 'vt300Mouse' does not exist on type 'Terminal'.
@@ -10854,27 +11551,40 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3367,26): error TS2339: Property 'browser' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3389,18): error TS2339: Property 'vt200Mouse' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3392,24): error TS2339: Property 'normalMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3398,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3399,19): error TS2339: Property 'mouseEvents' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3403,18): error TS2339: Property 'vt200Mouse' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3406,25): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3408,18): error TS2339: Property 'normalMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3409,13): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3410,19): error TS2339: Property 'x10Mouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3411,13): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3413,26): error TS2339: Property 'normalMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3414,21): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3415,17): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3416,29): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3419,21): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3421,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3422,19): error TS2339: Property 'mouseEvents' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3424,18): error TS2339: Property 'x10Mouse' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3425,21): error TS2339: Property 'vt300Mouse' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3426,21): error TS2339: Property 'decLocator' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3429,21): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3431,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3432,18): error TS2339: Property 'mouseEvents' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3435,21): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3442,10): error TS2300: Duplicate identifier 'handler'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3443,10): error TS2300: Duplicate identifier 'write'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3482,30): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3485,40): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3498,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3515,14): error TS2339: Property 'emit' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3520,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3523,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3526,10): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3528,20): error TS2300: Duplicate identifier 'write'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3569,16): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3622,14): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3623,21): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3629,14): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3634,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
@@ -10893,7 +11603,11 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3960,14): error TS2339: Property 'popOnBell' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3964,15): error TS2339: Property 'debug' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3972,15): error TS2339: Property 'debug' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4017,42): error TS2554: Expected 1 arguments, but got 0.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4021,22): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4060,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4082,37): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4137,30): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4140,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4161,21): error TS2339: Property 'termName' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4164,20): error TS2300: Duplicate identifier 'handler'.

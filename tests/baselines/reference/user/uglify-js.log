@@ -1,6 +1,23 @@
 Exit Code: 1
 Standard output:
+node_modules/uglify-js/lib/ast.js(97,35): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(121,1): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/ast.js(143,21): error TS2554: Expected 4 arguments, but got 3.
 node_modules/uglify-js/lib/ast.js(223,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(352,22): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(371,22): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(562,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(578,16): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(598,20): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(612,22): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(651,17): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(672,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(687,23): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(709,17): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(723,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(737,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(765,18): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/ast.js(825,20): error TS2554: Expected 4 arguments, but got 3.
 node_modules/uglify-js/lib/ast.js(905,5): error TS2322: Type '{ _visit: (node: any, descend: any) => any; parent: (n: any) => any; push: typeof push; pop: typeof pop; self: () => any; find_parent: (type: any) => any; has_directive: (type: any) => any; loopcontrol_target: (node: any) => any; in_boolean_context: () => boolean | undefined; }' is not assignable to type 'TreeWalker'.
   Object literal may only specify known properties, but '_visit' does not exist in type 'TreeWalker'. Did you mean to write 'visit'?
 node_modules/uglify-js/lib/ast.js(906,14): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
@@ -9,19 +26,37 @@ node_modules/uglify-js/lib/ast.js(968,25): error TS2339: Property 'self' does no
 node_modules/uglify-js/lib/ast.js(969,37): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/ast.js(985,31): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/ast.js(989,29): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(162,24): error TS2554: Expected 2 arguments, but got 0.
 node_modules/uglify-js/lib/compress.js(187,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(246,18): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(257,26): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(341,20): error TS2554: Expected 6 arguments, but got 5.
+node_modules/uglify-js/lib/compress.js(345,20): error TS2554: Expected 6 arguments, but got 5.
+node_modules/uglify-js/lib/compress.js(349,34): error TS2554: Expected 6 arguments, but got 5.
+node_modules/uglify-js/lib/compress.js(459,33): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(539,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(569,17): error TS2554: Expected 6 arguments, but got 5.
+node_modules/uglify-js/lib/compress.js(651,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(668,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(705,52): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(868,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(960,36): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(969,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(970,18): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(972,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(974,20): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(1132,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1148,51): error TS2349: This expression is not callable.
-  Not all constituents of type 'true | ((node: any) => any)' are callable.
+  Not all constituents of type 'true | ((node: any, tw: any) => any)' are callable.
     Type 'true' has no call signatures.
+node_modules/uglify-js/lib/compress.js(1192,51): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1222,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1243,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1289,112): error TS2454: Variable 'args' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(1290,29): error TS2532: Object is possibly 'undefined'.
 node_modules/uglify-js/lib/compress.js(1308,29): error TS2322: Type 'false' is not assignable to type 'number'.
 node_modules/uglify-js/lib/compress.js(1316,29): error TS2322: Type 'false' is not assignable to type 'never'.
+node_modules/uglify-js/lib/compress.js(1427,35): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(1431,53): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1542,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1557,58): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
@@ -29,83 +64,277 @@ node_modules/uglify-js/lib/compress.js(1571,38): error TS2339: Property 'parent'
 node_modules/uglify-js/lib/compress.js(1584,89): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1677,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1708,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1723,55): error TS2554: Expected 6 arguments, but got 5.
+node_modules/uglify-js/lib/compress.js(1813,70): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1830,49): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[number, number, ...never[]]'.
   Type 'number[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
+node_modules/uglify-js/lib/compress.js(1923,29): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(1928,29): error TS2554: Expected 4 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(2159,61): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(2163,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2197,43): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(2201,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[number, number, ...never[]]'.
   Type 'any[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
 node_modules/uglify-js/lib/compress.js(2349,34): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2740,35): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3063,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/uglify-js/lib/compress.js(3064,25): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/compress.js(3064,55): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/uglify-js/lib/compress.js(3064,56): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/compress.js(3105,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3185,33): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(3262,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(3264,20): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(3592,38): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3618,29): error TS2322: Type '"f"' is not assignable to type 'boolean'.
+node_modules/uglify-js/lib/compress.js(3667,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(3674,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(3681,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(3695,26): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(3751,33): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3804,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3822,29): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(3857,75): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(3880,28): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(3932,63): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(3987,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4057,45): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(4062,12): error TS2339: Property 'push' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(4154,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4175,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(4185,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(4168,18): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4172,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4177,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4192,34): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4297,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4358,24): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4419,17): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
+node_modules/uglify-js/lib/compress.js(4459,24): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(4482,45): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4578,24): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(4593,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4635,19): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4721,38): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(4790,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4813,30): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4849,45): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4908,54): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(4909,61): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(4936,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(4944,43): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(4955,31): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5015,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(5029,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5128,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5188,72): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5232,51): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5249,32): error TS2554: Expected 4 arguments, but got 3.
 node_modules/uglify-js/lib/compress.js(5250,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[string | RegExp, (string | undefined)?]'.
   Property '0' is missing in type 'any[]' but required in type '[string | RegExp, (string | undefined)?]'.
+node_modules/uglify-js/lib/compress.js(5333,28): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(5405,31): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5408,32): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(5414,45): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(5421,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: () => void; indentation: () => number; current_width: () => number; should_break: () => boolean; has_parens: () => boolean; newline: () => void; print: (str: any) => void; ... 23 more ...; parent: (n: any) => any; }'.
+node_modules/uglify-js/lib/compress.js(5421,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: (half: any) => void; indentation: () => number; current_width: () => number; should_break: () => boolean; has_parens: () => boolean; newline: () => void; print: (str: any) => void; ... 23 more ...; parent: (n: any) => any; }'.
+node_modules/uglify-js/lib/compress.js(5421,32): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/compress.js(5425,36): error TS2532: Object is possibly 'undefined'.
 node_modules/uglify-js/lib/compress.js(5430,41): error TS2339: Property 'get' does not exist on type 'string'.
+node_modules/uglify-js/lib/compress.js(5449,54): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5475,45): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5486,28): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5498,31): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5500,41): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5623,52): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5654,36): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5774,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5777,45): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5789,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5794,49): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5802,28): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(5809,54): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5811,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5900,13): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/compress.js(5923,21): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(5937,18): error TS2454: Variable 'is_strict_comparison' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(5938,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5950,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5959,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(5980,27): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6003,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6010,21): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6035,24): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(6080,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6119,29): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6276,32): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(6278,32): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(6319,32): error TS2554: Expected 6 arguments, but got 4.
+node_modules/uglify-js/lib/compress.js(6322,32): error TS2554: Expected 6 arguments, but got 4.
+node_modules/uglify-js/lib/compress.js(6480,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6482,24): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6484,24): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(6500,25): error TS2367: This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
 node_modules/uglify-js/lib/compress.js(6538,47): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6588,42): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(6619,39): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6691,39): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6697,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6788,26): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/compress.js(6828,13): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(6980,43): error TS2554: Expected 4 arguments, but got 3.
+node_modules/uglify-js/lib/compress.js(7101,40): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(7157,43): error TS2454: Variable 'property' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(7172,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(7175,46): error TS2339: Property 'has_side_effects' does not exist on type 'number'.
+node_modules/uglify-js/lib/compress.js(7178,59): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/compress.js(7181,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(7214,34): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/minify.js(186,75): error TS2339: Property 'compress' does not exist on type 'Compressor'.
+node_modules/uglify-js/lib/minify.js(186,42): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/mozilla-ast.js(230,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/mozilla-ast.js(244,5): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/mozilla-ast.js(248,5): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/mozilla-ast.js(566,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(232,25): error TS2554: Expected 0 arguments, but got 2.
+node_modules/uglify-js/lib/mozilla-ast.js(604,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/output.js(91,13): error TS2322: Type '(comment: any) => any' is not assignable to type '() => boolean'.
+node_modules/uglify-js/lib/output.js(95,13): error TS2322: Type '(comment: any) => any' is not assignable to type '() => boolean'.
+node_modules/uglify-js/lib/output.js(99,13): error TS2322: Type '(comment: any) => boolean' is not assignable to type '() => boolean'.
+node_modules/uglify-js/lib/output.js(162,15): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(262,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(396,9): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/output.js(456,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(479,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(494,21): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(502,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(512,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(550,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/output.js(554,17): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/output.js(766,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(905,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/output.js(1120,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/output.js(1137,9): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/output.js(1142,9): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/output.js(1160,44): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/output.js(1461,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/uglify-js/lib/parse.js(263,25): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(321,13): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(327,20): error TS2554: Expected 2 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(358,20): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
+node_modules/uglify-js/lib/parse.js(358,35): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(389,19): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(391,23): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(404,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(413,21): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(421,19): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/parse.js(437,32): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/uglify-js/lib/parse.js(448,32): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/uglify-js/lib/parse.js(457,61): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(458,58): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(462,22): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(477,22): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(498,20): error TS2339: Property 'raw_source' does not exist on type 'RegExp'.
+node_modules/uglify-js/lib/parse.js(499,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(510,17): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(516,16): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(516,49): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(520,9): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(523,13): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(526,13): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(527,20): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(533,9): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(534,65): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(539,34): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(540,38): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(541,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(542,33): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(543,15): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(581,29): error TS2554: Expected 3 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(591,40): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(592,40): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/parse.js(592,54): error TS2554: Expected 2 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(593,44): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(606,57): error TS2339: Property 'push' does not exist on type 'never'.
 node_modules/uglify-js/lib/parse.js(612,32): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'never'.
 node_modules/uglify-js/lib/parse.js(705,13): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(724,9): error TS2554: Expected 4 arguments, but got 3.
 node_modules/uglify-js/lib/parse.js(738,69): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/parse.js(738,83): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(753,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(763,19): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(782,31): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/parse.js(788,17): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(791,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(800,13): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(814,21): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(818,29): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(829,17): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(833,21): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(844,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(871,21): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(882,21): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(888,29): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(889,21): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(905,21): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(906,29): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(907,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(918,28): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(919,17): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(924,21): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(933,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(937,21): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(945,13): error TS2554: Expected 4 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(948,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/uglify-js/lib/parse.js(967,20): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(968,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(981,24): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(983,36): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(984,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1013,45): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1015,45): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1026,19): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1037,20): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1037,33): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1039,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1046,27): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(1064,9): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
   Type 'any' is not assignable to type 'never'.
+node_modules/uglify-js/lib/parse.js(1089,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1100,17): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1106,34): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1120,27): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(1121,17): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1130,20): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1135,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1140,27): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1149,25): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1154,13): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1167,25): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1192,20): error TS2554: Expected 3 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1249,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1253,26): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1282,13): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/lib/parse.js(1291,32): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1294,9): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1305,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1364,25): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1376,39): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1385,13): error TS2554: Expected 1 arguments, but got 0.
+node_modules/uglify-js/lib/parse.js(1390,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1390,26): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(1391,20): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/parse.js(1397,20): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1411,14): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1412,27): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1449,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1463,30): error TS2554: Expected 3 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1474,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1483,16): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(1483,48): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1509,18): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(1509,35): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1535,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/parse.js(1554,52): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1555,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1566,13): error TS2554: Expected 4 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1596,16): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/parse.js(1603,17): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(69,18): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | ... 4 more ... | ArrayConstructor'.
   Property 'prototype' does not exist on type 'Math'.
 node_modules/uglify-js/lib/propmangle.js(70,45): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | ... 4 more ... | ArrayConstructor'.
@@ -113,19 +342,28 @@ node_modules/uglify-js/lib/propmangle.js(70,45): error TS2339: Property 'prototy
 node_modules/uglify-js/lib/propmangle.js(80,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(94,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(146,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/propmangle.js(163,26): error TS2554: Expected 2 arguments, but got 1.
+node_modules/uglify-js/lib/propmangle.js(221,31): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(89,21): error TS2339: Property 'defun' does not exist on type 'SymbolDef'.
 node_modules/uglify-js/lib/scope.js(89,35): error TS2339: Property 'defun' does not exist on type 'SymbolDef'.
+node_modules/uglify-js/lib/scope.js(94,15): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/scope.js(103,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(158,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(193,47): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(238,17): error TS2554: Expected 3 arguments, but got 2.
+node_modules/uglify-js/lib/scope.js(387,15): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/lib/scope.js(418,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(432,22): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(481,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(506,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(55,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/lib/sourcemap.js(61,23): error TS2304: Cannot find name 'MOZ_SourceMap'.
+node_modules/uglify-js/lib/transform.js(55,16): error TS2554: Expected 3 arguments, but got 2.
 node_modules/uglify-js/tools/exit.js(10,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[(number | undefined)?]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '0 | 1'.
+node_modules/uglify-js/tools/node.js(44,17): error TS2554: Expected 3 arguments, but got 1.
+node_modules/uglify-js/tools/node.js(52,25): error TS2554: Expected 1 arguments, but got 0.
 node_modules/uglify-js/tools/node.js(64,26): error TS2339: Property 'minify' does not exist on type 'typeof import("/uglify-js/node_modules/uglify-js/tools/node")'.
 
 

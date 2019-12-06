@@ -15,6 +15,7 @@ node_modules/adonis-framework/providers/ServerProvider.js(9,33): error TS2307: C
 node_modules/adonis-framework/providers/SessionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/providers/StaticProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/providers/ViewProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/providers/ViewProvider.js(19,14): error TS2554: Expected 4 arguments, but got 3.
 node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
