@@ -117,12 +117,12 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
+                    if (suggestion.symbol.declarations?.length) {
                         suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                            ? suggestion.symbol.declarations[0].localSymbol ?? suggestion.symbol.declarations[0].symbol
                             : suggestion.symbol.declarations[0].symbol);
                     }
-                    if (suggestion.origin.moduleSymbol.declarations) {
+                    if (suggestion.origin.moduleSymbol.declarations?.length) {
                         suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
                     }
                 });
@@ -1623,6 +1623,9 @@ namespace ts.Completions {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
+                }
+                if (typeChecker.isUndefinedSymbol(symbol)) {
+                    return;
                 }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };

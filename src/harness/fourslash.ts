@@ -854,9 +854,9 @@ namespace FourSlash {
                 }
             }
 
-            assert.equal(actual.hasAction, hasAction);
-            assert.equal(actual.isRecommended, isRecommended);
-            assert.equal(actual.source, source);
+            assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' value '${actual.hasAction}' to equal '${hasAction}'`);
+            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' value '${actual.source}' to equal '${isRecommended}'`);
+            assert.equal(actual.source, source, `Expected 'source' value '${actual.source}' to equal '${source}'`);
             assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
             if (text !== undefined) {

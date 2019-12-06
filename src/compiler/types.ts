@@ -4232,7 +4232,7 @@ namespace ts {
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
-        ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.

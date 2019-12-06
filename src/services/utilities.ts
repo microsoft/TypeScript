@@ -2292,4 +2292,9 @@ namespace ts {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
     }
     // #endregion
+
+    /* @internal */
+    export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
+        return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
+    }
 }

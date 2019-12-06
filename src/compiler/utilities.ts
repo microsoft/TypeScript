@@ -4958,6 +4958,10 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
+    export function setObjectAllocator(alloc: ObjectAllocator) {
+        objectAllocator = alloc;
+    }
+
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
     }

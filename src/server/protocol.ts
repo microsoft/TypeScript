@@ -1575,7 +1575,7 @@ namespace ts.server.protocol {
         /**
          * List of last known projects
          */
-        knownProjects: protocol.ProjectVersionInfo[];
+        knownProjects: ProjectVersionInfo[];
     }
 
     /**

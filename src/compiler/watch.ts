@@ -243,13 +243,23 @@ namespace ts {
         };
     }
 
-    export const enum WatchType {
-        ConfigFile = "Config file",
-        SourceFile = "Source file",
-        MissingFile = "Missing file",
-        WildcardDirectory = "Wild card directory",
-        FailedLookupLocations = "Failed Lookup Locations",
-        TypeRoots = "Type roots"
+    export type WatchType = WatchTypeRegistry[keyof WatchTypeRegistry];
+    export const WatchType: WatchTypeRegistry = {
+        ConfigFile: "Config file",
+        SourceFile: "Source file",
+        MissingFile: "Missing file",
+        WildcardDirectory: "Wild card directory",
+        FailedLookupLocations: "Failed Lookup Locations",
+        TypeRoots: "Type roots"
+    };
+
+    export interface WatchTypeRegistry {
+        ConfigFile: "Config file",
+        SourceFile: "Source file",
+        MissingFile: "Missing file",
+        WildcardDirectory: "Wild card directory",
+        FailedLookupLocations: "Failed Lookup Locations",
+        TypeRoots: "Type roots"
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
