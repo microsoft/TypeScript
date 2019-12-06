@@ -1,7 +1,7 @@
 /**
  * Common utilities
  */
-namespace utils {
+namespace Utils {
     const testPathPrefixRegExp = /(?:(file:\/{3})|\/)\.(ts|lib|src)\//g;
     export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean): string {
         return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined!; // TODO: GH#18217
