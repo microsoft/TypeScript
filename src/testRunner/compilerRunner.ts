@@ -261,13 +261,13 @@ namespace Harness {
         public verifyModuleResolution() {
             if (this.options.traceResolution) {
                 Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
-                    JSON.stringify(this.result.traces.map(utils.sanitizeTraceResolutionLogEntry), undefined, 4));
+                    JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
             }
         }
 
         public verifySourceMapRecord() {
             if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
-                const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
+                const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
                 const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                     // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
                     ? null // eslint-disable-line no-null/no-null

@@ -39,7 +39,7 @@ namespace fakes {
         public readFile(path: string) {
             try {
                 const content = this.vfs.readFileSync(path, "utf8");
-                return content === undefined ? undefined : utils.removeByteOrderMark(content);
+                return content === undefined ? undefined : Utils.removeByteOrderMark(content);
             }
             catch {
                 return undefined;
@@ -48,7 +48,7 @@ namespace fakes {
 
         public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
             this.vfs.mkdirpSync(vpath.dirname(path));
-            this.vfs.writeFileSync(path, writeByteOrderMark ? utils.addUTF8ByteOrderMark(data) : data);
+            this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
         }
 
         public deleteFile(path: string) {
@@ -289,7 +289,7 @@ namespace fakes {
         }
 
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            if (writeByteOrderMark) content = utils.addUTF8ByteOrderMark(content);
+            if (writeByteOrderMark) content = Utils.addUTF8ByteOrderMark(content);
             this.sys.writeFile(fileName, content);
 
             const document = new documents.TextDocument(fileName, content);

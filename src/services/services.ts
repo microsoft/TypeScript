@@ -1025,59 +1025,54 @@ namespace ts {
         return sourceFile;
     }
 
-    export let disableIncrementalParsing = false; // eslint-disable-line prefer-const
-
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
-                // Once incremental parsing is ready, then just call into this function.
-                if (!disableIncrementalParsing) {
-                    let newText: string;
+                let newText: string;
 
-                    // grab the fragment from the beginning of the original text to the beginning of the span
-                    const prefix = textChangeRange.span.start !== 0
-                        ? sourceFile.text.substr(0, textChangeRange.span.start)
-                        : "";
+                // grab the fragment from the beginning of the original text to the beginning of the span
+                const prefix = textChangeRange.span.start !== 0
+                    ? sourceFile.text.substr(0, textChangeRange.span.start)
+                    : "";
 
-                    // grab the fragment from the end of the span till the end of the original text
-                    const suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
-                        ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
-                        : "";
+                // grab the fragment from the end of the span till the end of the original text
+                const suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
+                    ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
+                    : "";
 
-                    if (textChangeRange.newLength === 0) {
-                        // edit was a deletion - just combine prefix and suffix
-                        newText = prefix && suffix ? prefix + suffix : prefix || suffix;
-                    }
-                    else {
-                        // it was actual edit, fetch the fragment of new text that correspond to new span
-                        const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
-                        // combine prefix, changed text and suffix
-                        newText = prefix && suffix
-                            ? prefix + changedText + suffix
-                            : prefix
-                                ? (prefix + changedText)
-                                : (changedText + suffix);
-                    }
-
-                    const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
-                    setSourceFileFields(newSourceFile, scriptSnapshot, version);
-                    // after incremental parsing nameTable might not be up-to-date
-                    // drop it so it can be lazily recreated later
-                    newSourceFile.nameTable = undefined;
-
-                    // dispose all resources held by old script snapshot
-                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
-                        if (sourceFile.scriptSnapshot.dispose) {
-                            sourceFile.scriptSnapshot.dispose();
-                        }
-
-                        sourceFile.scriptSnapshot = undefined;
-                    }
-
-                    return newSourceFile;
+                if (textChangeRange.newLength === 0) {
+                    // edit was a deletion - just combine prefix and suffix
+                    newText = prefix && suffix ? prefix + suffix : prefix || suffix;
                 }
+                else {
+                    // it was actual edit, fetch the fragment of new text that correspond to new span
+                    const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
+                    // combine prefix, changed text and suffix
+                    newText = prefix && suffix
+                        ? prefix + changedText + suffix
+                        : prefix
+                            ? (prefix + changedText)
+                            : (changedText + suffix);
+                }
+
+                const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+                setSourceFileFields(newSourceFile, scriptSnapshot, version);
+                // after incremental parsing nameTable might not be up-to-date
+                // drop it so it can be lazily recreated later
+                newSourceFile.nameTable = undefined;
+
+                // dispose all resources held by old script snapshot
+                if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
+                    if (sourceFile.scriptSnapshot.dispose) {
+                        sourceFile.scriptSnapshot.dispose();
+                    }
+
+                    sourceFile.scriptSnapshot = undefined;
+                }
+
+                return newSourceFile;
             }
         }
 

@@ -96,7 +96,7 @@ namespace Harness {
         if (testConfigContent !== "") {
             const testConfig = <TestConfig>JSON.parse(testConfigContent);
             if (testConfig.light) {
-                lightMode = true;
+                setLightMode(true);
             }
             if (testConfig.timeout) {
                 globalTimeout = testConfig.timeout;
@@ -115,10 +115,10 @@ namespace Harness {
                 keepFailed = true;
             }
             if (testConfig.shardId) {
-                shardId = testConfig.shardId;
+                setShardId(testConfig.shardId);
             }
             if (testConfig.shards) {
-                shards = testConfig.shards;
+                setShards(testConfig.shards);
             }
 
             if (testConfig.stackTraceLimit === "full") {

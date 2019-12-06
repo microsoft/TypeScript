@@ -1,6 +1,4 @@
 namespace FourSlash {
-    ts.disableIncrementalParsing = false;
-
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
     export const enum FourSlashTestType {

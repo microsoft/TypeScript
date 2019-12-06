@@ -8,6 +8,14 @@ namespace Harness {
     export let shardId = 1;
     /* eslint-enable prefer-const */
 
+    // The following have setters as while they're read here in the harness, they're only set in the runner
+    export function setShards(count: number) {
+        shards = count;
+    }
+    export function setShardId(id: number) {
+        shardId = id;
+    }
+
     export abstract class RunnerBase {
         // contains the tests to run
         public tests: (string | FileBasedTest)[] = [];

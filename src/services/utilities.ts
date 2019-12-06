@@ -6,7 +6,7 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-declare let Promise: PromiseConstructor;
+declare var Promise: PromiseConstructor; // eslint-disable-line no-var
 
 /* @internal */
 namespace ts {

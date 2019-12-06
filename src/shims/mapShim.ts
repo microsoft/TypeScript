@@ -1,5 +1,8 @@
 /* @internal */
 namespace ts {
+    interface IteratorShim<T> {
+        next(): { value: T, done?: false } | { value: never, done: true };
+    }
     interface MapShim<T> {
         readonly size: number;
         get(key: string): T | undefined;
@@ -7,9 +10,9 @@ namespace ts {
         has(key: string): boolean;
         delete(key: string): boolean;
         clear(): void;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
+        keys(): IteratorShim<string>;
+        values(): IteratorShim<T>;
+        entries(): IteratorShim<[string, T]>;
         forEach(action: (value: T, key: string) => void): void;
     }
     export function createMapShim(): new <T>() => MapShim<T> {
@@ -51,7 +54,7 @@ namespace ts {
                 this.selector = selector;
             }
 
-            public next(): { value: U, done: false } | { value: never, done: true } {
+            public next(): { value: U, done?: false } | { value: never, done: true } {
                 // Navigate to the next entry.
                 while (this.currentEntry) {
                     const skipNext = !!this.currentEntry.skipNext;
@@ -188,15 +191,15 @@ namespace ts {
                 this.lastEntry = firstEntry;
             }
 
-            keys(): Iterator<string> {
+            keys(): IteratorShim<string> {
                 return new MapIterator(this.firstEntry, key => key);
             }
 
-            values(): Iterator<T> {
+            values(): IteratorShim<T> {
                 return new MapIterator(this.firstEntry, (_key, value) => value);
             }
 
-            entries(): Iterator<[string, T]> {
+            entries(): IteratorShim<[string, T]> {
                 return new MapIterator(this.firstEntry, (key, value) => [key, value] as [string, T]);
             }
 

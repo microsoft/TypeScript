@@ -240,7 +240,7 @@ namespace Harness.Parallel.Host {
             let totalPassing = 0;
             const startDate = new Date();
 
-            const progressBars = new ProgressBars({ noColors });
+            const progressBars = new ProgressBars({ noColors: Harness.noColors }); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
             const progressUpdateInterval = 1 / progressBars._options.width;
             let nextProgress = progressUpdateInterval;
 
@@ -250,7 +250,7 @@ namespace Harness.Parallel.Host {
             let closedWorkers = 0;
             for (let i = 0; i < workerCount; i++) {
                 // TODO: Just send the config over the IPC channel or in the command line arguments
-                const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit, timeout: globalTimeout };
+                const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: Harness.runUnitTests, stackTraceLimit: Harness.stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
                 IO.writeFile(configPath, JSON.stringify(config));
                 const worker: Worker = {
@@ -549,7 +549,7 @@ namespace Harness.Parallel.Host {
                     failedTestReporter = new FailedTestReporter(replayRunner, {
                         reporterOptions: {
                             file: path.resolve(".failed-tests"),
-                            keepFailed
+                            keepFailed: Harness.keepFailed // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                         }
                     });
                 }

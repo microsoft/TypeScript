@@ -29,6 +29,9 @@ namespace Harness {
     }
 
     export let IO: IO;
+    export function setHarnessIO(io: IO) {
+        IO = io;
+    }
 
     // harness always uses one kind of new line
     // But note that `parseTestData` in `fourslash.ts` uses "\n"
@@ -185,6 +188,9 @@ namespace Harness {
     export let userSpecifiedRoot = "";
     export let lightMode = false;
     /* eslint-enable prefer-const */
+    export function setLightMode(flag: boolean) {
+        lightMode = flag;
+    }
 
     /** Functionality for compiling TypeScript code */
     export namespace Compiler {
@@ -467,7 +473,7 @@ namespace Harness {
                 else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
-                        dtsFiles.push({ unitName: declFile.file, content: utils.removeByteOrderMark(declFile.text) });
+                        dtsFiles.push({ unitName: declFile.file, content: Utils.removeByteOrderMark(declFile.text) });
                     }
                 }
             }
@@ -557,7 +563,7 @@ namespace Harness {
             function outputErrorText(error: ts.Diagnostic) {
                 const message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
 
-                const errLines = utils.removeTestPathPrefixes(message)
+                const errLines = Utils.removeTestPathPrefixes(message)
                     .split("\n")
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === "\r" ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
@@ -580,7 +586,7 @@ namespace Harness {
                 }
             }
 
-            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+            yield [diagnosticSummaryMarker, Utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
 
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
@@ -595,7 +601,7 @@ namespace Harness {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                     const errFn = e.file;
-                    return !!errFn && ts.comparePaths(utils.removeTestPathPrefixes(errFn.fileName), utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
+                    return !!errFn && ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
                 });
 
 
@@ -812,7 +818,7 @@ namespace Harness {
                         }
                         typeLines += "\r\n";
                     }
-                    yield [checkDuplicatedFileName(unitName, dupeCase), utils.removeTestPathPrefixes(typeLines)];
+                    yield [checkDuplicatedFileName(unitName, dupeCase), Utils.removeTestPathPrefixes(typeLines)];
                 }
             }
         }
@@ -901,8 +907,8 @@ namespace Harness {
         }
 
         function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
-            const fileName = harnessSettings.fullEmitPaths ? utils.removeTestPathPrefixes(file.file) : ts.getBaseFileName(file.file);
-            return "//// [" + fileName + "]\r\n" + utils.removeTestPathPrefixes(file.text);
+            const fileName = harnessSettings.fullEmitPaths ? Utils.removeTestPathPrefixes(file.file) : ts.getBaseFileName(file.file);
+            return "//// [" + fileName + "]\r\n" + Utils.removeTestPathPrefixes(file.text);
         }
 
         export function collateOutputs(outputFiles: readonly documents.TextDocument[]): string {
@@ -928,7 +934,7 @@ namespace Harness {
             const dupeCase = ts.createMap<number>();
             // Yield them
             for (const outputFile of files) {
-                yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + utils.removeByteOrderMark(outputFile.text)];
+                yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + Utils.removeByteOrderMark(outputFile.text)];
             }
 
             function cleanName(fn: string) {
