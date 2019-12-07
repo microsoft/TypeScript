@@ -1,6 +1,6 @@
 Exit Code: 1
-Standard output:
-node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
+    Standard output:
+    node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/util.js(35,45): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
@@ -15,4 +15,5 @@ node_modules/util/util.js(553,69): error TS2345: Argument of type 'IArguments' i
 
 
 
-Standard error:
+    Standard error:
+    
