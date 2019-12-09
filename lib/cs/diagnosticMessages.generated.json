@@ -441,7 +441,7 @@
   "Function_implementation_is_missing_or_not_immediately_following_the_declaration_2391": "Implementace funkce chybí nebo nenásleduje hned po deklaraci.",
   "Function_implementation_name_must_be_0_2389": "Název implementace funkce musí být {0}.",
   "Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_ref_7024": "Funkce implicitně obsahuje návratový typ any, protože neobsahuje anotaci návratového typu a odkazuje se na ni přímo nebo nepřímo v jednom z jejích návratových výrazů.",
-  "Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined_2366": "Ve funkci chybí koncový návratový příkaz a návratový typ neobsahuje undefined.",
+  "Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined_2366": "Ve funkci chybí koncový příkaz return a návratový typ neobsahuje undefined.",
   "Function_overload_must_be_static_2387": "Přetížení funkce musí být statické.",
   "Function_overload_must_not_be_static_2388": "Přetížení funkce nesmí být statické.",
   "Generate_get_and_set_accessors_95046": "Generovat přístupové objekty get a set",

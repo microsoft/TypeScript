@@ -276,7 +276,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }

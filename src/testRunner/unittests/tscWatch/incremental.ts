@@ -194,7 +194,7 @@ namespace ts.tscWatch {
                                         exportedModulesMap: {},
                                         semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    version
+                                    version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                                 })
                             }
                         ],
@@ -221,7 +221,7 @@ namespace ts.tscWatch {
                                         exportedModulesMap: {},
                                         semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    version
+                                    version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                                 })
                             }
                         ],
@@ -285,7 +285,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -315,7 +315,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -348,7 +348,7 @@ namespace ts.tscWatch {
                                         ]
                                     },
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -420,7 +420,7 @@ namespace ts.tscWatch {
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -446,7 +446,7 @@ namespace ts.tscWatch {
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -506,7 +506,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -536,7 +536,7 @@ namespace ts.tscWatch {
                                         file1Path
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -620,7 +620,7 @@ namespace ts.tscWatch {
                                         ]
                                     },
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -729,7 +729,7 @@ export { C } from "./c";
                             path: `${project}/tsconfig.tsbuildinfo`,
                             content: getBuildInfoText({
                                 program: initialProgram,
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -753,7 +753,7 @@ export { C } from "./c";
                                     },
                                     ...rest
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],

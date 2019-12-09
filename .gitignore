@@ -90,6 +90,7 @@ tests/cases/user/TypeScript-React-Native-Starter/TypeScript-React-Native-Starter
 tests/cases/user/TypeScript-Vue-Starter/TypeScript-Vue-Starter
 tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter
 tests/cases/user/create-react-app/create-react-app
+tests/cases/user/fp-ts/fp-ts
 tests/cases/user/webpack/webpack
 tests/cases/user/puppeteer/puppeteer
 tests/cases/user/axios-src/axios-src

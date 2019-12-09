@@ -477,7 +477,6 @@ task("runtests-parallel").flags = {
     "   --workers=<number>": "The number of parallel workers to use.",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
-    "   --skipPercent=<number>": "Skip expensive tests with <percent> chance to miss an edit. Default 5%.",
     "   --shards": "Total number of shards running tests (default: 1)",
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
@@ -588,15 +587,15 @@ task("generate-spec").description = "Generates a Markdown version of the Languag
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
 
-const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/core.ts"]);
+const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-nightly", series(buildScripts, configureNightly));
 task("configure-nightly").description = "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing";
 
-const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/core.ts"]);
+const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-insiders", series(buildScripts, configureInsiders));
 task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
 
-const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/core.ts"]);
+const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
