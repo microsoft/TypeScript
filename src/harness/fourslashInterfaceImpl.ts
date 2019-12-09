@@ -434,6 +434,10 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
+        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]) {
+            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers);
+        }
+
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
             this.state.verifyNavigationBar(json, options);
         }
