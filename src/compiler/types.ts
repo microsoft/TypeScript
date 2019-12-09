@@ -567,6 +567,7 @@ namespace ts {
         /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
 
         BlockScoped = Let | Const,
 
@@ -2699,8 +2700,6 @@ namespace ts {
         Shared         = 1 << 11, // Referenced as antecedent more than once
         PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
-        /** @internal */
-        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
 
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition,
@@ -3474,7 +3473,6 @@ namespace ts {
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
-        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
         /**
          * True if `contextualType` should not be considered for completions because
@@ -4234,7 +4232,7 @@ namespace ts {
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
-        ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
@@ -4352,14 +4350,15 @@ namespace ts {
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
         ArrayLiteral     = 1 << 16, // Originates in an array literal
+        ObjectRestType   = 1 << 17, // Originates in object rest declaration
         /* @internal */
-        PrimitiveUnion   = 1 << 17, // Union of only primitive types
+        PrimitiveUnion   = 1 << 18, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 19, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4483,8 +4482,6 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
-        /* @internal */
-        possiblePropertyCache?: SymbolTable;       // Cache of _all_ resolved properties less any from aparent members
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4673,14 +4670,17 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
-        HasRestParameter = 1 << 0,      // Indicates last parameter is rest parameter
-        HasLiteralTypes = 1 << 1,       // Indicates signature is specialized
-        IsOptionalCall = 1 << 2,        // Indicates signature comes from a CallChain
+        HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
+        HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
+        IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
+        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
 
-        // We do not propagate `IsOptionalCall` to instantiated signatures, as that would result in us
+        // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
         // instantiating the return type.
         PropagatingFlags = HasRestParameter | HasLiteralTypes,
+
+        CallChainFlags = IsInnerCallChain | IsOuterCallChain,
     }
 
     export interface Signature {
@@ -4712,7 +4712,7 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
-        optionalCallSignatureCache?: Signature; // Optional chained call version of signature (deferred)
+        optionalCallSignatureCache?: { inner?: Signature, outer?: Signature }; // Optional chained call version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
@@ -4738,11 +4738,12 @@ namespace ts {
         HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
         PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
         MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
-        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
+        ContravariantConditional     = 1 << 4,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 5,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 6,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 7,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 8,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 9,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
@@ -5196,10 +5197,16 @@ namespace ts {
     }
 
     /* @internal */
+    export interface DidYouMeanOptionalDiagnostics {
+        unknownOptionDiagnostic: DiagnosticMessage,
+        unknownDidYouMeanDiagnostic: DiagnosticMessage,
+    }
+
+    /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
         elementOptions?: Map<CommandLineOption>;
-        extraKeyDiagnosticMessage?: DiagnosticMessage;
+        extraKeyDiagnostics?: DidYouMeanOptionalDiagnostics;
     }
 
     /* @internal */
@@ -5711,13 +5718,19 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
+    export interface SourceFileMayBeEmittedHost {
+        getCompilerOptions(): CompilerOptions;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    }
+
+    /* @internal */
+    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
         getSourceFiles(): readonly SourceFile[];
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
-        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         getCommonSourceDirectory(): string;
@@ -6454,7 +6467,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

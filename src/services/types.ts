@@ -677,11 +677,6 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface DocumentHighlights {
-        fileName: string;
-        highlightSpans: HighlightSpan[];
-    }
-
     export const enum HighlightSpanKind {
         none = "none",
         definition = "definition",
@@ -1253,5 +1248,51 @@ namespace ts {
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25,
+    }
+
+    /** @internal */
+    export interface CodeFixRegistration {
+        errorCodes: readonly number[];
+        getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined;
+        fixIds?: readonly string[];
+        getAllCodeActions?(context: CodeFixAllContext): CombinedCodeActions;
+    }
+
+    /** @internal */
+    export interface CodeFixContextBase extends textChanges.TextChangesContext {
+        sourceFile: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        preferences: UserPreferences;
+    }
+
+    /** @internal */
+    export interface CodeFixAllContext extends CodeFixContextBase {
+        fixId: {};
+    }
+
+    /** @internal */
+    export interface CodeFixContext extends CodeFixContextBase {
+        errorCode: number;
+        span: TextSpan;
+    }
+
+    /** @internal */
+    export interface Refactor {
+        /** Compute the associated code actions */
+        getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
+
+        /** Compute (quickly) which actions are available here */
+        getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[];
+    }
+
+    /** @internal */
+    export interface RefactorContext extends textChanges.TextChangesContext {
+        file: SourceFile;
+        startPosition: number;
+        endPosition?: number;
+        program: Program;
+        cancellationToken?: CancellationToken;
+        preferences: UserPreferences;
     }
 }

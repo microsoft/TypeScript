@@ -117,12 +117,12 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
+                    if (suggestion.symbol.declarations?.length) {
                         suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                            ? suggestion.symbol.declarations[0].localSymbol ?? suggestion.symbol.declarations[0].symbol
                             : suggestion.symbol.declarations[0].symbol);
                     }
-                    if (suggestion.origin.moduleSymbol.declarations) {
+                    if (suggestion.origin.moduleSymbol.declarations?.length) {
                         suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
                     }
                 });
@@ -373,7 +373,13 @@ namespace ts.Completions {
         }
         if (origin && originIsPromise(origin) && propertyAccessToConvert) {
             if (insertText === undefined) insertText = name;
-            const awaitText = `(await ${propertyAccessToConvert.expression.getText()})`;
+            const precedingToken = findPrecedingToken(propertyAccessToConvert.pos, sourceFile);
+            let awaitText = "";
+            if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
+                awaitText = ";";
+            }
+
+            awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
             insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
             replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
         }
@@ -1618,6 +1624,9 @@ namespace ts.Completions {
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
+                if (typeChecker.isUndefinedSymbol(symbol)) {
+                    return;
+                }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
                 results.push({
@@ -1688,7 +1697,16 @@ namespace ts.Completions {
 
             if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
                 if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
-                    return true;
+                    // Two possibilities:
+                    //   1. <div>/**/
+                    //      - contextToken: GreaterThanToken (before cursor)
+                    //      - location: JSXElement
+                    //      - different parents (JSXOpeningElement, JSXElement)
+                    //   2. <Component<string> /**/>
+                    //      - contextToken: GreaterThanToken (before cursor)
+                    //      - location: GreaterThanToken (after cursor)
+                    //      - same parent (JSXOpeningElement)
+                    return location.parent.kind !== SyntaxKind.JsxOpeningElement;
                 }
 
                 if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
@@ -1811,8 +1829,14 @@ namespace ts.Completions {
                 if (canGetType) {
                     const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                     if (!typeForObject) return GlobalsSearch.Fail;
-                    // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
-                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter((symbol) => !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier));
+                    // In a binding pattern, get only known properties (unless in the same scope).
+                    // Everywhere else we will get all possible properties.
+                    const containerClass = getContainingClass(objectLikeContainer);
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(symbol =>
+                        // either public
+                        !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier)
+                        // or we're in it
+                        || containerClass && contains(typeForObject.symbol.declarations, containerClass));
                     existingMembers = objectLikeContainer.elements;
                 }
             }

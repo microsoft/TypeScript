@@ -10,9 +10,9 @@ namespace ts {
     /**
      * Transforms ECMAScript Class Syntax.
      * TypeScript parameter property syntax is transformed in the TypeScript transformer.
-     * For now, this transforms public field declarations using TypeScript class semantics
-     * (where the declarations get elided and initializers are transformed as assignments in the constructor).
-     * Eventually, this transform will change to the ECMAScript semantics (with Object.defineProperty).
+     * For now, this transforms public field declarations using TypeScript class semantics,
+     * where declarations are elided and initializers are transformed as assignments in the constructor.
+     * When --useDefineForClassFields is on, this transforms to ECMAScript semantics, with Object.defineProperty.
      */
     export function transformClassFields(context: TransformationContext) {
         const {
@@ -294,7 +294,8 @@ namespace ts {
         }
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-            const properties = getProperties(node, /*requireInitializer*/ !context.getCompilerOptions().useDefineForClassFields, /*isStatic*/ false);
+            const useDefineForClassFields = context.getCompilerOptions().useDefineForClassFields;
+            const properties = getProperties(node, /*requireInitializer*/ !useDefineForClassFields, /*isStatic*/ false);
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
@@ -325,7 +326,6 @@ namespace ts {
             if (constructor) {
                 indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements, visitor);
             }
-
             // Add the property initializers. Transforms this:
             //
             //  public x = 1;
@@ -336,19 +336,16 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
-            if (constructor && constructor.body) {
-                let parameterPropertyDeclarationCount = 0;
-                for (let i = indexOfFirstStatement; i < constructor.body.statements.length; i++) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(constructor.body.statements[i]), constructor)) {
-                        parameterPropertyDeclarationCount++;
-                    }
-                    else {
-                        break;
-                    }
+            if (constructor?.body) {
+                let afterParameterProperties = findIndex(constructor.body.statements, s => !isParameterPropertyDeclaration(getOriginalNode(s), constructor), indexOfFirstStatement);
+                if (afterParameterProperties === -1) {
+                    afterParameterProperties = constructor.body.statements.length;
                 }
-                if (parameterPropertyDeclarationCount > 0) {
-                    addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, parameterPropertyDeclarationCount));
-                    indexOfFirstStatement += parameterPropertyDeclarationCount;
+                if (afterParameterProperties > indexOfFirstStatement) {
+                    if (!useDefineForClassFields) {
+                        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, afterParameterProperties - indexOfFirstStatement));
+                    }
+                    indexOfFirstStatement = afterParameterProperties;
                 }
             }
             addPropertyStatements(statements, properties, createThis());
@@ -421,7 +418,9 @@ namespace ts {
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
 
-            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : createVoidZero();
+            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
+                : hasModifier(getOriginalNode(property), ModifierFlags.ParameterPropertyModifier) && isIdentifier(propertyName) ? propertyName
+                : createVoidZero();
             if (emitAssignment) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
                 return createAssignment(memberAccess, initializer);

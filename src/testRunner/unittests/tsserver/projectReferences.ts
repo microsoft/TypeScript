@@ -92,9 +92,9 @@ namespace ts.projectSystem {
         });
 
         describe("with main and depedency project", () => {
-            const dependecyLocation = `${projectRoot}/dependency`;
-            const dependecyDeclsLocation = `${projectRoot}/decls`;
-            const mainLocation = `${projectRoot}/main`;
+            const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
+            const dependecyDeclsLocation = `${tscWatch.projectRoot}/decls`;
+            const mainLocation = `${tscWatch.projectRoot}/main`;
             const dependencyTs: File = {
                 path: `${dependecyLocation}/FnS.ts`,
                 content: `export function fn1() { }
@@ -136,11 +136,11 @@ fn5();
             };
 
             const randomFile: File = {
-                path: `${projectRoot}/random/random.ts`,
+                path: `${tscWatch.projectRoot}/random/random.ts`,
                 content: "let a = 10;"
             };
             const randomConfig: File = {
-                path: `${projectRoot}/random/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/random/tsconfig.json`,
                 content: "{}"
             };
             const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
@@ -1302,7 +1302,7 @@ function foo() {
 
         it("reusing d.ts files from composite and non composite projects", () => {
             const configA: File = {
-                path: `${projectRoot}/compositea/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositea/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1314,27 +1314,27 @@ function foo() {
                 })
             };
             const aTs: File = {
-                path: `${projectRoot}/compositea/a.ts`,
+                path: `${tscWatch.projectRoot}/compositea/a.ts`,
                 content: `import { b } from "@ref/compositeb/b";`
             };
             const a2Ts: File = {
-                path: `${projectRoot}/compositea/a2.ts`,
+                path: `${tscWatch.projectRoot}/compositea/a2.ts`,
                 content: `export const x = 10;`
             };
             const configB: File = {
-                path: `${projectRoot}/compositeb/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositeb/tsconfig.json`,
                 content: configA.content
             };
             const bTs: File = {
-                path: `${projectRoot}/compositeb/b.ts`,
+                path: `${tscWatch.projectRoot}/compositeb/b.ts`,
                 content: "export function b() {}"
             };
             const bDts: File = {
-                path: `${projectRoot}/dist/compositeb/b.d.ts`,
+                path: `${tscWatch.projectRoot}/dist/compositeb/b.d.ts`,
                 content: "export declare function b(): void;"
             };
             const configC: File = {
-                path: `${projectRoot}/compositec/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositec/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1347,7 +1347,7 @@ function foo() {
                 })
             };
             const cTs: File = {
-                path: `${projectRoot}/compositec/c.ts`,
+                path: `${tscWatch.projectRoot}/compositec/c.ts`,
                 content: aTs.content
             };
             const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
@@ -1375,78 +1375,70 @@ function foo() {
         });
 
         describe("when references are monorepo like with symlinks", () => {
-            function verifySession(alreadyBuilt: boolean, extraOptions: CompilerOptions) {
-                const bPackageJson: File = {
-                    path: `${projectRoot}/packages/B/package.json`,
-                    content: JSON.stringify({
-                        main: "lib/index.js",
-                        types: "lib/index.d.ts"
-                    })
-                };
+            interface Packages {
+                bPackageJson: File;
+                aTest: File;
+                bFoo: File;
+                bBar: File;
+            }
+            function verifySymlinkScenario(packages: () => Packages) {
+                describe("when solution is not built", () => {
+                    it("with preserveSymlinks turned off", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ false, {});
+                    });
+
+                    it("with preserveSymlinks turned on", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ false, { preserveSymlinks: true });
+                    });
+                });
+
+                describe("when solution is already built", () => {
+                    it("with preserveSymlinks turned off", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ true, {});
+                    });
+
+                    it("with preserveSymlinks turned on", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ true, { preserveSymlinks: true });
+                    });
+                });
+            }
+
+            function verifySession({ bPackageJson, aTest, bFoo, bBar }: Packages, alreadyBuilt: boolean, extraOptions: CompilerOptions) {
                 const aConfig = config("A", extraOptions, ["../B"]);
                 const bConfig = config("B", extraOptions);
-                const aIndex = index("A", `import { foo } from 'b';
-import { bar } from 'b/lib/bar';
-foo();
-bar();`);
-                const bIndex = index("B", `export function foo() { }`);
-                const bBar: File = {
-                    path: `${projectRoot}/packages/B/src/bar.ts`,
-                    content: `export function bar() { }`
-                };
                 const bSymlink: SymLink = {
-                    path: `${projectRoot}/node_modules/b`,
-                    symLink: `${projectRoot}/packages/B`
+                    path: `${tscWatch.projectRoot}/node_modules/b`,
+                    symLink: `${tscWatch.projectRoot}/packages/B`
                 };
-
-                const files = [libFile, bPackageJson, aConfig, bConfig, aIndex, bIndex, bBar, bSymlink];
+                const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
                 const host = alreadyBuilt ?
                     createHost(files, [aConfig.path]) :
                     createServerHost(files);
 
                 // Create symlink in node module
                 const session = createSession(host, { canUseEvents: true });
-                openFilesForSession([aIndex], session);
+                openFilesForSession([aTest], session);
                 const service = session.getProjectService();
                 const project = service.configuredProjects.get(aConfig.path.toLowerCase())!;
                 assert.deepEqual(project.getAllProjectErrors(), []);
                 checkProjectActualFiles(
                     project,
-                    [aConfig.path, aIndex.path, bIndex.path, bBar.path, libFile.path]
+                    [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
                 verifyGetErrRequest({
                     host,
                     session,
                     expected: [
-                        { file: aIndex, syntax: [], semantic: [], suggestion: [] }
+                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
                     ]
                 });
             }
 
-            function verifySymlinkScenario(alreadyBuilt: boolean) {
-                it("with preserveSymlinks turned off", () => {
-                    verifySession(alreadyBuilt, {});
-                });
-
-                it("with preserveSymlinks turned on", () => {
-                    verifySession(alreadyBuilt, { preserveSymlinks: true });
-                });
-            }
-
-            describe("when solution is not built", () => {
-                verifySymlinkScenario(/*alreadyBuilt*/ false);
-            });
-
-            describe("when solution is already built", () => {
-                verifySymlinkScenario(/*alreadyBuilt*/ true);
-            });
-
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
                 return {
-                    path: `${projectRoot}/packages/${packageName}/tsconfig.json`,
+                    path: `${tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
-                            baseUrl: ".",
                             outDir: "lib",
                             rootDir: "src",
                             composite: true,
@@ -1458,12 +1450,45 @@ bar();`);
                 };
             }
 
-            function index(packageName: string, content: string): File {
+            function file(packageName: string, fileName: string, content: string): File {
                 return {
-                    path: `${projectRoot}/packages/${packageName}/src/index.ts`,
+                    path: `${tscWatch.projectRoot}/packages/${packageName}/src/${fileName}`,
                     content
                 };
             }
+
+            describe("when packageJson has types field and has index.ts", () => {
+                verifySymlinkScenario(() => ({
+                    bPackageJson: {
+                        path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                        content: JSON.stringify({
+                            main: "lib/index.js",
+                            types: "lib/index.d.ts"
+                        })
+                    },
+                    aTest: file("A", "index.ts", `import { foo } from 'b';
+import { bar } from 'b/lib/bar';
+foo();
+bar();`),
+                    bFoo: file("B", "index.ts", `export function foo() { }`),
+                    bBar: file("B", "bar.ts", `export function bar() { }`)
+                }));
+            });
+
+            describe("when referencing file from subFolder", () => {
+                verifySymlinkScenario(() => ({
+                    bPackageJson: {
+                        path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                        content: "{}"
+                    },
+                    aTest: file("A", "test.ts", `import { foo } from 'b/lib/foo';
+import { bar } from 'b/lib/bar/foo';
+foo();
+bar();`),
+                    bFoo: file("B", "foo.ts", `export function foo() { }`),
+                    bBar: file("B", "bar/foo.ts", `export function bar() { }`)
+                }));
+            });
         });
     });
 }
