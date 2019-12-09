@@ -16,11 +16,11 @@ namespace ts.projectSystem {
 
         it("works when file is removed and added with different content", () => {
             const app: File = {
-                path: `${projectRoot}/app.ts`,
+                path: `${tscWatch.projectRoot}/app.ts`,
                 content: "console.log('Hello world');"
             };
             const unitTest1: File = {
-                path: `${projectRoot}/unitTest1.ts`,
+                path: `${tscWatch.projectRoot}/unitTest1.ts`,
                 content: `import assert = require('assert');
 
 describe("Test Suite 1", () => {
@@ -35,7 +35,7 @@ describe("Test Suite 1", () => {
 });`
             };
             const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [app, libFile, tsconfig];

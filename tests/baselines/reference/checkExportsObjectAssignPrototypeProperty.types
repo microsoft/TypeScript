@@ -214,7 +214,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 module.exports = Person;
 >module.exports = Person : typeof Person
 >module.exports : typeof Person
->module : { "tests/cases/conformance/jsdoc/mod1": typeof Person; }
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof Person; }
 >exports : typeof Person
 >Person : typeof Person
 
