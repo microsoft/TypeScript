@@ -2906,7 +2906,7 @@ namespace ts {
         | ArrowFunction;
 
     export function isValueSignatureDeclaration(node: Node): node is ValueSignatureDeclaration {
-        return isFunctionExpression(node) || isArrowFunction(node) || isMethodOrAccessor(node) || isFunctionDeclaration(node) || isConstructorDeclaration(node);
+        return isFunctionExpression(node) || isArrowFunction(node) || isMethodOrAccessor(node) || isFunctionDeclaration(node) || isConstructorDeclaration(node) || isPartialApplicationExpression(node);
     }
 
     function walkUp(node: Node, kind: SyntaxKind) {

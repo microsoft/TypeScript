@@ -255,6 +255,8 @@ namespace ts {
         ParenthesizedExpression,
         FunctionExpression,
         ArrowFunction,
+        PartialApplicationExpression,
+        PartialApplicationElement,
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
@@ -2113,6 +2115,19 @@ namespace ts {
         readonly kind: SyntaxKind.FunctionExpression;
         readonly name?: Identifier;
         readonly body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
+    }
+
+    export interface PartialApplicationExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
+        readonly kind: SyntaxKind.FunctionExpression;
+        readonly questionToken: QuestionToken,
+        readonly name?: Identifier;
+        readonly body?: FunctionBody;  // Required?, whereas the member inherited from FunctionDeclaration is optional
+    }
+
+    export interface PartialApplicationElement extends Expression {
+        readonly kind: SyntaxKind.PartialApplicationElement;
+        readonly questionToken: QuestionToken,
+        readonly argumentIndex: number;
     }
 
     export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
@@ -7296,6 +7311,8 @@ namespace ts {
         updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression;
         createSpreadElement(expression: Expression): SpreadElement;
         updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement;
+        createPartialApplicationElement(questionToken: QuestionToken | undefined): PartialApplicationElement;
+        updatePartialApplicationElement(node: PartialApplicationElement, questionToken: QuestionToken | undefined): PartialApplicationElement;
         createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         createOmittedExpression(): OmittedExpression;

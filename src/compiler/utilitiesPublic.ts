@@ -1009,6 +1009,10 @@ namespace ts {
         return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
+    export function isPartialApplicationExpression(node: Node): node is PartialApplicationExpression {
+        return node.kind === SyntaxKind.PartialApplicationExpression;
+    }
+
     export function isConstTypeReference(node: Node) {
         return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
             node.typeName.escapedText === "const" && !node.typeArguments;

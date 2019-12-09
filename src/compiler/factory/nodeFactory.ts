@@ -209,6 +209,8 @@ namespace ts {
             updateYieldExpression,
             createSpreadElement,
             updateSpreadElement,
+            createPartialApplicationElement,
+            updatePartialApplicationElement,
             createClassExpression,
             updateClassExpression,
             createOmittedExpression,
@@ -2987,6 +2989,21 @@ namespace ts {
         function updateSpreadElement(node: SpreadElement, expression: Expression) {
             return node.expression !== expression
                 ? update(createSpreadElement(expression), node)
+                : node;
+        }
+
+        // @api
+        function createPartialApplicationElement(questionToken: QuestionToken | undefined) {
+            const node = createBaseExpression<PartialApplicationElement>(SyntaxKind.PartialApplicationElement);
+            node.questionToken = questionToken ?? createToken(SyntaxKind.QuestionToken);
+            node.transformFlags |= TransformFlags.ContainsPartialApplication;
+            return node;
+        }
+
+        // @api
+        function updatePartialApplicationElement(node: PartialApplicationElement, questionToken: QuestionToken | undefined) {
+            return node.questionToken !== questionToken
+                ? update(createPartialApplicationElement(questionToken), node)
                 : node;
         }
 
