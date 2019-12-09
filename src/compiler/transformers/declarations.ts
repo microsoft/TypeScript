@@ -1050,16 +1050,14 @@ namespace ts {
         }
 
         function stripExportModifiers(statement: Statement): Statement {
-            if (isImportEqualsDeclaration(statement) || hasModifier(statement, ModifierFlags.Default)) {
+            if (isImportEqualsDeclaration(statement) || hasModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)) {
                 // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
                 // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
                 return statement;
             }
-            // TODO(rbuckton): Does this need to be parented?
-            const clone = setParent(setTextRange(factory.cloneNode(statement), statement), statement.parent);
+
             const modifiers = factory.createModifiersFromModifierFlags(getModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
-            clone.modifiers = modifiers.length ? factory.createNodeArray(modifiers) : undefined;
-            return clone;
+            return factory.updateModifiers(statement, modifiers);
         }
 
         function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
@@ -1126,8 +1124,8 @@ namespace ts {
                     ));
                     if (clean && resolver.isExpandoFunctionDeclaration(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
-                        const fakespace = factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
-                        fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
+                        // Use parseNodeFactory so it is usable as an enclosing declaration
+                        const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                         fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;

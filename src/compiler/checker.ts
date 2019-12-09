@@ -3683,7 +3683,7 @@ namespace ts {
                 typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
                 indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
-                    withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context)),
+                    withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, context, /*typeNode*/ undefined)),
                 signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
                     withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
                 symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
@@ -4141,29 +4141,53 @@ namespace ts {
                 function appendReferenceToType(root: TypeReferenceNode | ImportTypeNode, ref: TypeReferenceNode): TypeReferenceNode | ImportTypeNode {
                     if (isImportTypeNode(root)) {
                         // first shift type arguments
-                        const innerParams = root.typeArguments;
-                        if (root.qualifier) {
-                            (isIdentifier(root.qualifier) ? root.qualifier : root.qualifier.right).typeArguments = innerParams;
+                        let typeArguments = root.typeArguments;
+                        let qualifier = root.qualifier;
+                        if (qualifier) {
+                            if (isIdentifier(qualifier)) {
+                                qualifier = factory.updateIdentifier(qualifier, typeArguments);
+                            }
+                            else {
+                                qualifier = factory.updateQualifiedName(qualifier,
+                                    qualifier.left,
+                                    factory.updateIdentifier(qualifier.right, typeArguments));
+                            }
                         }
-                        root.typeArguments = ref.typeArguments;
+                        typeArguments = ref.typeArguments;
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.qualifier = root.qualifier ? factory.createQualifiedName(root.qualifier, id) : id;
+                            qualifier = qualifier ? factory.createQualifiedName(qualifier, id) : id;
                         }
-                        return root;
+                        return factory.updateImportTypeNode(
+                            root,
+                            root.argument,
+                            qualifier,
+                            typeArguments,
+                            root.isTypeOf);
                     }
                     else {
                         // first shift type arguments
-                        const innerParams = root.typeArguments;
-                        (isIdentifier(root.typeName) ? root.typeName : root.typeName.right).typeArguments = innerParams;
-                        root.typeArguments = ref.typeArguments;
+                        let typeArguments = root.typeArguments;
+                        let typeName = root.typeName;
+                        if (isIdentifier(typeName)) {
+                            typeName = factory.updateIdentifier(typeName, typeArguments);
+                        }
+                        else {
+                            typeName = factory.updateQualifiedName(typeName,
+                                typeName.left,
+                                factory.updateIdentifier(typeName.right, typeArguments));
+                        }
+                        typeArguments = ref.typeArguments;
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.typeName = factory.createQualifiedName(root.typeName, id);
+                            typeName = factory.createQualifiedName(typeName, id);
                         }
-                        return root;
+                        return factory.updateTypeReferenceNode(
+                            root,
+                            typeName,
+                            typeArguments);
                     }
                 }
 
@@ -4192,16 +4216,19 @@ namespace ts {
                     if (resolvedType.stringIndexInfo) {
                         let indexSignature: IndexSignatureDeclaration;
                         if (resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
-                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration), IndexKind.String, context);
-                            indexSignature.type = createElidedInformationPlaceholder(context);
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(
+                                createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration),
+                                IndexKind.String,
+                                context,
+                                createElidedInformationPlaceholder(context));
                         }
                         else {
-                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, context);
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, context, /*typeNode*/ undefined);
                         }
                         typeElements.push(indexSignature);
                     }
                     if (resolvedType.numberIndexInfo) {
-                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, context));
+                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, context, /*typeNode*/ undefined));
                     }
 
                     const properties = resolvedType.properties;
@@ -4267,9 +4294,7 @@ namespace ts {
                 if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                     const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
                     for (const signature of signatures) {
-                        const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
-                        methodDeclaration.name = propertyName;
-                        methodDeclaration.questionToken = optionalToken;
+                        const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context, { name: propertyName, questionToken: optionalToken });
                         typeElements.push(preserveCommentsOn(methodDeclaration));
                     }
                 }
@@ -4351,7 +4376,7 @@ namespace ts {
                 }
             }
 
-            function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
+            function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext, typeNode: TypeNode | undefined): IndexSignatureDeclaration {
                 const name = getNameFromIndexInfo(indexInfo) || "x";
                 const indexerTypeNode = factory.createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
@@ -4363,7 +4388,9 @@ namespace ts {
                     /*questionToken*/ undefined,
                     indexerTypeNode,
                     /*initializer*/ undefined);
-                const typeNode = typeToTypeNodeHelper(indexInfo.type || anyType, context);
+                if (!typeNode) {
+                    typeNode = typeToTypeNodeHelper(indexInfo.type || anyType, context);
+                }
                 if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
                     context.encounteredError = true;
                 }
@@ -4375,7 +4402,14 @@ namespace ts {
                     typeNode);
             }
 
-            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext): SignatureDeclaration {
+            interface SignatureToSignatureDeclarationOptions {
+                modifiers?: readonly Modifier[];
+                name?: PropertyName;
+                questionToken?: QuestionToken;
+
+            }
+
+            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -4416,10 +4450,28 @@ namespace ts {
                     returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
-                const node = factory.createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
+
+                const node =
+                    kind === SyntaxKind.CallSignature ? factory.createCallSignature(typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.ConstructSignature ? factory.createConstructSignature(typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.MethodSignature ? factory.createMethodSignature(options?.modifiers, options?.name ?? factory.createIdentifier(""), options?.questionToken, typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.MethodDeclaration ? factory.createMethodDeclaration(/*decorators*/ undefined, options?.modifiers, /*asteriskToken*/ undefined, options?.name ?? factory.createIdentifier(""), /*questionToken*/ undefined, typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
+                    kind === SyntaxKind.Constructor ? factory.createConstructorDeclaration(/*decorators*/ undefined, options?.modifiers, parameters, /*body*/ undefined) :
+                    kind === SyntaxKind.GetAccessor ? factory.createGetAccessorDeclaration(/*decorators*/ undefined, options?.modifiers, options?.name ?? factory.createIdentifier(""), parameters, returnTypeNode, /*body*/ undefined) :
+                    kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(/*decorators*/ undefined, options?.modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*body*/ undefined) :
+                    kind === SyntaxKind.IndexSignature ? factory.createIndexSignature(/*decorators*/ undefined, options?.modifiers, parameters, returnTypeNode) :
+                    kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
+                    kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(/*decorators*/ undefined, options?.modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
+                    kind === SyntaxKind.FunctionExpression ? factory.createFunctionExpression(options?.modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, factory.createBlock([])) :
+                    kind === SyntaxKind.ArrowFunction ? factory.createArrowFunction(options?.modifiers, typeParameters, parameters, returnTypeNode, /*equalsGreaterThanToken*/ undefined, factory.createBlock([])) :
+                    Debug.assertNever(kind);
+
                 if (typeArguments) {
                     node.typeArguments = factory.createNodeArray(typeArguments);
                 }
+
                 return node;
             }
 
@@ -4478,12 +4530,19 @@ namespace ts {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                             trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
-                        const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
-                        const clone = nodeIsSynthesized(visited) ? visited : factory.cloneNode(visited);
-                        if (clone.kind === SyntaxKind.BindingElement) {
-                            (<BindingElement>clone).initializer = undefined;
+                        let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                        if (isBindingElement(visited)) {
+                            visited = factory.updateBindingElement(
+                                visited,
+                                visited.dotDotDotToken,
+                                visited.propertyName,
+                                visited.name,
+                                /*initializer*/ undefined);
                         }
-                        return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
+                        if (!nodeIsSynthesized(visited)) {
+                            visited = factory.cloneNode(visited);
+                        }
+                        return setEmitFlags(visited, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
                 }
             }
@@ -4882,8 +4941,11 @@ namespace ts {
                         }
                         let expression: Expression | undefined;
                         if (isSingleOrDoubleQuote(firstChar)) {
-                            expression = factory.createStringLiteral(symbolName.substring(1, symbolName.length - 1).replace(/\\./g, s => s.substring(1)));
-                            (expression as StringLiteral).singleQuote = firstChar === CharacterCodes.singleQuote;
+                            expression = factory.createStringLiteral(
+                                symbolName
+                                    .substring(1, symbolName.length - 1)
+                                    .replace(/\\./g, s => s.substring(1)),
+                                firstChar === CharacterCodes.singleQuote);
                         }
                         else if (("" + +symbolName) === symbolName) {
                             expression = factory.createNumericLiteral(+symbolName);
@@ -5042,27 +5104,39 @@ namespace ts {
 
                 function flattenExportAssignedNamespace(statements: Statement[]) {
                     const exportAssignment = find(statements, isExportAssignment);
-                    const ns = find(statements, isModuleDeclaration);
+                    const nsIndex = findIndex(statements, isModuleDeclaration);
+                    let ns = nsIndex !== -1 ? statements[nsIndex] as ModuleDeclaration : undefined;
                     if (ns && exportAssignment && exportAssignment.isExportEquals &&
                         isIdentifier(exportAssignment.expression) && isIdentifier(ns.name) && idText(ns.name) === idText(exportAssignment.expression) &&
                         ns.body && isModuleBlock(ns.body)) {
                         // Pass 0: Correct situations where a module has both an `export = ns` and multiple top-level exports by stripping the export modifiers from
                         //  the top-level exports and exporting them in the targeted ns, as can occur when a js file has both typedefs and `module.export` assignments
                         const excessExports = filter(statements, s => !!(getModifierFlags(s) & ModifierFlags.Export));
+                        const name = ns.name;
+                        let body = ns.body;
                         if (length(excessExports)) {
-                            ns.body.statements = factory.createNodeArray([...ns.body.statements, factory.createExportDeclaration(
-                                /*decorators*/ undefined,
-                                /*modifiers*/ undefined,
-                                factory.createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => factory.createExportSpecifier(/*alias*/ undefined, id))),
-                                /*moduleSpecifier*/ undefined
-                            )]);
+                            ns = factory.updateModuleDeclaration(
+                                ns,
+                                ns.decorators,
+                                ns.modifiers,
+                                ns.name,
+                                body = factory.updateModuleBlock(
+                                    body,
+                                    factory.createNodeArray([...ns.body.statements, factory.createExportDeclaration(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        factory.createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => factory.createExportSpecifier(/*alias*/ undefined, id))),
+                                        /*moduleSpecifier*/ undefined
+                                    )])
+                                )
+                            );
+                            statements = [...statements.slice(0, nsIndex), ns, ...statements.slice(nsIndex + 1)];
                         }
 
-
                         // Pass 1: Flatten `export namespace _exports {} export = _exports;` so long as the `export=` only points at a single namespace declaration
-                        if (!find(statements, s => s !== ns && nodeHasName(s, ns.name as Identifier))) {
+                        if (!find(statements, s => s !== ns && nodeHasName(s, name))) {
                             results = [];
-                            forEach(ns.body.statements, s => {
+                            forEach(body.statements, s => {
                                 addResult(s, ModifierFlags.None); // Recalculates the ambient (and export, if applicable from above) flag
                             });
                             statements = [...filter(statements, s => s !== ns && s !== exportAssignment), ...results];
@@ -5109,27 +5183,39 @@ namespace ts {
 
                 function inlineExportModifiers(statements: Statement[]) {
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
-                    const exportDecl = find(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause) as ExportDeclaration | undefined;
-                    if (exportDecl) {
-                        const replacements = mapDefined(exportDecl.exportClause!.elements, e => {
+                    const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause);
+                    if (index >= 0) {
+                        const exportDecl = statements[index] as ExportDeclaration & { readonly exportClause: NamedExports };
+                        const replacements = mapDefined(exportDecl.exportClause.elements, e => {
                             if (!e.propertyName) {
                                 // export {name} - look thru `statements` for `name`, and if all results can take an `export` modifier, do so and filter it
-                                const associated = filter(statements, s => nodeHasName(s, e.name));
-                                if (length(associated) && every(associated, canHaveExportModifier)) {
-                                    forEach(associated, addExportModifier);
+                                const indices = indicesOf(statements);
+                                const associatedIndices = filter(indices, i => nodeHasName(statements[i], e.name));
+                                if (length(associatedIndices) && every(associatedIndices, i => canHaveExportModifier(statements[i]))) {
+                                    for (const index of associatedIndices) {
+                                        statements[index] = addExportModifier(statements[index] as Extract<HasModifiers, Statement>);
+                                    }
                                     return undefined;
                                 }
                             }
                             return e;
                         });
                         if (!length(replacements)) {
-                            // all clauses removed, filter the export declaration
-                            statements = filter(statements, s => s !== exportDecl);
+                            // all clauses removed, remove the export declaration
+                            orderedRemoveItemAt(statements, index);
                         }
                         else {
                             // some items filtered, others not - update the export declaration
-                            // (mutating because why not, we're building a whole new tree here anyway)
-                            exportDecl.exportClause!.elements = factory.createNodeArray(replacements);
+                            statements[index] = factory.updateExportDeclaration(
+                                exportDecl,
+                                exportDecl.decorators,
+                                exportDecl.modifiers,
+                                factory.updateNamedExports(
+                                    exportDecl.exportClause,
+                                    replacements
+                                ),
+                                exportDecl.moduleSpecifier
+                            );
                         }
                     }
                     return statements;
@@ -5150,7 +5236,7 @@ namespace ts {
                     return statements;
                 }
 
-                function canHaveExportModifier(node: Statement) {
+                function canHaveExportModifier(node: Statement): node is Extract<HasModifiers, Statement> {
                     return isEnumDeclaration(node) ||
                             isVariableStatement(node) ||
                             isFunctionDeclaration(node) ||
@@ -5160,10 +5246,9 @@ namespace ts {
                             isTypeDeclaration(node);
                 }
 
-                function addExportModifier(statement: Statement) {
-                    const flags = (getModifierFlags(statement) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
-                    statement.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(flags));
-                    statement.modifierFlagsCache = 0;
+                function addExportModifier(node: Extract<HasModifiers, Statement>) {
+                    const flags = (getModifierFlags(node) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
+                    return factory.updateModifiers(node, flags);
                 }
 
                 function visitSymbolTable(symbolTable: SymbolTable, suppressNewPrivateContext?: boolean, propertyAsAlias?: boolean) {
@@ -5302,29 +5387,29 @@ namespace ts {
                 }
 
                 // Prepends a `declare` and/or `export` modifier if the context requires it, and then adds `node` to `result` and returns `node`
-                // Note: This _mutates_ `node` without using `updateNode` - the assumption being that all nodes should be manufactured fresh by the node builder
                 function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
-                    let newModifierFlags: ModifierFlags = ModifierFlags.None;
-                    if (additionalModifierFlags & ModifierFlags.Export &&
-                        enclosingDeclaration &&
-                        isExportingScope(enclosingDeclaration) &&
-                        canHaveExportModifier(node)
-                    ) {
-                        // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
-                        newModifierFlags |= ModifierFlags.Export;
-                    }
-                    if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) &&
-                        (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) &&
-                        (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
-                        // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
-                        newModifierFlags |= ModifierFlags.Ambient;
-                    }
-                    if ((additionalModifierFlags & ModifierFlags.Default) && (isClassDeclaration(node) || isInterfaceDeclaration(node) || isFunctionDeclaration(node))) {
-                        newModifierFlags |= ModifierFlags.Default;
-                    }
-                    if (newModifierFlags) {
-                        node.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(newModifierFlags | getModifierFlags(node)));
-                        node.modifierFlagsCache = 0; // Reset computed flags cache
+                    if (canHaveModifiers(node)) {
+                        let newModifierFlags: ModifierFlags = ModifierFlags.None;
+                        if (additionalModifierFlags & ModifierFlags.Export &&
+                            enclosingDeclaration &&
+                            isExportingScope(enclosingDeclaration) &&
+                            canHaveExportModifier(node)
+                        ) {
+                            // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
+                            newModifierFlags |= ModifierFlags.Export;
+                        }
+                        if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) &&
+                            (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) &&
+                            (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
+                            // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
+                            newModifierFlags |= ModifierFlags.Ambient;
+                        }
+                        if ((additionalModifierFlags & ModifierFlags.Default) && (isClassDeclaration(node) || isInterfaceDeclaration(node) || isFunctionDeclaration(node))) {
+                            newModifierFlags |= ModifierFlags.Default;
+                        }
+                        if (newModifierFlags) {
+                            node = factory.updateModifiers(node, newModifierFlags | getModifierFlags(node));
+                        }
                     }
                     results.push(node);
                 }
@@ -5495,8 +5580,7 @@ namespace ts {
                     const signatures = getSignaturesOfType(type, SignatureKind.Call);
                     for (const sig of signatures) {
                         // Each overload becomes a separate function declaration, in order
-                        const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context) as FunctionDeclaration;
-                        decl.name = factory.createIdentifier(localName);
+                        const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context, { name: factory.createIdentifier(localName) }) as FunctionDeclaration;
                         addResult(setTextRange(decl, sig.declaration), modifierFlags);
                     }
                     // Module symbol emit will take care of module-y members, provided it has exports
@@ -5530,11 +5614,12 @@ namespace ts {
                         // emit akin to the above would be needed.
 
                         // Add a namespace
-                        const fakespace = factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
-                        fakespace.flags ^= NodeFlags.Synthesized; // unset synthesized so it is usable as an enclosing declaration
+                        // Create namespace as non-synthetic so it is usable as an enclosing declaration
+                        let fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
                         fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
+
                         const oldResults = results;
                         results = [];
                         const oldAddingDeclare = addingDeclare;
@@ -5548,11 +5633,14 @@ namespace ts {
                         addingDeclare = oldAddingDeclare;
                         const declarations = results;
                         results = oldResults;
-                        fakespace.flags ^= NodeFlags.Synthesized; // reset synthesized
-                        fakespace.parent = undefined!;
-                        fakespace.locals = undefined!;
-                        fakespace.symbol = undefined!;
-                        fakespace.body = factory.createModuleBlock(declarations);
+
+                        // replace namespace with synthetic version
+                        fakespace = factory.updateModuleDeclaration(
+                            fakespace,
+                            fakespace.decorators,
+                            fakespace.modifiers,
+                            fakespace.name,
+                            factory.createModuleBlock(declarations));
                         addResult(fakespace, modifierFlags); // namespaces can never be default exported
                     }
                 }
@@ -5574,12 +5662,6 @@ namespace ts {
                             p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"
                         ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
-                    for (const c of constructors) {
-                        // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
-                        // `signatureToSignatureDeclarationHelper` appends them regardless, so for now we delete them here
-                        c.type = undefined;
-                        c.typeParameters = undefined;
-                    }
                     const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
                     addResult(setTextRange(factory.createClassDeclaration(
                         /*decorators*/ undefined,
@@ -5900,14 +5982,16 @@ namespace ts {
                             const results = [];
                             for (const sig of signatures) {
                                 // Each overload becomes a separate method declaration, in order
-                                const decl = signatureToSignatureDeclarationHelper(sig, methodKind, context) as MethodDeclaration;
-                                decl.name = name; // TODO: Clone
-                                if (staticFlag) {
-                                    decl.modifiers = factory.createNodeArray(factory.createModifiersFromModifierFlags(staticFlag));
-                                }
-                                if (p.flags & SymbolFlags.Optional) {
-                                    decl.questionToken = factory.createToken(SyntaxKind.QuestionToken);
-                                }
+                                const decl = signatureToSignatureDeclarationHelper(
+                                    sig,
+                                    methodKind,
+                                    context,
+                                    {
+                                        name,
+                                        questionToken: p.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                                        modifiers: staticFlag ? factory.createModifiersFromModifierFlags(staticFlag) : undefined
+                                    }
+                                );
                                 results.push(setTextRange(decl, sig.declaration));
                             }
                             return results as unknown as T[];
@@ -6115,7 +6199,7 @@ namespace ts {
                                     }
                                 }
                             }
-                            results.push(indexInfoToIndexSignatureDeclarationHelper(info, type, context));
+                            results.push(indexInfoToIndexSignatureDeclarationHelper(info, type, context, /*typeNode*/ undefined));
                         }
                     }
                     return results;

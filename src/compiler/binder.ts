@@ -584,7 +584,7 @@ namespace ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
-        function bindContainer(node: Node, containerFlags: ContainerFlags) {
+        function bindContainer(node: Mutable<Node>, containerFlags: ContainerFlags) {
             // Before we recurse into a node's children, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
@@ -1757,7 +1757,7 @@ namespace ts {
             return !!body && body.statements.some(s => isExportDeclaration(s) || isExportAssignment(s));
         }
 
-        function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
+        function setExportContextFlag(node: Mutable<ModuleDeclaration | SourceFile>) {
             // A declaration source file or ambient module declaration that contains no export declarations (but possibly regular
             // declarations with export modifiers) is an export context in which declarations are implicitly exported.
             if (node.flags & NodeFlags.Ambient && !hasExportDeclarations(node)) {

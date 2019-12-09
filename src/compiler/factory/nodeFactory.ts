@@ -199,21 +199,13 @@ namespace ts {
             updateArrayLiteral: updateArrayLiteralExpression,
             createObjectLiteral: createObjectLiteralExpression,
             updateObjectLiteral: updateObjectLiteralExpression,
-            createPropertyAccess: (expression, name) => {
-                const node = createPropertyAccessExpression(expression, name);
-                if (flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess) {
-                    setEmitFlags(node, EmitFlags.NoIndentation);
-                }
-                return node;
-            },
+            createPropertyAccess: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
+                (expression, name) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
+                createPropertyAccessExpression,
             updatePropertyAccess: updatePropertyAccessExpression,
-            createPropertyAccessChain: (expression, questionDotToken, name) => {
-                const node = createPropertyAccessChain(expression, questionDotToken, name);
-                if (flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess) {
-                    setEmitFlags(node, EmitFlags.NoIndentation);
-                }
-                return node;
-            },
+            createPropertyAccessChain: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
+                (expression, questionDotToken, name) => setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), EmitFlags.NoIndentation) :
+                createPropertyAccessChain,
             updatePropertyAccessChain,
             createElementAccess: createElementAccessExpression,
             updateElementAccess: updateElementAccessExpression,
@@ -508,6 +500,7 @@ namespace ts {
             get copyCustomPrologue() { return lazyFactory().copyCustomPrologue; },
             get ensureUseStrict() { return lazyFactory().ensureUseStrict; },
             get liftToBlock() { return lazyFactory().liftToBlock; },
+            get updateModifiers() { return lazyFactory().updateModifiers; },
         };
 
         return factory;
@@ -543,8 +536,8 @@ namespace ts {
             return array;
         }
 
-        function createBaseNode<T extends Node>(kind: T["kind"]): T {
-            return createNode(kind) as T;
+        function createBaseNode<T extends Node>(kind: T["kind"]) {
+            return createNode(kind) as Mutable<T>;
         }
 
         function createBaseDeclaration<T extends Declaration | VariableStatement | ImportDeclaration>(
@@ -619,7 +612,8 @@ namespace ts {
             return node;
         }
 
-        function updateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: T, original: T) {
+        function updateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: Mutable<T>, original: T) {
+            // copy children used only for error reporting
             if (original.typeArguments) updated.typeArguments = original.typeArguments;
             return update(updated, original);
         }
@@ -650,7 +644,8 @@ namespace ts {
             return node;
         }
 
-        function updateBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(updated: T, original: T) {
+        function updateBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(updated: Mutable<T>, original: T) {
+            // copy children used only for error reporting
             if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
             if (original.typeArguments) updated.typeArguments = original.typeArguments;
             return updateBaseSignatureDeclaration(updated, original);
@@ -743,7 +738,7 @@ namespace ts {
             kind: T["kind"],
             text: string
         ) {
-            const node = createTokenNode(kind) as T;
+            const node = createBaseToken(kind);
             node.text = text;
             node.hasExtendedUnicodeEscape = undefined;
             node.isUnterminated = undefined;
@@ -815,21 +810,21 @@ namespace ts {
         // Identifiers
         //
 
-        function createBaseIdentifier(text: string, originalKeywordKind: SyntaxKind | undefined): Identifier {
+        function createBaseIdentifier(text: string, originalKeywordKind: SyntaxKind | undefined) {
             if (originalKeywordKind === undefined && text) {
                 originalKeywordKind = stringToToken(text);
             }
             if (originalKeywordKind === SyntaxKind.Identifier) {
                 originalKeywordKind = undefined;
             }
-            const node = createIdentifierNode(SyntaxKind.Identifier) as Identifier;
+            const node = createIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
             node.originalKeywordKind = originalKeywordKind;
             node.escapedText = escapeLeadingUnderscores(text);
             return node;
         }
 
         function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags) {
-            const node = createBaseIdentifier(text, /*originalKeywordKind*/ undefined) as GeneratedIdentifier;
+            const node = createBaseIdentifier(text, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
             node.autoGenerateFlags = autoGenerateFlags;
             node.autoGenerateId = nextAutoGenerateId;
             nextAutoGenerateId++;
@@ -902,6 +897,10 @@ namespace ts {
         // Punctuation
         //
 
+        function createBaseToken<T extends Node>(kind: T["kind"]) {
+            return createTokenNode(kind) as Mutable<T>;
+        }
+
         // @api
         function createToken(token: SyntaxKind.SuperKeyword): SuperExpression;
         function createToken(token: SyntaxKind.ThisKeyword): ThisExpression;
@@ -919,7 +918,7 @@ namespace ts {
             Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
             Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
             Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
-            const node = createTokenNode(token) as Token<TKind>;
+            const node = createBaseToken<Token<TKind>>(token);
             if (!skipTransformationFlags) {
                 switch (token) {
                     case SyntaxKind.AsyncKeyword:
@@ -1889,7 +1888,7 @@ namespace ts {
         }
 
         // @api
-        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean) {
+        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             setChild(node, node.argument = argument);
             setChild(node, node.qualifier = qualifier);
@@ -1902,7 +1901,7 @@ namespace ts {
         }
 
         // @api
-        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean) {
+        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf = node.isTypeOf) {
             return node.argument !== argument
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
@@ -2676,7 +2675,7 @@ namespace ts {
 
         // @api
         function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
-            const node = createTokenNode(kind) as TemplateLiteralLikeNode;
+            const node = createBaseToken<TemplateLiteralLikeNode>(kind);
             node.text = text;
             node.rawText = rawText;
             if (!skipTransformationFlags) {
@@ -4361,7 +4360,8 @@ namespace ts {
             return finish(node);
         }
 
-        function finishUpdatePropertyAssignment(updated: PropertyAssignment, original: PropertyAssignment) {
+        function finishUpdatePropertyAssignment(updated: Mutable<PropertyAssignment>, original: PropertyAssignment) {
+            // copy children used only for error reporting
             if (original.decorators) updated.decorators = original.decorators;
             if (original.modifiers) updated.modifiers = original.modifiers;
             if (original.questionToken) updated.questionToken = original.questionToken;
@@ -4394,7 +4394,8 @@ namespace ts {
             return finish(node);
         }
 
-        function finishUpdateShorthandPropertyAssignment(updated: ShorthandPropertyAssignment, original: ShorthandPropertyAssignment) {
+        function finishUpdateShorthandPropertyAssignment(updated: Mutable<ShorthandPropertyAssignment>, original: ShorthandPropertyAssignment) {
+            // copy children used only for error reporting
             if (original.decorators) updated.decorators = original.decorators;
             if (original.modifiers) updated.modifiers = original.modifiers;
             if (original.equalsToken) updated.equalsToken = original.equalsToken;
@@ -4460,10 +4461,12 @@ namespace ts {
         function createSourceFile(
             statements: readonly Statement[],
             endOfFileToken: EndOfFileToken,
+            flags: NodeFlags
         ) {
-            const node = createSourceFileNode(SyntaxKind.SourceFile) as SourceFile;
+            const node = createSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
             setChildren(node, node.statements = createNodeArray(statements));
             setChild(node, node.endOfFileToken = endOfFileToken);
+            node.flags |= flags;
             node.fileName = "";
             node.text = "";
             node.languageVersion = 0;
@@ -4556,8 +4559,8 @@ namespace ts {
             return node;
         }
 
-        function createBaseUnparsedNode<T extends UnparsedNode>(kind: T["kind"], data?: string): T {
-            const node = createBaseNode<T>(kind);
+        function createBaseUnparsedNode<T extends UnparsedNode>(kind: T["kind"], data?: string) {
+            const node = createBaseNode(kind);
             node.data = data;
             return node;
         }
@@ -4743,12 +4746,14 @@ namespace ts {
                 return node;
             }
 
-            const clone = node.kind === SyntaxKind.SourceFile ? createSourceFileNode(node.kind) as T:
+            const clone =
+                node.kind === SyntaxKind.SourceFile ? createSourceFileNode(node.kind) as T:
                 node.kind === SyntaxKind.Identifier ? createIdentifierNode(node.kind) as T:
                 !isNodeKind(node.kind) ? createTokenNode(node.kind) as T:
                 createBaseNode(node.kind) as T;
 
-            clone.flags |= node.flags;
+            (clone as Mutable<T>).flags |= (node.flags & ~NodeFlags.Synthesized);
+            (clone as Mutable<T>).transformFlags = node.transformFlags;
             setOriginalNode(clone, node);
 
             for (const key in node) {
@@ -4792,19 +4797,19 @@ namespace ts {
 
         function setChildWorker(parent: Node, child: Node | undefined): void {
             if (!skipTransformationFlags && child) {
-                parent.transformFlags |= propagateChildFlags(child);
+                (parent as Mutable<Node>).transformFlags |= propagateChildFlags(child);
             }
         }
 
         function setChildrenWorker(parent: Node, children: NodeArray<Node> | undefined): void {
             if (!skipTransformationFlags && children) {
-                parent.transformFlags |= propagateChildrenFlags(children);
+                (parent as Mutable<Node>).transformFlags |= propagateChildrenFlags(children);
             }
         }
 
         function finishWorker<T extends Node>(node: T) {
             if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.HasComputedFlags;
+                (node as Mutable<T>).transformFlags |= TransformFlags.HasComputedFlags;
             }
             return node;
         }
@@ -4897,6 +4902,7 @@ namespace ts {
             copyCustomPrologue,
             ensureUseStrict,
             liftToBlock,
+            updateModifiers,
         };
 
         function getBinaryFactory(operator: BinaryOperator) {
@@ -5445,6 +5451,38 @@ namespace ts {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
             return <Statement>singleOrUndefined(nodes) || factory.createBlock(<readonly Statement[]>nodes);
         }
+
+        function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
+        function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
+            if (typeof modifiers === "number") {
+                modifiers = factory.createModifiersFromModifierFlags(modifiers);
+            }
+
+            return node.kind === SyntaxKind.Parameter ? factory.updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                node.kind === SyntaxKind.PropertySignature ? factory.updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
+                node.kind === SyntaxKind.PropertyDeclaration ? factory.updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                node.kind === SyntaxKind.MethodSignature ? factory.updateMethodSignature(node, modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
+                node.kind === SyntaxKind.MethodDeclaration ? factory.updateMethodDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                node.kind === SyntaxKind.Constructor ? factory.updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
+                node.kind === SyntaxKind.GetAccessor ? factory.updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
+                node.kind === SyntaxKind.SetAccessor ? factory.updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
+                node.kind === SyntaxKind.IndexSignature ? factory.updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type!) :
+                node.kind === SyntaxKind.FunctionExpression ? factory.updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                node.kind === SyntaxKind.ArrowFunction ? factory.updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
+                node.kind === SyntaxKind.ClassExpression ? factory.updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                node.kind === SyntaxKind.VariableStatement ? factory.updateVariableStatement(node, modifiers, node.declarationList) :
+                node.kind === SyntaxKind.FunctionDeclaration ? factory.updateFunctionDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                node.kind === SyntaxKind.ClassDeclaration ? factory.updateClassDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                node.kind === SyntaxKind.InterfaceDeclaration ? factory.updateInterfaceDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                node.kind === SyntaxKind.TypeAliasDeclaration ? factory.updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
+                node.kind === SyntaxKind.EnumDeclaration ? factory.updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
+                node.kind === SyntaxKind.ModuleDeclaration ? factory.updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
+                node.kind === SyntaxKind.ImportEqualsDeclaration ? factory.updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
+                node.kind === SyntaxKind.ImportDeclaration ? factory.updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
+                node.kind === SyntaxKind.ExportAssignment ? factory.updateExportAssignment(node, node.decorators, modifiers, node.expression) :
+                node.kind === SyntaxKind.ExportDeclaration ? factory.updateExportDeclaration(node, node.decorators, modifiers, node.exportClause, node.moduleSpecifier) :
+                Debug.assertNever(node);
+        }
     }
 
     // Language-edition and feature specific node markers
@@ -5472,8 +5510,9 @@ namespace ts {
     const markJsx = createFlagMarker(TransformFlags.ContainsJsx);
 
     function createFlagMarker(transformFlags: TransformFlags, excludeSubtree?: boolean) {
-        return excludeSubtree ? (node: Node) => { node.transformFlags = transformFlags; } :
-            (node: Node) => { node.transformFlags |= transformFlags; };
+        return excludeSubtree ?
+            (node: Mutable<Node>) => { node.transformFlags = transformFlags; } :
+            (node: Mutable<Node>) => { node.transformFlags |= transformFlags; };
     }
 
     function observeArguments<T>(action: <U extends T>(arg1: U, arg2: U) => U, observer: ((arg1: T, arg2: T) => void) | undefined): <U extends T>(arg1: U, arg2: U) => U;
@@ -5649,7 +5688,7 @@ namespace ts {
     const baseFactory = createBaseNodeFactory();
 
     export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, baseFactory, {
-        onCreateNode: node => node.flags |= NodeFlags.Synthesized
+        onCreateNode: node => (node as Mutable<Node>).flags |= NodeFlags.Synthesized
     });
 
     export function createUnparsedSourceFile(text: string): UnparsedSource;
@@ -5976,4 +6015,3 @@ namespace ts {
         return destRanges;
     }
 }
-

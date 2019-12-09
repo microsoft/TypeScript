@@ -568,7 +568,7 @@ namespace ts {
         const newSourceFile = IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
         // Because new source file node is created, it may not have the flag PossiblyContainDynamicImport. This is the case if there is no new edit to add dynamic import.
         // We will manually port the flag to the new source file.
-        newSourceFile.flags |= (sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags);
+        (newSourceFile as Mutable<SourceFile>).flags |= (sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags);
         return newSourceFile;
     }
 
@@ -824,8 +824,7 @@ namespace ts {
             }
 
             // Set source file so that errors will be reported with this file name
-            const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken);
-            sourceFile.flags |= sourceFlags;
+            const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags);
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
@@ -923,8 +922,7 @@ namespace ts {
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
             const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
 
-            const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken);
-            sourceFile.flags |= sourceFlags;
+            const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags);
 
             // A member of ReadonlyArray<T> isn't assignable to a member of T[] (and prevents a direct cast) - but this is where we set up those members so they can be readonly in the future
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
@@ -994,10 +992,10 @@ namespace ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken): SourceFile {
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
-            const sourceFile = factory.createSourceFile(statements, endOfFileToken);
+            const sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
             sourceFile.pos = 0;
             sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
@@ -1411,7 +1409,7 @@ namespace ts {
             node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
-                node.flags |= contextFlags;
+                (node as Mutable<T>).flags |= contextFlags;
             }
 
             // Keep track on the node if we encountered an error while parsing it.  If we did, then
@@ -1419,7 +1417,7 @@ namespace ts {
             // flag so that we don't mark any subsequent nodes.
             if (parseErrorBeforeNextFinishedNode) {
                 parseErrorBeforeNextFinishedNode = false;
-                node.flags |= NodeFlags.ThisNodeHasError;
+                (node as Mutable<T>).flags |= NodeFlags.ThisNodeHasError;
             }
 
             return node;
@@ -3040,7 +3038,7 @@ namespace ts {
                 const node = factory.createOptionalTypeNode(type.type);
                 node.pos = type.pos;
                 node.end = type.end;
-                node.flags = type.flags;
+                (node as Mutable<Node>).flags = type.flags;
                 return node;
             }
             return type;
@@ -4783,7 +4781,7 @@ namespace ts {
                 parseTemplateExpression()
             );
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
-                tagExpression.flags |= NodeFlags.OptionalChain;
+                (tagExpression as Mutable<Node>).flags |= NodeFlags.OptionalChain;
             }
             factory.trackExtraneousChildNode(tagExpression, tagExpression.questionDotToken = questionDotToken);
             return finishNode(tagExpression, pos);
@@ -5019,7 +5017,7 @@ namespace ts {
             // CoverInitializedName[Yield] :
             //     IdentifierReference[?Yield] Initializer[In, ?Yield]
             // this is necessary because ObjectLiteral productions are also used to cover grammar for ObjectAssignmentPattern
-            let node: ShorthandPropertyAssignment | PropertyAssignment;
+            let node: Mutable<ShorthandPropertyAssignment | PropertyAssignment>;
             const isShorthandPropertyAssignment = tokenIsIdentifier && (token() !== SyntaxKind.ColonToken);
             if (isShorthandPropertyAssignment) {
                 const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
@@ -5323,13 +5321,15 @@ namespace ts {
             // ThrowStatement[Yield] :
             //      throw [no LineTerminator here]Expression[In, ?Yield];
 
+            const pos = getNodePos();
+            parseExpected(SyntaxKind.ThrowKeyword);
+
             // Because of automatic semicolon insertion, we need to report error if this
             // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
             // directly as that might consume an expression on the following line.
             // We just return 'undefined' in that case.  The actual error will be reported in the
             // grammar walker.
-            const pos = getNodePos();
-            parseExpected(SyntaxKind.ThrowKeyword);
+            // TODO(rbuckton): Should we use `createMissingNode` here instead?
             const expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
             return finishNode(factory.createThrow(expression!), pos);
@@ -5667,7 +5667,7 @@ namespace ts {
             const modifiers = parseModifiers();
             if (isAmbient) {
                 for (const m of modifiers!) {
-                    m.flags |= NodeFlags.Ambient;
+                    (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                 }
                 return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, decorators, modifiers));
             }
@@ -5722,7 +5722,7 @@ namespace ts {
                     if (decorators || modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
-                        const missing = createMissingNode<Statement>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         missing.pos = pos;
                         missing.decorators = decorators;
                         missing.modifiers = modifiers;
@@ -6004,7 +6004,7 @@ namespace ts {
                 : factory.createSetAccessorDeclaration(decorators, modifiers, name, parameters, body);
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
             if (typeParameters) factory.trackExtraneousChildNodes(node, node.typeParameters = typeParameters);
-            if (type && kind === SyntaxKind.SetAccessor) factory.trackExtraneousChildNode(node, node.type = type);
+            if (type && node.kind === SyntaxKind.SetAccessor) factory.trackExtraneousChildNode(node, node.type = type);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6182,7 +6182,7 @@ namespace ts {
                 const isAmbient = some(modifiers, isDeclareModifier);
                 if (isAmbient) {
                     for (const m of modifiers!) {
-                        m.flags |= NodeFlags.Ambient;
+                        (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                     }
                     return doInsideOfContext(NodeFlags.Ambient, () => parsePropertyOrMethodDeclaration(pos, hasJSDoc, decorators, modifiers));
                 }
@@ -6690,7 +6690,7 @@ namespace ts {
                 currentToken = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
 
-                const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken));
+                const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken), NodeFlags.None);
                 const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
                 if (jsDocDiagnostics) {
                     sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);

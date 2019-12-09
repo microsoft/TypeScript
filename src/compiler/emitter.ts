@@ -685,7 +685,7 @@ namespace ts {
                 return statement;
             });
             const eofToken = factory.createToken(SyntaxKind.EndOfFileToken);
-            const sourceFile = factory.createSourceFile(statements ?? [], eofToken);
+            const sourceFile = factory.createSourceFile(statements ?? [], eofToken, NodeFlags.None);
             sourceFile.fileName = getRelativePathFromDirectory(
                 host.getCurrentDirectory(),
                 getNormalizedAbsolutePath(fileName, buildInfoDirectory),

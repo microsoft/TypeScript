@@ -155,17 +155,23 @@ namespace ts.codefix {
         body: Block | undefined,
     ): MethodDeclaration | undefined {
         const program = context.program;
-        const signatureDeclaration = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
-        if (!signatureDeclaration) {
+        const node = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
+        if (!node) {
             return undefined;
         }
 
-        signatureDeclaration.decorators = undefined;
-        signatureDeclaration.modifiers = modifiers;
-        signatureDeclaration.name = name;
-        signatureDeclaration.questionToken = optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
-        signatureDeclaration.body = body;
-        return signatureDeclaration;
+        return factory.updateMethodDeclaration(
+            node,
+            /*decorators*/ undefined,
+            modifiers,
+            node.asteriskToken,
+            name,
+            optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+            node.typeParameters,
+            node.parameters,
+            node.type,
+            body
+        );
     }
 
     export function createMethodFromCallExpression(

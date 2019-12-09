@@ -180,7 +180,7 @@ namespace ts {
                 if (node.expression === undefined) {
                     return factory.createTrue();
                 }
-                return visitJsxExpression(node);
+                return visitNode(node.expression, visitor, isExpression);
             }
             else {
                 return Debug.failBadSyntaxKind(node);

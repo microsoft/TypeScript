@@ -607,7 +607,7 @@ namespace ts {
                 case ModuleKind.AMD:
                     return createImportCallExpressionAMD(argument, containsLexicalThis);
                 case ModuleKind.UMD:
-                    return createImportCallExpressionUMD(argument, containsLexicalThis);
+                    return createImportCallExpressionUMD(argument ?? factory.createVoidZero(), containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
                     return createImportCallExpressionCommonJS(argument, containsLexicalThis);
@@ -1166,7 +1166,7 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
-                        expressions = append(expressions, transformInitializedVariable(variable));
+                        expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
                     }
                 }
 
@@ -1215,7 +1215,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function transformInitializedVariable(node: VariableDeclaration): Expression {
+        function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
                     visitNode(node, moduleExpressionElementVisitor),

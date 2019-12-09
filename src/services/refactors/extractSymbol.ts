@@ -1262,13 +1262,13 @@ namespace ts.refactor.extractSymbol {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (!ignoreReturns && node.kind === SyntaxKind.ReturnStatement && hasWritesOrVariableDeclarations) {
+            if (!ignoreReturns && isReturnStatement(node) && hasWritesOrVariableDeclarations) {
                 const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
-                if ((<ReturnStatement>node).expression) {
+                if (node.expression) {
                     if (!returnValueProperty) {
                         returnValueProperty = "__return";
                     }
-                    assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode((<ReturnStatement>node).expression, visitor)));
+                    assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
                 }
                 if (assignments.length === 1) {
                     return factory.createReturn(assignments[0].name as Expression);

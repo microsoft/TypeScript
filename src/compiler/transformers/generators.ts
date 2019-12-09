@@ -265,7 +265,7 @@ namespace ts {
         // allocating objects to store the same information to avoid GC overhead.
         //
         let labelOffsets: number[] | undefined; // The operation offset at which the label is defined.
-        let labelExpressions: LiteralExpression[][] | undefined; // The NumericLiteral nodes bound to each label.
+        let labelExpressions: Mutable<LiteralExpression>[][] | undefined; // The NumericLiteral nodes bound to each label.
         let nextLabelId = 1; // The next label id to use.
 
         // Operations store information about generated code for the function body. This
@@ -939,8 +939,9 @@ namespace ts {
             const resumeLabel = defineLabel();
             const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
+                // NOTE: `expression` must be defined for `yield*`.
                 const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
-                    ? setTextRange(emitHelpers().createValuesHelper(expression), node)
+                    ? setTextRange(emitHelpers().createValuesHelper(expression!), node)
                     : expression;
                 emitYieldStar(iterator, /*location*/ node);
             }
@@ -1282,7 +1283,7 @@ namespace ts {
             return undefined;
         }
 
-        function transformInitializedVariable(node: VariableDeclaration) {
+        function transformInitializedVariable(node: InitializedVariableDeclaration) {
             return setSourceMapRange(
                 factory.createAssignment(
                     setSourceMapRange(<Identifier>factory.cloneNode(node.name), node.name),
@@ -1870,8 +1871,9 @@ namespace ts {
         }
 
         function transformAndEmitThrowStatement(node: ThrowStatement): void {
+            // TODO(rbuckton): `expression` should be required on `throw`.
             emitThrow(
-                visitNode(node.expression, visitor, isExpression),
+                visitNode(node.expression ?? factory.createVoidZero(), visitor, isExpression),
                 /*location*/ node
             );
         }

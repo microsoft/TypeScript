@@ -1737,12 +1737,9 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    // TODO(rbuckton): Does this need to be parented?
-                    const name = setParent(setTextRange(factory.cloneNode(node), node), node.parent);
-                    name.flags &= ~NodeFlags.Synthesized;
+                    const name = setParent(setTextRange(parseNodeFactory.cloneNode(node), node), node.parent);
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentLexicalScope)!; // ensure the parent is set to a parse tree node.
-
                     return name;
 
                 case SyntaxKind.QualifiedName:
@@ -2174,7 +2171,7 @@ namespace ts {
             }
         }
 
-        function transformInitializedVariable(node: VariableDeclaration): Expression {
+        function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenDestructuringAssignment(

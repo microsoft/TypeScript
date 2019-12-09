@@ -1777,9 +1777,6 @@ namespace ts.server {
             const configFileContent = this.host.readFile(configFilename)!; // TODO: GH#18217
 
             const result = parseJsonText(configFilename, configFileContent);
-            if (!result.endOfFileToken) {
-                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
-            }
             const configFileErrors = result.parseDiagnostics as Diagnostic[];
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,

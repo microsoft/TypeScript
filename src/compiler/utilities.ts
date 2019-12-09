@@ -298,13 +298,13 @@ namespace ts {
 
             // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
-                node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
+                (node as Mutable<Node>).flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propagated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.flags |= NodeFlags.HasAggregatedChildData;
+            (node as Mutable<Node>).flags |= NodeFlags.HasAggregatedChildData;
         }
     }
 
@@ -4792,7 +4792,7 @@ namespace ts {
         return filter(node.declarations, isInitializedVariable);
     }
 
-    function isInitializedVariable(node: VariableDeclaration) {
+    function isInitializedVariable(node: VariableDeclaration): node is InitializedVariableDeclaration {
         return node.initializer !== undefined;
     }
 
@@ -7114,7 +7114,7 @@ namespace ts {
         }
     }
 
-    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;

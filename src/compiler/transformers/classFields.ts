@@ -285,7 +285,7 @@ namespace ts {
                         factory.createConstructorDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            parameters,
+                            parameters ?? [],
                             body
                         ),
                         constructor || node
@@ -423,7 +423,7 @@ namespace ts {
                 ? factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name))
                 : property.name;
 
-            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) : factory.createVoidZero();
+            const initializer = visitNode(property.initializer, visitor, isExpression) ?? factory.createVoidZero();
             if (emitAssignment) {
                 const memberAccess = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ propertyName);
                 return factory.createAssignment(memberAccess, initializer);

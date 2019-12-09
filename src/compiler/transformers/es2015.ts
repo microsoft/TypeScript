@@ -3085,11 +3085,19 @@ namespace ts {
                 // we only evaluate the incrementor on subsequent evaluations.
 
                 currentState.conditionVariable = factory.createUniqueName("inc");
-                statements.push(factory.createIf(
-                    currentState.conditionVariable,
-                    factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
-                    factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
-                ));
+                if (node.incrementor) {
+                    statements.push(factory.createIf(
+                        currentState.conditionVariable,
+                        factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
+                        factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
+                    ));
+                }
+                else {
+                    statements.push(factory.createIf(
+                        factory.createLogicalNot(currentState.conditionVariable),
+                        factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
+                    ));
+                }
 
                 if (shouldConvertConditionOfForStatement(node)) {
                     statements.push(factory.createIf(

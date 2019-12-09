@@ -185,7 +185,6 @@ namespace ts.refactor {
             factory.createIdentifier("typedef"),
             factory.createJSDocTypeExpression(selection),
             factory.createIdentifier(name));
-        node.name = node.name as Identifier;
 
         const templates: JSDocTemplateTag[] = [];
         forEach(typeParameters, typeParameter => {

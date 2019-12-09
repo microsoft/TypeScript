@@ -163,7 +163,7 @@ namespace ts {
         function visitYieldExpression(node: YieldExpression) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 if (node.asteriskToken) {
-                    const expression = visitNode(node.expression, visitor, isExpression);
+                    const expression = visitNode(Debug.assertDefined(node.expression), visitor, isExpression);
 
                     return setOriginalNode(
                         setTextRange(
@@ -822,7 +822,7 @@ namespace ts {
             resumeLexicalEnvironment();
             let statementOffset = 0;
             const statements: Statement[] = [];
-            const body = visitNode(node.body, visitor, isConciseBody);
+            const body = visitNode(node.body, visitor, isConciseBody) ?? factory.createBlock([]);
             if (isBlock(body)) {
                 statementOffset = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
             }

@@ -1928,7 +1928,11 @@ namespace ts {
     });
 
     /**
-     * Creates a shallow, memberwise clone of a node for mutation.
+     * Creates a shallow, memberwise clone of a node ~for mutation~ with its `pos`, `end`, and `parent` set.
+     *
+     * NOTE: It is unsafe to change any properties of a `Node` that relate to its AST children, as those changes won't be
+     * captured with respect to transformations.
+     *
      * @deprecated Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.
      */
     export function getMutableClone<T extends Node>(node: T): T {

@@ -175,11 +175,13 @@ namespace ts {
             function replaceWithClassAndNamespace() {
                 return (sourceFile: SourceFile) => {
                     // TODO(rbuckton): Does this need to be parented?
-                    const result = setParent(setTextRange(factory.cloneNode(sourceFile), sourceFile), sourceFile.parent);
-                    result.statements = factory.createNodeArray([
-                        factory.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
-                    ]);
+                    const result = factory.updateSourceFile(
+                        sourceFile,
+                        factory.createNodeArray([
+                            factory.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                            factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
+                        ])
+                    );
                     return result;
                 };
             }
