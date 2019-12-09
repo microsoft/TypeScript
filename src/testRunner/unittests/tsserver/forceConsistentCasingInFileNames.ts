@@ -44,15 +44,15 @@ namespace ts.projectSystem {
 
         it("works when renaming file with different casing", () => {
             const loggerFile: File = {
-                path: `${projectRoot}/Logger.ts`,
+                path: `${tscWatch.projectRoot}/Logger.ts`,
                 content: `export class logger { }`
             };
             const anotherFile: File = {
-                path: `${projectRoot}/another.ts`,
+                path: `${tscWatch.projectRoot}/another.ts`,
                 content: `import { logger } from "./Logger"; new logger();`
             };
             const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { forceConsistentCasingInFileNames: true }
                 })
@@ -60,7 +60,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
             const session = createSession(host, { canUseEvents: true });
-            openFilesForSession([{ file: loggerFile, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
             const service = session.getProjectService();
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;
@@ -76,10 +76,10 @@ namespace ts.projectSystem {
             const newLoggerPath = loggerFile.path.toLowerCase();
             host.renameFile(loggerFile.path, newLoggerPath);
             closeFilesForSession([loggerFile], session);
-            openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: tscWatch.projectRoot }], session);
 
             // Apply edits for rename
-            openFilesForSession([{ file: anotherFile, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
                 arguments: {
@@ -109,15 +109,15 @@ namespace ts.projectSystem {
 
         it("when changing module name with different casing", () => {
             const loggerFile: File = {
-                path: `${projectRoot}/Logger.ts`,
+                path: `${tscWatch.projectRoot}/Logger.ts`,
                 content: `export class logger { }`
             };
             const anotherFile: File = {
-                path: `${projectRoot}/another.ts`,
+                path: `${tscWatch.projectRoot}/another.ts`,
                 content: `import { logger } from "./Logger"; new logger();`
             };
             const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { forceConsistentCasingInFileNames: true }
                 })
@@ -125,7 +125,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
             const session = createSession(host, { canUseEvents: true });
-            openFilesForSession([{ file: anotherFile, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
             const service = session.getProjectService();
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;

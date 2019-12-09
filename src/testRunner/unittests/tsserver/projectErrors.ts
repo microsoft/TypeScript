@@ -390,31 +390,31 @@ namespace ts.projectSystem {
 
         it("Reports errors correctly when file referenced by inferred project root, is opened right after closing the root file", () => {
             const app: File = {
-                path: `${projectRoot}/src/client/app.js`,
+                path: `${tscWatch.projectRoot}/src/client/app.js`,
                 content: ""
             };
             const serverUtilities: File = {
-                path: `${projectRoot}/src/server/utilities.js`,
+                path: `${tscWatch.projectRoot}/src/server/utilities.js`,
                 content: `function getHostName() { return "hello"; } export { getHostName };`
             };
             const backendTest: File = {
-                path: `${projectRoot}/test/backend/index.js`,
+                path: `${tscWatch.projectRoot}/test/backend/index.js`,
                 content: `import { getHostName } from '../../src/server/utilities';export default getHostName;`
             };
             const files = [libFile, app, serverUtilities, backendTest];
             const host = createServerHost(files);
             const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true });
-            openFilesForSession([{ file: app, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: app, projectRootPath: tscWatch.projectRoot }], session);
             const service = session.getProjectService();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
             checkProjectActualFiles(project, [libFile.path, app.path]);
-            openFilesForSession([{ file: backendTest, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: backendTest, projectRootPath: tscWatch.projectRoot }], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             checkProjectActualFiles(project, files.map(f => f.path));
             checkErrors([backendTest.path, app.path]);
             closeFilesForSession([backendTest], session);
-            openFilesForSession([{ file: serverUtilities.path, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: serverUtilities.path, projectRootPath: tscWatch.projectRoot }], session);
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
@@ -496,14 +496,14 @@ declare module '@custom/plugin' {
     });
 
     describe("unittests:: tsserver:: Project Errors for Configure file diagnostics events", () => {
-        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
-            const d = Diagnostics.Unknown_compiler_option_0;
+        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string, didYouMean?: string): ConfigFileDiagnostic {
+            const d = didYouMean ? Diagnostics.Unknown_compiler_option_0_Did_you_mean_1 : Diagnostics.Unknown_compiler_option_0;
             const start = configFile.content.indexOf(prop) - 1; // start at "prop"
             return {
                 fileName: configFile.path,
                 start,
                 length: prop.length + 2,
-                messageText: formatStringFromArgs(d.message, [prop]),
+                messageText: formatStringFromArgs(d.message, didYouMean ? [prop, didYouMean] : [prop]),
                 category: d.category,
                 code: d.code,
                 reportsUnnecessary: undefined
@@ -543,7 +543,7 @@ declare module '@custom/plugin' {
             openFilesForSession([file], serverEventManager.session);
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
                 getUnknownCompilerOptionDiagnostic(configFile, "foo"),
-                getUnknownCompilerOptionDiagnostic(configFile, "allowJS")
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS", "allowJs")
             ]);
         });
 
@@ -859,6 +859,78 @@ declare module '@custom/plugin' {
                     source: undefined,
                 },
             ]);
+        });
+    });
+
+    describe("unittests:: tsserver:: Project Errors with resolveJsonModule", () => {
+        function createSessionForTest({ include }: { include: readonly string[]; }) {
+            const test: File = {
+                path: `${tscWatch.projectRoot}/src/test.ts`,
+                content: `import * as blabla from "./blabla.json";
+declare var console: any;
+console.log(blabla);`
+            };
+            const blabla: File = {
+                path: `${tscWatch.projectRoot}/src/blabla.json`,
+                content: "{}"
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        resolveJsonModule: true,
+                        composite: true
+                    },
+                    include
+                })
+            };
+
+            const host = createServerHost([test, blabla, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true });
+            openFilesForSession([test], session);
+            return { host, session, test, blabla, tsconfig };
+        }
+
+        it("should not report incorrect error when json is root file found by tsconfig", () => {
+            const { host, session, test } = createSessionForTest({
+                include: ["./src/*.ts", "./src/*.json"]
+            });
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    {
+                        file: test,
+                        syntax: [],
+                        semantic: [],
+                        suggestion: []
+                    }
+                ]
+            });
+        });
+
+        it("should report error when json is not root file found by tsconfig", () => {
+            const { host, session, test, blabla, tsconfig } = createSessionForTest({
+                include: ["./src/*.ts"]
+            });
+            const span = protocolTextSpanFromSubstring(test.content, `"./blabla.json"`);
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [{
+                    file: test,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(
+                            span.start,
+                            span.end,
+                            Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
+                            [blabla.path, tsconfig.path]
+                        )
+                    ],
+                    suggestion: []
+                }]
+            });
         });
     });
 }

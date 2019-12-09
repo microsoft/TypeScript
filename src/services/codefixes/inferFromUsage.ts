@@ -899,13 +899,13 @@ namespace ts.codefix {
                     low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
                 },
                 {
-                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(t) & ObjectFlags.Anonymous),
-                    low: t => !!(checker.getObjectFlags(t) & ObjectFlags.Anonymous)
+                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
+                    low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
                 }];
             let good = removeLowPriorityInferences(inferences, priorities);
-            const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
             if (anons.length) {
-                good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
+                good = good.filter(i => !(getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(combineAnonymousTypes(anons));
             }
             return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));

@@ -24,6 +24,16 @@
     ],
 
     "files": [
+        "compilerRef.ts",
+        "evaluatorRef.ts",
+        "fakesRef.ts",
+        "vpathRef.ts",
+        "vfsRef.ts",
+        "fourslashRef.ts",
+        "playbackRef.ts",
+        "utilsRef.ts",
+        "documentsRef.ts",
+
         "fourslashRunner.ts",
         "compilerRunner.ts",
         "projectsRunner.ts",

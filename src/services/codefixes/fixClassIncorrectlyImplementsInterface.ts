@@ -54,6 +54,7 @@ namespace ts.codefix {
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
         const classType = checker.getTypeAtLocation(classDeclaration);
+        const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
@@ -62,12 +63,22 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            }
+        }
+
+        // Either adds the node at the top of the class, or if there's a constructor right after that
+        function insertInterfaceMemberNode(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+            if (constructor) {
+                changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
+            }
+            else {
+                changeTracker.insertNodeAtClassStart(sourceFile, cls, newElement);
             }
         }
     }

@@ -1575,7 +1575,7 @@ namespace ts.server.protocol {
         /**
          * List of last known projects
          */
-        knownProjects: protocol.ProjectVersionInfo[];
+        knownProjects: ProjectVersionInfo[];
     }
 
     /**
@@ -3013,7 +3013,7 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
