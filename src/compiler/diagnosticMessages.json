@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1006
     },
+    "The parser expected to find a '}' to match the '{' token here.": {
+        "category": "Error",
+        "code": 1007
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
