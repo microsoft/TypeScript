@@ -6,6 +6,6 @@
         "preserveConstEnums": false
     },
     "references": [
-        { "path": "../compiler/tsconfig.release.json", "prepend": true }
+        { "path": "../compiler/tsconfig.release.json" }
     ]
 }
