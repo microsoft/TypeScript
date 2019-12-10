@@ -201,6 +201,14 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
+            name: "noIndirectImports",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Skip_checking_and_generating_d_ts_files_for_files_indirectly_importing_affected_file
+        },
+        {
             name: "locale",
             type: "string",
             category: Diagnostics.Advanced_Options,

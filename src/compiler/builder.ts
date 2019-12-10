@@ -433,7 +433,9 @@ namespace ts {
             return;
         }
 
-        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
+        if (!state.compilerOptions.noIndirectImports) {
+            forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
+        }
     }
 
     /**

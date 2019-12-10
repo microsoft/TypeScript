@@ -66,6 +66,18 @@ namespace ts.tscWatch {
                 subScenario: `config with --isolatedModules and --declaration/${input.subScenario}`,
                 configFile: () => changeCompilerOptions(input, { isolatedModules: true, declaration: true })
             });
+
+            verifyEmitAndErrorUpdatesWorker({
+                ...input,
+                subScenario: `config with --noIndirectImports/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { noIndirectImports: true })
+            });
+
+            verifyEmitAndErrorUpdatesWorker({
+                ...input,
+                subScenario: `config with --noIndirectImports and --declaration/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { noIndirectImports: true, declaration: true })
+            });
         }
 
         describe("deep import changes", () => {

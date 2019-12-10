@@ -5015,6 +5015,7 @@ namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noIndirectImports?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
