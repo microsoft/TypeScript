@@ -1,7 +1,7 @@
 // @allowJs: true
 // @checkJs: true
 // @out: foo.js
-// @declare: true
+// @declaration: true
 // @Filename: privateTag.js
 
 class A {
