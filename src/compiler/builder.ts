@@ -947,11 +947,7 @@ namespace ts {
                 }
                 else {
                     const program = Debug.assertDefined(state.program);
-                    // Check if program uses any prepend project references, if thats the case we cant track of the js files of those, so emit even though there are no changes
-                    if (state.programEmitComplete || !some(program.getProjectReferences(), ref => !!ref.prepend)) {
-                        state.programEmitComplete = true;
-                        return undefined;
-                    }
+                    if (state.programEmitComplete) return undefined;
                     affected = program;
                 }
             }
@@ -1159,6 +1155,7 @@ namespace ts {
             getCurrentDirectory: notImplemented,
             emitNextAffectedFile: notImplemented,
             getSemanticDiagnosticsOfNextAffectedFile: notImplemented,
+            close: noop,
         };
 
         function toPath(path: string) {
@@ -1190,6 +1187,7 @@ namespace ts {
             emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => getProgram().emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
             getAllDependencies: notImplemented,
             getCurrentDirectory: () => getProgram().getCurrentDirectory(),
+            close: noop,
         };
 
         function getProgram() {

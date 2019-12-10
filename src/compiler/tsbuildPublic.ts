@@ -110,6 +110,7 @@ namespace ts {
         // TODO: To do better with watch mode and normal build mode api that creates program and emits files
         // This currently helps enable --diagnostics and --extendedDiagnostics
         afterProgramEmitAndDiagnostics?(program: T): void;
+        /*@internal*/ afterEmitBundle?(config: ParsedCommandLine): void;
 
         // For testing
         /*@internal*/ now?(): Date;
@@ -157,6 +158,7 @@ namespace ts {
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildNextInvalidatedProject(): void;
         /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
+        /*@internal*/ close(): void;
     }
 
     /**
@@ -177,6 +179,7 @@ namespace ts {
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
+        host.now = maybeBind(system, system.now); // For testing
         return host;
     }
 
@@ -854,6 +857,7 @@ namespace ts {
                     state,
                     projectPath,
                     program,
+                    config,
                     diagnostics,
                     errorFlags,
                     errorType
@@ -912,6 +916,7 @@ namespace ts {
                     state,
                     projectPath,
                     program,
+                    config,
                     declDiagnostics,
                     BuildResultFlags.DeclarationEmitErrors,
                     "Declaration file"
@@ -975,6 +980,7 @@ namespace ts {
                     state,
                     projectPath,
                     program,
+                    config,
                     emitDiagnostics,
                     BuildResultFlags.EmitErrors,
                     "Emit"
@@ -998,7 +1004,7 @@ namespace ts {
                     newestDeclarationFileContentChangedTime,
                 oldestOutputFileName
             });
-            if (program) afterProgramCreate(state, projectPath, program);
+            afterProgramDone(state, projectPath, program, config);
             state.projectCompilerOptions = state.baseCompilerOptions;
             step = Step.QueueReferencingProjects;
             buildResult = resultFlags;
@@ -1239,13 +1245,23 @@ namespace ts {
         return readBuilderProgram(parsed.options, compilerHost) as any as T;
     }
 
-    function afterProgramCreate<T extends BuilderProgram>({ host, watch, builderPrograms }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, program: T) {
-        if (host.afterProgramEmitAndDiagnostics) {
-            host.afterProgramEmitAndDiagnostics(program);
+    function afterProgramDone<T extends BuilderProgram>(
+        { host, watch, builderPrograms }: SolutionBuilderState<T>,
+        proj: ResolvedConfigFilePath,
+        program: T | undefined,
+        config: ParsedCommandLine
+    ) {
+        if (program) {
+            if (host.afterProgramEmitAndDiagnostics) {
+                host.afterProgramEmitAndDiagnostics(program);
+            }
+            if (watch) {
+                program.releaseProgram();
+                builderPrograms.set(proj, program);
+            }
         }
-        if (watch) {
-            program.releaseProgram();
-            builderPrograms.set(proj, program);
+        else if (host.afterEmitBundle) {
+            host.afterEmitBundle(config);
         }
     }
 
@@ -1253,6 +1269,7 @@ namespace ts {
         state: SolutionBuilderState<T>,
         resolvedPath: ResolvedConfigFilePath,
         program: T | undefined,
+        config: ParsedCommandLine,
         diagnostics: readonly Diagnostic[],
         errorFlags: BuildResultFlags,
         errorType: string
@@ -1261,7 +1278,7 @@ namespace ts {
         // List files if any other build error using program (emit errors already report files)
         if (program && state.writeFileName) listFiles(program, state.writeFileName);
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
-        if (program) afterProgramCreate(state, resolvedPath, program);
+        afterProgramDone(state, resolvedPath, program, config);
         state.projectCompilerOptions = state.baseCompilerOptions;
         return errorFlags;
     }
@@ -1869,6 +1886,12 @@ namespace ts {
         }
     }
 
+    function stopWatching(state: SolutionBuilderState) {
+        clearMap(state.allWatchedConfigFiles, closeFileWatcher);
+        clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
+        clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
+    }
+
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
@@ -1898,6 +1921,7 @@ namespace ts {
                 state.configFileCache.values(),
                 config => isParsedCommandLine(config) ? config : undefined
             )),
+            close: () => stopWatching(state),
         };
     }
 
