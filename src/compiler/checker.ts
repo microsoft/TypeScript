@@ -6363,6 +6363,15 @@ namespace ts {
             return name !== undefined ? name : symbolName(symbol);
         }
 
+        function getEffectivePrivacyModifier(node: Node, flags: ModifierFlags) {
+            Debug.assert((flags & ~(ModifierFlags.Public | ModifierFlags.Private | ModifierFlags.Protected)) === 0);
+            return hasModifier(node, flags)
+                || isInJSFile(node)
+                && (!(flags & ModifierFlags.Public) || getJSDocPublicTag(node))
+                && (!(flags & ModifierFlags.Private) || getJSDocPrivateTag(node))
+                && (!(flags & ModifierFlags.Protected) || getJSDocProtectedTag(node));
+        }
+
         function isDeclarationVisible(node: Node): boolean {
             if (node) {
                 const links = getNodeLinks(node);
@@ -6417,7 +6426,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (hasModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
+                        if (getEffectivePrivacyModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
