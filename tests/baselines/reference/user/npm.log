@@ -1,6 +1,6 @@
 Exit Code: 1
-Standard output:
-node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
+    Standard output:
+    node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
 node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
 node_modules/npm/bin/npm-cli.js(47,7): error TS2339: Property 'argv' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(48,11): error TS2339: Property 'deref' does not exist on type 'typeof EventEmitter'.
@@ -1811,4 +1811,5 @@ node_modules/npm/test/tap/zz-cleanup.js(2,20): error TS2307: Cannot find module 
 
 
 
-Standard error:
+    Standard error:
+    

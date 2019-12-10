@@ -1,6 +1,6 @@
 Exit Code: 1
-Standard output:
-node_modules/debug/dist/debug.js(3,100): error TS2539: Cannot assign to '_typeof' because it is not a variable.
+    Standard output:
+    node_modules/debug/dist/debug.js(3,100): error TS2539: Cannot assign to '_typeof' because it is not a variable.
 node_modules/debug/dist/debug.js(3,165): error TS2539: Cannot assign to '_typeof' because it is not a variable.
 node_modules/debug/dist/debug.js(8,21): error TS2304: Cannot find name 'define'.
 node_modules/debug/dist/debug.js(8,46): error TS2304: Cannot find name 'define'.
@@ -85,4 +85,5 @@ node_modules/debug/src/node.js(136,3): error TS2322: Type 'string | undefined' i
 
 
 
-Standard error:
+    Standard error:
+    
