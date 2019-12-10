@@ -1043,9 +1043,30 @@ namespace ts {
     ];
 
     /* @internal */
-    export interface OptionNameMap {
-        optionNameMap: Map<CommandLineOption>;
+    export interface OptionsNameMap {
+        optionsNameMap: Map<CommandLineOption>;
         shortOptionNames: Map<string>;
+    }
+
+    /*@internal*/
+    export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionsNameMap {
+        const optionsNameMap = createMap<CommandLineOption>();
+        const shortOptionNames = createMap<string>();
+        forEach(optionDeclarations, option => {
+            optionsNameMap.set(option.name.toLowerCase(), option);
+            if (option.shortName) {
+                shortOptionNames.set(option.shortName, option.name);
+            }
+        });
+
+        return { optionsNameMap, shortOptionNames };
+    }
+
+    let optionsNameMapCache: OptionsNameMap;
+
+    /* @internal */
+    export function getOptionsNameMap(): OptionsNameMap {
+        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
     }
 
     /* @internal */
@@ -1056,8 +1077,6 @@ namespace ts {
         esModuleInterop: true,
         forceConsistentCasingInFileNames: true
     };
-
-    let optionNameMapCache: OptionNameMap;
 
     /* @internal */
     export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
@@ -1070,25 +1089,6 @@ namespace ts {
             };
         }
         return typeAcquisition;
-    }
-
-    /* @internal */
-    export function getOptionNameMap(): OptionNameMap {
-        return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
-    }
-
-    /*@internal*/
-    export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionNameMap {
-        const optionNameMap = createMap<CommandLineOption>();
-        const shortOptionNames = createMap<string>();
-        forEach(optionDeclarations, option => {
-            optionNameMap.set(option.name.toLowerCase(), option);
-            if (option.shortName) {
-                shortOptionNames.set(option.shortName, option.name);
-            }
-        });
-
-        return { optionNameMap, shortOptionNames };
     }
 
     /* @internal */
@@ -1127,11 +1127,11 @@ namespace ts {
     }
 
     interface OptionsBase {
-        [option: string]: CompilerOptionsValue | undefined;
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
-        getOptionNameMap: () => OptionNameMap;
+        getOptionsNameMap: () => OptionsNameMap;
         optionTypeMismatchDiagnostic: DiagnosticMessage;
     }
 
@@ -1178,12 +1178,12 @@ namespace ts {
                 }
                 else if (s.charCodeAt(0) === CharacterCodes.minus) {
                     const inputOptionName = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
-                    const opt = getOptionDeclarationFromName(diagnostics.getOptionNameMap, inputOptionName, /*allowShort*/ true);
+                    const opt = getOptionDeclarationFromName(diagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
                     if (opt) {
                         i = parseOptionValue(args, i, diagnostics, opt, options, errors);
                     }
                     else {
-                        const watchOpt = getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionNameMap, inputOptionName, /*allowShort*/ true);
+                        const watchOpt = getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
                         if (watchOpt) {
                             i = parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions || (watchOptions = {}), errors);
                         }
@@ -1285,7 +1285,7 @@ namespace ts {
     }
 
     const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        getOptionNameMap,
+        getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
@@ -1297,12 +1297,12 @@ namespace ts {
 
     /** @internal */
     export function getOptionFromName(optionName: string, allowShort?: boolean): CommandLineOption | undefined {
-        return getOptionDeclarationFromName(getOptionNameMap, optionName, allowShort);
+        return getOptionDeclarationFromName(getOptionsNameMap, optionName, allowShort);
     }
 
-    function getOptionDeclarationFromName(getOptionNameMap: () => OptionNameMap, optionName: string, allowShort = false): CommandLineOption | undefined {
+    function getOptionDeclarationFromName(getOptionNameMap: () => OptionsNameMap, optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
-        const { optionNameMap, shortOptionNames } = getOptionNameMap();
+        const { optionsNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.
         if (allowShort) {
             const short = shortOptionNames.get(optionName);
@@ -1310,7 +1310,7 @@ namespace ts {
                 optionName = short;
             }
         }
-        return optionNameMap.get(optionName);
+        return optionsNameMap.get(optionName);
     }
 
     /*@internal*/
@@ -1321,13 +1321,13 @@ namespace ts {
         errors: Diagnostic[];
     }
 
-    let buildOptionNameMapCache: OptionNameMap;
-    function getBuildOptionNameMap(): OptionNameMap {
-        return buildOptionNameMapCache || (buildOptionNameMapCache = createOptionNameMap(buildOpts));
+    let buildOptionsNameMapCache: OptionsNameMap;
+    function getBuildOptionsNameMap(): OptionsNameMap {
+        return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
 
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        getOptionNameMap: getBuildOptionNameMap,
+        getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_build_option_0_Did_you_mean_1,
@@ -1474,7 +1474,7 @@ namespace ts {
     }
 
     function commandLineOptionsToMap(options: readonly CommandLineOption[]) {
-        return arrayToMap(options, option => option.name);
+        return arrayToMap(options, getOptionName);
     }
 
     const typeAcquisitionDidYouMeanDiagnostics: DidYouMeanOptionsDiagnostics = {
@@ -1483,18 +1483,30 @@ namespace ts {
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1,
     };
 
-
-    let watchOptionNameMapCache: OptionNameMap;
-    function getWatchOptionNameMap(): OptionNameMap {
-        return watchOptionNameMapCache || (watchOptionNameMapCache = createOptionNameMap(optionsForWatch));
+    let watchOptionsNameMapCache: OptionsNameMap;
+    function getWatchOptionsNameMap(): OptionsNameMap {
+        return watchOptionsNameMapCache || (watchOptionsNameMapCache = createOptionNameMap(optionsForWatch));
     }
     const watchOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        getOptionNameMap: getWatchOptionNameMap,
+        getOptionsNameMap: getWatchOptionsNameMap,
         optionDeclarations: optionsForWatch,
         unknownOptionDiagnostic: Diagnostics.Unknown_watch_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_watch_option_0_Did_you_mean_1,
         optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1
     };
+
+    let commandLineCompilerOptionsMapCache: Map<CommandLineOption>;
+    function getCommandLineCompilerOptionsMap() {
+        return commandLineCompilerOptionsMapCache || (commandLineCompilerOptionsMapCache = commandLineOptionsToMap(optionDeclarations));
+    }
+    let commandLineWatchOptionsMapCache: Map<CommandLineOption>;
+    function getCommandLineWatchOptionsMap() {
+        return commandLineWatchOptionsMapCache || (commandLineWatchOptionsMapCache = commandLineOptionsToMap(optionsForWatch));
+    }
+    let commandLineTypeAcquisitionMapCache: Map<CommandLineOption>;
+    function getCommandLineTypeAcquisitionMap() {
+        return commandLineTypeAcquisitionMapCache || (commandLineTypeAcquisitionMapCache = commandLineOptionsToMap(typeAcquisitionDeclarations));
+    }
 
     let _tsconfigRootOptions: TsConfigOnlyOption;
     function getTsconfigRootOptionsMap() {
@@ -1506,25 +1518,25 @@ namespace ts {
                     {
                         name: "compilerOptions",
                         type: "object",
-                        elementOptions: commandLineOptionsToMap(optionDeclarations),
+                        elementOptions: getCommandLineCompilerOptionsMap(),
                         extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
                     },
                     {
                         name: "watchOptions",
                         type: "object",
-                        elementOptions: commandLineOptionsToMap(optionsForWatch),
+                        elementOptions: getCommandLineWatchOptionsMap(),
                         extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
                     },
                     {
                         name: "typingOptions",
                         type: "object",
-                        elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                        elementOptions: getCommandLineTypeAcquisitionMap(),
                         extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
                     },
                     {
                         name: "typeAcquisition",
                         type: "object",
-                        elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                        elementOptions: getCommandLineTypeAcquisitionMap(),
                         extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
                     },
                     {
@@ -1856,11 +1868,12 @@ namespace ts {
                 )
             ),
             f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName)
-        ); // TODO
+        );
         const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
+        const watchOptionMap = configParseResult.watchOptions && serializeWatchOptions(configParseResult.watchOptions);
         const config = {
             compilerOptions: {
-                ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+                ...optionMapToObject(optionMap),
                 showConfig: undefined,
                 configFile: undefined,
                 configFilePath: undefined,
@@ -1872,6 +1885,7 @@ namespace ts {
                 build: undefined,
                 version: undefined,
             },
+            watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
             references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
             files: length(files) ? files : undefined,
             ...(configParseResult.configFileSpecs ? {
@@ -1881,6 +1895,12 @@ namespace ts {
             compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
         return config;
+    }
+
+    function optionMapToObject(optionMap: Map<CompilerOptionsValue>): object {
+        return {
+            ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+        };
     }
 
     function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
@@ -1929,9 +1949,23 @@ namespace ts {
         });
     }
 
-    function serializeCompilerOptions(options: CompilerOptions, pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }): Map<CompilerOptionsValue> {
+    function serializeCompilerOptions(
+        options: CompilerOptions,
+        pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
+    ): Map<CompilerOptionsValue> {
+        return serializeOptionBaseObject(options, getOptionsNameMap(), pathOptions);
+    }
+
+    function serializeWatchOptions(options: WatchOptions) {
+        return serializeOptionBaseObject(options, getWatchOptionsNameMap());
+    }
+
+    function serializeOptionBaseObject(
+        options: OptionsBase,
+        { optionsNameMap }: OptionsNameMap,
+        pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
+    ): Map<CompilerOptionsValue> {
         const result = createMap<CompilerOptionsValue>();
-        const optionsNameMap = getOptionNameMap().optionNameMap;
         const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
         for (const name in options) {
@@ -2080,7 +2114,7 @@ namespace ts {
     /* @internal */
     export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
         const result: CompilerOptions = {};
-        const optionsNameMap = getOptionNameMap().optionNameMap;
+        const optionsNameMap = getOptionsNameMap().optionsNameMap;
 
         for (const name in options) {
             if (hasProperty(options, name)) {
@@ -2624,7 +2658,7 @@ namespace ts {
         basePath: string, errors: Push<Diagnostic>, configFileName?: string): CompilerOptions {
 
         const options = getDefaultCompilerOptions(configFileName);
-        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, compilerOptionsDidYouMeanDiagnostics, errors);
+        convertOptionsFromJson(getCommandLineCompilerOptionsMap(), jsonOptions, basePath, options, compilerOptionsDidYouMeanDiagnostics, errors);
         if (configFileName) {
             options.configFilePath = normalizeSlashes(configFileName);
         }
@@ -2641,29 +2675,27 @@ namespace ts {
         const options = getDefaultTypeAcquisition(configFileName);
         const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
 
-        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
+        convertOptionsFromJson(getCommandLineTypeAcquisitionMap(), typeAcquisition, basePath, options, typeAcquisitionDidYouMeanDiagnostics, errors);
         return options;
     }
 
     function convertWatchOptionsFromJsonWorker(jsonOptions: any, basePath: string, errors: Push<Diagnostic>): WatchOptions | undefined {
-        return convertOptionsFromJson(optionsForWatch, jsonOptions, basePath, /*defaultOptions*/ undefined, watchOptionsDidYouMeanDiagnostics, errors);
+        return convertOptionsFromJson(getCommandLineWatchOptionsMap(), jsonOptions, basePath, /*defaultOptions*/ undefined, watchOptionsDidYouMeanDiagnostics, errors);
     }
 
-    function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: Map<CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): WatchOptions | undefined;
-    function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: Map<CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): CompilerOptions | TypeAcquisition;
-    function convertOptionsFromJson(optionDeclarations: readonly CommandLineOption[], jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: Map<CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition | WatchOptions | undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>) {
 
         if (!jsonOptions) {
             return;
         }
 
-        const optionNameMap = commandLineOptionsToMap(optionDeclarations);
-
         for (const id in jsonOptions) {
-            const opt = optionNameMap.get(id);
+            const opt = optionsNameMap.get(id);
             if (opt) {
                 (defaultOptions || (defaultOptions = {}))[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }

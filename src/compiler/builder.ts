@@ -743,7 +743,7 @@ namespace ts {
 
     function convertToReusableCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
         const result: CompilerOptions = {};
-        const optionsNameMap = getOptionNameMap().optionNameMap;
+        const { optionsNameMap } = getOptionsNameMap();
 
         for (const name in options) {
             if (hasProperty(options, name)) {
