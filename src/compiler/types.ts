@@ -468,6 +468,9 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocAuthorTag,
         JSDocClassTag,
+        JSDocPrivateTag,
+        JSDocProtectedTag,
+        JSDocPublicTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -2608,6 +2611,18 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+
+    export interface JSDocPrivateTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPrivateTag;
+    }
+
+    export interface JSDocProtectedTag extends JSDocTag {
+        kind: SyntaxKind.JSDocProtectedTag;
+    }
+
+    export interface JSDocPublicTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPublicTag;
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {
