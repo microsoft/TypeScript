@@ -1,6 +1,6 @@
 Exit Code: 1
-Standard output:
-
+    Standard output:
+    
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 12.13.1 (LTS)
 Starting "rush rebuild"
@@ -12,7 +12,6 @@ XX of XX: [@azure/logger] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/identity] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
@@ -21,8 +20,8 @@ XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -63,7 +62,6 @@ SUCCESS (22)
 @azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/identity (? seconds)
-@azure/core-amqp (? seconds)
 @azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
@@ -72,6 +70,7 @@ SUCCESS (22)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
+@azure/core-amqp (? seconds)
 @azure/core-arm (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
@@ -82,7 +81,6 @@ testhub (? seconds)
 SUCCESS WITH WARNINGS (1)
 ================================
 @azure/cosmos (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -115,7 +113,7 @@ test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<Confi
                 Types of property 'done' are incompatible.
                   Type 'boolean | undefined' is not assignable to type 'boolean'.
                     Type 'undefined' is not assignable to type 'boolean'.
-test/testHelpers.ts(90,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(91,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
       Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
@@ -162,8 +160,8 @@ rush rebuild - Errors! ( ? seconds)
 
 
 
-Standard error:
-
+    Standard error:
+    
 XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
