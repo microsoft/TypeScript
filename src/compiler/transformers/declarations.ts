@@ -1126,7 +1126,7 @@ namespace ts {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
                         const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
-                        fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
+                        setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
                         const declarations = mapDefined(props, p => {

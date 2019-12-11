@@ -5938,33 +5938,107 @@ namespace ts {
 }
 
 namespace ts {
-    export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
+    export function setTextRange<T extends TextRange>(range: T, location: ReadonlyTextRange | undefined): T {
         return location ? setTextRangePosEnd(range, location.pos, location.end) : range;
     }
 
     /* @internal */
-    export function setTextRangePosEnd<T extends TextRange>(range: T, pos: number, end: number) {
+    export function setTextRangePos<T extends TextRange>(range: T, pos: number) {
         range.pos = pos;
+        return range;
+    }
+
+    /* @internal */
+    export function setTextRangeEnd<T extends TextRange>(range: T, end: number) {
         range.end = end;
         return range;
     }
 
     /* @internal */
-    export function setParent<T extends Node>(child: T, parent: T["parent"]): T {
-        if (!child.parent) {
-            child.parent = parent;
+    export function setTextRangePosEnd<T extends TextRange>(range: T, pos: number, end: number) {
+        return setTextRangeEnd(setTextRangePos(range, pos), end);
+    }
+
+    /* @internal */
+    export function setTextRangePosWidth<T extends TextRange>(range: T, pos: number, width: number) {
+        return setTextRangePosEnd(range, pos, pos + width);
+    }
+
+    /**
+     * Sets the `parent` property of a `Node`.
+     */
+    /* @internal */
+    export function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+    /* @internal */
+    export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
+    export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
+        if (child && parent) {
+            (child as Mutable<T>).parent = parent;
         }
         return child;
     }
 
+    /**
+     * Sets the `parent` property of each `Node` in an array of nodes, if is not already set.
+     */
     /* @internal */
-    export function setEachParent<T extends readonly Node[] | undefined>(children: T, parent: NonNullable<T>[number]["parent"]): T {
+    export function setEachParent<T extends readonly Node[]>(children: T, parent: T[number]["parent"]): T;
+    /* @internal */
+    export function setEachParent<T extends readonly Node[]>(children: T | undefined, parent: T[number]["parent"]): T | undefined;
+    export function setEachParent<T extends readonly Node[]>(children: T | undefined, parent: T[number]["parent"]): T | undefined {
         if (children) {
-            for (const child of children!) {
+            for (const child of children) {
                 setParent(child, parent);
             }
         }
         return children;
+    }
+
+    /**
+     * Sets the `parent` property of each `Node` recursively.
+     * @param rootNode The root node from which to start the recursion.
+     * @param incremental When `true`, only recursively descends through nodes whose `parent` pointers are incorrect.
+     * This allows us to quickly bail out of setting `parent` for subtrees during incremental parsing.
+     */
+    /* @internal */
+    export function setParentRecursive<T extends Node>(rootNode: T, incremental: boolean): T;
+    /* @internal */
+    export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined;
+    export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined {
+        if (!rootNode) return rootNode;
+
+        let parent: Node = rootNode;
+        forEachChild(rootNode, isJSDocNode(rootNode) ? visitNodeWithoutJSDoc : visitNodeWithJSDoc);
+        return rootNode;
+
+        function visitNodeWithJSDoc(child: Node) {
+            visitNode(child, visitChildrenWithJSDoc);
+        }
+
+        function visitNodeWithoutJSDoc(child: Node) {
+            visitNode(child, visitChildrenWithoutJSDoc);
+        }
+
+        function visitChildrenWithJSDoc(node: Node) {
+            forEachChild(node, visitNodeWithJSDoc);
+            if (hasJSDocNodes(node)) {
+                forEach(node.jsDoc, visitNodeWithoutJSDoc);
+            }
+        }
+
+        function visitChildrenWithoutJSDoc(node: Node) {
+            forEachChild(node, visitNodeWithoutJSDoc);
+        }
+
+        function visitNode(n: Node, visitChildren: (node: Node) => void) {
+            if (!incremental || n.parent !== parent) {
+                setParent(n, parent);
+                const saveParent = parent;
+                parent = n;
+                visitChildren(n);
+                parent = saveParent;
+            }
+        }
     }
 
     export function isConstTypeReference(node: Node) {

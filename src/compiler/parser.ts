@@ -620,22 +620,18 @@ namespace ts {
         const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters, baseNodeFactory, {
             onSetChild(parent, child) {
                 if (setParentNodes) {
-                    child.parent = parent;
+                    setParent(child, parent);
                 }
             },
             onSetChildren(parent, children) {
                 if (setParentNodes) {
-                    for (const child of children) {
-                        child.parent = parent;
-                    }
+                    setEachParent(children, parent);
                 }
             },
             onFinishNode(node) {
                 if (setParentNodes) {
                     if (hasJSDocNodes(node)) {
-                        for (const jsDoc of node.jsDoc!) {
-                            jsDoc.parent = node;
-                        }
+                        setEachParent(node.jsDoc, node);
                     }
                 }
             },
@@ -965,39 +961,14 @@ namespace ts {
             // a syntax tree, and no semantic features, then the binding process is an unnecessary
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
-
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
-            return;
-
-            function visitNode(n: Node): void {
-                // walk down setting parents that differ from the parent we think it should be.  This
-                // allows us to quickly bail out of setting parents for subtrees during incremental
-                // parsing
-                if (n.parent !== parent) {
-                    n.parent = parent;
-
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (hasJSDocNodes(n)) {
-                        for (const jsDoc of n.jsDoc!) {
-                            jsDoc.parent = n;
-                            parent = jsDoc;
-                            forEachChild(jsDoc, visitNode);
-                        }
-                    }
-                    parent = saveParent;
-                }
-            }
+            setParentRecursive(rootNode, /*incremental*/ true);
         }
 
         function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             const sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
-            sourceFile.pos = 0;
-            sourceFile.end = sourceText.length;
+            setTextRangePosWidth(sourceFile, 0, sourceText.length);
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
             sourceFile.bindSuggestionDiagnostics = undefined;
@@ -1399,15 +1370,12 @@ namespace ts {
 
         function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number): NodeArray<T> {
             const array = factory.createNodeArray(elements, /*hasTrailingComma*/ undefined);
-            array.pos = pos;
-            array.end = end === undefined ? scanner.getStartPos() : end;
+            setTextRangePosEnd(array, pos, end ?? scanner.getStartPos());
             return array;
         }
 
         function finishNode<T extends Node>(node: T, pos: number, end?: number): T {
-            node.pos = pos;
-            node.end = end === undefined ? scanner.getStartPos() : end;
-
+            setTextRangePosEnd(node, pos, end ?? scanner.getStartPos());
             if (contextFlags) {
                 (node as Mutable<T>).flags |= contextFlags;
             }
@@ -3036,8 +3004,7 @@ namespace ts {
             const type = parseType();
             if (!(contextFlags & NodeFlags.JSDoc) && isJSDocNullableType(type) && type.pos === type.type.pos) {
                 const node = factory.createOptionalTypeNode(type.type);
-                node.pos = type.pos;
-                node.end = type.end;
+                setTextRange(node, type);
                 (node as Mutable<Node>).flags = type.flags;
                 return node;
             }
@@ -4479,7 +4446,7 @@ namespace ts {
                 if (invalidElement) {
                     parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
                     const operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false);
-                    operatorToken.pos = operatorToken.end = invalidElement.pos;
+                    setTextRangePosWidth(operatorToken, invalidElement.pos, 0);
                     return <JsxElement><Node>finishNode(factory.createBinary(result, operatorToken as Token<SyntaxKind.CommaToken>, invalidElement), pos);
                 }
             }
@@ -5723,7 +5690,7 @@ namespace ts {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                         const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                        missing.pos = pos;
+                        setTextRangePos(missing, pos);
                         missing.decorators = decorators;
                         missing.modifiers = modifiers;
                         return missing;
@@ -6736,9 +6703,7 @@ namespace ts {
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
                 const comment = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
-                if (comment) {
-                    comment.parent = parent;
-                }
+                setParent(comment, parent);
 
                 if (contextFlags & NodeFlags.JavaScriptFile) {
                     if (!jsDocDiagnostics) {
@@ -6947,21 +6912,21 @@ namespace ts {
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
                         case "author":
-                            tag = parseAuthorTag(start, tagName, margin);
+                            tag = parseAuthorTag(start, tagName, margin, indentText);
                             break;
                         case "augments":
                         case "extends":
-                            tag = parseAugmentsTag(start, tagName);
+                            tag = parseAugmentsTag(start, tagName, margin, indentText);
                             break;
                         case "class":
                         case "constructor":
-                            tag = parseClassTag(start, tagName);
+                            tag = parseClassTag(start, tagName, margin, indentText);
                             break;
                         case "this":
-                            tag = parseThisTag(start, tagName);
+                            tag = parseThisTag(start, tagName, margin, indentText);
                             break;
                         case "enum":
-                            tag = parseEnumTag(start, tagName);
+                            tag = parseEnumTag(start, tagName, margin, indentText);
                             break;
                         case "arg":
                         case "argument":
@@ -6969,33 +6934,33 @@ namespace ts {
                             return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, margin);
                         case "return":
                         case "returns":
-                            tag = parseReturnTag(start, tagName);
+                            tag = parseReturnTag(start, tagName, margin, indentText);
                             break;
                         case "template":
-                            tag = parseTemplateTag(start, tagName);
+                            tag = parseTemplateTag(start, tagName, margin, indentText);
                             break;
                         case "type":
-                            tag = parseTypeTag(start, tagName);
+                            tag = parseTypeTag(start, tagName, margin, indentText);
                             break;
                         case "typedef":
-                            tag = parseTypedefTag(start, tagName, margin);
+                            tag = parseTypedefTag(start, tagName, margin, indentText);
                             break;
                         case "callback":
-                            tag = parseCallbackTag(start, tagName, margin);
+                            tag = parseCallbackTag(start, tagName, margin, indentText);
                             break;
                         default:
-                            tag = parseUnknownTag(start, tagName);
+                            tag = parseUnknownTag(start, tagName, margin, indentText);
                             break;
                     }
-
-                    if (!tag.comment) {
-                        // some tags, like typedef and callback, have already parsed their comments earlier
-                        if (!indentText) {
-                            margin += tag.end - tag.pos;
-                        }
-                        tag.comment = parseTagComments(margin, indentText.slice(margin));
-                    }
                     return tag;
+                }
+
+                function parseTrailingTagComments(pos: number, end: number, margin: number, indentText: string) {
+                    // some tags, like typedef and callback, have already parsed their comments earlier
+                    if (!indentText) {
+                        margin += end - pos;
+                    }
+                    return parseTagComments(margin, indentText.slice(margin));
                 }
 
                 function parseTagComments(indent: number, initialMargin?: string): string | undefined {
@@ -7091,8 +7056,9 @@ namespace ts {
                     return comments.length === 0 ? undefined : comments.join("");
                 }
 
-                function parseUnknownTag(start: number, tagName: Identifier) {
-                    return finishNode(factory.createJSDocUnknownTag(tagName), start);
+                function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocUnknownTag(tagName, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                 }
 
                 function addTag(tag: JSDocTag | undefined): void {
@@ -7191,28 +7157,32 @@ namespace ts {
                     }
                 }
 
-                function parseReturnTag(start: number, tagName: Identifier): JSDocReturnTag {
+                function parseReturnTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocReturnTag {
                     if (some(tags, isJSDocReturnTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const typeExpression = tryParseTypeExpression();
-                    return finishNode(factory.createJSDocReturnTag(tagName, typeExpression), start);
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocReturnTag(tagName, typeExpression, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                 }
 
-                function parseTypeTag(start: number, tagName: Identifier): JSDocTypeTag {
+                function parseTypeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocTypeTag {
                     if (some(tags, isJSDocTypeTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
-                    return finishNode(factory.createJSDocTypeTag(tagName, typeExpression), start);
+                    const end = getNodePos();
+                    const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
+                    return finishNode(factory.createJSDocTypeTag(tagName, typeExpression, comments), start, end);
                 }
 
-                function parseAuthorTag(start: number, tagName: Identifier, indent: number): JSDocAuthorTag {
+                function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                     const authorInfoWithEmail = tryParse(() => tryParseAuthorNameAndEmail());
                     if (!authorInfoWithEmail) {
-                        return finishNode(factory.createJSDocAuthorTag(tagName), start);
+                        const end = getNodePos();
+                        return finishNode(factory.createJSDocAuthorTag(tagName, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                     }
 
                     let comments = authorInfoWithEmail;
@@ -7268,9 +7238,10 @@ namespace ts {
                     }
                 }
 
-                function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {
+                function parseAugmentsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocAugmentsTag {
                     const className = parseExpressionWithTypeArgumentsForAugments();
-                    return finishNode(factory.createJSDocAugmentsTag(tagName, className), start);
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocAugmentsTag(tagName, className, parseTrailingTagComments(start, end, margin, indentText)), start, end);
                 }
 
                 function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
@@ -7296,29 +7267,32 @@ namespace ts {
                     return node;
                 }
 
-                function parseClassTag(start: number, tagName: Identifier): JSDocClassTag {
-                    return finishNode(factory.createJSDocClassTag(tagName), start);
+                function parseClassTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocClassTag {
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocClassTag(tagName, parseTrailingTagComments(start, end, margin, indentText)), start, end);
                 }
 
-                function parseThisTag(start: number, tagName: Identifier): JSDocThisTag {
+                function parseThisTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocThisTag {
                     const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
-                    return finishNode(factory.createJSDocThisTag(tagName, typeExpression), start);
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocThisTag(tagName, typeExpression, parseTrailingTagComments(start, end, margin, indentText)), start, end);
                 }
 
-                function parseEnumTag(start: number, tagName: Identifier): JSDocEnumTag {
+                function parseEnumTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocEnumTag {
                     const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
-                    return finishNode(factory.createJSDocEnumTag(tagName, typeExpression), start);
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocEnumTag(tagName, typeExpression, parseTrailingTagComments(start, end, margin, indentText)), start, end);
                 }
 
-                function parseTypedefTag(start: number, tagName: Identifier, indent: number): JSDocTypedefTag {
+                function parseTypedefTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocTypedefTag {
                     let typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined = tryParseTypeExpression();
                     skipWhitespaceOrAsterisk();
 
                     const fullName = parseJSDocTypeNameWithNamespace();
                     skipWhitespace();
-                    const comment = parseTagComments(indent);
+                    let comment = parseTagComments(indent);
 
                     let end: number | undefined;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
@@ -7350,10 +7324,17 @@ namespace ts {
                         }
                     }
 
-                    const typedefTag = factory.createJSDocTypedefTag(tagName, typeExpression, fullName, comment);
-
                     // Only include the characters between the name end and the next token if a comment was actually parsed out - otherwise it's just whitespace
-                    return finishNode(typedefTag, start, end || typedefTag.comment !== undefined ? scanner.getStartPos() : (typedefTag.fullName || typedefTag.typeExpression || typedefTag.tagName).end);
+                    end = end || comment !== undefined ?
+                        getNodePos() :
+                        (fullName ?? typeExpression ?? tagName).end;
+
+                    if (!comment) {
+                        comment = parseTrailingTagComments(start, end, indent, indentText);
+                    }
+
+                    const typedefTag = factory.createJSDocTypedefTag(tagName, typeExpression, fullName, comment);
+                    return finishNode(typedefTag, start, end);
                 }
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {
@@ -7391,10 +7372,10 @@ namespace ts {
                     return createNodeArray(parameters || [], pos);
                 }
 
-                function parseCallbackTag(start: number, tagName: Identifier, indent: number): JSDocCallbackTag {
+                function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
                     const fullName = parseJSDocTypeNameWithNamespace();
                     skipWhitespace();
-                    const comment = parseTagComments(indent);
+                    let comment = parseTagComments(indent);
                     const parameters = parseCallbackTagParameters(indent);
                     const returnTag = tryParse(() => {
                         if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
@@ -7405,7 +7386,11 @@ namespace ts {
                         }
                     });
                     const typeExpression = finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
-                    return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start);
+                    const end = getNodePos();
+                    if (!comment) {
+                        comment = parseTrailingTagComments(start, end, indent, indentText);
+                    }
+                    return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
@@ -7507,7 +7492,7 @@ namespace ts {
                     return createNodeArray(typeParameters, pos);
                 }
 
-                function parseTemplateTag(start: number, tagName: Identifier): JSDocTemplateTag {
+                function parseTemplateTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocTemplateTag {
                     // The template tag looks like one of the following:
                     //   @template T,U,V
                     //   @template {Constraint} T
@@ -7521,7 +7506,8 @@ namespace ts {
                     // TODO: Consider only parsing a single type parameter if there is a constraint.
                     const constraint = token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                     const typeParameters = parseTemplateTagTypeParameters();
-                    return finishNode(factory.createJSDocTemplateTag(tagName, constraint, typeParameters), start);
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocTemplateTag(tagName, constraint, typeParameters, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                 }
 
                 function parseOptionalJsdoc(t: JSDocSyntaxKind): boolean {
@@ -7671,8 +7657,7 @@ namespace ts {
                     node._children = undefined;
                 }
 
-                node.pos += delta;
-                node.end += delta;
+                setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
                 if (aggressiveChecks && shouldCheckNode(node)) {
                     Debug.assert(text === newText.substring(node.pos, node.end));
@@ -7689,8 +7674,7 @@ namespace ts {
 
             function visitArray(array: IncrementalNodeArray) {
                 array._children = undefined;
-                array.pos += delta;
-                array.end += delta;
+                setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
                 for (const node of array) {
                     visitNode(node);
@@ -7745,7 +7729,7 @@ namespace ts {
             //
             // The element will keep its position if possible.  Or Move backward to the new-end
             // if it's in the 'Y' range.
-            element.pos = Math.min(element.pos, changeRangeNewEnd);
+            const pos = Math.min(element.pos, changeRangeNewEnd);
 
             // If the 'end' is after the change range, then we always adjust it by the delta
             // amount.  However, if the end is in the change range, then how we adjust it
@@ -7767,21 +7751,20 @@ namespace ts {
             // However any element that ended after that will have their pos adjusted to be
             // at the end of the new range.  i.e. any node that ended in the 'Y' range will
             // be adjusted to have their end at the end of the 'Z' range.
-            if (element.end >= changeRangeOldEnd) {
+            const end = element.end >= changeRangeOldEnd ?
                 // Element ends after the change range.  Always adjust the end pos.
-                element.end += delta;
-            }
-            else {
+                element.end + delta :
                 // Element ends in the change range.  The element will keep its position if
                 // possible. Or Move backward to the new-end if it's in the 'Y' range.
-                element.end = Math.min(element.end, changeRangeNewEnd);
+                Math.min(element.end, changeRangeNewEnd);
+
+            Debug.assert(pos <= end);
+            if (element.parent) {
+                Debug.assert(pos >= element.parent.pos);
+                Debug.assert(end <= element.parent.end);
             }
 
-            Debug.assert(element.pos <= element.end);
-            if (element.parent) {
-                Debug.assert(element.pos >= element.parent.pos);
-                Debug.assert(element.end <= element.parent.end);
-            }
+            setTextRangePosEnd(element, pos, end);
         }
 
         function checkNodePositions(node: Node, aggressiveChecks: boolean) {
@@ -8011,8 +7994,8 @@ namespace ts {
             }
         }
 
-        interface IncrementalElement extends TextRange {
-            parent: Node;
+        interface IncrementalElement extends ReadonlyTextRange {
+            readonly parent: Node;
             intersectsChange: boolean;
             length?: number;
             _children: Node[] | undefined;

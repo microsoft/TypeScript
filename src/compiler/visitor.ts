@@ -131,8 +131,7 @@ namespace ts {
         if (updated) {
             // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
             const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
-            updatedArray.pos = pos;
-            updatedArray.end = end;
+            setTextRangePosEnd(updatedArray, pos, end);
             return updatedArray;
         }
 

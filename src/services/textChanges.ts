@@ -897,8 +897,7 @@ namespace ts.textChanges {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
-        newNode.pos = getPos(node);
-        newNode.end = getEnd(node);
+        setTextRangePosEnd(newNode, getPos(node), getEnd(node));
         return newNode;
     }
 
@@ -909,8 +908,7 @@ namespace ts.textChanges {
         }
         // clone nodearray if necessary
         const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
-        nodeArray.pos = getPos(nodes);
-        nodeArray.end = getEnd(nodes);
+        setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
         return nodeArray;
     }
 

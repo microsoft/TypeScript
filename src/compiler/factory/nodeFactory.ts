@@ -525,8 +525,7 @@ namespace ts {
             // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
             const length = elements.length;
             const array = <NodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
-            array.pos = -1;
-            array.end = -1;
+            setTextRangePosEnd(array, -1, -1);
             if (hasTrailingComma) {
                 array.hasTrailingComma = hasTrailingComma;
             }
@@ -3942,8 +3941,8 @@ namespace ts {
         }
 
         // @api
-        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag {
-            const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"), /*comment*/ undefined);
+        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag {
+            const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"), comment);
             setChild(node, node.constraint = constraint);
             setChildren(node, node.typeParameters = createNodeArray(typeParameters));
             return finishJSDoc(node);
@@ -3973,8 +3972,8 @@ namespace ts {
         }
 
         // @api
-        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag {
-            const node = createBaseJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"), /*comment*/ undefined);
+        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag {
+            const node = createBaseJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"), comment);
             setChild(node, node.typeExpression = typeExpression);
             return finishJSDoc(node);
         }
@@ -4006,8 +4005,8 @@ namespace ts {
         }
 
         // @api
-        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag {
-            const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"), /*comment*/ undefined);
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag {
+            const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"), comment);
             setChild(node, node.class = className);
             return finishJSDoc(node);
         }
@@ -4022,21 +4021,21 @@ namespace ts {
         }
 
         // @api
-        function createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag {
-            const node = createBaseJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"), /*comment*/ undefined);
+        function createJSDocClassTag(tagName: Identifier | undefined, comment?: string): JSDocClassTag {
+            const node = createBaseJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"), comment);
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag {
-            const node = createBaseJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"), /*comment*/ undefined);
+        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag {
+            const node = createBaseJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"), comment);
             setChild(node, node.typeExpression = typeExpression);
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocUnknownTag(tagName: Identifier): JSDocUnknownTag {
-            const node = createBaseJSDocTag<JSDocUnknownTag>(SyntaxKind.JSDocTag, tagName, /*comment*/ undefined);
+        function createJSDocUnknownTag(tagName: Identifier, comment?: string): JSDocUnknownTag {
+            const node = createBaseJSDocTag<JSDocUnknownTag>(SyntaxKind.JSDocTag, tagName, comment);
             return finishJSDoc(node);
         }
 
@@ -5803,8 +5802,7 @@ namespace ts {
 
         if (!texts) {
             const textNode = factory.createUnparsedTextLike(/*data*/ undefined, /*internal*/ false);
-            textNode.pos = 0;
-            textNode.end = typeof length === "function" ? length() : length;
+            setTextRangePosWidth(textNode, 0, typeof length === "function" ? length() : length);
             texts = [textNode];
         }
 

@@ -650,11 +650,11 @@ namespace ts {
                 // The following partially-emitted expression exists purely to align our sourcemap
                 // emit with the original emitter.
                 const outer = factory.createPartiallyEmittedExpression(localName);
-                outer.end = closingBraceLocation.end;
+                setTextRangeEnd(outer, closingBraceLocation.end);
                 setEmitFlags(outer, EmitFlags.NoComments);
 
                 const statement = factory.createReturn(outer);
-                statement.pos = closingBraceLocation.pos;
+                setTextRangePos(statement, closingBraceLocation.pos);
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
 
@@ -1739,7 +1739,7 @@ namespace ts {
                     // a source tree node for the purposes of the checker.
                     const name = setParent(setTextRange(parseNodeFactory.cloneNode(node), node), node.parent);
                     name.original = undefined;
-                    name.parent = getParseTreeNode(currentLexicalScope)!; // ensure the parent is set to a parse tree node.
+                    setParent(name, getParseTreeNode(currentLexicalScope)); // ensure the parent is set to a parse tree node.
                     return name;
 
                 case SyntaxKind.QualifiedName:

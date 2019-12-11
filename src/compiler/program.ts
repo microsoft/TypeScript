@@ -2073,8 +2073,8 @@ namespace ts {
                 const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
                 const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                externalHelpersModuleReference.parent = importDecl;
-                importDecl.parent = file;
+                setParent(externalHelpersModuleReference, importDecl);
+                setParent(importDecl, file);
                 imports = [externalHelpersModuleReference];
             }
 

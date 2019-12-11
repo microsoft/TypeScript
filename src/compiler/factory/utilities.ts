@@ -30,7 +30,7 @@ namespace ts {
         const react = parseNodeFactory.createIdentifier(reactNamespace || "React");
         // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
-        react.parent = getParseTreeNode(parent)!;
+        setParent(react, getParseTreeNode(parent));
         return react;
     }
 

@@ -8,6 +8,11 @@ namespace ts {
         end: number;
     }
 
+    export interface ReadonlyTextRange {
+        readonly pos: number;
+        readonly end: number;
+    }
+
     // token > SyntaxKind.Identifier => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
@@ -796,7 +801,7 @@ namespace ts {
         ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
     }
 
-    export interface Node extends TextRange {
+    export interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
         readonly flags: NodeFlags;
         /* @internal */ modifierFlagsCache: ModifierFlags;
@@ -804,7 +809,7 @@ namespace ts {
         readonly decorators?: NodeArray<Decorator>;           // Array of decorators (in document order)
         readonly modifiers?: ModifiersArray;                  // Array of modifiers
         /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
-        parent: Node;                                         // Parent node (initialized by binding)
+        readonly parent: Node;                                // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
@@ -927,7 +932,7 @@ namespace ts {
     /* @internal */
     export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
 
-    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
+    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
         hasTrailingComma?: boolean;
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
@@ -1119,8 +1124,8 @@ namespace ts {
     }
 
     export interface ComputedPropertyName extends Node {
-        parent: Declaration;
         readonly kind: SyntaxKind.ComputedPropertyName;
+        readonly parent: Declaration;
         readonly expression: Expression;
     }
 
@@ -1258,8 +1263,8 @@ namespace ts {
         ;
 
     export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
-        parent: ObjectLiteralExpression;
         readonly kind: SyntaxKind.PropertyAssignment;
+        readonly parent: ObjectLiteralExpression;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken; // Present for use with reporting a grammar error
         readonly exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
@@ -1267,8 +1272,8 @@ namespace ts {
     }
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
-        parent: ObjectLiteralExpression;
         readonly kind: SyntaxKind.ShorthandPropertyAssignment;
+        readonly parent: ObjectLiteralExpression;
         readonly name: Identifier;
         readonly questionToken?: QuestionToken;
         readonly exclamationToken?: ExclamationToken;
@@ -1279,8 +1284,8 @@ namespace ts {
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
-        parent: ObjectLiteralExpression;
         readonly kind: SyntaxKind.SpreadAssignment;
+        readonly parent: ObjectLiteralExpression;
         readonly expression: Expression;
     }
 
@@ -1302,14 +1307,14 @@ namespace ts {
     }
 
     export interface ObjectBindingPattern extends Node {
-        parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly kind: SyntaxKind.ObjectBindingPattern;
+        readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly elements: NodeArray<BindingElement>;
     }
 
     export interface ArrayBindingPattern extends Node {
-        parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly kind: SyntaxKind.ArrayBindingPattern;
+        readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly elements: NodeArray<ArrayBindingElement>;
     }
 
@@ -1353,8 +1358,8 @@ namespace ts {
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
-        parent: ObjectTypeDeclaration;
         readonly kind: SyntaxKind.MethodSignature;
+        readonly parent: ObjectTypeDeclaration;
         readonly name: PropertyName;
     }
 
@@ -1368,16 +1373,16 @@ namespace ts {
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
-        parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly kind: SyntaxKind.MethodDeclaration;
+        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
         /* @internal*/ exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
     }
 
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
-        parent: ClassLikeDeclaration;
         readonly kind: SyntaxKind.Constructor;
+        readonly parent: ClassLikeDeclaration;
         readonly body?: FunctionBody;
         /* @internal */ returnFlowNode?: FlowNode;
         /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
@@ -1386,15 +1391,15 @@ namespace ts {
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
-        parent: ClassLikeDeclaration;
         readonly kind: SyntaxKind.SemicolonClassElement;
+        readonly parent: ClassLikeDeclaration;
     }
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
-        parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly kind: SyntaxKind.GetAccessor;
+        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
         /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
@@ -1403,8 +1408,8 @@ namespace ts {
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
-        parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly kind: SyntaxKind.SetAccessor;
+        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
         /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
@@ -1414,8 +1419,8 @@ namespace ts {
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
-        parent: ObjectTypeDeclaration;
         readonly kind: SyntaxKind.IndexSignature;
+        readonly parent: ObjectTypeDeclaration;
         readonly type: TypeNode;
     }
 
@@ -2030,17 +2035,17 @@ namespace ts {
 
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        parent: TemplateExpression;
+        readonly parent: TemplateExpression;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        parent: TemplateSpan;
+        readonly parent: TemplateSpan;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        parent: TemplateSpan;
+        readonly parent: TemplateSpan;
     }
 
     export type PseudoLiteralToken =
@@ -2068,8 +2073,8 @@ namespace ts {
     // Each of these corresponds to a substitution expression and a template literal, in that order.
     // The template literal must have kind TemplateMiddleLiteral or TemplateTailLiteral.
     export interface TemplateSpan extends Node {
-        parent: TemplateExpression;
         readonly kind: SyntaxKind.TemplateSpan;
+        readonly parent: TemplateExpression;
         readonly expression: Expression;
         readonly literal: TemplateMiddle | TemplateTail;
     }
@@ -2087,8 +2092,8 @@ namespace ts {
     }
 
     export interface SpreadElement extends Expression {
-        parent: ArrayLiteralExpression | CallExpression | NewExpression;
         readonly kind: SyntaxKind.SpreadElement;
+        readonly parent: ArrayLiteralExpression | CallExpression | NewExpression;
         readonly expression: Expression;
     }
 
@@ -2257,8 +2262,8 @@ namespace ts {
     }
 
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
-        parent: HeritageClause | JSDocAugmentsTag;
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
+        readonly parent: HeritageClause | JSDocAugmentsTag;
         readonly expression: LeftHandSideExpression;
     }
 
@@ -2351,14 +2356,14 @@ namespace ts {
     }
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
-        parent: JsxOpeningLikeElement;
         readonly kind: SyntaxKind.JsxAttributes;
+        readonly parent: JsxOpeningLikeElement;
     }
 
     /// The opening element of a <Tag>...</Tag> JsxElement
     export interface JsxOpeningElement extends Expression {
-        parent: JsxElement;
         readonly kind: SyntaxKind.JsxOpeningElement;
+        readonly parent: JsxElement;
         readonly tagName: JsxTagNameExpression;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly attributes: JsxAttributes;
@@ -2382,46 +2387,46 @@ namespace ts {
 
     /// The opening element of a <>...</> JsxFragment
     export interface JsxOpeningFragment extends Expression {
-        parent: JsxFragment;
         readonly kind: SyntaxKind.JsxOpeningFragment;
+        readonly parent: JsxFragment;
     }
 
     /// The closing element of a <>...</> JsxFragment
     export interface JsxClosingFragment extends Expression {
-        parent: JsxFragment;
         readonly kind: SyntaxKind.JsxClosingFragment;
+        readonly parent: JsxFragment;
     }
 
     export interface JsxAttribute extends ObjectLiteralElement {
-        parent: JsxAttributes;
         readonly kind: SyntaxKind.JsxAttribute;
+        readonly parent: JsxAttributes;
         readonly name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         readonly initializer?: StringLiteral | JsxExpression;
     }
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
-        parent: JsxAttributes;
         readonly kind: SyntaxKind.JsxSpreadAttribute;
+        readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
 
     export interface JsxClosingElement extends Node {
-        parent: JsxElement;
         readonly kind: SyntaxKind.JsxClosingElement;
+        readonly parent: JsxElement;
         readonly tagName: JsxTagNameExpression;
     }
 
     export interface JsxExpression extends Expression {
-        parent: JsxElement | JsxAttributeLike;
         readonly kind: SyntaxKind.JsxExpression;
+        readonly parent: JsxElement | JsxAttributeLike;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly expression?: Expression;
     }
 
     export interface JsxText extends LiteralLikeNode {
-        parent: JsxElement;
         readonly kind: SyntaxKind.JsxText;
+        readonly parent: JsxElement;
         readonly containsOnlyTriviaWhiteSpaces: boolean;
     }
 
@@ -2599,26 +2604,26 @@ namespace ts {
         readonly kind: SyntaxKind.SwitchStatement;
         readonly expression: Expression;
         readonly caseBlock: CaseBlock;
-        possiblyExhaustive?: boolean;
+        possiblyExhaustive?: boolean; // initialized by binding
     }
 
     export interface CaseBlock extends Node {
-        parent: SwitchStatement;
         readonly kind: SyntaxKind.CaseBlock;
+        readonly parent: SwitchStatement;
         readonly clauses: NodeArray<CaseOrDefaultClause>;
     }
 
     export interface CaseClause extends Node {
-        parent: CaseBlock;
         readonly kind: SyntaxKind.CaseClause;
+        readonly parent: CaseBlock;
         readonly expression: Expression;
         readonly statements: NodeArray<Statement>;
         /* @internal */ fallthroughFlowNode?: FlowNode;
     }
 
     export interface DefaultClause extends Node {
-        parent: CaseBlock;
         readonly kind: SyntaxKind.DefaultClause;
+        readonly parent: CaseBlock;
         readonly statements: NodeArray<Statement>;
         /* @internal */ fallthroughFlowNode?: FlowNode;
     }
@@ -2647,8 +2652,8 @@ namespace ts {
     }
 
     export interface CatchClause extends Node {
-        parent: TryStatement;
         readonly kind: SyntaxKind.CatchClause;
+        readonly parent: TryStatement;
         readonly variableDeclaration?: VariableDeclaration;
         readonly block: Block;
     }
@@ -2717,8 +2722,8 @@ namespace ts {
     }
 
     export interface HeritageClause extends Node {
-        parent: InterfaceDeclaration | ClassLikeDeclaration;
         readonly kind: SyntaxKind.HeritageClause;
+        readonly parent: InterfaceDeclaration | ClassLikeDeclaration;
         readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         readonly types: NodeArray<ExpressionWithTypeArguments>;
     }
@@ -2731,8 +2736,8 @@ namespace ts {
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
-        parent: EnumDeclaration;
         readonly kind: SyntaxKind.EnumMember;
+        readonly parent: EnumDeclaration;
         // This does include ComputedPropertyName, but the parser will give an error
         // if it parses a ComputedPropertyName in an EnumMember
         readonly name: PropertyName;
@@ -2761,8 +2766,8 @@ namespace ts {
     }
 
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
-        parent: ModuleBody | SourceFile;
         readonly kind: SyntaxKind.ModuleDeclaration;
+        readonly parent: ModuleBody | SourceFile;
         readonly name: ModuleName;
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
     }
@@ -2788,8 +2793,8 @@ namespace ts {
     }
 
     export interface ModuleBlock extends Node, Statement {
-        parent: ModuleDeclaration;
         readonly kind: SyntaxKind.ModuleBlock;
+        readonly parent: ModuleDeclaration;
         readonly statements: NodeArray<Statement>;
     }
 
@@ -2804,8 +2809,8 @@ namespace ts {
      * - import x = M.x;
      */
     export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
-        parent: SourceFile | ModuleBlock;
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
+        readonly parent: SourceFile | ModuleBlock;
         readonly name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -2814,8 +2819,8 @@ namespace ts {
     }
 
     export interface ExternalModuleReference extends Node {
-        parent: ImportEqualsDeclaration;
         readonly kind: SyntaxKind.ExternalModuleReference;
+        readonly parent: ImportEqualsDeclaration;
         readonly expression: Expression;
     }
 
@@ -2824,8 +2829,8 @@ namespace ts {
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
     export interface ImportDeclaration extends Statement, JSDocContainer {
-        parent: SourceFile | ModuleBlock;
         readonly kind: SyntaxKind.ImportDeclaration;
+        readonly parent: SourceFile | ModuleBlock;
         readonly importClause?: ImportClause;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier: Expression;
@@ -2843,15 +2848,15 @@ namespace ts {
     // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     export interface ImportClause extends NamedDeclaration {
-        parent: ImportDeclaration;
         readonly kind: SyntaxKind.ImportClause;
+        readonly parent: ImportDeclaration;
         readonly name?: Identifier; // Default binding
         readonly namedBindings?: NamedImportBindings;
     }
 
     export interface NamespaceImport extends NamedDeclaration {
-        parent: ImportClause;
         readonly kind: SyntaxKind.NamespaceImport;
+        readonly parent: ImportClause;
         readonly name: Identifier;
     }
 
@@ -2863,8 +2868,8 @@ namespace ts {
     }
 
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
-        parent: SourceFile | ModuleBlock;
         readonly kind: SyntaxKind.ExportDeclaration;
+        readonly parent: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
         readonly exportClause?: NamedExports;
         /** If this is not a StringLiteral it will be a grammar error. */
@@ -2872,29 +2877,29 @@ namespace ts {
     }
 
     export interface NamedImports extends Node {
-        parent: ImportClause;
         readonly kind: SyntaxKind.NamedImports;
+        readonly parent: ImportClause;
         readonly elements: NodeArray<ImportSpecifier>;
     }
 
     export interface NamedExports extends Node {
-        parent: ExportDeclaration;
         readonly kind: SyntaxKind.NamedExports;
+        readonly parent: ExportDeclaration;
         readonly elements: NodeArray<ExportSpecifier>;
     }
 
     export type NamedImportsOrExports = NamedImports | NamedExports;
 
     export interface ImportSpecifier extends NamedDeclaration {
-        parent: NamedImports;
         readonly kind: SyntaxKind.ImportSpecifier;
+        readonly parent: NamedImports;
         readonly propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         readonly name: Identifier;           // Declared name
     }
 
     export interface ExportSpecifier extends NamedDeclaration {
-        parent: NamedExports;
         readonly kind: SyntaxKind.ExportSpecifier;
+        readonly parent: NamedExports;
         readonly propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         readonly name: Identifier;           // Declared name
     }
@@ -2909,8 +2914,8 @@ namespace ts {
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
      */
     export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
-        parent: SourceFile;
         readonly kind: SyntaxKind.ExportAssignment;
+        readonly parent: SourceFile;
         readonly isExportEquals?: boolean;
         readonly expression: Expression;
     }
@@ -2991,16 +2996,16 @@ namespace ts {
         ;
 
     export interface JSDoc extends Node {
-        parent: HasJSDoc;
         readonly kind: SyntaxKind.JSDocComment;
+        readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
-        comment?: string;
+        readonly comment?: string;
     }
 
     export interface JSDocTag extends Node {
-        parent: JSDoc | JSDocTypeLiteral;
+        readonly parent: JSDoc | JSDocTypeLiteral;
         readonly tagName: Identifier;
-        comment?: string;
+        readonly comment?: string;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
@@ -3025,8 +3030,8 @@ namespace ts {
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {
-        parent: JSDoc;
         readonly kind: SyntaxKind.JSDocEnumTag;
+        readonly parent: JSDoc;
         readonly typeExpression?: JSDocTypeExpression;
     }
 
@@ -3052,16 +3057,16 @@ namespace ts {
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
-        parent: JSDoc;
         readonly kind: SyntaxKind.JSDocTypedefTag;
+        readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     }
 
     export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
-        parent: JSDoc;
         readonly kind: SyntaxKind.JSDocCallbackTag;
+        readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
@@ -3075,7 +3080,7 @@ namespace ts {
     }
 
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
-        parent: JSDoc;
+        readonly parent: JSDoc;
         readonly name: EntityName;
         readonly typeExpression?: JSDocTypeExpression;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
@@ -3404,32 +3409,32 @@ namespace ts {
         ;
 
     export interface UnparsedSection extends Node {
-        parent: UnparsedSource;
         readonly kind: SyntaxKind;
+        readonly parent: UnparsedSource;
         readonly data?: string;
     }
 
     export interface UnparsedPrologue extends UnparsedSection {
-        parent: UnparsedSource;
         readonly kind: SyntaxKind.UnparsedPrologue;
+        readonly parent: UnparsedSource;
         readonly data: string;
     }
 
     export interface UnparsedPrepend extends UnparsedSection {
-        parent: UnparsedSource;
         readonly kind: SyntaxKind.UnparsedPrepend;
+        readonly parent: UnparsedSource;
         readonly data: string;
         readonly texts: readonly UnparsedTextLike[];
     }
 
     export interface UnparsedTextLike extends UnparsedSection {
-        parent: UnparsedSource;
         readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
+        readonly parent: UnparsedSource;
     }
 
     export interface UnparsedSyntheticReference extends UnparsedSection {
-        parent: UnparsedSource;
         readonly kind: SyntaxKind.UnparsedSyntheticReference;
+        readonly parent: UnparsedSource;
         /*@internal*/ readonly section: BundleFileHasNoDefaultLib | BundleFileReference;
     }
 
@@ -6634,19 +6639,19 @@ namespace ts {
         /* @internal */ createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
         /* @internal */ createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         /* @internal */ createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
-        /* @internal */ createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag;
+        /* @internal */ createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag;
         /* @internal */ createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag;
         /* @internal */ createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
         /* @internal */ createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
-        /* @internal */ createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocThisTag;
+        /* @internal */ createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
         /* @internal */ createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag;
-        /* @internal */ createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"]): JSDocAugmentsTag;
-        /* @internal */ createJSDocClassTag(tagName: Identifier | undefined): JSDocClassTag;
+        /* @internal */ createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
+        /* @internal */ createJSDocClassTag(tagName: Identifier | undefined, comment?: string): JSDocClassTag;
         /* @internal */ createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
-        /* @internal */ createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression): JSDocEnumTag;
+        /* @internal */ createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
         /* @internal */ createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag;
         /* @internal */ createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag;
-        /* @internal */ createJSDocUnknownTag(tagName: Identifier): JSDocUnknownTag;
+        /* @internal */ createJSDocUnknownTag(tagName: Identifier, comment?: string): JSDocUnknownTag;
         /* @internal */ createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
 
         //

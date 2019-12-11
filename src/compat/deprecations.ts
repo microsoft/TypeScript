@@ -1933,13 +1933,12 @@ namespace ts {
      * NOTE: It is unsafe to change any properties of a `Node` that relate to its AST children, as those changes won't be
      * captured with respect to transformations.
      *
-     * @deprecated Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.
+     * @deprecated Use `factory.cloneNode` instead and use `setCommentRange` or `setSourceMapRange` and avoid setting `parent`.
      */
     export function getMutableClone<T extends Node>(node: T): T {
         const clone = factory.cloneNode(node);
-        clone.pos = node.pos;
-        clone.end = node.end;
-        clone.parent = node.parent;
+        setTextRange(clone, node);
+        setParent(clone, node.parent);
         return clone;
     }
 

@@ -5616,7 +5616,7 @@ namespace ts {
                         // Add a namespace
                         // Create namespace as non-synthetic so it is usable as an enclosing declaration
                         let fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier(localName), factory.createModuleBlock([]), NodeFlags.Namespace);
-                        fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
+                        setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
 
@@ -6775,8 +6775,8 @@ namespace ts {
                 if (propName) {
                     const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
                     const result = setTextRange(parseNodeFactory.createElementAccess(parentAccess, literal), node);
-                    literal.parent = result;
-                    result.parent = node;
+                    setParent(literal, result);
+                    setParent(result, node);
                     result.flowNode = parentAccess.flowNode;
                     return result;
                 }
@@ -20313,9 +20313,10 @@ namespace ts {
                         const unionTypes = (<UnionTypeNode>funcTypeNode.type).types;
                         if (unionTypes && unionTypes[unionTypes.length - 1].kind === SyntaxKind.UndefinedKeyword) {
                             // TODO(rbuckton): Does this need to be parented?
-                            const parenedFuncType = setParent(setTextRange(factory.cloneNode(funcTypeNode), funcTypeNode), funcTypeNode.parent);
                             // Highlight to the end of the second to last constituent of the union
-                            parenedFuncType.end = unionTypes[unionTypes.length - 2].end;
+                            const parenedFuncType = setParent(
+                                setTextRangePosEnd(factory.cloneNode(funcTypeNode), funcTypeNode.pos, unionTypes[unionTypes.length - 2].end),
+                                funcTypeNode.parent);
                             addRelatedInfo(diag, createDiagnosticForNode(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type));
                         }
                     }
@@ -22371,7 +22372,7 @@ namespace ts {
                         (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
                     // Fake up a property declaration for the children
                     childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
-                    childrenPropSymbol.valueDeclaration.parent = attributes;
+                    setParent(childrenPropSymbol.valueDeclaration, attributes);
                     childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
@@ -23985,7 +23986,7 @@ namespace ts {
         function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean) {
             const result = parseNodeFactory.createSyntheticExpression(type, isSpread);
             setTextRange(result, parent);
-            result.parent = parent;
+            setParent(result, parent);
             return result;
         }
 
@@ -24181,11 +24182,12 @@ namespace ts {
                 spanArray = factory.createNodeArray(args.slice(max));
             }
 
-            spanArray.pos = first(spanArray).pos;
-            spanArray.end = last(spanArray).end;
-            if (spanArray.end === spanArray.pos) {
-                spanArray.end++;
+            const pos = first(spanArray).pos;
+            let end = last(spanArray).end;
+            if (end === pos) {
+                end++;
             }
+            setTextRangePosEnd(spanArray, pos, end);
             const diagnostic = createDiagnosticForNodeArray(
                 getSourceFileOfNode(node), spanArray, error, paramRange, argCount);
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
@@ -32044,8 +32046,8 @@ namespace ts {
 
         function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
             const reference = factory.createPropertyAccess(factory.createThis(), propName);
-            reference.expression.parent = reference;
-            reference.parent = constructor;
+            setParent(reference.expression, reference);
+            setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
             const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
             return !(getFalsyFlags(flowType) & TypeFlags.Undefined);

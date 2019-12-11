@@ -17,7 +17,8 @@ namespace ts {
     export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
-            setParentPointers(node, node.body);
+            setParent(node.body, node);
+            setParentRecursive(node.body, /*incremental*/ false);
         }
         return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
@@ -114,7 +115,8 @@ namespace ts {
                 for (const statement of statements) {
                     if (nodeHasName(statement, name)) {
                         if (!statement.parent) {
-                            setParentPointers(p, statement);
+                            setParent(statement, p);
+                            setParentRecursive(statement, /*incremental*/ false);
                         }
                         const state = getModuleInstanceStateCached(statement, visited);
                         if (found === undefined || state > found) {
@@ -467,7 +469,7 @@ namespace ts {
                     else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.Assignment)) {
                         // Assignment declarations are allowed to merge with variables, no matter what other flags they have.
                         if (isNamedDeclaration(node)) {
-                            node.name.parent = node;
+                            setParent(node.name, node);
                         }
 
                         // Report errors every position with duplicate declaration
@@ -1484,9 +1486,10 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
-            node.tagName.parent = node;
+            setParent(node.tagName, node);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
-                setParentPointers(node, node.fullName);
+                setParent(node.fullName, node);
+                setParentRecursive(node.fullName, /*incremental*/ false);
             }
         }
 
@@ -2174,7 +2177,7 @@ namespace ts {
             if (!node) {
                 return;
             }
-            node.parent = parent;
+            setParent(node, parent);
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
@@ -2233,7 +2236,8 @@ namespace ts {
                 }
                 else {
                     for (const j of node.jsDoc!) {
-                        setParentPointers(node, j);
+                        setParent(j, node);
+                        setParentRecursive(j, /*incremental*/ false);
                     }
                 }
             }
@@ -2726,8 +2730,8 @@ namespace ts {
 
         /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
         function bindPrototypeAssignment(node: BindableStaticPropertyAssignmentExpression) {
-            node.left.parent = node;
-            node.right.parent = node;
+            setParent(node.left, node);
+            setParent(node.right, node);
             bindPropertyAssignment(node.left.expression, node.left, /*isPrototypeProperty*/ false, /*containerIsClass*/ true);
         }
 
@@ -2751,9 +2755,9 @@ namespace ts {
             const constructorFunction = classPrototype.expression;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
-            lhs.parent = parent;
-            constructorFunction.parent = classPrototype;
-            classPrototype.parent = lhs;
+            setParent(constructorFunction, classPrototype);
+            setParent(classPrototype, lhs);
+            setParent(lhs, parent);
 
             bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true, /*containerIsClass*/ true);
         }
@@ -2772,8 +2776,8 @@ namespace ts {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
-            node.left.parent = node;
-            node.right.parent = node;
+            setParent(node.left, node);
+            setParent(node.right, node);
             if (isIdentifier(node.left.expression) && container === file && isExportsOrModuleExportsOrAlias(file, node.left.expression)) {
                 // This can be an alias for the 'exports' or 'module.exports' names, e.g.
                 //    var util = module.exports;
@@ -2797,7 +2801,7 @@ namespace ts {
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
         function bindStaticPropertyAssignment(node: BindableStaticAccessExpression) {
-            node.expression.parent = node;
+            setParent(node.expression, node);
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
         }
 
@@ -2979,7 +2983,7 @@ namespace ts {
             const symbolExport = symbol.exports!.get(prototypeSymbol.escapedName);
             if (symbolExport) {
                 if (node.name) {
-                    node.name.parent = node;
+                    setParent(node.name, node);
                 }
                 file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
@@ -3240,14 +3244,5 @@ namespace ts {
             return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
-    }
-
-    /**
-     * "Binds" JSDoc nodes in TypeScript code.
-     * Since we will never create symbols for JSDoc, we just set parent pointers instead.
-     */
-    function setParentPointers(parent: Node, child: Node): void {
-        child.parent = parent;
-        forEachChild(child, grandchild => setParentPointers(child, grandchild));
     }
 }

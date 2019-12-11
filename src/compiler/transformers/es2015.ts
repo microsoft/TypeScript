@@ -789,11 +789,11 @@ namespace ts {
             // "inner" and "outer" below are added purely to preserve source map locations from
             // the old emitter
             const inner = factory.createPartiallyEmittedExpression(classFunction);
-            inner.end = node.end;
+            setTextRangeEnd(inner, node.end);
             setEmitFlags(inner, EmitFlags.NoComments);
 
             const outer = factory.createPartiallyEmittedExpression(inner);
-            outer.end = skipTrivia(currentText, node.pos);
+            setTextRangeEnd(outer, skipTrivia(currentText, node.pos));
             setEmitFlags(outer, EmitFlags.NoComments);
 
             const result = factory.createParen(
@@ -829,11 +829,11 @@ namespace ts {
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
             const outer = factory.createPartiallyEmittedExpression(localName);
-            outer.end = closingBraceLocation.end;
+            setTextRangeEnd(outer, closingBraceLocation.end);
             setEmitFlags(outer, EmitFlags.NoComments);
 
             const statement = factory.createReturn(outer);
-            statement.pos = closingBraceLocation.pos;
+            setTextRangePos(statement, closingBraceLocation.pos);
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
@@ -2364,7 +2364,7 @@ namespace ts {
                     statements.push(factory.createExpressionStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
                 }
                 else {
-                    assignment.end = initializer.end;
+                    setTextRangeEnd(assignment, initializer.end);
                     statements.push(setTextRange(factory.createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
                 }
             }
@@ -4077,8 +4077,7 @@ namespace ts {
             //    "abc" + (1 << 2) + ""
             const expression = reduceLeft(expressions, factory.createAdd)!;
             if (nodeIsSynthesized(expression)) {
-                expression.pos = node.pos;
-                expression.end = node.end;
+                setTextRange(expression, node);
             }
 
             return expression;

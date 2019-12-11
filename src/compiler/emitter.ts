@@ -681,7 +681,7 @@ namespace ts {
             const statements = prologueInfo?.directives.map(directive => {
                 const literal = setTextRange(factory.createStringLiteral(directive.expression.text), directive.expression);
                 const statement = setTextRange(factory.createExpressionStatement(literal), directive);
-                literal.parent = statement;
+                setParent(literal, statement);
                 return statement;
             });
             const eofToken = factory.createToken(SyntaxKind.EndOfFileToken);
@@ -692,14 +692,10 @@ namespace ts {
                 !host.useCaseSensitiveFileNames()
             );
             sourceFile.text = prologueInfo?.text ?? "";
-            sourceFile.pos = 0;
-            sourceFile.end = prologueInfo?.text.length ?? 0;
-            for (const statement of sourceFile.statements) {
-                statement.parent = sourceFile;
-            }
-            eofToken.pos = sourceFile.end;
-            eofToken.end = sourceFile.end;
-            eofToken.parent = sourceFile;
+            setTextRangePosWidth(sourceFile, 0, prologueInfo?.text.length ?? 0);
+            setEachParent(sourceFile.statements, sourceFile);
+            setTextRangePosWidth(eofToken, sourceFile.end, 0);
+            setParent(eofToken, sourceFile);
             return sourceFile;
         });
     }
