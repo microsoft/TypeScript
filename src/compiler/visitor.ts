@@ -386,6 +386,10 @@ namespace ts {
                 result = reduceNode((<NamespaceImport>node).name, cbNode, result);
                 break;
 
+            case SyntaxKind.NamespaceExport:
+                result = reduceNode((<NamespaceExport>node).name, cbNode, result);
+                break;
+
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
                 result = reduceNodes((<NamedImports | NamedExports>node).elements, cbNodes, result);
