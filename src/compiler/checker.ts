@@ -6673,7 +6673,9 @@ namespace ts {
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
-            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            const result = createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            result.objectFlags |= ObjectFlags.ObjectRestType;
+            return result;
         }
 
         // Determine the control flow type associated with a destructuring declaration or assignment. The following
@@ -7324,11 +7326,7 @@ namespace ts {
                 if (!declaration.statements.length) {
                     return emptyObjectType;
                 }
-                const type = getWidenedLiteralType(checkExpression(declaration.statements[0].expression));
-                if (type.flags & TypeFlags.Object) {
-                    return getRegularTypeOfObjectLiteral(type);
-                }
-                return type;
+                return getWidenedType(getWidenedLiteralType(checkExpression(declaration.statements[0].expression)));
             }
 
             // Handle variable, parameter or property
@@ -10866,7 +10864,8 @@ namespace ts {
                     }
                     isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                 }
-                if (isRequireAlias || node.kind === SyntaxKind.ImportType) {
+                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                if (isRequireAlias || isImportTypeWithQualifier) {
                     typeType = getTypeReferenceType(node, valueType.symbol);
                 }
             }
@@ -14820,7 +14819,7 @@ namespace ts {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
-                                    if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration)) {
+                                    if (prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && getSourceFileOfNode(errorNode) === getSourceFileOfNode(prop.valueDeclaration.name)) {
                                         // Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
                                         // since `children` is a SyntaxKind.PropertySignature instead of a SyntaxKind.JsxAttribute.
                                         errorNode = prop.valueDeclaration.name;
@@ -14831,7 +14830,7 @@ namespace ts {
                                     // use the property's value declaration if the property is assigned inside the literal itself
                                     const objectLiteralDeclaration = source.symbol && firstOrUndefined(source.symbol.declarations);
                                     let suggestion;
-                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
+                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration) && getSourceFileOfNode(objectLiteralDeclaration) === getSourceFileOfNode(errorNode)) {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
@@ -17256,7 +17255,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable ||
                 objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
-                objectFlags & ObjectFlags.Mapped ||
+                objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType) ||
                 type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
         }
 
@@ -19308,9 +19307,6 @@ namespace ts {
                     else if (containsMatchingReferenceDiscriminant(reference, expr)) {
                         type = declaredType;
                     }
-                    else if (flow.clauseStart === flow.clauseEnd && isExhaustiveSwitchStatement(flow.switchStatement)) {
-                        return unreachableNeverType;
-                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -19319,11 +19315,17 @@ namespace ts {
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let seenIncomplete = false;
+                let bypassFlow: FlowSwitchClause | undefined;
                 for (const antecedent of flow.antecedents!) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
                         // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
+                        continue;
+                    }
+                    if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (<FlowSwitchClause>antecedent).clauseStart === (<FlowSwitchClause>antecedent).clauseEnd) {
+                        // The antecedent is the bypass branch of a potentially exhaustive switch statement.
+                        bypassFlow = <FlowSwitchClause>antecedent;
                         continue;
                     }
                     const flowType = getTypeAtFlowNode(antecedent);
@@ -19344,6 +19346,25 @@ namespace ts {
                     }
                     if (isIncomplete(flowType)) {
                         seenIncomplete = true;
+                    }
+                }
+                if (bypassFlow) {
+                    const flowType = getTypeAtFlowNode(bypassFlow);
+                    const type = getTypeFromFlowType(flowType);
+                    // If the bypass flow contributes a type we haven't seen yet and the switch statement
+                    // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
+                    // the risk of circularities, we only want to perform them when they make a difference.
+                    if (!contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.switchStatement)) {
+                        if (type === declaredType && declaredType === initialType) {
+                            return type;
+                        }
+                        antecedentTypes.push(type);
+                        if (!isTypeSubsetOf(type, declaredType)) {
+                            subtypeReduction = true;
+                        }
+                        if (isIncomplete(flowType)) {
+                            seenIncomplete = true;
+                        }
                     }
                 }
                 return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
@@ -20206,7 +20227,26 @@ namespace ts {
                 }
             }
             else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
-                error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+                const diag = error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+
+                // See GH:32846 - if the user is using a variable whose type is () => T1 | ... | undefined
+                // they may have meant to specify the type as (() => T1 | ...) | undefined
+                // This is assumed if: the type is a FunctionType, the return type is a Union, the last constituent of
+                // the union is `undefined`
+                if (type.symbol && type.symbol.declarations.length === 1 && isFunctionTypeNode(type.symbol.declarations[0])) {
+                    const funcTypeNode = <FunctionTypeNode>type.symbol.declarations[0];
+                    const returnType = getReturnTypeFromAnnotation(funcTypeNode);
+                    if (returnType && returnType.flags & TypeFlags.Union) {
+                        const unionTypes = (<UnionTypeNode>funcTypeNode.type).types;
+                        if (unionTypes && unionTypes[unionTypes.length - 1].kind === SyntaxKind.UndefinedKeyword) {
+                            const parenedFuncType = getMutableClone(funcTypeNode);
+                            // Highlight to the end of the second to last constituent of the union
+                            parenedFuncType.end = unionTypes[unionTypes.length - 2].end;
+                            addRelatedInfo(diag, createDiagnosticForNode(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type));
+                        }
+                    }
+                }
+
                 // Return the declared type to reduce follow-on errors
                 return type;
             }
@@ -31829,11 +31869,14 @@ namespace ts {
                             // same when the derived property is from an assignment
                             continue;
                         }
-                        if (basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property) {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_property;
-                        }
-                        else if (basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property) {
-                            errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_accessor;
+
+                        const overriddenInstanceProperty = basePropertyFlags !== SymbolFlags.Property && derivedPropertyFlags === SymbolFlags.Property;
+                        const overriddenInstanceAccessor = basePropertyFlags === SymbolFlags.Property && derivedPropertyFlags !== SymbolFlags.Property;
+                        if (overriddenInstanceProperty || overriddenInstanceAccessor) {
+                            const errorMessage = overriddenInstanceProperty ?
+                                Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property :
+                                Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor;
+                            error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                         }
                         else {
                             const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
@@ -31853,9 +31896,10 @@ namespace ts {
                                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType));
                                 }
                             }
-                            // correct case
-                            continue;
                         }
+
+                        // correct case
+                        continue;
                     }
                     else if (isPrototypeProperty(base)) {
                         if (isPrototypeProperty(derived) || derived.flags & SymbolFlags.Property) {

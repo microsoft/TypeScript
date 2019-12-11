@@ -273,6 +273,11 @@ namespace ts.tscWatch {
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
+    export function getUnknownDidYouMeanCompilerOption(program: Program, configFile: File, option: string, didYouMean: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0_Did_you_mean_1, option, didYouMean);
+    }
+
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
         return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0, moduleName);
