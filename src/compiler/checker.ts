@@ -21160,9 +21160,9 @@ namespace ts {
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
-            if (contextFlags && contextFlags & ContextFlags.Completion && signature.target) {
+            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !hasTypeArguments(callTarget)) {
                 const baseSignature = getBaseSignature(signature.target);
-                return intersectTypes(getTypeAtPosition(signature, argIndex), getTypeAtPosition(baseSignature, argIndex));
+                return getTypeAtPosition(baseSignature, argIndex);
             }
             return getTypeAtPosition(signature, argIndex);
         }

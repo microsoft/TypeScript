@@ -709,6 +709,13 @@ namespace ts {
         | JSDocOptionalType
         | JSDocVariadicType;
 
+    export type HasTypeArguments =
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | JsxOpeningElement
+        | JsxSelfClosingElement;
+
     export type HasInitializer =
         | HasExpressionInitializer
         | ForStatement
@@ -3537,10 +3544,10 @@ namespace ts {
 
     /* @internal */
     export const enum ContextFlags {
-        None          = 0,
-        Signature     = 1 << 0, // Obtaining contextual signature
-        NoConstraints = 1 << 1, // Don't obtain type variable constraints
-        Completion    = 1 << 2, // Obtaining constraint type for completion
+        None           = 0,
+        Signature      = 1 << 0, // Obtaining contextual signature
+        NoConstraints  = 1 << 1, // Don't obtain type variable constraints
+        BaseConstraint = 1 << 2, // Use base constraint type for completions
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
