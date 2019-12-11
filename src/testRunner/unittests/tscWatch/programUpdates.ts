@@ -68,7 +68,7 @@ namespace ts.tscWatch {
             };
 
             const host = createWatchedSystem([configFile, libFile, file1, file2, file3]);
-            const watch = createWatchProgram(createWatchCompilerHostOfConfigFile(configFile.path, {}, host, /*createProgram*/ undefined, notImplemented));
+            const watch = createWatchProgram(createWatchCompilerHostOfConfigFile(configFile.path, {}, /*watchOptionsToExtend*/ undefined, host, /*createProgram*/ undefined, notImplemented));
 
             checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file1.path, libFile.path, file2.path]);
             checkProgramRootFiles(watch.getCurrentProgram().getProgram(), [file1.path, file2.path]);
@@ -931,7 +931,7 @@ namespace ts.tscWatch {
                     content: generateTSConfig(options, emptyArray, "\n")
                 };
                 const host = createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: projectRoot });
-                const watch = createWatchOfConfigFile(tsconfig.path, host, /*optionsToExtend*/ undefined, /*maxNumberOfFilesToIterateForInvalidation*/1);
+                const watch = createWatchOfConfigFile(tsconfig.path, host, /*optionsToExtend*/ undefined, /*watchOptionsToExtend*/ undefined, /*maxNumberOfFilesToIterateForInvalidation*/1);
                 checkProgramActualFiles(watch(), [file1.path, file2.path, libFile.path]);
 
                 outputFiles.forEach(f => host.fileExists(f));

@@ -68,7 +68,11 @@ namespace ts.tscWatch {
                 const projectSrcFolder = `${projectFolder}/src`;
                 const configFile: File = {
                     path: `${projectFolder}/tsconfig.json`,
-                    content: "{}"
+                    content: JSON.stringify({
+                        watchOptions: {
+                            synchronousWatchDirectory: true
+                        }
+                    })
                 };
                 const file: File = {
                     path: `${projectSrcFolder}/file1.ts`,
@@ -172,6 +176,277 @@ namespace ts.tscWatch {
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
                 checkWatchedDirectories(host, [cwd, `${cwd}/node_modules`, `${cwd}/node_modules/@types`, `${cwd}/node_modules/reala`, `${cwd}/node_modules/realb`,
                     `${cwd}/node_modules/reala/node_modules`, `${cwd}/node_modules/realb/node_modules`, `${cwd}/src`], /*recursive*/ false);
+            });
+
+            it("with non synchronous watch directory", () => {
+                const configFile: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: "{}"
+                };
+                const file1: File = {
+                    path: `${projectRoot}/src/file1.ts`,
+                    content: `import { x } from "file2";`
+                };
+                const file2: File = {
+                    path: `${projectRoot}/node_modules/file2/index.d.ts`,
+                    content: `export const x = 10;`
+                };
+                const files = [libFile, file1, file2, configFile];
+                const host = createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const watch = createWatchOfConfigFile(configFile.path, host);
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+                checkOutputErrorsInitial(host, emptyArray);
+                const watchedDirectories = [`${projectRoot}`, `${projectRoot}/src`, `${projectRoot}/node_modules`, `${projectRoot}/node_modules/file2`, `${projectRoot}/node_modules/@types`];
+                checkWatchesWithFile2();
+                host.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
+                host.checkTimeoutQueueLengthAndRun(1); // Update program again
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, emptyArray);
+                checkWatchesWithFile2();
+
+                // Remove directory node_modules
+                host.deleteFolder(`${projectRoot}/node_modules`, /*recursive*/ true);
+                host.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 2); // Update program
+                checkOutputErrorsIncremental(host, [
+                    getDiagnosticModuleNotFoundOfFile(watch(), file1, "file2")
+                ]);
+                checkWatchesWithoutFile2();
+
+                host.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
+                host.checkTimeoutQueueLengthAndRun(1); // To Update program
+                host.checkTimeoutQueueLength(0);
+                checkWatchesWithoutFile2();
+                checkOutputErrorsIncremental(host, [
+                    getDiagnosticModuleNotFoundOfFile(watch(), file1, "file2")
+                ]);
+
+                // npm install
+                host.createDirectory(`${projectRoot}/node_modules`);
+                host.checkTimeoutQueueLength(1); // To update folder structure
+                assert.deepEqual(host.getOutput(), emptyArray);
+                checkWatchesWithoutFile2();
+                host.createDirectory(`${projectRoot}/node_modules/file2`);
+                host.checkTimeoutQueueLength(1); // To update folder structure
+                assert.deepEqual(host.getOutput(), emptyArray);
+                checkWatchesWithoutFile2();
+                host.writeFile(file2.path, file2.content);
+                host.checkTimeoutQueueLength(1); // To update folder structure
+                assert.deepEqual(host.getOutput(), emptyArray);
+                checkWatchesWithoutFile2();
+
+                host.runQueuedTimeoutCallbacks();
+                host.checkTimeoutQueueLength(1); // To Update the program
+                assert.deepEqual(host.getOutput(), emptyArray);
+                checkWatchedFiles(files.filter(f => f !== file2)); // Files like without file2
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                checkNonRecursiveWatchedDirectories(watchedDirectories); // Directories like with file2
+
+                host.runQueuedTimeoutCallbacks();
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, emptyArray);
+                checkWatchesWithFile2();
+
+                function checkWatchesWithFile2() {
+                    checkWatchedFiles(files);
+                    checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                    checkNonRecursiveWatchedDirectories(watchedDirectories);
+                }
+
+                function checkWatchesWithoutFile2() {
+                    checkWatchedFiles(files.filter(f => f !== file2));
+                    checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                    checkNonRecursiveWatchedDirectories(watchedDirectories.filter(f => f !== `${projectRoot}/node_modules/file2`));
+                }
+
+                function checkWatchedFiles(files: readonly File[]) {
+                    checkWatchedFilesDetailed(
+                        host,
+                        files.map(f => f.path.toLowerCase()),
+                        1,
+                        arrayToMap(
+                            files,
+                            f => f.path.toLowerCase(),
+                            () => [PollingInterval.Low]
+                        )
+                    );
+                }
+
+                function checkNonRecursiveWatchedDirectories(directories: readonly string[]) {
+                    checkWatchedDirectoriesDetailed(
+                        host,
+                        directories,
+                        1,
+                        /*recursive*/ false,
+                        arrayToMap(
+                            directories,
+                            identity,
+                            () => [{
+                                fallbackPollingInterval: PollingInterval.Medium,
+                                fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                            }]
+                        )
+                    );
+                }
+            });
+        });
+
+        describe("handles watch compiler options", () => {
+            it("with watchFile option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        watchOptions: {
+                            watchFile: "UseFsEvents"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                // Instead of polling watch (= watchedFiles), uses fsWatch
+                checkWatchedFiles(host, emptyArray);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        f => [{
+                            fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Low,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ true,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+            });
+
+            it("with watchDirectory option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        watchOptions: {
+                            watchDirectory: "UseFsEvents"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                checkWatchedFilesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        () => [PollingInterval.Low]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            });
+
+            it("with fallbackPolling option", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        watchOptions: {
+                            fallbackPolling: "PriorityInterval"
+                        }
+                    })
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+                const filePaths = files.map(f => f.path.toLowerCase());
+                checkWatchedFilesDetailed(
+                    host,
+                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                    1,
+                    arrayToMap(
+                        filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                        identity,
+                        f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                    )
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            });
+
+            it("with watchFile as watch options to extend", () => {
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: "{}"
+                };
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfConfigFile(configFile.path, host, { extendedDiagnostics: true }, { watchFile: WatchFileKind.UseFsEvents });
+                checkProgramActualFiles(watch(), mapDefined(files, f => f === configFile ? undefined : f.path));
+
+                // Instead of polling watch (= watchedFiles), uses fsWatch
+                checkWatchedFiles(host, emptyArray);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    files.map(f => f.path.toLowerCase()),
+                    1,
+                    /*recursive*/ false,
+                    arrayToMap(
+                        files,
+                        f => f.path.toLowerCase(),
+                        f => [{
+                            fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Low,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    1,
+                    /*recursive*/ true,
+                    arrayToMap(
+                        ["/a/b", "/a/b/node_modules/@types"],
+                        identity,
+                        () => [{
+                            fallbackPollingInterval: PollingInterval.Medium,
+                            fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                        }]
+                    )
+                );
             });
         });
     });

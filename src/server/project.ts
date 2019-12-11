@@ -257,6 +257,7 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
+            protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
             customRealpath?: (s: string) => string) {
@@ -472,6 +473,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.FailedLookupLocations,
                 this
             );
@@ -489,6 +491,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.TypeRoots,
                 this
             );
@@ -1170,6 +1173,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
+                this.projectService.getWatchOptions(this),
                 WatchType.MissingFile,
                 this
             );
@@ -1213,6 +1217,7 @@ namespace ts.server {
                     generatedFile,
                     () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
                     PollingInterval.High,
+                    this.projectService.getWatchOptions(this),
                     WatchType.MissingGeneratedFile,
                     this
                 )
@@ -1281,6 +1286,16 @@ namespace ts.server {
                 }
                 this.markAsDirty();
             }
+        }
+
+        /*@internal*/
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            this.watchOptions = watchOptions;
+        }
+
+        /*@internal*/
+        getWatchOptions(): WatchOptions | undefined {
+            return this.watchOptions;
         }
 
         /* @internal */
@@ -1516,6 +1531,7 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
+                    this.projectService.getWatchOptions(this),
                     WatchType.PackageJsonFile,
                 ));
             }
@@ -1594,6 +1610,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
+            watchOptions: WatchOptions | undefined,
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined,
             pluginConfigOverrides: Map<any> | undefined) {
@@ -1606,6 +1623,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
+                watchOptions,
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -1730,6 +1748,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 /*compilerOptions*/ {},
                 /*compileOnSaveEnabled*/ false,
+                /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
                 projectService.host.realpath && (s => this.getRealpath(s))
@@ -1887,6 +1906,32 @@ namespace ts.server {
                     return result;
                 }
             ) || false;
+        }
+
+        /* @internal */
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            const oldOptions = this.getWatchOptions();
+            super.setWatchOptions(watchOptions);
+            // If watch options different than older options
+            if (this.isInitialLoadPending() &&
+                !isJsonEqual(oldOptions, this.getWatchOptions())) {
+                const oldWatcher = this.configFileWatcher;
+                this.createConfigFileWatcher();
+                if (oldWatcher) oldWatcher.close();
+            }
+        }
+
+        /* @internal */
+        createConfigFileWatcher() {
+            this.configFileWatcher = this.projectService.watchFactory.watchFile(
+                this.projectService.host,
+                this.getConfigFilePath(),
+                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.ConfigFile,
+                this
+            );
         }
 
         /**
@@ -2111,7 +2156,8 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string,
-            pluginConfigOverrides?: Map<any>) {
+            pluginConfigOverrides?: Map<any>,
+            watchOptions?: WatchOptions) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -2120,6 +2166,7 @@ namespace ts.server {
                 lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
+                watchOptions,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
