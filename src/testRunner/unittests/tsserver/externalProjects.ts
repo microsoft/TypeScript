@@ -824,9 +824,9 @@ namespace ts.projectSystem {
         });
 
         it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {
-            const projectFileName = `${projectRoot}/WebApplication36.csproj`;
+            const projectFileName = `${tscWatch.projectRoot}/WebApplication36.csproj`;
             const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [libFile, tsconfig];
@@ -844,7 +844,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configProject, [tsconfig.path]);
 
             // write js file, open external project and open it for edit
-            const jsFilePath = `${projectRoot}/javascript.js`;
+            const jsFilePath = `${tscWatch.projectRoot}/javascript.js`;
             host.writeFile(jsFilePath, "");
             service.openExternalProjects([{
                 projectFileName,
@@ -859,7 +859,7 @@ namespace ts.projectSystem {
 
             // write jsconfig file
             const jsConfig: File = {
-                path: `${projectRoot}/jsconfig.json`,
+                path: `${tscWatch.projectRoot}/jsconfig.json`,
                 content: "{}"
             };
             // Dont invoke file creation watchers as the repro suggests

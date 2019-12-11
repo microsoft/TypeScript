@@ -12,7 +12,7 @@ module A {
 }
 
 module B {
->B : typeof B
+>B : typeof globalThis.B
 
     import a = A;
 >a : any

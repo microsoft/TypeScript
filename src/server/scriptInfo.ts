@@ -46,7 +46,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
+        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -125,7 +125,7 @@ namespace ts.server {
             const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
             const reloaded = this.reload(newText);
             this.fileSize = fileSize; // NB: after reload since reload clears it
-            this.ownFileText = !tempFileName || tempFileName === this.fileName;
+            this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
             return reloaded;
         }
 
@@ -206,10 +206,10 @@ namespace ts.server {
 
         private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
             let text: string;
-            const fileName = tempFileName || this.fileName;
+            const fileName = tempFileName || this.info.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTSFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.info.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);
@@ -335,7 +335,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, fileName, initialVersion, this);
+            this.textStorage = new TextStorage(host, this, initialVersion);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -469,16 +469,16 @@ namespace ts.server {
 
         detachAllProjects() {
             for (const p of this.containingProjects) {
-                if (p.projectKind === ProjectKind.Configured) {
+                if (isConfiguredProject(p)) {
                     p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
-                const isInfoRoot = p.isRoot(this);
+                const existingRoot = p.getRootFilesMap().get(this.path);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
-                if (isInfoRoot && p.projectKind !== ProjectKind.Inferred) {
-                    p.addMissingFileRoot(this.fileName);
+                if (existingRoot && !isInferredProject(p)) {
+                    p.addMissingFileRoot(existingRoot.fileName);
                 }
             }
             clear(this.containingProjects);
@@ -503,7 +503,7 @@ namespace ts.server {
                     let defaultConfiguredProject: ConfiguredProject | false | undefined;
                     for (let index = 0; index < this.containingProjects.length; index++) {
                         const project = this.containingProjects[index];
-                        if (project.projectKind === ProjectKind.Configured) {
+                        if (isConfiguredProject(project)) {
                             if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                                 // If we havent found default configuredProject and
                                 // its not the last one, find it and use that one if there
@@ -516,7 +516,7 @@ namespace ts.server {
                             }
                             if (!firstConfiguredProject) firstConfiguredProject = project;
                         }
-                        else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
+                        else if (!firstExternalProject && isExternalProject(project)) {
                             firstExternalProject = project;
                         }
                     }

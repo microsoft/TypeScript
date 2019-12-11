@@ -1,0 +1,57 @@
+=== tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts ===
+const foo: Record<never, never> = {} // OK
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+interface RecordOfRecords extends Record<keyof any, RecordOfRecords> {}
+>RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
+
+const recordOfRecords: RecordOfRecords = {}
+>recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
+
+recordOfRecords.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 4, 50))
+
+recordOfRecords.propB = {...(foo && {foo})} // OK
+>recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 5, 37))
+
+recordOfRecords.propC = {...(foo !== undefined && {foo})} // error'd in 3.7 beta, should be OK
+>recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 51))
+
+interface RecordOfRecordsOrEmpty extends Record<keyof any, RecordOfRecordsOrEmpty | {}> {}
+>RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
+
+const recordsOfRecordsOrEmpty: RecordOfRecordsOrEmpty = {}
+>recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
+
+recordsOfRecordsOrEmpty.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 10, 58))
+
+recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} // OK
+>recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 11, 45))
+
+recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
+>recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 12, 59))
+

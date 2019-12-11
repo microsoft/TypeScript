@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1006
     },
+    "The parser expected to find a '}' to match the '{' token here.": {
+        "category": "Error",
+        "code": 1007
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -850,6 +854,10 @@
     "Keywords cannot contain escape characters.": {
         "category": "Error",
         "code": 1260
+    },
+    "Already included file name '{0}' differs from file name '{1}' only in casing.": {
+        "category": "Error",
+        "code": 1261
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -3241,7 +3249,7 @@
         "category": "Error",
         "code": 5061
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character.": {
+    "Substitution '{0}' in pattern '{1}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5062
     },
@@ -4060,7 +4068,7 @@
         "category": "Message",
         "code": 6201
     },
-        "Project references may not form a circular graph. Cycle detected: {0}": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6202
     },
@@ -4518,7 +4526,7 @@
         "category": "Error",
         "code": 7051
     },
-    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}'?": {
         "category": "Error",
         "code": 7052
     },
@@ -4543,59 +4551,51 @@
         "category": "Error",
         "code": 8001
     },
-    "'import ... =' can only be used in a .ts file.": {
+    "'import ... =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8002
     },
-    "'export=' can only be used in a .ts file.": {
+    "'export =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8003
     },
-    "'type parameter declarations' can only be used in a .ts file.": {
+    "Type parameter declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8004
     },
-    "'implements clauses' can only be used in a .ts file.": {
+    "'implements' clauses can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8005
     },
-    "'interface declarations' can only be used in a .ts file.": {
+    "'{0}' declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8006
     },
-    "'module declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8007
-    },
-    "'type aliases' can only be used in a .ts file.": {
+    "Type aliases can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8008
     },
-    "'{0}' can only be used in a .ts file.": {
+    "The '{0}' modifier can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8009
     },
-    "'types' can only be used in a .ts file.": {
+    "Type annotations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8010
     },
-    "'type arguments' can only be used in a .ts file.": {
+    "Type arguments can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8011
     },
-    "'parameter modifiers' can only be used in a .ts file.": {
+    "Parameter modifiers can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8012
     },
-    "'non-null assertions' can only be used in a .ts file.": {
+    "Non-null assertions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8013
     },
-    "'enum declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8015
-    },
-    "'type assertion expressions' can only be used in a .ts file.": {
+    "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
     },

@@ -374,12 +374,14 @@ namespace ts.server {
         private getDiagnostics(file: string, command: CommandNames): DiagnosticWithLocation[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
+            const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
+            const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
-                    file: undefined!, // TODO: GH#18217
+                    file: fakeSourceFile,
                     start: entry.start,
                     length: entry.length,
                     messageText: entry.message,
@@ -518,14 +520,14 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
             const args: protocol.SignatureHelpRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             const response = this.processResponse<protocol.SignatureHelpResponse>(request);
 
             if (!response.body) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;

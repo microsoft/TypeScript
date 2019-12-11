@@ -1,0 +1,9 @@
+tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts(2,6): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+
+
+==== tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts (1 errors) ====
+    class C {
+        p!;
+         ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }

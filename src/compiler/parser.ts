@@ -1031,6 +1031,10 @@ namespace ts {
             return doInsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
         }
 
+        function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
+            return doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
+        }
+
         function inContext(flags: NodeFlags) {
             return (contextFlags & flags) !== 0;
         }
@@ -5057,13 +5061,22 @@ namespace ts {
         // STATEMENTS
         function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             const node = <Block>createNode(SyntaxKind.Block);
+            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 if (scanner.hasPrecedingLineBreak()) {
                     node.multiLine = true;
                 }
 
                 node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                parseExpected(SyntaxKind.CloseBraceToken);
+                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                    const lastError = lastOrUndefined(parseDiagnostics);
+                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                        addRelatedInfo(
+                            lastError,
+                            createFileDiagnostic(sourceFile, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        );
+                    }
+                }
             }
             else {
                 node.statements = createMissingList<Statement>();
@@ -5867,19 +5880,7 @@ namespace ts {
                 node.exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
             }
             node.type = parseTypeAnnotation();
-
-            // For instance properties specifically, since they are evaluated inside the constructor,
-            // we do *not * want to parse yield expressions, so we specifically turn the yield context
-            // off. The grammar would look something like this:
-            //
-            //    MemberVariableDeclaration[Yield]:
-            //        AccessibilityModifier_opt PropertyName TypeAnnotation_opt Initializer_opt[In];
-            //        AccessibilityModifier_opt static_opt PropertyName TypeAnnotation_opt Initializer_opt[In, ?Yield];
-            //
-            // The checker may still error in the static case to explicitly disallow the yield expression.
-            node.initializer = hasModifier(node, ModifierFlags.Static)
-                ? allowInAnd(parseInitializer)
-                : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseInitializer);
+            node.initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
 
             parseSemicolon();
             return finishNode(node);
@@ -6215,7 +6216,7 @@ namespace ts {
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember);
+                node.members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
