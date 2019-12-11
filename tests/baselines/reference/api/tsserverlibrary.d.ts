@@ -8509,11 +8509,6 @@ declare namespace ts.server {
     type PluginModuleFactory = (mod: {
         typescript: typeof ts;
     }) => PluginModule;
-    /**
-     * The project root can be script info - if root is present,
-     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
-     */
-    type ProjectRoot = ScriptInfo | NormalizedPath;
     abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         readonly projectName: string;
         readonly projectKind: ProjectKind;
@@ -8623,7 +8618,7 @@ declare namespace ts.server {
         containsScriptInfo(info: ScriptInfo): boolean;
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
         isRoot(info: ScriptInfo): boolean;
-        addRoot(info: ScriptInfo): void;
+        addRoot(info: ScriptInfo, fileName?: NormalizedPath): void;
         addMissingFileRoot(fileName: NormalizedPath): void;
         removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
         registerFileUpdate(fileName: string): void;

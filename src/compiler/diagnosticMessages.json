@@ -855,6 +855,10 @@
         "category": "Error",
         "code": 1260
     },
+    "Already included file name '{0}' differs from file name '{1}' only in casing.": {
+        "category": "Error",
+        "code": 1261
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -4064,7 +4068,7 @@
         "category": "Message",
         "code": 6201
     },
-        "Project references may not form a circular graph. Cycle detected: {0}": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6202
     },

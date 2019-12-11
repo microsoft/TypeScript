@@ -34,7 +34,7 @@ namespace ts.server {
         // We still want to check .js files in a JS-only inferred or external project (e.g. if the
         // file has '// @ts-check').
 
-        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) &&
+        if ((isInferredProject(project) || isExternalProject(project)) &&
             project.isJsOnlyProject()) {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             return scriptInfo && !scriptInfo.isJavaScript();

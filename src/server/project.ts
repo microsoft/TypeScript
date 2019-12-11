@@ -103,10 +103,10 @@ namespace ts.server {
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
      */
-    export type ProjectRoot = ScriptInfo | NormalizedPath;
     /* @internal */
-    export function isScriptInfo(value: ProjectRoot): value is ScriptInfo {
-        return value instanceof ScriptInfo;
+    export interface ProjectRootFile {
+        fileName: NormalizedPath;
+        info?: ScriptInfo;
     }
 
     interface GeneratedFileWatcher {
@@ -120,7 +120,7 @@ namespace ts.server {
 
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
+        private rootFilesMap = createMap<ProjectRootFile>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
@@ -354,9 +354,9 @@ namespace ts.server {
 
             let result: string[] | undefined;
             this.rootFilesMap.forEach(value => {
-                if (this.languageServiceEnabled || (isScriptInfo(value) && value.isScriptOpen())) {
+                if (this.languageServiceEnabled || (value.info && value.info.isScriptOpen())) {
                     // if language service is disabled - process only files that are open
-                    (result || (result = [])).push(isScriptInfo(value) ? value.fileName : value);
+                    (result || (result = [])).push(value.fileName);
                 }
             });
 
@@ -367,10 +367,10 @@ namespace ts.server {
             const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
-                if (existingValue !== scriptInfo && existingValue !== undefined) {
+                if (existingValue && existingValue.info !== scriptInfo) {
                     // This was missing path earlier but now the file exists. Update the root
                     this.rootFiles.push(scriptInfo);
-                    this.rootFilesMap.set(scriptInfo.path, scriptInfo);
+                    existingValue.info = scriptInfo;
                 }
                 scriptInfo.attachToProject(this);
             }
@@ -835,14 +835,14 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFilesMap && this.rootFilesMap.get(info.path) === info;
+            return this.rootFilesMap && this.rootFilesMap.get(info.path)?.info === info;
         }
 
         // add a root file to project
-        addRoot(info: ScriptInfo) {
+        addRoot(info: ScriptInfo, fileName?: NormalizedPath) {
             Debug.assert(!this.isRoot(info));
             this.rootFiles.push(info);
-            this.rootFilesMap.set(info.path, info);
+            this.rootFilesMap.set(info.path, { fileName: fileName || info.fileName, info });
             info.attachToProject(this);
 
             this.markAsDirty();
@@ -851,7 +851,7 @@ namespace ts.server {
         // add a root file that doesnt exist on host
         addMissingFileRoot(fileName: NormalizedPath) {
             const path = this.projectService.toPath(fileName);
-            this.rootFilesMap.set(path, fileName);
+            this.rootFilesMap.set(path, { fileName });
             this.markAsDirty();
         }
 
@@ -1157,7 +1157,7 @@ namespace ts.server {
                 this.projectService.host,
                 missingFilePath,
                 (fileName, eventKind) => {
-                    if (this.projectKind === ProjectKind.Configured) {
+                    if (isConfiguredProject(this)) {
                         this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
@@ -1294,7 +1294,7 @@ namespace ts.server {
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
                 version: this.projectProgramVersion,
-                isInferred: this.projectKind === ProjectKind.Inferred,
+                isInferred: isInferredProject(this),
                 options: this.getCompilationSettings(),
                 languageServiceDisabled: !this.languageServiceEnabled,
                 lastFileExceededProgramSize: this.lastFileExceededProgramSize
@@ -1689,6 +1689,9 @@ namespace ts.server {
         /* @internal */
         pendingReloadReason: string | undefined;
 
+        /* @internal */
+        openFileWatchTriggered = createMap<true>();
+
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
 
@@ -1897,9 +1900,11 @@ namespace ts.server {
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
+                    this.openFileWatchTriggered.clear();
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
+                    this.openFileWatchTriggered.clear();
                     const reason = Debug.assertDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
                     this.projectService.reloadConfiguredProject(this, reason);
@@ -2028,6 +2033,7 @@ namespace ts.server {
             this.mapOfDeclarationDirectories = undefined;
             this.symlinkedDirectories = undefined;
             this.symlinkedFiles = undefined;
+            this.openFileWatchTriggered.clear();
             super.close();
         }
 
@@ -2135,5 +2141,20 @@ namespace ts.server {
             Debug.assert(typeof newTypeAcquisition.enable === "boolean", "newTypeAcquisition.enable may not be null/undefined");
             this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
+    }
+
+    /* @internal */
+    export function isInferredProject(project: Project): project is InferredProject {
+        return project.projectKind === ProjectKind.Inferred;
+    }
+
+    /* @internal */
+    export function isConfiguredProject(project: Project): project is ConfiguredProject {
+        return project.projectKind === ProjectKind.Configured;
+    }
+
+    /* @internal */
+    export function isExternalProject(project: Project): project is ExternalProject {
+        return project.projectKind === ProjectKind.External;
     }
 }
