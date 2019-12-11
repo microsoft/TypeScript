@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
+Standard output:
+node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/all.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/all.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/allLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -675,5 +675,4 @@ node_modules/async/wrapSync.js(103,10): error TS2695: Left side of comma operato
 
 
 
-    Standard error:
-    
+Standard error:

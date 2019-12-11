@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    @uifabric/build: yarn run vX.X.X
+Standard output:
+@uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op
 @uifabric/build: Done in ?s.
 @uifabric/example-data: yarn run vX.X.X
@@ -215,8 +215,8 @@ Exit Code: 1
 
 
 
-    Standard error:
-    info cli using local version of lerna
+Standard error:
+info cli using local version of lerna
 lerna notice cli vX.X.X
 lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect

@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    src/App.test.tsx(5,1): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
+Standard output:
+src/App.test.tsx(5,1): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 src/components/Hello.test.tsx(5,1): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 src/components/Hello.test.tsx(7,3): error TS2304: Cannot find name 'expect'.
 src/components/Hello.test.tsx(10,1): error TS2593: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
@@ -14,5 +14,4 @@ src/components/Hello.test.tsx(27,3): error TS2304: Cannot find name 'expect'.
 
 
 
-    Standard error:
-    
+Standard error:
