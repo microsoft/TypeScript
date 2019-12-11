@@ -497,9 +497,9 @@ namespace ts.server {
                     // - first configured project
                     // - first external project
                     // - first inferred project
-                    let firstExternalProject;
-                    let firstConfiguredProject;
-                    let firstNonSourceOfProjectReferenceRedirect;
+                    let firstExternalProject: ExternalProject | undefined;
+                    let firstConfiguredProject: ConfiguredProject | undefined;
+                    let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
                     let defaultConfiguredProject: ConfiguredProject | false | undefined;
                     for (let index = 0; index < this.containingProjects.length; index++) {
                         const project = this.containingProjects[index];

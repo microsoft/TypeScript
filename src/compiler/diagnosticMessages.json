@@ -4156,6 +4156,10 @@
         "category": "Message",
         "code": 6223
     },
+    "Disable solution searching for this project.": {
+        "category": "Message",
+        "code": 6224
+    },
 
     "Projects to reference": {
         "category": "Message",

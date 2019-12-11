@@ -495,8 +495,8 @@ namespace ts.projectSystem {
         checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
@@ -587,8 +587,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -732,14 +732,15 @@ namespace ts.projectSystem {
 
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
+        isWriteAccess?: boolean;
         lineText: string;
     }
 
-    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
     }
