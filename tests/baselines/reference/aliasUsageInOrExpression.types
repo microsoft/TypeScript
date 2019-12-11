@@ -29,7 +29,7 @@ var d2: IHasVisualizationModel = i || moduleA;
 
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : IHasVisualizationModel
->moduleA || i : IHasVisualizationModel
+>moduleA || i : typeof moduleA
 >moduleA : typeof moduleA
 >i : IHasVisualizationModel
 
