@@ -1689,7 +1689,7 @@ bar();`),
             checkProjectActualFiles(service.configuredProjects.get(servicesConfig.path)!, [servicesFile.path, servicesConfig.path, libFile.path, typesFile.path, programFile.path]);
         });
 
-        it("when disableSearchSolution is true, solution and siblings are not loaded", () => {
+        it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
             const solutionLocation = "/user/username/projects/solution";
             const solution: File = {
                 path: `${solutionLocation}/tsconfig.json`,
@@ -1708,7 +1708,7 @@ bar();`),
                     compilerOptions: {
                         composite: true,
                         module: "none",
-                        disableSearchSolution: true
+                        disableSolutionSearching: true
                     },
                     files: ["./types.ts", "./program.ts"]
                 })

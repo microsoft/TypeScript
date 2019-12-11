@@ -384,8 +384,10 @@ namespace ts.server {
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
     interface AncestorConfigFileInfo {
-        /** config file name */ fileName: string;
-        /** path of open file so we can look at correct root */path: Path;
+        /** config file name */
+        fileName: string;
+        /** path of open file so we can look at correct root */
+        path: Path;
         configFileInfo: true;
     }
     type OpenScriptInfoOrClosedFileInfo = ScriptInfo | OriginalFileInfo;
@@ -2815,7 +2817,7 @@ namespace ts.server {
                 if (!project.isInitialLoadPending() &&
                     (
                         !project.getCompilerOptions().composite ||
-                        project.getCompilerOptions().disableSearchSolution
+                        project.getCompilerOptions().disableSolutionSearching
                     )
                 ) return;
 

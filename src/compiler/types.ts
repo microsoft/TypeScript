@@ -4950,7 +4950,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
-        disableSearchSolution?: boolean;
+        disableSolutionSearching?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;

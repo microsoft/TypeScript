@@ -2592,7 +2592,7 @@ declare namespace ts {
         declarationDir?: string;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
-        disableSearchSolution?: boolean;
+        disableSolutionSearching?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
