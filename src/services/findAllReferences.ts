@@ -380,7 +380,10 @@ namespace ts.FindAllReferences {
                 return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
             }
             else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
-                return originalNode === entry.node ? { prefixText: name + " as " } : { suffixText: " as " + name };
+                // If the symbol for the node is same as declared node symbol use prefix text
+                return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
+                    { prefixText: name + " as " } :
+                    { suffixText: " as " + name };
             }
         }
 
@@ -758,7 +761,6 @@ namespace ts.FindAllReferences {
 
             // Compute the meaning from the location and the symbol it references
             const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
-
             const result: SymbolAndEntries[] = [];
             const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
@@ -1892,6 +1894,13 @@ namespace ts.FindAllReferences {
                 const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
                 Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]
                 return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
+            }
+
+            const exportSpecifier = getDeclarationOfKind<ExportSpecifier>(symbol, SyntaxKind.ExportSpecifier);
+            const localSymbol = exportSpecifier && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            if (localSymbol) {
+                const res = cbSymbol(localSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.Node);
+                if (res) return res;
             }
 
             // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
