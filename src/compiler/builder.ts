@@ -20,7 +20,7 @@ namespace ts {
 
     export interface ReusableBuilderProgramState extends ReusableBuilderState {
         /**
-         * Cache of semantic diagnostics for files with their Path being the key
+         * Cache of bind and check diagnostics for files with their Path being the key
          */
         semanticDiagnosticsPerFile?: ReadonlyMap<readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
         /**
@@ -85,7 +85,7 @@ namespace ts {
     // TODO: GH#18217 Properties of this interface are frequently asserted to be defined.
     export interface BuilderProgramState extends BuilderState {
         /**
-         * Cache of semantic diagnostics for files with their Path being the key
+         * Cache of bind and check diagnostics for files with their Path being the key
          */
         semanticDiagnosticsPerFile: Map<readonly Diagnostic[]> | undefined;
         /**
@@ -647,21 +647,32 @@ namespace ts {
     }
 
     /**
-     * Gets the semantic diagnostics either from cache if present, or otherwise from program and caches it
-     * Note that it is assumed that the when asked about semantic diagnostics, the file has been taken out of affected files/changed file set
+     * Gets semantic diagnostics for the file which are
+     * bindAndCheckDiagnostics (from cache) and program diagnostics
      */
     function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+        return concatenate(
+            getBinderAndCheckerDiagnosticsOfFile(state, sourceFile, cancellationToken),
+            Debug.assertDefined(state.program).getProgramDiagnostics(sourceFile)
+        );
+    }
+
+    /**
+     * Gets the binder and checker diagnostics either from cache if present, or otherwise from program and caches it
+     * Note that it is assumed that when asked about binder and checker diagnostics, the file has been taken out of affected files/changed file set
+     */
+    function getBinderAndCheckerDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
         const path = sourceFile.path;
         if (state.semanticDiagnosticsPerFile) {
             const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
-            // Report the semantic diagnostics from the cache if we already have those diagnostics present
+            // Report the bind and check diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
                 return cachedDiagnostics;
             }
         }
 
         // Diagnostics werent cached, get them from program, and cache the result
-        const diagnostics = Debug.assertDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken);
+        const diagnostics = Debug.assertDefined(state.program).getBindAndCheckDiagnostics(sourceFile, cancellationToken);
         if (state.semanticDiagnosticsPerFile) {
             state.semanticDiagnosticsPerFile.set(path, diagnostics);
         }

@@ -502,6 +502,7 @@ declare namespace ts {
     }
     export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
+    export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
     export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertySignature | PropertyDeclaration | PropertyAssignment | EnumMember;
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
@@ -2609,6 +2610,7 @@ declare namespace ts {
         declarationDir?: string;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
+        disableSolutionSearching?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -8563,11 +8565,6 @@ declare namespace ts.server {
     type PluginModuleFactory = (mod: {
         typescript: typeof ts;
     }) => PluginModule;
-    /**
-     * The project root can be script info - if root is present,
-     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
-     */
-    type ProjectRoot = ScriptInfo | NormalizedPath;
     abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         readonly projectName: string;
         readonly projectKind: ProjectKind;
@@ -8678,7 +8675,7 @@ declare namespace ts.server {
         containsScriptInfo(info: ScriptInfo): boolean;
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
         isRoot(info: ScriptInfo): boolean;
-        addRoot(info: ScriptInfo): void;
+        addRoot(info: ScriptInfo, fileName?: NormalizedPath): void;
         addMissingFileRoot(fileName: NormalizedPath): void;
         removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
         registerFileUpdate(fileName: string): void;
@@ -8742,7 +8739,6 @@ declare namespace ts.server {
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
-        protected isInitialLoadPending: () => boolean;
         private fileExistsIfProjectReferenceDts;
         /**
          * This implementation of fileExists checks if the file being requested is
@@ -9194,6 +9190,8 @@ declare namespace ts.server {
         private findExternalProjectContainingOpenScriptInfo;
         private getOrCreateOpenScriptInfo;
         private assignProjectToOpenedScriptInfo;
+        private createAncestorProjects;
+        private ensureProjectChildren;
         private cleanupAfterOpeningFile;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private removeOrphanConfiguredProjects;

@@ -1,6 +1,6 @@
 Exit Code: 1
-Standard output:
-node_modules/minimatch/minimatch.js(77,17): error TS2551: Property 'minimatch' does not exist on type 'typeof minimatch'. Did you mean 'Minimatch'?
+    Standard output:
+    node_modules/minimatch/minimatch.js(77,17): error TS2551: Property 'minimatch' does not exist on type 'typeof minimatch'. Did you mean 'Minimatch'?
 node_modules/minimatch/minimatch.js(410,15): error TS2532: Object is possibly 'undefined'.
 node_modules/minimatch/minimatch.js(411,13): error TS2532: Object is possibly 'undefined'.
 node_modules/minimatch/minimatch.js(414,9): error TS2532: Object is possibly 'undefined'.
@@ -33,4 +33,5 @@ node_modules/minimatch/minimatch.js(876,18): error TS2554: Expected 0 arguments,
 
 
 
-Standard error:
+    Standard error:
+    

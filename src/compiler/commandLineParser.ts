@@ -835,8 +835,16 @@ namespace ts {
         {
             name: "disableSourceOfProjectReferenceRedirect",
             type: "boolean",
+            isTSConfigOnly: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_use_of_source_files_instead_of_declaration_files_from_referenced_projects
+        },
+        {
+            name: "disableSolutionSearching",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_solution_searching_for_this_project
         },
         {
             name: "noImplicitUseStrict",
