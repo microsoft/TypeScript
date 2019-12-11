@@ -205,8 +205,8 @@ namespace ts {
         return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
     }
 
-    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T> {
-        return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
+        return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions, baseWatchOptions);
     }
 
     type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
@@ -232,6 +232,7 @@ namespace ts {
         readonly options: BuildOptions;
         readonly baseCompilerOptions: CompilerOptions;
         readonly rootNames: readonly string[];
+        readonly baseWatchOptions: WatchOptions | undefined;
 
         readonly resolvedConfigFilePaths: Map<ResolvedConfigFilePath>;
         readonly configFileCache: ConfigFileMap<ConfigFileCacheEntry>;
@@ -272,7 +273,7 @@ namespace ts {
         writeLog: (s: string) => void;
     }
 
-    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilderState<T> {
+    function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilderState<T> {
         const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
         const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
         const currentDirectory = host.getCurrentDirectory();
@@ -306,6 +307,7 @@ namespace ts {
             options,
             baseCompilerOptions,
             rootNames,
+            baseWatchOptions,
 
             resolvedConfigFilePaths: createMap(),
             configFileCache: createConfigFileMap(),
@@ -374,7 +376,7 @@ namespace ts {
         }
 
         let diagnostic: Diagnostic | undefined;
-        const { parseConfigFileHost, baseCompilerOptions, extendedConfigCache, host } = state;
+        const { parseConfigFileHost, baseCompilerOptions, baseWatchOptions, extendedConfigCache, host } = state;
         let parsed: ParsedCommandLine | undefined;
         if (host.getParsedCommandLine) {
             parsed = host.getParsedCommandLine(configFileName);
@@ -382,7 +384,7 @@ namespace ts {
         }
         else {
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
+            parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache, baseWatchOptions);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
         }
         configFileCache.set(configFilePath, parsed || diagnostic!);
@@ -1147,7 +1149,7 @@ namespace ts {
             }
 
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
-                watchConfigFile(state, project, projectPath);
+                watchConfigFile(state, project, projectPath, config);
                 watchWildCardDirectories(state, project, projectPath, config);
                 watchInputFiles(state, project, projectPath, config);
             }
@@ -1751,7 +1753,7 @@ namespace ts {
         reportErrorSummary(state, buildOrder);
     }
 
-    function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath) {
+    function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
         state.allWatchedConfigFiles.set(resolvedPath, state.watchFile(
             state.hostWithWatch,
@@ -1760,6 +1762,7 @@ namespace ts {
                 invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full);
             },
             PollingInterval.High,
+            parsed?.watchOptions,
             WatchType.ConfigFile,
             resolved
         ));
@@ -1820,6 +1823,7 @@ namespace ts {
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
                 },
                 flags,
+                parsed?.watchOptions,
                 WatchType.WildcardDirectory,
                 resolved
             )
@@ -1837,6 +1841,7 @@ namespace ts {
                     input,
                     () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
                     PollingInterval.Low,
+                    parsed?.watchOptions,
                     path as Path,
                     WatchType.SourceFile,
                     resolved
@@ -1851,10 +1856,9 @@ namespace ts {
         state.watchAllProjectsPending = false;
         for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
-            // Watch this file
-            watchConfigFile(state, resolved, resolvedPath);
-
             const cfg = parseConfigFile(state, resolved, resolvedPath);
+            // Watch this file
+            watchConfigFile(state, resolved, resolvedPath, cfg);
             if (cfg) {
                 // Update watchers for wildcard directories
                 watchWildCardDirectories(state, resolved, resolvedPath, cfg);
@@ -1870,9 +1874,9 @@ namespace ts {
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
     function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions): SolutionBuilder<T> {
-        const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options);
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
+        const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
         return {
             build: (project, cancellationToken) => build(state, project, cancellationToken),
             clean: project => clean(state, project),

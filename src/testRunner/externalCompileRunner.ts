@@ -103,12 +103,12 @@ namespace Harness {
         report(result: ExecResult) {
             // eslint-disable-next-line no-null/no-null
             return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
-    Standard output:
-    ${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
+Standard output:
+${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
 
 
-    Standard error:
-    ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
+Standard error:
+${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
         }
     }
 
@@ -153,12 +153,12 @@ namespace Harness {
         report(result: ExecResult) {
             // eslint-disable-next-line no-null/no-null
             return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
-    Standard output:
-    ${sanitizeDockerfileOutput(result.stdout.toString())}
+Standard output:
+${sanitizeDockerfileOutput(result.stdout.toString())}
 
 
-    Standard error:
-    ${sanitizeDockerfileOutput(result.stderr.toString())}`;
+Standard error:
+${sanitizeDockerfileOutput(result.stderr.toString())}`;
         }
     }
 
@@ -276,12 +276,12 @@ namespace Harness {
 
             // eslint-disable-next-line no-null/no-null
             return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
-    Standard output:
-    ${stdout.replace(/\r\n/g, "\n")}
+Standard output:
+${stdout.replace(/\r\n/g, "\n")}
 
 
-    Standard error:
-    ${stderr.replace(/\r\n/g, "\n")}`;
+Standard error:
+${stderr.replace(/\r\n/g, "\n")}`;
         }
     }
 
