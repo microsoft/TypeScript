@@ -2744,7 +2744,10 @@ namespace ts {
                     break;
                 case SyntaxKind.SourceFile:
                     // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script
-                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                    if (hasDynamicName(node)) {
+                        break;
+                    }
+                    else if ((thisContainer as SourceFile).commonJsModuleIndicator) {
                         declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
                     }
                     else {
