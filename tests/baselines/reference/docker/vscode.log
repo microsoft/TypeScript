@@ -8,6 +8,20 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/codeEditor/browser/suggestEnabledInput/suggestEnabledInput.ts(230,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingsEditor.ts(413,4): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingWidgets.ts(191,5): Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(280,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(285,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/statusbarColorProvider.ts(70,3): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/debugHover.ts(110,5): Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(520,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/statusbar/statusbarPart.ts(592,3): Type 'string | null' is not assignable to type 'string'.
@@ -31,20 +45,6 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(280,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingsEditor.ts(413,4): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingWidgets.ts(191,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(280,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(285,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/statusbarColorProvider.ts(70,3): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/debugHover.ts(110,5): Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/parts/quickopen/browser/quickOpenWidget.ts(414,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/paneview.ts(233,3): Type 'string | null' is not assignable to type 'string'.
@@ -70,6 +70,20 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/codeEditor/browser/suggestEnabledInput/suggestEnabledInput.ts(230,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingsEditor.ts(413,4): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingWidgets.ts(191,5): Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(280,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(285,5): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/statusbarColorProvider.ts(70,3): Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/debugHover.ts(110,5): Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/titlebar/titlebarPart.ts(520,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/statusbar/statusbarPart.ts(592,3): Type 'string | null' is not assignable to type 'string'.
@@ -93,20 +107,6 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/noTabsTitleControl.ts(280,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingsEditor.ts(413,4): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/keybindingWidgets.ts(191,5): Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(280,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/feedback/browser/feedback.ts(285,5): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/statusbarColorProvider.ts(70,3): Type 'string | null' is not assignable to type 'string'.
-  Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/debug/browser/debugHover.ts(110,5): Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/parts/quickopen/browser/quickOpenWidget.ts(414,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/splitview/paneview.ts(233,3): Type 'string | null' is not assignable to type 'string'.
