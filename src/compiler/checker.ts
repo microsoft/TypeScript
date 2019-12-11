@@ -6800,7 +6800,7 @@ namespace ts {
                     getTypeWithFacts(type, TypeFacts.NEUndefined) :
                     type;
             }
-            return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration)], UnionReduction.Subtype);
+            return getSupertypeOrUnion(getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration));
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -16595,10 +16595,20 @@ namespace ts {
             return true;
         }
 
+        // If the left type is a supertype of the right type, return the left type. Otherwise, if
+        // the right type is a supertype of the left type, return the right type. Otherwise, return
+        // the subtype reduced union of the two types. This function ensures that we get a stable
+        // choice, unlike union subtype reduction which depends on type ID order.
+        function getSupertypeOrUnion(left: Type, right: Type) {
+            return isTypeSubtypeOf(right, left) ? left :
+                isTypeSubtypeOf(left, right) ? right :
+                getUnionType([left, right], UnionReduction.Subtype);
+        }
+
         // When the candidate types are all literal types with the same base type, return a union
         // of those literal types. Otherwise, return the leftmost type for which no type to the
         // right is a supertype.
-        function getSupertypeOrUnion(types: Type[]): Type {
+        function getLeftmostSupertypeOrUnion(types: Type[]): Type {
             return literalTypesWithSameBaseType(types) ?
                 getUnionType(types) :
                 reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
@@ -16606,11 +16616,11 @@ namespace ts {
 
         function getCommonSupertype(types: Type[]): Type {
             if (!strictNullChecks) {
-                return getSupertypeOrUnion(types);
+                return getLeftmostSupertypeOrUnion(types);
             }
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
             return primaryTypes.length ?
-                getNullableType(getSupertypeOrUnion(primaryTypes), getFalsyFlagsOfTypes(types) & TypeFlags.Nullable) :
+                getNullableType(getLeftmostSupertypeOrUnion(primaryTypes), getFalsyFlagsOfTypes(types) & TypeFlags.Nullable) :
                 getUnionType(types, UnionReduction.Subtype);
         }
 
@@ -26991,11 +27001,11 @@ namespace ts {
                         leftType;
                 case SyntaxKind.BarBarToken:
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
+                        getSupertypeOrUnion(removeDefinitelyFalsyTypes(leftType), rightType) :
                         leftType;
                 case SyntaxKind.QuestionQuestionToken:
                     return getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
-                        getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
+                        getSupertypeOrUnion(getNonNullableType(leftType), rightType) :
                         leftType;
                 case SyntaxKind.EqualsToken:
                     const declKind = isBinaryExpression(left.parent) ? getAssignmentDeclarationKind(left.parent) : AssignmentDeclarationKind.None;
@@ -27260,7 +27270,7 @@ namespace ts {
             checkTruthinessExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
-            return getUnionType([type1, type2], UnionReduction.Subtype);
+            return getSupertypeOrUnion(type1, type2);
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
@@ -30663,7 +30673,7 @@ namespace ts {
                     return stringType;
                 }
 
-                return getUnionType([arrayElementType, stringType], UnionReduction.Subtype);
+                return getSupertypeOrUnion(arrayElementType, stringType);
             }
 
             return arrayElementType;
