@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1006
     },
+    "The parser expected to find a '}' to match the '{' token here.": {
+        "category": "Error",
+        "code": 1007
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -850,6 +854,10 @@
     "Keywords cannot contain escape characters.": {
         "category": "Error",
         "code": 1260
+    },
+    "Already included file name '{0}' differs from file name '{1}' only in casing.": {
+        "category": "Error",
+        "code": 1261
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

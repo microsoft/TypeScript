@@ -585,8 +585,8 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, parseConfigFileHost);
-            if (updateErrorForNoInputFiles(result, configFileName, configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost);
+            if (updateErrorForNoInputFiles(result, getNormalizedAbsolutePath(configFileName, currentDirectory), configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
             rootFileNames = result.fileNames;

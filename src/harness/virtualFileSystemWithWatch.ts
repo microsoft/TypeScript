@@ -518,6 +518,26 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
+        renameFile(fileName: string, newFileName: string) {
+            const fullPath = getNormalizedAbsolutePath(fileName, this.currentDirectory);
+            const path = this.toPath(fullPath);
+            const file = this.fs.get(path) as FsFile;
+            Debug.assert(!!file);
+
+            // Only remove the file
+            this.removeFileOrFolder(file, returnFalse, /*isRenaming*/ true);
+
+            // Add updated folder with new folder name
+            const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
+            const newFile = this.toFsFile({ path: newFullPath, content: file.content });
+            const newPath = newFile.path;
+            const basePath = getDirectoryPath(path);
+            Debug.assert(basePath !== path);
+            Debug.assert(basePath === getDirectoryPath(newPath));
+            const baseFolder = this.fs.get(basePath) as FsFolder;
+            this.addFileOrFolderInFolder(baseFolder, newFile);
+        }
+
         renameFolder(folderName: string, newFolderName: string) {
             const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
             const path = this.toPath(fullPath);

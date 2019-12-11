@@ -1069,6 +1069,9 @@ namespace ts.server {
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
+                        if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
+                            project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                        }
                         return;
                     }
 
@@ -1276,6 +1279,16 @@ namespace ts.server {
                     }
                     // Do not remove the project so that we can reuse this project
                     // if it would need to be re-created with next file open
+
+                    // If project had open file affecting
+                    // Reload the root Files from config if its not already scheduled
+                    if (p.openFileWatchTriggered.has(info.path)) {
+                        p.openFileWatchTriggered.delete(info.path);
+                        if (!p.pendingReload) {
+                            p.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                            p.markFileAsDirty(info.path);
+                        }
+                    }
                 }
                 else if (isInferredProject(p) && p.isRoot(info)) {
                     // If this was the last open root file of inferred project
@@ -1893,40 +1906,55 @@ namespace ts.server {
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
-            const newRootScriptInfoMap = createMap<ProjectRoot>();
+            const newRootScriptInfoMap = createMap<true>();
 
             for (const f of files) {
                 const newRootFile = propertyReader.getFileName(f);
-                const normalizedPath = toNormalizedPath(newRootFile);
-                const isDynamic = isDynamicFileName(normalizedPath);
-                let scriptInfo: ScriptInfo | NormalizedPath;
+                const fileName = toNormalizedPath(newRootFile);
+                const isDynamic = isDynamicFileName(fileName);
                 let path: Path;
                 // Use the project's fileExists so that it can use caching instead of reaching to disk for the query
                 if (!isDynamic && !project.fileExistsWithCache(newRootFile)) {
-                    path = normalizedPathToPath(normalizedPath, this.currentDirectory, this.toCanonicalFileName);
-                    const existingValue = projectRootFilesMap.get(path)!;
-                    if (isScriptInfo(existingValue)) {
-                        project.removeFile(existingValue, /*fileExists*/ false, /*detachFromProject*/ true);
+                    path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
+                    const existingValue = projectRootFilesMap.get(path);
+                    if (existingValue) {
+                        if (existingValue.info) {
+                            project.removeFile(existingValue.info, /*fileExists*/ false, /*detachFromProject*/ true);
+                            existingValue.info = undefined;
+                        }
+                        existingValue.fileName = fileName;
                     }
-                    projectRootFilesMap.set(path, normalizedPath);
-                    scriptInfo = normalizedPath;
+                    else {
+                        projectRootFilesMap.set(path, { fileName });
+                    }
                 }
                 else {
                     const scriptKind = propertyReader.getScriptKind(f, this.hostConfiguration.extraFileExtensions);
                     const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                    scriptInfo = this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(normalizedPath, project.currentDirectory, scriptKind, hasMixedContent, project.directoryStructureHost)!; // TODO: GH#18217
+                    const scriptInfo = Debug.assertDefined(this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+                        fileName,
+                        project.currentDirectory,
+                        scriptKind,
+                        hasMixedContent,
+                        project.directoryStructureHost
+                    ));
                     path = scriptInfo.path;
+                    const existingValue = projectRootFilesMap.get(path);
                     // If this script info is not already a root add it
-                    if (!project.isRoot(scriptInfo)) {
-                        project.addRoot(scriptInfo);
+                    if (!existingValue || existingValue.info !== scriptInfo) {
+                        project.addRoot(scriptInfo, fileName);
                         if (scriptInfo.isScriptOpen()) {
                             // if file is already root in some inferred project
                             // - remove the file from that project and delete the project if necessary
                             this.removeRootOfInferredProjectIfNowPartOfOtherProject(scriptInfo);
                         }
                     }
+                    else {
+                        // Already root update the fileName
+                        existingValue.fileName = fileName;
+                    }
                 }
-                newRootScriptInfoMap.set(path, scriptInfo);
+                newRootScriptInfoMap.set(path, true);
             }
 
             // project's root file map size is always going to be same or larger than new roots map
@@ -1934,8 +1962,8 @@ namespace ts.server {
             if (projectRootFilesMap.size > newRootScriptInfoMap.size) {
                 projectRootFilesMap.forEach((value, path) => {
                     if (!newRootScriptInfoMap.has(path)) {
-                        if (isScriptInfo(value)) {
-                            project.removeFile(value, project.fileExistsWithCache(path), /*detachFromProject*/ true);
+                        if (value.info) {
+                            project.removeFile(value.info, project.fileExistsWithCache(path), /*detachFromProject*/ true);
                         }
                         else {
                             projectRootFilesMap.delete(path);

@@ -313,19 +313,18 @@ namespace ts {
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
     /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[]; // eslint-disable-line @typescript-eslint/unified-signatures
     export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        const diagnostics = [
-            ...program.getConfigFileParsingDiagnostics(),
-            ...program.getOptionsDiagnostics(cancellationToken),
-            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-            ...program.getGlobalDiagnostics(cancellationToken),
-            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-        ];
+        let diagnostics: Diagnostic[] | undefined;
+        diagnostics = addRange(diagnostics, program.getConfigFileParsingDiagnostics());
+        diagnostics = addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+        diagnostics = addRange(diagnostics, program.getSyntacticDiagnostics(sourceFile, cancellationToken));
+        diagnostics = addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
+        diagnostics = addRange(diagnostics, program.getSemanticDiagnostics(sourceFile, cancellationToken));
 
         if (getEmitDeclarations(program.getCompilerOptions())) {
-            addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
+            diagnostics = addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
-        return sortAndDeduplicateDiagnostics(diagnostics);
+        return sortAndDeduplicateDiagnostics(diagnostics || emptyArray);
     }
 
     export interface FormatDiagnosticsHost {
@@ -543,8 +542,8 @@ namespace ts {
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
-        perFile?: Map<T[]>;
-        allDiagnostics?: Diagnostic[];
+        perFile?: Map<readonly T[]>;
+        allDiagnostics?: readonly T[];
     }
 
     interface RefFile extends TextRange {
@@ -721,7 +720,7 @@ namespace ts {
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<ts.RefFile> | undefined;
 
-        const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
+        const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
@@ -941,6 +940,8 @@ namespace ts {
             getSemanticDiagnostics,
             getSuggestionDiagnostics,
             getDeclarationDiagnostics,
+            getBindAndCheckDiagnostics,
+            getProgramDiagnostics,
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
@@ -1638,9 +1639,9 @@ namespace ts {
         }
 
         function getDiagnosticsHelper<T extends Diagnostic>(
-            sourceFile: SourceFile,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => readonly T[],
-            cancellationToken: CancellationToken): readonly T[] {
+            sourceFile: SourceFile | undefined,
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
+            cancellationToken: CancellationToken | undefined): readonly T[] {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
@@ -1652,15 +1653,40 @@ namespace ts {
             }));
         }
 
-        function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
+        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
-        function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
+        }
+
+        function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
+            if (skipTypeChecking(sourceFile, options, program)) {
+                return emptyArray;
+            }
+
+            const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
+            const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+
+            let diagnostics: Diagnostic[] | undefined;
+            for (const diags of [fileProcessingDiagnosticsInFile, programDiagnosticsInFile]) {
+                if (diags) {
+                    for (const diag of diags) {
+                        if (shouldReportDiagnostic(diag)) {
+                            diagnostics = append(diagnostics, diag);
+                        }
+                    }
+                }
+            }
+            return diagnostics || emptyArray;
+        }
+
+        function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
@@ -1706,11 +1732,18 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly Diagnostic[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+            return concatenate(
+                getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken),
+                getProgramDiagnostics(sourceFile)
+            );
         }
 
-        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
+        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
+        }
+
+        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
@@ -1727,11 +1760,9 @@ namespace ts {
                     sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
-                const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
-                const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 let diagnostics: Diagnostic[] | undefined;
-                for (const diags of [bindDiagnostics, checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
+                for (const diags of [bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
                     if (diags) {
                         for (const diag of diags) {
                             if (shouldReportDiagnostic(diag)) {
@@ -1740,7 +1771,7 @@ namespace ts {
                         }
                     }
                 }
-                return diagnostics;
+                return diagnostics || emptyArray;
             });
         }
 
@@ -1963,36 +1994,36 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
-        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken) {
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
-                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
+                return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile) || emptyArray;
             });
         }
 
-        function getAndCacheDiagnostics<T extends Diagnostic>(
-            sourceFile: SourceFile | undefined,
-            cancellationToken: CancellationToken,
-            cache: DiagnosticCache<T>,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => T[] | undefined,
-        ): readonly T[] {
+        function getAndCacheDiagnostics<T extends SourceFile | undefined, U extends Diagnostic>(
+            sourceFile: T,
+            cancellationToken: CancellationToken | undefined,
+            cache: DiagnosticCache<U>,
+            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined) => readonly U[],
+        ): readonly U[] {
 
             const cachedResult = sourceFile
                 ? cache.perFile && cache.perFile.get(sourceFile.path)
-                : cache.allDiagnostics as T[];
+                : cache.allDiagnostics;
 
             if (cachedResult) {
                 return cachedResult;
             }
-            const result = getDiagnostics(sourceFile!, cancellationToken) || emptyArray; // TODO: GH#18217
+            const result = getDiagnostics(sourceFile, cancellationToken);
             if (sourceFile) {
                 if (!cache.perFile) {
-                    cache.perFile = createMap<T[]>();
+                    cache.perFile = createMap();
                 }
                 cache.perFile.set(sourceFile.path, result);
             }
@@ -2244,13 +2275,23 @@ namespace ts {
             );
         }
 
-        function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFileName: string, refFile: RefFile | undefined): void {
-            fileProcessingDiagnostics.add(createRefFileDiagnostic(
-                refFile,
-                Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                fileName,
-                existingFileName
-            ));
+        function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFile: SourceFile, refFile: RefFile | undefined): void {
+            const refs = !refFile ? refFileMap && refFileMap.get(existingFile.path) : undefined;
+            const refToReportErrorOn = refs && find(refs, ref => ref.referencedFileName === existingFile.fileName);
+            fileProcessingDiagnostics.add(refToReportErrorOn ?
+                createFileDiagnosticAtReference(
+                    refToReportErrorOn,
+                    Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
+                    existingFile.fileName,
+                    fileName,
+                ) :
+                createRefFileDiagnostic(
+                    refFile,
+                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
+                    fileName,
+                    existingFile.fileName
+                )
+            );
         }
 
         function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string): SourceFile {
@@ -2301,20 +2342,20 @@ namespace ts {
             const originalFileName = fileName;
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
+                addFileToRefFileMap(fileName, file || undefined, refFile);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
                 if (file && options.forceConsistentCasingInFileNames) {
-                    let inputName = fileName;
                     const checkedName = file.fileName;
-                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    const isRedirect = toPath(checkedName) !== toPath(fileName);
                     if (isRedirect) {
-                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                        fileName = getProjectReferenceRedirect(fileName) || fileName;
                     }
                     // Check if it differs only in drive letters its ok to ignore that error:
                     const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
-                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(inputName, currentDirectory);
+                    const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(fileName, currentDirectory);
                     if (checkedAbsolutePath !== inputAbsolutePath) {
-                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile);
+                        reportFileNamesDifferOnlyInCasingError(fileName, file, refFile);
                     }
                 }
 
@@ -2341,7 +2382,6 @@ namespace ts {
                     }
                 }
 
-                addFileToRefFileMap(file || undefined, refFile);
                 return file || undefined;
             }
 
@@ -2400,16 +2440,18 @@ namespace ts {
 
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
+                file.fileName = fileName; // Ensure that source file has same name as what we were looking for
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
+                addFileToRefFileMap(fileName, file, refFile);
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {
-                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile);
+                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile, refFile);
                     }
                     else {
                         filesByNameIgnoreCase!.set(pathLowerCase, file);
@@ -2437,13 +2479,13 @@ namespace ts {
                     processingOtherFiles!.push(file);
                 }
             }
-            addFileToRefFileMap(file, refFile);
             return file;
         }
 
-        function addFileToRefFileMap(file: SourceFile | undefined, refFile: RefFile | undefined) {
+        function addFileToRefFileMap(referencedFileName: string, file: SourceFile | undefined, refFile: RefFile | undefined) {
             if (refFile && file) {
                 (refFileMap || (refFileMap = createMultiMap())).add(file.path, {
+                    referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,
                     file: refFile.file.path
@@ -2670,15 +2712,27 @@ namespace ts {
                         // Don't bother reading the file again if it's the same file.
                         if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
                             const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
-                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName!)!.text) {
+                            const existingFile = getSourceFile(previousResolution.resolvedFileName!)!;
+                            if (otherFileText !== existingFile.text) {
+                                // Try looking up ref for original file
+                                const refs = !refFile ? refFileMap && refFileMap.get(existingFile.path) : undefined;
+                                const refToReportErrorOn = refs && find(refs, ref => ref.referencedFileName === existingFile.fileName);
                                 fileProcessingDiagnostics.add(
-                                    createRefFileDiagnostic(
-                                        refFile,
-                                        Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                        typeReferenceDirective,
-                                        resolvedTypeReferenceDirective.resolvedFileName,
-                                        previousResolution.resolvedFileName
-                                    )
+                                    refToReportErrorOn ?
+                                        createFileDiagnosticAtReference(
+                                            refToReportErrorOn,
+                                            Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                            typeReferenceDirective,
+                                            resolvedTypeReferenceDirective.resolvedFileName,
+                                            previousResolution.resolvedFileName
+                                        ) :
+                                        createRefFileDiagnostic(
+                                            refFile,
+                                            Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                            typeReferenceDirective,
+                                            resolvedTypeReferenceDirective.resolvedFileName,
+                                            previousResolution.resolvedFileName
+                                        )
                                 );
                             }
                         }
@@ -2883,6 +2937,7 @@ namespace ts {
                 }
                 commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             }
+            sourceFile.fileName = refPath;
             sourceFile.path = sourceFilePath;
             sourceFile.resolvedPath = sourceFilePath;
             sourceFile.originalFileName = refPath;
@@ -3163,33 +3218,36 @@ namespace ts {
             }
         }
 
+        function createFileDiagnosticAtReference(refPathToReportErrorOn: ts.RefFile, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+            const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
+            const { kind, index } = refPathToReportErrorOn;
+            let pos: number, end: number;
+            switch (kind) {
+                case RefFileKind.Import:
+                    pos = skipTrivia(refFile.text, refFile.imports[index].pos);
+                    end = refFile.imports[index].end;
+                    break;
+                case RefFileKind.ReferenceFile:
+                    ({ pos, end } = refFile.referencedFiles[index]);
+                    break;
+                case RefFileKind.TypeReferenceDirective:
+                    ({ pos, end } = refFile.typeReferenceDirectives[index]);
+                    break;
+                default:
+                    return Debug.assertNever(kind);
+            }
+            return createFileDiagnostic(refFile, pos, end - pos, message, ...args);
+        }
+
         function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Map<true>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             const refPaths = refFileMap && refFileMap.get(file.path);
             const refPathToReportErrorOn = forEach(refPaths, refPath => rootPaths.has(refPath.file) ? refPath : undefined) ||
                 elementAt(refPaths, 0);
-            if (refPathToReportErrorOn) {
-                const refFile = Debug.assertDefined(getSourceFileByPath(refPathToReportErrorOn.file));
-                const { kind, index } = refPathToReportErrorOn;
-                let pos: number, end: number;
-                switch (kind) {
-                    case RefFileKind.Import:
-                        pos = skipTrivia(refFile.text, refFile.imports[index].pos);
-                        end = refFile.imports[index].end;
-                        break;
-                    case RefFileKind.ReferenceFile:
-                        ({ pos, end } = refFile.referencedFiles[index]);
-                        break;
-                    case RefFileKind.TypeReferenceDirective:
-                        ({ pos, end } = refFile.typeReferenceDirectives[index]);
-                        break;
-                    default:
-                        return Debug.assertNever(kind);
-                }
-                programDiagnostics.add(createFileDiagnostic(refFile, pos, end - pos, message, ...args));
-            }
-            else {
-                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
-            }
+            programDiagnostics.add(
+                refPathToReportErrorOn ?
+                    createFileDiagnosticAtReference(refPathToReportErrorOn, message, ...args) :
+                    createCompilerDiagnostic(message, ...args)
+            );
         }
 
         function verifyProjectReferences() {

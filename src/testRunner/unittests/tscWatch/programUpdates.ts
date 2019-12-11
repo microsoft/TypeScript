@@ -1126,7 +1126,7 @@ foo().hello`
             const bTsPath = `${projectRoot}/b.ts`;
             host.writeFile(bTsPath, aFile.content);
             host.runQueuedTimeoutCallbacks();
-            checkProgramActualFiles(watch(), [aFile.path, "b.ts", libFile.path]);
+            checkProgramActualFiles(watch(), [aFile.path, bTsPath, libFile.path]);
             checkOutputErrorsIncremental(host, [
                 "a.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n",
                 "b.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n"
