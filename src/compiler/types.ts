@@ -3193,7 +3193,6 @@ namespace ts {
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /*@internal*/ getProbableSymlinks(): ReadonlyMap<string>;
-        /*@internal*/ writeFile: WriteFileCallback;
     }
 
     /* @internal */

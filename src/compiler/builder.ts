@@ -882,36 +882,36 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
-        result.getState = () => state;
-        result.backupState = () => {
+        const builderProgram = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
+        builderProgram.getState = () => state;
+        builderProgram.backupState = () => {
             Debug.assert(backupState === undefined);
             backupState = cloneBuilderProgramState(state);
         };
-        result.restoreState = () => {
+        builderProgram.restoreState = () => {
             state = Debug.assertDefined(backupState);
             backupState = undefined;
         };
-        result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
-        result.getSemanticDiagnostics = getSemanticDiagnostics;
-        result.emit = emit;
-        result.releaseProgram = () => {
+        builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
+        builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
+        builderProgram.emit = emit;
+        builderProgram.releaseProgram = () => {
             releaseCache(state);
             backupState = undefined;
         };
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
-            (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+            (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
         }
         else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-            (result as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
-            (result as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
+            (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+            (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
         }
         else {
             notImplemented();
         }
 
-        return result;
+        return builderProgram;
 
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
@@ -984,9 +984,11 @@ namespace ts {
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
          * in that order would be used to write the files
          */
-        function emit(targetSourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
+                const result = handleNoEmitOptions(builderProgram, targetSourceFile, cancellationToken);
+                if (result) return result;
                 if (!targetSourceFile) {
                     // Emit and report any errors we ran into.
                     let sourceMaps: SourceMapEmitResult[] = [];
@@ -994,50 +996,12 @@ namespace ts {
                     let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];
 
-                    let writeFileToUse = writeFileCallback;
-                    let outputFiles: OutputFile[] | undefined;
-                    let savedState: BuilderProgramState | undefined;
-                    if (state.compilerOptions.noEmitOnError) {
-                        // Create backup and write in memory
-                        writeFileToUse = (name, text, writeByteOrderMark) =>
-                            (outputFiles || (outputFiles = [])).push({ name, text, writeByteOrderMark });
-                        savedState = backupState || cloneBuilderProgramState(state);
-                    }
                     let affectedEmitResult: AffectedFileResult<EmitResult>;
-                    while (affectedEmitResult = emitNextAffectedFile(writeFileToUse, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
                         emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
                         diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
                         emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
                         sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
-                    }
-
-                    if (state.compilerOptions.noEmitOnError) {
-                        if (length(diagnostics)) {
-                            // Errors so dont write files
-                            emitSkipped = true;
-                            emittedFiles.length = 0;
-                            sourceMaps.length = 0;
-                            state = Debug.assertDefined(savedState);
-                        }
-                        else {
-                            // write files since no error
-                            const emitterDiagnostics = createDiagnosticCollection();
-                            forEach(
-                                outputFiles,
-                                ({ name, text, writeByteOrderMark }) => writeFile(
-                                    {
-                                        writeFile: writeFileCallback ||
-                                            maybeBind(host, host.writeFile) ||
-                                            Debug.assertDefined(state.program).writeFile
-                                    },
-                                    emitterDiagnostics,
-                                    name,
-                                    text,
-                                    writeByteOrderMark
-                                )
-                            );
-                            diagnostics = addRange(diagnostics, emitterDiagnostics.getDiagnostics());
-                        }
                     }
                     return {
                         emitSkipped,
@@ -1047,7 +1011,7 @@ namespace ts {
                     };
                 }
             }
-            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFileCallback || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
+            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
 
         /**
