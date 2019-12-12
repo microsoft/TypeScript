@@ -137,6 +137,10 @@ namespace FourSlash {
         throw new Error("Operation should be cancelled");
     }
 
+    export function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations {
+        return { template: typeof diagnostic === "string" ? diagnostic : diagnostic.message } as FourSlashInterface.DiagnosticIgnoredInterpolations;
+    }
+
     // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
     // Return object may lack some functionalities for other purposes.
     function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
@@ -2483,7 +2487,12 @@ namespace FourSlash {
 
             const action = actions[index];
 
-            assert.equal(action.description, options.description);
+            if (typeof options.description === "string") {
+                assert.equal(action.description, options.description);
+            }
+            else {
+                assert.match(action.description, templateToRegExp(options.description.template));
+            }
             assert.deepEqual(action.commands, options.commands);
 
             if (options.applyChanges) {
@@ -3806,5 +3815,19 @@ ${code}
         const expectedString = quoted ? "\"" + expected + "\"" : expected;
         const actualString = quoted ? "\"" + actual + "\"" : actual;
         return `\n${expectMsg}:\n${expectedString}\n\n${actualMsg}:\n${actualString}`;
+    }
+
+    function templateToRegExp(template: string) {
+        const interpolationRegExp = /\{\d+\}/g;
+        let match;
+        let pos = 0;
+        let regExpString = "";
+        while (match = interpolationRegExp.exec(template)) {
+            regExpString += ts.regExpEscape(template.slice(pos, match.index));
+            regExpString += ".*?";
+            pos = match.index + match[0].length;
+        }
+        regExpString += ts.regExpEscape(template.slice(pos));
+        return new RegExp(`^${regExpString}$`);
     }
 }

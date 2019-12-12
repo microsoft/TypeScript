@@ -1543,7 +1543,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string;
+        readonly description: string | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
@@ -1600,6 +1600,10 @@ namespace FourSlashInterface {
         readonly findInComments?: boolean;
         readonly ranges: readonly RenameLocationOptions[];
         readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
+    export interface DiagnosticIgnoredInterpolations {
+        readonly kind: unique symbol;
+        template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }
