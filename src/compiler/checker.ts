@@ -11541,7 +11541,7 @@ namespace ts {
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            if (isEmptyAnonymousObjectType(type)) {
+            if (isEmptyAnonymousObjectType(type) && type !== anyFunctionType) {
                 if (!(includes & TypeFlags.IncludesEmptyObject)) {
                     includes |= TypeFlags.IncludesEmptyObject;
                     typeSet.set(type.id.toString(), type);
