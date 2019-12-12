@@ -183,10 +183,12 @@ namespace ts {
         NoTupleBoundsCheck = 1 << 3,
     }
 
-    const enum CallbackCheck {
-        None,
-        Bivariant,
-        Strict,
+    const enum SignatureCheckMode {
+        BivariantCallback = 1 << 0,
+        StrictCallback    = 1 << 1,
+        IgnoreReturnTypes = 1 << 2,
+        StrictArity       = 1 << 3,
+        Callback          = BivariantCallback | StrictCallback,
     }
 
     const enum MappedTypeModifiers {
@@ -13984,7 +13986,7 @@ namespace ts {
         function isSignatureAssignableTo(source: Signature,
             target: Signature,
             ignoreReturnTypes: boolean): boolean {
-            return compareSignaturesRelated(source, target, CallbackCheck.None, ignoreReturnTypes, /*reportErrors*/ false,
+            return compareSignaturesRelated(source, target, ignoreReturnTypes ? SignatureCheckMode.IgnoreReturnTypes : 0, /*reportErrors*/ false,
                 /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
         }
 
@@ -14004,8 +14006,7 @@ namespace ts {
          */
         function compareSignaturesRelated(source: Signature,
             target: Signature,
-            callbackCheck: CallbackCheck,
-            ignoreReturnTypes: boolean,
+            checkMode: SignatureCheckMode,
             reportErrors: boolean,
             errorReporter: ErrorReporter | undefined,
             incompatibleErrorReporter: ((source: Type, target: Type) => void) | undefined,
@@ -14021,7 +14022,8 @@ namespace ts {
             }
 
             const targetCount = getParameterCount(target);
-            if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
+            if (!hasEffectiveRestParameter(target) &&
+                (checkMode & SignatureCheckMode.StrictArity ? getParameterCount(source) : getMinArgumentCount(source)) > targetCount) {
                 return Ternary.False;
             }
 
@@ -14042,7 +14044,7 @@ namespace ts {
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = !callbackCheck && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
+            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
                 kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
             let result = Ternary.True;
 
@@ -14077,14 +14079,14 @@ namespace ts {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
                     // TODO: GH#18217 It will work if they're both `undefined`, but not if only one is
-                    compareSignaturesRelated(targetSig!, sourceSig!, strictVariance ? CallbackCheck.Strict : CallbackCheck.Bivariant, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
-                    !callbackCheck && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
+                    compareSignaturesRelated(targetSig!, sourceSig!, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
+                    !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -14096,7 +14098,7 @@ namespace ts {
                 result &= related;
             }
 
-            if (!ignoreReturnTypes) {
+            if (!(checkMode & SignatureCheckMode.IgnoreReturnTypes)) {
                 // If a signature resolution is already in-flight, skip issuing a circularity error
                 // here and just use the `any` type directly
                 const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
@@ -14127,7 +14129,7 @@ namespace ts {
                     // When relating callback signatures, we still need to relate return types bi-variantly as otherwise
                     // the containing type wouldn't be co-variant. For example, interface Foo<T> { add(cb: () => T): void }
                     // wouldn't be co-variant for T without this rule.
-                    result &= callbackCheck === CallbackCheck.Bivariant && compareTypes(targetReturnType, sourceReturnType, /*reportErrors*/ false) ||
+                    result &= checkMode & SignatureCheckMode.BivariantCallback && compareTypes(targetReturnType, sourceReturnType, /*reportErrors*/ false) ||
                         compareTypes(sourceReturnType, targetReturnType, reportErrors);
                     if (!result && reportErrors && incompatibleErrorReporter) {
                         incompatibleErrorReporter(sourceReturnType, targetReturnType);
@@ -14299,7 +14301,7 @@ namespace ts {
                 return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                const related = relation.get(getRelationKey(source, target, /*isIntersectionConstituent*/ false, relation));
+                const related = relation.get(getRelationKey(source, target, /*isIntersectionConstituent*/ false, /*strictArityChecks*/ false, relation));
                 if (related !== undefined) {
                     return !!(related & RelationComparisonResult.Succeeded);
                 }
@@ -14351,6 +14353,7 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
+            let strictArityChecks = relation === subtypeRelation;
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
             let lastSkippedInfo: [Type, Type] | undefined;
             let incompatibleStack: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] = [];
@@ -15139,7 +15142,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, isIntersectionConstituent, relation);
+                const id = getRelationKey(source, target, isIntersectionConstituent, strictArityChecks, relation);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -15486,6 +15489,17 @@ namespace ts {
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                        // When performing strict arity checks for signatures (under the subtype relationship), if source has
+                        // every property of target, and target is missing some properties from source, then we disable strict
+                        // arity checks for the members. This decreases the chances of "ties" in union subtype reduction. For
+                        // example, it enables us to consider { f(): void } a supertype of { f(x?: string): void, g(): void },
+                        // which we need for backwards compatibility reasons (specifically, for Object and Number).
+                        const saveStrictArityChecks = strictArityChecks;
+                        if (strictArityChecks &&
+                            !getUnmatchedProperty(source, target, /*requireOptionalProperties*/ true, /*matchDiscriminantProperties*/ false) &&
+                            getUnmatchedProperty(target, source, /*requireOptionalProperties*/ true, /*matchDiscriminantProperties*/ false)) {
+                            strictArityChecks = false;
+                        }
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, isIntersectionConstituent);
@@ -15501,6 +15515,7 @@ namespace ts {
                                 }
                             }
                         }
+                        strictArityChecks = saveStrictArityChecks;
                         if (varianceCheckFailed && result) {
                             errorInfo = originalErrorInfo || errorInfo || saveErrorInfo.errorInfo; // Use variance error (there is no structural one) and return false
                         }
@@ -16045,7 +16060,7 @@ namespace ts {
              */
             function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    CallbackCheck.None, /*ignoreReturnTypes*/ false, reportErrors, reportError, incompatibleReporter, isRelatedTo, reportUnreliableMarkers);
+                    strictArityChecks ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, reportUnreliableMarkers);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
@@ -16353,18 +16368,18 @@ namespace ts {
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
-        function getRelationKey(source: Type, target: Type, isIntersectionConstituent: boolean, relation: Map<RelationComparisonResult>) {
+        function getRelationKey(source: Type, target: Type, isIntersectionConstituent: boolean, strictArityChecks: boolean, relation: Map<RelationComparisonResult>) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
                 target = temp;
             }
-            const intersection = isIntersectionConstituent ? "&" : "";
+            const delimiter = isIntersectionConstituent ? strictArityChecks ? "|" : ";" : strictArityChecks ? "/" : ",";
             if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
                 const typeParameters: Type[] = [];
-                return getTypeReferenceId(<TypeReference>source, typeParameters) + "," + getTypeReferenceId(<TypeReference>target, typeParameters) + intersection;
+                return getTypeReferenceId(<TypeReference>source, typeParameters) + delimiter + getTypeReferenceId(<TypeReference>target, typeParameters);
             }
-            return source.id + "," + target.id + intersection;
+            return source.id + delimiter + target.id;
         }
 
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
