@@ -33692,6 +33692,41 @@ namespace ts {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
+                if (expr.arguments.some(isPartialApplicationElement)) {
+                    const funcType = checkNonNullExpression(expr.expression);
+
+                    ts.createArrowFunction(
+                        undefined,
+                        undefined,
+                        [
+                            ...expr.arguments
+                                .filter(isPartialApplicationElement)
+                                .map((partialApplicationIdentifier, i) =>
+                                    ts.createParameter(
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        // partialApplicationIdentifier,
+                                        ts.createIdentifier("pa"+i),
+                                        undefined,
+                                        undefined,
+                                        undefined
+                                    )
+                                )
+                        ],
+                        undefined,
+                        ts.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                        node
+                    );
+                      
+                    console.log('Partial application');
+                    // const type = createObjectType(ObjectFlags.Anonymous, symbol);
+
+                    // const t: Type = {
+
+                    // };
+                    // return t;
+                }
                 const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                     getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
                 if (type) {
