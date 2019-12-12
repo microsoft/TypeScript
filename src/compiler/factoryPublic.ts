@@ -2293,7 +2293,7 @@ namespace ts {
     export function updateNamespaceExport(node: NamespaceExport, name: Identifier) {
         return node.name !== name
             ? updateNode(createNamespaceExport(name), node)
-            :node
+            : node;
     }
 
     export function createNamedImports(elements: readonly ImportSpecifier[]): NamedImports {
