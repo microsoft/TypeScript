@@ -5322,7 +5322,7 @@ namespace ts {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node.modifiers = createNodeArray(createModifiersFromModifierFlags(newModifierFlags | getModifierFlags(node)));
+                        node.modifiers = createNodeArray(createModifiersFromModifierFlags(newModifierFlags | getEffectiveModifierFlags(node)));
                         node.modifierFlagsCache = 0; // Reset computed flags cache
                     }
                     results.push(node);
@@ -6363,15 +6363,6 @@ namespace ts {
             return name !== undefined ? name : symbolName(symbol);
         }
 
-        function getEffectivePrivacyModifier(node: Node, flags: ModifierFlags) {
-            Debug.assert((flags & ~(ModifierFlags.Public | ModifierFlags.Private | ModifierFlags.Protected)) === 0);
-            return hasModifier(node, flags)
-                || isInJSFile(node)
-                && (!(flags & ModifierFlags.Public) || getJSDocPublicTag(node))
-                && (!(flags & ModifierFlags.Private) || getJSDocPrivateTag(node))
-                && (!(flags & ModifierFlags.Protected) || getJSDocProtectedTag(node));
-        }
-
         function isDeclarationVisible(node: Node): boolean {
             if (node) {
                 const links = getNodeLinks(node);
@@ -6426,7 +6417,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (getEffectivePrivacyModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
+                        if (getEffectiveModifierFlags(node) & (ModifierFlags.Private | ModifierFlags.Protected)) {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
@@ -9760,6 +9751,7 @@ namespace ts {
                 const type = getApparentType(current);
                 if (type !== errorType) {
                     const prop = getPropertyOfType(type, name);
+                    getEffectiveModifierFlags
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
                         if (isUnion) {
@@ -28345,9 +28337,9 @@ namespace ts {
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                     const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node), otherKind);
                     if (otherAccessor) {
-                        const nodeFlags = getModifierFlags(node);
-                        const otherFlags = getModifierFlags(otherAccessor);
-                        if ((nodeFlags & ModifierFlags.AccessibilityModifier) !== (otherFlags & ModifierFlags.AccessibilityModifier)) {
+                        const nodeFlags = getEffectiveModifierFlags(node) & ModifierFlags.AccessibilityModifier;
+                        const otherFlags = getEffectiveModifierFlags(otherAccessor) & ModifierFlags.AccessibilityModifier;
+                        if (nodeFlags !== otherFlags) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }
                         if ((nodeFlags & ModifierFlags.Abstract) !== (otherFlags & ModifierFlags.Abstract)) {

@@ -4100,7 +4100,7 @@ namespace ts {
     }
 
     export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
-        return getModifierFlags(node) & flags;
+        return getEffectiveModifierFlags(node) & flags;
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
@@ -4125,6 +4125,17 @@ namespace ts {
             flags |= ModifierFlags.Export;
         }
 
+        return flags;
+    }
+
+    export function getEffectiveModifierFlags(node: Node) {
+        const flags = getModifierFlags(node);
+        if (isInJSFile(node)) {
+            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
+                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
+                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
+            return flags | tags;
+        }
         return flags;
     }
 

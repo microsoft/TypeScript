@@ -4,25 +4,26 @@
 // @declaration: true
 // @Filename: privateTag.js
 
+// TODO: Test get/set that disagree in visibility.
 class A {
     /**
      * Ap docs
      *
      * @private
      */
-    p;
+    p = 4;
     /**
      * Aq docs
      *
      * @protected
      */
-    q;
+    q = 5;
     /**
      * Ar docs
      *
      * @public
      */
-    r;
+    r = 6;
 }
 class C {
     constructor() {
