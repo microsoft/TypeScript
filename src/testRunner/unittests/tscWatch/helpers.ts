@@ -1,8 +1,6 @@
-namespace ts {
+namespace ts.tscWatch {
     export const projects = `/user/username/projects`;
     export const projectRoot = `${projects}/myproject`;
-}
-namespace ts.tscWatch {
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = TestFSWithWatch.File;
     export type SymLink = TestFSWithWatch.SymLink;
@@ -39,8 +37,8 @@ namespace ts.tscWatch {
         close(): void;
     }
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, host);
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, watchOptionsToExtend, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
@@ -49,8 +47,8 @@ namespace ts.tscWatch {
         return result;
     }
 
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host);
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, watchOptions, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
@@ -271,6 +269,11 @@ namespace ts.tscWatch {
     export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
         const quotedOption = `"${option}"`;
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
+    }
+
+    export function getUnknownDidYouMeanCompilerOption(program: Program, configFile: File, option: string, didYouMean: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0_Did_you_mean_1, option, didYouMean);
     }
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {

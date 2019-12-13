@@ -379,7 +379,7 @@ declare module "fs" {
             const expectedFiles = files.map(f => f.path);
             it("when watching node_modules in inferred project for failed lookup", () => {
                 const host = createWatchedSystem(files);
-                const watch = createWatchOfFilesAndCompilerOptions([file1.path], host, {}, /*maxNumberOfFilesToIterateForInvalidation*/ 1);
+                const watch = createWatchOfFilesAndCompilerOptions([file1.path], host, {}, /*watchOptions*/ undefined, /*maxNumberOfFilesToIterateForInvalidation*/ 1);
                 checkProgramActualFiles(watch(), expectedFiles);
                 host.checkTimeoutQueueLength(0);
 

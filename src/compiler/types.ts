@@ -567,6 +567,7 @@ namespace ts {
         /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
 
         BlockScoped = Let | Const,
 
@@ -707,6 +708,13 @@ namespace ts {
         | JSDocNullableType
         | JSDocOptionalType
         | JSDocVariadicType;
+
+    export type HasTypeArguments =
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | JsxOpeningElement
+        | JsxSelfClosingElement;
 
     export type HasInitializer =
         | HasExpressionInitializer
@@ -2699,8 +2707,6 @@ namespace ts {
         Shared         = 1 << 11, // Referenced as antecedent more than once
         PreFinally     = 1 << 12, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 13, // Injected edge that links post-finally flow with the rest of the graph
-        /** @internal */
-        Cached         = 1 << 14, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
 
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition,
@@ -3083,6 +3089,7 @@ namespace ts {
 
     /*@internal*/
     export interface RefFile {
+        referencedFileName: string;
         kind: RefFileKind;
         index: number;
         file: Path;
@@ -3132,6 +3139,9 @@ namespace ts {
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         /* @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
+
+        /* @internal */ getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        /* @internal */ getProgramDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
 
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
@@ -3474,7 +3484,6 @@ namespace ts {
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
-        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
         /**
          * True if `contextualType` should not be considered for completions because
@@ -3524,6 +3533,7 @@ namespace ts {
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
+        /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     }
 
     /* @internal */
@@ -3535,10 +3545,10 @@ namespace ts {
 
     /* @internal */
     export const enum ContextFlags {
-        None          = 0,
-        Signature     = 1 << 0, // Obtaining contextual signature
-        NoConstraints = 1 << 1, // Don't obtain type variable constraints
-        Completion    = 1 << 2, // Obtaining constraint type for completion
+        None           = 0,
+        Signature      = 1 << 0, // Obtaining contextual signature
+        NoConstraints  = 1 << 1, // Don't obtain type variable constraints
+        BaseConstraint = 1 << 2, // Use base constraint type for completions
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -4234,7 +4244,7 @@ namespace ts {
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
-        ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         // 'Narrowable' types are types where narrowing actually narrows.
@@ -4352,14 +4362,15 @@ namespace ts {
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
         ArrayLiteral     = 1 << 16, // Originates in an array literal
+        ObjectRestType   = 1 << 17, // Originates in object rest declaration
         /* @internal */
-        PrimitiveUnion   = 1 << 17, // Union of only primitive types
+        PrimitiveUnion   = 1 << 18, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 18, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 19, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 19, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 20, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4483,8 +4494,6 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
-        /* @internal */
-        possiblePropertyCache?: SymbolTable;       // Cache of _all_ resolved properties less any from aparent members
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4741,11 +4750,12 @@ namespace ts {
         HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
         PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
         MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
-        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 8,  // Seed for inference priority tracking
+        ContravariantConditional     = 1 << 4,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 5,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 6,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 7,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 8,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 9,  // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
@@ -4919,6 +4929,26 @@ namespace ts {
         circular?: boolean;
     }
 
+    export enum WatchFileKind {
+        FixedPollingInterval,
+        PriorityPollingInterval,
+        DynamicPriorityPolling,
+        UseFsEvents,
+        UseFsEventsOnParentDirectory,
+    }
+
+    export enum WatchDirectoryKind {
+        UseFsEvents,
+        FixedPollingInterval,
+        DynamicPriorityPolling,
+    }
+
+    export enum PollingWatchKind {
+        FixedInterval,
+        PriorityInterval,
+        DynamicPriority,
+    }
+
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
@@ -4947,6 +4977,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
+        disableSolutionSearching?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -5030,6 +5061,15 @@ namespace ts {
         useDefineForClassFields?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+    }
+
+    export interface WatchOptions {
+        watchFile?: WatchFileKind;
+        watchDirectory?: WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind;
+        synchronousWatchDirectory?: boolean;
+
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export interface TypeAcquisition {
@@ -5119,6 +5159,7 @@ namespace ts {
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         projectReferences?: readonly ProjectReference[];
+        watchOptions?: WatchOptions;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -5199,10 +5240,17 @@ namespace ts {
     }
 
     /* @internal */
+    export interface DidYouMeanOptionsDiagnostics {
+        optionDeclarations: CommandLineOption[];
+        unknownOptionDiagnostic: DiagnosticMessage,
+        unknownDidYouMeanDiagnostic: DiagnosticMessage,
+    }
+
+    /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
         elementOptions?: Map<CommandLineOption>;
-        extraKeyDiagnosticMessage?: DiagnosticMessage;
+        extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
     }
 
     /* @internal */
@@ -5714,13 +5762,19 @@ namespace ts {
     }
 
     /* @internal */
-    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost {
+    export interface SourceFileMayBeEmittedHost {
+        getCompilerOptions(): CompilerOptions;
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+        isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    }
+
+    /* @internal */
+    export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
         getSourceFiles(): readonly SourceFile[];
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
-        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         getCommonSourceDirectory(): string;
@@ -6457,7 +6511,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

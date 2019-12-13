@@ -803,19 +803,19 @@ namespace ts.projectSystem {
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
         const core: File = {
-            path: `${projectRoot}/core/core.ts`,
+            path: `${tscWatch.projectRoot}/core/core.ts`,
             content: "let z = 10;"
         };
         const app1: File = {
-            path: `${projectRoot}/app1/app.ts`,
+            path: `${tscWatch.projectRoot}/app1/app.ts`,
             content: "let x = 10;"
         };
         const app2: File = {
-            path: `${projectRoot}/app2/app.ts`,
+            path: `${tscWatch.projectRoot}/app2/app.ts`,
             content: "let y = 10;"
         };
         const app1Config: File = {
-            path: `${projectRoot}/app1/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },
@@ -823,7 +823,7 @@ namespace ts.projectSystem {
             })
         };
         const app2Config: File = {
-            path: `${projectRoot}/app2/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },

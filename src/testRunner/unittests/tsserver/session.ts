@@ -1,6 +1,6 @@
-const expect: typeof _chai.expect = _chai.expect;
-
 namespace ts.server {
+    const _chai: typeof import("chai") = require("chai");
+    const expect: typeof _chai.expect = _chai.expect;
     let lastWrittenToHost: string;
     const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
@@ -179,7 +179,9 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = { version };
+                const expected: protocol.StatusResponseBody = {
+                    version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });

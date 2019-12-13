@@ -1,0 +1,83 @@
+=== tests/cases/compiler/functionTypeReturnsUnionWithUndefinedWithStrictNullChecks.ts ===
+let a: () => void | undefined;
+>a : () => void | undefined
+
+a; // Error did you mean to paren this function type
+>a : () => void | undefined
+
+function b (): void | undefined {}
+>b : () => void | undefined
+
+let c: typeof b;
+>c : () => void | undefined
+>b : () => void | undefined
+
+c;
+>c : () => void | undefined
+
+type Undefined = undefined
+>Undefined : undefined
+
+let d: () => void | Undefined;
+>d : () => void | undefined
+
+d;
+>d : () => void | undefined
+
+let e: () => string | void | number | object | undefined;
+>e : () => string | number | void | object | undefined
+
+e; // Error did you mean to paren...
+>e : () => string | number | void | object | undefined
+
+let f: () => void;
+>f : () => void
+
+f;
+>f : () => void
+
+let g: () => undefined;
+>g : () => undefined
+
+g;
+>g : () => undefined
+
+type T1 = undefined | string;
+>T1 : T1
+
+type T2 = undefined | void;
+>T2 : void | undefined
+
+let h: () => T1 & T2;
+>h : () => undefined
+
+h;
+>h : () => undefined
+
+type T3 = void | undefined;
+>T3 : void | undefined
+
+let i: () => T3;
+>i : () => void | undefined
+
+i;
+>i : () => void | undefined
+
+type T4 = () => void | undefined;
+>T4 : T4
+
+let j: T4;
+>j : T4
+
+j; // Error did you mean to paren...
+>j : T4
+
+type T5 = () => void
+>T5 : T5
+
+let k: T5 | undefined
+>k : T5 | undefined
+
+j;
+>j : T4
+

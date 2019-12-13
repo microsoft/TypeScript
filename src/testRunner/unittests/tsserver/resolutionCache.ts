@@ -451,7 +451,7 @@ namespace ts.projectSystem {
 
     describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
         const configFile: File = {
-            path: `${projectRoot}/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/tsconfig.json`,
             content: JSON.stringify({ compilerOptions: { traceResolution: true } })
         };
 
@@ -558,7 +558,7 @@ namespace ts.projectSystem {
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = arrayToSet([projectRoot, `${projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            const expectedRecursiveDirectories = arrayToSet([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {
                     return undefined;
@@ -577,11 +577,11 @@ namespace ts.projectSystem {
         describe("from files in same folder", () => {
             function getFiles(fileContent: string) {
                 const file1: File = {
-                    path: `${projectRoot}/src/file1.ts`,
+                    path: `${tscWatch.projectRoot}/src/file1.ts`,
                     content: fileContent
                 };
                 const file2: File = {
-                    path: `${projectRoot}/src/file2.ts`,
+                    path: `${tscWatch.projectRoot}/src/file2.ts`,
                     content: fileContent
                 };
                 return { file1, file2 };
@@ -592,7 +592,7 @@ namespace ts.projectSystem {
                 const module2Name = "../module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectRoot}/src/module1.ts`, `${projectRoot}/module2.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/module1.ts`, `${tscWatch.projectRoot}/module2.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -615,12 +615,12 @@ namespace ts.projectSystem {
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/src`];
+                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectRoot}/src/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -646,19 +646,19 @@ namespace ts.projectSystem {
         describe("from files in different folders", () => {
             function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
                 const file1: File = {
-                    path: `${projectRoot}/product/src/file1.ts`,
+                    path: `${tscWatch.projectRoot}/product/src/file1.ts`,
                     content: fileContent1
                 };
                 const file2: File = {
-                    path: `${projectRoot}/product/src/feature/file2.ts`,
+                    path: `${tscWatch.projectRoot}/product/src/feature/file2.ts`,
                     content: fileContent2
                 };
                 const file3: File = {
-                    path: `${projectRoot}/product/test/src/file3.ts`,
+                    path: `${tscWatch.projectRoot}/product/test/src/file3.ts`,
                     content: fileContent3
                 };
                 const file4: File = {
-                    path: `${projectRoot}/product/test/file4.ts`,
+                    path: `${tscWatch.projectRoot}/product/test/file4.ts`,
                     content: fileContent4
                 };
                 return { file1, file2, file3, file4 };
@@ -676,7 +676,7 @@ namespace ts.projectSystem {
                 const fileContent3 = `import { module1 } from "${module5Name}";import { module2 } from "${module4Name}";`;
                 const fileContent4 = `import { module1 } from "${module6Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
-                const { module1, module2 } = getModules(`${projectRoot}/product/src/module1.ts`, `${projectRoot}/product/module2.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/src/module1.ts`, `${tscWatch.projectRoot}/product/module2.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -708,12 +708,12 @@ namespace ts.projectSystem {
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/product`];
+                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/product`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent);
-                const { module1, module2 } = getModules(`${projectRoot}/product/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -723,8 +723,8 @@ namespace ts.projectSystem {
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${tscWatch.projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${tscWatch.projectRoot}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
@@ -752,7 +752,7 @@ namespace ts.projectSystem {
                 const file4Name = "../test/file4";
                 const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
-                const { module1, module2 } = getModules(`${projectRoot}/product/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);
@@ -766,19 +766,19 @@ namespace ts.projectSystem {
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${tscWatch.projectRoot}/product`, expectedTrace);
+                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${tscWatch.projectRoot}/product`, expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
                 getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
                 const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path)
-                    .concat(getConfigFilesToWatch(`${projectRoot}/product/src`));
+                    .concat(getConfigFilesToWatch(`${tscWatch.projectRoot}/product/src`));
                 const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
-                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${projectRoot}/product/${nodeModules}`,
-                    `${projectRoot}/${nodeModules}`, `${projectRoot}/product/test/${nodeModules}`,
-                    `${projectRoot}/product/test/src/${nodeModules}`
+                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${tscWatch.projectRoot}/product/${nodeModules}`,
+                    `${tscWatch.projectRoot}/${nodeModules}`, `${tscWatch.projectRoot}/product/test/${nodeModules}`,
+                    `${tscWatch.projectRoot}/product/test/src/${nodeModules}`
                 ]);
                 checkWatches();
 
@@ -808,7 +808,7 @@ namespace ts.projectSystem {
 
         describe("when watching directories for failed lookup locations in amd resolution", () => {
             const nodeFile: File = {
-                path: `${projectRoot}/src/typings/node.d.ts`,
+                path: `${tscWatch.projectRoot}/src/typings/node.d.ts`,
                 content: `
 declare module "fs" {
     export interface something {
@@ -816,7 +816,7 @@ declare module "fs" {
 }`
             };
             const electronFile: File = {
-                path: `${projectRoot}/src/typings/electron.d.ts`,
+                path: `${tscWatch.projectRoot}/src/typings/electron.d.ts`,
                 content: `
 declare module 'original-fs' {
     import * as fs from 'fs';
@@ -824,19 +824,19 @@ declare module 'original-fs' {
 }`
             };
             const srcFile: File = {
-                path: `${projectRoot}/src/somefolder/srcfile.ts`,
+                path: `${tscWatch.projectRoot}/src/somefolder/srcfile.ts`,
                 content: `
 import { x } from "somefolder/module1";
 import { x } from "somefolder/module2";
 const y = x;`
             };
             const moduleFile: File = {
-                path: `${projectRoot}/src/somefolder/module1.ts`,
+                path: `${tscWatch.projectRoot}/src/somefolder/module1.ts`,
                 content: `
 export const x = 10;`
             };
             const configFile: File = {
-                path: `${projectRoot}/src/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/src/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "amd",
@@ -853,22 +853,22 @@ export const x = 10;`
                 const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
                 const host = createServerHost(files);
                 const service = createProjectService(host);
-                service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, projectRoot);
+                service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, tscWatch.projectRoot);
                 checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
                 checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
                 if (useNodeFile) {
                     checkWatchedDirectories(host, emptyArray,  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
                 }
                 else {
-                    checkWatchedDirectoriesDetailed(host, [`${projectRoot}`, `${projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
+                    checkWatchedDirectoriesDetailed(host, [`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
                 }
                 const expectedWatchedDirectories = createMap<number>();
-                expectedWatchedDirectories.set(`${projectRoot}/src`, 1); // Wild card
-                expectedWatchedDirectories.set(`${projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
-                expectedWatchedDirectories.set(`${projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
-                expectedWatchedDirectories.set(`${projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
-                expectedWatchedDirectories.set(`${projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
-                expectedWatchedDirectories.set(`${projectRoot}/src/typings`, useNodeFile ? 1 : 2); // typeroot directory + failed lookup if not using node file
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src`, 1); // Wild card
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
+                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/typings`, useNodeFile ? 1 : 2); // typeroot directory + failed lookup if not using node file
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
             }
 
@@ -883,15 +883,15 @@ export const x = 10;`
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
             const npmCacheFile: File = {
-                path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                path: `${tscWatch.projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                 content: JSON.stringify({ something: 10 })
             };
             const file1: File = {
-                path: `${projectRoot}/test.ts`,
+                path: `${tscWatch.projectRoot}/test.ts`,
                 content: `import { x } from "somemodule";`
             };
             const file2: File = {
-                path: `${projectRoot}/node_modules/somemodule/index.d.ts`,
+                path: `${tscWatch.projectRoot}/node_modules/somemodule/index.d.ts`,
                 content: `export const x = 10;`
             };
             it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
@@ -910,7 +910,7 @@ export const x = 10;`
             });
             it("when watching node_modules as part of wild card directories in config project", () => {
                 const config: File = {
-                    path: `${projectRoot}/tsconfig.json`,
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
                     content: "{}"
                 };
                 const files = [libFile, file1, file2, config];
@@ -929,15 +929,15 @@ export const x = 10;`
 
         describe("avoid unnecessary invalidation", () => {
             it("unnecessary lookup invalidation on save", () => {
-                const expectedNonRelativeDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/src`];
+                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/src`];
                 const module1Name = "module1";
                 const module2Name = "module2";
                 const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
                 const file1: File = {
-                    path: `${projectRoot}/src/file1.ts`,
+                    path: `${tscWatch.projectRoot}/src/file1.ts`,
                     content: fileContent
                 };
-                const { module1, module2 } = getModules(`${projectRoot}/src/node_modules/module1/index.ts`, `${projectRoot}/node_modules/module2/index.ts`);
+                const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, configFile, libFile];
                 const host = createServerHost(files);
                 const resolutionTrace = createHostModuleResolutionTrace(host);

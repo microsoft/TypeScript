@@ -2,9 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////[|import a = b;|]
+////import a = b;
 
-verify.getSyntacticDiagnostics([{
-    message: "'import ... =' can only be used in a .ts file.",
-    code: 8002
-}]);
+verify.baselineSyntacticDiagnostics();

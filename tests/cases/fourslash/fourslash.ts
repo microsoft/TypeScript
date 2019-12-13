@@ -297,7 +297,7 @@ declare namespace FourSlashInterface {
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
-        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
+        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[], providePrefixAndSuffixTextForRename?: boolean });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         noSignatureHelp(...markers: (string | Marker)[]): void;
         noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
@@ -310,6 +310,8 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
+        baselineSyntacticDiagnostics(): void;
+        baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
@@ -587,7 +589,7 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsOptions {

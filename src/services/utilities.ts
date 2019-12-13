@@ -6,12 +6,12 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-// eslint-disable-next-line no-var
-declare var Promise: PromiseConstructor;
+declare var Promise: PromiseConstructor; // eslint-disable-line no-var
 
-// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
+    // These utilities are common to multiple language service features.
+    //#region
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     export const enum SemanticMeaning {
@@ -1513,11 +1513,11 @@ namespace ts {
         }
         return undefined;
     }
-}
 
-// Display-part writer helpers
-/* @internal */
-namespace ts {
+    // #endregion
+
+    // Display-part writer helpers
+    // #region
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
@@ -2102,7 +2102,7 @@ namespace ts {
         syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
         syntaxRequiresTrailingSemicolonOrASI);
 
-    export function isASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
+    function nodeIsASICandidate(node: Node, sourceFile: SourceFileLike): boolean {
         const lastToken = node.getLastToken(sourceFile);
         if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
             return false;
@@ -2143,6 +2143,17 @@ namespace ts {
         const startLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
         const endLine = sourceFile.getLineAndCharacterOfPosition(nextToken.getStart(sourceFile)).line;
         return startLine !== endLine;
+    }
+
+    export function positionIsASICandidate(pos: number, context: Node, sourceFile: SourceFileLike): boolean {
+        const contextAncestor = findAncestor(context, ancestor => {
+            if (ancestor.end !== pos) {
+                return "quit";
+            }
+            return syntaxMayBeASICandidate(ancestor.kind);
+        });
+
+        return !!contextAncestor && nodeIsASICandidate(contextAncestor, sourceFile);
     }
 
     export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
@@ -2246,7 +2257,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2254,11 +2265,10 @@ namespace ts {
         type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
         const stringContent = host.readFile(fileName);
-        const content = stringContent && tryParseJson(stringContent) as PackageJsonRaw;
-        if (!content) {
-            return undefined;
-        }
+        if (!stringContent) return undefined;
 
+        const content = tryParseJson(stringContent) as PackageJsonRaw;
+        if (!content) return false;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
         for (const key of dependencyKeys) {
             const dependencies = content[key];
@@ -2315,5 +2325,11 @@ namespace ts {
 
     export function isInsideNodeModules(fileOrDirectory: string): boolean {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
+    }
+    // #endregion
+
+    /* @internal */
+    export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
+        return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 }

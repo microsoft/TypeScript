@@ -1280,7 +1280,7 @@ namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin;
+    export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
 
     /**
      * Contains information about current project version
@@ -1408,6 +1408,36 @@ namespace ts.server.protocol {
          * The host's additional supported .js file extensions
          */
         extraFileExtensions?: FileExtensionInfo[];
+
+        watchOptions?: WatchOptions;
+    }
+
+    export const enum WatchFileKind {
+        FixedPollingInterval = "FixedPollingInterval",
+        PriorityPollingInterval = "PriorityPollingInterval",
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+        UseFsEvents = "UseFsEvents",
+        UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
+    }
+
+    export const enum WatchDirectoryKind {
+        UseFsEvents = "UseFsEvents",
+        FixedPollingInterval = "FixedPollingInterval",
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+    }
+
+    export const enum PollingWatchKind {
+        FixedInterval = "FixedInterval",
+        PriorityInterval = "PriorityInterval",
+        DynamicPriority = "DynamicPriority",
+    }
+
+    export interface WatchOptions {
+        watchFile?: WatchFileKind | ts.WatchFileKind;
+        watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
+        synchronousWatchDirectory?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     /**
@@ -1579,7 +1609,7 @@ namespace ts.server.protocol {
         /**
          * List of last known projects
          */
-        knownProjects: protocol.ProjectVersionInfo[];
+        knownProjects: ProjectVersionInfo[];
     }
 
     /**
@@ -3059,7 +3089,7 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;

@@ -15,6 +15,10 @@
         "category": "Error",
         "code": 1006
     },
+    "The parser expected to find a '}' to match the '{' token here.": {
+        "category": "Error",
+        "code": 1007
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -851,6 +855,10 @@
         "category": "Error",
         "code": 1260
     },
+    "Already included file name '{0}' differs from file name '{1}' only in casing.": {
+        "category": "Error",
+        "code": 1261
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1046,6 +1054,10 @@
     "Identifier expected. '{0}' is a reserved word that cannot be used here.": {
         "category": "Error",
         "code": 1359
+    },
+    "Did you mean to parenthesize this function type?": {
+        "category": "Error",
+        "code": 1360
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2237,11 +2249,11 @@
         "category": "Error",
         "code": 2609
     },
-    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member property.": {
+    "'{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.": {
         "category": "Error",
         "code": 2610
     },
-    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member accessor.": {
+    "'{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.": {
         "category": "Error",
         "code": 2611
     },
@@ -3173,6 +3185,10 @@
         "category": "Error",
         "code": 5024
     },
+    "Unknown compiler option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5025
+    },
     "Could not write file '{0}': {1}.": {
         "category": "Error",
         "code": 5033
@@ -3233,7 +3249,7 @@
         "category": "Error",
         "code": 5061
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character.": {
+    "Substitution '{0}' in pattern '{1}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5062
     },
@@ -3292,6 +3308,22 @@
     "'{0}' and '{1}' operations cannot be mixed without parentheses.": {
         "category": "Error",
         "code": 5076
+    },
+    "Unknown build option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5077
+    },
+    "Unknown watch option '{0}'.": {
+        "category": "Error",
+        "code": 5078
+    },
+    "Unknown watch option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5079
+    },
+    "Watch option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5080
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3478,7 +3510,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
+    "File '{0}' has an unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -4048,7 +4080,7 @@
         "category": "Message",
         "code": 6201
     },
-        "Project references may not form a circular graph. Cycle detected: {0}": {
+    "Project references may not form a circular graph. Cycle detected: {0}": {
         "category": "Error",
         "code": 6202
     },
@@ -4135,6 +4167,26 @@
     "Generates a CPU profile.": {
         "category": "Message",
         "code": 6223
+    },
+    "Disable solution searching for this project.": {
+        "category": "Message",
+        "code": 6224
+    },
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+        "category": "Message",
+        "code": 6225
+    },
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+        "category": "Message",
+        "code": 6226
+    },
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+        "category": "Message",
+        "code": 6227
+    },
+    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
+        "category": "Message",
+        "code": 6228
     },
 
     "Projects to reference": {
@@ -4323,6 +4375,10 @@
         "category": "Message",
         "code": 6503
     },
+    "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
+        "category": "Error",
+        "code": 6504
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -4502,7 +4558,7 @@
         "category": "Error",
         "code": 7051
     },
-    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}'?": {
         "category": "Error",
         "code": 7052
     },
@@ -4527,59 +4583,51 @@
         "category": "Error",
         "code": 8001
     },
-    "'import ... =' can only be used in a .ts file.": {
+    "'import ... =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8002
     },
-    "'export=' can only be used in a .ts file.": {
+    "'export =' can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8003
     },
-    "'type parameter declarations' can only be used in a .ts file.": {
+    "Type parameter declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8004
     },
-    "'implements clauses' can only be used in a .ts file.": {
+    "'implements' clauses can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8005
     },
-    "'interface declarations' can only be used in a .ts file.": {
+    "'{0}' declarations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8006
     },
-    "'module declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8007
-    },
-    "'type aliases' can only be used in a .ts file.": {
+    "Type aliases can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8008
     },
-    "'{0}' can only be used in a .ts file.": {
+    "The '{0}' modifier can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8009
     },
-    "'types' can only be used in a .ts file.": {
+    "Type annotations can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8010
     },
-    "'type arguments' can only be used in a .ts file.": {
+    "Type arguments can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8011
     },
-    "'parameter modifiers' can only be used in a .ts file.": {
+    "Parameter modifiers can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8012
     },
-    "'non-null assertions' can only be used in a .ts file.": {
+    "Non-null assertions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8013
     },
-    "'enum declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8015
-    },
-    "'type assertion expressions' can only be used in a .ts file.": {
+    "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
     },
@@ -4739,7 +4787,10 @@
         "category": "Error",
         "code": 17017
     },
-
+    "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 17018
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
