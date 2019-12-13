@@ -3818,6 +3818,6 @@ ${code}
     }
 
     function templateToRegExp(template: string) {
-        return new RegExp(`^${ts.regExpEscape(template).replace(/\\\{d+\\\}/g, ".*?")}$`);
+        return new RegExp(`^${ts.regExpEscape(template).replace(/\\\{\d+\\\}/g, ".*?")}$`);
     }
 }
