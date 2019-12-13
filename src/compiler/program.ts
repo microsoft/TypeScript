@@ -1570,37 +1570,9 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            let declarationDiagnostics: readonly Diagnostic[] = [];
-
             if (!forceDtsEmit) {
-                if (options.noEmit) {
-                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-                }
-
-                // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
-                // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
-                // get any preEmit diagnostics, not just the ones
-                if (options.noEmitOnError) {
-                    const diagnostics = [
-                        ...program.getOptionsDiagnostics(cancellationToken),
-                        ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                        ...program.getGlobalDiagnostics(cancellationToken),
-                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
-                    ];
-
-                    if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {
-                        declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
-                    }
-
-                    if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                        return {
-                            diagnostics: concatenate(diagnostics, declarationDiagnostics),
-                            sourceMaps: undefined,
-                            emittedFiles: undefined,
-                            emitSkipped: true
-                        };
-                    }
-                }
+                const result = handleNoEmitOptions(program, sourceFile, cancellationToken);
+                if (result) return result;
             }
 
             // Create the emit resolver outside of the "emitTime" tracking code below.  That way
@@ -3440,6 +3412,33 @@ namespace ts {
                 getCanonicalFileName,
                 host.getCurrentDirectory()));
         }
+    }
+
+    /*@internal*/
+    export function handleNoEmitOptions(program: ProgramToEmitFilesAndReportErrors, sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): EmitResult | undefined {
+        const options = program.getCompilerOptions();
+        if (options.noEmit) {
+            return { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+        }
+
+        // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
+        // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
+        // get any preEmit diagnostics, not just the ones
+        if (!options.noEmitOnError) return undefined;
+        let diagnostics: readonly Diagnostic[] = [
+            ...program.getOptionsDiagnostics(cancellationToken),
+            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ...program.getGlobalDiagnostics(cancellationToken),
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+        ];
+
+        if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {
+            diagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+        }
+
+        return diagnostics.length > 0 ?
+            { diagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true } :
+            undefined;
     }
 
     /*@internal*/

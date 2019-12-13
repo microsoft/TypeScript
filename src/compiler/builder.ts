@@ -882,36 +882,36 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
-        result.getState = () => state;
-        result.backupState = () => {
+        const builderProgram = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
+        builderProgram.getState = () => state;
+        builderProgram.backupState = () => {
             Debug.assert(backupState === undefined);
             backupState = cloneBuilderProgramState(state);
         };
-        result.restoreState = () => {
+        builderProgram.restoreState = () => {
             state = Debug.assertDefined(backupState);
             backupState = undefined;
         };
-        result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
-        result.getSemanticDiagnostics = getSemanticDiagnostics;
-        result.emit = emit;
-        result.releaseProgram = () => {
+        builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
+        builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
+        builderProgram.emit = emit;
+        builderProgram.releaseProgram = () => {
             releaseCache(state);
             backupState = undefined;
         };
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
-            (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+            (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
         }
         else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-            (result as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
-            (result as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
+            (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+            (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
         }
         else {
             notImplemented();
         }
 
-        return result;
+        return builderProgram;
 
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
@@ -987,6 +987,8 @@ namespace ts {
         function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
+                const result = handleNoEmitOptions(builderProgram, targetSourceFile, cancellationToken);
+                if (result) return result;
                 if (!targetSourceFile) {
                     // Emit and report any errors we ran into.
                     let sourceMaps: SourceMapEmitResult[] = [];
