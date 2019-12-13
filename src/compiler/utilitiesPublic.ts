@@ -673,6 +673,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocClassTag);
     }
 
+    /** Gets the JSDoc public tag for the node if present */
+    export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPublicTag);
+    }
+
     /** Gets the JSDoc private tag for the node if present */
     export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined {
         return getFirstJSDocTag(node, isJSDocPrivateTag);
@@ -681,11 +686,6 @@ namespace ts {
     /** Gets the JSDoc protected tag for the node if present */
     export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined {
         return getFirstJSDocTag(node, isJSDocProtectedTag);
-    }
-
-    /** Gets the JSDoc public tag for the node if present */
-    export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined {
-        return getFirstJSDocTag(node, isJSDocPublicTag);
     }
 
     /** Gets the JSDoc enum tag for the node if present */
@@ -1562,16 +1562,16 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocClassTag;
     }
 
+    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
+        return node.kind === SyntaxKind.JSDocPublicTag;
+    }
+
     export function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag {
         return node.kind === SyntaxKind.JSDocPrivateTag;
     }
 
     export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
         return node.kind === SyntaxKind.JSDocProtectedTag;
-    }
-
-    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
-        return node.kind === SyntaxKind.JSDocPublicTag;
     }
 
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {

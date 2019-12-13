@@ -506,9 +506,9 @@ namespace ts {
                 return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
             case SyntaxKind.JSDocTag:
             case SyntaxKind.JSDocClassTag:
+            case SyntaxKind.JSDocPublicTag:
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
-            case SyntaxKind.JSDocPublicTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
@@ -6831,14 +6831,14 @@ namespace ts {
                         case "constructor":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocClassTag, tagName);
                             break;
+                        case "public":
+                            tag = parseSimpleTag(start, SyntaxKind.JSDocPublicTag, tagName);
+                            break;
                         case "private":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocPrivateTag, tagName);
                             break;
                         case "protected":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocProtectedTag, tagName);
-                            break;
-                        case "public":
-                            tag = parseSimpleTag(start, SyntaxKind.JSDocPublicTag, tagName);
                             break;
                         case "this":
                             tag = parseThisTag(start, tagName);
