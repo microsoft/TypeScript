@@ -12,6 +12,7 @@ XX of XX: [@azure/logger] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
@@ -20,7 +21,6 @@ XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
@@ -62,6 +62,7 @@ SUCCESS (22)
 @azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/identity (? seconds)
+@azure/core-amqp (? seconds)
 @azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
@@ -70,7 +71,6 @@ SUCCESS (22)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
-@azure/core-amqp (? seconds)
 @azure/core-arm (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
