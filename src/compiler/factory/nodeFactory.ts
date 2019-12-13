@@ -4772,7 +4772,7 @@ namespace ts {
             return array ? createNodeArray(array) : undefined;
         }
 
-        function asName<T extends Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
+        function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
             return typeof name === "string" ? createIdentifier(name) :
                 name;
         }
@@ -4946,9 +4946,9 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                     return factory.createJSDocFunctionType(parameters, type);
                 case SyntaxKind.FunctionType:
-                    return factory.createFunctionTypeNode(typeParameters, parameters, type);
+                    return factory.createFunctionTypeNode(typeParameters, parameters, Debug.assertDefined(type));
                 case SyntaxKind.ConstructorType:
-                    return factory.createConstructorTypeNode(typeParameters, parameters, type);
+                    return factory.createConstructorTypeNode(typeParameters, parameters, Debug.assertDefined(type));
                 case SyntaxKind.FunctionDeclaration:
                     return factory.createFunctionDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
                 case SyntaxKind.FunctionExpression:
@@ -5514,8 +5514,8 @@ namespace ts {
             (node: Mutable<Node>) => { node.transformFlags |= transformFlags; };
     }
 
-    function observeArguments<T>(action: <U extends T>(arg1: U, arg2: U) => U, observer: ((arg1: T, arg2: T) => void) | undefined): <U extends T>(arg1: U, arg2: U) => U;
-    function observeArguments<T, U, R>(action: (arg1: T, arg2: U | undefined) => R, observer: ((arg1: T, arg2: U) => void) | undefined): (arg1: T, arg2: U | undefined) => R;
+    function observeArguments<T, F extends <U extends T>(arg1: U, arg2: U) => U>(action: F, observer: ((arg1: T, arg2: T) => void) | undefined): F;
+    function observeArguments<T, U, R, F extends (arg1: T, arg2: U | undefined) => R>(action: F, observer: ((arg1: T, arg2: U) => void) | undefined): F;
     function observeArguments<T, U, R>(action: (arg1: T, arg2: U) => R, observer: ((arg1: T, arg2: U) => void) | undefined): (arg1: T, arg2: U) => R {
         return !observer ? action : (arg1, arg2) => {
             if (arg2 !== undefined) {
@@ -5525,8 +5525,8 @@ namespace ts {
         };
     }
 
-    function observeResult<T>(action: <U extends T>(arg: U) => U, observer: ((result: T) => void) | undefined): <U extends T>(arg: U) => U;
-    function observeResult<T, R>(action: (arg: T) => R, observer: ((result: R) => void) | undefined): (arg: T) => R;
+    function observeResult<T, F extends <U extends T>(arg: U) => U>(action: F, observer: ((result: T) => void) | undefined): F;
+    function observeResult<T, R, F extends (arg: T) => R>(action: F, observer: ((result: R) => void) | undefined): F;
     function observeResult<T, R>(action: (arg: T) => R, observer: ((result: R) => void) | undefined): (arg: T) => R {
         return !observer ? action : arg => {
             const result = action(arg);

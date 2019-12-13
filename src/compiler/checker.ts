@@ -4461,8 +4461,8 @@ namespace ts {
                     kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(/*decorators*/ undefined, options?.modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*body*/ undefined) :
                     kind === SyntaxKind.IndexSignature ? factory.createIndexSignature(/*decorators*/ undefined, options?.modifiers, parameters, returnTypeNode) :
                     kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
-                    kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode) :
-                    kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(typeParameters, parameters, returnTypeNode) :
+                    kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
+                    kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
                     kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(/*decorators*/ undefined, options?.modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
                     kind === SyntaxKind.FunctionExpression ? factory.createFunctionExpression(options?.modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, factory.createBlock([])) :
                     kind === SyntaxKind.ArrowFunction ? factory.createArrowFunction(options?.modifiers, typeParameters, parameters, returnTypeNode, /*equalsGreaterThanToken*/ undefined, factory.createBlock([])) :
@@ -6075,7 +6075,7 @@ namespace ts {
                                         visitNode(p.type, visitExistingNodeTreeSymbols),
                                         /*initializer*/ undefined
                                     )),
-                                    visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols)
+                                    visitNode(newTypeNode ?? node.type, visitExistingNodeTreeSymbols) ?? factory.createTypeReferenceNode(factory.createIdentifier(""))
                                 );
                             }
                             else {
@@ -6090,7 +6090,7 @@ namespace ts {
                                         visitNode(p.type, visitExistingNodeTreeSymbols),
                                         /*initializer*/ undefined
                                     )),
-                                    visitNode(node.type, visitExistingNodeTreeSymbols)
+                                    visitNode(node.type, visitExistingNodeTreeSymbols) ?? factory.createTypeReferenceNode(factory.createIdentifier(""))
                                 );
                             }
                         }

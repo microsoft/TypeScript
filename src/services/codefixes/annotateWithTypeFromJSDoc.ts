@@ -110,7 +110,9 @@ namespace ts.codefix {
     }
 
     function transformJSDocFunctionType(node: JSDocFunctionType) {
-        return factory.createFunctionTypeNode(emptyArray, node.parameters.map(transformJSDocParameter), node.type);
+        // TODO: This does not properly handle `function(new:C, string)` per https://github.com/google/closure-compiler/wiki/Types-in-the-Closure-Type-System#the-javascript-type-language
+        //       however we do handle it correctly in `serializeTypeForDeclaration` in checker.ts
+        return factory.createFunctionTypeNode(emptyArray, node.parameters.map(transformJSDocParameter), node.type ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
     }
 
     function transformJSDocParameter(node: ParameterDeclaration) {

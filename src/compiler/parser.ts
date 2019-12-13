@@ -2670,6 +2670,8 @@ namespace ts {
             );
         }
 
+        function parseReturnType(returnToken: SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode;
+        function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined;
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean) {
             if (shouldParseReturnType(returnToken, isType)) {
                 return parseTypeOrTypePredicate();
