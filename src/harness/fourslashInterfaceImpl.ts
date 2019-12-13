@@ -1602,7 +1602,6 @@ namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     export interface DiagnosticIgnoredInterpolations {
-        readonly kind: unique symbol;
         template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };

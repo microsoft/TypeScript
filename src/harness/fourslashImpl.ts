@@ -3818,16 +3818,6 @@ ${code}
     }
 
     function templateToRegExp(template: string) {
-        const interpolationRegExp = /\{\d+\}/g;
-        let match;
-        let pos = 0;
-        let regExpString = "";
-        while (match = interpolationRegExp.exec(template)) {
-            regExpString += ts.regExpEscape(template.slice(pos, match.index));
-            regExpString += ".*?";
-            pos = match.index + match[0].length;
-        }
-        regExpString += ts.regExpEscape(template.slice(pos));
-        return new RegExp(`^${regExpString}$`);
+        new RegExp(`^${ts.regExpEscape(template).replace(/\\\{d+\\\}/g, ".*?")}$`);
     }
 }

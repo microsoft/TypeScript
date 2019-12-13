@@ -719,7 +719,7 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
-    type DiagnosticIgnoredInterpolations = { readonly kind: unique symbol, template: string }
+    type DiagnosticIgnoredInterpolations = { template: string }
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
