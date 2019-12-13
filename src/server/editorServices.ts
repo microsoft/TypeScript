@@ -150,6 +150,15 @@ namespace ts.server {
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
+    /*@internal*/
+    export interface PerformanceEvent {
+        kind: "UpdateGraph";
+        durationMs: number;
+    }
+
+    /*@internal*/
+    export type PerformanceEventHandler = (event: PerformanceEvent) => void;
+
     export interface SafeList {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
@@ -612,6 +621,8 @@ namespace ts.server {
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
+        private performanceEventHandler?: PerformanceEventHandler;
+
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
             this.logger = opts.logger;
@@ -847,6 +858,13 @@ namespace ts.server {
                 data: { project }
             };
             this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendUpdateGraphPerformanceEvent(durationMs: number) {
+            if (this.performanceEventHandler) {
+                this.performanceEventHandler({ kind: "UpdateGraph", durationMs });
+            }
         }
 
         /* @internal */
@@ -2549,6 +2567,11 @@ namespace ts.server {
                 };
             }
             return info.sourceFileLike;
+        }
+
+        /*@internal*/
+        setPerformanceEventHandler(performanceEventHandler: PerformanceEventHandler) {
+            this.performanceEventHandler = performanceEventHandler;
         }
 
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
