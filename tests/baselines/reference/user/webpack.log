@@ -1,5 +1,26 @@
 Exit Code: 1
 Standard output:
+lib/Compilation.js(2048,46): error TS2339: Property 'fileDependencies' does not exist on type 'object'.
+lib/Compilation.js(2049,49): error TS2339: Property 'contextDependencies' does not exist on type 'object'.
+lib/Compilation.js(2050,49): error TS2339: Property 'missingDependencies' does not exist on type 'object'.
+lib/Compilation.js(2269,25): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/Compilation.js(2270,41): error TS2339: Property 'assetsInfo' does not exist on type 'object'.
+lib/Compilation.js(2271,58): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/Compilation.js(2281,24): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/ContextModule.js(307,23): error TS2339: Property 'snapshot' does not exist on type 'object'.
+lib/ContextModule.js(309,52): error TS2339: Property 'snapshot' does not exist on type 'object'.
+lib/ContextModule.js(423,21): error TS2339: Property 'snapshot' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(44,27): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(45,34): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(54,27): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(223,29): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(224,36): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/FlagDependencyExportsPlugin.js(231,29): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/FlagDependencyUsagePlugin.js(95,28): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/HotModuleReplacementPlugin.js(419,15): error TS2339: Property 'hot' does not exist on type 'object'.
+lib/LoaderTargetPlugin.js(29,20): error TS2339: Property 'target' does not exist on type 'object'.
+lib/Module.js(357,44): error TS2339: Property 'exportsArgument' does not exist on type 'object'.
+lib/Module.js(365,44): error TS2339: Property 'moduleArgument' does not exist on type 'object'.
 lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
 lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
 lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.
@@ -19,6 +40,82 @@ lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFil
 lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
 lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
 lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
+lib/NormalModule.js(390,25): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/NormalModule.js(391,21): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/NormalModule.js(392,21): error TS2339: Property 'assetsInfo' does not exist on type 'object'.
+lib/NormalModule.js(394,20): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/NormalModule.js(401,20): error TS2339: Property 'assetsInfo' does not exist on type 'object'.
+lib/NormalModule.js(560,20): error TS2339: Property 'fileDependencies' does not exist on type 'object'.
+lib/NormalModule.js(561,20): error TS2339: Property 'contextDependencies' does not exist on type 'object'.
+lib/NormalModule.js(564,20): error TS2339: Property 'missingDependencies' does not exist on type 'object'.
+lib/NormalModule.js(568,21): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/NormalModule.js(572,20): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/NormalModule.js(580,22): error TS2339: Property 'snapshot' does not exist on type 'object'.
+lib/NormalModule.js(652,18): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/NormalModule.js(699,20): error TS2339: Property 'parsed' does not exist on type 'object'.
+lib/NormalModule.js(780,23): error TS2339: Property 'parsed' does not exist on type 'object'.
+lib/NormalModule.js(843,23): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/NormalModule.js(846,52): error TS2339: Property 'snapshot' does not exist on type 'object'.
+lib/NormalModule.js(875,30): error TS2339: Property 'hash' does not exist on type 'object'.
+lib/WebpackOptionsDefaulter.js(55,21): error TS2339: Property 'mode' does not exist on type 'object'.
+lib/WebpackOptionsDefaulter.js(69,16): error TS2339: Property 'name' does not exist on type 'object'.
+lib/WebpackOptionsDefaulter.js(69,52): error TS2339: Property 'mode' does not exist on type 'object'.
+lib/asset/AssetGenerator.js(51,26): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetGenerator.js(124,24): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetGenerator.js(148,26): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetGenerator.js(173,32): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetParser.js(32,26): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/asset/AssetParser.js(36,27): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetParser.js(41,27): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/asset/AssetParser.js(46,27): error TS2339: Property 'dataUrl' does not exist on type 'object'.
+lib/dependencies/HarmonyExports.js(24,32): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/dependencies/HarmonyExports.js(25,32): error TS2339: Property 'exportsArgument' does not exist on type 'object'.
+lib/dependencies/HarmonyExports.js(28,33): error TS2339: Property 'moduleArgument' does not exist on type 'object'.
+lib/dependencies/LoaderPlugin.js(43,20): error TS2339: Property 'loadModule' does not exist on type 'object'.
+lib/dependencies/LoaderPlugin.js(63,37): error TS2339: Property '_module' does not exist on type 'object'.
+lib/dependencies/LoaderPlugin.js(64,32): error TS2339: Property 'context' does not exist on type 'object'.
+lib/dependencies/LoaderPlugin.js(92,25): error TS2339: Property 'addDependency' does not exist on type 'object'.
+lib/dependencies/LoaderPlugin.js(98,25): error TS2339: Property 'addContextDependency' does not exist on type 'object'.
+lib/javascript/JavascriptModulesPlugin.js(412,26): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/javascript/JavascriptModulesPlugin.js(489,55): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/javascript/JavascriptModulesPlugin.js(578,52): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/json/JsonGenerator.js(91,31): error TS2339: Property 'jsonData' does not exist on type 'object'.
+lib/json/JsonGenerator.js(103,33): error TS2339: Property 'jsonData' does not exist on type 'object'.
+lib/json/JsonParser.js(44,26): error TS2339: Property 'jsonData' does not exist on type 'object'.
+lib/json/JsonParser.js(45,26): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(566,51): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(567,41): error TS2339: Property 'moduleArgument' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(568,42): error TS2339: Property 'exportsArgument' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(609,21): error TS2339: Property 'fileDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(610,57): error TS2339: Property 'fileDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(613,21): error TS2339: Property 'contextDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(615,19): error TS2339: Property 'contextDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(619,21): error TS2339: Property 'missingDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(621,19): error TS2339: Property 'missingDependencies' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(639,21): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(643,55): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(645,21): error TS2339: Property 'assetsInfo' does not exist on type 'object'.
+lib/optimize/ConcatenatedModule.js(649,45): error TS2339: Property 'assetsInfo' does not exist on type 'object'.
+lib/optimize/SideEffectsFlagPlugin.js(74,26): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/optimize/SideEffectsFlagPlugin.js(85,25): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/optimize/SideEffectsFlagPlugin.js(88,26): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/optimize/SideEffectsFlagPlugin.js(111,29): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/optimize/SideEffectsFlagPlugin.js(137,33): error TS2339: Property 'sideEffectFree' does not exist on type 'object'.
+lib/rules/RuleSetCompiler.js(159,23): error TS2339: Property 'rules' does not exist on type 'object'.
+lib/rules/RuleSetCompiler.js(167,23): error TS2339: Property 'oneOf' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(37,23): error TS2339: Property 'use' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(38,27): error TS2339: Property 'enforce' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(73,28): error TS2339: Property 'loader' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(74,29): error TS2339: Property 'options' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(75,25): error TS2339: Property 'ident' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(132,26): error TS2339: Property 'loader' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(133,27): error TS2339: Property 'options' does not exist on type 'object'.
+lib/rules/UseEffectRulePlugin.js(134,27): error TS2339: Property 'enforce' does not exist on type 'object'.
+lib/stats/DefaultStatsFactoryPlugin.js(608,33): error TS2339: Property 'cacheable' does not exist on type 'object'.
+lib/stats/DefaultStatsFactoryPlugin.js(640,37): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/stats/DefaultStatsFactoryPlugin.js(641,36): error TS2339: Property 'assets' does not exist on type 'object'.
+lib/wasm-async/AsyncWebAssemblyParser.js(43,26): error TS2339: Property 'strict' does not exist on type 'object'.
+lib/wasm/WebAssemblyParser.js(83,26): error TS2339: Property 'strict' does not exist on type 'object'.
 
 
 

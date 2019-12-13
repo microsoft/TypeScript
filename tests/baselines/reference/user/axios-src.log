@@ -30,6 +30,20 @@ lib/cancel/CancelToken.js(28,11): error TS2339: Property 'reason' does not exist
 lib/cancel/CancelToken.js(29,26): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(37,12): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(38,16): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
+lib/core/dispatchRequest.js(27,10): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(30,10): error TS2339: Property 'data' does not exist on type 'object'.
+lib/core/dispatchRequest.js(31,12): error TS2339: Property 'data' does not exist on type 'object'.
+lib/core/dispatchRequest.js(32,12): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(33,12): error TS2339: Property 'transformRequest' does not exist on type 'object'.
+lib/core/dispatchRequest.js(37,10): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(38,12): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(39,12): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(39,27): error TS2339: Property 'method' does not exist on type 'object'.
+lib/core/dispatchRequest.js(40,12): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(46,21): error TS2339: Property 'headers' does not exist on type 'object'.
+lib/core/dispatchRequest.js(50,24): error TS2339: Property 'adapter' does not exist on type 'object'.
+lib/core/dispatchRequest.js(59,14): error TS2339: Property 'transformResponse' does not exist on type 'object'.
+lib/core/dispatchRequest.js(72,18): error TS2339: Property 'transformResponse' does not exist on type 'object'.
 lib/core/enhanceError.js(14,9): error TS2339: Property 'config' does not exist on type 'Error'.
 lib/core/enhanceError.js(16,11): error TS2339: Property 'code' does not exist on type 'Error'.
 lib/core/enhanceError.js(19,9): error TS2339: Property 'request' does not exist on type 'Error'.
@@ -43,7 +57,12 @@ lib/core/enhanceError.js(33,24): error TS2339: Property 'lineNumber' does not ex
 lib/core/enhanceError.js(34,26): error TS2339: Property 'columnNumber' does not exist on type 'Error'.
 lib/core/enhanceError.js(37,20): error TS2339: Property 'config' does not exist on type 'Error'.
 lib/core/enhanceError.js(38,18): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/core/settle.js(13,33): error TS2339: Property 'config' does not exist on type 'object'.
+lib/core/settle.js(14,50): error TS2339: Property 'status' does not exist on type 'object'.
+lib/core/settle.js(18,53): error TS2339: Property 'status' does not exist on type 'object'.
+lib/core/settle.js(19,16): error TS2339: Property 'config' does not exist on type 'object'.
 lib/core/settle.js(20,7): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/core/settle.js(21,16): error TS2339: Property 'request' does not exist on type 'object'.
 lib/helpers/cookies.js(16,56): error TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toUTCString'?
 lib/utils.js(258,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 lib/utils.js(282,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.

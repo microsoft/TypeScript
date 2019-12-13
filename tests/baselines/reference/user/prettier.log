@@ -1,0 +1,10 @@
+Exit Code: 1
+Standard output:
+src/doc/doc-builders.js(85,14): error TS2339: Property 'id' does not exist on type 'object'.
+src/doc/doc-builders.js(87,19): error TS2339: Property 'shouldBreak' does not exist on type 'object'.
+src/doc/doc-builders.js(88,26): error TS2339: Property 'expandedStates' does not exist on type 'object'.
+src/doc/doc-builders.js(163,19): error TS2339: Property 'groupId' does not exist on type 'object'.
+
+
+
+Standard error:
