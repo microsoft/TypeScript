@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    
+Standard output:
+
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 12.13.1 (LTS)
 Starting "rush rebuild"
@@ -160,8 +160,8 @@ rush rebuild - Errors! ( ? seconds)
 
 
 
-    Standard error:
-    
+Standard error:
+
 XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!

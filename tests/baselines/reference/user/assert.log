@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
+Standard output:
+node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
 node_modules/assert/test.js(39,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 node_modules/assert/test.js(55,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
 node_modules/assert/test.js(74,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.
@@ -32,5 +32,4 @@ node_modules/assert/test.js(346,5): error TS2552: Cannot find name 'test'. Did y
 
 
 
-    Standard error:
-    
+Standard error:
