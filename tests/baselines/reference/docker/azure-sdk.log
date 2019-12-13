@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    
+Standard output:
+
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 12.13.1 (LTS)
 Starting "rush rebuild"
@@ -12,6 +12,7 @@ XX of XX: [@azure/logger] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/identity] completed successfully in ? seconds
+XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-lro] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
 XX of XX: [@azure/test-utils-recorder] completed successfully in ? seconds
@@ -20,7 +21,6 @@ XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/core-amqp] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
@@ -62,6 +62,7 @@ SUCCESS (22)
 @azure/core-http (? seconds)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/identity (? seconds)
+@azure/core-amqp (? seconds)
 @azure/core-lro (? seconds)
 @azure/core-paging (? seconds)
 @azure/test-utils-recorder (? seconds)
@@ -70,7 +71,6 @@ SUCCESS (22)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
-@azure/core-amqp (? seconds)
 @azure/core-arm (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
@@ -144,7 +144,7 @@ npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.11 extract-api
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-@azure/storage-file-datalake (? seconds)
+@azure/storage-file-datalake ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/storage-file-datalake@X.X.X-preview.6 build:es6: `tsc -p tsconfig.json`
@@ -160,8 +160,8 @@ rush rebuild - Errors! ( ? seconds)
 
 
 
-    Standard error:
-    
+Standard error:
+
 XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
