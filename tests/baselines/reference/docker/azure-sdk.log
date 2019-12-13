@@ -102,7 +102,7 @@ samples/listRevisions.ts(43,32): error TS2322: Type 'PagedAsyncIterableIterator<
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
             Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
-test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
       Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
@@ -113,7 +113,7 @@ test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<Confi
                 Types of property 'done' are incompatible.
                   Type 'boolean | undefined' is not assignable to type 'boolean'.
                     Type 'undefined' is not assignable to type 'boolean'.
-test/testHelpers.ts(91,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
       Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
