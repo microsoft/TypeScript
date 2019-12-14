@@ -997,6 +997,15 @@ namespace ts {
             },
             description: Diagnostics.List_of_language_service_plugins
         },
+        {
+            name: "emitExtension",
+            type: "string",
+            category: Diagnostics.Basic_Options,
+
+            description: Diagnostics.Specify_the_extension_name_of_the_emitted_files,
+            showInSimplifiedHelpView: true,
+            affectsEmit: true,
+        }
     ];
 
     /* @internal */

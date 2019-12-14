@@ -2963,6 +2963,17 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.emitExtension) {
+                if (!startsWith(options.emitExtension, ".")) {
+                    createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_must_start_with_but_here_has_0_try_to_replace_it_with_0, options.emitExtension);
+                }
+                if (options.emitExtension !== Extension.Jsx && options.jsx === JsxEmit.Preserve) {
+                    createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_can_only_be_jsx_when_JSX_is_set_to_preserve, options.emitExtension);
+                }
+                if (options.emitExtension === Extension.Dts) {
+                    createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_can_not_be_d_ts, options.emitExtension);
+                }
+            }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }

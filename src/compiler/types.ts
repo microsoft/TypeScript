@@ -5134,6 +5134,7 @@ namespace ts {
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
+        emitExtension?: string;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;

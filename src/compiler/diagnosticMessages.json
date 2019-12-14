@@ -4527,6 +4527,22 @@
         "category": "Error",
         "code": 6504
     },
+    "Specify the extension name of the emitted files.": {
+        "category": "Message",
+        "code": 6505
+    },
+    "emitExtension must start with '.', but here has '{0}', try to replace it with '.{0}'.": {
+        "category": "Error",
+        "code": 6506
+    },
+    "emitExtension can only be \".jsx\" when JSX is set to \"preserve\"": {
+        "category": "Error",
+        "code": 6507
+    },
+    "emitExtension can not be \".d.ts\"": {
+        "category": "Error",
+        "code": 6508
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
