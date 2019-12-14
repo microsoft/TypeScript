@@ -840,13 +840,11 @@ namespace ts {
                             ensureType(input, input.type)
                         ));
                     case SyntaxKind.Constructor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
                         // A constructor declaration may not have a type annotation
                         const ctor = createSignatureDeclaration(
                             SyntaxKind.Constructor,
-                            isPrivate ? undefined : ensureTypeParams(input, input.typeParameters),
-                            // TODO: GH#18217
-                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None),
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*type*/ undefined
                         );
                         ctor.modifiers = createNodeArray(ensureModifiers(input));
@@ -865,15 +863,14 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                         return cleanup(updateGetAccessor(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
-                            updateAccessorParamsList(input, isPrivate),
-                            !isPrivate ? ensureType(input, accessorType) : undefined,
+                            updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
+                            ensureType(input, accessorType),
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
@@ -892,7 +889,7 @@ namespace ts {
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined,
+                            ensureType(input, input.type),
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.PropertySignature:
@@ -901,7 +898,7 @@ namespace ts {
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined,
+                            ensureType(input, input.type),
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.MethodSignature: {
