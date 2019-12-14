@@ -70,7 +70,7 @@ namespace compiler {
             const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
-                if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                if (vpath.isJavaScript(document.file, options) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
                     js.set(document.file, document);
                 }
                 else if (vpath.isDeclaration(document.file)) {

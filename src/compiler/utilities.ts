@@ -5900,7 +5900,13 @@ namespace ts {
         return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
-    export function hasJSFileExtension(fileName: string): boolean {
+    export function hasJSFileExtension(fileName: string, compilerOptions?: CompilerOptions): boolean {
+        if (compilerOptions && compilerOptions.emitExtension) {
+            return some(
+                [compilerOptions.emitExtension].concat(supportedJSExtensions),
+                extension => fileExtensionIs(fileName, extension)
+            );
+        }
         return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
