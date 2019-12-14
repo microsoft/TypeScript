@@ -1,6 +1,6 @@
 Exit Code: 1
-    Standard output:
-    node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+Standard output:
+node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(149,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(154,13): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(155,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
@@ -17,5 +17,4 @@ node_modules/npmlog/log.js(271,16): error TS2769: No overload matches this call.
 
 
 
-    Standard error:
-    
+Standard error:
