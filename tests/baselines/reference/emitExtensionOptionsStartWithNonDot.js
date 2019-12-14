@@ -3,7 +3,7 @@
 export default 0
 
 
-//// [0.js]
+//// [0mjs]
 "use strict";
 exports.__esModule = true;
 // emitExtension must start with '.'

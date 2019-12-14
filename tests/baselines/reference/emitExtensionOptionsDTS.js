@@ -4,7 +4,7 @@
 export default 0
 
 
-//// [emitExtensionOptionsDTS.js]
+//// [emitExtensionOptionsDTS.d.ts]
 "use strict";
 exports.__esModule = true;
 // @Filename 1.ts

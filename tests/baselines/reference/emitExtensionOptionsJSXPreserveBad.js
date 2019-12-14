@@ -3,7 +3,7 @@
 export default 1
 
 
-//// [0.js]
+//// [0.mjs]
 "use strict";
 exports.__esModule = true;
 // emitExtension can only be ".jsx" when JSX is set to "preserve"
