@@ -871,6 +871,7 @@ namespace ts {
         let outofbandVarianceMarkerHandler: ((onlyUnreliable: boolean) => void) | undefined;
 
         const subtypeRelation = createMap<RelationComparisonResult>();
+        const strictSubtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
@@ -11398,7 +11399,7 @@ namespace ts {
                             }
                         }
                         count++;
-                        if (isTypeSubtypeOf(source, target) && (
+                        if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
                             !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                             !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                             isTypeDerivedFrom(source, target))) {
@@ -14301,7 +14302,7 @@ namespace ts {
                 return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                const related = relation.get(getRelationKey(source, target, /*isIntersectionConstituent*/ false, /*strictArityChecks*/ false, relation));
+                const related = relation.get(getRelationKey(source, target, /*isIntersectionConstituent*/ false, relation));
                 if (related !== undefined) {
                     return !!(related & RelationComparisonResult.Succeeded);
                 }
@@ -14353,7 +14354,6 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
-            let strictArityChecks = relation === subtypeRelation;
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
             let lastSkippedInfo: [Type, Type] | undefined;
             let incompatibleStack: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] = [];
@@ -15142,7 +15142,7 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, isIntersectionConstituent, strictArityChecks, relation);
+                const id = getRelationKey(source, target, isIntersectionConstituent, relation);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -15438,7 +15438,7 @@ namespace ts {
                 }
                 else {
                     // An empty object type is related to any mapped type that includes a '?' modifier.
-                    if (relation !== subtypeRelation && isPartialMappedType(target) && isEmptyObjectType(source)) {
+                    if (relation !== subtypeRelation && relation !== strictSubtypeRelation && isPartialMappedType(target) && isEmptyObjectType(source)) {
                         return Ternary.True;
                     }
                     if (isGenericMappedType(target)) {
@@ -15480,7 +15480,7 @@ namespace ts {
                     }
                     // Consider a fresh empty object literal type "closed" under the subtype relationship - this way `{} <- {[idx: string]: any} <- fresh({})`
                     // and not `{} <- fresh({}) <- {[idx: string]: any}`
-                    else if (relation === subtypeRelation && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source)) {
+                    else if ((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source)) {
                         return Ternary.False;
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
@@ -15489,18 +15489,6 @@ namespace ts {
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
-                        // When performing strict arity checks for signatures (under the subtype relationship), if source has
-                        // every property of target, and target is missing some properties from source, then we disable strict
-                        // arity checks for the members. This decreases the chances of "ties" in union subtype reduction. For
-                        // example, it enables us to consider { f(): void } a supertype of { f(x?: string): void, g(): void },
-                        // which we need for backwards compatibility reasons (specifically, for Object and Number).
-                        const saveStrictArityChecks = strictArityChecks;
-                        if (strictArityChecks &&
-                            !getUnmatchedProperty(source, target, /*requireOptionalProperties*/ true, /*matchDiscriminantProperties*/ false) &&
-                            getUnmatchedProperty(target, source, /*requireOptionalProperties*/ true, /*matchDiscriminantProperties*/ false)) {
-                            strictArityChecks = false;
-                        }
-                        // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, isIntersectionConstituent);
                         if (result) {
@@ -15515,7 +15503,6 @@ namespace ts {
                                 }
                             }
                         }
-                        strictArityChecks = saveStrictArityChecks;
                         if (varianceCheckFailed && result) {
                             errorInfo = originalErrorInfo || errorInfo || saveErrorInfo.errorInfo; // Use variance error (there is no structural one) and return false
                         }
@@ -15837,7 +15824,7 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
-                const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
+                const requireOptionalProperties = (relation === subtypeRelation || relation === strictSubtypeRelation) && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
                     if (reportErrors) {
@@ -16060,7 +16047,7 @@ namespace ts {
              */
             function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    strictArityChecks ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, reportUnreliableMarkers);
+                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, reportUnreliableMarkers);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
@@ -16368,13 +16355,13 @@ namespace ts {
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
-        function getRelationKey(source: Type, target: Type, isIntersectionConstituent: boolean, strictArityChecks: boolean, relation: Map<RelationComparisonResult>) {
+        function getRelationKey(source: Type, target: Type, isIntersectionConstituent: boolean, relation: Map<RelationComparisonResult>) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
                 target = temp;
             }
-            const delimiter = isIntersectionConstituent ? strictArityChecks ? "|" : ";" : strictArityChecks ? "/" : ",";
+            const delimiter = isIntersectionConstituent ? ";" : ",";
             if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
                 const typeParameters: Type[] = [];
                 return getTypeReferenceId(<TypeReference>source, typeParameters) + delimiter + getTypeReferenceId(<TypeReference>target, typeParameters);
