@@ -580,7 +580,7 @@ namespace ts {
                 // Encode the sourceMap into the sourceMap url
                 const sourceMapText = sourceMapGenerator.toString();
                 const base64SourceMapText = base64encode(sys, sourceMapText);
-                return `data:application/json;base64,${base64SourceMapText}`;
+                return `data:application/json;charset=utf-8;base64,${base64SourceMapText}`;
             }
 
             const sourceMapFile = getBaseFileName(normalizeSlashes(Debug.assertDefined(sourceMapFilePath)));
