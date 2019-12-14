@@ -1,0 +1,5 @@
+=== tests/cases/compiler/0.ts ===
+// emitExtension can only be ".jsx" when JSX is set to "preserve"
+No type information for this code.export default 1
+No type information for this code.
+No type information for this code.

@@ -2657,6 +2657,7 @@ declare namespace ts {
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
+        emitExtension?: string;
         declarationDir?: string;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;

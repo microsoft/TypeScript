@@ -1,0 +1,9 @@
+error TS6508: emitExtension can not be ".d.ts"
+
+
+!!! error TS6508: emitExtension can not be ".d.ts"
+==== tests/cases/compiler/emitExtensionOptionsDTS.ts (0 errors) ====
+    // @Filename 1.ts
+    // emitExtension can not be ".d.ts"
+    export default 0
+    

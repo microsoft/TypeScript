@@ -1,0 +1,6 @@
+=== tests/cases/compiler/emitExtensionOptionsDTS.ts ===
+// @Filename 1.ts
+No type information for this code.// emitExtension can not be ".d.ts"
+No type information for this code.export default 0
+No type information for this code.
+No type information for this code.

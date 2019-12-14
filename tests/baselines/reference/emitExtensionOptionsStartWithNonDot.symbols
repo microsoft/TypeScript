@@ -1,0 +1,5 @@
+=== tests/cases/compiler/0.ts ===
+// emitExtension must start with '.'
+No type information for this code.export default 0
+No type information for this code.
+No type information for this code.

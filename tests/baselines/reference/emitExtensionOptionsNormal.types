@@ -1,0 +1,4 @@
+=== tests/cases/compiler/0.ts ===
+export default 0
+No type information for this code.
+No type information for this code.

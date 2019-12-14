@@ -1,0 +1,8 @@
+error TS6507: emitExtension can only be ".jsx" when JSX is set to "preserve"
+
+
+!!! error TS6507: emitExtension can only be ".jsx" when JSX is set to "preserve"
+==== tests/cases/compiler/0.ts (0 errors) ====
+    // emitExtension can only be ".jsx" when JSX is set to "preserve"
+    export default 1
+    

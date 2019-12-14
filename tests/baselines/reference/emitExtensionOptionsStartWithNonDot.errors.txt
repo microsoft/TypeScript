@@ -1,0 +1,8 @@
+error TS6506: emitExtension must start with '.', but here has 'mjs', try to replace it with '.mjs'.
+
+
+!!! error TS6506: emitExtension must start with '.', but here has 'mjs', try to replace it with '.mjs'.
+==== tests/cases/compiler/0.ts (0 errors) ====
+    // emitExtension must start with '.'
+    export default 0
+    
