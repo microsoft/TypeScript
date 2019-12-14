@@ -2973,6 +2973,12 @@ namespace ts {
                 if (options.emitExtension === Extension.Dts) {
                     createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_can_not_be_d_ts, options.emitExtension);
                 }
+                // To keep it simple at the first time,
+                // just accept . - a-z A-Z 0-9
+                // If there is demand, can extend to any Unicode and ban chars like / \ < > :
+                if (!options.emitExtension.match(/^(\.|-|[a-zA-Z0-9])+$/g)) {
+                    createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_contains_invalid_chars, options.emitExtension);
+                }
             }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
