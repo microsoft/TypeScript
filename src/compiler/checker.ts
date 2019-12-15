@@ -3053,7 +3053,12 @@ namespace ts {
                     const tsExtension = tryExtractTSExtension(moduleReference);
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-                        error(errorNode, diag, tsExtension, removeExtension(moduleReference, tsExtension));
+                        let rightPath = removeExtension(moduleReference, tsExtension);
+                        if (compilerOptions.emitExtension) {
+                            // e.g.: Consider importing '{1}.mjs' instead.
+                            rightPath += compilerOptions.emitExtension;
+                        }
+                        error(errorNode, diag, tsExtension, rightPath);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
