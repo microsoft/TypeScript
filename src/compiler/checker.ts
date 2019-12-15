@@ -33730,7 +33730,8 @@ namespace ts {
                         error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_module_declaration_cannot_reference_module_through_relative_module_name);
                         return false;
                     }
-                } else if (compilerOptions.noImplicitExtensionName) {
+                }
+                else if (compilerOptions.noImplicitExtensionName) {
                     const extensionLess = removeFileExtension(moduleName.text, compilerOptions);
                     if (extensionLess === moduleName.text) {
                         error(node, Diagnostics.Import_with_an_implicit_extension_name_is_not_allowed_Try_to_import_from_0_1_instead, extensionLess, compilerOptions.emitExtension || ".js");
