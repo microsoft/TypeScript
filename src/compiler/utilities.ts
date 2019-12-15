@@ -3767,27 +3767,27 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
-        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
+    export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, options: CompilerOptions, file: SourceFile, referenceFile?: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, options, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, compilerOptions: CompilerOptions): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
         }
-        return getResolvedExternalModuleName(host, file);
+        return getResolvedExternalModuleName(host, compilerOptions, file);
     }
 
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, fileName: string, referencePath?: string): string {
+    export function getExternalModuleNameFromPath(host: ResolveModuleNameResolutionHost, options: CompilerOptions, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-        const extensionless = removeFileExtension(relativePath);
+        const extensionless = removeFileExtension(relativePath, options);
         return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
@@ -3795,10 +3795,10 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(fileName, host, compilerOptions.outDir), compilerOptions);
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(fileName, compilerOptions);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
@@ -3814,7 +3814,7 @@ namespace ts {
         const path = outputDir
             ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
             : fileName;
-        return removeFileExtension(path) + Extension.Dts;
+        return removeFileExtension(path, options) + Extension.Dts;
     }
 
     export interface EmitFileNames {
@@ -5390,7 +5390,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+    export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"], target?: CompilerOptions["target"] }) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -5900,7 +5900,7 @@ namespace ts {
         return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
-    export function hasJSFileExtension(fileName: string, compilerOptions?: CompilerOptions): boolean {
+    export function hasJSFileExtension(fileName: string, compilerOptions: CompilerOptions): boolean {
         if (compilerOptions && compilerOptions.emitExtension) {
             return some(
                 [compilerOptions.emitExtension].concat(supportedJSExtensions),
@@ -5979,8 +5979,10 @@ namespace ts {
     }
 
     const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
-    export function removeFileExtension(path: string): string {
-        for (const ext of extensionsToRemove) {
+    export function removeFileExtension(path: string, options: CompilerOptions): string {
+        const extra = options && options.emitExtension;
+        const remove: string[] = extra ? (extensionsToRemove as string[]).concat(extra) : extensionsToRemove;
+        for (const ext of remove) {
             const extensionless = tryRemoveExtension(path, ext);
             if (extensionless !== undefined) {
                 return extensionless;

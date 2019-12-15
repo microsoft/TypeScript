@@ -34,7 +34,7 @@ namespace Harness {
 
                 before(() => {
                     const content = IO.readFile(filePath)!;
-                    const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
+                    const testFilename = ts.removeFileExtension(filePath, {}).replace(/\//g, "_") + ".test";
                     const testCaseContent = TestCaseParser.makeUnitsFromTest(content, testFilename);
 
                     const inputFiles: Compiler.TestFile[] = testCaseContent.testUnitData.map(unit => {
@@ -51,7 +51,7 @@ namespace Harness {
 
                     testState.compilerResult = Compiler.compileFiles(
                         [Test262BaselineRunner.helperFile].concat(inputFiles),
-                        /*otherFiles*/ [],
+                        /*otherFiles*/[],
                         /* harnessOptions */ undefined,
                         Test262BaselineRunner.options,
                         /* currentDirectory */ undefined);

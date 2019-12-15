@@ -6452,7 +6452,7 @@ namespace ts {
                                         getCurrentDirectory: () => context.tracker.moduleResolverHost!.getCurrentDirectory(),
                                         getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory()
                                     };
-                                    const newName = getResolvedExternalModuleName(resolverHost, targetFile);
+                                    const newName = getResolvedExternalModuleName(resolverHost, compilerOptions, targetFile);
                                     return createLiteral(newName);
                                 }
                             }

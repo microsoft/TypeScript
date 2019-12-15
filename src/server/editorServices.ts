@@ -3492,7 +3492,7 @@ namespace ts.server {
                     if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
                         const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                         if (fileExtensionIs(baseName, "js")) {
-                            const inferredTypingName = removeFileExtension(baseName);
+                            const inferredTypingName = removeFileExtension(baseName, {});
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
                             const typeName = this.legacySafelist.get(cleanedTypingName);
                             if (typeName !== undefined) {

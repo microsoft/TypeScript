@@ -1024,7 +1024,7 @@ namespace ts.server {
                     if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                         // --out
                         if (!outPath || !this.isValidGeneratedFileWatcher(
-                            removeFileExtension(outPath) + Extension.Dts,
+                            removeFileExtension(outPath, this.compilerOptions) + Extension.Dts,
                             this.generatedFilesMap,
                         )) {
                             this.clearGeneratedFileWatch();

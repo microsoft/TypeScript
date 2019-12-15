@@ -2220,12 +2220,13 @@ namespace ts {
 
         /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
         function getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined {
-            return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)) || undefined);
+            return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)) || undefined, options);
         }
 
         function getSourceFileFromReferenceWorker(
             fileName: string,
             getSourceFile: (fileName: string) => SourceFile | undefined,
+            options: CompilerOptions,
             fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
             refFile?: SourceFile): SourceFile | undefined {
 
@@ -2233,7 +2234,7 @@ namespace ts {
                 const canonicalFileName = host.getCanonicalFileName(fileName);
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule, extension => fileExtensionIs(canonicalFileName, extension))) {
                     if (fail) {
-                        if (hasJSFileExtension(canonicalFileName)) {
+                        if (hasJSFileExtension(canonicalFileName, options)) {
                             fail(Diagnostics.File_0_is_a_JavaScript_file_Did_you_mean_to_enable_the_allowJs_option, fileName);
                         }
                         else {
@@ -2280,6 +2281,7 @@ namespace ts {
             getSourceFileFromReferenceWorker(
                 fileName,
                 fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, ignoreNoDefaultLib, refFile, packageId), // TODO: GH#18217
+                options,
                 (diagnostic, ...args) => fileProcessingDiagnostics.add(
                     createRefFileDiagnostic(refFile, diagnostic, ...args)
                 ),
@@ -3438,7 +3440,7 @@ namespace ts {
             // If options have --outFile or --out just check that
             const out = options.outFile || options.out;
             if (out) {
-                return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
+                return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out, options) + Extension.Dts);
             }
 
             // If declarationDir is specified, return if its a file in that directory
@@ -3453,7 +3455,7 @@ namespace ts {
 
             if (fileExtensionIsOneOf(filePath, supportedJSExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
                 // Otherwise just check if sourceFile with the name exists
-                const filePathWithoutExtension = removeFileExtension(filePath);
+                const filePathWithoutExtension = removeFileExtension(filePath, options);
                 return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||
                     !!getSourceFileByPath((filePathWithoutExtension + Extension.Tsx) as Path);
             }

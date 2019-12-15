@@ -37,7 +37,7 @@ namespace ts.codefix {
             return undefined;
         }
         const checker = context.program.getTypeChecker();
-        const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
+        const compilerOptions = context.program.getCompilerOptions();
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
@@ -52,7 +52,7 @@ namespace ts.codefix {
                 const flags = preferences.quotePreference === "single" ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
                 let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
                 if (importAdder) {
-                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, compilerOptions);
                     if (importableReference) {
                         typeNode = importableReference.typeReference;
                         importSymbols(importAdder, importableReference.symbols);
@@ -74,7 +74,7 @@ namespace ts.codefix {
                     ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
                     : [allAccessors.firstAccessor];
                 if (importAdder) {
-                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, compilerOptions);
                     if (importableReference) {
                         typeNode = importableReference.typeReference;
                         importSymbols(importAdder, importableReference.symbols);
@@ -161,7 +161,7 @@ namespace ts.codefix {
     ): MethodDeclaration | undefined {
         const program = context.program;
         const checker = program.getTypeChecker();
-        const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+        const compilerOptions = program.getCompilerOptions();
         const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
         if (!signatureDeclaration) {
             return undefined;
@@ -172,14 +172,14 @@ namespace ts.codefix {
                 forEach(signatureDeclaration.typeParameters, (typeParameterDecl, i) => {
                     const typeParameter = signature.typeParameters![i];
                     if (typeParameterDecl.constraint) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.constraint, typeParameter.constraint, scriptTarget);
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.constraint, typeParameter.constraint, compilerOptions);
                         if (importableReference) {
                             typeParameterDecl.constraint = importableReference.typeReference;
                             importSymbols(importAdder, importableReference.symbols);
                         }
                     }
                     if (typeParameterDecl.default) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.default, typeParameter.default, scriptTarget);
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.default, typeParameter.default, compilerOptions);
                         if (importableReference) {
                             typeParameterDecl.default = importableReference.typeReference;
                             importSymbols(importAdder, importableReference.symbols);
@@ -189,14 +189,14 @@ namespace ts.codefix {
             }
             forEach(signatureDeclaration.parameters, (parameterDecl, i) => {
                 const parameter = signature.parameters[i];
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), compilerOptions);
                 if (importableReference) {
                     parameterDecl.type = importableReference.typeReference;
                     importSymbols(importAdder, importableReference.symbols);
                 }
             });
             if (signatureDeclaration.type) {
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(signatureDeclaration.type, signature.resolvedReturnType, scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(signatureDeclaration.type, signature.resolvedReturnType, compilerOptions);
                 if (importableReference) {
                     signatureDeclaration.type = importableReference.typeReference;
                     importSymbols(importAdder, importableReference.symbols);
@@ -408,11 +408,11 @@ namespace ts.codefix {
      * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
      * with type references, and a list of symbols that must be imported to use the type reference.
      */
-    export function tryGetAutoImportableReferenceFromImportTypeNode(importTypeNode: TypeNode | undefined, type: Type | undefined, scriptTarget: ScriptTarget) {
+    export function tryGetAutoImportableReferenceFromImportTypeNode(importTypeNode: TypeNode | undefined, type: Type | undefined, compilerOptions: CompilerOptions) {
         if (importTypeNode && isLiteralImportTypeNode(importTypeNode) && importTypeNode.qualifier && (!type || type.symbol)) {
             // Symbol for the left-most thing after the dot
             const firstIdentifier = getFirstIdentifier(importTypeNode.qualifier);
-            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+            const name = getNameForExportedSymbol(firstIdentifier.symbol, compilerOptions);
             const qualifier = name !== firstIdentifier.text
                 ? replaceFirstIdentifierOfEntityName(importTypeNode.qualifier, createIdentifier(name))
                 : importTypeNode.qualifier;
@@ -421,7 +421,7 @@ namespace ts.codefix {
             const typeArguments: TypeNode[] = [];
             if (importTypeNode.typeArguments) {
                 importTypeNode.typeArguments.forEach(arg => {
-                    const ref = tryGetAutoImportableReferenceFromImportTypeNode(arg, /*undefined*/ type, scriptTarget);
+                    const ref = tryGetAutoImportableReferenceFromImportTypeNode(arg, /*undefined*/ type, compilerOptions);
                     if (ref) {
                         symbols.push(...ref.symbols);
                         typeArguments.push(ref.typeReference);

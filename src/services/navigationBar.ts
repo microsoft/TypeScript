@@ -680,7 +680,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.SourceFile:
                 const sourceFile = <SourceFile>node;
                 return isExternalModule(sourceFile)
-                    ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
+                    ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName), {})))}"`
                     : "<global>";
             case SyntaxKind.ExportAssignment:
                 return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;

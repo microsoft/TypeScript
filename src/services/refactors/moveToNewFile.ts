@@ -130,7 +130,7 @@ namespace ts.refactor {
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
+            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference, program.getCompilerOptions()),
             ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
         ];
     }
@@ -398,6 +398,7 @@ namespace ts.refactor {
         checker: TypeChecker,
         useEs6ModuleSyntax: boolean,
         quotePreference: QuotePreference,
+        compilerOptions: CompilerOptions,
     ): readonly SupportedImportStatement[] {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
@@ -429,7 +430,7 @@ namespace ts.refactor {
             }
         });
 
-        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, quotePreference));
+        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName), compilerOptions), useEs6ModuleSyntax, quotePreference));
         return copiedOldImports;
     }
 

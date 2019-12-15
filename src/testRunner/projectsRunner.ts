@@ -357,10 +357,10 @@ namespace project {
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program!.getCommonSourceDirectory(), "");
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath), compilerOptions);
                     }
                     else {
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName, compilerOptions);
                     }
 
                     const outputDtsFileName = emitOutputFilePathWithoutExtension + ts.Extension.Dts;
@@ -371,7 +371,7 @@ namespace project {
                     }
                 }
                 else {
-                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!, compilerOptions) + ts.Extension.Dts;
                     const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);

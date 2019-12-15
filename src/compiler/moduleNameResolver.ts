@@ -1071,7 +1071,7 @@ namespace ts {
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         if (hasJSFileExtension(candidate, state.compilerOptions)) {
-            const extensionless = removeFileExtension(candidate);
+            const extensionless = removeFileExtension(candidate, state.compilerOptions);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
                 trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);

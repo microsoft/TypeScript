@@ -21,7 +21,7 @@ namespace ts.moduleSpecifiers {
                 case "minimal": return Ending.Minimal;
                 case "index": return Ending.Index;
                 case "js": return Ending.JsExtension;
-                default: return usesJsExtensionOnImports(importingSourceFile) ? Ending.JsExtension
+                default: return usesJsExtensionOnImports(importingSourceFile, compilerOptions) ? Ending.JsExtension
                     : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs ? Ending.Index : Ending.Minimal;
             }
         }
@@ -131,7 +131,7 @@ namespace ts.moduleSpecifiers {
         }
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl, compilerOptions), importRelativeToBaseUrl, compilerOptions, paths);
         const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (relativePreference === RelativePreference.NonRelative) {
@@ -152,8 +152,8 @@ namespace ts.moduleSpecifiers {
         return count;
     }
 
-    function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
+    function usesJsExtensionOnImports({ imports }: SourceFile, compilerOptions: CompilerOptions): boolean {
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text, compilerOptions) : undefined) || false;
     }
 
     function numberOfDirectorySeparators(str: string) {
@@ -273,10 +273,10 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, options: CompilerOptions, paths: MapLike<readonly string[]>): string | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
-                const pattern = removeFileExtension(normalizePath(patternText));
+                const pattern = removeFileExtension(normalizePath(patternText), options);
                 const indexOfStar = pattern.indexOf("*");
                 if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
@@ -306,7 +306,7 @@ namespace ts.moduleSpecifiers {
         const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
         return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
             ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions)
-            : removeFileExtension(relativePath);
+            : removeFileExtension(relativePath, compilerOptions);
     }
 
     function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
@@ -331,8 +331,9 @@ namespace ts.moduleSpecifiers {
             if (versionPaths) {
                 const subModuleName = moduleFileName.slice(parts.packageRootIndex + 1);
                 const fromPaths = tryGetModuleNameFromPaths(
-                    removeFileExtension(subModuleName),
+                    removeFileExtension(subModuleName, options),
                     removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
+                    options,
                     versionPaths.paths
                 );
                 if (fromPaths !== undefined) {
@@ -365,14 +366,14 @@ namespace ts.moduleSpecifiers {
                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                 if (isString(mainFileRelative)) {
                     const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                    if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
+                    if (removeFileExtension(mainExportFile, options) === removeFileExtension(getCanonicalFileName(path), options)) {
                         return packageRootPath;
                     }
                 }
             }
 
             // We still have a file name - remove the extension
-            const fullModulePathWithoutExtension = removeFileExtension(path);
+            const fullModulePathWithoutExtension = removeFileExtension(path, options);
 
             // If the file is /index, it can be imported by its directory name
             // IFF there is not _also_ a file by the same name
@@ -469,7 +470,7 @@ namespace ts.moduleSpecifiers {
 
     function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
         if (fileExtensionIs(fileName, Extension.Json)) return fileName;
-        const noExtension = removeFileExtension(fileName);
+        const noExtension = removeFileExtension(fileName, options);
         switch (ending) {
             case Ending.Minimal:
                 return removeSuffix(noExtension, "/index");

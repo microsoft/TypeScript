@@ -56,7 +56,7 @@ namespace ts.codefix {
 
         function addImportFromExportedSymbol(exportedSymbol: Symbol, usageIsTypeOnly?: boolean) {
             const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
-            const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+            const symbolName = getNameForExportedSymbol(exportedSymbol, compilerOptions);
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
             const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, sourceFile, compilerOptions, checker, program.getSourceFiles());
@@ -591,7 +591,7 @@ namespace ts.codefix {
             defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
             return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
         }
-        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!) };
+        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {
@@ -861,8 +861,8 @@ namespace ts.codefix {
             || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
     }
 
-    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
-        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target);
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, compilerOptions: CompilerOptions): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name), compilerOptions), getEmitScriptTarget(compilerOptions));
     }
 
     export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {

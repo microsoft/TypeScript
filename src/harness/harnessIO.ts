@@ -470,7 +470,7 @@ namespace Harness {
                 if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
+                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName, options) && options.allowJs)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: Utils.removeByteOrderMark(declFile.text) });
@@ -499,7 +499,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
+                const dTsFileName = ts.removeFileExtension(sourceFileName, options) + ts.Extension.Dts;
                 return result.dts.get(dTsFileName);
             }
 

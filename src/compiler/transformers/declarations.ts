@@ -237,7 +237,7 @@ namespace ts {
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
-                                createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
+                                createLiteral(getResolvedExternalModuleName(context.getEmitHost(), options, sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements))
                             )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                             return newFile;
@@ -632,7 +632,7 @@ namespace ts {
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
             if (isStringLiteralLike(input)) {
                 if (isBundledEmit) {
-                    const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
+                    const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent, options);
                     if (newName) {
                         return createLiteral(newName);
                     }

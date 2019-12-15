@@ -8,11 +8,11 @@ namespace ts.Completions.StringCompletions {
         if (isInString(sourceFile, position, contextToken)) {
             if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
             const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
-            return convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences);
+            return convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences, options);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences, compilerOptions: CompilerOptions): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -27,7 +27,7 @@ namespace ts.Completions.StringCompletions {
                     sourceFile,
                     sourceFile,
                     checker,
-                    ScriptTarget.ESNext,
+                    compilerOptions,
                     log,
                     CompletionKind.String,
                     preferences
@@ -363,7 +363,7 @@ namespace ts.Completions.StringCompletions {
                     continue;
                 }
 
-                const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
+                const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath), host.getCompilationSettings());
                 foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
             }
 
@@ -528,7 +528,7 @@ namespace ts.Completions.StringCompletions {
         const matches = mapDefined(tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]), match => {
             const extension = tryGetExtensionFromPath(match);
             const name = trimPrefixAndSuffix(match);
-            return name === undefined ? undefined : nameAndKind(removeFileExtension(name), ScriptElementKind.scriptElement, extension);
+            return name === undefined ? undefined : nameAndKind(removeFileExtension(name, host.getCompilationSettings()), ScriptElementKind.scriptElement, extension);
         });
         const directories = mapDefined(tryGetDirectories(host, baseDirectory).map(d => combinePaths(baseDirectory, d)), dir => {
             const name = trimPrefixAndSuffix(dir);

@@ -530,7 +530,7 @@ namespace ts.projectSystem {
 
         function getExpectedRelativeModuleResolutionTrace(host: TestServerHost, file: File, module: File, moduleName: string, expectedTrace: string[] = []) {
             getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
-            expectedTrace.push(`Loading module as file / folder, candidate module location '${removeFileExtension(module.path)}', target file type 'TypeScript'.`);
+            expectedTrace.push(`Loading module as file / folder, candidate module location '${removeFileExtension(module.path, {})}', target file type 'TypeScript'.`);
             getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(normalizePath(combinePaths(getDirectoryPath(file.path), moduleName))), module, moduleName.substring(moduleName.lastIndexOf("/") + 1), /*useNodeModules*/ false);
             getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false);
             return expectedTrace;

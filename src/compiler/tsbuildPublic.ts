@@ -1800,7 +1800,7 @@ namespace ts {
 
         // If options have --outFile or --out, check if its that
         const out = configFile.options.outFile || configFile.options.out;
-        if (out && (isSameFile(state, fileName, out) || isSameFile(state, fileName, removeFileExtension(out) + Extension.Dts))) {
+        if (out && (isSameFile(state, fileName, out) || isSameFile(state, fileName, removeFileExtension(out, state.projectCompilerOptions) + Extension.Dts))) {
             return true;
         }
 

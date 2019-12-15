@@ -58,11 +58,11 @@ namespace ts {
         const outPath = options.outFile || options.out;
         let buildInfoExtensionLess: string;
         if (outPath) {
-            buildInfoExtensionLess = removeFileExtension(outPath);
+            buildInfoExtensionLess = removeFileExtension(outPath, options);
         }
         else {
             if (!configFile) return undefined;
-            const configFileExtensionLess = removeFileExtension(configFile);
+            const configFileExtensionLess = removeFileExtension(configFile, options);
             buildInfoExtensionLess = options.outDir ?
                 options.rootDir ?
                     resolvePath(options.outDir, getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true)) :
@@ -77,7 +77,7 @@ namespace ts {
         const outPath = options.outFile || options.out!;
         const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
-        const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
+        const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath, options) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
