@@ -2687,6 +2687,7 @@ declare namespace ts {
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitExtensionName?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
         noStrictGenericChecks?: boolean;
