@@ -21,6 +21,7 @@ XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/cognitiveservices-textanalytics] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
@@ -53,7 +54,7 @@ XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (22)
+SUCCESS (23)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-tracing (? seconds)
@@ -71,6 +72,7 @@ SUCCESS (22)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
+@azure/cognitiveservices-textanalytics (? seconds)
 @azure/core-arm (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
