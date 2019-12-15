@@ -1,0 +1,13 @@
+tests/cases/compiler/1.ts(1,17): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0' instead.
+
+
+==== tests/cases/compiler/0.ts (0 errors) ====
+    // For the deno case
+    export default 0
+    
+==== tests/cases/compiler/1.ts (1 errors) ====
+    import num from './0.ts'
+                    ~~~~~~~~
+!!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0' instead.
+    num + 1
+    
