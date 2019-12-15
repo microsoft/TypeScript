@@ -1005,7 +1005,15 @@ namespace ts {
             description: Diagnostics.Specify_the_extension_name_of_the_emitted_files,
             showInSimplifiedHelpView: true,
             affectsEmit: true,
-        }
+        },
+        {
+            name: "noImplicitExtensionName",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Report_error_for_implicit_extension_name,
+        },
     ];
 
     /* @internal */

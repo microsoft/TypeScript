@@ -5173,6 +5173,7 @@ namespace ts {
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;  // Always combine with strict property
+        noImplicitExtensionName?: boolean
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;  // Always combine with strict property
         noStrictGenericChecks?: boolean;

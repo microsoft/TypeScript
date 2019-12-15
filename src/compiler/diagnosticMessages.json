@@ -4547,6 +4547,14 @@
         "category": "Error",
         "code": 6509
     },
+    "Report error for implicit extension name.": {
+        "category": "Message",
+        "code": 6510
+    },
+    "Import with an implicit extension name is not allowed. Try to import from '{0}{1}' instead.": {
+        "category": "Error",
+        "code": 6511
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
