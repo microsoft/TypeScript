@@ -1,0 +1,12 @@
+tests/cases/compiler/1.ts(1,17): error TS2307: Cannot find module './0.cjs'.
+
+
+==== tests/cases/compiler/0.ts (0 errors) ====
+    export default 0
+    
+==== tests/cases/compiler/1.ts (1 errors) ====
+    import num from './0.cjs'
+                    ~~~~~~~~~
+!!! error TS2307: Cannot find module './0.cjs'.
+    num + 1
+    

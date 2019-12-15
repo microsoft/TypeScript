@@ -2,11 +2,9 @@
 export default 0
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/1.ts ===
-import num from './0.ts'
->num : any
+import num from './0.cjs'
+>num : Symbol(num, Decl(1.ts, 0, 6))
 
 num + 1
->num + 1 : any
->num : any
->1 : 1
+>num : Symbol(num, Decl(1.ts, 0, 6))
 

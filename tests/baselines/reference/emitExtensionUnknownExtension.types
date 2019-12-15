@@ -2,7 +2,7 @@
 export default 0
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/1.ts ===
-import num from './0.ts'
+import num from './0.cjs'
 >num : any
 
 num + 1
