@@ -190,10 +190,10 @@ Standard output:
 @uifabric/utilities:  PASS  src/selection/Selection.test.ts
 @uifabric/utilities:  PASS  src/initializeFocusRects.test.ts
 @uifabric/utilities:  PASS  src/memoize.test.ts
+@uifabric/utilities:  PASS  src/rtl.test.ts
 @uifabric/utilities:  PASS  src/osDetector.test.ts
 @uifabric/utilities:  PASS  src/mobileDetector.test.ts
 @uifabric/utilities:  PASS  src/aria.test.ts
-@uifabric/utilities:  PASS  src/rtl.test.ts
 @uifabric/utilities:  PASS  src/setFocusVisibility.test.ts
 @uifabric/utilities:  PASS  src/properties.test.ts
 @uifabric/utilities:  PASS  src/asAsync.test.tsx
