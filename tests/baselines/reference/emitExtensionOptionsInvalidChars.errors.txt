@@ -1,0 +1,11 @@
+error TS6509: emitExtension contains invalid chars
+
+
+!!! error TS6509: emitExtension contains invalid chars
+==== tests/cases/compiler/0.ts (0 errors) ====
+    export default 1
+    
+==== tests/cases/compiler/1.ts (0 errors) ====
+    import x from './0'
+    x + 1
+    

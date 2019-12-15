@@ -1,0 +1,12 @@
+=== tests/cases/compiler/0.ts ===
+export default 1
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/1.ts ===
+import x from './0'
+>x : 1
+
+x + 1
+>x + 1 : number
+>x : 1
+>1 : 1
+
