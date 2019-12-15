@@ -2980,6 +2980,8 @@ namespace ts {
                 // If there is demand, can extend to any Unicode and ban chars like / \ < > :
                 if (!options.emitExtension.match(/^(\.|-|[a-zA-Z0-9])+$/g)) {
                     createOptionValueDiagnostic("emitExtension", Diagnostics.emitExtension_contains_invalid_chars, options.emitExtension);
+                    // Don't emit any file with this error, or it will break the file system unconditionally
+                    options.noEmitOnError = true;
                 }
             }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
