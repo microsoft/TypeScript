@@ -1001,7 +1001,8 @@ namespace ts {
             name: "emitExtension",
             type: "string",
             category: Diagnostics.Basic_Options,
-
+            // will effect noImplicitExtensionName
+            affectsSemanticDiagnostics: true,
             description: Diagnostics.Specify_the_extension_name_of_the_emitted_files,
             showInSimplifiedHelpView: true,
             affectsEmit: true,
