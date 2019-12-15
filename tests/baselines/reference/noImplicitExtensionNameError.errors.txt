@@ -1,0 +1,15 @@
+tests/cases/compiler/1.ts(2,1): error TS6511: Import with an implicit extension name is not allowed. Try to import from './0.js' instead.
+
+
+==== tests/cases/compiler/0.ts (0 errors) ====
+    export default 0
+    
+==== tests/cases/compiler/1.ts (1 errors) ====
+    // Should be error
+    import num from './0'
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6511: Import with an implicit extension name is not allowed. Try to import from './0.js' instead.
+    // Should be okay
+    import num2 from './0.js'
+    num + num2
+    

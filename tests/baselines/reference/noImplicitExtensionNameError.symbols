@@ -1,0 +1,16 @@
+=== tests/cases/compiler/0.ts ===
+export default 0
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/1.ts ===
+// Should be error
+import num from './0'
+>num : Symbol(num, Decl(1.ts, 1, 6))
+
+// Should be okay
+import num2 from './0.js'
+>num2 : Symbol(num2, Decl(1.ts, 3, 6))
+
+num + num2
+>num : Symbol(num, Decl(1.ts, 1, 6))
+>num2 : Symbol(num2, Decl(1.ts, 3, 6))
+

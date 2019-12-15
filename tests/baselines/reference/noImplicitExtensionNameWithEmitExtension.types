@@ -1,0 +1,16 @@
+=== tests/cases/compiler/0.ts ===
+export default 0
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/1.ts ===
+import num from './0.mjs'
+>num : 0
+
+// should be error
+import num2 from './0'
+>num2 : 0
+
+num + num2
+>num + num2 : number
+>num : 0
+>num2 : 0
+

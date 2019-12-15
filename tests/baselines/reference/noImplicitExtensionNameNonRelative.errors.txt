@@ -1,0 +1,19 @@
+tests/cases/compiler/1.ts(4,17): error TS2307: Cannot find module 'fs/my_file'.
+tests/cases/compiler/1.ts(5,18): error TS2307: Cannot find module 'fs/my_file.js'.
+
+
+==== tests/cases/compiler/fs/my_file.ts (0 errors) ====
+    export default 0
+    
+==== tests/cases/compiler/1.ts (2 errors) ====
+    // Should both be okay.
+    // This check is not applied to non-relative import.
+    // e.g. Node's ESModule support https://nodejs.org/api/esm.html#esm_package_exports
+    import num from 'fs/my_file'
+                    ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'fs/my_file'.
+    import num2 from 'fs/my_file.js'
+                     ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'fs/my_file.js'.
+    num + num2
+    
