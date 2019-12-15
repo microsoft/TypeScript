@@ -1,0 +1,20 @@
+=== tests/cases/compiler/0.ts ===
+// For the deno case
+No type information for this code.export default 0
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/1.ts ===
+import num from './0.ts'
+>num : any
+
+import num2 from './2.tsx'
+>num2 : 1
+
+num + num2
+>num + num2 : any
+>num : any
+>num2 : 1
+
+=== tests/cases/compiler/2.tsx ===
+export default 1
+No type information for this code.
+No type information for this code.

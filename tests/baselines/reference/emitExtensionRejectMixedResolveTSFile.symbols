@@ -1,0 +1,19 @@
+=== tests/cases/compiler/0.ts ===
+// For the deno case
+No type information for this code.export default 0
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/1.ts ===
+import num from './0.ts'
+>num : Symbol(num, Decl(1.ts, 0, 6))
+
+import num2 from './2.tsx'
+>num2 : Symbol(num2, Decl(1.ts, 1, 6))
+
+num + num2
+>num : Symbol(num, Decl(1.ts, 0, 6))
+>num2 : Symbol(num2, Decl(1.ts, 1, 6))
+
+=== tests/cases/compiler/2.tsx ===
+export default 1
+No type information for this code.
+No type information for this code.
