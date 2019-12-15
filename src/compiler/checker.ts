@@ -33718,16 +33718,23 @@ namespace ts {
                     Diagnostics.Import_declarations_in_a_namespace_cannot_reference_a_module);
                 return false;
             }
-            if (inAmbientExternalModule && isExternalModuleNameRelative(moduleName.text)) {
-                // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
-                // no need to do this again.
-                if (!isTopLevelInExternalModuleAugmentation(node)) {
-                    // TypeScript 1.0 spec (April 2013): 12.1.6
-                    // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference
-                    // other external modules only through top - level external module names.
-                    // Relative external module names are not permitted.
-                    error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_module_declaration_cannot_reference_module_through_relative_module_name);
-                    return false;
+            if (isExternalModuleNameRelative(moduleName.text)) {
+                if (inAmbientExternalModule) {
+                    // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
+                    // no need to do this again.
+                    if (!isTopLevelInExternalModuleAugmentation(node)) {
+                        // TypeScript 1.0 spec (April 2013): 12.1.6
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference
+                        // other external modules only through top - level external module names.
+                        // Relative external module names are not permitted.
+                        error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_module_declaration_cannot_reference_module_through_relative_module_name);
+                        return false;
+                    }
+                } else if (compilerOptions.noImplicitExtensionName) {
+                    const extensionLess = removeFileExtension(moduleName.text, compilerOptions);
+                    if (extensionLess === moduleName.text) {
+                        error(node, Diagnostics.Import_with_an_implicit_extension_name_is_not_allowed_Try_to_import_from_0_1_instead, extensionLess, compilerOptions.emitExtension || ".js");
+                    }
                 }
             }
             return true;
