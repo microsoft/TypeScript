@@ -1,4 +1,4 @@
-tests/cases/compiler/1.ts(1,17): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0' instead.
+tests/cases/compiler/1.ts(1,17): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0.tsx' instead.
 
 
 ==== tests/cases/compiler/0.ts (0 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/1.ts(1,17): error TS2691: An import path cannot end with a 
 ==== tests/cases/compiler/1.ts (1 errors) ====
     import num from './0.ts'
                     ~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0' instead.
+!!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0.tsx' instead.
     import num2 from './2.tsx'
     num + num2
     
