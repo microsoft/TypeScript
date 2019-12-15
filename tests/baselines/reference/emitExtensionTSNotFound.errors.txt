@@ -1,0 +1,10 @@
+tests/cases/compiler/0.ts(2,17): error TS2307: Cannot find module './1.ts'.
+
+
+==== tests/cases/compiler/0.ts (1 errors) ====
+    // should not emit error 2961
+    import num from './1.ts'
+                    ~~~~~~~~
+!!! error TS2307: Cannot find module './1.ts'.
+    num + 1
+    
