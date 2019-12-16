@@ -3291,6 +3291,7 @@ declare namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
+        reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
