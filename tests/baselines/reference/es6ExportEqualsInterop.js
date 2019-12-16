@@ -212,12 +212,15 @@ export * from "class-module";
 function __export(m) {
     for (var p in m) b(p);
     function b(p) {
-        if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
-            enumerable: true,
-            get: function () {
-                return m[p];
-            }
-        });
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
     }
 }
 exports.__esModule = true;
@@ -282,25 +285,25 @@ class_1.a;
 class_module_1.a;
 // named export
 var interface_2 = require("interface");
-Object.defineProperty(exports, "a1", { enumerable: true, get: () => interface_2.a });
+exports.a1 = interface_2.a;
 var variable_2 = require("variable");
-Object.defineProperty(exports, "a2", { enumerable: true, get: () => variable_2.a });
+exports.a2 = variable_2.a;
 var interface_variable_2 = require("interface-variable");
-Object.defineProperty(exports, "a3", { enumerable: true, get: () => interface_variable_2.a });
+exports.a3 = interface_variable_2.a;
 var module_2 = require("module");
-Object.defineProperty(exports, "a4", { enumerable: true, get: () => module_2.a });
+exports.a4 = module_2.a;
 var interface_module_2 = require("interface-module");
-Object.defineProperty(exports, "a5", { enumerable: true, get: () => interface_module_2.a });
+exports.a5 = interface_module_2.a;
 var variable_module_2 = require("variable-module");
-Object.defineProperty(exports, "a6", { enumerable: true, get: () => variable_module_2.a });
+exports.a6 = variable_module_2.a;
 var function_2 = require("function");
-Object.defineProperty(exports, "a7", { enumerable: true, get: () => function_2.a });
+exports.a7 = function_2.a;
 var function_module_2 = require("function-module");
-Object.defineProperty(exports, "a8", { enumerable: true, get: () => function_module_2.a });
+exports.a8 = function_module_2.a;
 var class_2 = require("class");
-Object.defineProperty(exports, "a9", { enumerable: true, get: () => class_2.a });
+exports.a9 = class_2.a;
 var class_module_2 = require("class-module");
-Object.defineProperty(exports, "a0", { enumerable: true, get: () => class_module_2.a });
+exports.a0 = class_module_2.a;
 __export(require("variable"));
 __export(require("interface-variable"));
 __export(require("module"));

@@ -23,22 +23,22 @@ exports.x = "x";
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-Object.defineProperty(exports, "x", { enumerable: true, get: () => t1_1.x });
-Object.defineProperty(exports, "from", { enumerable: true, get: () => t1_1.from });
+exports.x = t1_1.x;
+exports.from = t1_1.from;
 //// [t3.js]
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-Object.defineProperty(exports, "from", { enumerable: true, get: () => t1_1.from });
+exports.from = t1_1.from;
 //// [t4.js]
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-Object.defineProperty(exports, "a", { enumerable: true, get: () => t1_1.x });
-Object.defineProperty(exports, "from", { enumerable: true, get: () => t1_1.from });
+exports.a = t1_1.x;
+exports.from = t1_1.from;
 //// [t5.js]
 "use strict";
 exports.__esModule = true;
 var t1_1 = require("./t1");
-Object.defineProperty(exports, "a", { enumerable: true, get: () => t1_1.x });
-Object.defineProperty(exports, "from", { enumerable: true, get: () => t1_1.from });
+exports.a = t1_1.x;
+exports.from = t1_1.from;

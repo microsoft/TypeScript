@@ -20,18 +20,21 @@ x($);
 "use strict";
 exports.__esModule = true;
 var jquery_1 = require("jquery");
-Object.defineProperty(exports, "x", { enumerable: true, get: () => jquery_1.x });
+exports.x = jquery_1.x;
 //// [reExportAll.js]
 "use strict";
 function __export(m) {
     for (var p in m) b(p);
     function b(p) {
-        if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
-            enumerable: true,
-            get: function () {
-                return m[p];
-            }
-        });
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
     }
 }
 exports.__esModule = true;

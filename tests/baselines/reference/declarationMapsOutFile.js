@@ -39,7 +39,7 @@ define("a", ["require", "exports"], function (require, exports) {
 define("index", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
-    Object.defineProperty(exports, "Foo", { enumerable: true, get: () => a_1.Foo });
+    exports.Foo = a_1.Foo;
     var c = new a_1.Foo();
     exports.c = c;
     c.doThing({ a: 42 });

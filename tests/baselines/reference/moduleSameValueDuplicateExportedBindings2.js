@@ -26,18 +26,21 @@ var Animals;
 "use strict";
 exports.__esModule = true;
 var c_1 = require("./c");
-Object.defineProperty(exports, "Animals", { enumerable: true, get: () => c_1.Animals });
+exports.Animals = c_1.Animals;
 //// [a.js]
 "use strict";
 function __export(m) {
     for (var p in m) b(p);
     function b(p) {
-        if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
-            enumerable: true,
-            get: function () {
-                return m[p];
-            }
-        });
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
     }
 }
 exports.__esModule = true;

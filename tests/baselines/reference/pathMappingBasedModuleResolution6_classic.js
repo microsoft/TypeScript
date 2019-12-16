@@ -15,7 +15,7 @@ export {x} from "../file2";
 define(["require", "exports", "../file2"], function (require, exports, file2_1) {
     "use strict";
     exports.__esModule = true;
-    Object.defineProperty(exports, "x", { enumerable: true, get: () => file2_1.x });
+    exports.x = file2_1.x;
 });
 //// [file1.js]
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {

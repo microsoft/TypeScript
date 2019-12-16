@@ -61,7 +61,7 @@ exports.C = C;
 exports.__esModule = true;
 // OK, has a value side
 var exportValue_1 = require("./exportValue");
-Object.defineProperty(exports, "C", { enumerable: true, get: () => exportValue_1.C });
+exports.C = exportValue_1.C;
 // OK, even though the namespace it exports is only types.
 var NS = require("./exportT");
 exports.NS = NS;

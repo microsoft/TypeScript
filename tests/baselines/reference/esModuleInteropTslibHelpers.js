@@ -60,5 +60,5 @@ exports.Foo3 = Foo3;
 exports.__esModule = true;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importStar(require("path"));
-Object.defineProperty(exports, "Bar", { enumerable: true, get: () => path_1.Bar });
+exports.Bar = path_1.Bar;
 path_1["default"]("", "../");

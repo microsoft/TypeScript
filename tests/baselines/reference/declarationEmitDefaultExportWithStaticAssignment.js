@@ -52,7 +52,7 @@ Example.Foo = foo_1.Foo;
 "use strict";
 exports.__esModule = true;
 var foo_1 = require("./foo");
-Object.defineProperty(exports, "Foo", { enumerable: true, get: () => foo_1.Foo });
+exports.Foo = foo_1.Foo;
 function Example() { }
 exports["default"] = Example;
 Example.Foo = foo_1.Foo;

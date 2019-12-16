@@ -34,12 +34,15 @@ exports.x = 10;
 function __export(m) {
     for (var p in m) b(p);
     function b(p) {
-        if (!exports.hasOwnProperty(p)) Object.defineProperty(exports, p, {
-            enumerable: true,
-            get: function () {
-                return m[p];
-            }
-        });
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
     }
 }
 Object.defineProperty(exports, "__esModule", { value: true });
