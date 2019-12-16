@@ -1540,7 +1540,6 @@ namespace ts {
                 }
 
                 host.setModifiedTime(file, now);
-                listEmittedFile(state, proj, file);
             }
         }
 
