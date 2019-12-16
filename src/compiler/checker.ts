@@ -2881,7 +2881,11 @@ namespace ts {
             }
 
             const type = getTypeOfSymbol(exportEquals);
-            return type.flags & TypeFlags.Primitive ? undefined : getPropertyOfType(type, memberName);
+            return type.flags & TypeFlags.Primitive ||
+                getObjectFlags(type) & ObjectFlags.Class ||
+                isArrayOrTupleLikeType(type)
+                ? undefined
+                : getPropertyOfType(type, memberName);
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
