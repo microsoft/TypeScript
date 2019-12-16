@@ -31,6 +31,7 @@ namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
+        reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
@@ -902,6 +903,7 @@ namespace ts {
             reScanTemplateToken,
             scanJsxIdentifier,
             scanJsxAttributeValue,
+            reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
             reScanQuestionToken,
@@ -2131,6 +2133,11 @@ namespace ts {
                     // If this scans anything other than `{`, it's a parse error.
                     return scan();
             }
+        }
+
+        function reScanJsxAttributeValue(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return scanJsxAttributeValue();
         }
 
         function scanJsDocToken(): JSDocSyntaxKind {
