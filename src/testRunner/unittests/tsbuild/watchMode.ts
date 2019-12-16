@@ -135,7 +135,7 @@ namespace ts.tscWatch {
         it("verify building references watches only those projects", () => {
             const system = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             const host = createSolutionBuilderWithWatchHost(system);
-            const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
+            const solutionBuilder = createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
             solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
 
             checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));

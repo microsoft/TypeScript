@@ -919,7 +919,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         createHash(s: string): string {
-            return `${ts.generateDjb2Hash(s)}-${s}`;
+            return `${generateDjb2Hash(s)}-${s}`;
         }
 
         createSHA256Hash(s: string): string {
