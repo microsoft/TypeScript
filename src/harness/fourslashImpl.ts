@@ -138,7 +138,7 @@ namespace FourSlash {
     }
 
     export function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations {
-        return { template: typeof diagnostic === "string" ? diagnostic : diagnostic.message } as FourSlashInterface.DiagnosticIgnoredInterpolations;
+        return { template: typeof diagnostic === "string" ? diagnostic : diagnostic.message };
     }
 
     // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
