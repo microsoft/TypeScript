@@ -3325,6 +3325,10 @@
         "category": "Error",
         "code": 5080
     },
+    "Cannot find a tsconfig.json file at the current directory: {0}.": {
+        "category": "Error",
+        "code": 5081
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
