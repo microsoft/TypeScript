@@ -4130,7 +4130,9 @@ namespace ts {
 
     export function getEffectiveModifierFlags(node: Node) {
         const flags = getModifierFlags(node);
-        if (isInJSFile(node)) {
+        if (!!node.parent && isInJSFile(node)) {
+            // Do not try to look for tags during parsing, because parent pointers aren't set and
+            // non-local tags will incorrectly be missed; this wrong answer will be cached.
             const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
                 | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
                 | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
