@@ -1,0 +1,30 @@
+=== tests/cases/compiler/conditionalTypeSubclassExtendsTypeParam.ts ===
+// #25413
+
+declare class Model<M extends MR, MR extends {}> {
+>Model : Symbol(Model, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 0, 0))
+>M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 20))
+>MR : Symbol(MR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 33))
+>MR : Symbol(MR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 33))
+
+    public getField2<K extends keyof M>(): Field<M[K], K extends keyof MR ? MR[K] : M[K]>;
+>getField2 : Symbol(Model.getField2, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 50))
+>K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 3, 21))
+>M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 20))
+>Field : Symbol(Field, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 4, 1))
+>M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 20))
+>K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 3, 21))
+>K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 3, 21))
+>MR : Symbol(MR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 33))
+>MR : Symbol(MR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 33))
+>K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 3, 21))
+>M : Symbol(M, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 2, 20))
+>K : Symbol(K, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 3, 21))
+}
+
+declare class Field<T extends TR, TR> {}
+>Field : Symbol(Field, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 4, 1))
+>T : Symbol(T, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 6, 20))
+>TR : Symbol(TR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 6, 33))
+>TR : Symbol(TR, Decl(conditionalTypeSubclassExtendsTypeParam.ts, 6, 33))
+

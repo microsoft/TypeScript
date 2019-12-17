@@ -1,0 +1,477 @@
+=== tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
+// #29505
+
+export type FilterPropsByType<T, TT> = {
+>FilterPropsByType : Symbol(FilterPropsByType, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 30))
+>TT : Symbol(TT, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 32))
+
+    [K in keyof T]: T[K] extends TT ? K : never
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 5))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 30))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 30))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 5))
+>TT : Symbol(TT, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 32))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 3, 5))
+
+}[keyof T];
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 2, 30))
+
+function select<
+>select : Symbol(select, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 4, 11))
+
+    T extends string | number,
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 6, 16))
+
+    TList extends object,
+>TList : Symbol(TList, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 7, 30))
+
+    TValueProp extends FilterPropsByType<TList, T>
+>TValueProp : Symbol(TValueProp, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 8, 25))
+>FilterPropsByType : Symbol(FilterPropsByType, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 0, 0))
+>TList : Symbol(TList, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 7, 30))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 6, 16))
+
+>(property: T, list: TList[], valueProp: TValueProp) {}
+>property : Symbol(property, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 10, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 6, 16))
+>list : Symbol(list, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 10, 14))
+>TList : Symbol(TList, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 7, 30))
+>valueProp : Symbol(valueProp, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 10, 29))
+>TValueProp : Symbol(TValueProp, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 8, 25))
+
+<XX extends string>(x: XX, tipos: { value: XX }[]) => {
+>XX : Symbol(XX, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 1))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 20))
+>XX : Symbol(XX, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 1))
+>tipos : Symbol(tipos, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 26))
+>value : Symbol(value, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 35))
+>XX : Symbol(XX, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 1))
+
+    select(x, tipos, "value");
+>select : Symbol(select, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 4, 11))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 20))
+>tipos : Symbol(tipos, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 12, 26))
+
+};
+
+// #29662
+
+declare function onlyNullablePlease<T extends null extends T ? any : never>(
+>onlyNullablePlease : Symbol(onlyNullablePlease, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 14, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 18, 36))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 18, 36))
+
+    value: T
+>value : Symbol(value, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 18, 76))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 18, 36))
+
+): void;
+
+declare function onlyNullablePlease2<
+>onlyNullablePlease2 : Symbol(onlyNullablePlease2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 20, 8))
+
+    T extends [null] extends [T] ? any : never
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 22, 37))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 22, 37))
+
+>(value: T): void;
+>value : Symbol(value, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 24, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 22, 37))
+
+declare var z: string | null;
+>z : Symbol(z, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 26, 11))
+
+onlyNullablePlease(z); // works as expected
+>onlyNullablePlease : Symbol(onlyNullablePlease, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 14, 2))
+>z : Symbol(z, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 26, 11))
+
+onlyNullablePlease2(z); // works as expected
+>onlyNullablePlease2 : Symbol(onlyNullablePlease2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 20, 8))
+>z : Symbol(z, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 26, 11))
+
+declare var y: string;
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
+
+onlyNullablePlease(y); // error as expected
+>onlyNullablePlease : Symbol(onlyNullablePlease, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 14, 2))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
+
+onlyNullablePlease2(y); // error as expected
+>onlyNullablePlease2 : Symbol(onlyNullablePlease2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 20, 8))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
+
+<T>(t: T) => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 34, 1))
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 34, 4))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 34, 1))
+
+    var x: T | null = Math.random() > 0.5 ? null : t;
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 35, 7))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 34, 1))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 34, 4))
+
+    onlyNullablePlease(x); // should work
+>onlyNullablePlease : Symbol(onlyNullablePlease, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 14, 2))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 35, 7))
+
+    onlyNullablePlease2(x); // should work
+>onlyNullablePlease2 : Symbol(onlyNullablePlease2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 20, 8))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 35, 7))
+
+};
+
+<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>t1 : Symbol(t1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 4))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 15))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>t2 : Symbol(t2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 23))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 43))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 49))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 1))
+
+    t1 = t2; // OK
+>t1 : Symbol(t1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 4))
+>t2 : Symbol(t2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 23))
+
+    t2 = t1; // should fail
+>t2 : Symbol(t2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 23))
+>t1 : Symbol(t1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 40, 4))
+
+};
+
+type Foo<T> = T extends true ? string : "a";
+>Foo : Symbol(Foo, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 43, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 45, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 45, 9))
+
+<T>(x: Foo<T>, s: string) => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 1))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 4))
+>Foo : Symbol(Foo, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 43, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 1))
+>s : Symbol(s, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 14))
+
+    x = "a"; // Currently an error, should be ok
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 4))
+
+    x = s; // Error
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 4))
+>s : Symbol(s, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 47, 14))
+
+};
+
+// #26933
+
+type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
+>Distributive : Symbol(Distributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 50, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 54, 18))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 54, 18))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 54, 34))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 54, 50))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 54, 66))
+
+<T>() => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+
+    const o = { a: 1, b: 2 };
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 15))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 21))
+
+    const x: [T] extends [string]
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 57, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+
+        ? { y: number }
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 58, 11))
+
+        : { a: number; b: number } = undefined!;
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 59, 11))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 59, 22))
+>undefined : Symbol(undefined)
+
+    // Simple case: OK
+    const o1: [T] extends [number] ? { a: number } : { b: number } = o;
+>o1 : Symbol(o1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 61, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 61, 38))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 61, 54))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+    // Simple case where source happens to be a conditional type: also OK
+    const x1: [T] extends [number]
+>x1 : Symbol(x1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 63, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+
+        ? ([T] extends [string] ? { y: number } : { a: number })
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 64, 35))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 64, 51))
+
+        : ([T] extends [string] ? { y: number } : { b: number }) = x;
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>y : Symbol(y, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 65, 35))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 65, 51))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 57, 9))
+
+    // Infer type parameters: no good
+    const o2: [T] extends [[infer U]] ? U : { b: number } = o;
+>o2 : Symbol(o2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 67, 9))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>U : Symbol(U, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 67, 33))
+>U : Symbol(U, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 67, 33))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 67, 45))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+    // The next 4 are arguable - if you choose to ignore the `never` distribution case,
+    // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
+    // look approximately like the sum of their branches, but the `never` case bucks that.
+    // There's an argument for the result of dumping `never` into a distributive conditional
+    // being not `never`, but instead the intersection of the branches - a much more precise bound
+    // on that "impossible" input.
+
+    // Distributive where T might instantiate to never: no good
+    const o3: Distributive<T> = o;
+>o3 : Symbol(o3, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 77, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 50, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+    // Distributive where T & string might instantiate to never: also no good
+    const o4: Distributive<T & string> = o;
+>o4 : Symbol(o4, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 79, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 50, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+    // Distributive where {a: T} cannot instantiate to never: OK
+    const o5: Distributive<{ a: T }> = o;
+>o5 : Symbol(o5, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 50, 2))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 28))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+    // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+    const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
+>o6 : Symbol(o6, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 83, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 50, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 55, 1))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 83, 50))
+>o : Symbol(o, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 56, 9))
+
+};
+
+type Wrapped<T> = { ___secret: T };
+>Wrapped : Symbol(Wrapped, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 84, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 13))
+>___secret : Symbol(___secret, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 19))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 13))
+
+type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
+>Unwrap : Symbol(Unwrap, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 35))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 12))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 12))
+>Wrapped : Symbol(Wrapped, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 84, 2))
+>U : Symbol(U, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 40))
+>U : Symbol(U, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 40))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 12))
+
+declare function set<T, K extends keyof T>(
+>set : Symbol(set, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 52))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 21))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 23))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 21))
+
+    obj: T,
+>obj : Symbol(obj, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 43))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 21))
+
+    key: K,
+>key : Symbol(key, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 90, 11))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 23))
+
+    value: Unwrap<T[K]>
+>value : Symbol(value, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 91, 11))
+>Unwrap : Symbol(Unwrap, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 35))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 21))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 23))
+
+): Unwrap<T[K]>;
+>Unwrap : Symbol(Unwrap, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 86, 35))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 21))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 89, 23))
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 93, 16))
+
+    prop!: Wrapped<string>;
+>prop : Symbol(Foo2.prop, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 95, 12))
+>Wrapped : Symbol(Wrapped, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 84, 2))
+
+    method() {
+>method : Symbol(Foo2.method, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 96, 27))
+
+        set(this, "prop", "hi"); // <-- type error
+>set : Symbol(set, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 52))
+>this : Symbol(Foo2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 93, 16))
+    }
+}
+
+set(new Foo2(), "prop", "hi"); // <-- typechecks
+>set : Symbol(set, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 87, 52))
+>Foo2 : Symbol(Foo2, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 93, 16))
+
+type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
+>InferBecauseWhyNot : Symbol(InferBecauseWhyNot, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 103, 30))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 24))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 24))
+>p : Symbol(p, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 43))
+>P1 : Symbol(P1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 51))
+
+    ? P1 | T
+>P1 : Symbol(P1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 51))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 105, 24))
+
+    : never;
+
+<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> => {
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 1))
+>arg : Symbol(arg, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 12))
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 30))
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 1))
+>InferBecauseWhyNot : Symbol(InferBecauseWhyNot, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 103, 30))
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 1))
+
+    return x;
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 109, 30))
+
+};
+
+type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
+>InferBecauseWhyNotDistributive : Symbol(InferBecauseWhyNotDistributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 111, 2))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 36))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 36))
+>p : Symbol(p, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 52))
+>P1 : Symbol(P1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 60))
+
+    ? P1 | T
+>P1 : Symbol(P1, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 60))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 113, 36))
+
+    : never;
+
+<Q extends (arg: any) => any>(
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 1))
+>arg : Symbol(arg, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 12))
+
+    x: Q
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 30))
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 1))
+
+): InferBecauseWhyNotDistributive<Q> => {
+>InferBecauseWhyNotDistributive : Symbol(InferBecauseWhyNotDistributive, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 111, 2))
+>Q : Symbol(Q, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 1))
+
+    return x; // should fail
+>x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 117, 30))
+
+};
+
+let t: true;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 123, 3))
+
+let f: false;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 124, 3))
+
+let a: "a" extends "a" ? true : false = undefined!;
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 126, 3))
+>undefined : Symbol(undefined)
+
+let b: "a" extends "b" ? true : false = undefined!;
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 127, 3))
+>undefined : Symbol(undefined)
+
+t = a;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 123, 3))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 126, 3))
+
+f = a; // !!! error TS2322: Type 'true' is not assignable to type 'false'.
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 124, 3))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 126, 3))
+
+t = b; // !!! error TS2322: Type 'false' is not assignable to type 'true'.
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 123, 3))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 127, 3))
+
+f = b;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 124, 3))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 127, 3))
+
+a = true;
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 126, 3))
+
+a = false; // !!! error TS2322: Type 'false' is not assignable to type 'true'.
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 126, 3))
+
+b = true; // !!! error TS2322: Type 'true' is not assignable to type 'false'.
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 127, 3))
+
+b = false;
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 127, 3))
+
+// #23132
+
+<T extends "a">() => {
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 141, 1))
+
+    let a: T extends "a" ? true : false = undefined!;
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 142, 7))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 141, 1))
+>undefined : Symbol(undefined)
+
+    let b: T extends "b" ? true : false = undefined!;
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 143, 7))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 141, 1))
+>undefined : Symbol(undefined)
+
+    t = a;
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 123, 3))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 142, 7))
+
+    f = a; // !!! error TS2322: Type 'T extends "a" ? true : false' is not assignable to type 'false'.
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 124, 3))
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 142, 7))
+
+    t = b; // !!! error TS2322: Type 'T extends "b" ? true : false' is not assignable to type 'true'.
+>t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 123, 3))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 143, 7))
+
+    f = b;
+>f : Symbol(f, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 124, 3))
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 143, 7))
+
+    a = true;
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 142, 7))
+
+    a = false; // !!! error TS2322: Type 'false' is not assignable to type 'T extends "a" ? true : false'.
+>a : Symbol(a, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 142, 7))
+
+    b = true; // !!! error TS2322: Type 'true' is not assignable to type 'T extends "b" ? true : false'.
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 143, 7))
+
+    b = false;
+>b : Symbol(b, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 143, 7))
+
+};
+
