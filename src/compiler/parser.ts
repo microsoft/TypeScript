@@ -2584,7 +2584,7 @@ namespace ts {
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
             node.name = parseIdentifierOrPattern();
-            if (getFullWidth(node.name) === 0 && !hasModifiers(node) && isModifierKind(token())) {
+            if (getFullWidth(node.name) === 0 && !node.modifiers && isModifierKind(token())) {
                 // in cases like
                 // 'use strict'
                 // function foo(static)
@@ -3603,7 +3603,7 @@ namespace ts {
                 return undefined;
             }
 
-            const isAsync = hasModifier(arrowFunction, ModifierFlags.Async);
+            const isAsync = hasModifierOfKind(arrowFunction, SyntaxKind.AsyncKeyword);
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
@@ -3809,7 +3809,7 @@ namespace ts {
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction | undefined {
             const node = <ArrowFunction>createNodeWithJSDoc(SyntaxKind.ArrowFunction);
             node.modifiers = parseModifiersForArrowFunction();
-            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            const isAsync = hasModifierOfKind(node, SyntaxKind.AsyncKeyword) ? SignatureFlags.Await : SignatureFlags.None;
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
@@ -5005,7 +5005,7 @@ namespace ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
             const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
-            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            const isAsync = hasModifierOfKind(node, SyntaxKind.AsyncKeyword) ? SignatureFlags.Await : SignatureFlags.None;
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
                 isGenerator ? doInYieldContext(parseOptionalIdentifier) :
@@ -5834,9 +5834,9 @@ namespace ts {
             node.kind = SyntaxKind.FunctionDeclaration;
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalIdentifier() : parseIdentifier();
+            node.name = hasModifierOfKind(node, SyntaxKind.DefaultKeyword) ? parseOptionalIdentifier() : parseIdentifier();
             const isGenerator = node.asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
-            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            const isAsync = hasModifierOfKind(node, SyntaxKind.AsyncKeyword) ? SignatureFlags.Await : SignatureFlags.None;
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             return finishNode(node);
@@ -5869,7 +5869,7 @@ namespace ts {
             node.kind = SyntaxKind.MethodDeclaration;
             node.asteriskToken = asteriskToken;
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
-            const isAsync = hasModifier(node, ModifierFlags.Async) ? SignatureFlags.Await : SignatureFlags.None;
+            const isAsync = hasModifierOfKind(node, SyntaxKind.AsyncKeyword) ? SignatureFlags.Await : SignatureFlags.None;
             fillSignature(SyntaxKind.ColonToken, isGenerator | isAsync, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, diagnosticMessage);
             return finishNode(node);
@@ -6511,7 +6511,7 @@ namespace ts {
         }
 
         function isAnExternalModuleIndicatorNode(node: Node) {
-            return hasModifier(node, ModifierFlags.Export)
+            return hasModifierOfKind(node, SyntaxKind.ExportKeyword)
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAssignment
@@ -6526,6 +6526,11 @@ namespace ts {
 
         function walkTreeForExternalModuleIndicators(node: Node): Node | undefined {
             return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+        }
+
+        /** Do not use hasModifier inside the parser; it relies on parent pointers. Use this instead. */
+        function hasModifierOfKind(node: Node, kind: SyntaxKind) {
+            return some(node.modifiers, m => m.kind === kind);
         }
 
         function isImportMeta(node: Node): boolean {

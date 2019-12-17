@@ -5322,7 +5322,7 @@ namespace ts {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node.modifiers = createNodeArray(createModifiersFromModifierFlags(newModifierFlags | getEffectiveModifierFlags(node)));
+                        node.modifiers = createNodeArray(createModifiersFromModifierFlags(newModifierFlags | getModifierFlags(node)));
                         node.modifierFlagsCache = 0; // Reset computed flags cache
                     }
                     results.push(node);
@@ -6102,7 +6102,7 @@ namespace ts {
                                 }
                             }
                         }
-                        if (signatures.some(s => s.declaration && getEffectiveModifierFlags(s.declaration) & ModifierFlags.Private)) {
+                        if (signatures.some(s => s.declaration && getModifierFlags(s.declaration) & ModifierFlags.Private)) {
                             return [setTextRange(createProperty(
                                 /*decorators*/ undefined,
                                 createModifiersFromModifierFlags(ModifierFlags.Private),
@@ -28360,8 +28360,8 @@ namespace ts {
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                     const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node), otherKind);
                     if (otherAccessor) {
-                        const nodeFlags = getEffectiveModifierFlags(node);
-                        const otherFlags = getEffectiveModifierFlags(otherAccessor);
+                        const nodeFlags = getModifierFlags(node);
+                        const otherFlags = getModifierFlags(otherAccessor);
                         if ((nodeFlags & ModifierFlags.AccessibilityModifier) !== (otherFlags & ModifierFlags.AccessibilityModifier)) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }

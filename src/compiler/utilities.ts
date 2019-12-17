@@ -4100,7 +4100,7 @@ namespace ts {
     }
 
     export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
-        return getEffectiveModifierFlags(node) & flags;
+        return getModifierFlags(node) & flags;
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
@@ -4121,23 +4121,19 @@ namespace ts {
             }
         }
 
+        if (isInJSFile(node) && !!node.parent) {
+            // getModifierFlagsNoCache should only be called when parent pointers are set,
+            // or when !(node.flags & NodeFlags.Synthesized) && node.kind !== SyntaxKind.SourceFile)
+            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
+                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
+                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
+            flags |= tags;
+        }
+
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
 
-        return flags;
-    }
-
-    export function getEffectiveModifierFlags(node: Node) {
-        const flags = getModifierFlags(node);
-        if (!!node.parent && isInJSFile(node)) {
-            // Do not try to look for tags during parsing, because parent pointers aren't set and
-            // non-local tags will incorrectly be missed; this wrong answer will be cached.
-            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
-                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
-                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
-            return flags | tags;
-        }
         return flags;
     }
 

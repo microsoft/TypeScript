@@ -299,7 +299,7 @@ namespace ts {
     }
 
     export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
-        return getCombinedFlags(node, getEffectiveModifierFlags);
+        return getCombinedFlags(node, getModifierFlags);
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that

@@ -1473,7 +1473,7 @@ namespace ts {
     }
 
     function maskModifierFlags(node: Node, modifierMask: ModifierFlags = ModifierFlags.All ^ ModifierFlags.Public, modifierAdditions: ModifierFlags = ModifierFlags.None): ModifierFlags {
-        let flags = (getEffectiveModifierFlags(node) & modifierMask) | modifierAdditions;
+        let flags = (getModifierFlags(node) & modifierMask) | modifierAdditions;
         if (flags & ModifierFlags.Default && !(flags & ModifierFlags.Export)) {
             // A non-exported default is a nonsequitor - we usually try to remove all export modifiers
             // from statements in ambient declarations; but a default export must retain its export modifier to be syntactically valid
