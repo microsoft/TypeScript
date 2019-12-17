@@ -810,6 +810,7 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        /* @internal */ isLocal?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {

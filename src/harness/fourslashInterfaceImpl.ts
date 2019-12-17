@@ -434,6 +434,10 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
+        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]) {
+            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers);
+        }
+
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
             this.state.verifyNavigationBar(json, options);
         }
@@ -462,7 +466,7 @@ namespace FourSlashInterface {
             this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
         }
 
-        public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[] }) {
+        public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[], providePrefixAndSuffixTextForRename?: boolean }) {
             this.state.verifyRangesAreRenameLocations(options);
         }
 
@@ -1543,7 +1547,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string;
+        readonly description: string | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
@@ -1600,6 +1604,9 @@ namespace FourSlashInterface {
         readonly findInComments?: boolean;
         readonly ranges: readonly RenameLocationOptions[];
         readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
+    export interface DiagnosticIgnoredInterpolations {
+        template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }

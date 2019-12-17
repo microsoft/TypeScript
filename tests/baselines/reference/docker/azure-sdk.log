@@ -21,8 +21,8 @@ XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+XX of XX: [@azure/cognitiveservices-textanalytics] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -54,7 +54,7 @@ XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (22)
+SUCCESS (23)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-tracing (? seconds)
@@ -72,6 +72,7 @@ SUCCESS (22)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
 @azure/storage-blob (? seconds)
+@azure/cognitiveservices-textanalytics (? seconds)
 @azure/core-arm (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
@@ -82,7 +83,6 @@ testhub (? seconds)
 SUCCESS WITH WARNINGS (1)
 ================================
 @azure/cosmos (? seconds)
-Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -104,7 +104,7 @@ samples/listRevisions.ts(43,32): error TS2322: Type 'PagedAsyncIterableIterator<
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
             Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
-test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
       Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
@@ -115,7 +115,7 @@ test/testHelpers.ts(73,31): error TS2322: Type 'PagedAsyncIterableIterator<Confi
                 Types of property 'done' are incompatible.
                   Type 'boolean | undefined' is not assignable to type 'boolean'.
                     Type 'undefined' is not assignable to type 'boolean'.
-test/testHelpers.ts(90,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
+test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
       Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage | ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.

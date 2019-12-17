@@ -72,5 +72,21 @@ namespace ts {
             commandLineArgs: ["--p", "src/project"],
             incrementalScenarios: [noChangeRun]
         });
+
+        verifyTscIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "with noEmitOnError",
+            fs: () => loadProjectFromDisk("tests/projects/noEmitOnError"),
+            commandLineArgs: ["--incremental", "-p", "src"],
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`, "utf-8")
+                }
+            ]
+        });
     });
 }

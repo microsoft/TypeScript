@@ -498,6 +498,17 @@ namespace ts {
         };
     }
 
+    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const mapped = mapValue(value, key);
+            if (mapped !== undefined) {
+                result.set(mapKey(key), mapped);
+            }
+        });
+        return result;
+    }
+
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
     export function singleIterator<T>(value: T): Iterator<T> {

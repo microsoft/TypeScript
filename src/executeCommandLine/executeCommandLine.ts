@@ -251,7 +251,7 @@ namespace ts {
             fileName => getNormalizedAbsolutePath(fileName, currentDirectory)
         );
         if (configFileName) {
-            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
                 if (configParseResult.errors.length !== 0) {
                     reportDiagnostic = updateReportDiagnostic(
@@ -277,7 +277,8 @@ namespace ts {
                     sys,
                     reportDiagnostic,
                     configParseResult,
-                    commandLineOptions
+                    commandLineOptions,
+                    commandLine.watchOptions
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
@@ -314,7 +315,8 @@ namespace ts {
                     sys,
                     reportDiagnostic,
                     commandLine.fileNames,
-                    commandLineOptions
+                    commandLineOptions,
+                    commandLine.watchOptions
                 );
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
@@ -389,6 +391,7 @@ namespace ts {
         sys: System,
         cb: ExecuteCommandLineCallbacks | undefined,
         buildOptions: BuildOptions,
+        watchOptions: WatchOptions | undefined,
         projects: string[],
         errors: Diagnostic[]
     ) {
@@ -437,7 +440,7 @@ namespace ts {
             if (cb && cb.onSolutionBuilderHostCreate) cb.onSolutionBuilderHostCreate(buildHost);
             updateCreateProgram(sys, buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(sys, program.getProgram());
-            const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
+            const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
             return;
         }
@@ -463,12 +466,13 @@ namespace ts {
         cb: ExecuteCommandLineCallbacks | undefined,
         args: readonly string[]
     ) {
-        const { buildOptions, projects, errors } = parseBuildCommand(args);
+        const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(args);
         if (buildOptions.generateCpuProfile && sys.enableCPUProfiler) {
             sys.enableCPUProfiler(buildOptions.generateCpuProfile, () => performBuildWorker(
                 sys,
                 cb,
                 buildOptions,
+                watchOptions,
                 projects,
                 errors
             ));
@@ -478,6 +482,7 @@ namespace ts {
                 sys,
                 cb,
                 buildOptions,
+                watchOptions,
                 projects,
                 errors
             );
@@ -576,11 +581,13 @@ namespace ts {
         sys: System,
         reportDiagnostic: DiagnosticReporter,
         configParseResult: ParsedCommandLine,
-        optionsToExtend: CompilerOptions
+        optionsToExtend: CompilerOptions,
+        watchOptionsToExtend: WatchOptions | undefined
     ) {
         const watchCompilerHost = createWatchCompilerHostOfConfigFile(
             configParseResult.options.configFilePath!,
             optionsToExtend,
+            watchOptionsToExtend,
             sys,
             /*createProgram*/ undefined,
             reportDiagnostic,
@@ -595,11 +602,13 @@ namespace ts {
         sys: System,
         reportDiagnostic: DiagnosticReporter,
         rootFiles: string[],
-        options: CompilerOptions
+        options: CompilerOptions,
+        watchOptions: WatchOptions | undefined
     ) {
         const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(
             rootFiles,
             options,
+            watchOptions,
             sys,
             /*createProgram*/ undefined,
             reportDiagnostic,

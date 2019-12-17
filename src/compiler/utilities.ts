@@ -2433,6 +2433,10 @@ namespace ts {
         return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
     }
 
+    export function hasTypeArguments(node: Node): node is HasTypeArguments {
+        return !!(node as HasTypeArguments).typeArguments;
+    }
+
     export const enum AssignmentKind {
         None, Definite, Compound
     }

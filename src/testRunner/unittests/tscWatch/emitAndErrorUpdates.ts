@@ -392,5 +392,47 @@ export class Data2 {
                 verifyTransitiveExports(lib2Data, lib2Data2);
             });
         });
+
+        it("with noEmitOnError", () => {
+            const projectLocation = `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`;
+            const allFiles = ["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f));
+            const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                createWatchedSystem(
+                    [...allFiles, { path: libFile.path, content: libContent }],
+                    { currentDirectory: projectLocation }
+                )
+            );
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            const mainFile = allFiles.find(f => f.path === `${projectLocation}/src/main.ts`)!;
+            checkOutputErrorsInitial(host, [
+                getDiagnosticOfFileFromProgram(
+                    watch(),
+                    mainFile.path,
+                    mainFile.content.lastIndexOf(";"),
+                    1,
+                    Diagnostics._0_expected,
+                    ","
+                )
+            ]);
+            assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+
+            // Make changes
+            host.writeFile(mainFile.path, `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`);
+            host.writtenFiles.clear();
+            host.checkTimeoutQueueLengthAndRun(1); // build project
+            checkOutputErrorsIncremental(host, emptyArray);
+            assert.equal(host.writtenFiles.size, 3, `Expected to write 3 files: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
+            for (const f of [
+                `${projectLocation}/dev-build/shared/types/db.js`,
+                `${projectLocation}/dev-build/src/main.js`,
+                `${projectLocation}/dev-build/src/other.js`,
+            ]) {
+                assert.isTrue(host.writtenFiles.has(f.toLowerCase()), `Expected to write file: ${f}:: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
+            }
+        });
     });
 }

@@ -1389,4 +1389,45 @@ ${coreFiles[1].content}`);
             );
         }
     });
+
+    describe("unittests:: tsbuild:: watchMode:: with noEmitOnError", () => {
+        it("does not emit any files on error", () => {
+            const projectLocation = `${projectsLocation}/noEmitOnError`;
+            const host = createTsBuildWatchSystem([
+                ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                    .map(f => getFileFromProject("noEmitOnError", f)),
+                { path: libFile.path, content: libContent }
+            ], { currentDirectory: projectLocation });
+            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
+            checkOutputErrorsInitial(host, [
+                `src/main.ts(4,1): error TS1005: ',' expected.\n`,
+            ], /*disableConsoleClears*/ undefined, [
+                `Projects in this build: \r\n    * tsconfig.json\n\n`,
+                `Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist\n\n`,
+                `Building project '/user/username/projects/noEmitOnError/tsconfig.json'...\n\n`,
+            ]);
+            assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+
+            // Make changes
+            host.writeFile(`${projectLocation}/src/main.ts`, `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`);
+            host.writtenFiles.clear();
+            host.checkTimeoutQueueLengthAndRun(1); // build project
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
+                `Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist\n\n`,
+                `Building project '/user/username/projects/noEmitOnError/tsconfig.json'...\n\n`,
+            ]);
+            assert.equal(host.writtenFiles.size, 3, `Expected to write 3 files: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
+            for (const f of [
+                `${projectLocation}/dev-build/shared/types/db.js`,
+                `${projectLocation}/dev-build/src/main.js`,
+                `${projectLocation}/dev-build/src/other.js`,
+            ]) {
+                assert.isTrue(host.writtenFiles.has(f.toLowerCase()), `Expected to write file: ${f}:: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
+            }
+        });
+    });
 }

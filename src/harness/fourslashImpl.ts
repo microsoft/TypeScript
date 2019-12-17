@@ -137,6 +137,10 @@ namespace FourSlash {
         throw new Error("Operation should be cancelled");
     }
 
+    export function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations {
+        return { template: typeof diagnostic === "string" ? diagnostic : diagnostic.message };
+    }
+
     // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
     // Return object may lack some functionalities for other purposes.
     function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
@@ -2483,7 +2487,12 @@ namespace FourSlash {
 
             const action = actions[index];
 
-            assert.equal(action.description, options.description);
+            if (typeof options.description === "string") {
+                assert.equal(action.description, options.description);
+            }
+            else {
+                assert.match(action.description, templateToRegExp(options.description.template));
+            }
             assert.deepEqual(action.commands, options.commands);
 
             if (options.applyChanges) {
@@ -2553,7 +2562,7 @@ namespace FourSlash {
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions): readonly ts.CodeFixAction[] {
+        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions, position?: number): readonly ts.CodeFixAction[] {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -2564,7 +2573,12 @@ namespace FourSlash {
                 if (errorCode !== undefined && errorCode !== diagnostic.code) {
                     return;
                 }
-
+                if (position !== undefined && diagnostic.start !== undefined && diagnostic.length !== undefined) {
+                    const span = ts.createTextRangeFromSpan({ start: diagnostic.start, length: diagnostic.length });
+                    if (!ts.textRangeContainsPositionInclusive(span, position)) {
+                        return;
+                    }
+                }
                 return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start!, diagnostic.start! + diagnostic.length!, [diagnostic.code], this.formatCodeSettings, preferences);
             });
         }
@@ -2612,6 +2626,23 @@ namespace FourSlash {
                     this.raiseError(`Import fix at index ${index} doesn't match.\n${showTextDiff(expected, actual)}`);
                 }
             });
+        }
+
+        public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[]) {
+            const marker = this.getMarkerByName(markerName);
+            const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
+                includeCompletionsForModuleExports: true,
+                includeCompletionsWithInsertText: true
+            }, marker.position).filter(f => f.fixId === ts.codefix.importFixId);
+
+            const actualModuleSpecifiers = ts.mapDefined(codeFixes, fix => {
+                return ts.forEach(ts.flatMap(fix.changes, c => c.textChanges), c => {
+                    const match = /(?:from |require\()(['"])((?:(?!\1).)*)\1/.exec(c.newText);
+                    return match?.[2];
+                });
+            });
+
+            assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
         }
 
         public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
@@ -3806,5 +3837,9 @@ ${code}
         const expectedString = quoted ? "\"" + expected + "\"" : expected;
         const actualString = quoted ? "\"" + actual + "\"" : actual;
         return `\n${expectMsg}:\n${expectedString}\n\n${actualMsg}:\n${actualString}`;
+    }
+
+    function templateToRegExp(template: string) {
+        return new RegExp(`^${ts.regExpEscape(template).replace(/\\\{\d+\\\}/g, ".*?")}$`);
     }
 }
