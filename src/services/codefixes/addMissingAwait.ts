@@ -68,7 +68,7 @@ namespace ts.codefix {
                     makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
                 }
             });
-            return createCodeFixActionNoFixId(
+            return createCodeFixActionWithoutFixAll(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
                 awaitableInitializers.initializers.length === 1
