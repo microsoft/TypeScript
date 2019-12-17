@@ -289,3 +289,126 @@ function f31(foo: Foo) {
     }
 }
 
+// Repro from #33448
+
+type a = {
+>a : a
+
+    type: 'a',
+>type : "a"
+
+    data: string
+>data : string
+}
+type b = {
+>b : b
+
+    type: 'b',
+>type : "b"
+
+    name: string
+>name : string
+}
+type c = {
+>c : c
+
+    type: 'c',
+>type : "c"
+
+    other: string
+>other : string
+}
+
+type abc = a | b | c;
+>abc : abc
+
+function f(problem: abc & (b | c)) {
+>f : (problem: b | c | (a & b) | (a & c) | (b & c) | (c & b)) => void
+>problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+
+    if (problem.type === 'b') {
+>problem.type === 'b' : boolean
+>problem.type : "b" | "c"
+>problem : b | c | (a & b) | (a & c) | (b & c) | (c & b)
+>type : "b" | "c"
+>'b' : "b"
+
+        problem.name;
+>problem.name : string
+>problem : b
+>name : string
+    }
+    else {
+        problem.other;
+>problem.other : string
+>problem : c
+>other : string
+    }
+}
+
+type RuntimeValue =
+>RuntimeValue : RuntimeValue
+
+    | { type: 'number', value: number }
+>type : "number"
+>value : number
+
+    | { type: 'string', value: string }
+>type : "string"
+>value : string
+
+    | { type: 'boolean', value: boolean };
+>type : "boolean"
+>value : boolean
+
+function foo1(x: RuntimeValue & { type: 'number' }) {
+>foo1 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })) => void
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })
+>type : "number"
+
+    if (x.type === 'number') {
+>x.type === 'number' : boolean
+>x.type : "number"
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; })
+>type : "number"
+>'number' : "number"
+
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
+    }
+    else {
+        x.value;  // Error, x is never
+>x.value : any
+>x : never
+>value : any
+    }
+}
+
+function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+>foo2 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })) => void
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })
+>type : "number"
+>type : "string"
+
+    if (x.type === 'number') {
+>x.type === 'number' : boolean
+>x.type : "string" | "number"
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "number"; value: number; } & { type: "string"; }) | ({ type: "string"; value: string; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; }) | ({ type: "boolean"; value: boolean; } & { type: "number"; }) | ({ type: "boolean"; value: boolean; } & { type: "string"; })
+>type : "string" | "number"
+>'number' : "number"
+
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
+    }
+    else {
+        x.value;  // string
+>x.value : string
+>x : { type: "string"; value: string; } & { type: "string"; }
+>value : string
+    }
+}
+

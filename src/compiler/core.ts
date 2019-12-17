@@ -2,30 +2,7 @@
 /* @internal */
 namespace ts {
 
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    export function tryGetNativeMap(): MapConstructor | undefined {
-        // Internet Explorer's Map doesn't support iteration, so don't use it.
-        // Natives
-        // NOTE: TS doesn't strictly allow in-line declares, but if we suppress the error, the declaration
-        // is still used for typechecking _and_ correctly elided, which is out goal, as this prevents us from
-        // needing to pollute an outer scope with a declaration of `Map` just to satisfy the checks in this function
-        //@ts-ignore
-        declare const Map: (new <T>() => Map<T>) | undefined;
-        // eslint-disable-next-line no-in-operator
-        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
-    }
-
     export const emptyArray: never[] = [] as never[];
-
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
 
     /** Create a new map. */
     export function createMap<T>(): Map<T> {
@@ -519,6 +496,17 @@ namespace ts {
                 }
             }
         };
+    }
+
+    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const mapped = mapValue(value, key);
+            if (mapped !== undefined) {
+                result.set(mapKey(key), mapped);
+            }
+        });
+        return result;
     }
 
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
