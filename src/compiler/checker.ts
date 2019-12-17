@@ -5570,7 +5570,6 @@ namespace ts {
                             getPropertiesOfType(staticType),
                             p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype"
                         ), p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
-
                     const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
                         // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
@@ -6442,7 +6441,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (getEffectiveModifierFlags(node) & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                        if (hasModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
@@ -9776,7 +9775,6 @@ namespace ts {
                 const type = getApparentType(current);
                 if (type !== errorType) {
                     const prop = getPropertyOfType(type, name);
-                    getEffectiveModifierFlags
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
                         if (isUnion) {
@@ -28362,9 +28360,9 @@ namespace ts {
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                     const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node), otherKind);
                     if (otherAccessor) {
-                        const nodeFlags = getEffectiveModifierFlags(node) & ModifierFlags.AccessibilityModifier;
-                        const otherFlags = getEffectiveModifierFlags(otherAccessor) & ModifierFlags.AccessibilityModifier;
-                        if (nodeFlags !== otherFlags) {
+                        const nodeFlags = getEffectiveModifierFlags(node);
+                        const otherFlags = getEffectiveModifierFlags(otherAccessor);
+                        if ((nodeFlags & ModifierFlags.AccessibilityModifier) !== (otherFlags & ModifierFlags.AccessibilityModifier)) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }
                         if ((nodeFlags & ModifierFlags.Abstract) !== (otherFlags & ModifierFlags.Abstract)) {
