@@ -216,7 +216,6 @@ namespace ts.moduleSpecifiers {
         for (
             let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
             allFileNames.size !== 0;
-            directory = getDirectoryPath(directory)
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
             let pathsInDirectory: string[] | undefined;
@@ -232,6 +231,14 @@ namespace ts.moduleSpecifiers {
                 }
                 sortedPaths.push(...pathsInDirectory);
             }
+            const newDirectory = getDirectoryPath(directory);
+            if (newDirectory === directory) break;
+            directory = newDirectory;
+        }
+        if (allFileNames.size) {
+            const remainingPaths = arrayFrom(allFileNames.values());
+            if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByNumberOfDirectrorySeparators);
+            sortedPaths.push(...remainingPaths);
         }
         return sortedPaths;
     }

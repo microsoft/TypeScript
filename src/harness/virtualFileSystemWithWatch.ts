@@ -645,7 +645,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 }
                 else {
                     // root folder
-                    Debug.assert(this.fs.size === 0);
+                    Debug.assert(this.fs.size === 0 || !!this.windowsStyleRoot);
                     this.fs.set(path, folder);
                 }
             }
