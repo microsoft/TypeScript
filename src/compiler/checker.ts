@@ -9525,7 +9525,7 @@ namespace ts {
                     const constraint = getLowerBoundOfKeyType(checkType);
                     if (constraint !== checkType) {
                         const mapper = makeUnaryTypeMapper((<ConditionalType>type).root.checkType, constraint);
-                        return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper));
+                        return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper), /*writing*/ false);
                     }
                 }
                 return type;
@@ -9827,20 +9827,21 @@ namespace ts {
             return undefined;
         }
 
-        function getDefaultConstraintOfConditionalType(type: ConditionalType) {
-            if (!type.resolvedDefaultConstraint) {
+        function getDefaultConstraintOfConditionalType(type: ConditionalType, writing: boolean) {
+            const cache = writing ? "resolvedDefaultConstraintForWriting" : "resolvedDefaultConstraintForReading";
+            if (!type[cache]) {
                 // An `any` branch of a conditional type would normally be viral - specifically, without special handling here,
                 // a conditional type with a single branch of type `any` would be assignable to anything, since it's constraint would simplify to
                 // just `any`. This result is _usually_ unwanted - so instead here we elide an `any` branch from the constraint type,
                 // in effect treating `any` like `never` rather than `unknown` in this location.
                 const trueConstraint = getInferredTrueTypeFromConditionalType(type);
                 const falseConstraint = getFalseTypeFromConditionalType(type);
-                type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : getUnionType([trueConstraint, falseConstraint]);
+                type[cache] = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : (writing ? getIntersectionType : getUnionType)([trueConstraint, falseConstraint]);
             }
-            return type.resolvedDefaultConstraint;
+            return type[cache]!;
         }
 
-        function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type | undefined {
+        function getConstraintOfDistributiveConditionalType(type: ConditionalType, writing: boolean): Type | undefined {
             // Check if we have a conditional type of the form 'T extends U ? X : Y', where T is a constrained
             // type parameter. If so, create an instantiation of the conditional type where T is replaced
             // with its constraint. We do this because if the constraint is a union type it will be distributed
@@ -9857,7 +9858,7 @@ namespace ts {
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
                 if (constraint && constraint !== type.checkType) {
                     const mapper = makeUnaryTypeMapper(type.root.checkType, constraint);
-                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper), writing);
                     if (!(instantiated.flags & TypeFlags.Never)) {
                         return instantiated;
                     }
@@ -9867,7 +9868,7 @@ namespace ts {
         }
 
         function getConstraintFromConditionalType(type: ConditionalType) {
-            return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
+            return getConstraintOfDistributiveConditionalType(type, /*writing*/ false) || getDefaultConstraintOfConditionalType(type, /*writing*/ false);
         }
 
         function getConstraintOfConditionalType(type: ConditionalType) {
@@ -12740,7 +12741,7 @@ namespace ts {
             return type;
         }
 
-        function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
+        function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, writing: boolean): Type {
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
             if (checkType === wildcardType || extendsType === wildcardType) {
@@ -12771,7 +12772,7 @@ namespace ts {
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    return (writing ? getIntersectionType : getUnionType)([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
@@ -12847,10 +12848,10 @@ namespace ts {
                     aliasSymbol,
                     aliasTypeArguments
                 };
-                links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+                links.resolvedType = getConditionalType(root, /*mapper*/ undefined, /*writing*/ false);
                 if (outerTypeParameters) {
                     root.instantiations = createMap<Type>();
-                    root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
+                    root.instantiations.set(getTypeListId(outerTypeParameters) + "ForReading", links.resolvedType);
                 }
             }
             return links.resolvedType;
@@ -13718,18 +13719,18 @@ namespace ts {
             return result;
         }
 
-        function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper): Type {
+        function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, writing: boolean): Type {
             const root = type.root;
             if (root.outerTypeParameters) {
                 // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
                 const typeArguments = map(root.outerTypeParameters, mapper);
-                const id = getTypeListId(typeArguments);
+                const id = getTypeListId(typeArguments) + (writing ? "ForWriting" : "ForReading");
                 let result = root.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-                    result = instantiateConditionalType(root, newMapper);
+                    result = instantiateConditionalType(root, newMapper, writing);
                     root.instantiations!.set(id, result);
                 }
                 return result;
@@ -13737,7 +13738,7 @@ namespace ts {
             return type;
         }
 
-        function instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper): Type {
+        function instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper, writing: boolean): Type {
             // Check if we have a conditional type where the check type is a naked type parameter. If so,
             // the conditional type is distributive over union types and when T is instantiated to a union
             // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
@@ -13745,10 +13746,10 @@ namespace ts {
                 const checkType = <TypeParameter>root.checkType;
                 const instantiatedType = mapper(checkType);
                 if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper)));
+                    return mapType(instantiatedType, t => getConditionalType(root, createReplacementMapper(checkType, t, mapper), writing));
                 }
             }
-            return getConditionalType(root, mapper);
+            return getConditionalType(root, mapper, writing);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
@@ -13815,7 +13816,7 @@ namespace ts {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             if (flags & TypeFlags.Conditional) {
-                return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
+                return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper), /*writing*/ false);
             }
             if (flags & TypeFlags.Substitution) {
                 const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
@@ -15747,6 +15748,47 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    if (source.flags & TypeFlags.Conditional) {
+                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                        // and Y1 is related to Y2.
+                        const sourceParams = (source as ConditionalType).root.inferTypeParameters;
+                        let sourceExtends = (<ConditionalType>source).extendsType;
+                        let mapper: TypeMapper | undefined;
+                        if (sourceParams) {
+                            // If the source has infer type parameters, we instantiate them in the context of the target
+                            const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
+                            inferTypes(ctx.inferences, (<ConditionalType>target).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                            sourceExtends = instantiateType(sourceExtends, ctx.mapper);
+                            mapper = ctx.mapper;
+                        }
+                        if (isTypeIdenticalTo(sourceExtends, (<ConditionalType>target).extendsType) &&
+                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
+                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(<ConditionalType>source), mapper), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
+                                result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
+                            }
+                            if (result) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
+                        }
+                    }
+                    const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>target, /*writing*/ true);
+                    if (distributiveConstraint) {
+                        if (result = isRelatedTo(source, distributiveConstraint, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
+                    const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>target, /*writing*/ true);
+                    if (defaultConstraint) {
+                        if (result = isRelatedTo(source, defaultConstraint, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
+                }
 
                 if (source.flags & TypeFlags.TypeVariable) {
                     if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -15787,45 +15829,18 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.Conditional) {
-                    if (target.flags & TypeFlags.Conditional) {
-                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
-                        // and Y1 is related to Y2.
-                        const sourceParams = (source as ConditionalType).root.inferTypeParameters;
-                        let sourceExtends = (<ConditionalType>source).extendsType;
-                        let mapper: TypeMapper | undefined;
-                        if (sourceParams) {
-                            // If the source has infer type parameters, we instantiate them in the context of the target
-                            const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
-                            inferTypes(ctx.inferences, (<ConditionalType>target).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                            sourceExtends = instantiateType(sourceExtends, ctx.mapper);
-                            mapper = ctx.mapper;
-                        }
-                        if (isTypeIdenticalTo(sourceExtends, (<ConditionalType>target).extendsType) &&
-                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
-                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(<ConditionalType>source), mapper), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
-                            }
-                            if (result) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
+                    const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source, /*writing*/ false);
+                    if (distributiveConstraint) {
+                        if (result = isRelatedTo(distributiveConstraint, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
                         }
                     }
-                    else {
-                        const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
-                        if (distributiveConstraint) {
-                            if (result = isRelatedTo(distributiveConstraint, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
-                        }
-                        const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
-                        if (defaultConstraint) {
-                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
+                    const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source, /*writing*/ false);
+                    if (defaultConstraint) {
+                        if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
                         }
                     }
                 }
@@ -18477,7 +18492,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType, /*writing*/ false) : constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function isObjectLiteralType(type: Type) {

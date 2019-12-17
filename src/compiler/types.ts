@@ -4737,7 +4737,9 @@ namespace ts {
         /* @internal */
         resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
-        resolvedDefaultConstraint?: Type;
+        resolvedDefaultConstraintForReading?: Type;
+        /* @internal */
+        resolvedDefaultConstraintForWriting?: Type;
         /* @internal */
         mapper?: TypeMapper;
         /* @internal */

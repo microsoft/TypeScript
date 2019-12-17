@@ -7,6 +7,47 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(37,5): error TS2322: Type '
     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
         Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
+          Type 'T[string]' is not assignable to type 'never'.
+            Type 'T[string]' is not assignable to type 'NonNullable<T[keyof T]>'.
+              Type 'T[keyof T]' is not assignable to type 'never'.
+                Type 'T[keyof T]' is not assignable to type 'NonNullable<T[keyof T]>'.
+                  Type 'T[P]' is not assignable to type 'never'.
+                    Type 'T[P]' is not assignable to type 'NonNullable<T[keyof T]>'.
+                      Type 'T[keyof T]' is not assignable to type 'NonNullable<T[keyof T]>'.
+                        Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[keyof T]>'.
+                          Type 'T[string]' is not assignable to type 'NonNullable<T[keyof T]>'.
+                            Type 'T[string]' is not assignable to type 'never'.
+                              Type 'T[string]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                Type 'T[keyof T]' is not assignable to type 'never'.
+                                  Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                    Type 'T[P]' is not assignable to type 'never'.
+                                      Type 'T[P]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                        Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                          Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                            Type 'T[string]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+                                              Type 'T[string]' is not assignable to type 'never'.
+                                                Type 'T[string]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                  Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                    Type 'T[keyof T]' is not assignable to type 'never'.
+                                                      Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                        Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                          Type 'T[P]' is not assignable to type 'never'.
+                                                            Type 'T[P]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                              Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                                Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                                  Type 'T[string]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+                                                                    Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                      Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                        Type 'T[P]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                          Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                            Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                              Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+                                                                                Type 'T[string]' is not assignable to type 'never'.
+                                                                                  Type 'T[keyof T]' is not assignable to type 'never'.
+                                                                                    Type 'T[P]' is not assignable to type 'never'.
+                                                                                      Type 'T[keyof T]' is not assignable to type 'never'.
+                                                                                        Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'never'.
+                                                                                          Type 'T[string]' is not assignable to type 'never'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(38,5): error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(39,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(42,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
@@ -77,6 +118,47 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
 !!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
 !!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
 !!! error TS2322:         Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322:           Type 'T[string]' is not assignable to type 'never'.
+!!! error TS2322:             Type 'T[string]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:               Type 'T[keyof T]' is not assignable to type 'never'.
+!!! error TS2322:                 Type 'T[keyof T]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:                   Type 'T[P]' is not assignable to type 'never'.
+!!! error TS2322:                     Type 'T[P]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:                       Type 'T[keyof T]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:                         Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:                           Type 'T[string]' is not assignable to type 'NonNullable<T[keyof T]>'.
+!!! error TS2322:                             Type 'T[string]' is not assignable to type 'never'.
+!!! error TS2322:                               Type 'T[string]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                 Type 'T[keyof T]' is not assignable to type 'never'.
+!!! error TS2322:                                   Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                     Type 'T[P]' is not assignable to type 'never'.
+!!! error TS2322:                                       Type 'T[P]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                         Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                           Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                             Type 'T[string]' is not assignable to type 'NonNullable<T[string | number | symbol]>'.
+!!! error TS2322:                                               Type 'T[string]' is not assignable to type 'never'.
+!!! error TS2322:                                                 Type 'T[string]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                   Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                     Type 'T[keyof T]' is not assignable to type 'never'.
+!!! error TS2322:                                                       Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                         Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                           Type 'T[P]' is not assignable to type 'never'.
+!!! error TS2322:                                                             Type 'T[P]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                               Type 'T[keyof T]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                 Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                   Type 'T[string]' is not assignable to type 'NonNullable<T[string]> | NonNullable<T[number]> | NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                     Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                       Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                         Type 'T[P]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                           Type 'T[keyof T]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                             Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                               Type 'T[string]' is not assignable to type 'NonNullable<T[symbol]>'.
+!!! error TS2322:                                                                                 Type 'T[string]' is not assignable to type 'never'.
+!!! error TS2322:                                                                                   Type 'T[keyof T]' is not assignable to type 'never'.
+!!! error TS2322:                                                                                     Type 'T[P]' is not assignable to type 'never'.
+!!! error TS2322:                                                                                       Type 'T[keyof T]' is not assignable to type 'never'.
+!!! error TS2322:                                                                                         Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'never'.
+!!! error TS2322:                                                                                           Type 'T[string]' is not assignable to type 'never'.
         w = y;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
