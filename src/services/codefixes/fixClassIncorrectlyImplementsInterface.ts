@@ -34,7 +34,7 @@ namespace ts.codefix {
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
-        return !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
+        return !symbol.valueDeclaration || !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
     }
 
     function addMissingDeclarations(
