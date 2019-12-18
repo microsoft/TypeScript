@@ -622,6 +622,7 @@ namespace ts.server {
         }
 
         positionToLineOffset(position: number): protocol.Location {
+            failIfInvalidPosition(position);
             const location = this.textStorage.positionToLineOffset(position);
             failIfInvalidLocation(location);
             return location;
@@ -645,7 +646,11 @@ namespace ts.server {
         }
     }
 
-    /*@internal*/
+    function failIfInvalidPosition(position: number) {
+        Debug.assert(typeof position === "number", `Expected position ${position} to be a number.`);
+        Debug.assert(position >= 0, `Expected position to be non-negative.`);
+    }
+
     function failIfInvalidLocation(location: protocol.Location) {
         Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
         Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
