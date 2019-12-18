@@ -383,23 +383,26 @@ declare namespace ts {
         JSDocAugmentsTag = 305,
         JSDocAuthorTag = 306,
         JSDocClassTag = 307,
-        JSDocCallbackTag = 308,
-        JSDocEnumTag = 309,
-        JSDocParameterTag = 310,
-        JSDocReturnTag = 311,
-        JSDocThisTag = 312,
-        JSDocTypeTag = 313,
-        JSDocTemplateTag = 314,
-        JSDocTypedefTag = 315,
-        JSDocPropertyTag = 316,
-        SyntaxList = 317,
-        NotEmittedStatement = 318,
-        PartiallyEmittedExpression = 319,
-        CommaListExpression = 320,
-        MergeDeclarationMarker = 321,
-        EndOfDeclarationMarker = 322,
-        SyntheticReferenceExpression = 323,
-        Count = 324,
+        JSDocPublicTag = 308,
+        JSDocPrivateTag = 309,
+        JSDocProtectedTag = 310,
+        JSDocCallbackTag = 311,
+        JSDocEnumTag = 312,
+        JSDocParameterTag = 313,
+        JSDocReturnTag = 314,
+        JSDocThisTag = 315,
+        JSDocTypeTag = 316,
+        JSDocTemplateTag = 317,
+        JSDocTypedefTag = 318,
+        JSDocPropertyTag = 319,
+        SyntaxList = 320,
+        NotEmittedStatement = 321,
+        PartiallyEmittedExpression = 322,
+        CommaListExpression = 323,
+        MergeDeclarationMarker = 324,
+        EndOfDeclarationMarker = 325,
+        SyntheticReferenceExpression = 326,
+        Count = 327,
         FirstAssignment = 62,
         LastAssignment = 74,
         FirstCompoundAssignment = 63,
@@ -428,9 +431,9 @@ declare namespace ts {
         LastStatement = 240,
         FirstNode = 152,
         FirstJSDocNode = 292,
-        LastJSDocNode = 316,
+        LastJSDocNode = 319,
         FirstJSDocTagNode = 304,
-        LastJSDocTagNode = 316,
+        LastJSDocTagNode = 319,
     }
     export enum NodeFlags {
         None = 0,
@@ -1619,6 +1622,15 @@ declare namespace ts {
     }
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+    export interface JSDocPublicTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPublicTag;
+    }
+    export interface JSDocPrivateTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPrivateTag;
+    }
+    export interface JSDocProtectedTag extends JSDocTag {
+        kind: SyntaxKind.JSDocProtectedTag;
     }
     export interface JSDocEnumTag extends JSDocTag, Declaration {
         parent: JSDoc;
@@ -3454,6 +3466,12 @@ declare namespace ts {
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    /** Gets the JSDoc public tag for the node if present */
+    function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined;
+    /** Gets the JSDoc private tag for the node if present */
+    function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined;
+    /** Gets the JSDoc protected tag for the node if present */
+    function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
@@ -3658,6 +3676,9 @@ declare namespace ts {
     function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
+    function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
+    function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
+    function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocThisTag(node: Node): node is JSDocThisTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;

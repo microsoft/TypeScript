@@ -4125,6 +4125,15 @@ namespace ts {
             }
         }
 
+        if (isInJSFile(node) && !!node.parent) {
+            // getModifierFlagsNoCache should only be called when parent pointers are set,
+            // or when !(node.flags & NodeFlags.Synthesized) && node.kind !== SyntaxKind.SourceFile)
+            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
+                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
+                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
+            flags |= tags;
+        }
+
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }

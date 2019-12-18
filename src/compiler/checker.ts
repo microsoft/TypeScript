@@ -5838,6 +5838,8 @@ namespace ts {
                     initializer: Expression | undefined
                 ) => T, methodKind: SyntaxKind, useAccessors: boolean): (p: Symbol, isStatic: boolean, baseType: Type | undefined) => (T | AccessorDeclaration | (T | AccessorDeclaration)[]) {
                     return function serializePropertySymbol(p: Symbol, isStatic: boolean, baseType: Type | undefined) {
+                        const modifierFlags = getDeclarationModifierFlagsFromSymbol(p);
+                        const isPrivate = !!(modifierFlags & ModifierFlags.Private);
                         if (isStatic && (p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias))) {
                             // Only value-only-meaning symbols can be correctly encoded as class statics, type/namespace/alias meaning symbols
                             // need to be merged namespace members
@@ -5849,7 +5851,7 @@ namespace ts {
                             && isTypeIdenticalTo(getTypeOfSymbol(p), getTypeOfPropertyOfType(baseType, p.escapedName)!))) {
                             return [];
                         }
-                        const staticFlag = isStatic ? ModifierFlags.Static : 0;
+                        const flag = modifierFlags | (isStatic ? ModifierFlags.Static : 0);
                         const name = getPropertyNameNodeForSymbol(p, context);
                         const firstPropertyLikeDecl = find(p.declarations, or(isPropertyDeclaration, isAccessor, isVariableDeclaration, isPropertySignature, isBinaryExpression, isPropertyAccessExpression));
                         if (p.flags & SymbolFlags.Accessor && useAccessors) {
@@ -5857,7 +5859,7 @@ namespace ts {
                             if (p.flags & SymbolFlags.SetAccessor) {
                                 result.push(setTextRange(createSetAccessor(
                                     /*decorators*/ undefined,
-                                    createModifiersFromModifierFlags(staticFlag),
+                                    createModifiersFromModifierFlags(flag),
                                     name,
                                     [createParameter(
                                         /*decorators*/ undefined,
@@ -5865,18 +5867,19 @@ namespace ts {
                                         /*dotDotDotToken*/ undefined,
                                         "arg",
                                         /*questionToken*/ undefined,
-                                        serializeTypeForDeclaration(getTypeOfSymbol(p), p)
+                                        isPrivate ? undefined : serializeTypeForDeclaration(getTypeOfSymbol(p), p)
                                     )],
                                     /*body*/ undefined
                                 ), find(p.declarations, isSetAccessor) || firstPropertyLikeDecl));
                             }
                             if (p.flags & SymbolFlags.GetAccessor) {
+                                const isPrivate = modifierFlags & ModifierFlags.Private;
                                 result.push(setTextRange(createGetAccessor(
                                     /*decorators*/ undefined,
-                                    createModifiersFromModifierFlags(staticFlag),
+                                    createModifiersFromModifierFlags(flag),
                                     name,
                                     [],
-                                    serializeTypeForDeclaration(getTypeOfSymbol(p), p),
+                                    isPrivate ? undefined : serializeTypeForDeclaration(getTypeOfSymbol(p), p),
                                     /*body*/ undefined
                                 ), find(p.declarations, isGetAccessor) || firstPropertyLikeDecl));
                             }
@@ -5887,10 +5890,10 @@ namespace ts {
                         else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable)) {
                             return setTextRange(createProperty(
                                 /*decorators*/ undefined,
-                                createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | staticFlag),
+                                createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag),
                                 name,
                                 p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
-                                serializeTypeForDeclaration(getTypeOfSymbol(p), p),
+                                isPrivate ? undefined : serializeTypeForDeclaration(getTypeOfSymbol(p), p),
                                 // TODO: https://github.com/microsoft/TypeScript/pull/32372#discussion_r328386357
                                 // interface members can't have initializers, however class members _can_
                                 /*initializer*/ undefined
@@ -5899,13 +5902,24 @@ namespace ts {
                         if (p.flags & (SymbolFlags.Method | SymbolFlags.Function)) {
                             const type = getTypeOfSymbol(p);
                             const signatures = getSignaturesOfType(type, SignatureKind.Call);
+                            if (flag & ModifierFlags.Private) {
+                                return setTextRange(createProperty(
+                                    /*decorators*/ undefined,
+                                    createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag),
+                                    name,
+                                    p.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                                    /*type*/ undefined,
+                                    /*initializer*/ undefined
+                                ), find(p.declarations, isFunctionLikeDeclaration) || signatures[0] && signatures[0].declaration || p.declarations[0]);
+                            }
+
                             const results = [];
                             for (const sig of signatures) {
                                 // Each overload becomes a separate method declaration, in order
                                 const decl = signatureToSignatureDeclarationHelper(sig, methodKind, context) as MethodDeclaration;
                                 decl.name = name; // TODO: Clone
-                                if (staticFlag) {
-                                    decl.modifiers = createNodeArray(createModifiersFromModifierFlags(staticFlag));
+                                if (flag) {
+                                    decl.modifiers = createNodeArray(createModifiersFromModifierFlags(flag));
                                 }
                                 if (p.flags & SymbolFlags.Optional) {
                                     decl.questionToken = createToken(SyntaxKind.QuestionToken);
@@ -6092,6 +6106,20 @@ namespace ts {
                                     return []; // Every signature was identical - elide constructor list as it is inherited
                                 }
                             }
+                        }
+                        let privateProtected: ModifierFlags = 0;
+                        for (const s of signatures) {
+                            if (s.declaration) {
+                                privateProtected |= getSelectedModifierFlags(s.declaration, ModifierFlags.Private | ModifierFlags.Protected);
+                            }
+                        }
+                        if (privateProtected) {
+                            return [setTextRange(createConstructor(
+                                /*decorators*/ undefined,
+                                createModifiersFromModifierFlags(privateProtected),
+                                /*parameters*/ [],
+                                /*body*/ undefined,
+                            ), signatures[0].declaration)];
                         }
                     }
 
