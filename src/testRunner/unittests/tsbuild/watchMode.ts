@@ -810,7 +810,7 @@ export function gfoo() {
                             [aDts, [aDts]],
                             [bDts, [bDts, aDts]],
                             [refs.path, [refs.path]],
-                            [cTs.path, [cTs.path, refs.path, bDts]]
+                            [cTs.path, [cTs.path, refs.path, bDts, aDts]]
                         ];
 
                         function createSolutionAndWatchMode() {
@@ -965,7 +965,7 @@ export function gfoo() {
                                     [aDts, [aDts]],
                                     [bDts, [bDts, aDts]],
                                     [nrefs.path, [nrefs.path]],
-                                    [cTs.path, [cTs.path, nrefs.path, bDts]]
+                                    [cTs.path, [cTs.path, nrefs.path, bDts, aDts]]
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(cTsconfig.path, cTsconfig.content),
@@ -1001,7 +1001,7 @@ export function gfoo() {
                                     [nrefs.path, [nrefs.path]],
                                     [bDts, [bDts, nrefs.path]],
                                     [refs.path, [refs.path]],
-                                    [cTs.path, [cTs.path, refs.path, bDts]],
+                                    [cTs.path, [cTs.path, refs.path, bDts, nrefs.path]],
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(bTsconfig.path, bTsconfig.content),
@@ -1055,7 +1055,7 @@ export function gfoo() {
                                     [aTs.path, [aTs.path]],
                                     [bDts, [bDts, aTs.path]],
                                     [refs.path, [refs.path]],
-                                    [cTs.path, [cTs.path, refs.path, bDts]],
+                                    [cTs.path, [cTs.path, refs.path, bDts, aTs.path]],
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(aTsconfig.path, aTsconfig.content),
@@ -1093,7 +1093,7 @@ export function gfoo() {
                                 [aDts, [aDts]],
                                 [bDts, [bDts, aDts]],
                                 [refs.path, [refs.path]],
-                                [cTsFile.path, [cTsFile.path, refs.path, bDts]]
+                                [cTsFile.path, [cTsFile.path, refs.path, bDts, aDts]]
                             ];
                             function getOutputFileStamps(host: TsBuildWatchSystem) {
                                 return expectedFiles.map(file => transformOutputToOutputFileStamp(file, host));

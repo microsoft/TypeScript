@@ -274,7 +274,6 @@ export interface Session {
   "version": "FakeTSVersion"
 }
 
-//// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
 
 Output::
 >> Screen clear
@@ -293,11 +292,10 @@ Output::
 12:01:24 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
-12:01:26 AM - Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+src/main/index.ts(3,14): error TS2741: Property 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
 
-
-12:01:27 AM - Found 0 errors. Watching for file changes.
+12:01:25 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
@@ -322,6 +320,7 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/out/pure/session.d.ts
 /user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
@@ -412,26 +411,26 @@ export interface Session {
 
 Output::
 >> Screen clear
-12:01:31 AM - File change detected. Starting incremental compilation...
+12:01:29 AM - File change detected. Starting incremental compilation...
 
 
-12:01:32 AM - Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+12:01:30 AM - Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
 
 
-12:01:33 AM - Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+12:01:31 AM - Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
-12:01:49 AM - Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
+12:01:47 AM - Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
 
-12:01:50 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+12:01:48 AM - Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
-12:01:52 AM - Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+12:01:50 AM - Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 
 
-12:01:53 AM - Found 0 errors. Watching for file changes.
+12:01:51 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
@@ -456,6 +455,7 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/out/pure/session.d.ts
 /user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:

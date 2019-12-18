@@ -337,7 +337,7 @@ export declare function createDog(): Dog;
         "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
         "signature": "1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"
       },
-      "../../core/utilities.ts": {
+      "../core/utilities.d.ts": {
         "version": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",
         "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
       },
@@ -385,7 +385,7 @@ export declare function createDog(): Dog;
       "../../animals/animal.ts",
       "../../animals/dog.ts",
       "../../animals/index.ts",
-      "../../core/utilities.ts"
+      "../core/utilities.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -416,15 +416,15 @@ export declare function createZoo(): Array<Dog>;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../../animals/animal.ts": {
+      "../animals/animal.d.ts": {
         "version": "-10510161654-export declare type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n",
         "signature": "-10510161654-export declare type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"
       },
-      "../../animals/dog.ts": {
+      "../animals/dog.d.ts": {
         "version": "6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n",
         "signature": "6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"
       },
-      "../../animals/index.ts": {
+      "../animals/index.d.ts": {
         "version": "1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n",
         "signature": "1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"
       },
@@ -449,35 +449,35 @@ export declare function createZoo(): Array<Dog>;
       "configFilePath": "../../zoo/tsconfig.json"
     },
     "referencedMap": {
-      "../../animals/dog.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../../animals/index.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
       "../../zoo/zoo.ts": [
         "../animals/index.d.ts"
+      ],
+      "../animals/dog.d.ts": [
+        "../animals/index.d.ts"
+      ],
+      "../animals/index.d.ts": [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../../animals/index.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
       "../../zoo/zoo.ts": [
         "../animals/index.d.ts"
+      ],
+      "../animals/dog.d.ts": [
+        "../animals/index.d.ts"
+      ],
+      "../animals/index.d.ts": [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
-      "../../animals/animal.ts",
-      "../../animals/dog.ts",
-      "../../animals/index.ts",
-      "../../zoo/zoo.ts"
+      "../../zoo/zoo.ts",
+      "../animals/animal.d.ts",
+      "../animals/dog.d.ts",
+      "../animals/index.d.ts"
     ]
   },
   "version": "FakeTSVersion"
