@@ -2703,12 +2703,6 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    // function toLanguageServiceTextSpan(textSpan: protocol.TextSpan, scriptInfo: ScriptInfo): TextSpan {
-    //     const start = scriptInfo.lineOffsetToPosition(textSpan.start.line, textSpan.start.offset);
-    //     const end = scriptInfo.lineOffsetToPosition(textSpan.end.line, textSpan.end.offset);
-    //     return { start, length: end - start };
-    // }
-
     function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
         return {
             start: scriptInfo.positionToLineOffset(textSpan.start),
