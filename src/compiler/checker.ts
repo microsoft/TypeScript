@@ -6107,14 +6107,18 @@ namespace ts {
                                 }
                             }
                         }
-                        if (signatures.some(s => s.declaration && getModifierFlags(s.declaration) & ModifierFlags.Private)) {
-                            return [setTextRange(createProperty(
+                        let privateProtected: ModifierFlags = 0;
+                        for (const s of signatures) {
+                            if (s.declaration) {
+                                privateProtected |= getSelectedModifierFlags(s.declaration, ModifierFlags.Private | ModifierFlags.Protected);
+                            }
+                        }
+                        if (privateProtected) {
+                            return [setTextRange(createConstructor(
                                 /*decorators*/ undefined,
-                                createModifiersFromModifierFlags(ModifierFlags.Private),
-                                "constructor",
-                                /*questionOrExclamationToken*/ undefined,
-                                /*type*/ undefined,
-                                /*initializer*/ undefined
+                                createModifiersFromModifierFlags(privateProtected),
+                                /*parameters*/ [],
+                                /*body*/ undefined,
                             ), signatures[0].declaration)];
                         }
                     }

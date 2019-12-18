@@ -1,8 +1,7 @@
 // @allowJs: true
 // @checkJs: true
 // @target: esnext
-// @out: foo.js
-// @declaration: true
+// @noEmit: true
 // @Filename: jsdocAccessibilityTag.js
 
 class A {
@@ -66,19 +65,3 @@ new A().priv + new A().prot + new A().pub
 new B().priv + new B().prot + new B().pub
 new C().priv2 + new C().prot2 + new C().pub2
 new D().priv2 + new D().prot2 + new D().pub2
-
-class Privacy {
-    /** @private */
-    constructor(c) {
-        /** @private */
-        this.c = c
-    }
-    /** @private */
-    m() {
-        return this.c
-    }
-    /** @private */
-    get p() { return this.c }
-    /** @private */
-    set p(value) { this.c = value }
-}

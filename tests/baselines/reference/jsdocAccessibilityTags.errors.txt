@@ -99,19 +99,3 @@ tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(61,25): error TS2445: Pro
                             ~~~~~
 !!! error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
     
-    class Privacy {
-        /** @private */
-        constructor(c) {
-            /** @private */
-            this.c = c
-        }
-        /** @private */
-        m() {
-            return this.c
-        }
-        /** @private */
-        get p() { return this.c }
-        /** @private */
-        set p(value) { this.c = value }
-    }
-    
