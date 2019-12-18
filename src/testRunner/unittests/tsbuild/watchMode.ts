@@ -12,21 +12,7 @@ namespace ts.tscWatch {
 
     export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderHost(system);
-        host.now = system.now.bind(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
-    }
-
-    export function createSolutionBuilderWithWatchHost(system: WatchedSystem) {
-        const host = ts.createSolutionBuilderWithWatchHost(system);
-        host.now = system.now.bind(system);
-        return host;
-    }
-
-    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
-        const host = createSolutionBuilderWithWatchHost(system);
-        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
-        solutionBuilder.build();
-        return solutionBuilder;
     }
 
     type OutputFileStamp = [string, Date | undefined, boolean];
@@ -35,6 +21,7 @@ namespace ts.tscWatch {
     }
 
     describe("unittests:: tsbuild:: watchMode:: program updates", () => {
+        const scenario = "programUpdates";
         const project = "sample1";
         const enum SubProject {
             core = "core",
@@ -99,19 +86,14 @@ namespace ts.tscWatch {
             return result;
         }
 
-        function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: readonly string[], modifiedTimeStampFiles: readonly string[]) {
-            for (let i = 0; i < oldTimeStamps.length; i++) {
-                const actual = actualStamps[i];
-                const old = oldTimeStamps[i];
-                const expectedIsChanged = contains(changedFiles, actual[0]);
-                assert.equal(actual[2], contains(changedFiles, actual[0]), `Expected ${actual[0]} to be written.`);
-                if (expectedIsChanged || contains(modifiedTimeStampFiles, actual[0])) {
-                    assert.isTrue((actual[1] || 0) > (old[1] || 0), `${actual[0]} file expected to have newer modified time because it is expected to ${expectedIsChanged ? "be changed" : "have modified time stamp"}`);
-                }
-                else {
-                    assert.equal(actual[1], old[1], `${actual[0]} expected to not change or have timestamp modified.`);
-                }
-            }
+        function changeFile(sys: WatchedSystem, fileName: string, content: string, caption: string) {
+            sys.writeFile(fileName, content);
+            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
+            return caption;
+        }
+
+        function changeCore(sys: WatchedSystem, content: string, caption: string) {
+            return changeFile(sys, core[1].path, content, caption);
         }
 
         let core: SubProjectFiles;
@@ -142,32 +124,18 @@ namespace ts.tscWatch {
             testProjectExpectedWatchedDirectoriesRecursive = undefined!;
         });
 
-        function createSolutionInWatchMode(allFiles: readonly File[], defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
-            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], defaultOptions);
-            verifyWatches(host);
-            checkOutputErrorsInitial(host, emptyArray, disableConsoleClears);
-            const outputFileStamps = getOutputFileStamps(host);
-            for (const stamp of outputFileStamps) {
-                assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
-            }
-            return host;
-        }
-
-        function verifyWatches(host: TsBuildWatchSystem) {
-            checkWatchedFiles(host, testProjectExpectedWatchedFiles);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
-        }
-
-        it("creates solution in watch mode", () => {
-            createSolutionInWatchMode(allFiles);
+        verifyTscWatch({
+            scenario,
+            subScenario: "creates solution in watch mode",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
+            sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+            changes: emptyArray
         });
 
         it("verify building references watches only those projects", () => {
             const system = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             const host = createSolutionBuilderWithWatchHost(system);
-            const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
+            const solutionBuilder = createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { watch: true });
             solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
 
             checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));
@@ -193,252 +161,188 @@ namespace ts.tscWatch {
                 content: `export const newFileConst = 30;`
             };
 
-            function verifyProjectChanges(allFilesGetter: () => readonly File[]) {
-                function createSolutionInWatchModeToVerifyChanges(additionalFiles?: readonly [SubProject, string][]) {
-                    const host = createSolutionInWatchMode(allFilesGetter());
-                    return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
-
-                    function verifyChangeWithFile(fileName: string, content: string, local?: boolean) {
-                        const outputFileStamps = getOutputFileStamps(host, additionalFiles);
-                        host.writeFile(fileName, content);
-                        verifyChangeAfterTimeout(outputFileStamps, local);
-                    }
-
-                    function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[], local?: boolean) {
-                        host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                        const changedCore = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(
-                            changedCore,
-                            outputFileStamps,
-                            additionalFiles ?
-                                getOutputFileNames(SubProject.core, newFileWithoutExtension) :
-                                getOutputFileNames(SubProject.core, "index"), // Written files are new file or core index file thats changed
-                            [
-                                ...getOutputFileNames(SubProject.core, "anotherModule"),
-                                ...(additionalFiles ? getOutputFileNames(SubProject.core, "index") : emptyArray)
-                            ]
-                        );
-                        host.checkTimeoutQueueLengthAndRun(1); // Builds logic or updates timestamps
-                        const changedLogic = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(
-                            changedLogic,
-                            changedCore,
-                            additionalFiles || local ?
-                                emptyArray :
-                                getOutputFileNames(SubProject.logic, "index"),
-                            additionalFiles || local ?
-                                getOutputFileNames(SubProject.logic, "index") :
-                                emptyArray
-                        );
-                        host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-                        const changedTests = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(
-                            changedTests,
-                            changedLogic,
-                            additionalFiles || local ?
-                                emptyArray :
-                                getOutputFileNames(SubProject.tests, "index"),
-                            additionalFiles || local ?
-                                getOutputFileNames(SubProject.tests, "index") :
-                                emptyArray
-                        );
-                        host.checkTimeoutQueueLength(0);
-                        checkOutputErrorsIncremental(host, emptyArray);
-                        verifyWatches();
-                    }
-
-                    function verifyWatches() {
-                        checkWatchedFiles(host, additionalFiles ? testProjectExpectedWatchedFiles.concat(newFile.path) : testProjectExpectedWatchedFiles);
-                        checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                        checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
-                    }
+            function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
+                function buildLogicOrUpdateTimeStamps(sys: WatchedSystem) {
+                    sys.checkTimeoutQueueLengthAndRun(1); // Builds logic or updates timestamps
+                    return "Build logic or update time stamps";
                 }
 
-                it("change builds changes and reports found errors message", () => {
-                    const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = createSolutionInWatchModeToVerifyChanges();
-                    verifyChange(`${core[1].content}
-export class someClass { }`);
-
-                    // Another change requeues and builds it
-                    verifyChange(core[1].content);
-
-                    // Two changes together report only single time message: File change detected. Starting incremental compilation...
-                    const outputFileStamps = getOutputFileStamps(host);
-                    const change1 = `${core[1].content}
+                function buildTests(sys: WatchedSystem) {
+                    sys.checkTimeoutQueueLengthAndRun(1); // Build tests
+                    sys.checkTimeoutQueueLength(0);
+                    return "Build Tests";
+                }
+                verifyTscWatch({
+                    scenario,
+                    subScenario: `${subScenario}/change builds changes and reports found errors message`,
+                    commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
+                    sys: () => createWatchedSystem(
+                        allFilesGetter(),
+                        { currentDirectory: projectsLocation }
+                    ),
+                    changes: [
+                        sys => changeCore(sys, `${core[1].content}
+export class someClass { }`, "Make change to core"),
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests,
+                        // Another change requeues and builds it
+                        sys => changeCore(sys, core[1].content, "Revert core file"),
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests,
+                        sys => {
+                            const change1 = `${core[1].content}
 export class someClass { }`;
-                    host.writeFile(core[1].path, change1);
-                    host.writeFile(core[1].path, `${change1}
+                            sys.writeFile(core[1].path, change1);
+                            assert.equal(sys.writtenFiles.size, 1);
+                            sys.writtenFiles.clear();
+                            sys.writeFile(core[1].path, `${change1}
 export class someClass2 { }`);
-                    verifyChangeAfterTimeout(outputFileStamps);
-
-                    function verifyChange(coreContent: string) {
-                        verifyChangeWithFile(core[1].path, coreContent);
-                    }
+                            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
+                            return "Make two changes";
+                        },
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests,
+                    ]
                 });
 
-                it("non local change does not start build of referencing projects", () => {
-                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges();
-                    verifyChangeWithFile(core[1].path, `${core[1].content}
-function foo() { }`, /*local*/ true);
+                verifyTscWatch({
+                    scenario,
+                    subScenario: `${subScenario}/non local change does not start build of referencing projects`,
+                    commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
+                    sys: () => createWatchedSystem(
+                        allFilesGetter(),
+                        { currentDirectory: projectsLocation }
+                    ),
+                    changes: [
+                        sys => changeCore(sys, `${core[1].content}
+function foo() { }`, "Make local change to core"),
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests
+                    ]
                 });
 
-                it("builds when new file is added, and its subsequent updates", () => {
-                    const additionalFiles: readonly [SubProject, string][] = [[SubProject.core, newFileWithoutExtension]];
-                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additionalFiles);
-                    verifyChange(newFile.content);
-
-                    // Another change requeues and builds it
-                    verifyChange(`${newFile.content}
-export class someClass2 { }`);
-
-                    function verifyChange(newFileContent: string) {
-                        verifyChangeWithFile(newFile.path, newFileContent);
-                    }
+                function changeNewFile(sys: WatchedSystem, newFileContent: string) {
+                    return changeFile(sys, newFile.path, newFileContent, "Change to new File and build core");
+                }
+                verifyTscWatch({
+                    scenario,
+                    subScenario: `${subScenario}/builds when new file is added, and its subsequent updates`,
+                    commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
+                    sys: () => createWatchedSystem(
+                        allFilesGetter(),
+                        { currentDirectory: projectsLocation }
+                    ),
+                    changes: [
+                        sys => changeNewFile(sys, newFile.content),
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests,
+                        sys => changeNewFile(sys, `${newFile.content}
+export class someClass2 { }`),
+                        buildLogicOrUpdateTimeStamps,
+                        buildTests
+                    ]
                 });
             }
 
             describe("with simple project reference graph", () => {
-                verifyProjectChanges(() => allFiles);
+                verifyProjectChanges(
+                    "with simple project reference graph",
+                    () => allFiles
+                );
             });
 
             describe("with circular project reference", () => {
-                verifyProjectChanges(() => {
-                    const [coreTsconfig, ...otherCoreFiles] = core;
-                    const circularCoreConfig: File = {
-                        path: coreTsconfig.path,
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true },
-                            references: [{ path: "../tests", circular: true }]
-                        })
-                    };
-                    return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
-                });
+                verifyProjectChanges(
+                    "with circular project reference",
+                    () => {
+                        const [coreTsconfig, ...otherCoreFiles] = core;
+                        const circularCoreConfig: File = {
+                            path: coreTsconfig.path,
+                            content: JSON.stringify({
+                                compilerOptions: { composite: true, declaration: true },
+                                references: [{ path: "../tests", circular: true }]
+                            })
+                        };
+                        return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
+                    }
+                );
             });
         });
 
-        it("watches config files that are not present", () => {
-            const allFiles = [libFile, ...core, logic[1], ...tests];
-            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase()));
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
-            checkOutputErrorsInitial(host, [
-                createCompilerDiagnostic(Diagnostics.File_0_not_found, logic[0].path)
-            ]);
-            for (const f of [
-                ...getOutputFileNames(SubProject.core, "anotherModule"),
-                ...getOutputFileNames(SubProject.core, "index")
-            ]) {
-                assert.isTrue(host.fileExists(f), `${f} expected to be present`);
-            }
-            for (const f of [
-                ...getOutputFileNames(SubProject.logic, "index"),
-                ...getOutputFileNames(SubProject.tests, "index")
-            ]) {
-                assert.isFalse(host.fileExists(f), `${f} expected to be absent`);
-            }
-
-            // Create tsconfig file for logic and see that build succeeds
-            const initial = getOutputFileStamps(host);
-            host.writeFile(logic[0].path, logic[0].content);
-            host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-            const changedLogic = getOutputFileStamps(host);
-            verifyChangedFiles(changedLogic, initial, getOutputFileNames(SubProject.logic, "index"), emptyArray);
-            host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-            const changedTests = getOutputFileStamps(host);
-            verifyChangedFiles(changedTests, changedLogic, getOutputFileNames(SubProject.tests, "index"), emptyArray);
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, emptyArray);
-            verifyWatches(host);
+        verifyTscWatch({
+            scenario,
+            subScenario: "watches config files that are not present",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
+            sys: () => createWatchedSystem(
+                [libFile, ...core, logic[1], ...tests],
+                { currentDirectory: projectsLocation }
+            ),
+            changes: [
+                sys => {
+                    sys.writeFile(logic[0].path, logic[0].content);
+                    sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                    return "Write logic tsconfig and build logic";
+                },
+                sys => {
+                    sys.checkTimeoutQueueLengthAndRun(1); // Builds tests
+                    sys.checkTimeoutQueueLength(0);
+                    return "Build tests";
+                }
+            ]
         });
 
-        it("when referenced using prepend, builds referencing project even for non local change", () => {
-            const coreTsConfig: File = {
-                path: core[0].path,
-                content: JSON.stringify({
-                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
-                })
-            };
-            const coreIndex: File = {
-                path: core[1].path,
-                content: `function foo() { return 10; }`
-            };
-            const logicTsConfig: File = {
-                path: logic[0].path,
-                content: JSON.stringify({
-                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
-                    references: [{ path: "../core", prepend: true }]
-                })
-            };
-            const logicIndex: File = {
-                path: logic[1].path,
-                content: `function bar() { return foo() + 1 };`
-            };
-
-            const projectFiles = [coreTsConfig, coreIndex, logicTsConfig, logicIndex];
-            const host = createTsBuildWatchSystem([libFile, ...projectFiles], { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.logic}`]);
-            verifyWatches();
-            checkOutputErrorsInitial(host, emptyArray);
-            const outputFileStamps = getOutputFileStamps();
-            for (const stamp of outputFileStamps) {
-                assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
+        describe("when referenced using prepend, builds referencing project even for non local change", () => {
+            let coreIndex: File;
+            before(() => {
+                coreIndex = {
+                    path: core[1].path,
+                    content: `function foo() { return 10; }`
+                };
+            });
+            after(() => {
+                coreIndex = undefined!;
+            });
+            function buildLogic(sys: WatchedSystem) {
+                sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                sys.checkTimeoutQueueLength(0);
+                return "Build logic";
             }
-
-            // Make non local change
-            verifyChangeInCore(`${coreIndex.content}
-function myFunc() { return 10; }`);
-
-            // TODO:: local change does not build logic.js because builder doesnt find any changes in input files to generate output
-            // Make local change to function bar
-            verifyChangeInCore(`${coreIndex.content}
-function myFunc() { return 100; }`, /*isLocal*/ true);
-
-            function verifyChangeInCore(content: string, isLocal?: boolean) {
-                const outputFileStamps = getOutputFileStamps();
-                host.writeFile(coreIndex.path, content);
-
-                host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                const changedCore = getOutputFileStamps();
-                verifyChangedFiles(
-                    changedCore,
-                    outputFileStamps,
-                    getOutputFileNames(SubProject.core, "index"),
-                    emptyArray
-                );
-                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                const changedLogicOutput = getOutputFileNames(SubProject.logic, "index");
-                const changedLogic = getOutputFileStamps();
-                verifyChangedFiles(
-                    changedLogic,
-                    changedCore,
-                    // Only js file is written and d.ts is modified timestamp if its local change
-                    isLocal ? [changedLogicOutput[0]] : getOutputFileNames(SubProject.logic, "index"),
-                    isLocal ? [changedLogicOutput[1]] : emptyArray
-                );
-                host.checkTimeoutQueueLength(0);
-                checkOutputErrorsIncremental(host, emptyArray);
-                verifyWatches();
-            }
-
-            function getOutputFileStamps(): OutputFileStamp[] {
-                const result = [
-                    ...getOutputStamps(host, SubProject.core, "index"),
-                    ...getOutputStamps(host, SubProject.logic, "index"),
-                ];
-                host.writtenFiles.clear();
-                return result;
-            }
-
-            function verifyWatches() {
-                checkWatchedFiles(host, projectFiles.map(f => f.path));
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
-            }
+            verifyTscWatch({
+                scenario,
+                subScenario: "when referenced using prepend builds referencing project even for non local change",
+                commandLineArgs: ["-b", "-w", `${project}/${SubProject.logic}`],
+                sys: () => {
+                    const coreTsConfig: File = {
+                        path: core[0].path,
+                        content: JSON.stringify({
+                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
+                        })
+                    };
+                    const logicTsConfig: File = {
+                        path: logic[0].path,
+                        content: JSON.stringify({
+                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                            references: [{ path: "../core", prepend: true }]
+                        })
+                    };
+                    const logicIndex: File = {
+                        path: logic[1].path,
+                        content: `function bar() { return foo() + 1 };`
+                    };
+                    return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: projectsLocation });
+                },
+                changes: [
+                    sys => changeCore(sys, `${coreIndex.content}
+function myFunc() { return 10; }`, "Make non local change and build core"),
+                    buildLogic,
+                    sys => changeCore(sys, `${coreIndex.content}
+function myFunc() { return 100; }`, "Make local change and build core"),
+                    buildLogic,
+                ]
+            });
         });
 
-        it("when referenced project change introduces error in the down stream project and then fixes it", () => {
+        describe("when referenced project change introduces error in the down stream project and then fixes it", () => {
             const subProjectLibrary = `${projectsLocation}/${project}/Library`;
             const libraryTs: File = {
                 path: `${subProjectLibrary}/library.ts`,
@@ -455,77 +359,78 @@ export function createSomeObject(): SomeObject
     };
 }`
             };
-            const libraryTsconfig: File = {
-                path: `${subProjectLibrary}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true } })
-            };
-            const subProjectApp = `${projectsLocation}/${project}/App`;
-            const appTs: File = {
-                path: `${subProjectApp}/app.ts`,
-                content: `import { createSomeObject } from "../Library/library";
+            verifyTscWatch({
+                scenario,
+                subScenario: "when referenced project change introduces error in the down stream project and then fixes it",
+                commandLineArgs: ["-b", "-w", "App"],
+                sys: () => {
+                    const libraryTsconfig: File = {
+                        path: `${subProjectLibrary}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { composite: true } })
+                    };
+                    const subProjectApp = `${projectsLocation}/${project}/App`;
+                    const appTs: File = {
+                        path: `${subProjectApp}/app.ts`,
+                        content: `import { createSomeObject } from "../Library/library";
 createSomeObject().message;`
-            };
-            const appTsconfig: File = {
-                path: `${subProjectApp}/tsconfig.json`,
-                content: JSON.stringify({ references: [{ path: "../Library" }] })
-            };
+                    };
+                    const appTsconfig: File = {
+                        path: `${subProjectApp}/tsconfig.json`,
+                        content: JSON.stringify({ references: [{ path: "../Library" }] })
+                    };
 
-            const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
-            const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
-            createSolutionBuilderWithWatch(host, ["App"]);
-            checkOutputErrorsInitial(host, emptyArray);
+                    const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
+                    return createWatchedSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
+                },
+                changes: [
+                    sys => {
+                        // Change message in library to message2
+                        sys.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2"));
+                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
+                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        return "Introduce error";
+                    },
+                    sys => {
+                        // Revert library changes
+                        sys.writeFile(libraryTs.path, libraryTs.content);
+                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
+                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        return "Fix error";
+                    },
+                ]
+            });
 
-            // Change message in library to message2
-            host.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2"));
-            host.checkTimeoutQueueLengthAndRun(1); // Build library
-            host.checkTimeoutQueueLengthAndRun(1); // Build App
-            checkOutputErrorsIncremental(host, [
-                "App/app.ts(2,20): error TS2551: Property 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?\n"
-            ]);
-
-            // Revert library changes
-            host.writeFile(libraryTs.path, libraryTs.content);
-            host.checkTimeoutQueueLengthAndRun(1); // Build library
-            host.checkTimeoutQueueLengthAndRun(1); // Build App
-            checkOutputErrorsIncremental(host, emptyArray);
         });
 
         describe("reports errors in all projects on incremental compile", () => {
-            function verifyIncrementalErrors(defaultBuildOptions?: BuildOptions, disabledConsoleClear?: boolean) {
-                const host = createSolutionInWatchMode(allFiles, defaultBuildOptions, disabledConsoleClear);
-                const outputFileStamps = getOutputFileStamps(host);
-
-                host.writeFile(logic[1].path, `${logic[1].content}
+            function verifyIncrementalErrors(subScenario: string, buildOptions: readonly string[]) {
+                verifyTscWatch({
+                    scenario,
+                    subScenario: `reportErrors/${subScenario}`,
+                    commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`, ...buildOptions],
+                    sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+                    changes: [
+                        sys => {
+                            sys.writeFile(logic[1].path, `${logic[1].content}
 let y: string = 10;`);
 
-                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                const changedLogic = getOutputFileStamps(host);
-                verifyChangedFiles(changedLogic, outputFileStamps, emptyArray, emptyArray);
-                host.checkTimeoutQueueLength(0);
-                checkOutputErrorsIncremental(host, [
-                    `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
-                ], disabledConsoleClear);
-
-                host.writeFile(core[1].path, `${core[1].content}
+                            sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                            sys.checkTimeoutQueueLength(0);
+                            return "change logic";
+                        },
+                        sys => {
+                            sys.writeFile(core[1].path, `${core[1].content}
 let x: string = 10;`);
 
-                host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                const changedCore = getOutputFileStamps(host);
-                verifyChangedFiles(changedCore, changedLogic, emptyArray, emptyArray);
-                host.checkTimeoutQueueLength(0);
-                checkOutputErrorsIncremental(host, [
-                    `sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.\n`,
-                    `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
-                ], disabledConsoleClear);
+                            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
+                            sys.checkTimeoutQueueLength(0);
+                            return "change core";
+                        }
+                    ]
+                });
             }
-
-            it("when preserveWatchOutput is not used", () => {
-                verifyIncrementalErrors();
-            });
-
-            it("when preserveWatchOutput is passed on command line", () => {
-                verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
-            });
+            verifyIncrementalErrors("when preserveWatchOutput is not used", emptyArray);
+            verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
 
             describe("when declaration emit errors are present", () => {
                 const solution = "solution";
@@ -550,88 +455,84 @@ let x: string = 10;`);
                     path: `${subProjectLocation}/tsconfig.json`,
                     content: JSON.stringify({ compilerOptions: { composite: true } })
                 };
-                const expectedDtsEmitErrors = [
-                    `${subProject}/fileWithError.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.\n`
-                ];
-                const outputs = [
-                    changeExtension(fileWithError.path, Extension.Js),
-                    changeExtension(fileWithError.path, Extension.Dts),
-                    changeExtension(fileWithoutError.path, Extension.Js),
-                    changeExtension(fileWithoutError.path, Extension.Dts),
-                    `${subProjectLocation}/tsconfig${Extension.TsBuildInfo}`
-                ];
 
-                function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: readonly string[]) {
-                    (isIncremental ? checkOutputErrorsIncremental : checkOutputErrorsInitial)(host, expectedErrors);
-                    outputs.forEach(f => assert.equal(host.fileExists(f), !expectedErrors.length, `Expected file ${f} to ${!expectedErrors.length ? "exist" : "not exist"}`));
+                function incrementalBuild(sys: WatchedSystem) {
+                    sys.checkTimeoutQueueLengthAndRun(1); // Build the app
+                    sys.checkTimeoutQueueLength(0);
                 }
 
-                function createSolutionWithWatch(withFixedError?: true) {
-                    const files = [libFile, withFixedError ? fileWithFixedError : fileWithError, fileWithoutError, tsconfig];
-                    const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${solution}` });
-                    createSolutionBuilderWithWatch(host, [subProject]);
-                    verifyDtsErrors(host, /*isIncremental*/ false, withFixedError ? emptyArray : expectedDtsEmitErrors);
-                    return host;
-                }
-
-                function incrementalBuild(host: TsBuildWatchSystem) {
-                    host.checkTimeoutQueueLengthAndRun(1); // Build the app
-                    host.checkTimeoutQueueLength(0);
-                }
-
-                function fixError(host: TsBuildWatchSystem) {
+                function fixError(sys: WatchedSystem) {
                     // Fix error
-                    host.writeFile(fileWithError.path, fileWithFixedError.content);
-                    host.writtenFiles.clear();
-                    incrementalBuild(host);
-                    verifyDtsErrors(host, /*isIncremental*/ true, emptyArray);
+                    sys.writeFile(fileWithError.path, fileWithFixedError.content);
+                    incrementalBuild(sys);
+                    return "Fix error in fileWithError";
                 }
 
-                it("when fixing error files all files are emitted", () => {
-                    const host = createSolutionWithWatch();
-                    fixError(host);
+                function changeFileWithoutError(sys: WatchedSystem) {
+                    sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
+                    incrementalBuild(sys);
+                    return "Change fileWithoutError";
+                }
+
+                verifyTscWatch({
+                    scenario,
+                    subScenario: "reportErrors/declarationEmitErrors/when fixing error files all files are emitted",
+                    commandLineArgs: ["-b", "-w", subProject],
+                    sys: () => createWatchedSystem(
+                        [libFile, fileWithError, fileWithoutError, tsconfig],
+                        { currentDirectory: `${projectsLocation}/${solution}` }
+                    ),
+                    changes: [
+                        fixError
+                    ]
                 });
 
-                it("when file with no error changes, declaration errors are reported", () => {
-                    const host = createSolutionWithWatch();
-                    host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
-                    incrementalBuild(host);
-                    verifyDtsErrors(host, /*isIncremental*/ true, expectedDtsEmitErrors);
+                verifyTscWatch({
+                    scenario,
+                    subScenario: "reportErrors/declarationEmitErrors/when file with no error changes",
+                    commandLineArgs: ["-b", "-w", subProject],
+                    sys: () => createWatchedSystem(
+                        [libFile, fileWithError, fileWithoutError, tsconfig],
+                        { currentDirectory: `${projectsLocation}/${solution}` }
+                    ),
+                    changes: [
+                        changeFileWithoutError
+                    ]
                 });
 
                 describe("when reporting errors on introducing error", () => {
-                    function createSolutionWithIncrementalError() {
-                        const host = createSolutionWithWatch(/*withFixedError*/ true);
-                        host.writeFile(fileWithError.path, fileWithError.content);
-                        host.writtenFiles.clear();
-
-                        incrementalBuild(host);
-                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
-                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
-                        return host;
+                    function introduceError(sys: WatchedSystem) {
+                        sys.writeFile(fileWithError.path, fileWithError.content);
+                        incrementalBuild(sys);
+                        return "Introduce error";
                     }
 
-                    function verifyWrittenFile(host: TsBuildWatchSystem, f: string) {
-                        assert.isTrue(host.writtenFiles.has(host.toFullPath(f)), `Expected to write ${f}: ${arrayFrom(host.writtenFiles.keys())}`);
-                    }
-
-                    it("when fixing errors only changed file is emitted", () => {
-                        const host = createSolutionWithIncrementalError();
-                        fixError(host);
-                        assert.equal(host.writtenFiles.size, 3, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
-                        verifyWrittenFile(host, outputs[0]);
-                        verifyWrittenFile(host, outputs[1]);
-                        verifyWrittenFile(host, outputs[4]);
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
+                        commandLineArgs: ["-b", "-w", subProject],
+                        sys: () => createWatchedSystem(
+                            [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                            { currentDirectory: `${projectsLocation}/${solution}` }
+                        ),
+                        changes: [
+                            introduceError,
+                            fixError
+                        ]
                     });
 
-                    it("when file with no error changes, declaration errors are reported", () => {
-                        const host = createSolutionWithIncrementalError();
-                        host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
-                        host.writtenFiles.clear();
-
-                        incrementalBuild(host);
-                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
-                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: "reportErrors/declarationEmitErrors/introduceError/when file with no error changes",
+                        commandLineArgs: ["-b", "-w", subProject],
+                        sys: () => createWatchedSystem(
+                            [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                            { currentDirectory: `${projectsLocation}/${solution}` }
+                        ),
+                        changes: [
+                            introduceError,
+                            changeFileWithoutError
+                        ]
                     });
                 });
             });
@@ -1208,43 +1109,27 @@ export function gfoo() {
             });
         });
 
-        it("incremental updates in verbose mode", () => {
-            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
-            checkOutputErrorsInitial(host, emptyArray, /*disableConsoleClears*/ undefined, [
-                `Projects in this build: \r\n    * sample1/core/tsconfig.json\r\n    * sample1/logic/tsconfig.json\r\n    * sample1/tests/tsconfig.json\n\n`,
-                `Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist\n\n`,
-                `Building project '/user/username/projects/sample1/core/tsconfig.json'...\n\n`,
-                `Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist\n\n`,
-                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
-                `Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist\n\n`,
-                `Building project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`
-            ]);
-            verifyWatches(host);
-
-            // Make non dts change
-            host.writeFile(logic[1].path, `${logic[1].content}
+        verifyTscWatch({
+            scenario,
+            subScenario: "incremental updates in verbose mode",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`, "-verbose"],
+            sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
+            changes: [
+                sys => {
+                    sys.writeFile(logic[1].path, `${logic[1].content}
 function someFn() { }`);
-            host.checkTimeoutQueueLengthAndRun(1); // build logic
-            host.checkTimeoutQueueLengthAndRun(1); // build tests
-            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
-                `Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'\n\n`,
-                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
-                `Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies\n\n`,
-                `Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`,
-            ]);
-
-            // Make dts change
-            host.writeFile(logic[1].path, `${logic[1].content}
+                    sys.checkTimeoutQueueLengthAndRun(1); // build logic
+                    sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                    return "Make non dts change";
+                },
+                sys => {
+                    sys.writeFile(logic[1].path, `${logic[1].content}
 export function someFn() { }`);
-            host.checkTimeoutQueueLengthAndRun(1); // build logic
-            host.checkTimeoutQueueLengthAndRun(1); // build tests
-            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
-                `Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'\n\n`,
-                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
-                `Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'\n\n`,
-                `Building project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`,
-            ]);
+                    sys.checkTimeoutQueueLengthAndRun(1); // build logic
+                    sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                    return "Make dts change";
+                }
+            ],
         });
     });
 
@@ -1255,14 +1140,14 @@ export function someFn() { }`);
         let zooFiles: File[];
         let solutionFile: File;
         let baseConfig: File;
-        let allFilesExceptBase: File[];
+        let allFiles: File[];
         before(() => {
             coreFiles = subProjectFiles("core", ["tsconfig.json", "utilities.ts"]);
             animalFiles = subProjectFiles("animals", ["tsconfig.json", "animal.ts", "dog.ts", "index.ts"]);
             zooFiles = subProjectFiles("zoo", ["tsconfig.json", "zoo.ts"]);
             solutionFile = projectFile("tsconfig.json");
             baseConfig = projectFile("tsconfig-base.json");
-            allFilesExceptBase = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile];
+            allFiles = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile, baseConfig, { path: libFile.path, content: libContent }];
         });
 
         after(() => {
@@ -1271,103 +1156,59 @@ export function someFn() { }`);
             zooFiles = undefined!;
             solutionFile = undefined!;
             baseConfig = undefined!;
-            allFilesExceptBase = undefined!;
+            allFiles = undefined!;
         });
 
-        it("updates with circular reference", () => {
-            const host = createTsBuildWatchSystem([
-                ...allFilesExceptBase,
-                baseConfig,
-                { path: libFile.path, content: libContent }
-            ], { currentDirectory: projectLocation });
-            host.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
-                "}",
-                `},
+        verifyTscWatch({
+            scenario: "demo",
+            subScenario: "updates with circular reference",
+            commandLineArgs: ["-b", "-w", "-verbose"],
+            sys: () => {
+                const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
+                sys.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
+                    "}",
+                    `},
   "references": [
     {
       "path": "../zoo"
     }
   ]`
-            ));
-            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
-            checkOutputErrorsInitial(host, [
-                `error TS6202: Project references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json\r\n/user/username/projects/demo/core/tsconfig.json\r\n/user/username/projects/demo/zoo/tsconfig.json\r\n/user/username/projects/demo/animals/tsconfig.json\n`
-            ], /*disableConsoleClears*/ undefined, [
-                `Projects in this build: \r\n    * animals/tsconfig.json\r\n    * zoo/tsconfig.json\r\n    * core/tsconfig.json\r\n    * tsconfig.json\n\n`
-            ]);
-            verifyWatches(host);
-
-            // Make changes
-            host.writeFile(coreFiles[0].path, coreFiles[0].content);
-            host.checkTimeoutQueueLengthAndRun(1); // build core
-            host.checkTimeoutQueueLengthAndRun(1); // build animals
-            host.checkTimeoutQueueLengthAndRun(1); // build zoo
-            host.checkTimeoutQueueLengthAndRun(1); // build solution
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
-                `Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`,
-                `Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`,
-                `Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist\n\n`,
-                `Building project '/user/username/projects/demo/animals/tsconfig.json'...\n\n`,
-                `Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist\n\n`,
-                `Building project '/user/username/projects/demo/zoo/tsconfig.json'...\n\n`,
-            ]);
+                ));
+                return sys;
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(coreFiles[0].path, coreFiles[0].content);
+                    sys.checkTimeoutQueueLengthAndRun(1); // build core
+                    sys.checkTimeoutQueueLengthAndRun(1); // build animals
+                    sys.checkTimeoutQueueLengthAndRun(1); // build zoo
+                    sys.checkTimeoutQueueLengthAndRun(1); // build solution
+                    sys.checkTimeoutQueueLength(0);
+                    return "Fix error";
+                }
+            ]
         });
 
-        it("updates with bad reference", () => {
-            const host = createTsBuildWatchSystem([
-                ...allFilesExceptBase,
-                baseConfig,
-                { path: libFile.path, content: libContent }
-            ], { currentDirectory: projectLocation });
-            host.writeFile(coreFiles[1].path, `import * as A from '../animals';
+        verifyTscWatch({
+            scenario: "demo",
+            subScenario: "updates with bad reference",
+            commandLineArgs: ["-b", "-w", "-verbose"],
+            sys: () => {
+                const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
+                sys.writeFile(coreFiles[1].path, `import * as A from '../animals';
 ${coreFiles[1].content}`);
-            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
-            const errors = [
-                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
-                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
-                `core/utilities.ts(1,1): error TS6133: 'A' is declared but its value is never read.\n`,
-                `core/utilities.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `core/utilities.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
-            ].map(hostOutputDiagnostic);
-            checkOutputErrors(host, [
-                startingCompilationInWatchMode(),
-                hostOutputLog(`Projects in this build: \r\n    * core/tsconfig.json\r\n    * animals/tsconfig.json\r\n    * zoo/tsconfig.json\r\n    * tsconfig.json\n\n`),
-                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
-                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
-                ...errors,
-                hostOutputLog(`Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors\n\n`),
-                hostOutputLog(`Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors\n\n`),
-                hostOutputLog(`Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built\n\n`),
-                hostOutputLog(`Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built\n\n`),
-                foundErrorsWatching(errors)
-            ]);
-            verifyWatches(host);
-
-            // Make changes
-            host.writeFile(coreFiles[1].path, `
+                return sys;
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(coreFiles[1].path, `
 import * as A from '../animals';
 ${coreFiles[1].content}`);
-            const newErrors = [
-                `animals/index.ts(1,20): error TS6059: File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `animals/index.ts(1,20): error TS6307: File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
-                `animals/index.ts(4,32): error TS6059: File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `animals/index.ts(4,32): error TS6307: File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`,
-                `core/utilities.ts(2,1): error TS6133: 'A' is declared but its value is never read.\n`,
-                `core/utilities.ts(2,20): error TS6059: File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.\n`,
-                `core/utilities.ts(2,20): error TS6307: File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.\n`
-            ].map(hostOutputDiagnostic);
-            host.checkTimeoutQueueLengthAndRun(1); // build core
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrors(host, [
-                fileChangeDetected(),
-                hostOutputLog(`Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist\n\n`),
-                hostOutputLog(`Building project '/user/username/projects/demo/core/tsconfig.json'...\n\n`),
-                ...newErrors,
-                foundErrorsWatching(newErrors)
-            ]);
+                    sys.checkTimeoutQueueLengthAndRun(1); // build core
+                    sys.checkTimeoutQueueLength(0);
+                    return "Prepend a line";
+                }
+            ]
         });
 
         function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {
@@ -1377,57 +1218,32 @@ ${coreFiles[1].content}`);
         function projectFile(fileName: string): File {
             return getFileFromProject("demo", fileName);
         }
-
-        function verifyWatches(host: TsBuildWatchSystem) {
-            checkWatchedFilesDetailed(host, allFilesExceptBase.map(f => f.path), 1);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(
-                host,
-                [`${projectLocation}/core`, `${projectLocation}/animals`, `${projectLocation}/zoo`],
-                1,
-                /*recursive*/ true
-            );
-        }
     });
 
     describe("unittests:: tsbuild:: watchMode:: with noEmitOnError", () => {
-        it("does not emit any files on error", () => {
-            const projectLocation = `${projectsLocation}/noEmitOnError`;
-            const host = createTsBuildWatchSystem([
-                ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                    .map(f => getFileFromProject("noEmitOnError", f)),
-                { path: libFile.path, content: libContent }
-            ], { currentDirectory: projectLocation });
-            createSolutionBuilderWithWatch(host, ["tsconfig.json"], { verbose: true, watch: true });
-            checkOutputErrorsInitial(host, [
-                `src/main.ts(4,1): error TS1005: ',' expected.\n`,
-            ], /*disableConsoleClears*/ undefined, [
-                `Projects in this build: \r\n    * tsconfig.json\n\n`,
-                `Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist\n\n`,
-                `Building project '/user/username/projects/noEmitOnError/tsconfig.json'...\n\n`,
-            ]);
-            assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
-
-            // Make changes
-            host.writeFile(`${projectLocation}/src/main.ts`, `import { A } from "../shared/types/db";
+        verifyTscWatch({
+            scenario: "noEmitOnError",
+            subScenario: "does not emit any files on error",
+            commandLineArgs: ["-b", "-w", "-verbose"],
+            sys: () => createWatchedSystem(
+                [
+                    ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                        .map(f => getFileFromProject("noEmitOnError", f)),
+                    { path: libFile.path, content: libContent }
+                ],
+                { currentDirectory: `${projectsLocation}/noEmitOnError` }
+            ),
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`);
-            host.writtenFiles.clear();
-            host.checkTimeoutQueueLengthAndRun(1); // build project
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
-                `Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist\n\n`,
-                `Building project '/user/username/projects/noEmitOnError/tsconfig.json'...\n\n`,
-            ]);
-            assert.equal(host.writtenFiles.size, 3, `Expected to write 3 files: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
-            for (const f of [
-                `${projectLocation}/dev-build/shared/types/db.js`,
-                `${projectLocation}/dev-build/src/main.js`,
-                `${projectLocation}/dev-build/src/other.js`,
-            ]) {
-                assert.isTrue(host.writtenFiles.has(f.toLowerCase()), `Expected to write file: ${f}:: Actual:: ${arrayFrom(host.writtenFiles.keys())}`);
-            }
+                    sys.checkTimeoutQueueLengthAndRun(1); // build project
+                    sys.checkTimeoutQueueLength(0);
+                    return "Fix error";
+                }
+            ]
         });
     });
 }

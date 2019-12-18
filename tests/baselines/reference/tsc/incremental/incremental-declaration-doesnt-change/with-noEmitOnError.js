@@ -17,6 +17,8 @@ var a = {
 
 
 //// [/src/dev-build/src/other.js]
+"use strict";
+exports.__esModule = true;
 console.log("hi");
 
 
@@ -37,8 +39,8 @@ console.log("hi");
         "signature": "-4882119183-export {};\r\n"
       },
       "../src/other.ts": {
-        "version": "7719445449-console.log(\"hi\");",
-        "signature": "5381-"
+        "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+        "signature": "-4882119183-export {};\r\n"
       }
     },
     "options": {

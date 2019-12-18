@@ -103,6 +103,8 @@ namespace ts {
          * Get the current directory of the program
          */
         getCurrentDirectory(): string;
+        /*@internal*/
+        close(): void;
     }
 
     /**
