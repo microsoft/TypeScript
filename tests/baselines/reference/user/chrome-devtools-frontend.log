@@ -659,12 +659,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15882,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15891,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(15894,16): error TS2339: Property '_logs' does not exist on type 'typeof ConsoleQuieter'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16208,1): error TS2322: Type '(node: any) => boolean' is not assignable to type '() => boolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16213,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16219,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(16733,11): error TS2339: Property 'NodeTimingData' does not exist on type 'typeof Simulator'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,26): error TS2339: Property '__proto__' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,45): error TS2339: Property '__proto__' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17501,1): error TS2322: Type 'any[]' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17976,1): error TS2322: Type '(err: any, opts: any) => Promise<any>' is not assignable to type '() => Promise<void>'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18010,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19585,1): error TS2322: Type 'Promise<void | { artifacts: any; auditResults: any[]; }>' is not assignable to type 'Promise<void>'.
@@ -1177,6 +1179,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43252,8): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43262,13): error TS2339: Property 'escapeCharacters' does not exist on type 'String'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43262,37): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43312,1): error TS2322: Type '(maxLength: any) => string' is not assignable to type '() => string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43369,8): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43395,8): error TS2339: Property 'isDigitAt' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(43442,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
@@ -3424,6 +3427,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.j
   Types of property 'prototype' are incompatible.
     Type '{ eol: () => boolean; sol: () => boolean; peek: () => any; next: () => any; eat: (match: any) => any; eatWhile: (match: any) => boolean; eatSpace: () => boolean; skipToEnd: typeof skipToEnd; skipTo: typeof skipTo; ... 6 more ...; lookAhead: () => any; }' is not assignable to type '{ backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; match: (pattern: string | RegExp, consume?: boolean, caseInsensitive?: boolean) => void; ... 4 more ...; sol: () => void; }'.
       Property 'hideFirstChars' does not exist on type '{ backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; match: (pattern: string | RegExp, consume?: boolean, caseInsensitive?: boolean) => void; ... 4 more ...; sol: () => void; }'.
+node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(76,1): error TS2322: Type '(mode: any, a1: any, a2: any) => any' is not assignable to type '(mode: any) => void'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(87,12): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(97,21): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(102,12): error TS2339: Property 'registerHelper' does not exist on type 'typeof CodeMirror'.
@@ -3449,7 +3453,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(12,5): 
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(41,3): error TS2740: Type 'RegExp' is missing the following properties from type 'string[]': length, pop, push, concat, and 28 more.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(282,24): error TS2339: Property 'exec' does not exist on type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2307: Cannot find module '../xml/xml'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
@@ -3460,7 +3464,7 @@ node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): e
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(13,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2307: Cannot find module '../clike/clike'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,19): error TS2304: Cannot find name 'define'.
@@ -3485,14 +3489,14 @@ node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,42): error TS2554: Expected 1 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2307: Cannot find module '../../addon/mode/multiplex'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(9,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,42): error TS2554: Expected 0-1 arguments, but got 4.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,42): error TS2554: Expected 1 arguments, but got 4.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2307: Cannot find module '../xml/xml'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2307: Cannot find module '../css/css'.
@@ -8558,6 +8562,8 @@ node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,67): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(463,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(541,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(603,84): error TS2345: Argument of type '(error: any, result: any) => void' is not assignable to parameter of type '(arg0: any) => any'.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(621,85): error TS2345: Argument of type '(error: any, result: any) => void' is not assignable to parameter of type '(arg0: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(634,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,49): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,67): error TS2339: Property 'context' does not exist on type 'Console'.

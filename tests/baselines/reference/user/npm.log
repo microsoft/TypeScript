@@ -356,8 +356,8 @@ node_modules/npm/lib/install.js(268,26): error TS2339: Property 'config' does no
 node_modules/npm/lib/install.js(269,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(272,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(273,7): error TS2532: Object is possibly 'undefined'.
-node_modules/npm/lib/install.js(273,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type '(this: null, err?: any, ...args: any[]) => any'.
-  Type 'undefined' is not assignable to type '(this: null, err?: any, ...args: any[]) => any'.
+node_modules/npm/lib/install.js(273,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type '(this: null, err: any, ...args: any[]) => any'.
+  Type 'undefined' is not assignable to type '(this: null, err: any, ...args: any[]) => any'.
 node_modules/npm/lib/install.js(340,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(369,18): error TS2769: No overload matches this call.
   The last overload gave the following error.

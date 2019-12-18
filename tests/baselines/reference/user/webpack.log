@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+lib/FileSystemInfo.js(357,4): error TS2345: Argument of type '({ type, context, path, expected }: any, callback: any) => void' is not assignable to parameter of type 'AsyncFunction<{ type: number; path: string; context?: string; expected?: string; }, Error>'.
 lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
 lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
 lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.
@@ -19,6 +20,8 @@ lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFil
 lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
 lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
 lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
+lib/stats/DefaultStatsFactoryPlugin.js(1260,5): error TS2345: Argument of type '(stats: any, options: any, context: any) => void' is not assignable to parameter of type '(args_0: StatsFactory, args_1: any) => void'.
+lib/stats/DefaultStatsPrinterPlugin.js(1037,5): error TS2345: Argument of type '(stats: any, options: any, context: any) => void' is not assignable to parameter of type '(args_0: StatsPrinter, args_1: any) => void'.
 
 
 
