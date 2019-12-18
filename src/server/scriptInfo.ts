@@ -622,7 +622,10 @@ namespace ts.server {
         }
 
         positionToLineOffset(position: number): protocol.Location {
-            return this.textStorage.positionToLineOffset(position);
+            const location = this.textStorage.positionToLineOffset(position);
+            Debug.assert(typeof location.line === "number" && location.line > 0, `Expected line ${location.line} to be greater than 0.`);
+            Debug.assert(typeof location.offset === "number" && location.offset > 0, `Expected offset ${location.offset} to be greater than 0.`);
+            return location;
         }
 
         public isJavaScript() {
