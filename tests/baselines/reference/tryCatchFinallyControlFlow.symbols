@@ -107,3 +107,114 @@ function f4() {
 >x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 48, 7))
 }
 
+function f5() {
+>f5 : Symbol(f5, Decl(tryCatchFinallyControlFlow.ts, 59, 1))
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 62, 7))
+
+    try {
+        x = 1;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 62, 7))
+
+        return;
+    }
+    catch (e) {
+>e : Symbol(e, Decl(tryCatchFinallyControlFlow.ts, 67, 11))
+
+        x = 2;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 62, 7))
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 62, 7))
+    }
+    x;  // 2
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 62, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(tryCatchFinallyControlFlow.ts, 74, 1))
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 77, 7))
+
+    try {
+        x = 1;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 77, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(tryCatchFinallyControlFlow.ts, 81, 11))
+
+        x = 2;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 77, 7))
+
+        return;
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 77, 7))
+    }
+    x;  // 1
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 77, 7))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(tryCatchFinallyControlFlow.ts, 89, 1))
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 92, 7))
+
+    try {
+        x = 1;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 92, 7))
+
+        return;
+    }
+    catch (e) {
+>e : Symbol(e, Decl(tryCatchFinallyControlFlow.ts, 97, 11))
+
+        x = 2;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 92, 7))
+
+        return;
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 92, 7))
+    }
+    x;  // Unreachable
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 92, 7))
+}
+
+// Repro from #35644
+
+const main = () => {
+>main : Symbol(main, Decl(tryCatchFinallyControlFlow.ts, 109, 5))
+
+    let hoge: string | undefined = undefined;
+>hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 110, 7))
+>undefined : Symbol(undefined)
+
+    try {
+        hoge = 'hoge!';
+>hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 110, 7))
+
+        return;
+    }
+    catch {
+        return;
+    }
+    finally {
+        if (hoge) {
+>hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 110, 7))
+
+            hoge.length;
+>hoge.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 110, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+        }
+        return;
+    }
+}
+

@@ -645,7 +645,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 }
                 else {
                     // root folder
-                    Debug.assert(this.fs.size === 0);
+                    Debug.assert(this.fs.size === 0 || !!this.windowsStyleRoot);
                     this.fs.set(path, folder);
                 }
             }
@@ -919,7 +919,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         createHash(s: string): string {
-            return `${ts.generateDjb2Hash(s)}-${s}`;
+            return `${generateDjb2Hash(s)}-${s}`;
         }
 
         createSHA256Hash(s: string): string {

@@ -244,7 +244,7 @@ interface Symbol {
         if (!out) return;
         const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
         if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
-        if (!sys.fileExists(buildInfoPath!)) return;
+        if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
         const bundle = buildInfo.bundle;
