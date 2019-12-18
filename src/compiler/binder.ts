@@ -1198,8 +1198,10 @@ namespace ts {
             // exceptions. We add all mutation flow nodes as antecedents of this label such that we can analyze them
             // as possible antecedents of the start of catch or finally blocks. Furthermore, we add the current
             // control flow to represent exceptions that occur before any mutations.
+            const saveReturnTarget = currentReturnTarget;
             const saveExceptionTarget = currentExceptionTarget;
-            currentExceptionTarget = createBranchLabel();
+            currentReturnTarget = createBranchLabel();
+            currentExceptionTarget = node.catchClause ? createBranchLabel() : currentReturnTarget;
             addAntecedent(currentExceptionTarget, currentFlow);
             bind(node.tryBlock);
             addAntecedent(preFinallyLabel, currentFlow);
@@ -1211,22 +1213,24 @@ namespace ts {
                 // The currentExceptionTarget now represents control flows from exceptions in the catch clause.
                 // Effectively, in a try-catch-finally, if an exception occurs in the try block, the catch block
                 // acts like a second try block.
-                currentExceptionTarget = createBranchLabel();
+                currentExceptionTarget = currentReturnTarget;
                 addAntecedent(currentExceptionTarget, currentFlow);
                 bind(node.catchClause);
                 addAntecedent(preFinallyLabel, currentFlow);
                 flowAfterCatch = currentFlow;
             }
             const exceptionTarget = finishFlowLabel(currentExceptionTarget);
+            currentReturnTarget = saveReturnTarget;
             currentExceptionTarget = saveExceptionTarget;
             if (node.finallyBlock) {
                 // Possible ways control can reach the finally block:
                 // 1) Normal completion of try block of a try-finally or try-catch-finally
                 // 2) Normal completion of catch block (following exception in try block) of a try-catch-finally
-                // 3) Exception in try block of a try-finally
-                // 4) Exception in catch block of a try-catch-finally
+                // 3) Return in try or catch block of a try-finally or try-catch-finally
+                // 4) Exception in try block of a try-finally
+                // 5) Exception in catch block of a try-catch-finally
                 // When analyzing a control flow graph that starts inside a finally block we want to consider all
-                // four possibilities above. However, when analyzing a control flow graph that starts outside (past)
+                // five possibilities above. However, when analyzing a control flow graph that starts outside (past)
                 // the finally block, we only want to consider the first two (if we're past a finally block then it
                 // must have completed normally). To make this possible, we inject two extra nodes into the control
                 // flow graph: An after-finally with an antecedent of the control flow at the end of the finally
