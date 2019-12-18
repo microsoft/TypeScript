@@ -1,0 +1,8 @@
+=== tests/cases/compiler/assigningFunctionToTupleIssuesError.ts ===
+declare let a: () => void;
+>a : () => void
+
+let b: [string] = a;
+>b : [string]
+>a : () => void
+

@@ -307,3 +307,80 @@ class C6 extends Mix(Public, Public2) {
 	}
 }
 
+class ProtectedGeneric<T> {
+>ProtectedGeneric : ProtectedGeneric<T>
+
+	private privateMethod() {}
+>privateMethod : () => void
+
+	protected protectedMethod() {}
+>protectedMethod : () => void
+}
+
+class ProtectedGeneric2<T> {
+>ProtectedGeneric2 : ProtectedGeneric2<T>
+
+	private privateMethod() {}
+>privateMethod : () => void
+
+	protected protectedMethod() {}
+>protectedMethod : () => void
+}
+
+function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
+>f7 : (x: ProtectedGeneric<{}>) => void
+>x : ProtectedGeneric<{}>
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod() : void
+>x.privateMethod : () => void
+>x : ProtectedGeneric<{}>
+>privateMethod : () => void
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod() : void
+>x.protectedMethod : () => void
+>x : ProtectedGeneric<{}>
+>protectedMethod : () => void
+}
+
+function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
+>f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+>a : void
+>a : void
+>b : void
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod() : void
+>x.privateMethod : (() => void) & (() => void)
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+>privateMethod : (() => void) & (() => void)
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod() : void
+>x.protectedMethod : (() => void) & (() => void)
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+>protectedMethod : (() => void) & (() => void)
+}
+
+function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
+>f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>a : void
+>a : void
+>b : void
+
+	x.privateMethod(); // Error, private constituent makes method inaccessible
+>x.privateMethod() : void
+>x.privateMethod : (() => void) & (() => void)
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>privateMethod : (() => void) & (() => void)
+
+	x.protectedMethod(); // Error, protected when all constituents are protected
+>x.protectedMethod() : void
+>x.protectedMethod : (() => void) & (() => void)
+>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>protectedMethod : (() => void) & (() => void)
+}
+

@@ -3,24 +3,32 @@
     "pos": 1,
     "end": 24,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "elementTypes": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
             "end": 8,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 9,
             "end": 15,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "2": {
             "kind": "BooleanKeyword",
             "pos": 16,
             "end": 23,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "length": 3,
         "pos": 2,

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/stringMatchAll.ts ===
+const matches = "matchAll".matchAll(/\w/g);
+>matches : Symbol(matches, Decl(stringMatchAll.ts, 0, 5))
+>"matchAll".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+
+const array = [...matches];
+>array : Symbol(array, Decl(stringMatchAll.ts, 1, 5))
+>matches : Symbol(matches, Decl(stringMatchAll.ts, 0, 5))
+
+const { index, input } = array[0];
+>index : Symbol(index, Decl(stringMatchAll.ts, 2, 7))
+>input : Symbol(input, Decl(stringMatchAll.ts, 2, 14))
+>array : Symbol(array, Decl(stringMatchAll.ts, 1, 5))
+

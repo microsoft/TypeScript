@@ -3,23 +3,31 @@
     "pos": 1,
     "end": 16,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "type": {
         "kind": "UnionType",
         "pos": 2,
         "end": 15,
         "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "types": {
             "0": {
                 "kind": "NumberKeyword",
                 "pos": 2,
                 "end": 8,
-                "flags": "JSDoc"
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0
             },
             "1": {
                 "kind": "StringKeyword",
                 "pos": 9,
                 "end": 15,
-                "flags": "JSDoc"
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0
             },
             "length": 2,
             "pos": 2,

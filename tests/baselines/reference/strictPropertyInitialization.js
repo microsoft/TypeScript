@@ -98,6 +98,17 @@ class C10 {
     }
 }
 
+// Property is considered initialized by type any even though value could be undefined
+
+declare function someValue(): any;
+
+class C11 {
+    a: number;
+    constructor() {
+        this.a = someValue();
+    }
+}
+
 
 //// [strictPropertyInitialization.js]
 "use strict";
@@ -172,6 +183,12 @@ var C10 = /** @class */ (function () {
     }
     return C10;
 }());
+var C11 = /** @class */ (function () {
+    function C11() {
+        this.a = someValue();
+    }
+    return C11;
+}());
 
 
 //// [strictPropertyInitialization.d.ts]
@@ -225,5 +242,10 @@ declare class C10 {
     a: number;
     b: number;
     c?: number;
+    constructor();
+}
+declare function someValue(): any;
+declare class C11 {
+    a: number;
     constructor();
 }

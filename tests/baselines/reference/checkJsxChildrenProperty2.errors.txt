@@ -1,21 +1,9 @@
 tests/cases/conformance/jsx/file.tsx(14,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 tests/cases/conformance/jsx/file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
-tests/cases/conformance/jsx/file.tsx(31,6): error TS2322: Type '{ children: (Element | ((name: string) => Element))[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
-      Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(37,6): error TS2322: Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(number | Element)[]' is not assignable to type 'string | Element'.
-      Type '(number | Element)[]' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(43,6): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(string | Element)[]' is not assignable to type 'string | Element'.
-      Type '(string | Element)[]' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type 'Element[]' is not assignable to type 'string | Element'.
-      Type 'Element[]' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(31,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+tests/cases/conformance/jsx/file.tsx(37,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+tests/cases/conformance/jsx/file.tsx(43,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+tests/cases/conformance/jsx/file.tsx(49,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (6 errors) ====
@@ -56,10 +44,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     let k2 =
         <Comp a={10} b="hi">
          ~~~~
-!!! error TS2322: Type '{ children: (Element | ((name: string) => Element))[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
-!!! error TS2322:       Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string'.
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
             <div> My Div </div>
             {(name: string) => <div> My name {name} </div>}
         </Comp>;
@@ -67,10 +52,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     let k3 =
         <Comp a={10} b="hi">
          ~~~~
-!!! error TS2322: Type '{ children: (number | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(number | Element)[]' is not assignable to type 'string | Element'.
-!!! error TS2322:       Type '(number | Element)[]' is not assignable to type 'string'.
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
             <div> My Div </div>
             {1000000}
         </Comp>;
@@ -78,10 +60,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     let k4 =
         <Comp a={10} b="hi" >
          ~~~~
-!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'string | Element'.
-!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'string'.
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
             <div> My Div </div>
             hi hi hi!
         </Comp>;
@@ -89,10 +68,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     let k5 =
         <Comp a={10} b="hi" >
          ~~~~
-!!! error TS2322: Type '{ children: Element[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'Element[]' is not assignable to type 'string | Element'.
-!!! error TS2322:       Type 'Element[]' is not assignable to type 'string'.
+!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
             <div> My Div </div>
             <div> My Div </div>
         </Comp>;

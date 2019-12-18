@@ -1,0 +1,49 @@
+=== tests/cases/conformance/types/tuple/readonlyArraysAndTuples2.ts ===
+type T10 = string[];
+>T10 : T10
+
+type T11 = Array<string>;
+>T11 : T11
+
+type T12 = readonly string[];
+>T12 : T12
+
+type T13 = ReadonlyArray<string>;
+>T13 : T13
+
+type T20 = [number, number];
+>T20 : T20
+
+type T21 = readonly [number, number];
+>T21 : T21
+
+declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
+>f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => readonly [string, string]
+>ma : string[]
+>ra : readonly string[]
+>mt : [string, string]
+>rt : readonly [string, string]
+
+declare const someDec: any;
+>someDec : any
+
+class A {
+>A : A
+
+  @someDec
+>someDec : any
+
+  j: readonly string[] = [];
+>j : readonly string[]
+>[] : never[]
+
+  @someDec
+>someDec : any
+
+  k: readonly [string, number] = ['foo', 42];
+>k : readonly [string, number]
+>['foo', 42] : [string, number]
+>'foo' : "foo"
+>42 : 42
+}
+

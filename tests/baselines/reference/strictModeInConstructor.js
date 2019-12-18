@@ -123,8 +123,8 @@ var Bs = /** @class */ (function (_super) {
 var Cs = /** @class */ (function (_super) {
     __extends(Cs, _super);
     function Cs() {
-        var _this = _super.call(this) || this;
         "use strict";
+        var _this = _super.call(this) || this;
         return _this;
     }
     Cs.s = 9;

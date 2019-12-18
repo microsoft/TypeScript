@@ -11,7 +11,7 @@ var a: any;
 >a : any
 
 foo(a);
->foo(a) : {}
+>foo(a) : unknown
 >foo : <Z, T extends <U>(x: U) => Z>(y: T) => Z
 >a : any
 

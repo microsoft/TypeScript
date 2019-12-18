@@ -1,0 +1,31 @@
+tests/cases/compiler/destructuringTuple.ts(11,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+tests/cases/compiler/destructuringTuple.ts(11,60): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'ConcatArray<never>'.
+  Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'ConcatArray<never>'.
+
+
+==== tests/cases/compiler/destructuringTuple.ts (2 errors) ====
+    declare var tuple: [boolean, number, ...string[]];
+    
+    const [a, b, c, ...rest] = tuple;
+    
+    declare var receiver: typeof tuple;
+    
+    [...receiver] = tuple;
+    
+    // Repros from #32140
+    
+    const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
+           ~~~~~
+!!! error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+                                                               ~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'ConcatArray<never>'.
+!!! error TS2769:   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'ConcatArray<never>'.
+    
+    const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
+    

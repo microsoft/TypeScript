@@ -14,8 +14,8 @@ function foo<T>(x: (a: T) => T) {
 }
 
 var r = foo(<U>(x: U) => ''); // {}
->r : {}
->foo(<U>(x: U) => '') : {}
+>r : unknown
+>foo(<U>(x: U) => '') : unknown
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
 >x : U
@@ -30,11 +30,11 @@ var r2 = foo<string>(<U>(x: U) => ''); // string
 >'' : ""
 
 var r3 = foo(x => ''); // {}
->r3 : {}
->foo(x => '') : {}
+>r3 : unknown
+>foo(x => '') : unknown
 >foo : <T>(x: (a: T) => T) => T
->x => '' : (x: {}) => string
->x : {}
+>x => '' : (x: unknown) => string
+>x : unknown
 >'' : ""
 
 function foo2<T, U>(x: T, cb: (a: T) => U) {

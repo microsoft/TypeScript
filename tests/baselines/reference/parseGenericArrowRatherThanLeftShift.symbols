@@ -1,0 +1,25 @@
+=== tests/cases/compiler/parseGenericArrowRatherThanLeftShift.ts ===
+type Bar = ReturnType<<T>(x: T) => number>;
+>Bar : Symbol(Bar, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 0))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 23))
+>x : Symbol(x, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 26))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 23))
+
+declare const a: Bar;
+>a : Symbol(a, Decl(parseGenericArrowRatherThanLeftShift.ts, 1, 13))
+>Bar : Symbol(Bar, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 0))
+
+function foo<T>(_x: T) {}
+>foo : Symbol(foo, Decl(parseGenericArrowRatherThanLeftShift.ts, 1, 21))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 3, 13))
+>_x : Symbol(_x, Decl(parseGenericArrowRatherThanLeftShift.ts, 3, 16))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 3, 13))
+
+const b = foo<<T>(x: T) => number>(() => 1);
+>b : Symbol(b, Decl(parseGenericArrowRatherThanLeftShift.ts, 4, 5))
+>foo : Symbol(foo, Decl(parseGenericArrowRatherThanLeftShift.ts, 1, 21))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 4, 15))
+>x : Symbol(x, Decl(parseGenericArrowRatherThanLeftShift.ts, 4, 18))
+>T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 4, 15))
+

@@ -1,0 +1,66 @@
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(4,15): error TS2729: Property 'p4' is used before its initialization.
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(7,34): error TS2729: Property 'directlyAssigned' is used before its initialization.
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(16,15): error TS2729: Property 'withinObjectLiteral' is used before its initialization.
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(20,19): error TS2729: Property 'withinObjectLiteralGetterName' is used before its initialization.
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(26,19): error TS2729: Property 'withinObjectLiteralSetterName' is used before its initialization.
+tests/cases/compiler/classUsedBeforeInitializedVariables.ts(29,64): error TS2729: Property 'withinClassDeclarationExtension' is used before its initialization.
+
+
+==== tests/cases/compiler/classUsedBeforeInitializedVariables.ts (6 errors) ====
+    class Test {
+        p1 = 0;
+        p2 = this.p1;
+        p3 = this.p4;
+                  ~~
+!!! error TS2729: Property 'p4' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:5:5: 'p4' is declared here.
+        p4 = 0;
+    
+        directlyAssigned: any = this.directlyAssigned;
+                                     ~~~~~~~~~~~~~~~~
+!!! error TS2729: Property 'directlyAssigned' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:7:5: 'directlyAssigned' is declared here.
+    
+        withinArrowFunction: any = () => this.withinArrowFunction;
+    
+        withinFunction: any = function () {
+            return this.withinFunction;
+        };
+    
+        withinObjectLiteral: any = {
+            [this.withinObjectLiteral]: true,
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2729: Property 'withinObjectLiteral' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:15:5: 'withinObjectLiteral' is declared here.
+        };
+    
+        withinObjectLiteralGetterName: any = {
+            get [this.withinObjectLiteralGetterName]() {
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2729: Property 'withinObjectLiteralGetterName' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:19:5: 'withinObjectLiteralGetterName' is declared here.
+                return true;
+            }
+        };
+    
+        withinObjectLiteralSetterName: any = {
+            set [this.withinObjectLiteralSetterName](_: any) {}
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2729: Property 'withinObjectLiteralSetterName' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:25:5: 'withinObjectLiteralSetterName' is declared here.
+        };
+    
+        withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
+                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2729: Property 'withinClassDeclarationExtension' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/classUsedBeforeInitializedVariables.ts:29:5: 'withinClassDeclarationExtension' is declared here.
+    
+        // These error cases are ignored (not checked by control flow analysis)
+    
+        assignedByArrowFunction: any = (() => this.assignedByFunction)();
+    
+        assignedByFunction: any = (function () {
+            return this.assignedByFunction;
+        })();
+    }
+    

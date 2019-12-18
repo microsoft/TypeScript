@@ -1,0 +1,135 @@
+=== tests/cases/compiler/controlFlowForCatchAndFinally.ts ===
+type Page = {close(): Promise<void>; content(): Promise<string>};
+>Page : Symbol(Page, Decl(controlFlowForCatchAndFinally.ts, 0, 0))
+>close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 0, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>content : Symbol(content, Decl(controlFlowForCatchAndFinally.ts, 0, 36))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+type Browser = {close(): Promise<void>};
+>Browser : Symbol(Browser, Decl(controlFlowForCatchAndFinally.ts, 0, 65))
+>close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 1, 16))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function test1(): Promise<Browser>;
+>test1 : Symbol(test1, Decl(controlFlowForCatchAndFinally.ts, 1, 40))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Browser : Symbol(Browser, Decl(controlFlowForCatchAndFinally.ts, 0, 65))
+
+declare function test2(obj: Browser): Promise<Page>;
+>test2 : Symbol(test2, Decl(controlFlowForCatchAndFinally.ts, 2, 43))
+>obj : Symbol(obj, Decl(controlFlowForCatchAndFinally.ts, 3, 23))
+>Browser : Symbol(Browser, Decl(controlFlowForCatchAndFinally.ts, 0, 65))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Page : Symbol(Page, Decl(controlFlowForCatchAndFinally.ts, 0, 0))
+
+async function test(): Promise<string> {
+>test : Symbol(test, Decl(controlFlowForCatchAndFinally.ts, 3, 52))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    let browser: Browser | undefined = undefined;
+>browser : Symbol(browser, Decl(controlFlowForCatchAndFinally.ts, 5, 7))
+>Browser : Symbol(Browser, Decl(controlFlowForCatchAndFinally.ts, 0, 65))
+>undefined : Symbol(undefined)
+
+    let page: Page | undefined = undefined;
+>page : Symbol(page, Decl(controlFlowForCatchAndFinally.ts, 6, 7))
+>Page : Symbol(Page, Decl(controlFlowForCatchAndFinally.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+    try {
+        browser = await test1();
+>browser : Symbol(browser, Decl(controlFlowForCatchAndFinally.ts, 5, 7))
+>test1 : Symbol(test1, Decl(controlFlowForCatchAndFinally.ts, 1, 40))
+
+        page = await test2(browser);
+>page : Symbol(page, Decl(controlFlowForCatchAndFinally.ts, 6, 7))
+>test2 : Symbol(test2, Decl(controlFlowForCatchAndFinally.ts, 2, 43))
+>browser : Symbol(browser, Decl(controlFlowForCatchAndFinally.ts, 5, 7))
+
+        return await page.content();;
+>page.content : Symbol(content, Decl(controlFlowForCatchAndFinally.ts, 0, 36))
+>page : Symbol(page, Decl(controlFlowForCatchAndFinally.ts, 6, 7))
+>content : Symbol(content, Decl(controlFlowForCatchAndFinally.ts, 0, 36))
+
+    } finally {
+        if (page) {
+>page : Symbol(page, Decl(controlFlowForCatchAndFinally.ts, 6, 7))
+
+            await page.close(); // ok
+>page.close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 0, 13))
+>page : Symbol(page, Decl(controlFlowForCatchAndFinally.ts, 6, 7))
+>close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 0, 13))
+        }
+
+        if (browser) {
+>browser : Symbol(browser, Decl(controlFlowForCatchAndFinally.ts, 5, 7))
+
+            await browser.close(); // ok
+>browser.close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 1, 16))
+>browser : Symbol(browser, Decl(controlFlowForCatchAndFinally.ts, 5, 7))
+>close : Symbol(close, Decl(controlFlowForCatchAndFinally.ts, 1, 16))
+        }
+    }
+}
+
+declare class Aborter { abort(): void };
+>Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+>abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+
+    abortController: Aborter | undefined = undefined;
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+>undefined : Symbol(undefined)
+
+    async operation() {
+>operation : Symbol(Foo.operation, Decl(controlFlowForCatchAndFinally.ts, 24, 53))
+
+        if (this.abortController !== undefined) {
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>undefined : Symbol(undefined)
+
+            this.abortController.abort();
+>this.abortController.abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+
+            this.abortController = undefined;
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>undefined : Symbol(undefined)
+        }
+        try {
+            this.abortController = new Aborter();
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>Aborter : Symbol(Aborter, Decl(controlFlowForCatchAndFinally.ts, 20, 1))
+
+        } catch (error) {
+>error : Symbol(error, Decl(controlFlowForCatchAndFinally.ts, 33, 17))
+
+            if (this.abortController !== undefined) {
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>undefined : Symbol(undefined)
+
+                this.abortController.abort(); // ok
+>this.abortController.abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+>this.abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>this : Symbol(Foo, Decl(controlFlowForCatchAndFinally.ts, 22, 40))
+>abortController : Symbol(Foo.abortController, Decl(controlFlowForCatchAndFinally.ts, 23, 11))
+>abort : Symbol(Aborter.abort, Decl(controlFlowForCatchAndFinally.ts, 22, 23))
+            }
+        }
+    }
+}

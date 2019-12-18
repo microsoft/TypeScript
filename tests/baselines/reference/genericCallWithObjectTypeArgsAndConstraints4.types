@@ -96,11 +96,11 @@ var r8 = foo(() => { }, () => { });
 >() => { } : () => void
 
 var r9 = foo(() => { }, () => 1);
->r9 : (x: () => void) => () => 1
->foo(() => { }, () => 1) : (x: () => void) => () => 1
+>r9 : (x: () => void) => () => number
+>foo(() => { }, () => 1) : (x: () => void) => () => number
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
 >() => { } : () => void
->() => 1 : () => 1
+>() => 1 : () => number
 >1 : 1
 
 function other<T, U extends T>() {

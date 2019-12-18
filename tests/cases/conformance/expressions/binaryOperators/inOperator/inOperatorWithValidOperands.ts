@@ -22,6 +22,14 @@ function foo<T>(t: T) {
     var rb3 = x in t;
 }
 
+function unionCase<T, U>(t: T | U) {
+    var rb4 = x in t;
+}
+
+function unionCase2<T>(t: T | object) {
+    var rb5 = x in t;
+}
+
 interface X { x: number }
 interface Y { y: number }
 

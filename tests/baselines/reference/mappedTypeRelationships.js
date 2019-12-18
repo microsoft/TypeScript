@@ -181,6 +181,16 @@ function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2
     return t[k1][k2];
 }
 
+// #31070
+type Numeric<T> = { [K in keyof T]?: number };
+function f90<T extends { x: number }>() {
+    const n: Numeric<T> = { x: 1 };
+}
+
+function f<T extends { x: {} }>(): Partial<T> {
+    return undefined! as T;
+}
+
 
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
@@ -310,6 +320,12 @@ function f81(t, k) {
 function f82(t, k1, k2) {
     return t[k1][k2];
 }
+function f90() {
+    var n = { x: 1 };
+}
+function f() {
+    return undefined;
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -393,3 +409,12 @@ declare function f76<T, U extends T, K extends keyof T>(x: {
 declare function f80<T>(t: T): Partial<T>;
 declare function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]>;
 declare function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]>;
+declare type Numeric<T> = {
+    [K in keyof T]?: number;
+};
+declare function f90<T extends {
+    x: number;
+}>(): void;
+declare function f<T extends {
+    x: {};
+}>(): Partial<T>;

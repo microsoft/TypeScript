@@ -18,7 +18,7 @@
 verify.completions({
     marker: "",
     // Tester will assert that it is only included once
-    includes: [{ name: "foo", source: "a", hasAction: true }],
+    includes: [{ name: "foo", source: "a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }],
     preferences: {
         includeCompletionsForModuleExports: true,
     }

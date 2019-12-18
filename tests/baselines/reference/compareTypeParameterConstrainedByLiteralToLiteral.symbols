@@ -1,0 +1,16 @@
+=== tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts ===
+// Test for #26758
+
+function foo<T extends "a" | "b">(t: T) {
+>foo : Symbol(foo, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 0, 0))
+>T : Symbol(T, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 2, 13))
+>t : Symbol(t, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 2, 34))
+>T : Symbol(T, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 2, 13))
+
+    t === "a";  // Should be allowed
+>t : Symbol(t, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 2, 34))
+
+    t === "x";  // Should be error
+>t : Symbol(t, Decl(compareTypeParameterConstrainedByLiteralToLiteral.ts, 2, 34))
+}
+

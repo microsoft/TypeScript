@@ -8,7 +8,7 @@ tests/cases/conformance/es6/Symbols/symbolType12.ts(7,1): error TS2362: The left
 tests/cases/conformance/es6/Symbols/symbolType12.ts(7,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es6/Symbols/symbolType12.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es6/Symbols/symbolType12.ts(9,1): error TS2365: Operator '+=' cannot be applied to types 'symbol' and 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType12.ts(10,1): error TS2365: Operator '+=' cannot be applied to types 'symbol' and '0'.
+tests/cases/conformance/es6/Symbols/symbolType12.ts(10,1): error TS2365: Operator '+=' cannot be applied to types 'symbol' and 'number'.
 tests/cases/conformance/es6/Symbols/symbolType12.ts(11,1): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
 tests/cases/conformance/es6/Symbols/symbolType12.ts(12,8): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
 tests/cases/conformance/es6/Symbols/symbolType12.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -67,7 +67,7 @@ tests/cases/conformance/es6/Symbols/symbolType12.ts(28,8): error TS2469: The '+=
 !!! error TS2365: Operator '+=' cannot be applied to types 'symbol' and 'symbol'.
     s += 0;
     ~~~~~~
-!!! error TS2365: Operator '+=' cannot be applied to types 'symbol' and '0'.
+!!! error TS2365: Operator '+=' cannot be applied to types 'symbol' and 'number'.
     s += "";
     ~
 !!! error TS2469: The '+=' operator cannot be applied to type 'symbol'.

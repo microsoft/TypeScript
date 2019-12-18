@@ -1,0 +1,52 @@
+=== tests/cases/compiler/substitutionTypeNoMergeOfAssignableType.ts ===
+interface Entry {
+    comment?: string;
+>comment : string
+ }
+ 
+ interface Entity {
+     fields: {[key: string]: Entry};
+>fields : { [key: string]: Entry; }
+>key : string
+ }
+ 
+ type Fields<E extends Entity> = {
+>Fields : Fields<E>
+
+     [P in keyof E["fields"]]: E["fields"][P]
+ };
+ 
+ type Nodes<T = any> = {
+>Nodes : Nodes<T>
+
+     [P in keyof T]: T[P] extends Entity
+         ? Fields<T[P]>
+         : T[P]
+ };
+ 
+ function makeEntityStore<T extends Record<string, Entity>>(config: T): Nodes<T> {
+>makeEntityStore : <T extends Record<string, Entity>>(config: T) => Nodes<T>
+>config : T
+
+     return {} as Nodes<T>
+>{} as Nodes<T> : Nodes<T>
+>{} : {}
+ }
+ 
+ const myTest = makeEntityStore({ test: { fields: { id: {} } } });
+>myTest : Nodes<{ test: { fields: { id: {}; }; }; }>
+>makeEntityStore({ test: { fields: { id: {} } } }) : Nodes<{ test: { fields: { id: {}; }; }; }>
+>makeEntityStore : <T extends Record<string, Entity>>(config: T) => Nodes<T>
+>{ test: { fields: { id: {} } } } : { test: { fields: { id: {}; }; }; }
+>test : { fields: { id: {}; }; }
+>{ fields: { id: {} } } : { fields: { id: {}; }; }
+>fields : { id: {}; }
+>{ id: {} } : { id: {}; }
+>id : {}
+>{} : {}
+
+ myTest.test
+>myTest.test : Fields<{ fields: { id: {}; }; }>
+>myTest : Nodes<{ test: { fields: { id: {}; }; }; }>
+>test : Fields<{ fields: { id: {}; }; }>
+ 

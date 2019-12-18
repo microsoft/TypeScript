@@ -1,0 +1,21 @@
+=== tests/cases/compiler/useBeforeDeclaration_destructuring.ts ===
+a;
+>a : Symbol(a, Decl(useBeforeDeclaration_destructuring.ts, 1, 5))
+
+let {a, b = a} = {a: '', b: 1};
+>a : Symbol(a, Decl(useBeforeDeclaration_destructuring.ts, 1, 5))
+>b : Symbol(b, Decl(useBeforeDeclaration_destructuring.ts, 1, 7))
+>a : Symbol(a, Decl(useBeforeDeclaration_destructuring.ts, 1, 5))
+>a : Symbol(a, Decl(useBeforeDeclaration_destructuring.ts, 1, 18))
+>b : Symbol(b, Decl(useBeforeDeclaration_destructuring.ts, 1, 24))
+
+b;
+>b : Symbol(b, Decl(useBeforeDeclaration_destructuring.ts, 1, 7))
+
+function test({c, d = c}: Record<string, number>) {}
+>test : Symbol(test, Decl(useBeforeDeclaration_destructuring.ts, 2, 2))
+>c : Symbol(c, Decl(useBeforeDeclaration_destructuring.ts, 4, 15))
+>d : Symbol(d, Decl(useBeforeDeclaration_destructuring.ts, 4, 17))
+>c : Symbol(c, Decl(useBeforeDeclaration_destructuring.ts, 4, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+

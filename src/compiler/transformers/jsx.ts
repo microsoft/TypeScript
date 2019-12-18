@@ -84,7 +84,7 @@ namespace ts {
             return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
@@ -133,7 +133,7 @@ namespace ts {
             return element;
         }
 
-        function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningFragment(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217
@@ -182,7 +182,7 @@ namespace ts {
         }
 
         function visitJsxText(node: JsxText): StringLiteral | undefined {
-            const fixed = fixupWhitespaceAndDecodeEntities(getTextOfNode(node, /*includeTrivia*/ true));
+            const fixed = fixupWhitespaceAndDecodeEntities(node.text);
             return fixed === undefined ? undefined : createLiteral(fixed);
         }
 
@@ -253,15 +253,15 @@ namespace ts {
         function decodeEntities(text: string): string {
             return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
                 if (decimal) {
-                    return String.fromCharCode(parseInt(decimal, 10));
+                    return utf16EncodeAsString(parseInt(decimal, 10));
                 }
                 else if (hex) {
-                    return String.fromCharCode(parseInt(hex, 16));
+                    return utf16EncodeAsString(parseInt(hex, 16));
                 }
                 else {
                     const ch = entities.get(word);
                     // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
-                    return ch ? String.fromCharCode(ch) : match;
+                    return ch ? utf16EncodeAsString(ch) : match;
                 }
             });
         }

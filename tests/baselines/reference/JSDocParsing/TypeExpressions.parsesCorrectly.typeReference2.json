@@ -3,11 +3,15 @@
     "pos": 1,
     "end": 18,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "typeName": {
         "kind": "Identifier",
         "pos": 1,
         "end": 2,
         "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "escapedText": "a",
         "jsdocDotPos": 2
     },
@@ -16,13 +20,17 @@
             "kind": "NumberKeyword",
             "pos": 4,
             "end": 10,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 11,
             "end": 17,
-            "flags": "JSDoc"
+            "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0
         },
         "length": 2,
         "pos": 4,

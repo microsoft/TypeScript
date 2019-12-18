@@ -171,8 +171,7 @@ namespace ts.SymbolDisplay {
             }
 
             if (callExpressionLike) {
-                const candidateSignatures: Signature[] = [];
-                signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures)!; // TODO: GH#18217
+                signature = typeChecker.getResolvedSignature(callExpressionLike)!; // TODO: GH#18217
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
@@ -238,7 +237,7 @@ namespace ts.SymbolDisplay {
                 // get the signature from the declaration and write it
                 const functionDeclaration = <FunctionLike>location.parent;
                 // Use function declaration to write the signatures only if the symbol corresponding to this declaration
-                const locationIsSymbolDeclaration = find(symbol.declarations, declaration =>
+                const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration =>
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
                 if (locationIsSymbolDeclaration) {
@@ -310,7 +309,7 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
         }
-        if (symbolFlags & SymbolFlags.Module) {
+        if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
             prefixNextMeaning();
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
@@ -604,7 +603,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addSignatureDisplayParts(signature: Signature, allSignatures: ReadonlyArray<Signature>, flags = TypeFormatFlags.None) {
+        function addSignatureDisplayParts(signature: Signature, allSignatures: readonly Signature[], flags = TypeFormatFlags.None) {
             addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
             if (allSignatures.length > 1) {
                 displayParts.push(spacePart());

@@ -210,3 +210,23 @@ class C10 {
     }
 }
 
+// Property is considered initialized by type any even though value could be undefined
+
+declare function someValue(): any;
+>someValue : Symbol(someValue, Decl(strictPropertyInitialization.ts, 97, 1))
+
+class C11 {
+>C11 : Symbol(C11, Decl(strictPropertyInitialization.ts, 101, 34))
+
+    a: number;
+>a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 103, 11))
+
+    constructor() {
+        this.a = someValue();
+>this.a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 103, 11))
+>this : Symbol(C11, Decl(strictPropertyInitialization.ts, 101, 34))
+>a : Symbol(C11.a, Decl(strictPropertyInitialization.ts, 103, 11))
+>someValue : Symbol(someValue, Decl(strictPropertyInitialization.ts, 97, 1))
+    }
+}
+

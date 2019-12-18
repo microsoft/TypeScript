@@ -70,7 +70,8 @@ namespace ts {
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
-        let hasImportStarOrImportDefault = false;
+        let hasImportStar = false;
+        let hasImportDefault = false;
 
         for (const node of sourceFile.statements) {
             switch (node.kind) {
@@ -80,7 +81,12 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    if (!hasImportStar && getImportNeedsImportStarHelper(<ImportDeclaration>node)) {
+                        hasImportStar = true;
+                    }
+                    if (!hasImportDefault && getImportNeedsImportDefaultHelper(<ImportDeclaration>node)) {
+                        hasImportDefault = true;
+                    }
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -183,15 +189,8 @@ namespace ts {
             }
         }
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStarOrImportDefault);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
+        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
         if (externalHelpersImportDeclaration) {
-            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
@@ -241,6 +240,47 @@ namespace ts {
     }
 
     /**
+     * A simple inlinable expression is an expression which can be copied into multiple locations
+     * without risk of repeating any sideeffects and whose value could not possibly change between
+     * any such locations
+     */
+    export function isSimpleInlineableExpression(expression: Expression) {
+        return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
+            isWellKnownSymbolSyntactically(expression);
+    }
+
+    /**
+     * Adds super call and preceding prologue directives into the list of statements.
+     *
+     * @param ctor The constructor node.
+     * @param result The list of statements.
+     * @param visitor The visitor to apply to each node added to the result array.
+     * @returns index of the statement that follows super call
+     */
+    export function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
+        if (ctor.body) {
+            const statements = ctor.body.statements;
+            // add prologue directives to the list (if any)
+            const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
+            if (index === statements.length) {
+                // list contains nothing but prologue directives (or empty) - exit
+                return index;
+            }
+
+            const statement = statements[index];
+            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
+                result.push(visitNode(statement, visitor, isStatement));
+                return index + 1;
+            }
+
+            return index;
+        }
+
+        return 0;
+    }
+
+
+    /**
      * @param input Template string input strings
      * @param args Names which need to be made file-level unique
      */
@@ -255,4 +295,31 @@ namespace ts {
             return result;
         };
     }
+
+    /**
+     * Gets all the static or all the instance property declarations of a class
+     *
+     * @param node The class node.
+     * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+     */
+    export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
+        return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
+    }
+
+    /**
+     * Is a class element either a static or an instance property declaration with an initializer?
+     *
+     * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
+     */
+    function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
+        return isPropertyDeclaration(member)
+            && (!!member.initializer || !requireInitializer)
+            && hasStaticModifier(member) === isStatic;
+    }
+
+    export function isInitializedProperty(member: ClassElement, requireInitializer: boolean): member is PropertyDeclaration {
+        return isPropertyDeclaration(member) && (!!member.initializer || !requireInitializer);
+    }
+
 }

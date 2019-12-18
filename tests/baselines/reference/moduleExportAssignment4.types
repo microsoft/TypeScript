@@ -13,7 +13,7 @@ exports.default = { m: 1, a: 1 }
 module.exports = exports['default'];
 >module.exports = exports['default'] : any
 >module.exports : any
->module : { "tests/cases/conformance/salsa/async": any; }
+>module : { "\"tests/cases/conformance/salsa/async\"": any; }
 >exports : any
 >exports['default'] : any
 >exports : any

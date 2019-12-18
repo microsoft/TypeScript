@@ -210,15 +210,15 @@ function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 someGenerics6(n => n, n => n, n => n);
 >someGenerics6(n => n, n => n, n => n) : void
 >someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics6<number>(n => n, n => n, n => n);
 >someGenerics6<number>(n => n, n => n, n => n) : void
@@ -259,15 +259,15 @@ function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) 
 someGenerics7(n => n, n => n, n => n);
 >someGenerics7(n => n, n => n, n => n) : void
 >someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7<number, string, number>(n => n, n => n, n => n) : void

@@ -9,11 +9,11 @@ let x = (new C).foo();
 
 //// [classExpression4.js]
 var C = /** @class */ (function () {
-    function class_1() {
+    function C() {
     }
-    class_1.prototype.foo = function () {
+    C.prototype.foo = function () {
         return new C();
     };
-    return class_1;
+    return C;
 }());
 var x = (new C).foo();

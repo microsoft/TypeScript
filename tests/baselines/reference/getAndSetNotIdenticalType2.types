@@ -31,20 +31,20 @@ class C<T> {
 }
 
 var x = new C();
->x : C<{}>
->new C() : C<{}>
+>x : C<unknown>
+>new C() : C<unknown>
 >C : typeof C
 
 var r = x.x;
->r : A<{}>
->x.x : A<{}>
->x : C<{}>
->x : A<{}>
+>r : A<unknown>
+>x.x : A<unknown>
+>x : C<unknown>
+>x : A<unknown>
 
 x.x = r;
->x.x = r : A<{}>
->x.x : A<{}>
->x : C<{}>
->x : A<{}>
->r : A<{}>
+>x.x = r : A<unknown>
+>x.x : A<unknown>
+>x : C<unknown>
+>x : A<unknown>
+>r : A<unknown>
 

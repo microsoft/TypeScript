@@ -4,4 +4,5 @@ var obj = {
 
     [this.bar]: 0
 >[this.bar] : Symbol([this.bar], Decl(computedPropertyNames20_ES5.ts, 0, 11))
+>this : Symbol(globalThis)
 }

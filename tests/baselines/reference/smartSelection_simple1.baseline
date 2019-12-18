@@ -1,0 +1,116 @@
+class Foo {
+  bar(a, b) {
+      if (/**/a === b) {
+          return true;
+      }
+      return false;
+  }
+}
+
+
+          a         
+
+
+          a === b   
+
+
+      if (a === b) {
+          return true;
+      }
+
+
+             ↲
+••••••if (a === b) {
+          return true;
+      }
+      return false;↲
+•• 
+
+
+  bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
+
+
+           ↲
+••bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }↲
+
+
+class Foo {
+  bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
+}
+
+================================================================================
+
+class Foo {
+  bar(a, b) {
+      if (a === b) {
+          return tr/**/ue;
+      }
+      return false;
+  }
+}
+
+
+                 true 
+
+
+          return true;
+
+
+                    ↲
+••••••••••return true;↲
+•••••• 
+
+
+      if (a === b) {
+          return true;
+      }
+
+
+             ↲
+••••••if (a === b) {
+          return true;
+      }
+      return false;↲
+•• 
+
+
+  bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
+
+
+           ↲
+••bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }↲
+
+
+class Foo {
+  bar(a, b) {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
+}

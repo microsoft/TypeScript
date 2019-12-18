@@ -1,0 +1,52 @@
+=== tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts ===
+type Obj = {} | undefined;
+>Obj : Symbol(Obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 0))
+
+type User = {
+>User : Symbol(User, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 26))
+
+    email: string;
+>email : Symbol(email, Decl(partialTypeNarrowedToByTypeGuard.ts, 2, 13))
+
+    name: string;
+>name : Symbol(name, Decl(partialTypeNarrowedToByTypeGuard.ts, 3, 18))
+
+};
+
+type PartialUser = Partial<User>;
+>PartialUser : Symbol(PartialUser, Decl(partialTypeNarrowedToByTypeGuard.ts, 5, 2))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>User : Symbol(User, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 26))
+
+// type PartialUser = {
+//   email?: string;
+//   name?: string;
+// };
+
+function isUser(obj: Obj): obj is PartialUser {
+>isUser : Symbol(isUser, Decl(partialTypeNarrowedToByTypeGuard.ts, 7, 33))
+>obj : Symbol(obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 14, 16))
+>Obj : Symbol(Obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 0))
+>obj : Symbol(obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 14, 16))
+>PartialUser : Symbol(PartialUser, Decl(partialTypeNarrowedToByTypeGuard.ts, 5, 2))
+
+    return true;
+}
+
+function getUserName(obj: Obj) {
+>getUserName : Symbol(getUserName, Decl(partialTypeNarrowedToByTypeGuard.ts, 16, 1))
+>obj : Symbol(obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 18, 21))
+>Obj : Symbol(Obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 0))
+
+    if (isUser(obj)) {
+>isUser : Symbol(isUser, Decl(partialTypeNarrowedToByTypeGuard.ts, 7, 33))
+>obj : Symbol(obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 18, 21))
+
+        return obj.name;
+>obj.name : Symbol(name, Decl(partialTypeNarrowedToByTypeGuard.ts, 3, 18))
+>obj : Symbol(obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 18, 21))
+>name : Symbol(name, Decl(partialTypeNarrowedToByTypeGuard.ts, 3, 18))
+    }
+
+    return '';
+}

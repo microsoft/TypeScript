@@ -1,5 +1,5 @@
 tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(1,7): error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(4,2): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(4,10): error TS2554: Expected 0 arguments, but got 1.
 
 
 ==== tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts (2 errors) ====
@@ -9,6 +9,6 @@ tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(4,2): erro
     {
     }
     (new S18(123)).S18 = 0;
-     ~~~~~~~~~~~~
+             ~~~
 !!! error TS2554: Expected 0 arguments, but got 1.
     

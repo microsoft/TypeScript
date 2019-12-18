@@ -138,3 +138,53 @@ declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]
 >T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
 >T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
 
+// Repro from #31823
+
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints.ts, 35, 88))
+>Elm : Symbol(Elm, Decl(infiniteConstraints.ts, 39, 20))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+
+  T extends unknown ?
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+>arg : Symbol(arg, Decl(infiniteConstraints.ts, 41, 4))
+>Elm : Symbol(Elm, Decl(infiniteConstraints.ts, 39, 20))
+>rest : Symbol(rest, Decl(infiniteConstraints.ts, 41, 13))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 39, 24))
+>args : Symbol(args, Decl(infiniteConstraints.ts, 41, 45))
+>T2 : Symbol(T2, Decl(infiniteConstraints.ts, 41, 59))
+>T2 : Symbol(T2, Decl(infiniteConstraints.ts, 41, 59))
+
+  never :
+  never;
+export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints.ts, 43, 8))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 44, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 44, 25))
+
+type Conv<T, U = T> =
+>Conv : Symbol(Conv, Decl(infiniteConstraints.ts, 44, 79))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+
+  { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+>0 : Symbol(0, Decl(infiniteConstraints.ts, 47, 3))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>1 : Symbol(1, Decl(infiniteConstraints.ts, 47, 11))
+>Prepend : Symbol(Prepend, Decl(infiniteConstraints.ts, 35, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>Conv : Symbol(Conv, Decl(infiniteConstraints.ts, 44, 79))
+>ExactExtract : Symbol(ExactExtract, Decl(infiniteConstraints.ts, 43, 8))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+>U : Symbol(U, Decl(infiniteConstraints.ts, 46, 12))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 46, 10))
+

@@ -18,6 +18,7 @@ verify.completions({
         kind: "function",
         kindModifiers: "export",
         hasAction: true,
+        sortText: completion.SortText.AutoImportSuggestions
     },
     preferences: { includeCompletionsForModuleExports: true },
 });

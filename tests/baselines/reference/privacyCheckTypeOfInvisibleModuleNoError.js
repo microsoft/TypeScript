@@ -22,5 +22,6 @@ declare module Outer {
     module Inner {
         var m: number;
     }
-    var f: typeof Inner;
+    export var f: typeof Inner;
+    export {};
 }

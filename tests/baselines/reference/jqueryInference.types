@@ -22,11 +22,11 @@ declare const p1: MyPromise<boolean, any>;
 >p1 : MyPromise<boolean, any>
 
 var p2 = shouldBeIdentity(p1);
->p2 : MyPromise<boolean, {}>
->shouldBeIdentity(p1) : MyPromise<boolean, {}>
+>p2 : MyPromise<boolean, any>
+>shouldBeIdentity(p1) : MyPromise<boolean, any>
 >shouldBeIdentity : <T, U>(p: DoNothingAlias<T, U>) => MyPromise<T, U>
 >p1 : MyPromise<boolean, any>
 
-var p2: MyPromise<boolean, {}>;
->p2 : MyPromise<boolean, {}>
+var p2: MyPromise<boolean, any>;
+>p2 : MyPromise<boolean, any>
 

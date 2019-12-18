@@ -3,7 +3,7 @@ class _this {
 >_this : _this
 }
 var f = () => this;
->f : () => any
->() => this : () => any
->this : any
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 

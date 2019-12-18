@@ -274,7 +274,7 @@ function g4([x, y = 0] = [0]) { }
 >x : number
 >y : number
 >0 : 0
->[0] : [number, number?]
+>[0] : [number]
 >0 : 0
 
 g4();
@@ -295,7 +295,7 @@ function g5([x = 0, y = 0] = []) { }
 >0 : 0
 >y : number
 >0 : 0
->[] : [number?, number?]
+>[] : []
 
 g5();
 >g5() : void

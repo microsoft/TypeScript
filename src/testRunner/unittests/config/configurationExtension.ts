@@ -159,8 +159,7 @@ namespace ts {
                     "dev/configs/third.json": JSON.stringify({
                         extends: "./second",
                         compilerOptions: {
-                            // tslint:disable-next-line:no-null-keyword
-                            module: null
+                            module: null // eslint-disable-line no-null/no-null
                         },
                         include: ["../supplemental.*"]
                     }),
@@ -169,8 +168,7 @@ namespace ts {
                         compilerOptions: {
                             module: "system"
                         },
-                        // tslint:disable-next-line:no-null-keyword
-                        include: null,
+                        include: null, // eslint-disable-line no-null/no-null
                         files: ["../main.ts"]
                     }),
                     "dev/configs/fifth.json": JSON.stringify({
@@ -197,13 +195,13 @@ namespace ts {
     const caseSensitiveBasePath = "/dev/";
     const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
 
-    function verifyDiagnostics(actual: Diagnostic[], expected: {code: number, category: DiagnosticCategory, messageText: string}[]) {
+    function verifyDiagnostics(actual: Diagnostic[], expected: { code: number; messageText: string; }[]) {
         assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
         for (let i = 0; i < actual.length; i++) {
             const actualError = actual[i];
             const expectedError = expected[i];
             assert.equal(actualError.code, expectedError.code, "Error code mismatch");
-            assert.equal(actualError.category, expectedError.category, "Category mismatch");
+            assert.equal(actualError.category, DiagnosticCategory.Error, "Category mismatch"); // Should always be error
             assert.equal(flattenDiagnosticMessageText(actualError.messageText, "\n"), expectedError.messageText);
         }
     }
@@ -246,7 +244,7 @@ namespace ts {
                 });
             }
 
-            function testFailure(name: string, entry: string, expectedDiagnostics: { code: number, category: DiagnosticCategory, messageText: string }[]) {
+            function testFailure(name: string, entry: string, expectedDiagnostics: { code: number; messageText: string; }[]) {
                 it(name, () => {
                     const parsed = getParseCommandLine(entry);
                     verifyDiagnostics(parsed.errors, expectedDiagnostics);
@@ -280,26 +278,22 @@ namespace ts {
                 testFailure("can report errors on circular imports", "circular.json", [
                     {
                         code: 18000,
-                        category: DiagnosticCategory.Error,
                         messageText: `Circularity detected while resolving configuration: ${[combinePaths(basePath, "circular.json"), combinePaths(basePath, "circular2.json"), combinePaths(basePath, "circular.json")].join(" -> ")}`
                     }
                 ]);
 
                 testFailure("can report missing configurations", "missing.json", [{
-                    code: 6096,
-                    category: DiagnosticCategory.Message,
-                    messageText: `File './missing2' does not exist.`
+                    code: 6053,
+                    messageText: `File './missing2' not found.`
                 }]);
 
                 testFailure("can report errors in extended configs", "failure.json", [{
                     code: 6114,
-                    category: DiagnosticCategory.Error,
                     messageText: `Unknown option 'excludes'. Did you mean 'exclude'?`
                 }]);
 
                 testFailure("can error when 'extends' is not a string", "extends.json", [{
                     code: 5024,
-                    category: DiagnosticCategory.Error,
                     messageText: `Compiler option 'extends' requires a value of type string.`
                 }]);
 

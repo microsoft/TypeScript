@@ -7,6 +7,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(32,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
+      'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(33,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived'.
@@ -14,6 +15,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(36,9): error TS2322: Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
+      'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(37,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived2'.
@@ -66,6 +68,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2322:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
             b = a; // error
             ~
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }'.
@@ -79,6 +82,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2322:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
             b2 = a; // error
             ~~
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }'.

@@ -10,11 +10,25 @@ class P {
 >y : typeof P
 >this : typeof P
 
-    constructor(public z = this, zz = this) { }
+    constructor(public z = this, zz = this, zzz = (p = this) => this) {
 >z : this
 >this : this
 >zz : this
 >this : this
+>zzz : (p?: this) => this
+>(p = this) => this : (p?: this) => this
+>p : this
+>this : this
+>this : this
+
+        zzz = (p = this) => this;
+>zzz = (p = this) => this : (p?: this) => this
+>zzz : (p?: this) => this
+>(p = this) => this : (p?: this) => this
+>p : this
+>this : this
+>this : this
+    }
 
     foo(zz = this) { zz.x; }
 >foo : (zz?: this) => void

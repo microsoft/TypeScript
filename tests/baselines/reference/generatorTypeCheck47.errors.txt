@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck47.ts(1,9): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
-
-
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck47.ts (1 errors) ====
-    function* g() { }
-            ~
-!!! error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.

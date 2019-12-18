@@ -1,0 +1,125 @@
+=== tests/cases/compiler/consistentAliasVsNonAliasRecordBehavior.ts ===
+// TODO: FIXME: All the below cases labeled `no error` _should be an error_, and are only prevented from so being
+// by incorrect variance-based relationships
+// Ref: https://github.com/Microsoft/TypeScript/issues/29698
+
+type Record2<K extends keyof any, T> = {
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>K : Symbol(K, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 4, 13))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 4, 33))
+
+    [P in K]: T;
+>P : Symbol(P, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 5, 5))
+>K : Symbol(K, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 4, 13))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 4, 33))
+
+};
+
+function defaultRecord(x: Record<'a', string>, y: Record<string, string>) {
+>defaultRecord : Symbol(defaultRecord, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 6, 2))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 8, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 8, 46))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    x = y; // no error, but error expected.
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 8, 23))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 8, 46))
+}
+
+function customRecord(x: Record2<'a', string>, y: Record2<string, string>) {
+>customRecord : Symbol(customRecord, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 10, 1))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 12, 22))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 12, 46))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+
+    x = y; // no error, but error expected.
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 12, 22))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 12, 46))
+}
+
+function mixed1(x: Record2<'a', string>, y: Record<string, string>) {
+>mixed1 : Symbol(mixed1, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 14, 1))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 16, 16))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 16, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    x = y; // error
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 16, 16))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 16, 40))
+}
+
+function mixed2(x: Record<'a', string>, y: Record2<string, string>) {
+>mixed2 : Symbol(mixed2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 18, 1))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 20, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 20, 39))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+
+    x = y; // error
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 20, 16))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 20, 39))
+}
+
+function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
+>defaultRecord2 : Symbol(defaultRecord2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 22, 1))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 24))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 24))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 45))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 24))
+
+    x = y; // no error, but error expected.
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 27))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 24, 45))
+}
+
+function customRecord2<T>(x: Record2<'a', T>, y: Record2<string, T>) {
+>customRecord2 : Symbol(customRecord2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 26, 1))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 23))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 26))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 23))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 45))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 23))
+
+    x = y; // no error, but error expected.
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 26))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 28, 45))
+}
+
+function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
+>mixed3 : Symbol(mixed3, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 30, 1))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 16))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 19))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 16))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 38))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 16))
+
+    x = y; // error
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 19))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 32, 38))
+}
+
+function mixed4<T>(x: Record<'a', T>, y: Record2<string, T>) {
+>mixed4 : Symbol(mixed4, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 34, 1))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 16))
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 16))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 37))
+>Record2 : Symbol(Record2, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 0, 0))
+>T : Symbol(T, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 16))
+
+    x = y; // error
+>x : Symbol(x, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 19))
+>y : Symbol(y, Decl(consistentAliasVsNonAliasRecordBehavior.ts, 36, 37))
+}
+

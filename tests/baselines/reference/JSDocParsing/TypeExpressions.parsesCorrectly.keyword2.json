@@ -2,5 +2,7 @@
     "kind": "NullKeyword",
     "pos": 1,
     "end": 5,
-    "flags": "JSDoc"
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0
 }
