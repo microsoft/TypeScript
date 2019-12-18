@@ -12,7 +12,7 @@
 //// someOptional(1, 2, 3);
 //// /*missing*/someOptional(); // no error here; x and y are optional in JS
 
-verify.errorExistsAfterMarker("missing");
+verify.not.errorExistsAfterMarker("missing");
 verify.signatureHelp(
     {
         marker: "1",

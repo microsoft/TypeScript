@@ -10100,12 +10100,17 @@ namespace ts {
                 let hasThisParameter = false;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                const isUntypedSignatureInJSFile = !iife &&
+                let isUntypedSignatureInJSFile = !iife &&
                     isInJSFile(declaration) &&
                     isValueSignatureDeclaration(declaration) &&
                     !hasJSDocParameterTags(declaration) &&
-                    !getJSDocType(declaration) &&
-                    (!isFunctionExpressionOrArrowFunction(declaration) || !isContextSensitiveFunctionLikeDeclaration(declaration) || !getContextualType(declaration));
+                    !getJSDocType(declaration);
+                if (isUntypedSignatureInJSFile && isFunctionExpressionOrArrowFunction(declaration) && isContextSensitiveFunctionLikeDeclaration(declaration)) {
+                    const t = getContextualType(declaration);
+                    if (t) {
+                        isUntypedSignatureInJSFile = t !== anyType;
+                    }
+                }
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
