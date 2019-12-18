@@ -623,8 +623,7 @@ namespace ts.server {
 
         positionToLineOffset(position: number): protocol.Location {
             const location = this.textStorage.positionToLineOffset(position);
-            Debug.assert(typeof location.line === "number" && location.line > 0, `Expected line ${location.line} to be greater than 0.`);
-            Debug.assert(typeof location.offset === "number" && location.offset > 0, `Expected offset ${location.offset} to be greater than 0.`);
+            failIfInvalidLocation(location);
             return location;
         }
 
@@ -644,5 +643,14 @@ namespace ts.server {
                 this.sourceMapFilePath = undefined;
             }
         }
+    }
+
+    /*@internal*/
+    function failIfInvalidLocation(location: protocol.Location) {
+        Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
+        Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
+
+        Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
+        Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
     }
 }
