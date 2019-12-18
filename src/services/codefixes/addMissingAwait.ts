@@ -68,6 +68,8 @@ namespace ts.codefix {
                     makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
                 }
             });
+            // No fix-all because it will already be included once with the use site fix,
+            // and for simplicity the fix-all doesn‘t let the user choose between use-site and declaration-site fixes.
             return createCodeFixActionWithoutFixAll(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
