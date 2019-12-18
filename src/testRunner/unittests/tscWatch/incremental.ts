@@ -8,13 +8,13 @@ namespace ts.tscWatch {
         };
 
         interface VerifyIncrementalWatchEmitInput {
-            files: ReadonlyArray<File>;
+            files: readonly File[];
             optionsToExtend?: CompilerOptions;
-            expectedInitialEmit: ReadonlyArray<File>;
-            expectedInitialErrors: ReadonlyArray<string>;
+            expectedInitialEmit: readonly File[];
+            expectedInitialErrors: readonly string[];
             modifyFs?: (host: WatchedSystem) => void;
-            expectedIncrementalEmit?: ReadonlyArray<File>;
-            expectedIncrementalErrors?: ReadonlyArray<string>;
+            expectedIncrementalEmit?: readonly File[];
+            expectedIncrementalErrors?: readonly string[];
         }
         function verifyIncrementalWatchEmit(input: () => VerifyIncrementalWatchEmitInput) {
             it("with tsc --w", () => {
@@ -35,7 +35,7 @@ namespace ts.tscWatch {
 
         function incrementalBuild(configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) {
             const reportDiagnostic = createDiagnosticReporter(host);
-            const config = parseConfigFileWithSystem(configFile, optionsToExtend || {}, host, reportDiagnostic);
+            const config = parseConfigFileWithSystem(configFile, optionsToExtend || {}, /*watchOptionsToExtend*/ undefined, host, reportDiagnostic);
             if (config) {
                 performIncrementalCompilation({
                     rootNames: config.fileNames,
@@ -52,7 +52,7 @@ namespace ts.tscWatch {
         interface VerifyIncrementalWatchEmitWorkerInput {
             input: VerifyIncrementalWatchEmitInput;
             emitAndReportErrors: (configFile: string, host: WatchedSystem, optionsToExtend?: CompilerOptions) => { close(): void; };
-            verifyErrors: (host: WatchedSystem, errors: ReadonlyArray<string>) => void;
+            verifyErrors: (host: WatchedSystem, errors: readonly string[]) => void;
         }
         function verifyIncrementalWatchEmitWorker({
             input: {
@@ -100,8 +100,8 @@ namespace ts.tscWatch {
             writtenFiles: Map<string>;
             emitAndReportErrors: VerifyIncrementalWatchEmitWorkerInput["emitAndReportErrors"];
             verifyErrors: VerifyIncrementalWatchEmitWorkerInput["verifyErrors"];
-            expectedEmit: ReadonlyArray<File>;
-            expectedErrors: ReadonlyArray<string>;
+            expectedEmit: readonly File[];
+            expectedErrors: readonly string[];
         }
         function verifyBuild({
             host, optionsToExtend, writtenFiles, emitAndReportErrors,
@@ -120,7 +120,7 @@ namespace ts.tscWatch {
             return getBuildInfoText(buildInfo);
         }
 
-        function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {
+        function checkFileEmit(actual: Map<string>, expected: readonly File[]) {
             assert.equal(actual.size, expected.length, `Actual: ${JSON.stringify(arrayFrom(actual.entries()), /*replacer*/ undefined, " ")}\nExpected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
             for (const file of expected) {
                 let expectedContent = file.content;
@@ -194,7 +194,7 @@ namespace ts.tscWatch {
                                         exportedModulesMap: {},
                                         semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    version
+                                    version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                                 })
                             }
                         ],
@@ -221,7 +221,7 @@ namespace ts.tscWatch {
                                         exportedModulesMap: {},
                                         semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                     },
-                                    version
+                                    version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                                 })
                             }
                         ],
@@ -285,7 +285,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -315,7 +315,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -348,7 +348,7 @@ namespace ts.tscWatch {
                                         ]
                                     },
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -420,7 +420,7 @@ namespace ts.tscWatch {
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -446,7 +446,7 @@ namespace ts.tscWatch {
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFilePath, file1Path, file2Path]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -506,7 +506,7 @@ namespace ts.tscWatch {
                                         file2ReuasableError
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -536,7 +536,7 @@ namespace ts.tscWatch {
                                         file1Path
                                     ]
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -547,7 +547,7 @@ namespace ts.tscWatch {
                     const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
                     incrementalBuild("tsconfig.json", system);
 
-                    const command = parseConfigFileWithSystem("tsconfig.json", {}, system, noop)!;
+                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, noop)!;
                     const builderProgram = createIncrementalProgram({
                         rootNames: command.fileNames,
                         options: command.options,
@@ -620,7 +620,7 @@ namespace ts.tscWatch {
                                         ]
                                     },
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -729,7 +729,7 @@ export { C } from "./c";
                             path: `${project}/tsconfig.tsbuildinfo`,
                             content: getBuildInfoText({
                                 program: initialProgram,
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],
@@ -753,7 +753,7 @@ export { C } from "./c";
                                     },
                                     ...rest
                                 },
-                                version
+                                version: ts.version // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                             })
                         }
                     ],

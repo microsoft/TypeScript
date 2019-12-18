@@ -1,4 +1,6 @@
 namespace ts.tscWatch {
+    export const projects = `/user/username/projects`;
+    export const projectRoot = `${projects}/myproject`;
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = TestFSWithWatch.File;
     export type SymLink = TestFSWithWatch.SymLink;
@@ -21,11 +23,11 @@ namespace ts.tscWatch {
         content: "let y = 1"
     };
 
-    export function checkProgramActualFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramActualFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }
 
-    export function checkProgramRootFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
+    export function checkProgramRootFiles(program: Program, expectedFiles: readonly string[]) {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
@@ -35,8 +37,8 @@ namespace ts.tscWatch {
         close(): void;
     }
 
-    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, host);
+    export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, optionsToExtend?: CompilerOptions, watchOptionsToExtend?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, optionsToExtend || {}, watchOptionsToExtend, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
@@ -45,8 +47,8 @@ namespace ts.tscWatch {
         return result;
     }
 
-    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host);
+    export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, watchOptions?: WatchOptions, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, watchOptions, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
@@ -172,7 +174,7 @@ namespace ts.tscWatch {
         return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
     }
 
-    export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsInitial(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -185,7 +187,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -199,7 +201,7 @@ namespace ts.tscWatch {
         );
     }
 
-    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             [
@@ -213,7 +215,7 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function checkNormalBuildErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, reportErrorSummary?: boolean) {
+    export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], reportErrorSummary?: boolean) {
         checkOutputErrors(
             host,
             [
@@ -260,13 +262,18 @@ namespace ts.tscWatch {
     }
 
     export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
-        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
+        return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
             start, length, message, ...args);
     }
 
     export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
         const quotedOption = `"${option}"`;
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
+    }
+
+    export function getUnknownDidYouMeanCompilerOption(program: Program, configFile: File, option: string, didYouMean: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0_Did_you_mean_1, option, didYouMean);
     }
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {

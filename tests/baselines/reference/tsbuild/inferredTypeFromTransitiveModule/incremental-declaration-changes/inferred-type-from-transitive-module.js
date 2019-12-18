@@ -1,3 +1,17 @@
+//// [/lib/incremental-declaration-changesOutput.txt]
+/lib/tsc --b /src --verbose
+12:04:00 AM - Projects in this build: 
+    * src/tsconfig.json
+
+12:04:00 AM - Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
+
+12:04:00 AM - Building project '/src/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/bar.ts]
 interface RawAction {
     (...args: any[]): Promise<any> | void;
@@ -26,6 +40,8 @@ import { LazyAction } from './bundling';
 export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex")>;
 
 
+//// [/src/obj/lazyIndex.d.ts] file written with same contents
+//// [/src/obj/lazyIndex.js] file written with same contents
 //// [/src/obj/tsconfig.tsbuildinfo]
 {
   "program": {

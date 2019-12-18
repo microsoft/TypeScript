@@ -371,6 +371,16 @@ interface QueuingStrategy<T = any> {
     size?: QueuingStrategySizeCallback<T>;
 }
 
+interface ReadableStreamReadDoneResult<T> {
+    done: true;
+    value?: T;
+}
+
+interface ReadableStreamReadValueResult<T> {
+    done: false;
+    value: T;
+}
+
 interface RegistrationOptions {
     scope?: string;
     type?: WorkerType;
@@ -703,7 +713,7 @@ interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
     keys(): Promise<string[]>;
-    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response | undefined>;
+    match(request: RequestInfo, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
     open(cacheName: string): Promise<Cache>;
 }
 
@@ -2202,7 +2212,7 @@ interface ImageData {
 declare var ImageData: {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
-    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height?: number): ImageData;
 };
 
 /** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
@@ -2452,7 +2462,7 @@ declare var OffscreenCanvas: {
     new(width: number, height: number): OffscreenCanvas;
 };
 
-interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
+interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
     readonly canvas: OffscreenCanvas;
     commit(): void;
 }
@@ -2758,11 +2768,6 @@ interface ReadableStreamDefaultReader<R = any> {
     cancel(reason?: any): Promise<void>;
     read(): Promise<ReadableStreamReadResult<R>>;
     releaseLock(): void;
-}
-
-interface ReadableStreamReadResult<T> {
-    done: boolean;
-    value: T;
 }
 
 interface ReadableStreamReader<R = any> {
@@ -3082,7 +3087,9 @@ interface TextDecoderCommon {
     readonly ignoreBOM: boolean;
 }
 
-interface TextDecoderStream extends TextDecoderCommon, GenericTransformStream {
+interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+    readonly readable: ReadableStream<string>;
+    readonly writable: WritableStream<BufferSource>;
 }
 
 declare var TextDecoderStream: {
@@ -3114,7 +3121,9 @@ interface TextEncoderCommon {
     readonly encoding: string;
 }
 
-interface TextEncoderStream extends TextEncoderCommon, GenericTransformStream {
+interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<string>;
 }
 
 declare var TextEncoderStream: {
@@ -3202,6 +3211,7 @@ interface URL {
     host: string;
     hostname: string;
     href: string;
+    toString(): string;
     readonly origin: string;
     password: string;
     pathname: string;
@@ -3246,12 +3256,14 @@ interface URLSearchParams {
      */
     set(name: string, value: string): void;
     sort(): void;
+    toString(): string;
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
 }
 
 declare var URLSearchParams: {
     prototype: URLSearchParams;
     new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
+    toString(): string;
 };
 
 interface WEBGL_color_buffer_float {
@@ -3365,7 +3377,7 @@ interface WEBGL_lose_context {
     restoreContext(): void;
 }
 
-interface WebGL2RenderingContext extends WebGLRenderingContextBase, WebGL2RenderingContextBase, WebGL2RenderingContextOverloads {
+interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
 }
 
 declare var WebGL2RenderingContext: {
@@ -5355,7 +5367,7 @@ interface WorkerGlobalScopeEventMap {
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, WindowOrWorkerGlobalScope {
+interface WorkerGlobalScope extends EventTarget, WindowConsole, WindowOrWorkerGlobalScope, WorkerUtils {
     readonly caches: CacheStorage;
     readonly isSecureContext: boolean;
     readonly location: WorkerLocation;
@@ -5380,12 +5392,12 @@ interface WorkerLocation {
     readonly host: string;
     readonly hostname: string;
     readonly href: string;
+    toString(): string;
     readonly origin: string;
     readonly pathname: string;
     readonly port: string;
     readonly protocol: string;
     readonly search: string;
-    toString(): string;
 }
 
 declare var WorkerLocation: {
@@ -5394,7 +5406,7 @@ declare var WorkerLocation: {
 };
 
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorID, NavigatorOnLine, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorStorage {
+interface WorkerNavigator extends NavigatorBeacon, NavigatorConcurrentHardware, NavigatorID, NavigatorOnLine, NavigatorStorage {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
@@ -5600,16 +5612,16 @@ declare namespace WebAssembly {
     
     var Global: {
         prototype: Global;
-        new(descriptor: GlobalDescriptor, value?: any): Global;
+        new(descriptor: GlobalDescriptor, v?: any): Global;
     };
     
     interface Instance {
-        readonly exports: any;
+        readonly exports: Exports;
     }
     
     var Instance: {
         prototype: Instance;
-        new(module: Module, importObject?: any): Instance;
+        new(module: Module, importObject?: Imports): Instance;
     };
     
     interface Memory {
@@ -5628,9 +5640,9 @@ declare namespace WebAssembly {
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
-        customSections(module: Module, sectionName: string): ArrayBuffer[];
-        exports(module: Module): ModuleExportDescriptor[];
-        imports(module: Module): ModuleImportDescriptor[];
+        customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
+        exports(moduleObject: Module): ModuleExportDescriptor[];
+        imports(moduleObject: Module): ModuleImportDescriptor[];
     };
     
     interface Table {
@@ -5647,7 +5659,7 @@ declare namespace WebAssembly {
     
     interface GlobalDescriptor {
         mutable?: boolean;
-        value: string;
+        value: ValueType;
     }
     
     interface MemoryDescriptor {
@@ -5679,9 +5691,17 @@ declare namespace WebAssembly {
     
     type ImportExportKind = "function" | "table" | "memory" | "global";
     type TableKind = "anyfunc";
+    type ValueType = "i32" | "i64" | "f32" | "f64";
+    type ExportValue = Function | Global | Memory | Table;
+    type Exports = Record<string, ExportValue>;
+    type ImportValue = ExportValue | number;
+    type ModuleImports = Record<string, ImportValue>;
+    type Imports = Record<string, ModuleImports>;
     function compile(bytes: BufferSource): Promise<Module>;
-    function instantiate(bytes: BufferSource, importObject?: any): Promise<WebAssemblyInstantiatedSource>;
-    function instantiate(moduleObject: Module, importObject?: any): Promise<Instance>;
+    function compileStreaming(source: Response | Promise<Response>): Promise<Module>;
+    function instantiate(bytes: BufferSource, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
+    function instantiate(moduleObject: Module, importObject?: Imports): Promise<Instance>;
+    function instantiateStreaming(response: Response | PromiseLike<Response>, importObject?: Imports): Promise<WebAssemblyInstantiatedSource>;
     function validate(bytes: BufferSource): boolean;
 }
 
@@ -5796,6 +5816,7 @@ type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
+type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
 type VibratePattern = number | number[];
 type AlgorithmIdentifier = string | Algorithm;
 type HashAlgorithmIdentifier = AlgorithmIdentifier;
@@ -5855,7 +5876,7 @@ type RequestRedirect = "follow" | "error" | "manual";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
 type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
-type VisibilityState = "hidden" | "visible" | "prerender";
+type VisibilityState = "hidden" | "visible";
 type WebGLPowerPreference = "default" | "low-power" | "high-performance";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";

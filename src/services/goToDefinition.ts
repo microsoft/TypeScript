@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): ReadonlyArray<DefinitionInfo> | undefined {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const reference = getReferenceAtPosition(sourceFile, position, program);
         if (reference) {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
@@ -12,13 +12,14 @@ namespace ts.GoToDefinition {
         }
         const { parent } = node;
 
+        const typeChecker = program.getTypeChecker();
+
         // Labels
         if (isJumpStatementTarget(node)) {
             const label = getTargetLabel(node.parent, node.text);
-            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+            return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
-        const typeChecker = program.getTypeChecker();
         const symbol = getSymbol(node, typeChecker);
 
         // Could not find a symbol e.g. node is string or number keyword,
@@ -129,7 +130,7 @@ namespace ts.GoToDefinition {
     }
 
     /// Goto type
-    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): ReadonlyArray<DefinitionInfo> | undefined {
+    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
@@ -145,7 +146,7 @@ namespace ts.GoToDefinition {
         return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
     }
 
-    function definitionFromType(type: Type, checker: TypeChecker, node: Node): ReadonlyArray<DefinitionInfo> {
+    function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {
         return flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
             t.symbol && getDefinitionFromSymbol(checker, t.symbol, node));
     }
@@ -254,7 +255,7 @@ namespace ts.GoToDefinition {
                 : undefined;
         }
 
-        function getSignatureDefinition(signatureDeclarations: ReadonlyArray<Declaration> | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
+        function getSignatureDefinition(signatureDeclarations: readonly Declaration[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
             if (!signatureDeclarations) {
                 return undefined;
             }
@@ -275,11 +276,11 @@ namespace ts.GoToDefinition {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
         const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
-        return createDefinitionInfoFromName(declaration, symbolKind, symbolName, containerName);
+        return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
         const textSpan = createTextSpanFromNode(name, sourceFile);
@@ -294,7 +295,8 @@ namespace ts.GoToDefinition {
                 textSpan,
                 sourceFile,
                 FindAllReferences.getContextNode(declaration)
-            )
+            ),
+            isLocal: !checker.isDeclarationVisible(declaration)
         };
     }
 
@@ -302,7 +304,7 @@ namespace ts.GoToDefinition {
         return createDefinitionInfo(decl, typeChecker, decl.symbol, decl);
     }
 
-    export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
+    export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
         return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 

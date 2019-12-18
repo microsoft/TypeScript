@@ -202,6 +202,9 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
@@ -222,6 +225,13 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
 
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
+        }
+
+        function spanForTemplateLiteral(node: TemplateExpression | NoSubstitutionTemplateLiteral) {
+            if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.text.length === 0) {
+                return undefined;
+            }
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 

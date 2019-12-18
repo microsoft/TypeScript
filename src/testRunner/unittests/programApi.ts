@@ -1,5 +1,5 @@
 namespace ts {
-    function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
+    function verifyMissingFilePaths(missingPaths: readonly Path[], expected: readonly string[]) {
         assert.isDefined(missingPaths);
         const map = arrayToSet(expected) as Map<boolean>;
         for (const missing of missingPaths) {
@@ -152,12 +152,30 @@ namespace ts {
             assertIsExternal(program, [a, fooIndex], f => f !== a);
         });
 
-        function assertIsExternal(program: Program, files: ReadonlyArray<documents.TextDocument>, isExternalExpected: (file: documents.TextDocument) => boolean): void {
+        function assertIsExternal(program: Program, files: readonly documents.TextDocument[], isExternalExpected: (file: documents.TextDocument) => boolean): void {
             for (const file of files) {
                 const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
                 const expected = isExternalExpected(file);
                 assert.equal(actual, expected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${expected}, got ${actual}`);
             }
         }
+    });
+
+    describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
+        it("works on projects that have .json files", () => {
+            const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
+            const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
+            const program = createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            const json = program.getSourceFile("/package.json")!;
+            assert.equal(json.scriptKind, ScriptKind.JSON);
+            assert.isNumber(json.nodeCount);
+            assert.isNumber(json.identifierCount);
+
+            assert.isNotNaN(program.getNodeCount());
+            assert.isNotNaN(program.getIdentifierCount());
+        });
     });
 }

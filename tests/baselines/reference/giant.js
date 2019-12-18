@@ -1120,19 +1120,19 @@ export declare class eC {
     pF(): void;
     private rF;
     pgF(): void;
-    readonly pgF: any;
+    get pgF(): any;
     psF(param: any): void;
-    psF: any;
+    set psF(param: any);
     private rgF;
-    private readonly rgF;
+    private get rgF();
     private rsF;
-    private rsF;
+    private set rsF(value);
     static tV: any;
     static tF(): void;
     static tsF(param: any): void;
-    static tsF: any;
+    static set tsF(param: any);
     static tgF(): void;
-    static readonly tgF: any;
+    static get tgF(): any;
 }
 export interface eI {
     (): any;
@@ -1172,19 +1172,19 @@ export declare module eM {
         pF(): void;
         private rF;
         pgF(): void;
-        readonly pgF: any;
+        get pgF(): any;
         psF(param: any): void;
-        psF: any;
+        set psF(param: any);
         private rgF;
-        private readonly rgF;
+        private get rgF();
         private rsF;
-        private rsF;
+        private set rsF(value);
         static tV: any;
         static tF(): void;
         static tsF(param: any): void;
-        static tsF: any;
+        static set tsF(param: any);
         static tgF(): void;
-        static readonly tgF: any;
+        static get tgF(): any;
     }
     interface eI {
         (): any;

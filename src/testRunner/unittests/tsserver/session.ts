@@ -1,6 +1,6 @@
-const expect: typeof _chai.expect = _chai.expect;
-
 namespace ts.server {
+    const _chai: typeof import("chai") = require("chai");
+    const expect: typeof _chai.expect = _chai.expect;
     let lastWrittenToHost: string;
     const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
@@ -179,7 +179,9 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = { version };
+                const expected: protocol.StatusResponseBody = {
+                    version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });
@@ -283,9 +285,7 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    /* tslint:disable no-null-keyword */
-                    req.arguments = null;
-                    /* tslint:enable no-null-keyword */
+                    req.arguments = null; // eslint-disable-line no-null/no-null
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
@@ -337,7 +337,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
+                expect(session.send(msg)).to.not.exist; // eslint-disable-line no-unused-expressions
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -548,7 +548,6 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            // tslint:disable-next-line no-unused-expression
             new class extends TestSession {
                 constructor() {
                     super();

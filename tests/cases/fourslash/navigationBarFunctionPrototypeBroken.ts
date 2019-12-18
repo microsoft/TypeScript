@@ -139,6 +139,28 @@ verify.navigationBar([
     ]
   },
   {
+    "text": "G",
+    "kind": "method",
+    "childItems": [
+      {
+        "text": "A",
+        "kind": "method"
+      }
+    ],
+    "indent": 1
+  },
+  {
+    "text": "A",
+    "kind": "method",
+    "childItems": [
+      {
+        "text": "a",
+        "kind": "function"
+      }
+    ],
+    "indent": 2
+  },
+  {
     "text": "A",
     "kind": "class",
     "childItems": [
@@ -152,5 +174,16 @@ verify.navigationBar([
       }
     ],
     "indent": 1
-  }
+  },
+  {
+    "text": "A",
+    "kind": "method",
+    "childItems": [
+      {
+        "text": "a",
+        "kind": "function"
+      }
+    ],
+    "indent": 2
+  },
 ]);

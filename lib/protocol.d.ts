@@ -467,7 +467,7 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
-        body: ReadonlyArray<FileCodeEdits>;
+        body: readonly FileCodeEdits[];
     }
     interface GetEditsForFileRenameRequest extends Request {
         command: CommandTypes.GetEditsForFileRename;
@@ -479,7 +479,7 @@ declare namespace ts.server.protocol {
         readonly newFilePath: string;
     }
     interface GetEditsForFileRenameResponse extends Response {
-        body: ReadonlyArray<FileCodeEdits>;
+        body: readonly FileCodeEdits[];
     }
     /**
      * Request for the available codefixes at a specific position.
@@ -526,7 +526,7 @@ declare namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes: ReadonlyArray<number>;
+        errorCodes: readonly number[];
     }
     interface GetCombinedCodeFixRequestArgs {
         scope: GetCombinedCodeFixScope;
@@ -643,7 +643,7 @@ declare namespace ts.server.protocol {
     interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
     interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<FileSpanWithContext>;
+        definitions: readonly FileSpanWithContext[];
         textSpan: TextSpan;
     }
     /**
@@ -652,9 +652,11 @@ declare namespace ts.server.protocol {
     interface DefinitionResponse extends Response {
         body?: FileSpanWithContext[];
     }
-    interface DefinitionInfoAndBoundSpanReponse extends Response {
+    interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
     }
+    /** @deprecated Use `DefinitionInfoAndBoundSpanResponse` instead. */
+    type DefinitionInfoAndBoundSpanReponse = DefinitionInfoAndBoundSpanResponse;
     /**
      * Definition response message.  Gives text range for definition.
      */
@@ -781,7 +783,7 @@ declare namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReadonlyArray<ReferencesResponseItem>;
+        refs: readonly ReferencesResponseItem[];
         /**
          * The name of the symbol.
          */
@@ -885,7 +887,7 @@ declare namespace ts.server.protocol {
         /**
          * An array of span groups (one per file) that refer to the item to be renamed.
          */
-        locs: ReadonlyArray<SpanGroup>;
+        locs: readonly SpanGroup[];
     }
     /**
      * Rename response message.
@@ -1364,8 +1366,8 @@ declare namespace ts.server.protocol {
         commands?: {}[];
     }
     interface CombinedCodeActions {
-        changes: ReadonlyArray<FileCodeEdits>;
-        commands?: ReadonlyArray<{}>;
+        changes: readonly FileCodeEdits[];
+        commands?: readonly {}[];
     }
     interface CodeFixAction extends CodeAction {
         /** Short name to identify the fix, for use by telemetry. */
@@ -1572,7 +1574,7 @@ declare namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
-        readonly entries: ReadonlyArray<CompletionEntry>;
+        readonly entries: readonly CompletionEntry[];
     }
     interface CompletionDetailsResponse extends Response {
         body?: CompletionEntryDetails[];
@@ -2251,7 +2253,7 @@ declare namespace ts.server.protocol {
         /**
          * list of packages to install
          */
-        packages: ReadonlyArray<string>;
+        packages: readonly string[];
     }
     interface BeginInstallTypesEventBody extends InstallTypesEventBody {
     }
@@ -2271,6 +2273,11 @@ declare namespace ts.server.protocol {
         None = "None",
         Block = "Block",
         Smart = "Smart"
+    }
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove"
     }
     interface EditorSettings {
         baseIndentSize?: number;
@@ -2297,6 +2304,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        semicolons?: SemicolonPreference;
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
@@ -2311,7 +2319,13 @@ declare namespace ts.server.protocol {
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /**
+         * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
+         * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
+         * values, with insertion text to replace preceding `.` tokens with `?.`.
+         */
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
@@ -2380,6 +2394,7 @@ declare namespace ts.server.protocol {
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
+        useDefineForClassFields?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
@@ -2532,7 +2547,11 @@ declare namespace ts.server.protocol {
         string = "string"
     }
 
-    interface TypeAcquisition {
+    export interface TypeAcquisition {
+        /**
+         * @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
@@ -2540,7 +2559,7 @@ declare namespace ts.server.protocol {
         [option: string]: string[] | boolean | undefined;
     }
 
-    interface FileExtensionInfo {
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -2560,11 +2579,11 @@ declare namespace ts.server.protocol {
         [index: string]: T;
     }
 
-    interface PluginImport {
+    export interface PluginImport {
         name: string;
     }
 
-    interface ProjectReference {
+    export interface ProjectReference {
         /** A normalized path on disk */
         path: string;
         /** The path as the user originally wrote it */
@@ -2575,7 +2594,7 @@ declare namespace ts.server.protocol {
         circular?: boolean;
     }
 
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
