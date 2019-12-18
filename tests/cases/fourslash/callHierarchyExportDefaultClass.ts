@@ -3,54 +3,19 @@
 // @filename: main.ts
 //// import Bar from "./other";
 ////
-//// [|function [|foo|]() {
-////     new [|Bar|]();
-//// }|]
+//// function foo() {
+////     new Bar();
+//// }
 
 // @filename: other.ts
-//// [|export /**/[|default|] class {
+//// export /**/default class {
 ////     constructor() {
-////         [|baz|]();
+////         baz();
 ////     }
-//// }|]
+//// }
 ////
-//// [|function [|baz|]() {
-//// }|]
-
-const [
-    fooFunctionRange,
-    fooFunctionSelectionRange,
-    barReferenceRange,
-    barFunctionRange,
-    barFunctionSelectionRange,
-    bazReferenceRange,
-    bazFunctionRange,
-    bazFunctionSelectionRange
-] = test.ranges();
+//// function baz() {
+//// }
 
 goTo.marker();
-verify.callHierarchy({
-    kind: "class",
-    range: barFunctionRange,
-    selectionRange: barFunctionSelectionRange,
-    incoming: sequence.one({
-        from: {
-            kind: "function",
-            range: fooFunctionRange,
-            selectionRange: fooFunctionSelectionRange,
-        },
-        fromRanges: sequence.one(
-            barReferenceRange
-        )
-    }),
-    outgoing: sequence.one({
-        to: {
-            kind: "function",
-            range: bazFunctionRange,
-            selectionRange: bazFunctionSelectionRange
-        },
-        fromRanges: sequence.one(
-            bazReferenceRange
-        )
-    })
-});
+verify.baselineCallHierarchy();

@@ -537,6 +537,10 @@ namespace FourSlashInterface {
             this.state.getEditsForFileRename(options);
         }
 
+        public baselineCallHierarchy() {
+            this.state.baselineCallHierarchy();
+        }
+
         public callHierarchy(options: false | FourSlash.Range | VerifyCallHierarchyOptions) {
             this.state.verifyCallHierarchy(options);
         }

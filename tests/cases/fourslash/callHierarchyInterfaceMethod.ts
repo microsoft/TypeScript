@@ -1,33 +1,12 @@
 /// <reference path="fourslash.ts" />
 
-//// [|interface I {
-////     /**/[|[|foo|](): void;|]
+//// interface I {
+////     /**/foo(): void;
 //// }
 ////
 //// const obj: I = { foo() {} };
 ////
-//// obj.[|foo|]();|]
-
-const [
-    fileRange,
-    fooMethodRange,
-    fooMethodSelectionRange,
-    fooReferenceRange
-] = test.ranges();
+//// obj.foo();
 
 goTo.marker();
-verify.callHierarchy({
-    kind: "method",
-    range: fooMethodRange,
-    selectionRange: fooMethodSelectionRange,
-    incoming: sequence.one({
-        from: {
-            kind: "script",
-            range: fileRange
-        },
-        fromRanges: sequence.one(
-            fooReferenceRange
-        )
-    }),
-    outgoing: sequence.none()
-});
+verify.baselineCallHierarchy();

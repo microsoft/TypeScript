@@ -1,51 +1,16 @@
 /// <reference path="fourslash.ts" />
 
 // @experimentalDecorators: true
-//// [|@[|bar|]
-//// class [|Foo|] {
-//// }|]
+//// @bar
+//// class Foo {
+//// }
 ////
-//// [|function /**/[|bar|]() {
-////     [|baz|]();
-//// }|]
+//// function /**/bar() {
+////     baz();
+//// }
 ////
-//// [|function [|baz|]() {
-//// }|]
-
-const [
-    fooClassRange,
-    barReferenceRange,
-    fooClassSelectionRange,
-    barFunctionRange,
-    barFunctionSelectionRange,
-    bazReferenceRange,
-    bazFunctionRange,
-    bazFunctionSelectionRange,
-] = test.ranges();
+//// function baz() {
+//// }
 
 goTo.marker();
-verify.callHierarchy({
-    kind: "function",
-    range: barFunctionRange,
-    selectionRange: barFunctionSelectionRange,
-    incoming: sequence.one({
-        from: {
-            kind: "class",
-            range: fooClassRange,
-            selectionRange: fooClassSelectionRange,
-        },
-        fromRanges: sequence.one(
-            barReferenceRange
-        )
-    }),
-    outgoing: sequence.one({
-        to: {
-            kind: "function",
-            range: bazFunctionRange,
-            selectionRange: bazFunctionSelectionRange
-        },
-        fromRanges: sequence.one(
-            bazReferenceRange
-        )
-    })
-});
+verify.baselineCallHierarchy();

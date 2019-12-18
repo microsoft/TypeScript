@@ -1,52 +1,17 @@
 /// <reference path="fourslash.ts" />
 
-//// [|function [|foo|]() {
-////     new [|Bar|]();
-//// }|]
+//// function foo() {
+////     new Bar();
+//// }
 ////
-//// const /**/[|Bar|] = [|class {
+//// const /**/Bar = class {
 ////     constructor() {
-////         [|baz|]();
+////         baz();
 ////     }
-//// }|]
+//// }
 ////
-//// [|function [|baz|]() {
-//// }|]
-
-const [
-    fooFunctionRange,
-    fooFunctionSelectionRange,
-    barReferenceRange,
-    barClassSelectionRange,
-    barClassRange,
-    bazReferenceRange,
-    bazFunctionRange,
-    bazFunctionSelectionRange,
-] = test.ranges();
+//// function baz() {
+//// }
 
 goTo.marker();
-verify.callHierarchy({
-    kind: "class",
-    range: barClassRange,
-    selectionRange: barClassSelectionRange,
-    incoming: sequence.one({
-        from: {
-            kind: "function",
-            range: fooFunctionRange,
-            selectionRange: fooFunctionSelectionRange,
-        },
-        fromRanges: sequence.one(
-            barReferenceRange
-        )
-    }),
-    outgoing: sequence.one({
-        to: {
-            kind: "function",
-            range: bazFunctionRange,
-            selectionRange: bazFunctionSelectionRange
-        },
-        fromRanges: sequence.one(
-            bazReferenceRange
-        )
-    })
-});
+verify.baselineCallHierarchy();

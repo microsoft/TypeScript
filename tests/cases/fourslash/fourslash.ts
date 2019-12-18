@@ -382,6 +382,7 @@ declare namespace FourSlashInterface {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
         }): void;
+        baselineCallHierarchy(): void;
         callHierarchy(options: false | Range | VerifyCallHierarchyOptions): void;
         callHierarchyIncomingCalls(options: Sequence<VerifyCallHierarchyIncomingCallOptions | Range>): void;
         callHierarchyOutgoingCalls(options: Sequence<VerifyCallHierarchyOutgoingCallOptions | Range>): void;
