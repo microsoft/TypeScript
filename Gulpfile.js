@@ -435,7 +435,7 @@ task("watch-local").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", "" + cmdLineOptions.testTimeout, "built/local/run.js"]);
+const generateCodeCoverage = () => exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", "" + cmdLineOptions.timeout, "built/local/run.js"]);
 task("generate-code-coverage", series(preBuild, buildTests, generateCodeCoverage));
 task("generate-code-coverage").description = "Generates code coverage data via istanbul";
 

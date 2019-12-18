@@ -17,6 +17,8 @@ exports.localRwcBaseline = "internal/baselines/rwc/local";
 exports.refRwcBaseline = "internal/baselines/rwc/reference";
 exports.localTest262Baseline = "internal/baselines/test262/local";
 
+const testConfigFile = "test.config";
+
 /**
  * @param {string} runJs
  * @param {string} defaultReporter
@@ -32,7 +34,6 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
-    const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
     const keepFailed = cmdLineOptions.keepFailed;
     const shards = +cmdLineOptions.shards || undefined;
@@ -42,9 +43,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         cancelToken.throwIfCancellationRequested();
     }
 
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
+    await del(testConfigFile);
 
     let workerCount, taskConfigsFolder;
     if (runInParallel) {
@@ -64,39 +63,27 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
-    }
-
     const colors = cmdLineOptions.colors;
-    const reporter = cmdLineOptions.reporter || defaultReporter;
+    const reporterOption = ["reporter=" + (cmdLineOptions.reporter || defaultReporter),
+                            ...(keepFailed ? ["keepFailed=true"] : [])];
+
+    writeTestConfigFile("scripts/failed-tests", reporterOption,
+                        tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit,
+                        testTimeout, keepFailed, shards, shardId, colors);
 
     /** @type {string[]} */
     let args = [];
 
-    // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         args.push(failed ? "scripts/run-failed-tests.js" : mochaJs);
-        args.push("-R", "scripts/failed-tests");
-        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
-        if (tests) {
-            args.push("-g", `"${tests}"`);
-        }
-        if (colors) {
-            args.push("--colors");
-        }
-        else {
-            args.push("--no-colors");
-        }
+        args.push("--config", testConfigFile);
         if (inspect !== undefined) {
             args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
         }
         else if (debug) {
             args.unshift("--debug-brk");
-        }
-        else {
-            args.push("-t", "" + testTimeout);
         }
         args.push(runJs);
     }
@@ -138,7 +125,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         restoreSavedNodeEnv();
     }
 
-    await del("test.config");
+    await del(testConfigFile);
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
@@ -157,6 +144,8 @@ exports.cleanTestDirs = cleanTestDirs;
 
 /**
  * used to pass data from gulp command line directly to run.js
+ * @param {string} reporter
+ * @param {string[]} reporterOption
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
@@ -167,23 +156,26 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
+ * @param {boolean} [color]
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
+function writeTestConfigFile(reporter, reporterOption, tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId, color) {
     const testConfigContents = JSON.stringify({
-        test: tests ? [tests] : undefined,
-        runners: runners ? runners.split(",") : undefined,
+        reporter,
+        reporterOption,
+        grep: tests || undefined, // tests is a string interpreted as a regexp
+        runners: runners ? runners.split(/ *, */) : undefined,
         light,
         workerCount,
         stackTraceLimit,
         taskConfigsFolder,
-        noColor: !cmdLineOptions.colors,
+        color,
         timeout,
         keepFailed,
         shards,
         shardId
     });
     log.info("Running tests with config: " + testConfigContents);
-    fs.writeFileSync("test.config", testConfigContents);
+    fs.writeFileSync(testConfigFile, testConfigContents);
 }
 exports.writeTestConfigFile = writeTestConfigFile;
 
