@@ -541,18 +541,6 @@ namespace FourSlashInterface {
             this.state.baselineCallHierarchy();
         }
 
-        public callHierarchy(options: false | FourSlash.Range | VerifyCallHierarchyOptions) {
-            this.state.verifyCallHierarchy(options);
-        }
-
-        public callHierarchyIncomingCalls(options: Sequence<VerifyCallHierarchyIncomingCallOptions | FourSlash.Range>) {
-            this.state.verifyCallHierarchyIncomingCalls(options);
-        }
-
-        public callHierarchyOutgoingCalls(options: Sequence<VerifyCallHierarchyOutgoingCallOptions | FourSlash.Range>) {
-            this.state.verifyCallHierarchyOutgoingCalls(options);
-        }
-
         public moveToNewFile(options: MoveToNewFileOptions): void {
             this.state.moveToNewFile(options);
         }
@@ -1619,48 +1607,4 @@ namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
-
-    export type Sequence<T> =
-        | false // Indicates the actual result must be undefined or contain no elements
-        | readonly T[] // Indicates the actual result must at least contain the specified elements, in any order
-        | {
-            readonly exact?: boolean; // Indicates the actual result must contain all of the elements in `values` (no more and no fewer).
-            readonly values: readonly T[];
-        };
-
-    export namespace Sequence {
-        export function atLeast<T>(array: readonly T[]): Sequence<T> {
-            return { exact: false, values: array };
-        }
-
-        export function exact<T>(array: readonly T[]): Sequence<T> {
-            return { exact: true, values: array };
-        }
-
-        export function one<T>(value: T): Sequence<T> {
-            return { exact: true, values: [value] };
-        }
-
-        export function none<T>(): Sequence<T> {
-            return false;
-        }
-    }
-
-    export interface VerifyCallHierarchyOptions {
-        readonly range?: FourSlash.Range;
-        readonly kind?: ts.ScriptElementKind;
-        readonly selectionRange?: FourSlash.Range;
-        readonly incoming?: Sequence<VerifyCallHierarchyIncomingCallOptions | FourSlash.Range>;
-        readonly outgoing?: Sequence<VerifyCallHierarchyOutgoingCallOptions | FourSlash.Range>;
-    }
-
-    export interface VerifyCallHierarchyIncomingCallOptions {
-        readonly from: VerifyCallHierarchyOptions | FourSlash.Range;
-        readonly fromRanges?: Sequence<FourSlash.Range>;
-    }
-
-    export interface VerifyCallHierarchyOutgoingCallOptions {
-        readonly to: VerifyCallHierarchyOptions | FourSlash.Range;
-        readonly fromRanges?: Sequence<FourSlash.Range>;
-    }
 }

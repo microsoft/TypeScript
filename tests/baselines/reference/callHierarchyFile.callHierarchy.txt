@@ -1,5 +1,6 @@
 ╭ name: foo
 ├ kind: function
+├ file: /tests/cases/fourslash/callHierarchyFile.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/callHierarchyFile.ts:2:1-3:2
 │ │ 2: function foo() {
@@ -16,6 +17,7 @@
 │ ╭ from:
 │ │ ╭ name: /tests/cases/fourslash/callHierarchyFile.ts
 │ │ ├ kind: script
+│ │ ├ file: /tests/cases/fourslash/callHierarchyFile.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyFile.ts:1:1-3:2
 │ │ │ │ 1: foo();

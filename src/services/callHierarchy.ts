@@ -130,9 +130,9 @@ namespace ts.CallHierarchy {
     }
 
     /** Finds the implementation of a function-like declaration, if one exists. */
-    function findFunctionImplementation(typeChecker: TypeChecker, node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
-    function findFunctionImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined;
-    function findFunctionImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined {
+    function findImplementation(typeChecker: TypeChecker, node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
+    function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined;
+    function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined {
         if (node.body) {
             return node;
         }
@@ -141,34 +141,47 @@ namespace ts.CallHierarchy {
         }
         if (isFunctionDeclaration(node) || isMethodDeclaration(node)) {
             const symbol = getSymbolOfCallHierarchyDeclaration(typeChecker, node);
-            if (symbol && symbol.valueDeclaration && isFunctionLikeDeclaration(symbol.valueDeclaration)) {
+            if (symbol && symbol.valueDeclaration && isFunctionLikeDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.body) {
                 return symbol.valueDeclaration;
             }
+            return undefined;
         }
         return node;
     }
 
-    function findFirstDeclaration(typeChecker: TypeChecker, node: CallHierarchyDeclaration) {
+    function findAllInitialDeclarations(typeChecker: TypeChecker, node: CallHierarchyDeclaration) {
         const symbol = getSymbolOfCallHierarchyDeclaration(typeChecker, node);
+        let declarations: CallHierarchyDeclaration[] | undefined;
         if (symbol && symbol.declarations) {
-            for (const decl of symbol.declarations) {
-                if (isValidCallHierarchyDeclaration(decl)) return decl;
+            const indices = indicesOf(symbol.declarations);
+            const keys = map(symbol.declarations, decl => ({ file: decl.getSourceFile().fileName, pos: decl.pos }));
+            indices.sort((a, b) => compareStringsCaseSensitive(keys[a].file, keys[b].file) || keys[a].pos - keys[b].pos);
+            const sortedDeclarations = map(indices, i => symbol.declarations[i]);
+            let lastDecl: CallHierarchyDeclaration | undefined;
+            for (const decl of sortedDeclarations) {
+                if (isValidCallHierarchyDeclaration(decl)) {
+                    if (!lastDecl || lastDecl.parent !== decl.parent || lastDecl.end !== decl.pos) {
+                        declarations = append(declarations, decl);
+                    }
+                    lastDecl = decl;
+                }
             }
         }
+        return declarations;
     }
 
     /** Find the implementation or the first declaration for a call hierarchy declaration. */
-    function findImplementationOrFirstDeclaration(typeChecker: TypeChecker, node: CallHierarchyDeclaration): CallHierarchyDeclaration {
-        if (isFunctionLikeDeclaration(node) && !node.body) {
-            return findFunctionImplementation(typeChecker, node) ||
-                findFirstDeclaration(typeChecker, node) ||
+    function findImplementationOrAllInitialDeclarations(typeChecker: TypeChecker, node: CallHierarchyDeclaration): CallHierarchyDeclaration | CallHierarchyDeclaration[] {
+        if (isFunctionLikeDeclaration(node)) {
+            return findImplementation(typeChecker, node) ??
+                findAllInitialDeclarations(typeChecker, node) ??
                 node;
         }
-        return findFirstDeclaration(typeChecker, node) || node;
+        return findAllInitialDeclarations(typeChecker, node) ?? node;
     }
 
     /** Resolves the call hierarchy declaration for a node. */
-    export function resolveCallHierarchyDeclaration(program: Program, location: Node): CallHierarchyDeclaration | undefined {
+    export function resolveCallHierarchyDeclaration(program: Program, location: Node): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
         // A call hierarchy item must refer to either a SourceFile, Module Declaration, or something intrinsically callable that has a name:
         // - Class Declarations
         // - Class Expressions (with a name)
@@ -186,19 +199,19 @@ namespace ts.CallHierarchy {
         let followingSymbol = false;
         while (true) {
             if (isValidCallHierarchyDeclaration(location)) {
-                return findImplementationOrFirstDeclaration(typeChecker, location);
+                return findImplementationOrAllInitialDeclarations(typeChecker, location);
             }
             if (isPossibleCallHierarchyDeclaration(location)) {
                 const ancestor = findAncestor(location, isValidCallHierarchyDeclaration);
-                return ancestor && findImplementationOrFirstDeclaration(typeChecker, ancestor);
+                return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
             }
             if (isDeclarationName(location)) {
                 if (isValidCallHierarchyDeclaration(location.parent)) {
-                    return findImplementationOrFirstDeclaration(typeChecker, location.parent);
+                    return findImplementationOrAllInitialDeclarations(typeChecker, location.parent);
                 }
                 if (isPossibleCallHierarchyDeclaration(location.parent)) {
                     const ancestor = findAncestor(location.parent, isValidCallHierarchyDeclaration);
-                    return ancestor && findImplementationOrFirstDeclaration(typeChecker, ancestor);
+                    return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
                 }
                 if (isVariableDeclaration(location.parent) && location.parent.initializer && isConstNamedExpression(location.parent.initializer)) {
                     return location.parent.initializer;
@@ -256,7 +269,7 @@ namespace ts.CallHierarchy {
                 || isRightSideOfPropertyAccess(entry.node)
                 || isArgumentExpressionOfElementAccess(entry.node)) {
                 const ancestor = findAncestor(entry.node, isValidCallHierarchyDeclaration) || entry.node.getSourceFile();
-                return { declaration: findImplementationOrFirstDeclaration(typeChecker, ancestor), range: createTextRangeFromNode(entry.node, entry.node.getSourceFile()) };
+                return { declaration: firstOrOnly(findImplementationOrAllInitialDeclarations(typeChecker, ancestor)), range: createTextRangeFromNode(entry.node, entry.node.getSourceFile()) };
             }
         }
     }
@@ -292,7 +305,17 @@ namespace ts.CallHierarchy {
                 isAccessExpression(node) ? node :
                 node.expression;
             const declaration = resolveCallHierarchyDeclaration(program, target);
-            if (declaration) callSites.push({ declaration, range: createTextRangeFromNode(target, node.getSourceFile()) });
+            if (declaration) {
+                const range = createTextRangeFromNode(target, node.getSourceFile());
+                if (isArray(declaration)) {
+                    for (const decl of declaration) {
+                        callSites.push({ declaration: decl, range });
+                    }
+                }
+                else {
+                    callSites.push({ declaration, range });
+                }
+            }
         }
 
         function collect(node: Node | undefined) {
@@ -391,7 +414,7 @@ namespace ts.CallHierarchy {
     }
 
     function collectCallSitesOfFunctionLikeDeclaration(typeChecker: TypeChecker, node: FunctionLikeDeclaration, collect: (node: Node | undefined) => void) {
-        const implementation = findFunctionImplementation(typeChecker, node);
+        const implementation = findImplementation(typeChecker, node);
         if (implementation) {
             forEach(implementation.parameters, collect);
             collect(implementation.body);

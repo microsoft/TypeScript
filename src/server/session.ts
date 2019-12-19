@@ -2171,15 +2171,13 @@ namespace ts.server {
             };
         }
 
-        private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | undefined {
+        private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | protocol.CallHierarchyItem[] | undefined {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             if (scriptInfo) {
                 const position = this.getPosition(args, scriptInfo);
-                const item = languageService.prepareCallHierarchy(file, position);
-                return !item
-                    ? undefined
-                    : this.toProtocolCallHierarchyItem(item, scriptInfo);
+                const result = languageService.prepareCallHierarchy(file, position);
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
             }
             return undefined;
         }

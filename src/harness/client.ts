@@ -753,11 +753,11 @@ namespace ts.server {
             };
         }
 
-        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | undefined {
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
             const args = this.createFileLocationRequestArgs(fileName, position);
             const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(CommandNames.PrepareCallHierarchy, args);
             const response = this.processResponse<protocol.PrepareCallHierarchyResponse>(request);
-            return response.body && this.convertCallHierarchyItem(response.body);
+            return response.body && mapOneOrMany(response.body, item => this.convertCallHierarchyItem(item));
         }
 
         private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {

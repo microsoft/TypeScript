@@ -2332,4 +2332,23 @@ namespace ts {
     export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
         return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
+
+    /**
+     * If the provided value is an array, the mapping function is applied to each element; otherwise, the mapping function is applied
+     * to the provided value itself.
+     */
+    export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U): U | U[];
+    export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U): U | U[] | undefined;
+    export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U;
+    export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U | undefined;
+    export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U, resultSelector: (x: U[]) => U | U[] = identity): U | U[] | undefined {
+        return valueOrArray ? isArray(valueOrArray) ? resultSelector(map(valueOrArray, f)) : f(valueOrArray, 0) : undefined;
+    }
+
+    /**
+     * If the provided value is an array, the first element of the array is returned; otherwise, the provided value is returned instead.
+     */
+    export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
+        return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
+    }
 }

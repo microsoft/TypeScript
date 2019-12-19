@@ -1,5 +1,6 @@
 ╭ name: Bar
 ├ kind: function
+├ file: /tests/cases/fourslash/main.tsx
 ├ span:
 │ ╭ /tests/cases/fourslash/main.tsx:5:1-7:2
 │ │ 5: function Bar() {
@@ -18,6 +19,7 @@
 │ ╭ from:
 │ │ ╭ name: foo
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/main.tsx
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/main.tsx:1:1-3:2
 │ │ │ │ 1: function foo() {
@@ -42,6 +44,7 @@
 │ ╭ to:
 │ │ ╭ name: baz
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/main.tsx
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/main.tsx:9:1-10:2
 │ │ │ │  9: function baz() {

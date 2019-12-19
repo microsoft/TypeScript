@@ -5071,7 +5071,7 @@ declare namespace ts {
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
-        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | undefined;
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
         getOutliningSpans(fileName: string): OutliningSpan[];
@@ -8340,7 +8340,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.PrepareCallHierarchy;
     }
     interface PrepareCallHierarchyResponse extends Response {
-        readonly body: CallHierarchyItem;
+        readonly body: CallHierarchyItem | CallHierarchyItem[];
     }
     interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
         command: CommandTypes.ProvideCallHierarchyIncomingCalls;

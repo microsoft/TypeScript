@@ -1,5 +1,6 @@
 ╭ name: bar
 ├ kind: getter
+├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:6:5-8:6
 │ │ 6:     get bar() {
@@ -18,6 +19,7 @@
 │ ╭ from:
 │ │ ╭ name: foo
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:1:1-3:2
 │ │ │ │ 1: function foo() {
@@ -42,6 +44,7 @@
 │ ╭ to:
 │ │ ╭ name: baz
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:11:1-12:2
 │ │ │ │ 11: function baz() {

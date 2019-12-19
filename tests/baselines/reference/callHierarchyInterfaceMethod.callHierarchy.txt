@@ -1,5 +1,6 @@
 ╭ name: foo
 ├ kind: method
+├ file: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:2:5-2:17
 │ │ 2:     foo(): void;
@@ -14,6 +15,7 @@
 │ ╭ from:
 │ │ ╭ name: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
 │ │ ├ kind: script
+│ │ ├ file: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyInterfaceMethod.ts:1:1-7:11
 │ │ │ │ 1: interface I {

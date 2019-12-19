@@ -1,5 +1,6 @@
 ╭ name: bar
 ├ kind: function
+├ file: /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts:5:13-7:2
 │ │ 5: const bar = function () {
@@ -18,6 +19,7 @@
 │ ╭ from:
 │ │ ╭ name: foo
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts:1:1-3:2
 │ │ │ │ 1: function foo() {
@@ -42,6 +44,7 @@
 │ ╭ to:
 │ │ ╭ name: baz
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/callHierarchyConstNamedFunctionExpression.ts:9:1-10:2
 │ │ │ │  9: function baz() {

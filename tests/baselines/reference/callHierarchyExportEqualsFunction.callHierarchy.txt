@@ -1,5 +1,6 @@
 ╭ name: /tests/cases/fourslash/other.ts
 ├ kind: module
+├ file: /tests/cases/fourslash/other.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/other.ts:1:1-6:2
 │ │ 1: export = function () {
@@ -25,6 +26,7 @@
 │ ╭ to:
 │ │ ╭ name: baz
 │ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/other.ts
 │ │ ├ span:
 │ │ │ ╭ /tests/cases/fourslash/other.ts:5:1-6:2
 │ │ │ │ 5: function baz() {

@@ -383,9 +383,6 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         baselineCallHierarchy(): void;
-        callHierarchy(options: false | Range | VerifyCallHierarchyOptions): void;
-        callHierarchyIncomingCalls(options: Sequence<VerifyCallHierarchyIncomingCallOptions | Range>): void;
-        callHierarchyOutgoingCalls(options: Sequence<VerifyCallHierarchyOutgoingCallOptions | Range>): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
@@ -723,32 +720,6 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
-
-    type Sequence<T> =
-        | false // Indicates the actual result must be undefined or contain no elements
-        | readonly T[] // Indicates the actual result must at least contain the specified elements, in any order
-        | {
-            readonly exact?: boolean; // Indicates the actual result must contain all of the elements in `values` (no more and no fewer).
-            readonly values: readonly T[];
-        };
-
-    interface VerifyCallHierarchyOptions {
-        readonly range?: Range;
-        readonly kind?: string;
-        readonly selectionRange?: Range;
-        readonly incoming?: Sequence<VerifyCallHierarchyIncomingCallOptions | Range>;
-        readonly outgoing?: Sequence<VerifyCallHierarchyOutgoingCallOptions | Range>;
-    }
-
-    interface VerifyCallHierarchyIncomingCallOptions {
-        readonly from: VerifyCallHierarchyOptions | Range;
-        readonly fromRanges?: Sequence<Range>;
-    }
-
-    interface VerifyCallHierarchyOutgoingCallOptions {
-        readonly to: VerifyCallHierarchyOptions | Range;
-        readonly fromRanges?: Sequence<Range>;
-    }
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
@@ -799,10 +770,4 @@ declare namespace completion {
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
     export const statementInJsKeywords: ReadonlyArray<Entry>;
-}
-declare namespace sequence {
-    export function atLeast<T>(array: readonly T[]): FourSlashInterface.Sequence<T>;
-    export function exact<T>(array: readonly T[]): FourSlashInterface.Sequence<T>;
-    export function one<T>(value: T): FourSlashInterface.Sequence<T>;
-    export function none<T>(): FourSlashInterface.Sequence<T>;
 }

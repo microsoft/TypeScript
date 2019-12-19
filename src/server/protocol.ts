@@ -3010,7 +3010,7 @@ namespace ts.server.protocol {
     }
 
     export interface PrepareCallHierarchyResponse extends Response {
-        readonly body: CallHierarchyItem;
+        readonly body: CallHierarchyItem | CallHierarchyItem[];
     }
 
     export interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
