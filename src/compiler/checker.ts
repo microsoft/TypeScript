@@ -24866,7 +24866,7 @@ namespace ts {
             const modifiers = getSelectedModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier);
 
             // (1) Public constructors and (2) constructor functions are always accessible.
-            if (!modifiers || isFunctionLikeDeclaration(declaration)) {
+            if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
                 return true;
             }
 
