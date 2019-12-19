@@ -267,11 +267,11 @@ namespace ts {
     }
 
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
-        return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
+        return isIdentifier(node) && tryCast(node.parent, isBreakOrContinueStatement)?.label === node;
     }
 
     export function isLabelOfLabeledStatement(node: Node): node is Identifier {
-        return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
+        return isIdentifier(node) && tryCast(node.parent, isLabeledStatement)?.label === node;
     }
 
     export function isLabelName(node: Node): boolean {
@@ -279,28 +279,27 @@ namespace ts {
     }
 
     export function isTagName(node: Node): boolean {
-        return isJSDocTag(node.parent) && node.parent.tagName === node;
+        return tryCast(node.parent, isJSDocTag)?.tagName === node;
     }
 
     export function isRightSideOfQualifiedName(node: Node) {
-        return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
+        return tryCast(node.parent, isQualifiedName)?.right === node;
     }
 
     export function isRightSideOfPropertyAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
+        return tryCast(node.parent, isPropertyAccessExpression)?.name === node;
     }
 
     export function isArgumentExpressionOfElementAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node;
+        return tryCast(node.parent, isElementAccessExpression)?.argumentExpression === node;
     }
 
     export function isNameOfModuleDeclaration(node: Node) {
-        return node.parent.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node;
+        return tryCast(node.parent, isModuleDeclaration)?.name === node;
     }
 
     export function isNameOfFunctionDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
+        return isIdentifier(node) && tryCast(node.parent, isFunctionLike)?.name === node;
     }
 
     export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLiteral | NumericLiteral | NoSubstitutionTemplateLiteral): boolean {
