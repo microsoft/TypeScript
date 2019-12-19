@@ -4532,7 +4532,8 @@ namespace ts {
                     const returnType = getReturnTypeOfSignature(signature);
                     returnTypeNode = returnType && typeToTypeNodeHelper(returnType, context);
                 }
-                if (context.flags & NodeBuilderFlags.SuppressAnyReturnType) {
+                if (context.flags & NodeBuilderFlags.SuppressAnyReturnType
+                    && kind !== SyntaxKind.FunctionType && kind !== SyntaxKind.ConstructorType) {
                     if (returnTypeNode && returnTypeNode.kind === SyntaxKind.AnyKeyword) {
                         returnTypeNode = undefined;
                     }
