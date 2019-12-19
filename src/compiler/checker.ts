@@ -7619,8 +7619,8 @@ namespace ts {
                 return anyType;
             }
             else if (declaration.kind === SyntaxKind.BinaryExpression ||
-                    (declaration.kind === SyntaxKind.PropertyAccessExpression || declaration.kind === SyntaxKind.ElementAccessExpression) &&
-                    declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                     isAccessExpression(declaration) &&
+                     declaration.parent.kind === SyntaxKind.BinaryExpression) {
                 return getWidenedTypeForAssignmentDeclaration(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
@@ -21085,8 +21085,8 @@ namespace ts {
                 const parent = func.parent;
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                     const target = (<BinaryExpression>parent).left;
-                    if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        const { expression } = target as AccessExpression;
+                    if (isAccessExpression(target)) {
+                        const { expression } = target;
                         // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
                         if (inJs && isIdentifier(expression)) {
                             const sourceFile = getSourceFileOfNode(parent);
@@ -23278,7 +23278,7 @@ namespace ts {
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
-            if (node.kind !== SyntaxKind.ElementAccessExpression && node.kind !== SyntaxKind.PropertyAccessExpression ||
+            if (!isAccessExpression(node) ||
                 assignmentKind === AssignmentKind.Definite ||
                 prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
@@ -23320,8 +23320,9 @@ namespace ts {
 
             let diagnosticMessage;
             const declarationName = idText(right);
-            if (isInPropertyInitializer(node) &&
-                !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
+            if (isInPropertyInitializer(node)
+                && !(isAccessExpression(node) && isAccessExpression(node.expression))
+                && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && !isPropertyDeclaredInAncestorClass(prop)) {
                 diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
             }
@@ -24214,8 +24215,8 @@ namespace ts {
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
             if (node.kind === SyntaxKind.CallExpression) {
                 const callee = skipOuterExpressions(node.expression);
-                if (callee.kind === SyntaxKind.PropertyAccessExpression || callee.kind === SyntaxKind.ElementAccessExpression) {
-                    return (callee as AccessExpression).expression;
+                if (isAccessExpression(callee)) {
+                    return callee.expression;
                 }
             }
         }
@@ -26569,8 +26570,8 @@ namespace ts {
             if (isReadonlySymbol(symbol)) {
                 // Allow assignments to readonly properties within constructors of the same class declaration.
                 if (symbol.flags & SymbolFlags.Property &&
-                    (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
-                    (expr as AccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
+                    isAccessExpression(expr) &&
+                    expr.expression.kind === SyntaxKind.ThisKeyword) {
                     // Look for if this is the constructor for the class that `symbol` is a property of.
                     const ctor = getContainingFunction(expr);
                     if (!(ctor && ctor.kind === SyntaxKind.Constructor)) {
@@ -26592,9 +26593,9 @@ namespace ts {
                 }
                 return true;
             }
-            if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+            if (isAccessExpression(expr)) {
                 // references through namespace import should be readonly
-                const node = skipParentheses((expr as AccessExpression).expression);
+                const node = skipParentheses(expr.expression);
                 if (node.kind === SyntaxKind.Identifier) {
                     const symbol = getNodeLinks(node).resolvedSymbol!;
                     if (symbol.flags & SymbolFlags.Alias) {
@@ -26609,7 +26610,7 @@ namespace ts {
         function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, invalidOptionalChainMessage: DiagnosticMessage): boolean {
             // References are combinations of identifiers, parentheses, and property accesses.
             const node = skipOuterExpressions(expr, OuterExpressionKinds.Assertions | OuterExpressionKinds.Parentheses);
-            if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
+            if (node.kind !== SyntaxKind.Identifier && !isAccessExpression(node)) {
                 error(expr, invalidReferenceMessage);
                 return false;
             }
@@ -26623,7 +26624,7 @@ namespace ts {
         function checkDeleteExpression(node: DeleteExpression): Type {
             checkExpression(node.expression);
             const expr = skipParentheses(node.expression);
-            if (expr.kind !== SyntaxKind.PropertyAccessExpression && expr.kind !== SyntaxKind.ElementAccessExpression) {
+            if (!isAccessExpression(expr)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_a_property_reference);
                 return booleanType;
             }
@@ -36244,10 +36245,10 @@ namespace ts {
         }
 
         function isSimpleLiteralEnumReference(expr: Expression) {
-            if (
-                (isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
-                isEntityNameExpression(expr.expression)
-            ) return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+            if ((isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
+                isEntityNameExpression(expr.expression)) {
+                return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+            }
         }
 
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
