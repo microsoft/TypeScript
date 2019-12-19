@@ -31,6 +31,7 @@ namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
+        reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
@@ -902,6 +903,7 @@ namespace ts {
             reScanTemplateToken,
             scanJsxIdentifier,
             scanJsxAttributeValue,
+            reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
             reScanQuestionToken,
@@ -1333,20 +1335,6 @@ namespace ts {
             }
 
             return utf16EncodeAsString(escapedValue);
-        }
-
-        // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
-        function utf16EncodeAsString(codePoint: number): string {
-            Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-
-            if (codePoint <= 65535) {
-                return String.fromCharCode(codePoint);
-            }
-
-            const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
-            const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
-
-            return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
@@ -2133,6 +2121,11 @@ namespace ts {
             }
         }
 
+        function reScanJsxAttributeValue(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return scanJsxAttributeValue();
+        }
+
         function scanJsDocToken(): JSDocSyntaxKind {
             startPos = tokenPos = pos;
             tokenFlags = TokenFlags.None;
@@ -2331,5 +2324,26 @@ namespace ts {
             return 2;
         }
         return 1;
+    }
+
+    // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+    function utf16EncodeAsStringFallback(codePoint: number) {
+        Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+
+        if (codePoint <= 65535) {
+            return String.fromCharCode(codePoint);
+        }
+
+        const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
+        const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+
+        return String.fromCharCode(codeUnit1, codeUnit2);
+    }
+
+    const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => String.fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
+
+    /* @internal */
+    export function utf16EncodeAsString(codePoint: number) {
+        return utf16EncodeAsStringWorker(codePoint);
     }
 }

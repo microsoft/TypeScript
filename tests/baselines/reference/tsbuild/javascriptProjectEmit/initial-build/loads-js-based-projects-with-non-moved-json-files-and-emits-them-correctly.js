@@ -26,11 +26,11 @@ exports.m = common_1["default"];
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../src/common/obj.json": {
+      "../../src/common/obj.d.ts": {
         "version": "-6323167306-export declare const val: number;\r\n",
         "signature": "-6323167306-export declare const val: number;\r\n"
       },
-      "../../src/common/index.ts": {
+      "../../src/common/index.d.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
         "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
       },
@@ -52,7 +52,7 @@ exports.m = common_1["default"];
       "configFilePath": "../../src/sub-project/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/common/index.ts": [
+      "../../src/common/index.d.ts": [
         "../../src/common/obj.d.ts"
       ],
       "../../src/sub-project/index.js": [
@@ -60,14 +60,14 @@ exports.m = common_1["default"];
       ]
     },
     "exportedModulesMap": {
-      "../../src/common/index.ts": [
+      "../../src/common/index.d.ts": [
         "../../src/common/obj.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/common/index.ts",
-      "../../src/common/obj.json",
+      "../../src/common/index.d.ts",
+      "../../src/common/obj.d.ts",
       "../../src/sub-project/index.js"
     ]
   },
@@ -101,15 +101,15 @@ exports.getVar = getVar;
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../src/common/obj.json": {
+      "../../src/common/obj.d.ts": {
         "version": "-6323167306-export declare const val: number;\r\n",
         "signature": "-6323167306-export declare const val: number;\r\n"
       },
-      "../../src/common/index.ts": {
+      "../../src/common/index.d.ts": {
         "version": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n",
         "signature": "-4085459678-import x = require(\"./obj.json\");\r\nexport = x;\r\n"
       },
-      "../../src/sub-project/index.js": {
+      "../sub-project/index.d.ts": {
         "version": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n",
         "signature": "-229957289-export const m: typeof mod;\r\nimport mod from \"../common\";\r\n"
       },
@@ -131,33 +131,33 @@ exports.getVar = getVar;
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/common/index.ts": [
+      "../../src/common/index.d.ts": [
         "../../src/common/obj.d.ts"
       ],
       "../../src/sub-project-2/index.js": [
         "../sub-project/index.d.ts"
       ],
-      "../../src/sub-project/index.js": [
+      "../sub-project/index.d.ts": [
         "../../src/common/index.d.ts"
       ]
     },
     "exportedModulesMap": {
-      "../../src/common/index.ts": [
+      "../../src/common/index.d.ts": [
         "../../src/common/obj.d.ts"
       ],
       "../../src/sub-project-2/index.js": [
         "../../src/common/obj.d.ts"
       ],
-      "../../src/sub-project/index.js": [
+      "../sub-project/index.d.ts": [
         "../../src/common/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../../src/common/index.ts",
-      "../../src/common/obj.json",
+      "../../src/common/index.d.ts",
+      "../../src/common/obj.d.ts",
       "../../src/sub-project-2/index.js",
-      "../../src/sub-project/index.js"
+      "../sub-project/index.d.ts"
     ]
   },
   "version": "FakeTSVersion"

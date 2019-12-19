@@ -3313,6 +3313,18 @@
         "category": "Error",
         "code": 5077
     },
+    "Unknown watch option '{0}'.": {
+        "category": "Error",
+        "code": 5078
+    },
+    "Unknown watch option '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 5079
+    },
+    "Watch option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5080
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4155,6 +4167,26 @@
     "Generates a CPU profile.": {
         "category": "Message",
         "code": 6223
+    },
+    "Disable solution searching for this project.": {
+        "category": "Message",
+        "code": 6224
+    },
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+        "category": "Message",
+        "code": 6225
+    },
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+        "category": "Message",
+        "code": 6226
+    },
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+        "category": "Message",
+        "code": 6227
+    },
+    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
+        "category": "Message",
+        "code": 6228
     },
 
     "Projects to reference": {

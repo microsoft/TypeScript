@@ -257,6 +257,7 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
+            protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
             customRealpath?: (s: string) => string) {
@@ -472,6 +473,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.FailedLookupLocations,
                 this
             );
@@ -489,6 +491,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.TypeRoots,
                 this
             );
@@ -1170,6 +1173,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
+                this.projectService.getWatchOptions(this),
                 WatchType.MissingFile,
                 this
             );
@@ -1213,6 +1217,7 @@ namespace ts.server {
                     generatedFile,
                     () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
                     PollingInterval.High,
+                    this.projectService.getWatchOptions(this),
                     WatchType.MissingGeneratedFile,
                     this
                 )
@@ -1248,9 +1253,8 @@ namespace ts.server {
         }
 
         filesToString(writeProjectFileNames: boolean) {
-            if (!this.program) {
-                return "\tFiles (0)\n";
-            }
+            if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
+            if (!this.program) return "\tFiles (0) NoProgram\n";
             const sourceFiles = this.program.getSourceFiles();
             let strBuilder = `\tFiles (${sourceFiles.length})\n`;
             if (writeProjectFileNames) {
@@ -1282,6 +1286,16 @@ namespace ts.server {
                 }
                 this.markAsDirty();
             }
+        }
+
+        /*@internal*/
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            this.watchOptions = watchOptions;
+        }
+
+        /*@internal*/
+        getWatchOptions(): WatchOptions | undefined {
+            return this.watchOptions;
         }
 
         /* @internal */
@@ -1517,6 +1531,7 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
+                    this.projectService.getWatchOptions(this),
                     WatchType.PackageJsonFile,
                 ));
             }
@@ -1595,6 +1610,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
+            watchOptions: WatchOptions | undefined,
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined,
             pluginConfigOverrides: Map<any> | undefined) {
@@ -1607,6 +1623,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
+                watchOptions,
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -1705,10 +1722,15 @@ namespace ts.server {
 
         private projectReferences: readonly ProjectReference[] | undefined;
 
+        /** Potential project references before the project is actually loaded (read config file) */
+        /*@internal*/
+        potentialProjectReferences: Map<true> | undefined;
+
         /*@internal*/
         projectOptions?: ProjectOptions | true;
 
-        protected isInitialLoadPending: () => boolean = returnTrue;
+        /*@internal*/
+        isInitialLoadPending: () => boolean = returnTrue;
 
         /*@internal*/
         sendLoadingProjectFinish = false;
@@ -1726,6 +1748,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 /*compilerOptions*/ {},
                 /*compileOnSaveEnabled*/ false,
+                /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
                 projectService.host.realpath && (s => this.getRealpath(s))
@@ -1885,6 +1908,32 @@ namespace ts.server {
             ) || false;
         }
 
+        /* @internal */
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            const oldOptions = this.getWatchOptions();
+            super.setWatchOptions(watchOptions);
+            // If watch options different than older options
+            if (this.isInitialLoadPending() &&
+                !isJsonEqual(oldOptions, this.getWatchOptions())) {
+                const oldWatcher = this.configFileWatcher;
+                this.createConfigFileWatcher();
+                if (oldWatcher) oldWatcher.close();
+            }
+        }
+
+        /* @internal */
+        createConfigFileWatcher() {
+            this.configFileWatcher = this.projectService.watchFactory.watchFile(
+                this.projectService.host,
+                this.getConfigFilePath(),
+                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.ConfigFile,
+                this
+            );
+        }
+
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -1933,12 +1982,13 @@ namespace ts.server {
 
         updateReferences(refs: readonly ProjectReference[] | undefined) {
             this.projectReferences = refs;
+            this.potentialProjectReferences = undefined;
         }
 
         /*@internal*/
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
-            const program = this.getCurrentProgram();
-            return program && program.forEachResolvedProjectReference(cb);
+        setPotentialProjectReference(canonicalConfigPath: NormalizedPath) {
+            Debug.assert(this.isInitialLoadPending());
+            (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(canonicalConfigPath, true);
         }
 
         /*@internal*/
@@ -2106,7 +2156,8 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string,
-            pluginConfigOverrides?: Map<any>) {
+            pluginConfigOverrides?: Map<any>,
+            watchOptions?: WatchOptions) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -2115,6 +2166,7 @@ namespace ts.server {
                 lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
+                watchOptions,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);

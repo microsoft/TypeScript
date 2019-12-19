@@ -133,3 +133,132 @@ function f4() {
 >x : 1 | 2
 }
 
+function f5() {
+>f5 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+
+        return;
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // 2
+>x : 2
+}
+
+function f6() {
+>f6 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+
+        return;
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // 1
+>x : 1
+}
+
+function f7() {
+>f7 : () => void
+
+    let x: 0 | 1 | 2 | 3 = 0;
+>x : 0 | 1 | 2 | 3
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3
+>1 : 1
+
+        return;
+    }
+    catch (e) {
+>e : any
+
+        x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3
+>2 : 2
+
+        return;
+    }
+    finally {
+        x;  // 0 | 1 | 2
+>x : 0 | 1 | 2
+    }
+    x;  // Unreachable
+>x : 0 | 1 | 2 | 3
+}
+
+// Repro from #35644
+
+const main = () => {
+>main : () => void
+>() => {    let hoge: string | undefined = undefined;    try {        hoge = 'hoge!';        return;    }    catch {        return;    }    finally {        if (hoge) {            hoge.length;        }        return;    }} : () => void
+
+    let hoge: string | undefined = undefined;
+>hoge : string | undefined
+>undefined : undefined
+
+    try {
+        hoge = 'hoge!';
+>hoge = 'hoge!' : "hoge!"
+>hoge : string | undefined
+>'hoge!' : "hoge!"
+
+        return;
+    }
+    catch {
+        return;
+    }
+    finally {
+        if (hoge) {
+>hoge : string | undefined
+
+            hoge.length;
+>hoge.length : number
+>hoge : string
+>length : number
+        }
+        return;
+    }
+}
+

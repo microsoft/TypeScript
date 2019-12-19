@@ -176,7 +176,9 @@ namespace ts.FindAllReferences {
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
                 for (const directImport of directImports) {
-                    addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    if (!isImportTypeNode(directImport)) {
+                        addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                    }
                 }
             }
         }
@@ -221,8 +223,9 @@ namespace ts.FindAllReferences {
 
             if (decl.kind === SyntaxKind.ImportType) {
                 if (decl.qualifier) {
-                    if (isIdentifier(decl.qualifier) && decl.qualifier.escapedText === symbolName(exportSymbol)) {
-                        singleReferences.push(decl.qualifier);
+                    const firstIdentifier = getFirstIdentifier(decl.qualifier);
+                    if (firstIdentifier.escapedText === symbolName(exportSymbol)) {
+                        singleReferences.push(firstIdentifier);
                     }
                 }
                 else if (exportKind === ExportKind.ExportEquals) {

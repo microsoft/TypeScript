@@ -20,7 +20,7 @@ namespace ts.tscWatch {
         it("verify that module resolution with json extension works when returned without extension", () => {
             const files = [libFile, mainFile, config, settingsJson];
             const host = createWatchedSystem(files, { currentDirectory: projectRoot });
-            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host);
+            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, /*watchOptionsToExtend*/ undefined, host);
             const parsedCommandResult = parseJsonConfigFileContent(configFileJson, host, config.path);
             compilerHost.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
                 const result = resolveModuleName(m, containingFile, parsedCommandResult.options, compilerHost);
@@ -58,7 +58,7 @@ namespace ts.tscWatch {
             const reportWatchStatus: WatchStatusReporter = (_, __, ___, errorCount) => {
                 watchedErrorCount = errorCount;
             };
-            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, host, /*createProgram*/ undefined, /*reportDiagnostic*/ undefined, reportWatchStatus);
+            const compilerHost = createWatchCompilerHostOfConfigFile(config.path, {}, /*watchOptionsToExtend*/ undefined, host, /*createProgram*/ undefined, /*reportDiagnostic*/ undefined, reportWatchStatus);
             createWatchProgram(compilerHost);
             assert.equal(watchedErrorCount, 2, "The error count was expected to be 2 for the file change");
         });

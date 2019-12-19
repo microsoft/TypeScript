@@ -21,6 +21,7 @@ namespace ts.formatting {
         RescanTemplateToken,
         RescanJsxIdentifier,
         RescanJsxText,
+        RescanJsxAttributeValue,
     }
 
     export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
@@ -133,6 +134,10 @@ namespace ts.formatting {
                 container.kind === SyntaxKind.TemplateTail;
         }
 
+        function shouldRescanJsxAttributeValue(node: Node): boolean {
+            return node.parent && isJsxAttribute(node.parent) && node.parent.initializer === node;
+        }
+
         function startsWithSlashToken(t: SyntaxKind): boolean {
             return t === SyntaxKind.SlashToken || t === SyntaxKind.SlashEqualsToken;
         }
@@ -147,6 +152,7 @@ namespace ts.formatting {
                 shouldRescanTemplateToken(n) ? ScanAction.RescanTemplateToken :
                 shouldRescanJsxIdentifier(n) ? ScanAction.RescanJsxIdentifier :
                 shouldRescanJsxText(n) ? ScanAction.RescanJsxText :
+                shouldRescanJsxAttributeValue(n) ? ScanAction.RescanJsxAttributeValue :
                 ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
@@ -239,6 +245,9 @@ namespace ts.formatting {
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
                     return scanner.reScanJsxToken();
+                case ScanAction.RescanJsxAttributeValue:
+                    lastScanAction = ScanAction.RescanJsxAttributeValue;
+                    return scanner.reScanJsxAttributeValue();
                 case ScanAction.Scan:
                     break;
                 default:

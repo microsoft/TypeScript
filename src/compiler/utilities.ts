@@ -2433,6 +2433,10 @@ namespace ts {
         return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
     }
 
+    export function hasTypeArguments(node: Node): node is HasTypeArguments {
+        return !!(node as HasTypeArguments).typeArguments;
+    }
+
     export const enum AssignmentKind {
         None, Definite, Compound
     }
@@ -4120,6 +4124,15 @@ namespace ts {
             for (const modifier of node.modifiers) {
                 flags |= modifierToFlag(modifier.kind);
             }
+        }
+
+        if (isInJSFile(node) && !!node.parent) {
+            // getModifierFlagsNoCache should only be called when parent pointers are set,
+            // or when !(node.flags & NodeFlags.Synthesized) && node.kind !== SyntaxKind.SourceFile)
+            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
+                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
+                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
+            flags |= tags;
         }
 
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
