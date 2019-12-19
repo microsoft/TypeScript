@@ -399,7 +399,7 @@ namespace ts.tscWatch {
         if (state.semanticDiagnosticsPerFile?.size) {
             baseline.push("Semantic diagnostics in builder refreshed for::");
             for (const file of program.getSourceFiles()) {
-                if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.path)) {
+                if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
                     baseline.push(file.fileName);
                 }
             }
