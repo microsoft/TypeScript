@@ -47,8 +47,8 @@ namespace ts.codefix {
         }
 
         const fixAllUnavailable = maybeFixableDiagnostics < 2;
-        return (action: CodeFixAction): CodeFixAction => {
-            return { ...action, fixId: fixAllUnavailable ? undefined : action.fixId };
+        return ({ fixId, fixAllDescription, ...action }: CodeFixAction): CodeFixAction => {
+            return fixAllUnavailable ? action : { ...action, fixId, fixAllDescription };
         };
     }
 

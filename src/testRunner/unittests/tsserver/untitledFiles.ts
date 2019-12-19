@@ -26,8 +26,6 @@ namespace ts.projectSystem {
             assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
                 {
                     description: "Change spelling to 'foo'",
-                    fixAllDescription: "Fix all detected spelling errors",
-                    fixId: "fixSpelling",
                     fixName: "spelling",
                     changes: [{
                         fileName: untitledFile,
@@ -38,6 +36,8 @@ namespace ts.projectSystem {
                         }],
                     }],
                     commands: undefined,
+                    fixId: undefined,
+                    fixAllDescription: undefined
                 },
             ]);
         });
