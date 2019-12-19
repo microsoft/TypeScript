@@ -733,15 +733,3 @@ namespace ts {
         return;
     }
 }
-
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
-}
-
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
-}
-
-if (ts.sys.setBlocking) {
-    ts.sys.setBlocking();
-}
