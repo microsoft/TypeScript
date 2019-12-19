@@ -26339,14 +26339,19 @@ namespace ts {
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as AccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
                     // Look for if this is the constructor for the class that `symbol` is a property of.
-                    const func = getContainingFunction(expr);
-                    if (!(func && func.kind === SyntaxKind.Constructor)) {
+                    const ctor = getContainingFunction(expr);
+                    if (!(ctor && ctor.kind === SyntaxKind.Constructor)) {
                         return true;
                     }
+                    // 1. no valueDeclaration -- some kind of synthetic property, don't allow the write
+                    // 2. normal property declaration -- its parent and the ctor's parent should both be a class
+                    // 3. parameter property declaration -- its parent should BE the ctor itself
+                    // 4. this.property assignment in a class -- it should be a binaryexpression, and ctor.parent should be the symbol.parent.valueDeclaration
+                    // 5. this.property assignment in a ctor func -- it should be a binaryexp, and ctor should be the symbol.parent.valueDeclaration
                     // If func.parent is a class and symbol is a (readonly) property of that class, or
                     // if func is a constructor and symbol is a (readonly) parameter property declared in it,
                     // then symbol is writeable here.
-                    return !symbol.valueDeclaration || !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
+                    return !symbol.valueDeclaration || !(ctor.parent === symbol.valueDeclaration.parent || ctor === symbol.valueDeclaration.parent);
                 }
                 return true;
             }

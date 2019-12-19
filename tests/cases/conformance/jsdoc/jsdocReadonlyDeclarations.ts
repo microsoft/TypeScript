@@ -18,3 +18,8 @@ class C {
     }
 }
 new C().x
+
+function F() {
+    /** @readonly */
+    this.z = 1
+}
