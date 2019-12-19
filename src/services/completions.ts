@@ -2540,11 +2540,12 @@ namespace ts.Completions {
     }
 
     function getPropertiesForObjectExpression(contextualType: Type, baseConstrainedType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
-        const type = baseConstrainedType && !(baseConstrainedType.flags & TypeFlags.AnyOrUnknown)
-            ? checker.getUnionType([contextualType, baseConstrainedType])
+        const hasBaseType = baseConstrainedType && baseConstrainedType !== contextualType;
+        const type = hasBaseType && !(baseConstrainedType!.flags & TypeFlags.AnyOrUnknown)
+            ? checker.getUnionType([contextualType, baseConstrainedType!])
             : contextualType;
 
-        return type.isUnion()
+        const properties = type.isUnion()
             ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
                 !(memberType.flags & TypeFlags.Primitive ||
@@ -2552,6 +2553,17 @@ namespace ts.Completions {
                     typeHasCallOrConstructSignatures(memberType, checker) ||
                     checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
             : type.getApparentProperties();
+
+        return hasBaseType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
+
+        // Filter out members whose only declaration is the object literal itself to avoid
+        // self-fulfilling completions like:
+        //
+        // function f<T>(x: T) {}
+        // f({ abc/**/: "" }) // `abc` is a member of `T` but only because it declares itself
+        function hasDeclarationOtherThanSelf(member: Symbol) {
+            return some(member.declarations, decl => decl.parent !== obj);
+        }
     }
 
     /**
