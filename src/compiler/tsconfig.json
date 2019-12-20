@@ -51,7 +51,7 @@
         "transformers/generators.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",
-        "transformers/module/es2015.ts",
+        "transformers/module/esnextAnd2015.ts",
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
         "transformer.ts",

@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-    export function transformES2015Module(context: TransformationContext) {
+    export function transformECMAScriptModule(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
