@@ -6,7 +6,7 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
-declare let Promise: PromiseConstructor;
+declare var Promise: PromiseConstructor; // eslint-disable-line no-var
 
 /* @internal */
 namespace ts {
@@ -2330,5 +2330,11 @@ namespace ts {
 
         return result;
     }
+
+    /* @internal */
+    export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
+        return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
+    }
+
     // #endregion
 }

@@ -370,9 +370,8 @@ namespace ts {
                 return false;
             }
             try {
-                // making clear this is a global mutation!
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-                ts.localizedDiagnosticMessages = JSON.parse(fileContents!);
+                // this is a global mutation (or live binding update)!
+                setLocalizedDiagnosticMessages(JSON.parse(fileContents!));
             }
             catch {
                 if (errors) {
@@ -672,6 +671,21 @@ namespace ts {
     /** Gets the JSDoc class tag for the node if present */
     export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
         return getFirstJSDocTag(node, isJSDocClassTag);
+    }
+
+    /** Gets the JSDoc public tag for the node if present */
+    export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPublicTag);
+    }
+
+    /** Gets the JSDoc private tag for the node if present */
+    export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPrivateTag);
+    }
+
+    /** Gets the JSDoc protected tag for the node if present */
+    export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocProtectedTag);
     }
 
     /** Gets the JSDoc enum tag for the node if present */
@@ -1546,6 +1560,18 @@ namespace ts {
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {
         return node.kind === SyntaxKind.JSDocClassTag;
+    }
+
+    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
+        return node.kind === SyntaxKind.JSDocPublicTag;
+    }
+
+    export function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag {
+        return node.kind === SyntaxKind.JSDocPrivateTag;
+    }
+
+    export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
+        return node.kind === SyntaxKind.JSDocProtectedTag;
     }
 
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {

@@ -82,7 +82,7 @@ require("../common/nominal");
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../../solution/common/nominal.ts": {
+      "../common/nominal.d.ts": {
         "version": "-9513375615-export declare type Nominal<T, Name extends string> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
         "signature": "-9513375615-export declare type Nominal<T, Name extends string> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n"
       },
@@ -110,8 +110,8 @@ require("../common/nominal");
     },
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
-      "../../../solution/common/nominal.ts",
-      "../../../solution/sub-project/index.ts"
+      "../../../solution/sub-project/index.ts",
+      "../common/nominal.d.ts"
     ]
   },
   "version": "FakeTSVersion"
@@ -146,11 +146,11 @@ exports.getVar = getVar;
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n"
       },
-      "../../../solution/common/nominal.ts": {
+      "../common/nominal.d.ts": {
         "version": "-9513375615-export declare type Nominal<T, Name extends string> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
         "signature": "-9513375615-export declare type Nominal<T, Name extends string> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n"
       },
-      "../../../solution/sub-project/index.ts": {
+      "../sub-project/index.d.ts": {
         "version": "-21416888433-import { Nominal } from '../common/nominal';\r\nexport declare type MyNominal = Nominal<string, 'MyNominal'>;\r\n",
         "signature": "-21416888433-import { Nominal } from '../common/nominal';\r\nexport declare type MyNominal = Nominal<string, 'MyNominal'>;\r\n"
       },
@@ -170,7 +170,7 @@ exports.getVar = getVar;
       "../../../solution/sub-project-2/index.ts": [
         "../sub-project/index.d.ts"
       ],
-      "../../../solution/sub-project/index.ts": [
+      "../sub-project/index.d.ts": [
         "../common/nominal.d.ts"
       ]
     },
@@ -178,15 +178,15 @@ exports.getVar = getVar;
       "../../../solution/sub-project-2/index.ts": [
         "../common/nominal.d.ts"
       ],
-      "../../../solution/sub-project/index.ts": [
+      "../sub-project/index.d.ts": [
         "../common/nominal.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
-      "../../../solution/common/nominal.ts",
       "../../../solution/sub-project-2/index.ts",
-      "../../../solution/sub-project/index.ts"
+      "../common/nominal.d.ts",
+      "../sub-project/index.d.ts"
     ]
   },
   "version": "FakeTSVersion"

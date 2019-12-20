@@ -8,7 +8,7 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/codeEditor/browser/suggestEnabledInput/suggestEnabledInput.ts(230,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(547,4): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
@@ -70,7 +70,7 @@ $ gulp compile --max_old_space_size=4095
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/codeEditor/browser/suggestEnabledInput/suggestEnabledInput.ts(230,3): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
-[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(547,4): Type 'string | null' is not assignable to type 'string'.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(536,4): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
 [XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesWidgets.ts(646,5): Type 'string | null' is not assignable to type 'string'.
   Type 'null' is not assignable to type 'string'.
