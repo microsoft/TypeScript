@@ -471,6 +471,7 @@ namespace ts {
         JSDocPublicTag,
         JSDocPrivateTag,
         JSDocProtectedTag,
+        JSDocReadonlyTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -2630,6 +2631,10 @@ namespace ts {
 
     export interface JSDocProtectedTag extends JSDocTag {
         kind: SyntaxKind.JSDocProtectedTag;
+    }
+
+    export interface JSDocReadonlyTag extends JSDocTag {
+        kind: SyntaxKind.JSDocReadonlyTag;
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {

@@ -688,6 +688,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocProtectedTag);
     }
 
+    /** Gets the JSDoc protected tag for the node if present */
+    export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined {
+        return getFirstJSDocTag(node, isJSDocReadonlyTag);
+    }
+
     /** Gets the JSDoc enum tag for the node if present */
     export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
         return getFirstJSDocTag(node, isJSDocEnumTag);
@@ -1572,6 +1577,10 @@ namespace ts {
 
     export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
         return node.kind === SyntaxKind.JSDocProtectedTag;
+    }
+
+    export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
+        return node.kind === SyntaxKind.JSDocReadonlyTag;
     }
 
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {

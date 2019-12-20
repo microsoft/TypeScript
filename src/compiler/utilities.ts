@@ -4130,7 +4130,8 @@ namespace ts {
             // or when !(node.flags & NodeFlags.Synthesized) && node.kind !== SyntaxKind.SourceFile)
             const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
                 | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
-                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None);
+                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None)
+                | (getJSDocReadonlyTag(node) ? ModifierFlags.Readonly : ModifierFlags.None);
             flags |= tags;
         }
 
