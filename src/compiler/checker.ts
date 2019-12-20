@@ -32641,7 +32641,7 @@ namespace ts {
             }
         }
 
-        function checkImportOrExportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | NamespaceExport | ImportSpecifier) {
+        function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
@@ -32659,16 +32659,16 @@ namespace ts {
                 const importClause = node.importClause;
                 if (importClause) {
                     if (importClause.name) {
-                        checkImportOrExportBinding(importClause);
+                        checkImportBinding(importClause);
                     }
                     if (importClause.namedBindings) {
                         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            checkImportOrExportBinding(importClause.namedBindings);
+                            checkImportBinding(importClause.namedBindings);
                         }
                         else {
                             const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
                             if (moduleExisted) {
-                                forEach(importClause.namedBindings.elements, checkImportOrExportBinding);
+                                forEach(importClause.namedBindings.elements, checkImportBinding);
                             }
                         }
                     }
@@ -32684,7 +32684,7 @@ namespace ts {
 
             checkGrammarDecoratorsAndModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
-                checkImportOrExportBinding(node);
+                checkImportBinding(node);
                 if (hasModifier(node, ModifierFlags.Export)) {
                     markExportAsReferenced(node);
                 }
@@ -32726,8 +32726,12 @@ namespace ts {
                 if (node.exportClause) {
                     // export { x, y }
                     // export { x, y } from "foo"
-                    // export * as ns from "foo"
-                    isNamedExports(node.exportClause) ? forEach(node.exportClause.elements, checkExportSpecifier) : checkImportOrExportBinding(node.exportClause);
+                    if (isNamedExports(node.exportClause)) {
+                        forEach(node.exportClause.elements, checkExportSpecifier);
+                    }
+                    else if(!isNamespaceExport(node.exportClause)) {
+                        checkImportBinding(node.exportClause);
+                    }
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
                     const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
