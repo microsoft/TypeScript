@@ -26345,23 +26345,19 @@ namespace ts {
                     if (!(ctor && ctor.kind === SyntaxKind.Constructor)) {
                         return true;
                     }
-                    // 1. no valueDeclaration -- some kind of synthetic property, don't allow the write
-                    // 2. normal property declaration -- its parent and the ctor's parent should both be a class
-                    // 3. parameter property declaration -- its parent should BE the ctor itself
-                    // 4. this.property assignment in a class -- it should be a binaryexpression, and ctor.parent should be the symbol.parent.valueDeclaration
-                    // 5. this.property assignment in a ctor func -- it should be a binaryexp, and ctor should be the symbol.parent.valueDeclaration
-                    // If func.parent is a class and symbol is a (readonly) property of that class, or
-                    // if func is a constructor and symbol is a (readonly) parameter property declared in it,
-                    // then symbol is writeable here.
                     if (symbol.valueDeclaration) {
-                        const isLocalParameterProperty = ctor === symbol.valueDeclaration.parent;
+                        const isAssignmentDeclaration = isBinaryExpression(symbol.valueDeclaration);
                         const isLocalPropertyDeclaration = ctor.parent === symbol.valueDeclaration.parent;
-                        const isLocalThisPropertyAssignment = symbol.parent && symbol.parent.valueDeclaration === ctor.parent; // TODO: Make sure that symbol.parent is a function and class
-                        const isLocalThisPropertyAssignmentConstructorFunction = symbol.parent && symbol.parent.valueDeclaration === ctor; // TODO: Make sure that symbol.parent is a function and class
-                        const isLocalProperty = isLocalPropertyDeclaration || isLocalParameterProperty || isLocalThisPropertyAssignment || isLocalThisPropertyAssignmentConstructorFunction ;
-                        return !isLocalProperty;
+                        const isLocalParameterProperty = ctor === symbol.valueDeclaration.parent;
+                        const isLocalThisPropertyAssignment = isAssignmentDeclaration && symbol.parent?.valueDeclaration === ctor.parent;
+                        const isLocalThisPropertyAssignmentConstructorFunction = isAssignmentDeclaration && symbol.parent?.valueDeclaration === ctor;
+                        const isWriteableSymbol =
+                            isLocalPropertyDeclaration
+                            || isLocalParameterProperty
+                            || isLocalThisPropertyAssignment
+                            || isLocalThisPropertyAssignmentConstructorFunction;
+                        return !isWriteableSymbol;
                     }
-                    return false;
                 }
                 return true;
             }
