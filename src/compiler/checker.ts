@@ -11979,7 +11979,7 @@ namespace ts {
                 if (prop) {
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
-                        if (isAssignmentTarget(accessExpression) && (isReferenceToReadonlyEntity(accessExpression, prop) || isReferenceThroughNamespaceImport(accessExpression))) {
+                        if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return undefined;
                         }
@@ -12897,7 +12897,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
-                    return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
+                    return node.flags & NodeFlags.JavaScriptFile && !noImplicitAny ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);
@@ -23061,11 +23061,9 @@ namespace ts {
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
                 getNodeLinks(node).resolvedSymbol = prop;
                 checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, apparentType, prop);
-                if (assignmentKind) {
-                    if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
-                        error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
-                        return errorType;
-                    }
+                if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
+                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
+                    return errorType;
                 }
                 propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
@@ -24880,8 +24878,8 @@ namespace ts {
             const declaration = signature.declaration;
             const modifiers = getSelectedModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier);
 
-            // Public constructor is accessible.
-            if (!modifiers) {
+            // (1) Public constructors and (2) constructor functions are always accessible.
+            if (!modifiers || declaration.kind !== SyntaxKind.Constructor) {
                 return true;
             }
 
@@ -26347,29 +26345,39 @@ namespace ts {
             );
         }
 
-        function isReferenceToReadonlyEntity(expr: Expression, symbol: Symbol): boolean {
+        function isAssignmentToReadonlyEntity(expr: Expression, symbol: Symbol, assignmentKind: AssignmentKind) {
+            if (assignmentKind === AssignmentKind.None) {
+                // no assigment means it doesn't matter whether the entity is readonly
+                return false;
+            }
             if (isReadonlySymbol(symbol)) {
                 // Allow assignments to readonly properties within constructors of the same class declaration.
                 if (symbol.flags & SymbolFlags.Property &&
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as AccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
                     // Look for if this is the constructor for the class that `symbol` is a property of.
-                    const func = getContainingFunction(expr);
-                    if (!(func && func.kind === SyntaxKind.Constructor)) {
+                    const ctor = getContainingFunction(expr);
+                    if (!(ctor && ctor.kind === SyntaxKind.Constructor)) {
                         return true;
                     }
-                    // If func.parent is a class and symbol is a (readonly) property of that class, or
-                    // if func is a constructor and symbol is a (readonly) parameter property declared in it,
-                    // then symbol is writeable here.
-                    return !symbol.valueDeclaration || !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
+                    if (symbol.valueDeclaration) {
+                        const isAssignmentDeclaration = isBinaryExpression(symbol.valueDeclaration);
+                        const isLocalPropertyDeclaration = ctor.parent === symbol.valueDeclaration.parent;
+                        const isLocalParameterProperty = ctor === symbol.valueDeclaration.parent;
+                        const isLocalThisPropertyAssignment = isAssignmentDeclaration && symbol.parent?.valueDeclaration === ctor.parent;
+                        const isLocalThisPropertyAssignmentConstructorFunction = isAssignmentDeclaration && symbol.parent?.valueDeclaration === ctor;
+                        const isWriteableSymbol =
+                            isLocalPropertyDeclaration
+                            || isLocalParameterProperty
+                            || isLocalThisPropertyAssignment
+                            || isLocalThisPropertyAssignmentConstructorFunction;
+                        return !isWriteableSymbol;
+                    }
                 }
                 return true;
             }
-            return false;
-        }
-
-        function isReferenceThroughNamespaceImport(expr: Expression): boolean {
             if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+                // references through namespace import should be readonly
                 const node = skipParentheses((expr as AccessExpression).expression);
                 if (node.kind === SyntaxKind.Identifier) {
                     const symbol = getNodeLinks(node).resolvedSymbol!;

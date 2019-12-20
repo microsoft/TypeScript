@@ -472,6 +472,7 @@ namespace ts {
         JSDocPublicTag,
         JSDocPrivateTag,
         JSDocProtectedTag,
+        JSDocReadonlyTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -2640,6 +2641,10 @@ namespace ts {
         kind: SyntaxKind.JSDocProtectedTag;
     }
 
+    export interface JSDocReadonlyTag extends JSDocTag {
+        kind: SyntaxKind.JSDocReadonlyTag;
+    }
+
     export interface JSDocEnumTag extends JSDocTag, Declaration {
         parent: JSDoc;
         kind: SyntaxKind.JSDocEnumTag;
@@ -3139,6 +3144,8 @@ namespace ts {
         getMissingFilePaths(): readonly Path[];
         /* @internal */
         getRefFileMap(): MultiMap<RefFile> | undefined;
+        /* @internal */
+        getFilesByNameMap(): Map<SourceFile | false | undefined>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then

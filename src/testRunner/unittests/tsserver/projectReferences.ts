@@ -1433,6 +1433,7 @@ function foo() {
                 aTest: File;
                 bFoo: File;
                 bBar: File;
+                bSymlink: SymLink;
             }
             function verifySymlinkScenario(packages: () => Packages) {
                 describe("when solution is not built", () => {
@@ -1456,13 +1457,9 @@ function foo() {
                 });
             }
 
-            function verifySession({ bPackageJson, aTest, bFoo, bBar }: Packages, alreadyBuilt: boolean, extraOptions: CompilerOptions) {
+            function verifySession({ bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: CompilerOptions) {
                 const aConfig = config("A", extraOptions, ["../B"]);
                 const bConfig = config("B", extraOptions);
-                const bSymlink: SymLink = {
-                    path: `${tscWatch.projectRoot}/node_modules/b`,
-                    symLink: `${tscWatch.projectRoot}/packages/B`
-                };
                 const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
                 const host = alreadyBuilt ?
                     createHost(files, [aConfig.path]) :
@@ -1478,6 +1475,26 @@ function foo() {
                     project,
                     [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
+                verifyGetErrRequest({
+                    host,
+                    session,
+                    expected: [
+                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
+                    ]
+                });
+                session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
+                    arguments: {
+                        changedFiles: [{
+                            fileName: aTest.path,
+                            textChanges: [{
+                                newText: "\n",
+                                start: { line: 5, offset: 1 },
+                                end: { line: 5, offset: 1 }
+                            }]
+                        }]
+                    }
+                });
                 verifyGetErrRequest({
                     host,
                     session,
@@ -1510,37 +1527,55 @@ function foo() {
                 };
             }
 
-            describe("when packageJson has types field and has index.ts", () => {
-                verifySymlinkScenario(() => ({
-                    bPackageJson: {
-                        path: `${tscWatch.projectRoot}/packages/B/package.json`,
-                        content: JSON.stringify({
-                            main: "lib/index.js",
-                            types: "lib/index.d.ts"
-                        })
-                    },
-                    aTest: file("A", "index.ts", `import { foo } from 'b';
-import { bar } from 'b/lib/bar';
+            function verifyMonoRepoLike(scope = "") {
+                describe("when packageJson has types field and has index.ts", () => {
+                    verifySymlinkScenario(() => ({
+                        bPackageJson: {
+                            path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                            content: JSON.stringify({
+                                main: "lib/index.js",
+                                types: "lib/index.d.ts"
+                            })
+                        },
+                        aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+import { bar } from '${scope}b/lib/bar';
 foo();
-bar();`),
-                    bFoo: file("B", "index.ts", `export function foo() { }`),
-                    bBar: file("B", "bar.ts", `export function bar() { }`)
-                }));
-            });
+bar();
+`),
+                        bFoo: file("B", "index.ts", `export function foo() { }`),
+                        bBar: file("B", "bar.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `${tscWatch.projectRoot}/node_modules/${scope}b`,
+                            symLink: `${tscWatch.projectRoot}/packages/B`
+                        }
+                    }));
+                });
 
-            describe("when referencing file from subFolder", () => {
-                verifySymlinkScenario(() => ({
-                    bPackageJson: {
-                        path: `${tscWatch.projectRoot}/packages/B/package.json`,
-                        content: "{}"
-                    },
-                    aTest: file("A", "test.ts", `import { foo } from 'b/lib/foo';
-import { bar } from 'b/lib/bar/foo';
+                describe("when referencing file from subFolder", () => {
+                    verifySymlinkScenario(() => ({
+                        bPackageJson: {
+                            path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                            content: "{}"
+                        },
+                        aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+import { bar } from '${scope}b/lib/bar/foo';
 foo();
-bar();`),
-                    bFoo: file("B", "foo.ts", `export function foo() { }`),
-                    bBar: file("B", "bar/foo.ts", `export function bar() { }`)
-                }));
+bar();
+`),
+                        bFoo: file("B", "foo.ts", `export function foo() { }`),
+                        bBar: file("B", "bar/foo.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `${tscWatch.projectRoot}/node_modules/${scope}b`,
+                            symLink: `${tscWatch.projectRoot}/packages/B`
+                        }
+                    }));
+                });
+            }
+            describe("when package is not scoped", () => {
+                verifyMonoRepoLike();
+            });
+            describe("when package is scoped", () => {
+                verifyMonoRepoLike("@issue/");
             });
         });
 

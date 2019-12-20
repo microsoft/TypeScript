@@ -511,6 +511,7 @@ namespace ts {
             case SyntaxKind.JSDocPublicTag:
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
+            case SyntaxKind.JSDocReadonlyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
@@ -6855,6 +6856,9 @@ namespace ts {
                             break;
                         case "protected":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocProtectedTag, tagName);
+                            break;
+                        case "readonly":
+                            tag = parseSimpleTag(start, SyntaxKind.JSDocReadonlyTag, tagName);
                             break;
                         case "this":
                             tag = parseThisTag(start, tagName);
