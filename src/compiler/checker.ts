@@ -345,6 +345,7 @@ namespace ts {
                 assignable: assignableRelation.size,
                 identity: identityRelation.size,
                 subtype: subtypeRelation.size,
+                strictSubtype: strictSubtypeRelation.size,
             }),
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
@@ -14027,8 +14028,17 @@ namespace ts {
             }
 
             const targetCount = getParameterCount(target);
-            if (!hasEffectiveRestParameter(target) && (checkMode & SignatureCheckMode.StrictArity ? getParameterCount(source) : getMinArgumentCount(source)) > targetCount) {
-                return Ternary.False;
+            if (checkMode & SignatureCheckMode.StrictArity) {
+                const sourceHasRest = hasEffectiveRestParameter(source);
+                const targetHasRest = hasEffectiveRestParameter(target);
+                if (sourceHasRest && !targetHasRest || sourceHasRest === targetHasRest && getParameterCount(source) > getParameterCount(target)) {
+                    return Ternary.False;
+                }
+            }
+            else {
+                if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
+                    return Ternary.False;
+                }
             }
 
             if (source.typeParameters && source.typeParameters !== target.typeParameters) {
@@ -14091,7 +14101,7 @@ namespace ts {
                     compareSignaturesRelated(targetSig!, sourceSig!, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
-                if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && isTypeIdenticalTo(sourceType, targetType)) {
+                if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
                     related = Ternary.False;
                 }
                 if (!related) {
@@ -15495,6 +15505,7 @@ namespace ts {
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                        // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, isIntersectionConstituent);
                         if (result) {
