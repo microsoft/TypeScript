@@ -6,8 +6,3 @@ import { default as yield } from "somemodule"; // no error
 import { default as default } from "somemodule"; // default as is ok, error of default binding name
 
 //// [es6ImportNamedImportIdentifiersParsing.js]
-import "somemodule"; // Allowed
-import "somemodule"; // Error - as this is keyword that is not allowed as identifier
-import "somemodule"; // error to use default as binding name
-import "somemodule"; // no error 
-import "somemodule"; // default as is ok, error of default binding name

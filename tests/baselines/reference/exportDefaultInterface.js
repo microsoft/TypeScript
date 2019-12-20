@@ -20,6 +20,5 @@ a.value.toExponential();
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-require("./a");
 var a;
 a.value.toExponential();

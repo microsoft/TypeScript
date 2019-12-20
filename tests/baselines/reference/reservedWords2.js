@@ -20,7 +20,6 @@ exports.__esModule = true;
 require();
 while ( = require("dfdf"))
     ;
-require();
 while (from)
     "foo";
 var ;

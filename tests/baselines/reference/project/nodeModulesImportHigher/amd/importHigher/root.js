@@ -1,4 +1,4 @@
-define(["require", "exports", "m1", "m2"], function (require, exports, m1) {
+define(["require", "exports", "m1"], function (require, exports, m1) {
     "use strict";
     exports.__esModule = true;
     m1.f1("test");

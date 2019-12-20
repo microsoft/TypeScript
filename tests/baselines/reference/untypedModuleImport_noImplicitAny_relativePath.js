@@ -13,4 +13,3 @@ import * as foo from "./node_modules/foo";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("./node_modules/foo");

@@ -17,7 +17,6 @@ export function foo() {
 //// [app.js]
 "use strict";
 exports.__esModule = true;
-require("./db");
 function foo() {
     return new Object();
 }

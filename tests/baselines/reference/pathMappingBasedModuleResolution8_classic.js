@@ -14,7 +14,7 @@ define(["require", "exports"], function (require, exports) {
     exports.x = 1 + 2;
 });
 //// [index.js]
-define(["require", "exports", "@speedy/folder1/testing"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

@@ -47,7 +47,6 @@ exports.ThingB = ThingB_1.ThingB;
 //// [Test.js]
 "use strict";
 exports.__esModule = true;
-require("./Things");
 var Test = /** @class */ (function () {
     function Test() {
         this.method = function (input) { };

@@ -17,4 +17,3 @@ import * as test from "./test.json"
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./test.json");

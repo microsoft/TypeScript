@@ -1,5 +1,4 @@
 // @noUnusedLocals: true
-// @removeUnusedImports: true
 
 // @Filename: /a.ts
 export const a = 0;

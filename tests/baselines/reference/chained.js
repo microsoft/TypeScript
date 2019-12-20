@@ -30,13 +30,11 @@ var A = /** @class */ (function () {
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-require("./a");
 //// [c.js]
 "use strict";
 exports.__esModule = true;
 //// [d.js]
 "use strict";
 exports.__esModule = true;
-require("./c");
 new D();
 var d = {};

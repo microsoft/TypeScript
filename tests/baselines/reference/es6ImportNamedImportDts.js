@@ -135,7 +135,6 @@ exports.aaaa1 = aaaa1;
 //// [client.js]
 "use strict";
 exports.__esModule = true;
-require("./server");
 var server_1 = require("./server");
 exports.xxxx = new server_1.a();
 var server_2 = require("./server");
@@ -157,9 +156,6 @@ var server_8 = require("./server");
 exports.z111 = new server_8.z1();
 var server_9 = require("./server");
 exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
-// not referenced
-require("./server");
-require("./server");
 
 
 //// [server.d.ts]

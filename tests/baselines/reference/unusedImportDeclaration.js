@@ -26,6 +26,7 @@ module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
 "use strict";
 exports.__esModule = true;
+require("./unusedImportDeclaration_testerB");
 var thingy = {
     me: "A"
 };

@@ -40,8 +40,6 @@ observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
 exports.__esModule = true;
-/// <reference path="observable.d.ts"/>
-require("observable");
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });

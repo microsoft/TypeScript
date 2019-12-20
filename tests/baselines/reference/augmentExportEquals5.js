@@ -81,12 +81,12 @@ let x: Request;
 const y = x.id;
 
 //// [augmentation.js]
-define(["require", "exports", "express"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });
 //// [consumer.js]
-define(["require", "exports", "express", "./augmentation"], function (require, exports) {
+define(["require", "exports", "./augmentation"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var x;

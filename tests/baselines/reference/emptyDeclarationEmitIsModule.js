@@ -12,11 +12,9 @@ export interface Bar {
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("./module");
 //// [module.js]
 "use strict";
 exports.__esModule = true;
-require("./index");
 var Foo = /** @class */ (function () {
     function Foo() {
     }

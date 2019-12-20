@@ -44,7 +44,6 @@ x.foo2().x2;
 /// <reference path="O.d.ts" />
 /// <reference path="O2.d.ts" />
 exports.__esModule = true;
-require("Observable");
 require("Map");
 var x;
 x.foo().x;

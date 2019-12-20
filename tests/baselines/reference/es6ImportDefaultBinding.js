@@ -16,7 +16,6 @@ export default a;
 //// [es6ImportDefaultBinding_1.js]
 import defaultBinding from "es6ImportDefaultBinding_0";
 var x = defaultBinding;
-import "es6ImportDefaultBinding_0"; // elide this import since defaultBinding2 is not used
 
 
 //// [es6ImportDefaultBinding_0.d.ts]

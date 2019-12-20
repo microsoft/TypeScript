@@ -42,7 +42,6 @@ exports.Point = Point;
 //// [referencer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./source");
 /**
  * @param {Point} p
  */

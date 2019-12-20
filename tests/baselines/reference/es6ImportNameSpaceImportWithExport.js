@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
     exports.a = 10;
 });
 //// [client.js]
-define(["require", "exports", "server", "server"], function (require, exports, nameSpaceBinding) {
+define(["require", "exports", "server"], function (require, exports, nameSpaceBinding) {
     "use strict";
     exports.__esModule = true;
     exports.x = nameSpaceBinding.a;

@@ -15,7 +15,7 @@ import * as b from './b.json';
     "b": "hello"
 }
 //// [out/file1.js]
-define(["require", "exports", "./b.json"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

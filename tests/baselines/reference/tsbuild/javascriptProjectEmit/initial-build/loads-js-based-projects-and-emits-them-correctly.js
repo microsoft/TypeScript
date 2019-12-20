@@ -59,7 +59,6 @@ export type MyNominal = string & {
 //// [/lib/sub-project/index.js]
 "use strict";
 exports.__esModule = true;
-require("../common/nominal");
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
@@ -117,7 +116,6 @@ export function getVar(): "key";
 //// [/lib/sub-project-2/index.js]
 "use strict";
 exports.__esModule = true;
-require("../sub-project/index");
 var variable = {
     key: /** @type {MyNominal} */ ('value')
 };

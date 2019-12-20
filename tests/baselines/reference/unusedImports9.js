@@ -35,3 +35,4 @@ exports.test2 = test2;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+require("./file1");

@@ -20,7 +20,6 @@ exports.__esModule = true;
 //// [Card.js]
 "use strict";
 exports.__esModule = true;
-require("./Types");
 exports["default"] = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
 //// [index.js]
 "use strict";

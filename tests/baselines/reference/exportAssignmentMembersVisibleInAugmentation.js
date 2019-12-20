@@ -22,11 +22,9 @@ declare module "foo" {
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("foo");
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-require("foo");
 
 
 //// [a.d.ts]

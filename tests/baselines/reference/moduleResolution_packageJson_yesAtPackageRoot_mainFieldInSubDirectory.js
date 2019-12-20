@@ -13,4 +13,3 @@ import { x } from "foo";
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("foo");

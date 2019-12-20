@@ -14,4 +14,3 @@ exports.x = 1 + 2;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("@speedy/folder1/testing");

@@ -9,4 +9,3 @@ import * as a from "a";
 
 
 //// [b.js]
-import "a";

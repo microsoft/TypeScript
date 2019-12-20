@@ -19,8 +19,6 @@ const p: string = Alpha.x;
 //// [consumer.js]
 "use strict";
 exports.__esModule = true;
-require("./v1");
-require("./v2");
 //// [global.js]
 // Should be OK, first in wins
 var p = Alpha.x;

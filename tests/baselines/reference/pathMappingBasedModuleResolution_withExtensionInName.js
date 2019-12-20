@@ -14,5 +14,3 @@ import { y } from "zone.tsx";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("zone.js");
-require("zone.tsx");

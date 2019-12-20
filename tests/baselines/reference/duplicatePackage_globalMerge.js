@@ -24,15 +24,11 @@ import { y } from '../tests/index'
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("react");
 exports.x = 1;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("react");
 exports.y = 2;
 //// [bug25410.js]
 "use strict";
 exports.__esModule = true;
-require("./index");
-require("../tests/index");

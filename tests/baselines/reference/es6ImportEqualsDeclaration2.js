@@ -20,4 +20,3 @@ import {a} from "server";
 
 
 //// [client.js]
-import "server";

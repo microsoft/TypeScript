@@ -20,5 +20,3 @@ import { x } from "foo/Bar";
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("foo/Foo");
-require("foo/Bar");

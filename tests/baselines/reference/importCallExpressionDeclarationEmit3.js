@@ -16,7 +16,6 @@ export var p2: Promise<any> = import("./0");
 //// [0.js]
 export function foo() { return "foo"; }
 //// [1.js]
-import "./0";
 import("./0");
 export var p0 = import(getPath());
 export var p1 = import("./0");

@@ -22,8 +22,6 @@ declare module "a.foo" {
 //// [testA.js]
 "use strict";
 exports.__esModule = true;
-require("a.foo");
 //// [testB.js]
 "use strict";
 exports.__esModule = true;
-require("b.foo"); // Error

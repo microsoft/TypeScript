@@ -39,7 +39,6 @@ B.zzz;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("./a");
 var x = { x: "" };
 B.zzz;
 var OriginalB = require("./b");

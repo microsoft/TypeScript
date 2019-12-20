@@ -16,10 +16,8 @@ export var a = 10;
 export var x = a;
 export var m = a;
 //// [es6ImportNamedImportParsingError_1.js]
-import  * ;
 from;
 "es6ImportNamedImportParsingError_0";
-import "es6ImportNamedImportParsingError_0";
 {
     a;
 }

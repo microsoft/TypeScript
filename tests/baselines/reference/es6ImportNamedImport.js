@@ -54,7 +54,6 @@ exports.aaaa = 10;
 //// [es6ImportNamedImport_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./es6ImportNamedImport_0");
 const es6ImportNamedImport_0_1 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_1.a;
 const es6ImportNamedImport_0_2 = require("./es6ImportNamedImport_0");
@@ -76,10 +75,6 @@ const es6ImportNamedImport_0_8 = require("./es6ImportNamedImport_0");
 var z111 = es6ImportNamedImport_0_8.z1;
 const es6ImportNamedImport_0_9 = require("./es6ImportNamedImport_0");
 var z2 = es6ImportNamedImport_0_9.z2; // z2 shouldn't give redeclare error
-// These are elided
-require("./es6ImportNamedImport_0");
-// These are elided
-require("./es6ImportNamedImport_0");
 
 
 //// [es6ImportNamedImport_0.d.ts]

@@ -11,8 +11,6 @@ import {x} from "foo";
 //// [lib.js]
 "use strict";
 exports.__esModule = true;
-require("foo");
 //// [app.js]
 "use strict";
 exports.__esModule = true;
-require("foo");

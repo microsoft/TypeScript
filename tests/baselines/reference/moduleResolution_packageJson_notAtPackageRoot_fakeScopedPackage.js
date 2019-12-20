@@ -18,4 +18,3 @@ import { x } from "foo/@bar";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("foo/@bar");

@@ -33,6 +33,5 @@ export {};
 //// [/src/plugin-one/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("plugin-two"); // include this to add reference to symlink
 
 

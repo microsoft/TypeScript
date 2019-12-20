@@ -35,11 +35,9 @@ exports.__esModule = true;
 //// [ImportExport.js]
 "use strict";
 exports.__esModule = true;
-require("./ConstEnum");
 //// [ImportExportDefault.js]
 "use strict";
 exports.__esModule = true;
-require("./ConstEnum");
 //// [ReExportDefault.js]
 "use strict";
 exports.__esModule = true;
@@ -49,17 +47,13 @@ exports.__esModule = true;
 //// [Usage1.js]
 "use strict";
 exports.__esModule = true;
-require("./ImportExportDefault");
-require("./ReExportDefault");
 0 /* Foo */;
 0 /* Foo */;
 //// [Usage2.js]
 "use strict";
 exports.__esModule = true;
-require("./ImportExport");
 0 /* Foo */;
 //// [Usage3.js]
 "use strict";
 exports.__esModule = true;
-require("./ReExport");
 0 /* Foo */;

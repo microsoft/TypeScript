@@ -26,7 +26,6 @@ exports.fooFunc = fooFunc;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
-require("./foo");
 function check(x) {
     switch (x) {
         case 0 /* Some */:

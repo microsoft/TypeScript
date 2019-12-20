@@ -48,9 +48,3 @@ import * as scopeBarSub from "@scope/bar/sub";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("foo");
-require("foo/sub");
-require("bar/sub");
-require("@scope/foo");
-require("@scope/foo/sub");
-require("@scope/bar/sub");

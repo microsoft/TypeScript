@@ -234,19 +234,6 @@ z7.a;
 z8.a;
 z9.a;
 z0.a;
-// default import
-require("interface");
-require("variable");
-require("interface-variable");
-require("module");
-require("interface-module");
-require("variable-module");
-require("function");
-require("function-module");
-require("class");
-require("class-module");
-// namespace import
-require("interface");
 var y2 = require("variable");
 var y3 = require("interface-variable");
 var y4 = require("module");

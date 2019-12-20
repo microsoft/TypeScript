@@ -71,7 +71,6 @@ export declare type MyNominal = Nominal<string, 'MyNominal'>;
 //// [/src/lib/solution/sub-project/index.js]
 "use strict";
 exports.__esModule = true;
-require("../common/nominal");
 
 
 //// [/src/lib/solution/sub-project/tsconfig.tsbuildinfo]
@@ -128,7 +127,6 @@ export {};
 //// [/src/lib/solution/sub-project-2/index.js]
 "use strict";
 exports.__esModule = true;
-require("../sub-project/index");
 var variable = {
     key: 'value'
 };

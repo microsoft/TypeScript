@@ -22,8 +22,6 @@ export function f() {
 //// [main.js]
 "use strict";
 exports.__esModule = true;
-/// <reference types="node" />
-require("fs");
 function f() {
     return {};
 }

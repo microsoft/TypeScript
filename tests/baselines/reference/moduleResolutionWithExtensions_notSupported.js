@@ -15,6 +15,3 @@ import js from "./js"; // OK because it's an untyped module.
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("./tsx"); // Not allowed.
-require("./jsx"); // Not allowed.
-require("./js"); // OK because it's an untyped module.

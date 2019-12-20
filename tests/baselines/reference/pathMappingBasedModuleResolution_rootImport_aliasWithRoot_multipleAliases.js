@@ -24,5 +24,3 @@ exports.bar = bar;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("/import/foo");
-require("/client/bar");

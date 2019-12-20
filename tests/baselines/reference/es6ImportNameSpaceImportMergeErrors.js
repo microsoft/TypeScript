@@ -21,8 +21,4 @@ exports.a = 10;
 //// [es6ImportNameSpaceImportMergeErrors_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./es6ImportNameSpaceImportMergeErrors_0");
-require("./es6ImportNameSpaceImportMergeErrors_0"); // should be error
-require("./es6ImportNameSpaceImportMergeErrors_0"); // should be error
-require("./es6ImportNameSpaceImportMergeErrors_0"); // should be error
 var nameSpaceBinding3 = 10;

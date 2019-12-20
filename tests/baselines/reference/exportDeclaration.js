@@ -21,5 +21,4 @@ var A = /** @class */ (function () {
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-require("./a");
 new A();

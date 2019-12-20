@@ -18,7 +18,6 @@ exports.__esModule = true;
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
-require("./color");
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

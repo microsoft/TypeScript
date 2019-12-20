@@ -54,7 +54,7 @@ define(["require", "exports"], function (require, exports) {
     exports.aaaa = 10;
 });
 //// [es6ImportNamedImportAmd_1.js]
-define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {
+define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {
     "use strict";
     exports.__esModule = true;
     var xxxx = es6ImportNamedImportAmd_0_1.a;

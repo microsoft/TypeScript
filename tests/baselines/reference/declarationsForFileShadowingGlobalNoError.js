@@ -38,8 +38,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-require("./custom");
-require("./dom");
 exports.mixin = function (Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);

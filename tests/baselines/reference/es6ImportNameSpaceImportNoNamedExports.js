@@ -14,4 +14,3 @@ module.exports = a;
 //// [es6ImportNameSpaceImportNoNamedExports_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./es6ImportNameSpaceImportNoNamedExports_0"); // error

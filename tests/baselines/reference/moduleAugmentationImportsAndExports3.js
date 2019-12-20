@@ -62,7 +62,6 @@ f1_1.A.prototype.foo = function () { return undefined; };
 //// [f4.js]
 "use strict";
 exports.__esModule = true;
-require("./f1");
 require("./f3");
 var a;
 var b = a.foo().n;

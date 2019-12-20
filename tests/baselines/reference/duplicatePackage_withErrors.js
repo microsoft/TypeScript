@@ -26,5 +26,3 @@ import { x as xb } from "b";
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("a");
-require("b");

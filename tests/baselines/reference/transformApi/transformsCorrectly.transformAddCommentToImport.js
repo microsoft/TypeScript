@@ -7,8 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var somewhere_1 = require("somewhere");
 exports.Value = somewhere_1.Value;
 /*comment*/
-require("somewhere");
-/*comment*/
 var somewhere_2 = require("somewhere");
 /*comment*/
 exports.X = somewhere_2.X;

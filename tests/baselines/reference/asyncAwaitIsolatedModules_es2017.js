@@ -40,7 +40,6 @@ module M {
 }
 
 //// [asyncAwaitIsolatedModules_es2017.js]
-import "missing";
 async function f0() { }
 async function f1() { }
 async function f3() { }

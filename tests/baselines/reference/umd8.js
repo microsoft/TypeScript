@@ -23,8 +23,6 @@ let x: any = Foo; // Not OK in value position
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-/// <reference path="foo.d.ts" />
-require("./foo");
 var y; // OK in type position
 y.foo();
 var z; // OK in ns position

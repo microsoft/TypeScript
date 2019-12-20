@@ -66,5 +66,3 @@ exports.C = exportValue_1.C;
 // OK, even though the namespace it exports is only types.
 var NS = require("./exportT");
 exports.NS = NS;
-// Error, not clear (to an isolated module) whether `T4` is a type.
-require("./exportT");

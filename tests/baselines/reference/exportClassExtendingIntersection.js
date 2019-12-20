@@ -60,7 +60,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-require("./BaseClass");
 function MyMixin(base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);

@@ -1087,7 +1087,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Do not emit imports that are unused or used only for types": {
+    "Emit imports that are unused or used only for types": {
         "category": "Message",
         "code": 1368
     },

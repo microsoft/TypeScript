@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
     exports.a = 10;
 });
 //// [es6ImportNameSpaceImportAmd_1.js]
-define(["require", "exports", "es6ImportNameSpaceImportAmd_0", "es6ImportNameSpaceImportAmd_0"], function (require, exports, nameSpaceBinding) {
+define(["require", "exports", "es6ImportNameSpaceImportAmd_0"], function (require, exports, nameSpaceBinding) {
     "use strict";
     exports.__esModule = true;
     var x = nameSpaceBinding.a;

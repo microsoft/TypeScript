@@ -10,4 +10,3 @@ import foobar from "foo/bar/foobar.json";
 //// [/bin/a.js]
 "use strict";
 exports.__esModule = true;
-require("foo/bar/foobar.json");

@@ -15,14 +15,11 @@ import * as b from './b.json';
     "b": "hello"
 }
 //// [out/file1.js]
-System.register(["./b.json"], function (exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
-        setters: [
-            function (_1) {
-            }
-        ],
+        setters: [],
         execute: function () {
         }
     };

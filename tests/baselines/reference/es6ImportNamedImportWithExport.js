@@ -53,7 +53,6 @@ exports.aaaa = 10;
 //// [client.js]
 "use strict";
 exports.__esModule = true;
-require("./server");
 var server_1 = require("./server");
 exports.xxxx = server_1.a;
 var server_2 = require("./server");
@@ -75,9 +74,6 @@ var server_8 = require("./server");
 exports.z111 = server_8.z1;
 var server_9 = require("./server");
 exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
-// Non referenced imports
-require("./server");
-require("./server");
 
 
 //// [server.d.ts]
