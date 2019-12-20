@@ -44,6 +44,9 @@ namespace ts {
                     return undefined;
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ExportDeclaration:
+                    const exportDecl = (node as ExportDeclaration);
+                    return visitExportDeclaration(exportDecl);
             }
 
             return node;
@@ -52,6 +55,41 @@ namespace ts {
         function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {
             // Elide `export=` as it is not legal with --module ES6
             return node.isExportEquals ? undefined : node;
+        }
+
+        function visitExportDeclaration(node: ExportDeclaration) {
+            // `export * as ns` only needs to be transformed in ES2015
+            if (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015) {
+                return node;
+            }
+
+            // Either ill-formed or don't need to be tranformed.
+            if (!node.exportClause || !isNamespaceExport(node.exportClause) || !node.moduleSpecifier) {
+                return node;
+            }
+
+            const oldIdentifier = node.exportClause.name;
+            const synthName = getGeneratedNameForNode(oldIdentifier);
+            const importDecl = createImportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createImportClause(/*name*/ undefined,
+                    createNamespaceImport(
+                        synthName
+                    )
+                ),
+                node.moduleSpecifier,
+            );
+            setOriginalNode(importDecl, node.exportClause);
+
+            const exportDecl = createExportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createNamedExports([createExportSpecifier(synthName, oldIdentifier)]),
+            );
+            setOriginalNode(exportDecl, node);
+
+            return [importDecl, exportDecl];
         }
 
         //
