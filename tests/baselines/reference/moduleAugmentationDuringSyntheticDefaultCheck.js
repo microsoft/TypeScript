@@ -41,4 +41,3 @@ exports.__esModule = true;
 "use strict";
 /// <reference path="./idx" />
 exports.__esModule = true;
-require("moment-timezone");

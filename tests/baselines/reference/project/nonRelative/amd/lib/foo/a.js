@@ -1,4 +1,4 @@
-define(["require", "exports", "lib/foo/b"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     function hello() { }

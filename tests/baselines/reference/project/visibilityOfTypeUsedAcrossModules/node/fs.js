@@ -1,6 +1,5 @@
 "use strict";
 exports.__esModule = true;
-require("./commands");
 var RM = /** @class */ (function () {
     function RM() {
     }

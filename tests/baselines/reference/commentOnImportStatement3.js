@@ -8,5 +8,3 @@ import foo = require('./foo');
 "use strict";
 /* copyright */
 exports.__esModule = true;
-/* not copyright */
-require("./foo");

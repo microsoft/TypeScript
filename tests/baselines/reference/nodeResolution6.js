@@ -15,4 +15,3 @@ import y = require("a");
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-require("a");

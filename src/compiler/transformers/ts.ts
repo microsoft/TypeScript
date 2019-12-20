@@ -2917,7 +2917,7 @@ namespace ts {
             if (isExternalModuleImportEqualsDeclaration(node)) {
                 const isReferenced = resolver.isReferencedAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-                if (!isReferenced && !compilerOptions.preserveUnusedImports) {
+                if (!isReferenced && compilerOptions.preserveUnusedImports) {
                     return setOriginalNode(
                         setTextRange(
                             createImportDeclaration(

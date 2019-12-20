@@ -44,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
     })(elaborate = exports.elaborate || (exports.elaborate = {}));
 });
 //// [file2.js]
-define(["require", "exports", "file1"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var ImportingModule;

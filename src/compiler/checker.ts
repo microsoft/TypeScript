@@ -2028,12 +2028,12 @@ namespace ts {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
-                    if (isTypeOnlyEnumAlias(symbol)) {
-                        error(errorLocation, Diagnostics.Type_only_enum_0_cannot_be_used_as_a_value, unescapeLeadingUnderscores(name));
-                    }
-                    else {
-                        error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
-                    }
+                    error(
+                        errorLocation,
+                        isTypeOnlyEnumAlias(symbol)
+                            ? Diagnostics.Type_only_enum_0_cannot_be_used_as_a_value
+                            : Diagnostics.Cannot_use_namespace_0_as_a_value,
+                        unescapeLeadingUnderscores(name));
                     return true;
                 }
             }

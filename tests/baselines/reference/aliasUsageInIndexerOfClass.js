@@ -63,7 +63,6 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInIndexerOfClass_main.js]
 "use strict";
 exports.__esModule = true;
-require("./aliasUsageInIndexerOfClass_backbone");
 var moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
 var N = /** @class */ (function () {
     function N() {

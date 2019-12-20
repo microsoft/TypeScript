@@ -17,7 +17,7 @@ var p = testData[0].name;
 
 //// [b.js]
 //// [a.js]
-define(["require", "exports", "ITest"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var testData;

@@ -21,8 +21,6 @@ export var x: SubModule.m.m3.c;
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.js]
 "use strict";
 exports.__esModule = true;
-///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts'/>
-require("SubModule");
 
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]

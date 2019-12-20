@@ -16,5 +16,4 @@ exports.__esModule = true;
 //// [aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.js]
 "use strict";
 exports.__esModule = true;
-require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
 var d = b.q3;

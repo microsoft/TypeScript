@@ -29,7 +29,7 @@ var y: Foo2;
 
 //// [propertyIdentityWithPrivacyMismatch_0.js]
 //// [propertyIdentityWithPrivacyMismatch_1.js]
-define(["require", "exports", "mod1", "mod2"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var x;

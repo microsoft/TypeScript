@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
 });
 //// [m2.js]
-define(["require", "exports", "m1"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var v = 100 /* V */;

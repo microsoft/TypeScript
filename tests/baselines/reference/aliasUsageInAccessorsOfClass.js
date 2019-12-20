@@ -64,7 +64,6 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsage1_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./aliasUsage1_backbone");
 var moduleA = require("./aliasUsage1_moduleA");
 var C2 = /** @class */ (function () {
     function C2() {

@@ -31,7 +31,7 @@ define(["require", "exports"], function (require, exports) {
     exports.Promise = Promise;
 });
 //// [staticInstanceResolution5_1.js]
-define(["require", "exports", "staticInstanceResolution5_0"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     // these 3 should be errors

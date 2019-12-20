@@ -24,12 +24,12 @@ define(["require", "exports"], function (require, exports) {
     return foo;
 });
 //// [file2.js]
-define(["require", "exports", "./file1"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });
 //// [file3.js]
-define(["require", "exports", "./file1", "./file2"], function (require, exports) {
+define(["require", "exports", "./file2"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var a; // should not work

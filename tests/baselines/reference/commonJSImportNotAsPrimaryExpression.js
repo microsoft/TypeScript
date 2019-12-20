@@ -51,7 +51,6 @@ var E1;
 //// [foo_1.js]
 "use strict";
 exports.__esModule = true;
-require("./foo_0");
 var i;
 var x = {};
 var y = false;

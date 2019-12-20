@@ -22,5 +22,4 @@ module.exports = /** @class */ (function () {
 //// [use.js]
 "use strict";
 exports.__esModule = true;
-require("./mod1");
 c.chunk;

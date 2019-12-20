@@ -47,7 +47,7 @@ define(["require", "exports"], function (require, exports) {
     return ClassB;
 });
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleA.js]
-define(["require", "exports", "recursiveExportAssignmentAndFindAliasedType6_moduleC", "recursiveExportAssignmentAndFindAliasedType6_moduleB"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
 });

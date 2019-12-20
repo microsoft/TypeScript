@@ -23,6 +23,4 @@ exports.Promise = Promise;
 //// [moduleInTypePosition1_1.js]
 "use strict";
 exports.__esModule = true;
-///<reference path='moduleInTypePosition1_0.ts'/>
-require("./moduleInTypePosition1_0");
 var x = function (w1) { };

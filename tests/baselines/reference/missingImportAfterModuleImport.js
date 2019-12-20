@@ -25,8 +25,6 @@ export = MainModule;
 //// [missingImportAfterModuleImport_0.js]
 //// [missingImportAfterModuleImport_1.js]
 "use strict";
-///<reference path='missingImportAfterModuleImport_0.ts'/>
-require("SubModule");
 var MainModule = /** @class */ (function () {
     function MainModule() {
     }

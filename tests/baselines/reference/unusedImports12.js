@@ -25,4 +25,3 @@ exports["default"] = Member;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("./b");

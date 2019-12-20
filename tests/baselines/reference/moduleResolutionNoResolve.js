@@ -10,7 +10,6 @@ export var c = '';
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-require("./b");
 //// [b.js]
 "use strict";
 exports.__esModule = true;

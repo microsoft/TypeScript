@@ -13,4 +13,3 @@ import fs = require('./requireOfAnEmptyFile1_b');
 "use strict";
 //requireOfAnEmptyFile1
 exports.__esModule = true;
-require("./requireOfAnEmptyFile1_b");

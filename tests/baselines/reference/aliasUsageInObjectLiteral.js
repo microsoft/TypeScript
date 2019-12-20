@@ -58,7 +58,6 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInObjectLiteral_main.js]
 "use strict";
 exports.__esModule = true;
-require("./aliasUsageInObjectLiteral_backbone");
 var moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 var a = { x: moduleA };
 var b = { x: moduleA };

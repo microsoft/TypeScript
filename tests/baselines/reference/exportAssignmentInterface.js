@@ -20,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
     exports.__esModule = true;
 });
 //// [exportAssignmentInterface_B.js]
-define(["require", "exports", "exportAssignmentInterface_A"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var i;

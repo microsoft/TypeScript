@@ -57,7 +57,6 @@ exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
 "use strict";
 exports.__esModule = true;
-require("./aliasUsageInFunctionExpression_backbone");
 var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 var f = function (x) { return x; };
 f = function (x) { return moduleA; };

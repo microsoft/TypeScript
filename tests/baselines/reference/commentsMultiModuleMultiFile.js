@@ -71,7 +71,7 @@ define(["require", "exports"], function (require, exports) {
     new multiM.c();
 });
 //// [commentsMultiModuleMultiFile_1.js]
-define(["require", "exports", "commentsMultiModuleMultiFile_0"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/

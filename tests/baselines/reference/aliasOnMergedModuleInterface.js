@@ -25,8 +25,6 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 //// [aliasOnMergedModuleInterface_1.js]
 "use strict";
 exports.__esModule = true;
-///<reference path='aliasOnMergedModuleInterface_0.ts' />
-require("foo");
 var z;
 z.bar("hello"); // This should be ok
 var x = foo.bar("hello"); // foo.A should be ok but foo.bar should be error

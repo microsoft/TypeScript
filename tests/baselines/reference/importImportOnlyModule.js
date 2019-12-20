@@ -29,7 +29,7 @@ define(["require", "exports"], function (require, exports) {
     exports.C1 = C1;
 });
 //// [foo_1.js]
-define(["require", "exports", "./foo_0"], function (require, exports) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     var answer = 42; // No exports
