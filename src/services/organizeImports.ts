@@ -307,7 +307,7 @@ namespace ts.OrganizeImports {
         }
 
         const newExportSpecifiers: ExportSpecifier[] = [];
-        newExportSpecifiers.push(...flatMap(namedExports, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : []));
+        newExportSpecifiers.push(...flatMap(namedExports, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
         const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 

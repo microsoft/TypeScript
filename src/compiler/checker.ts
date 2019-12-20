@@ -6638,7 +6638,6 @@ namespace ts {
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.NamedImports:
                     case SyntaxKind.NamespaceImport:
-                    case SyntaxKind.NamespaceExport:
                     case SyntaxKind.ImportClause:
                         return false;
                     default:
@@ -36351,7 +36350,6 @@ namespace ts {
             case SyntaxKind.ImportClause: // For default import
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.NamespaceImport:
-            case SyntaxKind.NamespaceExport:
             case SyntaxKind.ImportSpecifier: // For rename import `x as y`
                 return true;
             case SyntaxKind.Identifier:

@@ -821,7 +821,7 @@ namespace ts {
                 return updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
                     visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.NamedExports:

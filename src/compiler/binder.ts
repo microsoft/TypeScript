@@ -56,7 +56,7 @@ namespace ts {
                 break;
             // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
             case SyntaxKind.ExportDeclaration:
-                const exportDeclaration = (node as ExportDeclaration);
+                const exportDeclaration = node as ExportDeclaration;
                 if (!exportDeclaration.moduleSpecifier && exportDeclaration.exportClause && exportDeclaration.exportClause.kind === SyntaxKind.NamedExports) {
                     let state = ModuleInstanceState.NonInstantiated;
                     for (const specifier of exportDeclaration.exportClause.elements) {

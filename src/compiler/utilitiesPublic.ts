@@ -1365,6 +1365,10 @@ namespace ts {
         return node.kind === SyntaxKind.NamespaceExport;
     }
 
+    export function isNamedExportBindings(node: Node): node is NamedExportBindings {
+        return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
+    }
+
     export function isNamedImports(node: Node): node is NamedImports {
         return node.kind === SyntaxKind.NamedImports;
     }
