@@ -31,12 +31,11 @@ System.register([], function (exports_1, context_1) {
 //// [1.js]
 System.register(["./0"], function (exports_1, context_1) {
     "use strict";
-    var ns;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
             function (ns_1) {
-                exports_1("ns", ns = ns_1);
+                exports_1("ns", ns_1);
             }
         ],
         execute: function () {

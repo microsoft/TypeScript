@@ -33,8 +33,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 exports.__esModule = true;
-var ns = __importStar(require("./0"));
-exports.ns = ns;
+exports.ns = __importStar(require("./0"));
 ns.a;
 ns.b;
 var ns = { a: 1, b: 2 };

@@ -23,8 +23,7 @@ exports.b = 2;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
-var ns = require("./0");
-exports.ns = ns;
+exports.ns = require("./0");
 ns.a;
 ns.b;
 //// [2.js]

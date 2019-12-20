@@ -1022,26 +1022,16 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
-                if (moduleKind !== ModuleKind.AMD) {
-                    statements.push(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList([
-                                createVariableDeclaration(
-                                    getSynthesizedClone(node.exportClause.name),
-                                    /*type*/ undefined,
-                                    getHelperExpressionForExport(node, createRequireCall(node))
-                                )
-                            ])
-                        )
-                    );
-                }
-
                 statements.push(
                     setOriginalNode(
                         setTextRange(
                             createExpressionStatement(
-                                createExportExpression(getSynthesizedClone(node.exportClause.name), createIdentifier(idText(node.exportClause.name)))
+                                createExportExpression(
+                                    getSynthesizedClone(node.exportClause.name),
+                                    moduleKind !== ModuleKind.AMD ?
+                                        getHelperExpressionForExport(node, createRequireCall(node)) :
+                                        createIdentifier(idText(node.exportClause.name))
+                                )
                             ),
                             node
                         ),

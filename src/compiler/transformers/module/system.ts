@@ -539,7 +539,7 @@ namespace ts {
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     createLiteral(idText(entry.exportClause.name)),
-                                                    createAssignment(importVariableName, parameterName)
+                                                    parameterName
                                                 ]
                                             )
                                         )
@@ -634,9 +634,7 @@ namespace ts {
         }
 
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
-            if (node.exportClause && isNamespaceExport(node.exportClause)) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile)!); // TODO: GH#18217
-            }
+            Debug.assertDefined(node);
             return undefined;
         }
 

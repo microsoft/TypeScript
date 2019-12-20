@@ -42,8 +42,7 @@ foo.ns.b;
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var ns = require("./0");
-    exports.ns = ns;
+    exports.ns = require("./0");
     ns.a;
     ns.b;
 });

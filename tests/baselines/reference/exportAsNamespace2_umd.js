@@ -49,8 +49,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var ns = __importStar(require("./0"));
-    exports.ns = ns;
+    exports.ns = __importStar(require("./0"));
     ns.a;
     ns.b;
 });
