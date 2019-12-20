@@ -1935,6 +1935,7 @@ declare namespace ts {
             assignable: number;
             identity: number;
             subtype: number;
+            strictSubtype: number;
         };
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
