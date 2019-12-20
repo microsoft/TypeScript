@@ -14028,17 +14028,10 @@ namespace ts {
             }
 
             const targetCount = getParameterCount(target);
-            if (checkMode & SignatureCheckMode.StrictArity) {
-                const sourceHasRest = hasEffectiveRestParameter(source);
-                const targetHasRest = hasEffectiveRestParameter(target);
-                if (sourceHasRest && !targetHasRest || sourceHasRest === targetHasRest && getParameterCount(source) > getParameterCount(target)) {
-                    return Ternary.False;
-                }
-            }
-            else {
-                if (!hasEffectiveRestParameter(target) && getMinArgumentCount(source) > targetCount) {
-                    return Ternary.False;
-                }
+            const sourceHasMoreParameters = !hasEffectiveRestParameter(target) &&
+                (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
+            if (sourceHasMoreParameters) {
+                return Ternary.False;
             }
 
             if (source.typeParameters && source.typeParameters !== target.typeParameters) {
