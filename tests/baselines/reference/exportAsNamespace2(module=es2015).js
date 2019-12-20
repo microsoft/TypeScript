@@ -19,7 +19,8 @@ foo.ns.b;
 export var a = 1;
 export var b = 2;
 //// [1.js]
-export * as ns from './0';
+import * as ns_1 from './0';
+export { ns_1 as ns };
 ns.a;
 ns.b;
 //// [2.js]
