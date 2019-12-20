@@ -12,14 +12,14 @@ export * as ns from './0';
 >ns : typeof ns
 
 ns.a;
->ns.a : 1
->ns : typeof ns
->a : 1
+>ns.a : any
+>ns : any
+>a : any
 
 ns.b;
->ns.b : 2
->ns : typeof ns
->b : 2
+>ns.b : any
+>ns : any
+>b : any
 
 === tests/cases/conformance/es2020/modules/2.ts ===
 import * as foo from './1'

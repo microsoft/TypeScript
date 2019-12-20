@@ -25,8 +25,8 @@ exports.b = 2;
 exports.__esModule = true;
 var ns = require("./0");
 exports.ns = ns;
-exports.ns.a;
-exports.ns.b;
+ns.a;
+ns.b;
 //// [2.js]
 "use strict";
 exports.__esModule = true;

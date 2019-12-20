@@ -10,14 +10,7 @@ export * as ns from './0';
 >ns : Symbol(ns, Decl(1.ts, 0, 11))
 
 ns.a;
->ns.a : Symbol(ns.a, Decl(0.ts, 0, 12))
->ns : Symbol(ns, Decl(1.ts, 0, 11))
->a : Symbol(ns.a, Decl(0.ts, 0, 12))
-
 ns.b;
->ns.b : Symbol(ns.b, Decl(0.ts, 1, 12))
->ns : Symbol(ns, Decl(1.ts, 0, 11))
->b : Symbol(ns.b, Decl(0.ts, 1, 12))
 
 === tests/cases/conformance/es2020/modules/2.ts ===
 import * as foo from './1'

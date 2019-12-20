@@ -32,8 +32,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 exports.__esModule = true;
 var ns = __importStar(require("./0"));
 exports.ns = ns;
-exports.ns.a;
-exports.ns.b;
+ns.a;
+ns.b;
 //// [2.js]
 "use strict";
 var __importStar = (this && this.__importStar) || function (mod) {

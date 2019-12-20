@@ -27,8 +27,8 @@ define(["require", "exports", "./0"], function (require, exports, ns) {
     "use strict";
     exports.__esModule = true;
     exports.ns = ns;
-    exports.ns.a;
-    exports.ns.b;
+    ns.a;
+    ns.b;
 });
 //// [2.js]
 var __importStar = (this && this.__importStar) || function (mod) {
