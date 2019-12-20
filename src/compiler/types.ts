@@ -3131,6 +3131,8 @@ namespace ts {
         getMissingFilePaths(): readonly Path[];
         /* @internal */
         getRefFileMap(): MultiMap<RefFile> | undefined;
+        /* @internal */
+        getFilesByNameMap(): Map<SourceFile | false | undefined>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then

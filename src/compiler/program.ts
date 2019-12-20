@@ -933,6 +933,7 @@ namespace ts {
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
             getRefFileMap: () => refFileMap,
+            getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
@@ -1422,21 +1423,25 @@ namespace ts {
             refFileMap = oldProgram.getRefFileMap();
 
             // update fileName -> file mapping
+            Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
             for (const newSourceFile of newSourceFiles) {
-                const filePath = newSourceFile.path;
-                addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
-                if (useSourceOfProjectReferenceRedirect) {
-                    const redirectProject = getProjectReferenceRedirectProject(newSourceFile.fileName);
-                    if (redirectProject && !(redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out)) {
-                        const redirect = getProjectReferenceOutputName(redirectProject, newSourceFile.fileName);
-                        addFileToFilesByName(newSourceFile, toPath(redirect), /*redirectedPath*/ undefined);
-                    }
-                }
-                // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(newSourceFile.resolvedPath)!)) {
-                    sourceFilesFoundSearchingNodeModules.set(filePath, true);
-                }
+                filesByName.set(newSourceFile.path, newSourceFile);
             }
+            const oldFilesByNameMap = oldProgram.getFilesByNameMap();
+            oldFilesByNameMap.forEach((oldFile, path) => {
+                if (!oldFile) {
+                    filesByName.set(path, oldFile);
+                    return;
+                }
+                if (oldFile.path === path) {
+                    // Set the file as found during node modules search if it was found that way in old progra,
+                    if (oldProgram!.isSourceFileFromExternalLibrary(oldFile)) {
+                        sourceFilesFoundSearchingNodeModules.set(oldFile.path, true);
+                    }
+                    return;
+                }
+                filesByName.set(path, filesByName.get(oldFile.path));
+            });
 
             files = newSourceFiles;
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
