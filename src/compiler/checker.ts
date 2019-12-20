@@ -21633,7 +21633,7 @@ namespace ts {
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags?: ContextFlags) {
-            if (isJsxOpeningElement(node) && node.parent.contextualType) {
+            if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.BaseConstraint) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
                 // (as below) instead!
