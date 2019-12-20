@@ -1,3 +1,4 @@
+// @module: esnext, es2015, commonjs, amd, system, umd
 // @filename: 0.ts
 // @declaration: true
 // @esModuleInterop: true
