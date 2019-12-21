@@ -5593,7 +5593,26 @@ namespace ts {
                     const staticType = getTypeOfSymbol(symbol);
                     const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
                     const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))];
-                    const members = flatMap<Symbol, ClassElement>(getPropertiesOfType(classType), p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
+                    const symbolProps = getPropertiesOfType(classType);
+                    const publicSymbolProps = filter(symbolProps, s => {
+                        const valueDecl = s.valueDeclaration;
+                        Debug.assertDefined(valueDecl);
+                        return isClassElement(valueDecl) && isNamedDeclaration(valueDecl)
+                            && !isPrivateIdentifier(valueDecl.name);
+                    });
+                    const hasPrivateField = symbolProps !== publicSymbolProps;
+                    // Boil down all private properties into a single one.
+                    const privateProperties = hasPrivateField ?
+                        [createProperty(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createPrivateIdentifier("#private"),
+                            /*questionOrExclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined,
+                        )] :
+                        emptyArray;
+                    const publicProperties = flatMap<Symbol, ClassElement>(publicSymbolProps, p => serializePropertySymbolForClass(p, /*isStatic*/ false, baseTypes[0]));
                     // Consider static members empty if symbol also has function or module meaning - function namespacey emit will handle statics
                     const staticMembers = symbol.flags & (SymbolFlags.Function | SymbolFlags.ValueModule)
                         ? []
@@ -5615,7 +5634,7 @@ namespace ts {
                         localName,
                         typeParamDecls,
                         heritageClauses,
-                        [...indexSignatures, ...staticMembers, ...constructors, ...members]
+                        [...indexSignatures, ...staticMembers, ...constructors, ...publicProperties, ...privateProperties]
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
