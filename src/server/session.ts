@@ -2172,35 +2172,35 @@ namespace ts.server {
         }
 
         private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | protocol.CallHierarchyItem[] | undefined {
-            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             if (scriptInfo) {
                 const position = this.getPosition(args, scriptInfo);
-                const result = languageService.prepareCallHierarchy(file, position);
+                const result = project.getLanguageService().prepareCallHierarchy(file, position);
                 return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
             }
             return undefined;
         }
 
         private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
-            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             if (!scriptInfo) {
                 this.projectService.logErrorForScriptInfoNotFound(file);
                 return Errors.ThrowNoProject();
             }
-            const incomingCalls = languageService.provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
+            const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
             return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call, scriptInfo));
         }
 
         private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
-            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             if (!scriptInfo) {
                 this.projectService.logErrorForScriptInfoNotFound(file);
                 return Errors.ThrowNoProject();
             }
-            const outgoingCalls = languageService.provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
+            const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
             return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
         }
 
