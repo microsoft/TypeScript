@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/dynamicImport/importCallExpression2ESNext.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression2ES2020.ts] ////
 
 //// [0.ts]
 export class B {
@@ -14,6 +14,7 @@ function foo(x: Promise<any>) {
 }
 
 foo(import("./0"));
+
 
 //// [0.js]
 export class B {

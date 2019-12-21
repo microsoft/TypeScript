@@ -1509,8 +1509,7 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ESNext;
+                && moduleKind < ModuleKind.ES2015;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {

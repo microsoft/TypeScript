@@ -1,4 +1,4 @@
-// @module: esnext
+// @module: es2020
 // @target: es5
 // @skipLibCheck: true
 // @lib: es6

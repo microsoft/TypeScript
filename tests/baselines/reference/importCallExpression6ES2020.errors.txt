@@ -23,3 +23,4 @@ tests/cases/conformance/dynamicImport/2.ts(6,24): error TS7036: Dynamic import's
     let myModule3 = import(null);
                            ~~~~
 !!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'null'.
+    

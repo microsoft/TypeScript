@@ -1,5 +1,5 @@
-// @module: esnext
-// @target: esnext
+// @module: es2020
+// @target: es2020
 // @filename: test.ts
 export async function fn() {
     const req = await import('./test') // ONE

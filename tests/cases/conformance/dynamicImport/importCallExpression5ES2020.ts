@@ -1,5 +1,6 @@
-﻿// @module: esnext
-// @target: esnext
+﻿// @module: es2020
+// @target: es2020
+// @strictNullChecks: true
 // @filename: 0.ts
 export class B {
     print() { return "I am B"}

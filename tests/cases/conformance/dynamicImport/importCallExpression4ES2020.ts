@@ -1,6 +1,6 @@
-﻿// @lib: esnext
-// @module: esnext
-// @target: esnext
+﻿// @lib: es2020
+// @module: es2020
+// @target: es2020
 // @filename: 0.ts
 export class B {
     print() { return "I am B"}
