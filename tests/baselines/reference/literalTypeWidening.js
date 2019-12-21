@@ -136,6 +136,13 @@ function test<T extends { a: string, b: string }>(obj: T): T {
     return { a: 'hello', ...rest } as T;
 }
 
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+enum E { A, B }
+const a = f(E.A);
+const b: E.A = a;
+
 
 //// [literalTypeWidening.js]
 "use strict";
@@ -156,8 +163,10 @@ var __rest = (this && this.__rest) || function (s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
     return t;
 };
 exports.__esModule = true;
@@ -265,3 +274,10 @@ function test(obj) {
     var a = obj.a, rest = __rest(obj, ["a"]);
     return __assign({ a: 'hello' }, rest);
 }
+var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+})(E || (E = {}));
+var a = f(E.A);
+var b = a;

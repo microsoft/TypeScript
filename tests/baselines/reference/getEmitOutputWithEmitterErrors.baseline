@@ -15,6 +15,7 @@ FileName : /tests/cases/fourslash/inputFile.d.ts
 declare module M {
     class C {
     }
-    var foo: C;
+    export var foo: C;
+    export {};
 }
 

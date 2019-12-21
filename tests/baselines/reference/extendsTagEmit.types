@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/super.js ===
+export class B { }
+>B : B
+
+=== tests/cases/conformance/jsdoc/main.js ===
+import { B } from './super'
+>B : typeof B
+
+/** @extends {Mismatch} */
+class C extends B { }
+>C : C
+>B : typeof B
+
+

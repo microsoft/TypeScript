@@ -936,7 +936,7 @@ namespace ts {
             //      x = %sent%;
 
             const resumeLabel = defineLabel();
-            const expression = visitNode(node.expression!, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
                 const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
                     ? createValuesHelper(context, expression, /*location*/ node)
@@ -1172,7 +1172,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformAndEmitStatements(statements: ReadonlyArray<Statement>, start = 0) {
+        function transformAndEmitStatements(statements: readonly Statement[], start = 0) {
             const numStatements = statements.length;
             for (let i = start; i < numStatements; i++) {
                 transformAndEmitStatement(statements[i]);
@@ -1262,7 +1262,7 @@ namespace ts {
             while (variablesWritten < numVariables) {
                 for (let i = variablesWritten; i < numVariables; i++) {
                     const variable = variables[i];
-                    if (containsYield(variable.initializer!) && pendingExpressions.length > 0) {
+                    if (containsYield(variable.initializer) && pendingExpressions.length > 0) {
                         break;
                     }
 
@@ -1283,7 +1283,7 @@ namespace ts {
             return setSourceMapRange(
                 createAssignment(
                     setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
-                    visitNode(node.initializer!, visitor, isExpression)
+                    visitNode(node.initializer, visitor, isExpression)
                 ),
                 node
             );
@@ -1868,7 +1868,7 @@ namespace ts {
 
         function transformAndEmitThrowStatement(node: ThrowStatement): void {
             emitThrow(
-                visitNode(node.expression!, visitor, isExpression),
+                visitNode(node.expression, visitor, isExpression),
                 /*location*/ node
             );
         }
@@ -1975,12 +1975,11 @@ namespace ts {
         }
 
         function cacheExpression(node: Expression): Identifier {
-            let temp: Identifier;
             if (isGeneratedIdentifier(node) || getEmitFlags(node) & EmitFlags.HelperName) {
                 return <Identifier>node;
             }
 
-            temp = createTempVariable(hoistVariableDeclaration);
+            const temp = createTempVariable(hoistVariableDeclaration);
             emitAssignment(temp, node, /*location*/ node);
             return temp;
         }
@@ -2872,7 +2871,7 @@ namespace ts {
         function tryEnterOrLeaveBlock(operationIndex: number): void {
             if (blocks) {
                 for (; blockIndex < blockActions!.length && blockOffsets![blockIndex] <= operationIndex; blockIndex++) {
-                    const block = blocks[blockIndex];
+                    const block: CodeBlock = blocks[blockIndex];
                     const blockAction = blockActions![blockIndex];
                     switch (block.kind) {
                         case CodeBlockKind.Exception:
@@ -3176,7 +3175,7 @@ namespace ts {
     function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
         context.requestEmitHelper(generatorHelper);
         return createCall(
-            getHelperName("__generator"),
+            getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
             [createThis(), body]);
     }
@@ -3242,6 +3241,7 @@ namespace ts {
     // For examples of how these are used, see the comments in ./transformers/generators.ts
     export const generatorHelper: UnscopedEmitHelper = {
         name: "typescript:generator",
+        importName: "__generator",
         scoped: false,
         priority: 6,
         text: `

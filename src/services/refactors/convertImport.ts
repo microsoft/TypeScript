@@ -4,7 +4,7 @@ namespace ts.refactor {
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context);
             if (!i) return emptyArray;
             const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
@@ -12,8 +12,8 @@ namespace ts.refactor {
             return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace);
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context))));
+            Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context), "Context must provide an import to convert")));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
@@ -55,7 +55,7 @@ namespace ts.refactor {
                 if (checker.resolveName(exportName, id, SymbolFlags.All, /*excludeGlobals*/ true)) {
                     conflictingNames.set(exportName, true);
                 }
-                Debug.assert(parent.expression === id);
+                Debug.assert(parent.expression === id, "Parent expression should match id");
                 nodesToReplace.push(parent);
             }
         });
@@ -123,7 +123,7 @@ namespace ts.refactor {
         }
     }
 
-    function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: ReadonlyArray<ImportSpecifier> | undefined): ImportDeclaration {
+    function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
         return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
             createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
     }

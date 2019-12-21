@@ -14,7 +14,7 @@
 ////}
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Convert to named parameters");
+verify.not.refactorAvailable("Convert parameters to destructured object");
 
 goTo.select("c", "d");
-verify.not.refactorAvailable("Convert to named parameters");
+verify.not.refactorAvailable("Convert parameters to destructured object");

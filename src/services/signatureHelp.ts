@@ -63,7 +63,7 @@ namespace ts.SignatureHelp {
     const enum CandidateOrTypeKind { Candidate, Type }
     interface CandidateInfo {
         readonly kind: CandidateOrTypeKind.Candidate;
-        readonly candidates: ReadonlyArray<Signature>;
+        readonly candidates: readonly Signature[];
         readonly resolvedSignature: Signature;
     }
     interface TypeInfo {
@@ -133,11 +133,21 @@ namespace ts.SignatureHelp {
     }
 
     function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
-        const precedingToken = Debug.assertDefined(
-            findPrecedingToken(startingToken.getFullStart(), sourceFile, startingToken.parent, /*excludeJsdoc*/ true)
-        );
-
-        return rangeContainsRange(container, precedingToken);
+        const pos = startingToken.getFullStart();
+        // There’s a possibility that `startingToken.parent` contains only `startingToken` and
+        // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
+        // case, the preceding token we want is actually higher up the tree—almost definitely the
+        // next parent, but theoretically the situation with missing nodes might be happening on
+        // multiple nested levels.
+        let currentParent: Node | undefined = startingToken.parent;
+        while (currentParent) {
+            const precedingToken = findPrecedingToken(pos, sourceFile, currentParent, /*excludeJsdoc*/ true);
+            if (precedingToken) {
+                return rangeContainsRange(container, precedingToken);
+            }
+            currentParent = currentParent.parent;
+        }
+        return Debug.fail("Could not find preceding token");
     }
 
     export interface ArgumentInfoForCompletions {
@@ -384,11 +394,11 @@ namespace ts.SignatureHelp {
         //          not enough to put us in the substitution expression; we should consider ourselves part of
         //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
         //
-        // tslint:disable no-double-space
+        /* eslint-disable no-double-space */
         // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
         //              ^       ^ ^       ^   ^          ^ ^      ^     ^
         // Case:        1       1 3       2   1          3 2      2     1
-        // tslint:enable no-double-space
+        /* eslint-enable no-double-space */
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
         if (isTemplateLiteralToken(node)) {
             if (isInsideTemplateLiteral(node, position, sourceFile)) {
@@ -455,7 +465,7 @@ namespace ts.SignatureHelp {
         for (let n = node; !isSourceFile(n) && (isManuallyInvoked || !isBlock(n)); n = n.parent) {
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
-            Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.showSyntaxKind(n)}, parent: ${Debug.showSyntaxKind(n.parent)}`);
+            Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`);
             const argumentInfo = getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker);
             if (argumentInfo) {
                 return argumentInfo;
@@ -481,7 +491,7 @@ namespace ts.SignatureHelp {
 
     const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
     function createSignatureHelpItems(
-        candidates: ReadonlyArray<Signature>,
+        candidates: readonly Signature[],
         resolvedSignature: Signature,
         { isTypeParameterList, argumentCount, argumentsSpan: applicableSpan, invocation, argumentIndex }: ArgumentListInfo,
         sourceFile: SourceFile,
@@ -514,7 +524,7 @@ namespace ts.SignatureHelp {
         return { items, applicableSpan, selectedItemIndex: 0, argumentIndex, argumentCount };
     }
 
-    function getTypeHelpItem(symbol: Symbol, typeParameters: ReadonlyArray<TypeParameter>, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
+    function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[], checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
         const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
         const printer = createPrinter({ removeComments: true });
@@ -528,7 +538,7 @@ namespace ts.SignatureHelp {
 
     const separatorDisplayParts: SymbolDisplayPart[] = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
 
-    function getSignatureHelpItem(candidateSignature: Signature, callTargetDisplayParts: ReadonlyArray<SymbolDisplayPart>, isTypeParameterList: boolean, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
+    function getSignatureHelpItem(candidateSignature: Signature, callTargetDisplayParts: readonly SymbolDisplayPart[], isTypeParameterList: boolean, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
         const { isVariadic, parameters, prefix, suffix } = (isTypeParameterList ? itemInfoForTypeParameters : itemInfoForParameters)(candidateSignature, checker, enclosingDeclaration, sourceFile);
         const prefixDisplayParts = [...callTargetDisplayParts, ...prefix];
         const suffixDisplayParts = [...suffix, ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker)];
@@ -537,7 +547,7 @@ namespace ts.SignatureHelp {
         return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters, documentation, tags };
     }
 
-    function returnTypeToDisplayParts(candidateSignature: Signature, enclosingDeclaration: Node, checker: TypeChecker): ReadonlyArray<SymbolDisplayPart> {
+    function returnTypeToDisplayParts(candidateSignature: Signature, enclosingDeclaration: Node, checker: TypeChecker): readonly SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
             writer.writePunctuation(":");
             writer.writeSpace(" ");
@@ -551,7 +561,7 @@ namespace ts.SignatureHelp {
         });
     }
 
-    interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly parameters: SignatureHelpParameter[]; readonly prefix: ReadonlyArray<SymbolDisplayPart>; readonly suffix: ReadonlyArray<SymbolDisplayPart>; }
+    interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly parameters: SignatureHelpParameter[]; readonly prefix: readonly SymbolDisplayPart[]; readonly suffix: readonly SymbolDisplayPart[]; }
 
     function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo {
         const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;

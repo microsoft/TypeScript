@@ -19,14 +19,14 @@ function foo<T>(a: (x: T) => T, b: (x: T) => T) {
 
 //var r1 = foo((x: number) => 1, (x: string) => ''); // error
 var r1b = foo((x) => 1, (x) => ''); // {} => {}
->r1b : (x: {}) => {}
->foo((x) => 1, (x) => '') : (x: {}) => {}
+>r1b : (x: unknown) => unknown
+>foo((x) => 1, (x) => '') : (x: unknown) => unknown
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(x) => 1 : (x: {}) => number
->x : {}
+>(x) => 1 : (x: unknown) => number
+>x : unknown
 >1 : 1
->(x) => '' : (x: {}) => string
->x : {}
+>(x) => '' : (x: unknown) => string
+>x : unknown
 >'' : ""
 
 var r2 = foo((x: Object) => null, (x: string) => ''); // Object => Object
@@ -114,15 +114,15 @@ function other<T>(x: T) {
 >b : T
 
     var r6b = foo((a) => a, (b) => b); // {} => {}
->r6b : (x: {}) => {}
->foo((a) => a, (b) => b) : (x: {}) => {}
+>r6b : (x: unknown) => unknown
+>foo((a) => a, (b) => b) : (x: unknown) => unknown
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(a) => a : (a: {}) => {}
->a : {}
->a : {}
->(b) => b : (b: {}) => {}
->b : {}
->b : {}
+>(a) => a : (a: unknown) => unknown
+>a : unknown
+>a : unknown
+>(b) => b : (b: unknown) => unknown
+>b : unknown
+>b : unknown
 }
 
 function other2<T extends Date>(x: T) {
@@ -141,15 +141,15 @@ function other2<T extends Date>(x: T) {
 >b : T
 
     var r7b = foo((a) => a, (b) => b); // {} => {}
->r7b : (x: {}) => {}
->foo((a) => a, (b) => b) : (x: {}) => {}
+>r7b : (x: unknown) => unknown
+>foo((a) => a, (b) => b) : (x: unknown) => unknown
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(a) => a : (a: {}) => {}
->a : {}
->a : {}
->(b) => b : (b: {}) => {}
->b : {}
->b : {}
+>(a) => a : (a: unknown) => unknown
+>a : unknown
+>a : unknown
+>(b) => b : (b: unknown) => unknown
+>b : unknown
+>b : unknown
 
     var r8 = r7(null);
 >r8 : T

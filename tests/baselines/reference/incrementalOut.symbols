@@ -1,0 +1,5 @@
+=== tests/cases/compiler/incrementalOut.ts ===
+const x = 10;
+>x : Symbol(x, Decl(incrementalOut.ts, 0, 5))
+
+

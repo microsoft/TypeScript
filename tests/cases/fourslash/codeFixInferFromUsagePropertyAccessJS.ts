@@ -21,7 +21,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `/**
- * @param {{ b: { c: any; }; }} a
+ * @param {{ b: { c: void; }; }} a
  * @param {{ n: () => number; }} m
  * @param {{ y: { z: number[]; }; }} x
  */

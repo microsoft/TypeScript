@@ -1,0 +1,91 @@
+=== tests/cases/compiler/enumDef.js ===
+var Host = {};
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
+
+Host.UserMetrics = {};
+>Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
+>UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+
+/** @enum {number} */
+Host.UserMetrics.Action = {
+>Host.UserMetrics.Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
+>Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
+>UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
+
+    WindowDocked: 1,
+>WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
+
+    WindowUndocked: 2,
+>WindowUndocked : Symbol(WindowUndocked, Decl(enumDef.js, 4, 20))
+
+    ScriptsBreakpointSet: 3,
+>ScriptsBreakpointSet : Symbol(ScriptsBreakpointSet, Decl(enumDef.js, 5, 22))
+
+    TimelineStarted: 4,
+>TimelineStarted : Symbol(TimelineStarted, Decl(enumDef.js, 6, 28))
+
+};
+/**
+ * @typedef {string} Host.UserMetrics.Bargh
+ */
+/**
+ * @typedef {string}
+ */
+Host.UserMetrics.Blah = {
+>Host.UserMetrics.Blah : Symbol(Host.UserMetrics.Blah, Decl(enumDef.js, 8, 2), Decl(enumDef.js, 15, 17), Decl(enumDef.js, 13, 3))
+>Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
+>UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Blah : Symbol(Host.UserMetrics.Blah, Decl(enumDef.js, 8, 2), Decl(enumDef.js, 15, 17), Decl(enumDef.js, 13, 3))
+
+    x: 12
+>x : Symbol(x, Decl(enumDef.js, 15, 25))
+}
+=== tests/cases/compiler/index.js ===
+var Other = {};
+>Other : Symbol(Other, Decl(index.js, 0, 3), Decl(index.js, 0, 15))
+
+Other.Cls = class {
+>Other.Cls : Symbol(Other.Cls, Decl(index.js, 0, 15))
+>Other : Symbol(Other, Decl(index.js, 0, 3), Decl(index.js, 0, 15))
+>Cls : Symbol(Other.Cls, Decl(index.js, 0, 15))
+
+    /**
+     * @param {!Host.UserMetrics.Action} p
+     */
+    method(p) {}
+>method : Symbol(Cls.method, Decl(index.js, 1, 19))
+>p : Symbol(p, Decl(index.js, 5, 11))
+
+    usage() {
+>usage : Symbol(Cls.usage, Decl(index.js, 5, 16))
+
+        this.method(Host.UserMetrics.Action.WindowDocked);
+>this.method : Symbol(Cls.method, Decl(index.js, 1, 19))
+>this : Symbol(Cls, Decl(index.js, 1, 11))
+>method : Symbol(Cls.method, Decl(index.js, 1, 19))
+>Host.UserMetrics.Action.WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
+>Host.UserMetrics.Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
+>Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
+>UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
+>Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
+>WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
+    }
+}
+
+/**
+ * @type {Host.UserMetrics.Bargh}
+ */
+var x = "ok";
+>x : Symbol(x, Decl(index.js, 14, 3))
+
+/**
+ * @type {Host.UserMetrics.Blah}
+ */
+var y = "ok";
+>y : Symbol(y, Decl(index.js, 19, 3))
+

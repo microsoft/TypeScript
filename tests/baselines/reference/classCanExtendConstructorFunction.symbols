@@ -205,7 +205,9 @@ class Chowder extends Soup {
 >log : Symbol(Chowder.log, Decl(generic.js, 8, 28))
 
         return this.flavour
+>this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 >this : Symbol(Chowder, Decl(generic.js, 6, 1))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
     }
 }
 
@@ -224,7 +226,11 @@ var chowder = new Chowder({ claim: "ignorant" });
 >claim : Symbol(claim, Decl(generic.js, 16, 27))
 
 chowder.flavour.claim
+>chowder.flavour.claim : Symbol(claim, Decl(generic.js, 7, 20))
+>chowder.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 >chowder : Symbol(chowder, Decl(generic.js, 16, 3))
+>flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>claim : Symbol(claim, Decl(generic.js, 7, 20))
 
 var errorNoArgs = new Chowder();
 >errorNoArgs : Symbol(errorNoArgs, Decl(generic.js, 18, 3))

@@ -1,0 +1,39 @@
+tests/cases/compiler/invariantGenericErrorElaboration.ts(3,7): error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+  The types of 'constraint.constraint.constraint' are incompatible between these types.
+    Type 'Constraint<Constraint<Constraint<Num>>>' is not assignable to type 'Constraint<Constraint<Constraint<Runtype<any>>>>'.
+      Type 'Constraint<Runtype<any>>' is not assignable to type 'Constraint<Num>'.
+tests/cases/compiler/invariantGenericErrorElaboration.ts(4,19): error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+
+
+==== tests/cases/compiler/invariantGenericErrorElaboration.ts (2 errors) ====
+    // Repro from #19746
+    
+    const wat: Runtype<any> = Num;
+          ~~~
+!!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+!!! error TS2322:   The types of 'constraint.constraint.constraint' are incompatible between these types.
+!!! error TS2322:     Type 'Constraint<Constraint<Constraint<Num>>>' is not assignable to type 'Constraint<Constraint<Constraint<Runtype<any>>>>'.
+!!! error TS2322:       Type 'Constraint<Runtype<any>>' is not assignable to type 'Constraint<Num>'.
+    const Foo = Obj({ foo: Num })
+                      ~~~
+!!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+!!! related TS6501 tests/cases/compiler/invariantGenericErrorElaboration.ts:17:34: The expected type comes from this index signature.
+    
+    interface Runtype<A> {
+      constraint: Constraint<this>
+      witness: A
+    }
+    
+    interface Num extends Runtype<number> {
+      tag: 'number'
+    }
+    declare const Num: Num
+    
+    interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
+    declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
+    
+    interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
+      underlying: A,
+      check: (x: A['witness']) => void,
+    }
+    

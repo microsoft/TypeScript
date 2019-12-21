@@ -2,6 +2,7 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 29,
+    "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "tags": {
@@ -17,6 +18,7 @@
                 "end": 15,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
+                "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             },
             "typeExpression": {

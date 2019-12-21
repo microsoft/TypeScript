@@ -29,7 +29,7 @@ interface Array<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -40,7 +40,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -319,6 +319,12 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
+     * Returns the names of the enumerable string properties and methods of an object.
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
+    keys(o: {}): string[];
+
+    /**
      * Returns true if the values are the same value, false otherwise.
      * @param value1 The first value.
      * @param value2 The second value.
@@ -326,7 +332,7 @@ interface ObjectConstructor {
     is(value1: any, value2: any): boolean;
 
     /**
-     * Sets the prototype of a specified object o to  object proto or null. Returns the object o.
+     * Sets the prototype of a specified object o to object proto or null. Returns the object o.
      * @param o The object to change its prototype.
      * @param proto The value of the new prototype or null.
      */
@@ -343,8 +349,8 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
+    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -355,7 +361,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
 }
 
 interface RegExp {
@@ -387,8 +393,8 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp, flags?: string): RegExp;
-    (pattern: RegExp, flags?: string): RegExp;
+    new (pattern: RegExp | string, flags?: string): RegExp;
+    (pattern: RegExp | string, flags?: string): RegExp;
 }
 
 interface String {

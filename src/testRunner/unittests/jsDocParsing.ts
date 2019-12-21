@@ -37,6 +37,8 @@ namespace ts {
                 parsesCorrectly("callSignatureInRecordType", "{{(): number}}");
                 parsesCorrectly("methodInRecordType", "{{foo(): number}}");
                 parsesCorrectly("unionType", "{(number|string)}");
+                parsesCorrectly("unionTypeWithLeadingOperator", "{( | number | string )}");
+                parsesCorrectly("unionTypeWithOneElementAndLeadingOperator", "{( | number )}");
                 parsesCorrectly("topLevelNoParenUnionType", "{number|string}");
                 parsesCorrectly("functionType1", "{function()}");
                 parsesCorrectly("functionType2", "{function(string, boolean)}");
@@ -65,7 +67,7 @@ namespace ts {
                 parsesCorrectly("tsFunctionType", "{() => string}");
                 parsesCorrectly("typeArgumentsNotFollowingDot", "{a<>}");
                 parsesCorrectly("functionTypeWithTrailingComma", "{function(a,)}");
-           });
+            });
 
             describe("parsesIncorrectly", () => {
                 parsesIncorrectly("emptyType", "{}");
@@ -109,39 +111,39 @@ namespace ts {
 
             describe("parsesIncorrectly", () => {
                 parsesIncorrectly("multipleTypes",
-                        `/**
+                    `/**
   * @type {number}
   * @type {string}
   */`);
                 parsesIncorrectly("multipleReturnTypes",
-                        `/**
+                    `/**
   * @return {number}
   * @return {string}
   */`);
                 parsesIncorrectly("noTypeParameters",
-                        `/**
+                    `/**
   * @template
   */`);
                 parsesIncorrectly("trailingTypeParameterComma",
-                        `/**
+                    `/**
   * @template T,
   */`);
                 parsesIncorrectly("paramWithoutName",
-                        `/**
+                    `/**
   * @param {number}
   */`);
                 parsesIncorrectly("paramWithoutTypeOrName",
-                        `/**
+                    `/**
   * @param
   */`);
 
                 parsesIncorrectly("noType",
-`/**
+                    `/**
 * @type
 */`);
 
                 parsesIncorrectly("@augments with no type",
-`/**
+                    `/**
  * @augments
  */`);
             });
@@ -150,169 +152,174 @@ namespace ts {
                 parsesCorrectly("threeAsterisks", "/*** */");
                 parsesCorrectly("emptyComment", "/***/");
                 parsesCorrectly("noLeadingAsterisk",
-`/**
+                    `/**
     @type {number}
   */`);
 
 
                 parsesCorrectly("noReturnType",
-`/**
+                    `/**
   * @return
   */`);
 
                 parsesCorrectly("leadingAsterisk",
-`/**
+                    `/**
   * @type {number}
   */`);
 
                 parsesCorrectly("asteriskAfterPreamble", "/** * @type {number} */");
 
                 parsesCorrectly("typeTag",
-`/**
+                    `/**
   * @type {number}
   */`);
 
 
                 parsesCorrectly("returnTag1",
-`/**
+                    `/**
   * @return {number}
   */`);
 
 
                 parsesCorrectly("returnTag2",
-`/**
+                    `/**
   * @return {number} Description text follows
   */`);
 
 
                 parsesCorrectly("returnsTag1",
-`/**
+                    `/**
   * @returns {number}
   */`);
 
 
                 parsesCorrectly("oneParamTag",
-`/**
+                    `/**
   * @param {number} name1
   */`);
 
 
                 parsesCorrectly("twoParamTag2",
-`/**
+                    `/**
   * @param {number} name1
   * @param {number} name2
   */`);
 
 
                 parsesCorrectly("paramTag1",
-`/**
+                    `/**
   * @param {number} name1 Description text follows
   */`);
 
 
                 parsesCorrectly("paramTagBracketedName1",
-`/**
+                    `/**
   * @param {number} [name1] Description text follows
   */`);
 
 
                 parsesCorrectly("paramTagBracketedName2",
-`/**
+                    `/**
   * @param {number} [ name1 = 1] Description text follows
   */`);
 
 
                 parsesCorrectly("twoParamTagOnSameLine",
-`/**
+                    `/**
   * @param {number} name1 @param {number} name2
   */`);
 
 
                 parsesCorrectly("paramTagNameThenType1",
-`/**
+                    `/**
   * @param name1 {number}
   */`);
 
 
                 parsesCorrectly("paramTagNameThenType2",
-`/**
+                    `/**
   * @param name1 {number} Description
   */`);
 
 
                 parsesCorrectly("argSynonymForParamTag",
-`/**
+                    `/**
   * @arg {number} name1 Description
   */`);
 
 
                 parsesCorrectly("argumentSynonymForParamTag",
-`/**
+                    `/**
   * @argument {number} name1 Description
   */`);
 
 
                 parsesCorrectly("templateTag",
-`/**
+                    `/**
   * @template T
   */`);
 
 
                 parsesCorrectly("templateTag2",
-`/**
+                    `/**
   * @template K,V
   */`);
 
 
                 parsesCorrectly("templateTag3",
-`/**
+                    `/**
   * @template K ,V
   */`);
 
 
                 parsesCorrectly("templateTag4",
-`/**
+                    `/**
   * @template K, V
   */`);
 
 
                 parsesCorrectly("templateTag5",
-`/**
+                    `/**
   * @template K , V
   */`);
 
                 parsesCorrectly("templateTag6",
-`/**
+                    `/**
   * @template K , V Description of type parameters.
   */`);
 
                 parsesCorrectly("paramWithoutType",
-`/**
+                    `/**
   * @param foo
   */`);
                 parsesCorrectly("typedefTagWithChildrenTags",
-`/**
+                    `/**
   * @typedef People
   * @type {Object}
   * @property {number} age
   * @property {string} name
   */`);
                 parsesCorrectly("less-than and greater-than characters",
-`/**
+                    `/**
  * @param x hi
 < > still part of the previous comment
  */`);
 
                 parsesCorrectly("Nested @param tags",
-`/**
+                    `/**
 * @param {object} o Doc doc
 * @param {string} o.f Doc for f
 */`);
                 parsesCorrectly("@link tags",
-`/**
+                    `/**
  * {@link first link}
  * Inside {@link link text} thing
  * @see {@link second link text} and {@link Foo|a foo} as well.
+ */`);
+                parsesCorrectly("authorTag",
+                    `/**
+ * @author John Doe <john.doe@example.com>
+ * @author John Doe <john.doe@example.com> unexpected comment
  */`);
             });
         });

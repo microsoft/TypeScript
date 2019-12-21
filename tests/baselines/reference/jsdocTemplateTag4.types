@@ -12,7 +12,7 @@ function Multimap() {
     this._map = {};
 >this._map = {} : {}
 >this._map : { [x: string]: V; }
->this : Multimap
+>this : this
 >_map : { [x: string]: V; }
 >{} : {}
 
@@ -35,7 +35,7 @@ Multimap.prototype.get = function (key) {
     return this._map[key + ''];
 >this._map[key + ''] : V
 >this._map : { [x: string]: V; }
->this : Multimap
+>this : this
 >_map : { [x: string]: V; }
 >key + '' : string
 >key : K
@@ -56,7 +56,7 @@ var Multimap2 = function() {
     this._map = {};
 >this._map = {} : {}
 >this._map : { [x: string]: V; }
->this : Multimap2
+>this : this
 >_map : { [x: string]: V; }
 >{} : {}
 
@@ -79,7 +79,7 @@ Multimap2.prototype.get = function (key) {
     return this._map[key + ''];
 >this._map[key + ''] : V
 >this._map : { [x: string]: V; }
->this : Multimap2
+>this : this
 >_map : { [x: string]: V; }
 >key + '' : string
 >key : K
@@ -107,7 +107,7 @@ Ns.Multimap3 = function() {
     this._map = {};
 >this._map = {} : {}
 >this._map : { [x: string]: V; }
->this : Multimap3
+>this : this
 >_map : { [x: string]: V; }
 >{} : {}
 
@@ -132,7 +132,7 @@ Ns.Multimap3.prototype.get = function (key) {
     return this._map[key + ''];
 >this._map[key + ''] : V
 >this._map : { [x: string]: V; }
->this : Multimap3
+>this : this
 >_map : { [x: string]: V; }
 >key + '' : string
 >key : K

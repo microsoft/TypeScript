@@ -17,9 +17,11 @@ tests/cases/conformance/types/tuple/strictTupleLength.ts(18,1): error TS2741: Pr
     var t1 = t2; // error
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't1' must be of type '[number]', but here has type '[number, number]'.
+!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:2:5: 't1' was also declared here.
     var t2 = t1; // error
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type '[number, number]', but here has type '[number]'.
+!!! related TS6203 tests/cases/conformance/types/tuple/strictTupleLength.ts:3:5: 't2' was also declared here.
     
     type A<T extends any[]> = T['length'];
     var b: A<[boolean]>;

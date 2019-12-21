@@ -223,7 +223,7 @@ namespace ts.projectSystem {
             this.service = this.session.getProjectService();
         }
 
-        getEvents(): ReadonlyArray<server.ProjectServiceEvent> {
+        getEvents(): readonly server.ProjectServiceEvent[] {
             const events = this.events;
             this.events = [];
             return events;
@@ -248,7 +248,7 @@ namespace ts.projectSystem {
             this.events.forEach(event => assert.notEqual(event.eventName, eventName));
         }
 
-        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: ReadonlyArray<ConfigFileDiagnostic>) {
+        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: readonly ConfigFileDiagnostic[]) {
             const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
             assert.equal(eventData.configFileName, configFileName);
             assert.equal(eventData.triggerFile, triggerFile);
@@ -276,7 +276,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -292,7 +292,7 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host!: TestServerHost;
+        public testhost: TestServerHost = this.host as TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -320,7 +320,7 @@ namespace ts.projectSystem {
 
         public clearMessages() {
             clear(this.events);
-            this.host.clearOutput();
+            this.testhost.clearOutput();
         }
     }
 
@@ -438,17 +438,20 @@ namespace ts.projectSystem {
     export function configuredProjectAt(projectService: server.ProjectService, index: number) {
         const values = projectService.configuredProjects.values();
         while (index > 0) {
-            values.next();
+            const iterResult = values.next();
+            if (iterResult.done) return Debug.fail("Expected a result.");
             index--;
         }
-        return values.next().value;
+        const iterResult = values.next();
+        if (iterResult.done) return Debug.fail("Expected a result.");
+        return iterResult.value;
     }
 
-    export function checkProjectActualFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
+    export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    export function checkProjectRootFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
+    export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
@@ -477,21 +480,28 @@ namespace ts.projectSystem {
         return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
     }
 
+    export function getConfigFilesToWatch(folder: string) {
+        return [
+            ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
+            ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
+        ];
+    }
+
     export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
-    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: ReadonlyArray<string>) {
-        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
+        checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
 
-    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+    export function protocolToLocation(text: string): (pos: number) => protocol.Location {
         const lineStarts = computeLineStarts(text);
         return pos => {
             const x = computeLineAndCharacterOfPosition(lineStarts, pos);
@@ -505,13 +515,70 @@ namespace ts.projectSystem {
         return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
 
-    export function protocolRenameSpanFromSubstring(
-        str: string,
-        substring: string,
-        options?: SpanFromSubstringOptions,
-        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
-    ): protocol.RenameTextSpan {
-        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
+    export interface DocumentSpanFromSubstring {
+        file: File;
+        text: string;
+        options?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
+    }
+    export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
+        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
+    }
+
+    interface FileSpanWithContextFromSubString {
+        file: File;
+        text: string;
+        options?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
+    }
+    export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): protocol.FileSpanWithContext {
+        const result = protocolFileSpanFromSubstring(rest);
+        const contextSpan = contextText !== undefined ?
+            protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
+            undefined;
+        return contextSpan ?
+            {
+                ...result,
+                contextStart: contextSpan.start,
+                contextEnd: contextSpan.end
+            } :
+            result;
+    }
+
+    export interface ProtocolTextSpanWithContextFromString {
+        fileText: string;
+        text: string;
+        options?: SpanFromSubstringOptions;
+        contextText?: string;
+        contextOptions?: SpanFromSubstringOptions;
+    }
+    export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): protocol.TextSpanWithContext {
+        const span = textSpanFromSubstring(fileText, text, options);
+        const toLocation = protocolToLocation(fileText);
+        const contextSpan = contextText !== undefined ? textSpanFromSubstring(fileText, contextText, contextOptions) : undefined;
+        return {
+            start: toLocation(span.start),
+            end: toLocation(textSpanEnd(span)),
+            ...contextSpan && {
+                contextStart: toLocation(contextSpan.start),
+                contextEnd: toLocation(textSpanEnd(contextSpan))
+            }
+        };
+    }
+
+    export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithContextFromString {
+        prefixSuffixText?: {
+            readonly prefixText?: string;
+            readonly suffixText?: string;
+        };
+    }
+    export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): protocol.RenameTextSpan {
+        return {
+            ...protocolTextSpanWithContextFromSubstring(rest),
+            ...prefixSuffixText
+        };
     }
 
     export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
@@ -520,8 +587,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -597,14 +664,14 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: ReadonlyArray<File | { readonly file: File | string, readonly projectRootPath: string }>, session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
-                "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path }));
+                "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
         }
     }
 
-    export function closeFilesForSession(files: ReadonlyArray<File>, session: server.Session): void {
+    export function closeFilesForSession(files: readonly File[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
         }
@@ -619,7 +686,7 @@ namespace ts.projectSystem {
         return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
     }
 
-    export function verifyDiagnostics(actual: ReadonlyArray<server.protocol.Diagnostic>, expected: ReadonlyArray<ErrorInformation>) {
+    export function verifyDiagnostics(actual: readonly server.protocol.Diagnostic[], expected: readonly ErrorInformation[]) {
         const expectedErrors = expected.map(getProtocolDiagnosticMessage);
         assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
     }
@@ -632,7 +699,7 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
         return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
     }
 
@@ -654,12 +721,27 @@ namespace ts.projectSystem {
         const events = session.events;
         assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
-        const outputs = session.host.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+        const outputs = session.testhost.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
 
         if (isMostRecent) {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));
             assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
         }
+    }
+
+    export interface MakeReferenceItem extends DocumentSpanFromSubstring {
+        isDefinition: boolean;
+        isWriteAccess?: boolean;
+        lineText: string;
+    }
+
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+        return {
+            ...protocolFileSpanWithContextFromSubstring(rest),
+            isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
+            lineText,
+        };
     }
 }

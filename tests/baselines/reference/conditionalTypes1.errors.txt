@@ -14,15 +14,13 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(30,9): error TS23
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
+  'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
+  'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(106,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
   Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-    Type 'keyof T' is not assignable to type 'never'.
-      Type 'string | number | symbol' is not assignable to type 'never'.
-        Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(108,5): error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
   Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-    Type 'keyof T' is not assignable to type 'never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(114,5): error TS2322: Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
@@ -40,10 +38,14 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(135,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a read-only property.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(137,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
-  Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-    Type '0' is not assignable to type 'T'.
-      Type '"" | 0' is not assignable to type 'T'.
-        Type '""' is not assignable to type 'T'.
+  'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+    Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
+      Type '0' is not assignable to type 'T'.
+        '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+          Type '"" | 0' is not assignable to type 'T'.
+            '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+              Type '""' is not assignable to type 'T'.
+                '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
@@ -179,23 +181,21 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = y;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
+!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         x = z;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
+!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         y = x;
         y = z;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
 !!! error TS2322:   Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
-!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'never'.
-!!! error TS2322:         Type 'string' is not assignable to type 'never'.
         z = x;
         z = y;  // Error
         ~
 !!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
 !!! error TS2322:   Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
     }
     
     function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
@@ -273,10 +273,14 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = y;  // Error
         ~
 !!! error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
-!!! error TS2322:   Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-!!! error TS2322:     Type '0' is not assignable to type 'T'.
-!!! error TS2322:       Type '"" | 0' is not assignable to type 'T'.
-!!! error TS2322:         Type '""' is not assignable to type 'T'.
+!!! error TS2322:   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
+!!! error TS2322:       Type '0' is not assignable to type 'T'.
+!!! error TS2322:         '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:           Type '"" | 0' is not assignable to type 'T'.
+!!! error TS2322:             '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:               Type '""' is not assignable to type 'T'.
+!!! error TS2322:                 '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
@@ -387,6 +391,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         var z: T2;  // Error, T2 is distributive, T1 isn't
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+!!! related TS6203 tests/cases/conformance/types/conditional/conditionalTypes1.ts:262:9: 'z' was also declared here.
     }
     
     function f33<T, U>() {

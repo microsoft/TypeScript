@@ -1,0 +1,18 @@
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,16): error TS2556: Expected 0 arguments, but got 1 or more.
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,19): error TS2461: Type 'number' is not an array type.
+tests/cases/compiler/noImplicitAnyLoopCrash.ts(4,19): error TS2461: Type 'undefined' is not an array type.
+
+
+==== tests/cases/compiler/noImplicitAnyLoopCrash.ts (3 errors) ====
+    let foo = () => {};
+    let bar;
+    while (1) {
+        bar = ~foo(...bar);
+                   ~~~~~~
+!!! error TS2556: Expected 0 arguments, but got 1 or more.
+                      ~~~
+!!! error TS2461: Type 'number' is not an array type.
+                      ~~~
+!!! error TS2461: Type 'undefined' is not an array type.
+    }
+    

@@ -4,12 +4,12 @@
 // @Filename: jsDocCallback.js
 ////
 //// /**
-////  * @callback [|FooCallback|]
+////  * [|@callback [|{| "contextRangeIndex": 0 |}FooCallback|]
 ////  * @param {string} eventName - Rename should work
-////  */
+////  |]*/
 ////
 //// /** @type {/*1*/[|FooCallback|]} */
 //// var t;
 
-const ranges = test.ranges();
+const [rDef, ...ranges] = test.ranges();
 verify.renameLocations(ranges[0], { findInStrings: false, findInComments: true, ranges });

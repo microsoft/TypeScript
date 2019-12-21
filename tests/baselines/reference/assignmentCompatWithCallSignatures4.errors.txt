@@ -5,6 +5,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Types of parameters 'x' and 'x' are incompatible.
     Types of parameters 'arg' and 'arg' are incompatible.
       Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(52,9): error TS2322: Type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived'.
   Types of parameters 'y' and 'y' are incompatible.
     Types of parameters 'arg2' and 'arg2' are incompatible.
@@ -15,6 +16,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Types of parameters 'x' and 'x' are incompatible.
     Types of parameters 'arg' and 'arg' are incompatible.
       Type 'Base' is not assignable to type 'T'.
+        'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(58,9): error TS2322: Type '(...x: Base[]) => Base' is not assignable to type '<T extends Derived>(...x: T[]) => T'.
   Type 'Base' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(62,9): error TS2322: Type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type '<T extends Derived>(x: T, y: T) => T'.
@@ -45,6 +47,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(89,9): error TS2322: Type '<T>(x: T) => string[]' is not assignable to type '<T>(x: T) => T[]'.
   Type 'string[]' is not assignable to type 'T[]'.
     Type 'string' is not assignable to type 'T'.
+      'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(90,9): error TS2322: Type '<T>(x: T) => T[]' is not assignable to type '<T>(x: T) => string[]'.
   Type 'T[]' is not assignable to type 'string[]'.
     Type 'T' is not assignable to type 'string'.
@@ -54,6 +57,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => string[]' is not assignable to type '<T>(x: T) => T[]'.
   Type 'string[]' is not assignable to type 'T[]'.
     Type 'string' is not assignable to type 'T'.
+      'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures4.ts (15 errors) ====
@@ -115,6 +119,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
 !!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
     
             var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
             a8 = b8; // error, { foo: number } and Base are incompatible
@@ -131,6 +136,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
 !!! error TS2322:       Type 'Base' is not assignable to type 'T'.
+!!! error TS2322:         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
     
             
             var b10: <T extends Derived>(...x: T[]) => T; 
@@ -205,6 +211,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '<T>(x: T) => string[]' is not assignable to type '<T>(x: T) => T[]'.
 !!! error TS2322:   Type 'string[]' is not assignable to type 'T[]'.
 !!! error TS2322:     Type 'string' is not assignable to type 'T'.
+!!! error TS2322:       'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
             b2 = a2;
             ~~
 !!! error TS2322: Type '<T>(x: T) => T[]' is not assignable to type '<T>(x: T) => string[]'.
@@ -224,5 +231,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '<T>(x: T) => string[]' is not assignable to type '<T>(x: T) => T[]'.
 !!! error TS2322:   Type 'string[]' is not assignable to type 'T[]'.
 !!! error TS2322:     Type 'string' is not assignable to type 'T'.
+!!! error TS2322:       'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         }
     }

@@ -25,7 +25,7 @@ async function f2() {
 }
 === tests/cases/conformance/emitter/es5/forAwait/file3.ts ===
 async function* f3() {
->f3 : () => AsyncIterableIterator<any>
+>f3 : () => AsyncGenerator<never, void, unknown>
 
     let y: any;
 >y : any
@@ -37,7 +37,7 @@ async function* f3() {
 }
 === tests/cases/conformance/emitter/es5/forAwait/file4.ts ===
 async function* f4() {
->f4 : () => AsyncIterableIterator<any>
+>f4 : () => AsyncGenerator<never, void, unknown>
 
     let x: any, y: any;
 >x : any
@@ -68,7 +68,7 @@ async function f5() {
 === tests/cases/conformance/emitter/es5/forAwait/file6.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function* f6() {
->f6 : () => AsyncIterableIterator<any>
+>f6 : () => AsyncGenerator<never, void, unknown>
 
     let y: any;
 >y : any

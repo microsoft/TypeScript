@@ -2,9 +2,9 @@
 
 // @Filename: file1.ts
 //// class Foo {
-////     constructor(private [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}privateParam|]: number,
-////         public [|{| "isWriteAccess": true, "isDefinition": true, "type": "string" |}publicParam|]: string,
-////         protected [|{| "isWriteAccess": true, "isDefinition": true, "type": "boolean" |}protectedParam|]: boolean) {
+////     constructor([|private [|{| "isWriteAccess": true, "isDefinition": true, "type": "number", "contextRangeIndex": 0 |}privateParam|]: number|],
+////         [|public [|{| "isWriteAccess": true, "isDefinition": true, "type": "string", "contextRangeIndex": 2 |}publicParam|]: string|],
+////         [|protected [|{| "isWriteAccess": true, "isDefinition": true, "type": "boolean", "contextRangeIndex": 4 |}protectedParam|]: boolean|]) {
 ////
 ////         let localPrivate = [|privateParam|];
 ////         this.[|{| "isWriteAccess": true |}privateParam|] += 10;
@@ -18,6 +18,8 @@
 //// }
 
 test.rangesByText().forEach((ranges, text) => {
+    if (text !== "privateParam" && text !== "publicParam" && text !== "protectedParam") return;
+
     const [r0, r1, r2] = ranges;
     const type = r0.marker.data.type;
     verify.referenceGroups(ranges, [

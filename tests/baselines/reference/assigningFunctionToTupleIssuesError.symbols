@@ -1,0 +1,8 @@
+=== tests/cases/compiler/assigningFunctionToTupleIssuesError.ts ===
+declare let a: () => void;
+>a : Symbol(a, Decl(assigningFunctionToTupleIssuesError.ts, 0, 11))
+
+let b: [string] = a;
+>b : Symbol(b, Decl(assigningFunctionToTupleIssuesError.ts, 1, 3))
+>a : Symbol(a, Decl(assigningFunctionToTupleIssuesError.ts, 0, 11))
+

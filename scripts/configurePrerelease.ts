@@ -22,7 +22,7 @@ function main(): void {
     }
 
     const tag = args[0];
-    if (tag !== "dev" && tag !== "insiders") {
+    if (tag !== "dev" && tag !== "insiders" && tag !== "experimental") {
         throw new Error(`Unexpected tag name '${tag}'.`);
     }
 
@@ -48,10 +48,11 @@ function main(): void {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
+    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
+/* eslint-disable no-null/no-null */
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
@@ -76,6 +77,7 @@ function parsePackageJsonVersion(versionString: string): { majorMinor: string, p
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match![1], patch: match![2] };
 }
+/* eslint-enable no-null/no-null */
 
 /** e.g. 0-dev.20170707 */
 function getPrereleasePatch(tag: string, plainPatch: string): string {

@@ -117,7 +117,7 @@ namespace ts.codefix {
     }
 
     function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters));
+        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
     }
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
@@ -125,7 +125,7 @@ namespace ts.codefix {
         return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
     }
 
-    function tryDeleteFullDestructure(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): boolean {
+    function tryDeleteFullDestructure(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): boolean {
         if (token.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(token.parent)) return false;
         const decl = token.parent.parent;
         if (decl.kind === SyntaxKind.Parameter) {
@@ -174,7 +174,7 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean) {
+    function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean) {
         tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, isFixAll);
         if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
     }
@@ -188,7 +188,7 @@ namespace ts.codefix {
         });
     }
 
-    function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
+    function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): void {
         const { parent } = token;
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, isFixAll);
@@ -198,7 +198,7 @@ namespace ts.codefix {
         }
     }
 
-    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
+    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
             if (p.modifiers && p.modifiers.length > 0
                     && (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
@@ -231,7 +231,7 @@ namespace ts.codefix {
                 // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
                 const { parameters } = parent;
                 const index = parameters.indexOf(p);
-                Debug.assert(index !== -1);
+                Debug.assert(index !== -1, "The parameter should already be in the list");
                 return isFixAll
                     ? parameters.slice(index + 1).every(p => p.name.kind === SyntaxKind.Identifier && !p.symbol.isReferenced)
                     : index === parameters.length - 1;
@@ -246,7 +246,7 @@ namespace ts.codefix {
         }
     }
 
-    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker): void {
+    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker): void {
         FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, call => {
             const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
             if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.

@@ -68,18 +68,19 @@ namespace ts {
             return sourceIndex;
         }
 
+        /* eslint-disable boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
                 if (!sourcesContent) sourcesContent = [];
                 while (sourcesContent.length < sourceIndex) {
-                    // tslint:disable-next-line:no-null-keyword boolean-trivia
                     sourcesContent.push(null);
                 }
                 sourcesContent[sourceIndex] = content;
             }
             exit();
         }
+        /* eslint-enable boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
@@ -148,7 +149,8 @@ namespace ts {
             const sourceIndexToNewSourceIndexMap: number[] = [];
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
-            for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+            for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
+                const raw = iterResult.value;
                 if (end && (
                     raw.generatedLine > end.line ||
                     (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
@@ -284,7 +286,7 @@ namespace ts {
         getLineText(line: number): string;
     }
 
-    export function getLineInfo(text: string, lineStarts: ReadonlyArray<number>): LineInfo {
+    export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
         return {
             getLineCount: () => lineStarts.length,
             getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
@@ -308,13 +310,12 @@ namespace ts {
         }
     }
 
+    /* eslint-disable no-null/no-null */
     function isStringOrNull(x: any) {
-        // tslint:disable-next-line:no-null-keyword
         return typeof x === "string" || x === null;
     }
 
     export function isRawSourceMap(x: any): x is RawSourceMap {
-        // tslint:disable-next-line:no-null-keyword
         return x !== null
             && typeof x === "object"
             && x.version === 3
@@ -325,6 +326,7 @@ namespace ts {
             && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
             && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
     }
+    /* eslint-enable no-null/no-null */
 
     export function tryParseRawSourceMap(text: string) {
         try {
@@ -621,9 +623,9 @@ namespace ts {
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
         const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
-        let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
+        let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
-        let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
+        let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
 
         return {
             getSourcePosition,

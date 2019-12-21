@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: 'type arguments' can only be used in a .ts file.
+tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: Type arguments can only be used in TypeScript files.
 
 
 ==== tests/cases/conformance/jsx/component.d.ts (0 errors) ====
@@ -18,5 +18,5 @@ tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: 'type arguments' can o
     
     let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
                     ~~~~
-!!! error TS8011: 'type arguments' can only be used in a .ts file.
+!!! error TS8011: Type arguments can only be used in TypeScript files.
     
