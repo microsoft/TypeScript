@@ -373,6 +373,7 @@ namespace ts {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.NamespaceExport:
                 return ScriptElementKind.alias;
             case SyntaxKind.BinaryExpression:
                 const kind = getAssignmentDeclarationKind(node as BinaryExpression);

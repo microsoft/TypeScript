@@ -4,7 +4,7 @@ namespace ts {
         switch (moduleKind) {
             case ModuleKind.ESNext:
             case ModuleKind.ES2015:
-                return transformES2015Module;
+                return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
             default:

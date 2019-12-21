@@ -346,11 +346,21 @@ namespace ts {
                     continue;
                 }
 
-                for (const element of externalImport.exportClause.elements) {
-                    // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                if (isNamedExports(externalImport.exportClause)) {
+                    for (const element of externalImport.exportClause.elements) {
+                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                        exportedNames.push(
+                            createPropertyAssignment(
+                                createLiteral(idText(element.name || element.propertyName)),
+                                createTrue()
+                            )
+                        );
+                    }
+                }
+                else {
                     exportedNames.push(
                         createPropertyAssignment(
-                            createLiteral(idText(element.name || element.propertyName)),
+                            createLiteral(idText(externalImport.exportClause.name)),
                             createTrue()
                         )
                     );
@@ -489,36 +499,52 @@ namespace ts {
                         case SyntaxKind.ExportDeclaration:
                             Debug.assert(importVariableName !== undefined);
                             if (entry.exportClause) {
-                                //  export {a, b as c} from 'foo'
-                                //
-                                // emit as:
-                                //
-                                //  exports_({
-                                //     "a": _["a"],
-                                //     "c": _["b"]
-                                //  });
-                                const properties: PropertyAssignment[] = [];
-                                for (const e of entry.exportClause.elements) {
-                                    properties.push(
-                                        createPropertyAssignment(
-                                            createLiteral(idText(e.name)),
-                                            createElementAccess(
-                                                parameterName,
-                                                createLiteral(idText(e.propertyName || e.name))
+                                if (isNamedExports(entry.exportClause)) {
+                                    //  export {a, b as c} from 'foo'
+                                    //
+                                    // emit as:
+                                    //
+                                    //  exports_({
+                                    //     "a": _["a"],
+                                    //     "c": _["b"]
+                                    //  });
+                                    const properties: PropertyAssignment[] = [];
+                                    for (const e of entry.exportClause.elements) {
+                                        properties.push(
+                                            createPropertyAssignment(
+                                                createLiteral(idText(e.name)),
+                                                createElementAccess(
+                                                    parameterName,
+                                                    createLiteral(idText(e.propertyName || e.name))
+                                                )
+                                            )
+                                        );
+                                    }
+
+                                    statements.push(
+                                        createExpressionStatement(
+                                            createCall(
+                                                exportFunction,
+                                                /*typeArguments*/ undefined,
+                                                [createObjectLiteral(properties, /*multiline*/ true)]
                                             )
                                         )
                                     );
                                 }
-
-                                statements.push(
-                                    createExpressionStatement(
-                                        createCall(
-                                            exportFunction,
-                                            /*typeArguments*/ undefined,
-                                            [createObjectLiteral(properties, /*multiline*/ true)]
+                                else {
+                                    statements.push(
+                                        createExpressionStatement(
+                                            createCall(
+                                                exportFunction,
+                                                /*typeArguments*/ undefined,
+                                                [
+                                                    createLiteral(idText(entry.exportClause.name)),
+                                                    parameterName
+                                                ]
+                                            )
                                         )
-                                    )
-                                );
+                                    );
+                                }
                             }
                             else {
                                 //  export * from 'foo'
@@ -574,9 +600,7 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 case SyntaxKind.ExportDeclaration:
-                    // ExportDeclarations are elided as they are handled via
-                    // `appendExportsOfDeclaration`.
-                    return undefined;
+                    return visitExportDeclaration(<ExportDeclaration>node);
 
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
@@ -607,6 +631,11 @@ namespace ts {
             }
 
             return singleOrMany(statements);
+        }
+
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+            Debug.assertDefined(node);
+            return undefined;
         }
 
         /**

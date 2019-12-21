@@ -56,9 +56,10 @@ namespace ts {
                 break;
             // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
             case SyntaxKind.ExportDeclaration:
-                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                const exportDeclaration = node as ExportDeclaration;
+                if (!exportDeclaration.moduleSpecifier && exportDeclaration.exportClause && exportDeclaration.exportClause.kind === SyntaxKind.NamedExports) {
                     let state = ModuleInstanceState.NonInstantiated;
-                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                    for (const specifier of exportDeclaration.exportClause.elements) {
                         const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
                         if (specifierState > state) {
                             state = specifierState;
@@ -2575,6 +2576,9 @@ namespace ts {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
+            else if (isNamespaceExport(node.exportClause)) {
+                declareSymbol(container.symbol.exports, container.symbol, node.exportClause, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
         }
 
         function bindImportClause(node: ImportClause) {
@@ -4109,6 +4113,10 @@ namespace ts {
                 break;
 
             case SyntaxKind.SourceFile:
+                break;
+
+            case SyntaxKind.NamespaceExport:
+                transformFlags |= TransformFlags.AssertESNext;
                 break;
 
             case SyntaxKind.ReturnStatement:

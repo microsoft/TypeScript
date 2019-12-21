@@ -2278,9 +2278,21 @@ namespace ts {
         return node;
     }
 
+    export function createNamespaceExport(name: Identifier): NamespaceExport {
+        const node = <NamespaceExport>createSynthesizedNode(SyntaxKind.NamespaceExport);
+        node.name = name;
+        return node;
+    }
+
     export function updateNamespaceImport(node: NamespaceImport, name: Identifier) {
         return node.name !== name
             ? updateNode(createNamespaceImport(name), node)
+            : node;
+    }
+
+    export function updateNamespaceExport(node: NamespaceExport, name: Identifier) {
+        return node.name !== name
+            ? updateNode(createNamespaceExport(name), node)
             : node;
     }
 
@@ -2327,7 +2339,7 @@ namespace ts {
             : node;
     }
 
-    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExports | undefined, moduleSpecifier?: Expression) {
+    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression) {
         const node = <ExportDeclaration>createSynthesizedNode(SyntaxKind.ExportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -2340,7 +2352,7 @@ namespace ts {
         node: ExportDeclaration,
         decorators: readonly Decorator[] | undefined,
         modifiers: readonly Modifier[] | undefined,
-        exportClause: NamedExports | undefined,
+        exportClause: NamedExportBindings | undefined,
         moduleSpecifier: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers

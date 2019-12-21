@@ -390,6 +390,8 @@ namespace ts {
 
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
+            case SyntaxKind.NamespaceExport:
+                return visitNode(cbNode, (<NamespaceExport>node).name);
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
                 return visitNodes(cbNode, cbNodes, (<NamedImportsOrExports>node).elements);
@@ -6470,9 +6472,18 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseNamespaceExport(): NamespaceExport {
+            const node = <NamespaceExport>createNode(SyntaxKind.NamespaceExport);
+            node.name = parseIdentifier();
+            return finishNode(node);
+        }
+
         function parseExportDeclaration(node: ExportDeclaration): ExportDeclaration {
             node.kind = SyntaxKind.ExportDeclaration;
             if (parseOptional(SyntaxKind.AsteriskToken)) {
+                if (parseOptional(SyntaxKind.AsKeyword)) {
+                    node.exportClause = parseNamespaceExport();
+                }
                 parseExpected(SyntaxKind.FromKeyword);
                 node.moduleSpecifier = parseModuleSpecifier();
             }
