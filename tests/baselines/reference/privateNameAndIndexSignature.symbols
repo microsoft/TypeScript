@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameAndIndexSignature.ts, 0, 0))
+
+    [k: string]: any;
+>k : Symbol(k, Decl(privateNameAndIndexSignature.ts, 1, 5))
+
+    constructor(message: string) {
+>message : Symbol(message, Decl(privateNameAndIndexSignature.ts, 2, 16))
+
+        this.#f = 3                 // Error Property '#f' does not exist on type 'A'.
+>this : Symbol(A, Decl(privateNameAndIndexSignature.ts, 0, 0))
+    }
+}
+

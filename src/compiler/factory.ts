@@ -1740,13 +1740,13 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateName> | undefined {
         const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
         Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
         return propertyName;
     }
 
-    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateName> | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -1755,6 +1755,9 @@ namespace ts {
                 // `1` in `let { 1: b } = ...`
                 if (bindingElement.propertyName) {
                     const propertyName = bindingElement.propertyName;
+                    if (isPrivateName(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -1769,6 +1772,9 @@ namespace ts {
                 // `1` in `({ 1: b } = ...)`
                 if (bindingElement.name) {
                     const propertyName = bindingElement.name;
+                    if (isPrivateName(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -1778,6 +1784,9 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
+                if (bindingElement.name && isPrivateName(bindingElement.name)) {
+                    return Debug.failBadSyntaxKind(bindingElement.name);
+                }
                 return bindingElement.name;
         }
 

@@ -453,8 +453,8 @@ namespace ts {
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
-    export function idText(identifier: Identifier): string {
-        return unescapeLeadingUnderscores(identifier.escapedText);
+    export function idText(identifierOrPrivateName: Identifier | PrivateName): string {
+        return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
         return unescapeLeadingUnderscores(symbol.escapedName);
@@ -465,7 +465,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateName | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -524,7 +524,7 @@ namespace ts {
         return false;
     }
 
-    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateName | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
@@ -876,6 +876,14 @@ namespace ts {
 
     export function isComputedPropertyName(node: Node): node is ComputedPropertyName {
         return node.kind === SyntaxKind.ComputedPropertyName;
+    }
+
+    export function isPrivateName(node: Node): node is PrivateName {
+        return node.kind === SyntaxKind.PrivateName;
+    }
+
+    export function isIdentifierOrPrivateName(node: Node): node is Identifier | PrivateName {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateName;
     }
 
     // Signature elements

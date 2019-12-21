@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/members/privateNames/privateNameField.ts(4,14): error TS2339: Property '#name' does not exist on type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameField.ts (1 errors) ====
+    class A {
+        #name: string;
+        constructor(name: string) {
+            this.#name = name;
+                 ~~~~~
+!!! error TS2339: Property '#name' does not exist on type 'A'.
+        }
+    }

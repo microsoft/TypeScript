@@ -1429,6 +1429,17 @@ namespace ts {
             return createIdentifier(tokenIsIdentifierOrKeyword(token()), diagnosticMessage);
         }
 
+        function createPrivateName(): PrivateName {
+            const node = createNode(SyntaxKind.PrivateName) as PrivateName;
+            node.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
+            nextToken();
+            return finishNode(node);
+        }
+
+        function parsePrivateName(): PrivateName {
+            return createPrivateName();
+        }
+
         function isLiteralPropertyName(): boolean {
             return tokenIsIdentifierOrKeyword(token()) ||
                 token() === SyntaxKind.StringLiteral ||
@@ -1443,6 +1454,9 @@ namespace ts {
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
+            }
+            if (token() === SyntaxKind.PrivateName) {
+                return parsePrivateName();
             }
             return parseIdentifierName();
         }
