@@ -25,11 +25,6 @@ export class C {
 
 //// [file.d.ts]
 export class C {
-    "__#1@#hello": string;
-    "__#1@#world": number;
-    "__#1@#calcHello"(): string;
-    /** @param value {string} */
-    set "__#1@#screamingHello"(arg: string);
-    get "__#1@#screamingHello"(): string;
     getWorld(): number;
+    #private;
 }
