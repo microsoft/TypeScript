@@ -3898,9 +3898,12 @@ namespace ts {
 
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
-            case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                // async is ES2017 syntax, but may be ES2018 syntax (for async generators)
                 transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017;
+                break;
+            case SyntaxKind.AwaitExpression:
+                // await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017 | TransformFlags.ContainsAwait;
                 break;
 
             case SyntaxKind.TypeAssertionExpression:

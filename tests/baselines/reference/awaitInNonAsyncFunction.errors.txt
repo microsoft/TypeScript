@@ -13,7 +13,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' exp
 tests/cases/compiler/awaitInNonAsyncFunction.ts(34,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expression is only allowed within an async function.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(39,5): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1361: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
 
 
 ==== tests/cases/compiler/awaitInNonAsyncFunction.ts (16 errors) ====
@@ -100,4 +100,4 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1308: 'await' exp
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
     await null;
     ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1361: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
