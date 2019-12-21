@@ -10,7 +10,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
@@ -123,7 +123,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return expr;
     }
 
-    function makeSingleExpressionOrBinary(nodes: ReadonlyArray<Expression>): Expression {
+    function makeSingleExpressionOrBinary(nodes: readonly Expression[]): Expression {
         if (nodes.length > 1) {
             const left = nodes[0];
             const right = nodes[1];
@@ -135,7 +135,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return nodes[0];
     }
 
-    function arrayToTree(nodes: ReadonlyArray<Expression>, index: number, accumulator: BinaryExpression): Expression {
+    function arrayToTree(nodes: readonly Expression[], index: number, accumulator: BinaryExpression): Expression {
         if (nodes.length === index) return accumulator;
 
         const right = nodes[index];
@@ -178,7 +178,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     // to copy comments following the string
     // "foo" /* comment */ + "bar" /* comment */ + "bar2"
-    const copyCommentFromMultiNode = (nodes: ReadonlyArray<Expression>, file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) =>
+    const copyCommentFromMultiNode = (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) =>
     (indexes: number[], targetNode: Node) => {
         while (indexes.length > 0) {
             const index = indexes.shift()!;
@@ -187,7 +187,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
     };
 
-    function concatConsecutiveString(index: number, nodes: ReadonlyArray<Expression>): [number, string, number[]] {
+    function concatConsecutiveString(index: number, nodes: readonly Expression[]): [number, string, number[]] {
         let text = "";
         const indexes = [];
 
@@ -202,7 +202,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return [index, text, indexes];
     }
 
-    function nodesToTemplate({nodes, operators}: {nodes: ReadonlyArray<Expression>, operators: Token<BinaryOperator>[]}, file: SourceFile) {
+    function nodesToTemplate({nodes, operators}: {nodes: readonly Expression[], operators: Token<BinaryOperator>[]}, file: SourceFile) {
         const copyOperatorComments = copyTrailingOperatorComments(operators, file);
         const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
         const [begin, headText, headIndexes] = concatConsecutiveString(0, nodes);
