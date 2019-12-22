@@ -26437,21 +26437,41 @@ namespace ts {
             return undefinedWideningType;
         }
 
+        function isTopLevelAwait(node: AwaitExpression) {
+            const container = getThisContainer(node, /*includeArrowFunctions*/ true);
+            return isSourceFile(container);
+        }
+
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
                 if (!(node.flags & NodeFlags.AwaitContext)) {
-                    // use of 'await' in non-async function
-                    const sourceFile = getSourceFileOfNode(node);
-                    if (!hasParseDiagnostics(sourceFile)) {
-                        const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                        const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
-                        const func = getContainingFunction(node);
-                        if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
-                            const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
-                            addRelatedInfo(diagnostic, relatedInfo);
+                    if (isTopLevelAwait(node)) {
+                        const sourceFile = getSourceFileOfNode(node);
+                        if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) ||
+                            languageVersion < ScriptTarget.ES2017 ||
+                            !isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                            if (!hasParseDiagnostics(sourceFile)) {
+                                const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                                const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                    Diagnostics.await_outside_of_an_async_function_is_only_allowed_at_the_top_level_of_a_module_when_module_is_esnext_or_system_and_target_is_es2017_or_higher);
+                                diagnostics.add(diagnostic);
+                            }
                         }
-                        diagnostics.add(diagnostic);
+                    }
+                    else {
+                        // use of 'await' in non-async function
+                        const sourceFile = getSourceFileOfNode(node);
+                        if (!hasParseDiagnostics(sourceFile)) {
+                            const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
+                            const func = getContainingFunction(node);
+                            if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
+                                const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
+                                addRelatedInfo(diagnostic, relatedInfo);
+                            }
+                            diagnostics.add(diagnostic);
+                        }
                     }
                 }
 

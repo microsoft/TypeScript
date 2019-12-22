@@ -1059,6 +1059,10 @@
         "category": "Error",
         "code": 1360
     },
+    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1361
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

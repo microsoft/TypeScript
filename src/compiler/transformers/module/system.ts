@@ -262,13 +262,16 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
+            const modifiers = node.transformFlags & TransformFlags.ContainsAwait ?
+                createModifiersFromModifierFlags(ModifierFlags.Async) :
+                undefined;
             const moduleObject = createObjectLiteral([
                 createPropertyAssignment("setters",
                     createSettersArray(exportStarFunction, dependencyGroups)
                 ),
                 createPropertyAssignment("execute",
                     createFunctionExpression(
-                        /*modifiers*/ undefined,
+                        modifiers,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
