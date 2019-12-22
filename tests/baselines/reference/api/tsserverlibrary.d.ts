@@ -5113,6 +5113,9 @@ declare namespace ts {
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5251,6 +5254,21 @@ declare namespace ts {
         nameSpan: TextSpan | undefined;
         /** Present if non-empty */
         childItems?: NavigationTree[];
+    }
+    interface CallHierarchyItem {
+        name: string;
+        kind: ScriptElementKind;
+        file: string;
+        span: TextSpan;
+        selectionSpan: TextSpan;
+    }
+    interface CallHierarchyIncomingCall {
+        from: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+    interface CallHierarchyOutgoingCall {
+        to: CallHierarchyItem;
+        fromSpans: TextSpan[];
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -6113,6 +6131,9 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        PrepareCallHierarchy = "prepareCallHierarchy",
+        ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
     }
     /**
      * A TypeScript Server message
@@ -8342,6 +8363,39 @@ declare namespace ts.server.protocol {
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
+    interface CallHierarchyItem {
+        name: string;
+        kind: ScriptElementKind;
+        file: string;
+        span: TextSpan;
+        selectionSpan: TextSpan;
+    }
+    interface CallHierarchyIncomingCall {
+        from: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+    interface CallHierarchyOutgoingCall {
+        to: CallHierarchyItem;
+        fromSpans: TextSpan[];
+    }
+    interface PrepareCallHierarchyRequest extends FileLocationRequest {
+        command: CommandTypes.PrepareCallHierarchy;
+    }
+    interface PrepareCallHierarchyResponse extends Response {
+        readonly body: CallHierarchyItem | CallHierarchyItem[];
+    }
+    interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
+        command: CommandTypes.ProvideCallHierarchyIncomingCalls;
+    }
+    interface ProvideCallHierarchyIncomingCallsResponse extends Response {
+        readonly body: CallHierarchyIncomingCall[];
+    }
+    interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
+        command: CommandTypes.ProvideCallHierarchyOutgoingCalls;
+    }
+    interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
+        readonly body: CallHierarchyOutgoingCall[];
+    }
     enum IndentStyle {
         None = "None",
         Block = "Block",
@@ -9433,6 +9487,12 @@ declare namespace ts.server {
         private configurePlugin;
         private getSmartSelectionRange;
         private mapSelectionRange;
+        private toProtocolCallHierarchyItem;
+        private toProtocolCallHierarchyIncomingCall;
+        private toProtocolCallHierarchyOutgoingCall;
+        private prepareCallHierarchy;
+        private provideCallHierarchyIncomingCalls;
+        private provideCallHierarchyOutgoingCalls;
         getCanonicalFileName(fileName: string): string;
         exit(): void;
         private notRequired;

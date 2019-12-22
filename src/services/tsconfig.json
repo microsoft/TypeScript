@@ -18,6 +18,7 @@
         "documentRegistry.ts",
         "importTracker.ts",
         "findAllReferences.ts",
+        "callHierarchy.ts",
         "getEditsForFileRename.ts",
         "goToDefinition.ts",
         "jsDoc.ts",
