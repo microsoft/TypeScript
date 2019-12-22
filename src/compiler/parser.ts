@@ -2242,7 +2242,7 @@ namespace ts {
                     break;
                 }
                 dotPos = scanner.getStartPos();
-                entity = createQualifiedName(entity, parseRightSideOfDot(allowReservedWords));
+                entity = createQualifiedName(entity, parseRightSideOfDot(allowReservedWords, /* allowPrivateNames */ false) as Identifier);
             }
             return entity;
         }
@@ -2254,7 +2254,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateNames: boolean): Identifier | PrivateName {
             // Technically a keyword is valid here as all identifiers and keywords are identifier names.
             // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
@@ -2283,6 +2283,10 @@ namespace ts {
                     // be an identifier and the error would be quite confusing.
                     return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                 }
+            }
+
+            if (allowPrivateNames && token() === SyntaxKind.PrivateName) {
+                return parsePrivateName();
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
@@ -4358,7 +4362,8 @@ namespace ts {
             const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
             parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+            // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
+            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
             return finishNode(node);
         }
 
@@ -4529,7 +4534,7 @@ namespace ts {
             while (parseOptional(SyntaxKind.DotToken)) {
                 const propertyAccess: JsxTagNamePropertyAccess = <JsxTagNamePropertyAccess>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                 propertyAccess.expression = expression;
-                propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+                propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
                 expression = finishNode(propertyAccess);
             }
             return expression;
@@ -4646,7 +4651,8 @@ namespace ts {
             const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
-            propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
+            propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
+
             if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
             }
