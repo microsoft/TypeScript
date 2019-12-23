@@ -769,6 +769,9 @@ namespace ts {
                     Debug.fail("Undeclared private name for property declaration.");
                 }
             }
+            if (isPrivateIdentifier(propertyName) && !property.initializer) {
+                return undefined;
+            }
 
             if (isPrivateIdentifier(propertyName) && !property.initializer) {
                 return undefined;
