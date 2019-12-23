@@ -5609,7 +5609,7 @@ namespace ts {
         ContainsBlockScopedBinding = 1 << 16,
         ContainsBindingPattern = 1 << 17,
         ContainsYield = 1 << 18,
-        ContainsAwait = 1 << 19
+        ContainsAwait = 1 << 19,
         ContainsHoistedDeclarationOrCompletion = 1 << 20,
         ContainsDynamicImport = 1 << 21,
         ContainsClassFields = 1 << 22,
