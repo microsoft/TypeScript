@@ -618,7 +618,11 @@ namespace ts {
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
             const useDefineForClassFields = context.getCompilerOptions().useDefineForClassFields;
-            const properties = getProperties(node, /*requireInitializer*/ !useDefineForClassFields, /*isStatic*/ false)
+            let properties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
+            if (!useDefineForClassFields) {
+                properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
+            }
+
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
