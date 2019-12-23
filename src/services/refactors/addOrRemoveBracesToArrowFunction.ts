@@ -103,8 +103,11 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         const edits = textChanges.ChangeTracker.with(context, t => {
             t.replaceNode(file, func.body, body);
-            // Push the raw change into our array of textChanges
-            t.pushRaw(file, { fileName: file.fileName, textChanges: [newEdit] });
+            // Check if we have a newEdit
+            if (newEdit) {
+                // Push the raw change into our array of textChanges
+                t.pushRaw(file, { fileName: file.fileName, textChanges: [newEdit] });
+            }
         });
 
         return { renameFilename: undefined, renameLocation: undefined, edits };
