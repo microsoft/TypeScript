@@ -433,9 +433,9 @@ namespace ts.formatting {
     }
 
     function isBinaryOpContext(context: FormattingContext): boolean {
-
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
