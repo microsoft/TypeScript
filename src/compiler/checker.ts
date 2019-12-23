@@ -5597,12 +5597,15 @@ namespace ts {
                     const publicSymbolProps = filter(symbolProps, s => {
                         const valueDecl = s.valueDeclaration;
                         Debug.assertDefined(valueDecl);
-                        return isClassElement(valueDecl) && isNamedDeclaration(valueDecl)
-                            && !isPrivateIdentifier(valueDecl.name);
+                        return !(isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name));
                     });
-                    const hasPrivateField = symbolProps !== publicSymbolProps;
+                    const hasPrivateIdentifier = some(symbolProps, s => {
+                        const valueDecl = s.valueDeclaration;
+                        Debug.assertDefined(valueDecl);
+                        return isNamedDeclaration(valueDecl) && isPrivateIdentifier(valueDecl.name);
+                    });
                     // Boil down all private properties into a single one.
-                    const privateProperties = hasPrivateField ?
+                    const privateProperties = hasPrivateIdentifier ?
                         [createProperty(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
