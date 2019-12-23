@@ -2137,6 +2137,26 @@ namespace ts {
             return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
+        function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
+            synchronizeHostData();
+            const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+            return declarations && mapOneOrMany(declarations, declaration => CallHierarchy.createCallHierarchyItem(program, declaration));
+        }
+
+        function provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
+        }
+
+        function provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        }
+
         return {
             dispose,
             cleanupSemanticCache,
@@ -2192,6 +2212,9 @@ namespace ts {
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
+            prepareCallHierarchy,
+            provideCallHierarchyIncomingCalls,
+            provideCallHierarchyOutgoingCalls
         };
     }
 

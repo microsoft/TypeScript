@@ -271,6 +271,10 @@ namespace ts {
          */
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
+        prepareCallHierarchy(fileName: string, position: number): string;
+        provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
     }
@@ -1017,6 +1021,29 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTodoComments('${fileName}')`,
                 () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
+            );
+        }
+
+        /// CALL HIERARCHY
+
+        public prepareCallHierarchy(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `prepareCallHierarchy('${fileName}', ${position})`,
+                () => this.languageService.prepareCallHierarchy(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
+            );
+        }
+
+        public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
+                () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
             );
         }
 

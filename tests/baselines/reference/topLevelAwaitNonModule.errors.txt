@@ -1,0 +1,11 @@
+tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts(1,1): error TS1361: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
+tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts(1,7): error TS2304: Cannot find name 'x'.
+
+
+==== tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts (2 errors) ====
+    await x;
+    ~~~~~
+!!! error TS1361: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
+          ~
+!!! error TS2304: Cannot find name 'x'.
+    

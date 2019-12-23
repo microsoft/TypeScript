@@ -1059,6 +1059,10 @@
         "category": "Error",
         "code": 1360
     },
+    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1361
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3386,11 +3390,11 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
+    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
