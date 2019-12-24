@@ -2795,6 +2795,10 @@
         "category": "Error",
         "code": 2781
     },
+    "'{0}' must be declared with an explicit type annotation.": {
+        "category": "Message",
+        "code": 2782
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
