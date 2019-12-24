@@ -33693,33 +33693,59 @@ namespace ts {
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
                 if (expr.arguments.some(isPartialApplicationElement)) {
-                    const funcType = checkNonNullExpression(expr.expression);
-
-                    ts.createArrowFunction(
-                        undefined,
-                        undefined,
-                        [
-                            ...expr.arguments
-                                .filter(isPartialApplicationElement)
-                                .map((partialApplicationIdentifier, i) =>
-                                    ts.createParameter(
-                                        undefined,
-                                        undefined,
-                                        undefined,
-                                        // partialApplicationIdentifier,
-                                        ts.createIdentifier("pa"+i),
-                                        undefined,
-                                        undefined,
-                                        undefined
-                                    )
-                                )
-                        ],
-                        undefined,
-                        ts.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                        node
-                    );
-                      
                     console.log('Partial application');
+                    
+                    const funcType = checkNonNullExpression(expr.expression);
+                    (funcType as any).__debugTypeToString();
+                    const pAType = createObjectType(ObjectFlags.Anonymous);
+                    let typeParams: Symbol[] = (funcType.symbol.valueDeclaration as any).parameters.map((n: Node) => n.symbol);
+                    // if (funcType.symbol.valueDeclaration.) {
+                    //     funcType.symbol.valueDeclaration.forEach(symbol => {
+                    //         if (symbol.flags & SymbolFlags.TypeParameter) {
+                    //             typeParams = append(typeParams, getDeclaredTypeOfSymbol(symbol));
+                    //         }
+                    //     });
+                    // }
+        
+                    pAType.callSignatures = [createSignature(
+                        undefined,
+                        undefined,
+                        undefined,
+                        typeParams,
+                        (funcType as any).callSignatures![0]!.resolvedReturnType,
+                        (funcType as any).callSignatures![0]!.resolvedTypePredicate,
+                        expr.arguments.filter(isPartialApplicationElement).length,
+                        (typeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
+                            ? SignatureFlags.HasLiteralTypes
+                            : SignatureFlags.None                        
+                    )]
+
+                    return pAType;
+
+                    // ts.createArrowFunction(
+                    //     undefined,
+                    //     undefined,
+                    //     [
+                    //         ...expr.arguments
+                    //             .filter(isPartialApplicationElement)
+                    //             .map((partialApplicationIdentifier, i) =>
+                    //                 ts.createParameter(
+                    //                     undefined,
+                    //                     undefined,
+                    //                     undefined,
+                    //                     // partialApplicationIdentifier,
+                    //                     ts.createIdentifier("pa"+i),
+                    //                     undefined,
+                    //                     undefined,
+                    //                     undefined
+                    //                 )
+                    //             )
+                    //     ],
+                    //     undefined,
+                    //     ts.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                    //     node
+                    // );
+                      
                     // const type = createObjectType(ObjectFlags.Anonymous, symbol);
 
                     // const t: Type = {
