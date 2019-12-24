@@ -2795,7 +2795,7 @@
         "category": "Error",
         "code": 2781
     },
-    "'{0}' must be declared with an explicit type annotation.": {
+    "'{0}' needs an explicit type annotation.": {
         "category": "Message",
         "code": 2782
     },
