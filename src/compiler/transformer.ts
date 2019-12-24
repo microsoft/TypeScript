@@ -55,6 +55,10 @@ namespace ts {
             transformers.push(transformESNext);
         }
 
+        if (languageVersion < ScriptTarget.ES2020) {
+            transformers.push(transformES2020);
+        }
+
         if (languageVersion < ScriptTarget.ES2019) {
             transformers.push(transformES2019);
         }

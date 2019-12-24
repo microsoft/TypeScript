@@ -3361,7 +3361,7 @@ namespace ts {
         const expression = node.expression;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         if (node.typeArguments) {
@@ -3405,7 +3405,7 @@ namespace ts {
         const leftKind = node.left.kind;
 
         if (operatorTokenKind === SyntaxKind.QuestionQuestionToken) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2020;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax
@@ -3764,7 +3764,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
@@ -3783,7 +3783,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         // If an ElementAccessExpression starts with a super keyword, then it is
