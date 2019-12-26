@@ -5020,7 +5020,30 @@ namespace ts {
     }
 
     export function getDotOrQuestionDotToken(node: PropertyAccessExpression) {
-        return node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
+        if(node.questionDotToken) return node.questionDotToken;
+
+        let pos = node.expression.end;
+        let end = node.name.pos;
+
+        // If the pos or end have synthetic positions, then try to find the original positions.
+        // We do this in order to keep source spacing and comments.
+        if(pos === -1 || end === -1) {
+            const parserTreeNode = getParseTreeNode(node) as PropertyAccessExpression;
+            const isSimilarNode = parserTreeNode && parserTreeNode.kind === parserTreeNode.kind;
+
+            if (isSimilarNode) {
+                // If we find the original node, use those positions.
+                pos = parserTreeNode.expression.end;
+                end = parserTreeNode.name.pos;
+            }
+            else {
+                // If not, just leave the node with both synthetic pos and end.
+                end = -1;
+                pos = -1;
+            }
+        }
+
+        return createNode(SyntaxKind.DotToken, pos, end) as DotToken;
     }
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {

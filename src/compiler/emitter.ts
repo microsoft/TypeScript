@@ -2288,7 +2288,7 @@ namespace ts {
                 writePunctuation(".");
             }
 
-            emitTokenWithComment(token.kind, node.expression.end, writePunctuation, node);
+            emit(token);
             increaseIndentIf(indentAfterDot, /*writeSpaceIfNotIndenting*/ false);
             emit(node.name);
             decreaseIndentIf(indentBeforeDot, indentAfterDot);
