@@ -72,3 +72,28 @@ class Foo {
         }
     }
 }
+
+// Test for GH-35557 where ids were not assigned for a symbol.
+function A(stats: StatsBase<any>) {
+    if (stats.isDirectory) { // err
+        console.log(`[Directory] ${stats.ctime}`)
+    }
+}
+
+function B(a: Nested, b: Nested) {
+    if (a.stats.isDirectory) { // err
+        b.stats.isDirectory(); 
+    }
+    if (a.stats.isDirectory) { // ok
+        a.stats.isDirectory();
+    }
+} 
+
+interface StatsBase<T> {
+    isDirectory(): boolean;
+    ctime: number;
+}
+
+interface Nested {
+    stats: StatsBase<any>;
+}
