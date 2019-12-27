@@ -21,9 +21,10 @@ tests/cases/compiler/commaOperatorLeftSideUnused.ts(38,7): error TS2695: Left si
 tests/cases/compiler/commaOperatorLeftSideUnused.ts(39,7): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/compiler/commaOperatorLeftSideUnused.ts(40,7): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/commaOperatorLeftSideUnused.ts(42,7): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/commaOperatorLeftSideUnused.ts (23 errors) ====
+==== tests/cases/compiler/commaOperatorLeftSideUnused.ts (24 errors) ====
     var xx: any;
     var yy: any;
     
@@ -111,6 +112,9 @@ tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2695: Left si
     xx = (+xx, 10);
           ~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
+    xx = (0, xx)();
+          ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     
     // OK cases
     xx = (xx ? x++ : 4, 10);
@@ -122,4 +126,6 @@ tests/cases/compiler/commaOperatorLeftSideUnused.ts(41,7): error TS2695: Left si
     xx = (Math.pow(3, 2), 4);
     xx = (void xx, 10);
     xx = (xx as any, 100);
-    
+    xx = (0, xx.fn)();
+    xx = (0, xx['fn'])();
+    xx = (0, xx.fn)``;

@@ -240,6 +240,15 @@ xx = (+xx, 10);
 >xx : any
 >10 : 10
 
+xx = (0, xx)();
+>xx = (0, xx)() : any
+>xx : any
+>(0, xx)() : any
+>(0, xx) : any
+>0, xx : any
+>0 : 0
+>xx : any
+
 // OK cases
 xx = (xx ? x++ : 4, 10);
 >xx = (xx ? x++ : 4, 10) : 10
@@ -334,4 +343,38 @@ xx = (xx as any, 100);
 >xx as any : any
 >xx : any
 >100 : 100
+
+xx = (0, xx.fn)();
+>xx = (0, xx.fn)() : any
+>xx : any
+>(0, xx.fn)() : any
+>(0, xx.fn) : any
+>0, xx.fn : any
+>0 : 0
+>xx.fn : any
+>xx : any
+>fn : any
+
+xx = (0, xx['fn'])();
+>xx = (0, xx['fn'])() : any
+>xx : any
+>(0, xx['fn'])() : any
+>(0, xx['fn']) : any
+>0, xx['fn'] : any
+>0 : 0
+>xx['fn'] : any
+>xx : any
+>'fn' : "fn"
+
+xx = (0, xx.fn)``;
+>xx = (0, xx.fn)`` : any
+>xx : any
+>(0, xx.fn)`` : any
+>(0, xx.fn) : any
+>0, xx.fn : any
+>0 : 0
+>xx.fn : any
+>xx : any
+>fn : any
+>`` : ""
 

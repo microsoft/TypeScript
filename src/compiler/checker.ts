@@ -27104,7 +27104,7 @@ namespace ts {
                         return getRegularTypeOfObjectLiteral(rightType);
                     }
                 case SyntaxKind.CommaToken:
-                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
+                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isInIndirectCall(<BinaryExpression>left.parent)) {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
@@ -27133,8 +27133,9 @@ namespace ts {
                 }
             }
 
-            function isEvalNode(node: Expression) {
-                return node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "eval";
+            function isInIndirectCall(node: BinaryExpression) {
+                return node.parent.kind === SyntaxKind.ParenthesizedExpression && (isCallExpression(node.parent.parent) && node.parent.parent.expression === node.parent || node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) &&
+                    (isAccessExpression(node.right) || isIdentifier(node.right) && node.right.escapedText === "eval");
             }
 
             // Return true if there was no error, false if there was an error.
