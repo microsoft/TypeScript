@@ -34,6 +34,8 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
+        context.enableSubstitution(SyntaxKind.CallExpression); // Substitutes expression identifiers with imported/exported symbols.
+        context.enableSubstitution(SyntaxKind.TaggedTemplateExpression); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
@@ -1742,11 +1744,37 @@ namespace ts {
                     return substituteExpressionIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     return substituteBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.CallExpression:
+                    return substituteCallExpression(<CallExpression>node);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return substituteTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
                     return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
 
+            return node;
+        }
+
+        function substituteCallExpression(node: CallExpression) {
+            if (!isIdentifier(node.expression)) {
+                return node;
+            }
+            const newExpression = substituteExpressionIdentifier(node.expression);
+            if (newExpression !== node.expression) {
+                return updateCall(node, setTextRange(createBinary(createNumericLiteral("0"), SyntaxKind.CommaToken, newExpression), node.expression), /*typeArguments*/ undefined, node.arguments);
+            }
+            return node;
+        }
+
+        function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (!isIdentifier(node.tag)) {
+                return node;
+            }
+            const newTag = substituteExpressionIdentifier(node.tag);
+            if (newTag !== node.tag) {
+                return updateTaggedTemplate(node, setTextRange(createBinary(createNumericLiteral("0"), SyntaxKind.CommaToken, newTag), node.tag), /*typeArguments*/ undefined, node.template);
+            }
             return node;
         }
 
