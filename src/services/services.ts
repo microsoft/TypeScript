@@ -2,10 +2,11 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.8";
 
-    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-            new TokenObject(kind, pos, end);
+            kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
+                new TokenObject(kind, pos, end);
         node.parent = parent;
         node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
@@ -368,6 +369,19 @@ namespace ts {
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
+    class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
+        public kind!: SyntaxKind.PrivateIdentifier;
+        public escapedText!: __String;
+        public symbol!: Symbol;
+        constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+            super(pos, end);
+        }
+
+        get text(): string {
+            return idText(this);
+        }
+    }
+    PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
 
     class TypeObject implements Type {
         checker: TypeChecker;
@@ -814,6 +828,7 @@ namespace ts {
             getTokenConstructor: () => TokenObject,
 
             getIdentifierConstructor: () => IdentifierObject,
+            getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
@@ -2233,6 +2248,10 @@ namespace ts {
         sourceFile.forEachChild(function walk(node) {
             if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
+            }
+            else if (isPrivateIdentifier(node)) {
+                const text = node.escapedText;
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
 

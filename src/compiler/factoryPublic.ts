@@ -116,7 +116,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: PropertyNameLiteral): StringLiteral {
+    function createLiteralFromNode(sourceNode: Exclude<PropertyNameLiteral, PrivateIdentifier>): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
@@ -214,6 +214,13 @@ namespace ts {
         name.original = node;
         nextAutoGenerateId++;
         return name;
+    }
+
+    // Private Identifiers
+    export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
+        node.escapedText = escapeLeadingUnderscores(text);
+        return node;
     }
 
     // Punctuation
@@ -1057,7 +1064,7 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier | PrivateIdentifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
         node.expression = parenthesizeForAccess(expression);
         node.name = asName(name);
@@ -1065,9 +1072,11 @@ namespace ts {
         return node;
     }
 
-    export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
-        if (isOptionalChain(node)) {
-            return updatePropertyAccessChain(node, expression, node.questionDotToken, name);
+    export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
+        if (isOptionalChain(node) && isIdentifier(node.name) && isIdentifier(name)) {
+            // Not sure why this cast was necessary: the previous line should already establish that node.name is an identifier
+            const theNode = node as (typeof node & { name: Identifier });
+            return updatePropertyAccessChain(theNode, expression, node.questionDotToken, name);
         }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
@@ -2923,7 +2932,9 @@ namespace ts {
             templateObjectHelper,
             generatorHelper,
             importStarHelper,
-            importDefaultHelper
+            importDefaultHelper,
+            classPrivateFieldGetHelper,
+            classPrivateFieldSetHelper,
         ], helper => helper.name));
     }
 

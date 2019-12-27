@@ -453,10 +453,13 @@ namespace ts {
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
-    export function idText(identifier: Identifier): string {
-        return unescapeLeadingUnderscores(identifier.escapedText);
+    export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
+        return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
+        if (symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+            return idText(symbol.valueDeclaration.name);
+        }
         return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
@@ -465,7 +468,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateIdentifier | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -524,7 +527,7 @@ namespace ts {
         return false;
     }
 
-    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
@@ -876,6 +879,14 @@ namespace ts {
 
     export function isComputedPropertyName(node: Node): node is ComputedPropertyName {
         return node.kind === SyntaxKind.ComputedPropertyName;
+    }
+
+    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
+        return node.kind === SyntaxKind.PrivateIdentifier;
+    }
+
+    export function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
     }
 
     // Signature elements
@@ -1719,6 +1730,17 @@ namespace ts {
     /* @internal */
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    }
+
+    // Private Identifiers
+    /*@internal*/
+    export function isPrivateIdentifierPropertyDeclaration(node: Node): node is PrivateIdentifierPropertyDeclaration {
+        return isPropertyDeclaration(node) && isPrivateIdentifier(node.name);
+    }
+
+    /*@internal*/
+    export function isPrivateIdentifierPropertyAccessExpression(node: Node): node is PrivateIdentifierPropertyAccessExpression {
+        return isPropertyAccessExpression(node) && isPrivateIdentifier(node.name);
     }
 
     // Keywords

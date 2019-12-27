@@ -201,8 +201,9 @@ namespace ts {
         AmpersandEqualsToken,
         BarEqualsToken,
         CaretEqualsToken,
-        // Identifiers
+        // Identifiers and PrivateIdentifiers
         Identifier,
+        PrivateIdentifier,
         // Reserved words
         BreakKeyword,
         CaseKeyword,
@@ -831,10 +832,11 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
     export type DeclarationName =
         | Identifier
+        | PrivateIdentifier
         | StringLiteralLike
         | NumericLiteral
         | ComputedPropertyName
@@ -885,6 +887,14 @@ namespace ts {
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
+
+    export interface PrivateIdentifier extends Node {
+        kind: SyntaxKind.PrivateIdentifier;
+        // escaping not strictly necessary
+        // avoids gotchas in transforms and utils
+        escapedText: __String;
+    }
+
 
     /* @internal */
     // A name that supports late-binding (used in checker)
@@ -997,6 +1007,11 @@ namespace ts {
         exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
+        name: PrivateIdentifier;
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
@@ -1831,11 +1846,17 @@ namespace ts {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
-        name: Identifier;
+        name: Identifier | PrivateIdentifier;
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyAccessExpression extends PropertyAccessExpression {
+        name: PrivateIdentifier;
     }
 
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
+        name: Identifier;
     }
 
     /* @internal */
@@ -1851,6 +1872,7 @@ namespace ts {
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
+        name: Identifier;
     }
 
     export interface ElementAccessExpression extends MemberExpression {
@@ -1909,6 +1931,7 @@ namespace ts {
     /** @internal */
     export interface WellKnownSymbolExpression extends PropertyAccessExpression {
         expression: Identifier & { escapedText: "Symbol" };
+        name: Identifier;
     }
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableStaticNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
@@ -3334,6 +3357,7 @@ namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
+        getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
@@ -4182,6 +4206,7 @@ namespace ts {
         AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
+        ContainsClassWithPrivateIdentifiers = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
     }
 
     /* @internal */
@@ -5766,8 +5791,10 @@ namespace ts {
         AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
         ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
         FirstEmitHelper = Extends,
-        LastEmitHelper = MakeTemplateObject,
+        LastEmitHelper = ClassPrivateFieldSet,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,

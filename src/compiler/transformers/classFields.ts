@@ -7,6 +7,23 @@ namespace ts {
          */
         ClassAliases = 1 << 0,
     }
+
+    const enum PrivateIdentifierPlacement {
+        InstanceField
+    }
+
+    type PrivateIdentifierInfo = PrivateIdentifierInstanceField;
+
+    interface PrivateIdentifierInstanceField {
+        placement: PrivateIdentifierPlacement.InstanceField;
+        weakMapName: Identifier;
+    }
+
+    /**
+     * A mapping of private names to information needed for transformation.
+     */
+    type PrivateIdentifierEnvironment = UnderscoreEscapedMap<PrivateIdentifierInfo>;
+
     /**
      * Transforms ECMAScript Class Syntax.
      * TypeScript parameter property syntax is transformed in the TypeScript transformer.
@@ -21,6 +38,10 @@ namespace ts {
             resumeLexicalEnvironment
         } = context;
         const resolver = context.getEmitResolver();
+        const compilerOptions = context.getCompilerOptions();
+        const languageVersion = getEmitScriptTarget(compilerOptions);
+
+        const shouldTransformPrivateFields = languageVersion < ScriptTarget.ESNext;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -41,6 +62,9 @@ namespace ts {
          */
         let pendingStatements: Statement[] | undefined;
 
+        const privateIdentifierEnvironmentStack: (PrivateIdentifierEnvironment | undefined)[] = [];
+        let currentPrivateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
+
         return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -59,13 +83,55 @@ namespace ts {
 
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
-                    return visitClassExpression(node as ClassExpression);
                 case SyntaxKind.ClassDeclaration:
-                    return visitClassDeclaration(node as ClassDeclaration);
+                    return visitClassLike(node as ClassLikeDeclaration);
+                case SyntaxKind.PropertyDeclaration:
+                    return visitPropertyDeclaration(node as PropertyDeclaration);
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(node as VariableStatement);
+                case SyntaxKind.ComputedPropertyName:
+                    return visitComputedPropertyName(node as ComputedPropertyName);
+                case SyntaxKind.PropertyAccessExpression:
+                    return visitPropertyAccessExpression(node as PropertyAccessExpression);
+                case SyntaxKind.PrefixUnaryExpression:
+                    return visitPrefixUnaryExpression(node as PrefixUnaryExpression);
+                case SyntaxKind.PostfixUnaryExpression:
+                    return visitPostfixUnaryExpression(node as PostfixUnaryExpression, /*valueIsDiscarded*/ false);
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(node as CallExpression);
+                case SyntaxKind.BinaryExpression:
+                    return visitBinaryExpression(node as BinaryExpression);
+                case SyntaxKind.PrivateIdentifier:
+                    return visitPrivateIdentifier(node as PrivateIdentifier);
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(node as ExpressionStatement);
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(node as ForStatement);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitorDestructuringTarget(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                    return visitAssignmentPattern(node as AssignmentPattern);
+                default:
+                    return visitor(node);
+            }
+        }
+
+        /**
+         * If we visit a private name, this means it is an undeclared private name.
+         * Replace it with an empty identifier to indicate a problem with the code.
+         */
+        function visitPrivateIdentifier(node: PrivateIdentifier) {
+            if (!shouldTransformPrivateFields) {
+                return node;
+            }
+            return setOriginalNode(createIdentifier(""), node);
         }
 
         /**
@@ -129,6 +195,18 @@ namespace ts {
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
             Debug.assert(!some(node.decorators));
+            if (!shouldTransformPrivateFields && isPrivateIdentifier(node.name)) {
+                // Initializer is elided as the field is initialized in transformConstructor.
+                return updateProperty(
+                    node,
+                    /*decorators*/ undefined,
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    node.name,
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined
+                );
+            }
             // Create a temporary variable to store a computed property name (if necessary).
             // If it's not inlineable, then we emit an expression after the class which assigns
             // the property name to the temporary variable.
@@ -139,13 +217,244 @@ namespace ts {
             return undefined;
         }
 
-        function visitClassDeclaration(node: ClassDeclaration) {
-            if (!forEach(node.members, isPropertyDeclaration)) {
-                return visitEachChild(node, visitor, context);
+        function createPrivateIdentifierAccess(info: PrivateIdentifierInfo, receiver: Expression): Expression {
+            receiver = visitNode(receiver, visitor, isExpression);
+            switch (info.placement) {
+                case PrivateIdentifierPlacement.InstanceField:
+                    return createClassPrivateFieldGetHelper(
+                        context,
+                        nodeIsSynthesized(receiver) ? receiver : getSynthesizedClone(receiver),
+                        info.weakMapName
+                    );
+                default: return Debug.fail("Unexpected private identifier placement");
             }
+        }
 
+        function visitPropertyAccessExpression(node: PropertyAccessExpression) {
+            if (shouldTransformPrivateFields && isPrivateIdentifier(node.name)) {
+                const privateIdentifierInfo = accessPrivateIdentifier(node.name);
+                if (privateIdentifierInfo) {
+                    return setOriginalNode(
+                        createPrivateIdentifierAccess(privateIdentifierInfo, node.expression),
+                        node
+                    );
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitPrefixUnaryExpression(node: PrefixUnaryExpression) {
+            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
+                const operator = node.operator === SyntaxKind.PlusPlusToken ?
+                    SyntaxKind.PlusToken : node.operator === SyntaxKind.MinusMinusToken ?
+                        SyntaxKind.MinusToken : undefined;
+                let info: PrivateIdentifierInfo | undefined;
+                if (operator && (info = accessPrivateIdentifier(node.operand.name))) {
+                    const receiver = visitNode(node.operand.expression, visitor, isExpression);
+                    const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
+
+                    const existingValue = createPrefix(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
+
+                    return setOriginalNode(
+                        createPrivateIdentifierAssignment(
+                            info,
+                            initializeExpression || readExpression,
+                            createBinary(existingValue, operator, createLiteral(1)),
+                            SyntaxKind.EqualsToken
+                        ),
+                        node
+                    );
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitPostfixUnaryExpression(node: PostfixUnaryExpression, valueIsDiscarded: boolean) {
+            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
+                const operator = node.operator === SyntaxKind.PlusPlusToken ?
+                    SyntaxKind.PlusToken : node.operator === SyntaxKind.MinusMinusToken ?
+                        SyntaxKind.MinusToken : undefined;
+                let info: PrivateIdentifierInfo | undefined;
+                if (operator && (info = accessPrivateIdentifier(node.operand.name))) {
+                    const receiver = visitNode(node.operand.expression, visitor, isExpression);
+                    const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
+
+                    const existingValue = createPrefix(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
+
+                    // Create a temporary variable to store the value returned by the expression.
+                    const returnValue = valueIsDiscarded ? undefined : createTempVariable(hoistVariableDeclaration);
+
+                    return setOriginalNode(
+                        inlineExpressions(compact<Expression>([
+                            createPrivateIdentifierAssignment(
+                                info,
+                                initializeExpression || readExpression,
+                                createBinary(
+                                    returnValue ? createAssignment(returnValue, existingValue) : existingValue,
+                                    operator,
+                                    createLiteral(1)
+                                ),
+                                SyntaxKind.EqualsToken
+                            ),
+                            returnValue
+                        ])),
+                        node
+                    );
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitForStatement(node: ForStatement) {
+            if (node.incrementor && isPostfixUnaryExpression(node.incrementor)) {
+                return updateFor(
+                    node,
+                    visitNode(node.initializer, visitor, isForInitializer),
+                    visitNode(node.condition, visitor, isExpression),
+                    visitPostfixUnaryExpression(node.incrementor, /*valueIsDiscarded*/ true),
+                    visitNode(node.statement, visitor, isStatement)
+                );
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitExpressionStatement(node: ExpressionStatement) {
+            if (isPostfixUnaryExpression(node.expression)) {
+                return updateExpressionStatement(node, visitPostfixUnaryExpression(node.expression, /*valueIsDiscarded*/ true));
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function createCopiableReceiverExpr(receiver: Expression): { readExpression: Expression; initializeExpression: Expression | undefined } {
+            const clone = nodeIsSynthesized(receiver) ? receiver : getSynthesizedClone(receiver);
+            if (isSimpleInlineableExpression(receiver)) {
+                return { readExpression: clone, initializeExpression: undefined };
+            }
+            const readExpression = createTempVariable(hoistVariableDeclaration);
+            const initializeExpression = createAssignment(readExpression, clone);
+            return { readExpression, initializeExpression };
+        }
+
+        function visitCallExpression(node: CallExpression) {
+            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
+                // Transform call expressions of private names to properly bind the `this` parameter.
+                const { thisArg, target } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
+                return updateCall(
+                    node,
+                    createPropertyAccess(visitNode(target, visitor), "call"),
+                    /*typeArguments*/ undefined,
+                    [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                );
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.tag)) {
+                // Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
+                const { thisArg, target } = createCallBinding(node.tag, hoistVariableDeclaration, languageVersion);
+                return updateTaggedTemplate(
+                    node,
+                    createCall(
+                        createPropertyAccess(visitNode(target, visitor), "bind"),
+                        /*typeArguments*/ undefined,
+                        [visitNode(thisArg, visitor, isExpression)]
+                    ),
+                    visitNode(node.template, visitor, isTemplateLiteral)
+                );
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitBinaryExpression(node: BinaryExpression) {
+            if (shouldTransformPrivateFields) {
+                if (isDestructuringAssignment(node)) {
+                    const savedPendingExpressions = pendingExpressions;
+                    pendingExpressions = undefined!;
+                    node = updateBinary(
+                        node,
+                        visitNode(node.left, visitorDestructuringTarget),
+                        visitNode(node.right, visitor),
+                        node.operatorToken
+                    );
+                    const expr = some(pendingExpressions) ?
+                        inlineExpressions(compact([...pendingExpressions!, node])) :
+                        node;
+                    pendingExpressions = savedPendingExpressions;
+                    return expr;
+                }
+                if (isAssignmentExpression(node) && isPrivateIdentifierPropertyAccessExpression(node.left)) {
+                    const info = accessPrivateIdentifier(node.left.name);
+                    if (info) {
+                        return setOriginalNode(
+                            createPrivateIdentifierAssignment(info, node.left.expression, node.right, node.operatorToken.kind),
+                            node
+                        );
+                    }
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator) {
+            switch (info.placement) {
+                case PrivateIdentifierPlacement.InstanceField: {
+                    return createPrivateIdentifierInstanceFieldAssignment(info, receiver, right, operator);
+                }
+                default: return Debug.fail("Unexpected private identifier placement");
+            }
+        }
+
+        function createPrivateIdentifierInstanceFieldAssignment(info: PrivateIdentifierInstanceField, receiver: Expression, right: Expression, operator: AssignmentOperator) {
+            receiver = visitNode(receiver, visitor, isExpression);
+            right = visitNode(right, visitor, isExpression);
+            if (isCompoundAssignment(operator)) {
+                const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
+                return createClassPrivateFieldSetHelper(
+                    context,
+                    initializeExpression || readExpression,
+                    info.weakMapName,
+                    createBinary(
+                        createClassPrivateFieldGetHelper(context, readExpression, info.weakMapName),
+                        getNonAssignmentOperatorForCompoundAssignment(operator),
+                        right
+                    )
+                );
+            }
+            else {
+                return createClassPrivateFieldSetHelper(context, receiver, info.weakMapName, right);
+            }
+        }
+
+        /**
+         * Set up the environment for a class.
+         */
+        function visitClassLike(node: ClassLikeDeclaration) {
             const savedPendingExpressions = pendingExpressions;
             pendingExpressions = undefined;
+            if (shouldTransformPrivateFields) {
+                startPrivateIdentifierEnvironment();
+            }
+
+            const result = isClassDeclaration(node) ?
+                visitClassDeclaration(node) :
+                visitClassExpression(node);
+
+            if (shouldTransformPrivateFields) {
+                endPrivateIdentifierEnvironment();
+            }
+            pendingExpressions = savedPendingExpressions;
+            return result;
+        }
+
+        function doesClassElementNeedTransform(node: ClassElement) {
+            return isPropertyDeclaration(node) || (shouldTransformPrivateFields && node.name && isPrivateIdentifier(node.name));
+        }
+
+        function visitClassDeclaration(node: ClassDeclaration) {
+            if (!forEach(node.members, doesClassElementNeedTransform)) {
+                return visitEachChild(node, visitor, context);
+            }
 
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
@@ -167,8 +476,6 @@ namespace ts {
                 statements.push(createExpressionStatement(inlineExpressions(pendingExpressions)));
             }
 
-            pendingExpressions = savedPendingExpressions;
-
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
             // it is safe to emit static property assignment after classDeclaration
             // From ES6 specification:
@@ -183,11 +490,9 @@ namespace ts {
         }
 
         function visitClassExpression(node: ClassExpression): Expression {
-            if (!forEach(node.members, isPropertyDeclaration)) {
+            if (!forEach(node.members, doesClassElementNeedTransform)) {
                 return visitEachChild(node, visitor, context);
             }
-            const savedPendingExpressions = pendingExpressions;
-            pendingExpressions = undefined;
 
             // If this class expression is a transformation of a decorated class declaration,
             // then we want to output the pendingExpressions as statements, not as inlined
@@ -219,7 +524,6 @@ namespace ts {
                     if (pendingStatements && pendingExpressions && some(pendingExpressions)) {
                         pendingStatements.push(createExpressionStatement(inlineExpressions(pendingExpressions)));
                     }
-                    pendingExpressions = savedPendingExpressions;
 
                     if (pendingStatements && some(staticProperties)) {
                         addPropertyStatements(pendingStatements, staticProperties, getInternalName(node));
@@ -247,16 +551,23 @@ namespace ts {
                     addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                     expressions.push(startOnNewLine(temp));
 
-                    pendingExpressions = savedPendingExpressions;
                     return inlineExpressions(expressions);
                 }
             }
 
-            pendingExpressions = savedPendingExpressions;
             return classExpression;
         }
 
         function transformClassMembers(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
+            if (shouldTransformPrivateFields) {
+                // Declare private names.
+                for (const member of node.members) {
+                    if (isPrivateIdentifierPropertyDeclaration(member)) {
+                        addPrivateIdentifierToEnvironment(member.name);
+                    }
+                }
+            }
+
             const members: ClassElement[] = [];
             const constructor = transformConstructor(node, isDerivedClass);
             if (constructor) {
@@ -266,10 +577,22 @@ namespace ts {
             return setTextRange(createNodeArray(members), /*location*/ node.members);
         }
 
+        function isPropertyDeclarationThatRequiresConstructorStatement(member: ClassElement): member is PropertyDeclaration {
+            if (!isPropertyDeclaration(member) || hasStaticModifier(member)) {
+                return false;
+            }
+            if (context.getCompilerOptions().useDefineForClassFields) {
+                // If we are using define semantics and targeting ESNext or higher,
+                // then we don't need to transform any class properties.
+                return languageVersion < ScriptTarget.ESNext;
+            }
+            return isInitializedProperty(member) || shouldTransformPrivateFields && isPrivateIdentifierPropertyDeclaration(member);
+        }
+
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             const constructor = visitNode(getFirstConstructorWithBody(node), visitor, isConstructorDeclaration);
-            const containsProperty = forEach(node.members, m => isInitializedProperty(m, /*requireInitializer*/ !context.getCompilerOptions().useDefineForClassFields));
-            if (!containsProperty) {
+            const properties = node.members.filter(isPropertyDeclarationThatRequiresConstructorStatement);
+            if (!some(properties)) {
                 return constructor;
             }
             const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
@@ -295,7 +618,11 @@ namespace ts {
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
             const useDefineForClassFields = context.getCompilerOptions().useDefineForClassFields;
-            const properties = getProperties(node, /*requireInitializer*/ !useDefineForClassFields, /*isStatic*/ false);
+            let properties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
+            if (!useDefineForClassFields) {
+                properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
+            }
+
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !some(properties)) {
@@ -377,7 +704,11 @@ namespace ts {
          */
         function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const statement = createExpressionStatement(transformInitializedProperty(property, receiver));
+                const expression = transformProperty(property, receiver);
+                if (!expression) {
+                    continue;
+                }
+                const statement = createExpressionStatement(expression);
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 setOriginalNode(statement, property);
@@ -394,7 +725,10 @@ namespace ts {
         function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                const expression = transformInitializedProperty(property, receiver);
+                const expression = transformProperty(property, receiver);
+                if (!expression) {
+                    continue;
+                }
                 startOnNewLine(expression);
                 setSourceMapRange(expression, moveRangePastModifiers(property));
                 setCommentRange(expression, property);
@@ -411,17 +745,43 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
+        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const emitAssignment = !context.getCompilerOptions().useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
 
+            if (shouldTransformPrivateFields && isPrivateIdentifier(propertyName)) {
+                const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
+                if (privateIdentifierInfo) {
+                    switch (privateIdentifierInfo.placement) {
+                        case PrivateIdentifierPlacement.InstanceField: {
+                            return createPrivateInstanceFieldInitializer(
+                                receiver,
+                                visitNode(property.initializer, visitor, isExpression),
+                                privateIdentifierInfo.weakMapName
+                            );
+                        }
+                    }
+                }
+                else {
+                    Debug.fail("Undeclared private name for property declaration.");
+                }
+            }
+            if (isPrivateIdentifier(propertyName) && !property.initializer) {
+                return undefined;
+            }
+
+            if (isPrivateIdentifier(propertyName) && !property.initializer) {
+                return undefined;
+            }
+
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression)
                 : hasModifier(getOriginalNode(property), ModifierFlags.ParameterPropertyModifier) && isIdentifier(propertyName) ? propertyName
                 : createVoidZero();
-            if (emitAssignment) {
+
+            if (emitAssignment || isPrivateIdentifier(propertyName)) {
                 const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
                 return createAssignment(memberAccess, initializer);
             }
@@ -517,6 +877,218 @@ namespace ts {
                 return (inlinable || isIdentifier(innerExpression)) ? undefined : expression;
             }
         }
+
+        function startPrivateIdentifierEnvironment() {
+            privateIdentifierEnvironmentStack.push(currentPrivateIdentifierEnvironment);
+            currentPrivateIdentifierEnvironment = undefined;
+        }
+
+        function endPrivateIdentifierEnvironment() {
+            currentPrivateIdentifierEnvironment = privateIdentifierEnvironmentStack.pop();
+        }
+
+        function addPrivateIdentifierToEnvironment(name: PrivateIdentifier) {
+            const text = getTextOfPropertyName(name) as string;
+            const weakMapName = createOptimisticUniqueName("_" + text.substring(1));
+            weakMapName.autoGenerateFlags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
+            hoistVariableDeclaration(weakMapName);
+            (currentPrivateIdentifierEnvironment || (currentPrivateIdentifierEnvironment = createUnderscoreEscapedMap()))
+                .set(name.escapedText, { placement: PrivateIdentifierPlacement.InstanceField, weakMapName });
+            (pendingExpressions || (pendingExpressions = [])).push(
+                createAssignment(
+                    weakMapName,
+                    createNew(
+                        createIdentifier("WeakMap"),
+                        /*typeArguments*/ undefined,
+                        []
+                    )
+                )
+            );
+        }
+
+        function accessPrivateIdentifier(name: PrivateIdentifier) {
+            if (currentPrivateIdentifierEnvironment) {
+                const info = currentPrivateIdentifierEnvironment.get(name.escapedText);
+                if (info) {
+                    return info;
+                }
+            }
+            for (let i = privateIdentifierEnvironmentStack.length - 1; i >= 0; --i) {
+                const env = privateIdentifierEnvironmentStack[i];
+                if (!env) {
+                    continue;
+                }
+                const info = env.get(name.escapedText);
+                if (info) {
+                    return info;
+                }
+            }
+            return undefined;
+        }
+
+
+        function wrapPrivateIdentifierForDestructuringTarget(node: PrivateIdentifierPropertyAccessExpression) {
+            const parameter = getGeneratedNameForNode(node);
+            const info = accessPrivateIdentifier(node.name);
+            if (!info) {
+                return visitEachChild(node, visitor, context);
+            }
+            let receiver = node.expression;
+            // We cannot copy `this` or `super` into the function because they will be bound
+            // differently inside the function.
+            if (isThisProperty(node) || isSuperProperty(node) || !isSimpleCopiableExpression(node.expression)) {
+                receiver = createTempVariable(hoistVariableDeclaration);
+                (receiver as Identifier).autoGenerateFlags! |= GeneratedIdentifierFlags.ReservedInNestedScopes;
+                (pendingExpressions || (pendingExpressions = [])).push(createBinary(receiver, SyntaxKind.EqualsToken, node.expression));
+            }
+            return createPropertyAccess(
+                // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+                createParen(
+                    createObjectLiteral([
+                        createSetAccessor(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            "value",
+                            [createParameter(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
+                                parameter,
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
+                            )],
+                            createBlock(
+                                [createExpressionStatement(
+                                    createPrivateIdentifierAssignment(
+                                        info,
+                                        receiver,
+                                        parameter,
+                                        SyntaxKind.EqualsToken
+                                    )
+                                )]
+                            )
+                        )
+                    ])
+                ),
+                "value"
+            );
+        }
+
+        function visitArrayAssignmentTarget(node: AssignmentPattern) {
+            const target = getTargetOfBindingOrAssignmentElement(node);
+            if (target && isPrivateIdentifierPropertyAccessExpression(target)) {
+                const wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
+                if (isAssignmentExpression(node)) {
+                    return updateBinary(
+                        node,
+                        wrapped,
+                        visitNode(node.right, visitor, isExpression),
+                        node.operatorToken
+                    );
+                }
+                else if (isSpreadElement(node)) {
+                    return updateSpread(node, wrapped);
+                }
+                else {
+                    return wrapped;
+                }
+            }
+            return visitNode(node, visitorDestructuringTarget);
+        }
+
+        function visitObjectAssignmentTarget(node: ObjectLiteralElementLike) {
+            if (isPropertyAssignment(node)) {
+                const target = getTargetOfBindingOrAssignmentElement(node);
+                if (target && isPrivateIdentifierPropertyAccessExpression(target)) {
+                    const initializer = getInitializerOfBindingOrAssignmentElement(node);
+                    const wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
+                    return updatePropertyAssignment(
+                        node,
+                        visitNode(node.name, visitor),
+                        initializer ? createAssignment(wrapped, visitNode(initializer, visitor)) : wrapped,
+                    );
+                }
+                return updatePropertyAssignment(
+                    node,
+                    visitNode(node.name, visitor),
+                    visitNode(node.initializer, visitorDestructuringTarget)
+                );
+            }
+            return visitNode(node, visitor);
+        }
+
+
+        function visitAssignmentPattern(node: AssignmentPattern) {
+            if (isArrayLiteralExpression(node)) {
+                // Transforms private names in destructuring assignment array bindings.
+                //
+                // Source:
+                // ([ this.#myProp ] = [ "hello" ]);
+                //
+                // Transformation:
+                // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
+                return updateArrayLiteral(
+                    node,
+                    visitNodes(node.elements, visitArrayAssignmentTarget, isExpression)
+                );
+            }
+            else {
+                // Transforms private names in destructuring assignment object bindings.
+                //
+                // Source:
+                // ({ stringProperty: this.#myProp } = { stringProperty: "hello" });
+                //
+                // Transformation:
+                // ({ stringProperty: { set value(x) { this.#myProp = x; } }.value }) = { stringProperty: "hello" };
+                return updateObjectLiteral(
+                    node,
+                    visitNodes(node.properties, visitObjectAssignmentTarget, isObjectLiteralElementLike)
+                );
+            }
+        }
     }
 
+    function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
+        return createCall(
+            createPropertyAccess(weakMapName, "set"),
+            /*typeArguments*/ undefined,
+            [receiver, initializer || createVoidZero()]
+        );
+    }
+
+    export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldGet",
+        scoped: false,
+        text: `
+            var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+                if (!privateMap.has(receiver)) {
+                    throw new TypeError("attempted to get private field on non-instance");
+                }
+                return privateMap.get(receiver);
+            };`
+    };
+
+    function createClassPrivateFieldGetHelper(context: TransformationContext, receiver: Expression, privateField: Identifier) {
+        context.requestEmitHelper(classPrivateFieldGetHelper);
+        return createCall(getUnscopedHelperName("__classPrivateFieldGet"), /* typeArguments */ undefined, [receiver, privateField]);
+    }
+
+    export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldSet",
+        scoped: false,
+        text: `
+            var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+                if (!privateMap.has(receiver)) {
+                    throw new TypeError("attempted to set private field on non-instance");
+                }
+                privateMap.set(receiver, value);
+                return value;
+            };`
+    };
+
+    function createClassPrivateFieldSetHelper(context: TransformationContext, receiver: Expression, privateField: Identifier, value: Expression) {
+        context.requestEmitHelper(classPrivateFieldSetHelper);
+        return createCall(getUnscopedHelperName("__classPrivateFieldSet"), /* typeArguments */ undefined, [receiver, privateField, value]);
+    }
 }

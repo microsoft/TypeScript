@@ -1397,7 +1397,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.": {
+    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -2479,11 +2479,11 @@
         "category": "Error",
         "code": 2702
     },
-    "The operand of a delete operator must be a property reference.": {
+    "The operand of a 'delete' operator must be a property reference.": {
         "category": "Error",
         "code": 2703
     },
-    "The operand of a delete operator cannot be a read-only property.": {
+    "The operand of a 'delete' operator cannot be a read-only property.": {
         "category": "Error",
         "code": 2704
     },
@@ -5361,5 +5361,85 @@
     "JSX expressions may not use the comma operator. Did you mean to write an array?": {
         "category": "Error",
         "code": 18007
+    },
+    "'#!' can only be used at the start of a file.": {
+        "category": "Error",
+        "code": 18008
+    },
+    "Private identifiers cannot be used as parameters": {
+        "category": "Error",
+        "code": 18009
+    },
+    "An accessibility modifier cannot be used with a private identifier.": {
+        "category": "Error",
+        "code": 18010
+    },
+    "The operand of a 'delete' operator cannot be a private identifier.": {
+        "category": "Error",
+        "code": 18011
+    },
+    "'#constructor' is a reserved word.": {
+        "category": "Error",
+        "code": 18012
+    },
+    "Property '{0}' is not accessible outside class '{1}' because it has a private identifier.": {
+        "category": "Error",
+        "code": 18013
+    },
+    "The property '{0}' cannot be accessed on type '{1}' within this class because it is shadowed by another private identifier with the same spelling.": {
+        "category": "Error",
+        "code": 18014
+    },
+    "Property '{0}' in type '{1}' refers to a different member that cannot be accessed from within type '{2}'.": {
+        "category": "Error",
+        "code": 18015
+    },
+    "Private identifiers are not allowed outside class bodies.": {
+        "category": "Error",
+        "code": 18016
+    },
+    "The shadowing declaration of '{0}' is defined here": {
+        "category": "Error",
+        "code": 18017
+    },
+    "The declaration of '{0}' that you probably intended to use is defined here": {
+        "category": "Error",
+        "code": 18018
+    },
+    "'{0}' modifier cannot be used with a private identifier": {
+        "category": "Error",
+        "code": 18019
+    },
+    "A method cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18022
+    },
+    "An accessor cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18023
+    },
+    "An enum member cannot be named with a private identifier.": {
+        "category": "Error",
+        "code": 18024
+    },
+    "'#!' can only be used at the start of a file.": {
+        "category": "Error",
+        "code": 18026
+    },
+    "Compiler reserves name '{0}' when emitting private identifier downlevel.": {
+        "category": "Error",
+        "code": 18027
+    },
+    "Private identifiers are only available when targeting ECMAScript 2015 and higher.": {
+        "category": "Error",
+        "code": 18028
+    },
+    "Private identifiers are not allowed in variable declarations.": {
+        "category": "Error",
+        "code": 18029
+    },
+    "An optional chain cannot contain private identifiers.": {
+        "category": "Error",
+        "code": 18030
     }
 }

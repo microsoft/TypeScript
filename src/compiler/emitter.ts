@@ -1253,6 +1253,10 @@ namespace ts {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
 
+                    // PrivateIdentifiers
+                    case SyntaxKind.PrivateIdentifier:
+                        return emitPrivateIdentifier(node as PrivateIdentifier);
+
                     // Parse tree nodes
                     // Names
                     case SyntaxKind.QualifiedName:
@@ -1817,6 +1821,12 @@ namespace ts {
         //
         // Names
         //
+
+        function emitPrivateIdentifier(node: PrivateIdentifier) {
+            const writeText = node.symbol ? writeSymbol : write;
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+        }
+
 
         function emitQualifiedName(node: QualifiedName) {
             emitEntityName(node.left);
@@ -4285,7 +4295,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return generateName(node);
             }
-            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
+            else if ((isIdentifier(node) || isPrivateIdentifier(node)) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
                 return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {

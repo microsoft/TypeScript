@@ -464,7 +464,7 @@ namespace ts {
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
                     visitNode((<PropertyAccessExpression>node).expression, visitor, isExpression),
-                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
+                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
 
             case SyntaxKind.ElementAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
