@@ -910,6 +910,9 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
+                        if (isMetaProperty(node)) {
+                            return undefined;
+                        }
                         if (node.end === contextToken.pos &&
                             isCallExpression(node) &&
                             node.getChildCount(sourceFile) &&

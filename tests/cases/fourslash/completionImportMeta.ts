@@ -1,5 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-////import./**/
+// @Filename: a.ts
+////import./*1*/
 
-verify.completions({ marker: "", exact: "meta" });
+// @Filename: b.ts
+////import.meta./*2*/
+
+verify.completions({ marker: "1", exact: "meta" });
+verify.completions({ marker: "2", exact: undefined });
