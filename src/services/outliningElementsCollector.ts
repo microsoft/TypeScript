@@ -205,6 +205,8 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
+            case SyntaxKind.ArrowFunction:
+                return spanForArrowFunction(<ArrowFunction>n);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
@@ -233,6 +235,18 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
+        }
+
+        function spanForArrowFunction(node: ArrowFunction) {
+            if(!isParenthesizedExpression(node.body)) {
+                return undefined;
+            }
+            const openToken = isNodeArrayMultiLine(node.parameters, sourceFile)
+                ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
+                : findChildOfKind(node.body, SyntaxKind.OpenParenToken, sourceFile);
+
+            const closeToken = findChildOfKind(node.body, SyntaxKind.CloseParenToken, sourceFile);
+            return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false);
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
