@@ -6,6 +6,7 @@ let obj = {};
 ({...obj});
 let {
     prop = { ...obj },
+    more = { ...obj } = { ...obj },
     ['' + 'other']: other = { ...obj },
     yetAnother: {nested: { ['nested' + 'prop']: nestedProp = { ...obj }, ...nestedRest } = { ...obj }} = { ...obj },
     fn = async function*() {},
