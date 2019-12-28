@@ -51,9 +51,21 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(471,13): error T
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(474,13): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(488,13): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(491,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(539,9): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(541,5): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(548,5): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(553,9): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(555,5): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(560,9): error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+  Type 'undefined' is not assignable to type 'SomeObject'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (53 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (59 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -686,5 +698,59 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(491,13): error T
             return [];
         }
         return f.geometry.coordinates;
+    }
+    
+    // Simplified repro from #35842
+    
+    interface SomeObject {
+        someProperty: unknown;
+    }
+    
+    declare let lastSomeProperty: unknown;
+    
+    function someFunction(someOptionalObject: SomeObject | undefined): SomeObject {
+        if (someOptionalObject?.someProperty !== lastSomeProperty) {
+            return someOptionalObject; // error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+        }
+        return someOptionalObject; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+    }
+    
+    function someFunction2(someOptionalObject: SomeObject | undefined): SomeObject {
+        if (someOptionalObject?.someProperty !== undefined) {
+            return someOptionalObject; // no error
+        }
+        return someOptionalObject; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+    }
+    
+    function someFunction3(someOptionalObject: SomeObject | undefined): SomeObject {
+        if (someOptionalObject?.someProperty === lastSomeProperty) {
+            return someOptionalObject; // error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+        }
+        return someOptionalObject; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+    }
+    
+    function someFunction4(someOptionalObject: SomeObject | undefined): SomeObject {
+        if (someOptionalObject?.someProperty === undefined) {
+            return someOptionalObject; // error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'SomeObject | undefined' is not assignable to type 'SomeObject'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'SomeObject'.
+        }
+        return someOptionalObject; // no error
     }
     

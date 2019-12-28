@@ -527,6 +527,42 @@ function extractCoordinates(f: Feature): number[] {
     return f.geometry.coordinates;
 }
 
+// Simplified repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+}
+
+declare let lastSomeProperty: unknown;
+
+function someFunction(someOptionalObject: SomeObject | undefined): SomeObject {
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // error
+}
+
+function someFunction2(someOptionalObject: SomeObject | undefined): SomeObject {
+    if (someOptionalObject?.someProperty !== undefined) {
+        return someOptionalObject; // no error
+    }
+    return someOptionalObject; // error
+}
+
+function someFunction3(someOptionalObject: SomeObject | undefined): SomeObject {
+    if (someOptionalObject?.someProperty === lastSomeProperty) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // error
+}
+
+function someFunction4(someOptionalObject: SomeObject | undefined): SomeObject {
+    if (someOptionalObject?.someProperty === undefined) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // no error
+}
+
 
 //// [controlFlowOptionalChain.js]
 "use strict";
@@ -981,4 +1017,28 @@ function extractCoordinates(f) {
         return [];
     }
     return f.geometry.coordinates;
+}
+function someFunction(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // error
+}
+function someFunction2(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== undefined) {
+        return someOptionalObject; // no error
+    }
+    return someOptionalObject; // error
+}
+function someFunction3(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) === lastSomeProperty) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // error
+}
+function someFunction4(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) === undefined) {
+        return someOptionalObject; // error
+    }
+    return someOptionalObject; // no error
 }

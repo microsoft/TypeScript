@@ -1663,3 +1663,91 @@ function extractCoordinates(f: Feature): number[] {
 >coordinates : Symbol(coordinates, Decl(controlFlowOptionalChain.ts, 515, 17))
 }
 
+// Simplified repro from #35842
+
+interface SomeObject {
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+
+    someProperty: unknown;
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+}
+
+declare let lastSomeProperty: unknown;
+>lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 534, 11))
+
+function someFunction(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction : Symbol(someFunction, Decl(controlFlowOptionalChain.ts, 534, 38))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 536, 22))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 536, 22))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 534, 11))
+
+        return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 536, 22))
+    }
+    return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 536, 22))
+}
+
+function someFunction2(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction2 : Symbol(someFunction2, Decl(controlFlowOptionalChain.ts, 541, 1))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 543, 23))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+
+    if (someOptionalObject?.someProperty !== undefined) {
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 543, 23))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>undefined : Symbol(undefined)
+
+        return someOptionalObject; // no error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 543, 23))
+    }
+    return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 543, 23))
+}
+
+function someFunction3(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction3 : Symbol(someFunction3, Decl(controlFlowOptionalChain.ts, 548, 1))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 550, 23))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+
+    if (someOptionalObject?.someProperty === lastSomeProperty) {
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 550, 23))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>lastSomeProperty : Symbol(lastSomeProperty, Decl(controlFlowOptionalChain.ts, 534, 11))
+
+        return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 550, 23))
+    }
+    return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 550, 23))
+}
+
+function someFunction4(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction4 : Symbol(someFunction4, Decl(controlFlowOptionalChain.ts, 555, 1))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 557, 23))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+>SomeObject : Symbol(SomeObject, Decl(controlFlowOptionalChain.ts, 526, 1))
+
+    if (someOptionalObject?.someProperty === undefined) {
+>someOptionalObject?.someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 557, 23))
+>someProperty : Symbol(SomeObject.someProperty, Decl(controlFlowOptionalChain.ts, 530, 22))
+>undefined : Symbol(undefined)
+
+        return someOptionalObject; // error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 557, 23))
+    }
+    return someOptionalObject; // no error
+>someOptionalObject : Symbol(someOptionalObject, Decl(controlFlowOptionalChain.ts, 557, 23))
+}
+

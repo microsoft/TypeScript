@@ -1886,3 +1886,85 @@ function extractCoordinates(f: Feature): number[] {
 >coordinates : number[]
 }
 
+// Simplified repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+>someProperty : unknown
+}
+
+declare let lastSomeProperty: unknown;
+>lastSomeProperty : unknown
+
+function someFunction(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction : (someOptionalObject: SomeObject | undefined) => SomeObject
+>someOptionalObject : SomeObject | undefined
+
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+>someOptionalObject?.someProperty !== lastSomeProperty : boolean
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+>lastSomeProperty : unknown
+
+        return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+    }
+    return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+}
+
+function someFunction2(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction2 : (someOptionalObject: SomeObject | undefined) => SomeObject
+>someOptionalObject : SomeObject | undefined
+
+    if (someOptionalObject?.someProperty !== undefined) {
+>someOptionalObject?.someProperty !== undefined : boolean
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+>undefined : undefined
+
+        return someOptionalObject; // no error
+>someOptionalObject : SomeObject
+    }
+    return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+}
+
+function someFunction3(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction3 : (someOptionalObject: SomeObject | undefined) => SomeObject
+>someOptionalObject : SomeObject | undefined
+
+    if (someOptionalObject?.someProperty === lastSomeProperty) {
+>someOptionalObject?.someProperty === lastSomeProperty : boolean
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+>lastSomeProperty : unknown
+
+        return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+    }
+    return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+}
+
+function someFunction4(someOptionalObject: SomeObject | undefined): SomeObject {
+>someFunction4 : (someOptionalObject: SomeObject | undefined) => SomeObject
+>someOptionalObject : SomeObject | undefined
+
+    if (someOptionalObject?.someProperty === undefined) {
+>someOptionalObject?.someProperty === undefined : boolean
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+>undefined : undefined
+
+        return someOptionalObject; // error
+>someOptionalObject : SomeObject | undefined
+    }
+    return someOptionalObject; // no error
+>someOptionalObject : SomeObject
+}
+

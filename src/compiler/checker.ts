@@ -19744,8 +19744,15 @@ namespace ts {
                 // operator is !== and the type of value is undefined.
                 const effectiveTrue = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken ? assumeTrue : !assumeTrue;
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
-                const valueNonNullish = !(getTypeFacts(getTypeOfExpression(value)) & (doubleEquals ? TypeFacts.EQUndefinedOrNull : TypeFacts.EQUndefined));
-                return effectiveTrue === valueNonNullish ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+                const expectedNullishFacts = (doubleEquals ? TypeFacts.EQUndefinedOrNull : TypeFacts.EQUndefined);
+                const valueFacts = getTypeFacts(getTypeOfExpression(value));
+                if (effectiveTrue) {
+                    return (valueFacts & expectedNullishFacts) ? type : getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                }
+                if ((valueFacts & expectedNullishFacts) && (valueFacts & ~(doubleEquals ? (TypeFacts.UndefinedFacts | TypeFacts.NullFacts) : TypeFacts.UndefinedFacts)) === 0) {
+                    return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                }
+                return type;
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
