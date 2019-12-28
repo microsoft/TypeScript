@@ -1463,7 +1463,9 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends keyof any> = {
+    [P in Exclude<keyof T, K>]: T[P];
+};
 
 /**
  * Exclude null and undefined from T
