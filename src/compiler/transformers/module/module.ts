@@ -522,6 +522,10 @@ namespace ts {
                 case SyntaxKind.EndOfDeclarationMarker:
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return visitForInOrOfStatement(<ForInOrOfStatement>node);
+
                 default:
                     return visitEachChild(node, moduleExpressionElementVisitor, context);
             }
@@ -1258,6 +1262,38 @@ namespace ts {
                     visitNode(node.initializer, moduleExpressionElementVisitor)
                 );
             }
+        }
+
+        function visitForInOrOfStatement(node: ForInOrOfStatement) {
+            node = visitEachChild(node, sourceElementVisitor, context);
+            if (node.initializer.kind === SyntaxKind.VariableDeclarationList || !destructuringNeedsFlattening(node.initializer)) {
+                return node;
+            }
+            let temp;
+            let expression: Expression;
+            if (isIdentifier(node.initializer)) {
+                if (isExportName(node.initializer)) {
+                    temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    expression = temp;
+                }
+                else {
+                    expression = node.initializer;
+                }
+                for (const exportName of getExports(node.initializer)!) {
+                    setEmitFlags(expression, EmitFlags.NoSubstitution);
+                    expression = createExportExpression(exportName, expression, /*location*/ node.initializer);
+                }
+            }
+            else {
+                temp = createTempVariable(/*recordTempVariable*/ undefined);
+                expression = flattenDestructuringAssignment(node.initializer as ObjectDestructuringAssignment | ArrayDestructuringAssignment, sourceElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
+            }
+
+            const initializer = temp ? createVariableDeclarationList([createVariableDeclaration(temp)]) : node.initializer;
+            const statement = isBlock(node.statement) ? updateBlock(node.statement, [createExpressionStatement(expression), ...node.statement.statements]) : createBlock([createExpressionStatement(expression), node.statement]);
+            return node.kind === SyntaxKind.ForInStatement
+                ? updateForIn(node, initializer, node.expression, statement)
+                : updateForOf(node, node.awaitModifier, initializer, node.expression, statement);
         }
 
         /**
