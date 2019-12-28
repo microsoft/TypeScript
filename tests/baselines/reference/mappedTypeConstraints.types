@@ -98,12 +98,12 @@ const modifier = <T extends TargetProps>(targetProps: T) => {
 
     let {bar, ...rest} = targetProps;
 >bar : string
->rest : Pick<T, Exclude<keyof T, "bar">>
+>rest : Omit<T, "bar">
 >targetProps : T
 
     rest.foo;
 >rest.foo : T["foo"]
->rest : Pick<T, Exclude<keyof T, "bar">>
+>rest : Omit<T, "bar">
 >foo : T["foo"]
 
 };
