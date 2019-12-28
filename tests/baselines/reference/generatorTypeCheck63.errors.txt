@@ -1,10 +1,9 @@
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
-    The types returned by 'next(...)' are incompatible between these types.
-      Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
-        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
-          Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
-            Type 'number' is not assignable to type 'State'.
+    The types of 'next' are incompatible between these types.
+      Type '{ (this: Generator<number, State, void>, ...args: [] | [undefined]): IteratorResult<number, State>; (args_0: undefined): IteratorResult<number, State>; }' is not assignable to type '{ (this: Iterator<State, any, void>, ...args: [] | [undefined]): IteratorResult<State, any>; (args_0: undefined): IteratorResult<State, any>; }'.
+        The 'this' types of each signature are incompatible.
+          Property '[Symbol.iterator]' is missing in type 'Iterator<State, any, void>' but required in type 'Generator<number, State, void>'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (1 errors) ====
@@ -35,11 +34,11 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): err
                                                                 ~~~~~~~~
 !!! error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
 !!! error TS2345:   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
-!!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
-!!! error TS2345:       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
-!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
-!!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
-!!! error TS2345:             Type 'number' is not assignable to type 'State'.
+!!! error TS2345:     The types of 'next' are incompatible between these types.
+!!! error TS2345:       Type '{ (this: Generator<number, State, void>, ...args: [] | [undefined]): IteratorResult<number, State>; (args_0: undefined): IteratorResult<number, State>; }' is not assignable to type '{ (this: Iterator<State, any, void>, ...args: [] | [undefined]): IteratorResult<State, any>; (args_0: undefined): IteratorResult<State, any>; }'.
+!!! error TS2345:         The 'this' types of each signature are incompatible.
+!!! error TS2345:           Property '[Symbol.iterator]' is missing in type 'Iterator<State, any, void>' but required in type 'Generator<number, State, void>'.
+!!! related TS2728 /.ts/lib.es2015.generator.d.ts:29:5: '[Symbol.iterator]' is declared here.
         yield 1;
         return state;
     });

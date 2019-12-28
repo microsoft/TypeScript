@@ -1,11 +1,9 @@
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error TS2322: Type '() => Generator<Bar | Baz, void, undefined>' is not assignable to type '() => Iterable<Foo>'.
   Call signature return types 'Generator<Bar | Baz, void, undefined>' and 'Iterable<Foo>' are incompatible.
-    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-      Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
-        Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
-          Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorYieldResult<Foo>'.
-            Type 'Bar | Baz' is not assignable to type 'Foo'.
-              Property 'x' is missing in type 'Baz' but required in type 'Foo'.
+    The types of '[Symbol.iterator]().next' are incompatible between these types.
+      Type '{ (this: Generator<Bar | Baz, void, void>, ...args: [] | [undefined]): IteratorResult<Bar | Baz, void>; (args_0: undefined): IteratorResult<Bar | Baz, void>; }' is not assignable to type '{ (this: Iterator<Foo, any, void>, ...args: [] | [undefined]): IteratorResult<Foo, any>; (args_0: undefined): IteratorResult<Foo, any>; }'.
+        The 'this' types of each signature are incompatible.
+          Property '[Symbol.iterator]' is missing in type 'Iterator<Foo, any, void>' but required in type 'Generator<Bar | Baz, void, void>'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts (1 errors) ====
@@ -16,13 +14,11 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
         ~~
 !!! error TS2322: Type '() => Generator<Bar | Baz, void, undefined>' is not assignable to type '() => Iterable<Foo>'.
 !!! error TS2322:   Call signature return types 'Generator<Bar | Baz, void, undefined>' and 'Iterable<Foo>' are incompatible.
-!!! error TS2322:     The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-!!! error TS2322:       Type 'IteratorResult<Bar | Baz, void>' is not assignable to type 'IteratorResult<Foo, any>'.
-!!! error TS2322:         Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo, any>'.
-!!! error TS2322:           Type 'IteratorYieldResult<Bar | Baz>' is not assignable to type 'IteratorYieldResult<Foo>'.
-!!! error TS2322:             Type 'Bar | Baz' is not assignable to type 'Foo'.
-!!! error TS2322:               Property 'x' is missing in type 'Baz' but required in type 'Foo'.
-!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:13: 'x' is declared here.
+!!! error TS2322:     The types of '[Symbol.iterator]().next' are incompatible between these types.
+!!! error TS2322:       Type '{ (this: Generator<Bar | Baz, void, void>, ...args: [] | [undefined]): IteratorResult<Bar | Baz, void>; (args_0: undefined): IteratorResult<Bar | Baz, void>; }' is not assignable to type '{ (this: Iterator<Foo, any, void>, ...args: [] | [undefined]): IteratorResult<Foo, any>; (args_0: undefined): IteratorResult<Foo, any>; }'.
+!!! error TS2322:         The 'this' types of each signature are incompatible.
+!!! error TS2322:           Property '[Symbol.iterator]' is missing in type 'Iterator<Foo, any, void>' but required in type 'Generator<Bar | Baz, void, void>'.
+!!! related TS2728 /.ts/lib.es2015.generator.d.ts:29:5: '[Symbol.iterator]' is declared here.
         yield;
         yield new Bar;
         yield new Baz;
