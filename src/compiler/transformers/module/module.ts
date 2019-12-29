@@ -31,9 +31,6 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
-        context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
-        context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
-        context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
@@ -42,7 +39,6 @@ namespace ts {
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
-        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
 
         return chainBundle(transformSourceFile);
@@ -457,7 +453,7 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, moduleExpressionElementVisitor);
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, nestedElementVisitor);
                 if (expressionResult) {
                     if (emitAsReturn) {
                         const statement = createReturn(expressionResult);
@@ -522,31 +518,66 @@ namespace ts {
                 case SyntaxKind.EndOfDeclarationMarker:
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
+                default:
+                    return nestedElementVisitor(node);
+            }
+        }
+
+        function nestedElementVisitor(node: Node): Node {
+            switch (node.kind) {
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
                     return visitForInOrOfStatement(<ForInOrOfStatement>node);
 
+                case SyntaxKind.BinaryExpression:
+                    return visitBinaryExpression(<BinaryExpression>node, /*destructuringNeedsValue*/ true);
+
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                    return visitUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
+
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(<ExpressionStatement>node);
+
                 default:
-                    return visitEachChild(node, moduleExpressionElementVisitor, context);
+                    if (isImportCall(node)) {
+                        return visitImportCallExpression(node);
+                    }
+                    return visitEachChild(node, nestedElementVisitor, context);
             }
         }
 
-        function moduleExpressionElementVisitor(node: Expression): VisitResult<Expression> {
-            // This visitor does not need to descend into the tree if there is no dynamic import or destructuring assignment,
-            // as export/import statements are only transformed at the top level of a file.
-            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport) && !(node.transformFlags & TransformFlags.ContainsDestructuringAssignment)) {
-                return node;
+        function visitExpressionStatement(node: ExpressionStatement) {
+            let expression;
+            switch (node.expression.kind) {
+                case SyntaxKind.BinaryExpression:
+                    expression = visitBinaryExpression(<BinaryExpression>node.expression, /*destructuringNeedsValue*/ false);
+                    break;
+                case SyntaxKind.ParenthesizedExpression:
+                    expression = visitParenthesizedExpression(<ParenthesizedExpression>node.expression);
+                    break;
+                default:
+                    expression = visitNode(node.expression, nestedElementVisitor);
             }
+            return updateExpressionStatement(node, expression);
+        }
 
-            if (isImportCall(node)) {
-                return visitImportCallExpression(node);
+        /**
+         * This function is only called from `visitExpressionStatement` to ignore the value of nested destructuring assignments.
+         */
+        function visitParenthesizedExpression(node: ParenthesizedExpression): ParenthesizedExpression {
+            let expression;
+            switch (node.expression.kind) {
+                case SyntaxKind.BinaryExpression:
+                    expression = visitBinaryExpression(<BinaryExpression>node.expression, /*destructuringNeedsValue*/ false);
+                    break;
+                case SyntaxKind.ParenthesizedExpression:
+                    expression = visitParenthesizedExpression(<ParenthesizedExpression>node.expression);
+                    break;
+                default:
+                    expression = visitNode(node.expression, nestedElementVisitor);
             }
-            else if (isDestructuringAssignment(node)) {
-                return visitDestructuringAssignment(node);
-            }
-            else {
-                return visitEachChild(node, moduleExpressionElementVisitor, context);
-            }
+            return updateParen(node, expression);
         }
 
         function destructuringNeedsFlattening(node: Expression): boolean {
@@ -594,15 +625,15 @@ namespace ts {
             return false;
         }
 
-        function visitDestructuringAssignment(node: DestructuringAssignment): Expression {
+        function visitDestructuringAssignment(node: DestructuringAssignment, needsValue: boolean): Expression {
             if (destructuringNeedsFlattening(node.left)) {
-                return flattenDestructuringAssignment(node, moduleExpressionElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
+                return flattenDestructuringAssignment(node, nestedElementVisitor, context, FlattenLevel.All, needsValue, createAllExportExpressions);
             }
-            return visitEachChild(node, moduleExpressionElementVisitor, context);
+            return visitEachChild(node, nestedElementVisitor, context);
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
-            const argument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            const argument = visitNode(firstOrUndefined(node.arguments), nestedElementVisitor);
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
@@ -1073,10 +1104,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, moduleExpressionElementVisitor), /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), visitNode(node.expression, nestedElementVisitor), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, moduleExpressionElementVisitor), /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, createIdentifier("default"), visitNode(node.expression, nestedElementVisitor), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -1099,9 +1130,9 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.parameters, moduleExpressionElementVisitor),
+                                visitNodes(node.parameters, nestedElementVisitor),
                                 /*type*/ undefined,
-                                visitEachChild(node.body, moduleExpressionElementVisitor, context)
+                                visitEachChild(node.body, nestedElementVisitor, context)
                             ),
                             /*location*/ node
                         ),
@@ -1110,7 +1141,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
+                statements = append(statements, visitEachChild(node, nestedElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1141,8 +1172,8 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.heritageClauses, moduleExpressionElementVisitor),
-                                visitNodes(node.members, moduleExpressionElementVisitor)
+                                visitNodes(node.heritageClauses, nestedElementVisitor),
+                                visitNodes(node.members, nestedElementVisitor)
                             ),
                             node
                         ),
@@ -1151,7 +1182,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
+                statements = append(statements, visitEachChild(node, nestedElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1203,7 +1234,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, visitEachChild(node, moduleExpressionElementVisitor, context));
+                statements = append(statements, visitEachChild(node, nestedElementVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1221,15 +1252,7 @@ namespace ts {
         function createAllExportExpressions(name: Identifier, value: Expression, location?: TextRange) {
             const exportedNames = getExports(name);
             if (exportedNames) {
-                // For each additional export of the declaration, apply an export assignment.
-                let expression: Expression = isExportName(name) ? value : createAssignment(name, value);
-                for (const exportName of exportedNames) {
-                    // Mark the node to prevent triggering substitution.
-                    setEmitFlags(expression, EmitFlags.NoSubstitution);
-                    expression = createExportExpression(exportName, expression, /*location*/ location);
-                }
-
-                return expression;
+                return createExportExpressionChain(exportedNames, createAssignment(name, value), location);
             }
             return createAssignment(name, value);
         }
@@ -1242,7 +1265,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    visitNode(node, moduleExpressionElementVisitor),
+                    visitNode(node, nestedElementVisitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -1259,38 +1282,28 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, moduleExpressionElementVisitor)
+                    visitNode(node.initializer, nestedElementVisitor)
                 );
             }
         }
 
         function visitForInOrOfStatement(node: ForInOrOfStatement) {
-            node = visitEachChild(node, sourceElementVisitor, context);
+            node = visitEachChild(node, nestedElementVisitor, context);
             if (node.initializer.kind === SyntaxKind.VariableDeclarationList || !destructuringNeedsFlattening(node.initializer)) {
                 return node;
             }
-            let temp;
+            let initializer: ForInitializer = node.initializer;
             let expression: Expression;
             if (isIdentifier(node.initializer)) {
-                if (isExportName(node.initializer)) {
-                    temp = createTempVariable(/*recordTempVariable*/ undefined);
-                    expression = temp;
-                }
-                else {
-                    expression = node.initializer;
-                }
-                for (const exportName of getExports(node.initializer)!) {
-                    setEmitFlags(expression, EmitFlags.NoSubstitution);
-                    expression = createExportExpression(exportName, expression, /*location*/ node.initializer);
-                }
+                expression = createExportExpressionChain(getExports(node.initializer)!, node.initializer);
             }
             else {
-                temp = createTempVariable(/*recordTempVariable*/ undefined);
-                const assignment = createAssignment(node.initializer, temp);
+                const temp = createTempVariable(/*recordTempVariable*/ undefined);
+                initializer = createVariableDeclarationList([createVariableDeclaration(temp)]);
+                const assignment = createAssignment(node.initializer, temp); // create a temporary destructuring assignment which is flattened below
                 expression = flattenDestructuringAssignment(assignment as ObjectDestructuringAssignment | ArrayDestructuringAssignment, sourceElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
             }
 
-            const initializer = temp ? createVariableDeclarationList([createVariableDeclaration(temp)]) : node.initializer;
             const statement = isBlock(node.statement) ? updateBlock(node.statement, [createExpressionStatement(expression), ...node.statement.statements]) : createBlock([createExpressionStatement(expression), node.statement]);
             return node.kind === SyntaxKind.ForInStatement
                 ? updateForIn(node, initializer, node.expression, statement)
@@ -1620,13 +1633,11 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 currentSourceFile = <SourceFile>node;
                 currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
-                noSubstitution = [];
 
                 previousOnEmitNode(hint, node, emitCallback);
 
                 currentSourceFile = undefined!;
                 currentModuleInfo = undefined!;
-                noSubstitution = undefined!;
             }
             else {
                 previousOnEmitNode(hint, node, emitCallback);
@@ -1645,9 +1656,6 @@ namespace ts {
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
-            if (node.id && noSubstitution[node.id]) {
-                return node;
-            }
 
             if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
@@ -1689,11 +1697,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
-                case SyntaxKind.BinaryExpression:
-                    return substituteBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.PostfixUnaryExpression:
-                case SyntaxKind.PrefixUnaryExpression:
-                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
 
             return node;
@@ -1753,12 +1756,11 @@ namespace ts {
             return node;
         }
 
-        /**
-         * Substitution for a BinaryExpression that may contain an imported or exported symbol.
-         *
-         * @param node The node to substitute.
-         */
-        function substituteBinaryExpression(node: BinaryExpression): Expression {
+        function visitBinaryExpression(node: BinaryExpression, destructuringNeedsValue: boolean): Expression {
+            if (isDestructuringAssignment(node)) {
+                return visitDestructuringAssignment(node, destructuringNeedsValue);
+            }
+            node = visitEachChild(node, nestedElementVisitor, context);
             // When we see an assignment expression whose left-hand side is an exported symbol,
             // we should ensure all exports of that symbol are updated with the correct value.
             //
@@ -1774,27 +1776,15 @@ namespace ts {
                 && !isDeclarationNameOfEnumOrNamespace(node.left)) {
                 const exportedNames = getExports(node.left);
                 if (exportedNames) {
-                    // For each additional export of the declaration, apply an export assignment.
-                    let expression: Expression = node;
-                    for (const exportName of exportedNames) {
-                        // Mark the node to prevent triggering this rule again.
-                        noSubstitution[getNodeId(expression)] = true;
-                        expression = createExportExpression(exportName, expression, /*location*/ node);
-                    }
-
-                    return expression;
+                    return createExportExpressionChain(exportedNames, node, node);
                 }
             }
 
             return node;
         }
 
-        /**
-         * Substitution for a UnaryExpression that may contain an imported or exported symbol.
-         *
-         * @param node The node to substitute.
-         */
-        function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
+        function visitUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
+            node = visitEachChild(node, nestedElementVisitor, context);
             // When we see a prefix or postfix increment expression whose operand is an exported
             // symbol, we should ensure all exports of that symbol are updated with the correct
             // value.
@@ -1811,26 +1801,26 @@ namespace ts {
                 && !isDeclarationNameOfEnumOrNamespace(node.operand)) {
                 const exportedNames = getExports(node.operand);
                 if (exportedNames) {
-                    let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
-                        ? setTextRange(
-                            createBinary(
-                                node.operand,
-                                createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
-                                createLiteral(1)
-                            ),
-                            /*location*/ node)
-                        : node;
-                    for (const exportName of exportedNames) {
-                        // Mark the node to prevent triggering this rule again.
-                        noSubstitution[getNodeId(expression)] = true;
-                        expression = createExportExpression(exportName, expression);
+                    if (node.kind === SyntaxKind.PostfixUnaryExpression) {
+                        const temp = createTempVariable(hoistVariableDeclaration);
+                        return createCommaList([
+                            createAssignment(temp, createPrefix(SyntaxKind.PlusToken, node.operand)),
+                            createExportExpressionChain(exportedNames, createAssignment(node.operand, createBinary(temp, node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusToken : SyntaxKind.MinusToken, createNumericLiteral("1"))), node),
+                            temp,
+                        ]);
                     }
-
-                    return expression;
+                    return createExportExpressionChain(exportedNames, node, node);
                 }
             }
 
             return node;
+        }
+
+        function createExportExpressionChain(exportedNames: readonly Identifier[], expression: Expression, location?: TextRange) {
+            for (const exportName of exportedNames) {
+                expression = createExportExpression(exportName, expression, location);
+            }
+            return expression;
         }
 
         /**

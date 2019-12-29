@@ -7,7 +7,7 @@ exportedFoo = null;
 nonexportedFoo = null;
 
 if (null as any) {
-    ({ exportedFoo, nonexportedFoo } = null as any);
+    let temp = ({ exportedFoo, nonexportedFoo } = null as any);
 }
 else if (null as any) {
 	({ foo: exportedFoo, bar: nonexportedFoo } = null as any);
@@ -16,7 +16,7 @@ else if (null as any) {
 	({ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any);
 }
 else if (null as any) {
-	([exportedFoo, nonexportedFoo] = null as any);
+	[exportedFoo, nonexportedFoo] = null as any;
 }
 else {
 	([[exportedFoo, nonexportedFoo]] = null as any);
@@ -39,7 +39,7 @@ exports.nfoo = nonexportedFoo;
 exports.foo = exports.exportedFoo = null;
 exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
 if (null) {
-    (_a = null, exports.foo = exports.exportedFoo = _a.exportedFoo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _a.nonexportedFoo);
+    let temp = (_a = null, exports.foo = exports.exportedFoo = _a.exportedFoo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _a.nonexportedFoo, _a);
 }
 else if (null) {
     (_b = null, exports.foo = exports.exportedFoo = _b.foo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _b.bar);
@@ -48,7 +48,7 @@ else if (null) {
     (_c = null.foo, exports.foo = exports.exportedFoo = _c.bar, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _c.baz);
 }
 else if (null) {
-    (_d = null, exports.foo = exports.exportedFoo = _d[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _d[1]);
+    _d = null, exports.foo = exports.exportedFoo = _d[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _d[1];
 }
 else {
     (_e = null[0], exports.foo = exports.exportedFoo = _e[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _e[1]);
