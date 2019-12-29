@@ -1,0 +1,66 @@
+It seems that the symbol is valid, but how to use it?
+
+Symbol:
+    __debugFlags:"ExportDoesNotSupportDefaultModifier|BlockScopedVariable"
+    declarations:Array(1) [Node]
+    escapedName:"square"
+    exports:Map(0) {}
+    flags:2
+    id:undefined
+    mergeId:undefined
+    parent:undefined
+    valueDeclaration:Node {pos: 5, end: 29, kind: 244, "square = Math.pow(?, 2)"}
+    __proto__:Object {constructor: , __debugFlags: <accessor>}
+
+checkVariableLikeDeclaration results in problem:
+    the type of square MUST BE (x: number) => number
+
+    Whole expression: 'const square = Math.pow(?, 2);'
+
+    LHS = const square
+        WORKS!
+        const type = convertAutoToAny(getTypeOfSymbol(symbol));
+
+
+    RHS = Math.pow(?, 2);
+        Claims: number. Should be: (x: number) => number
+        const initializer = getEffectiveInitializer(node);
+        checkExpressionCached(initializer) |> 
+            checkTypeAssignableToAndOptionallyElaborate)
+
+    type returned from getTypeOfSymbol(symbol) MUST NOT BE ANY OF
+        A) number
+        B) () => (x: number) => number
+        C) (2) => (x: number) => number
+
+    But it's a callExpression here. This means that the function is checked as if it's called. Means that correct option is not(?) valid unless a lot of hacking is done.
+        Should it then be a ((x) => (2, x) => 2)()?
+    We run checkExpressionCached(initializer):
+        We go to CheckCallExpression -> getResolvedSignature -> resolveSignature which actually goes and checks Math.pow -function call.
+            Retrieves .pow from Math.
+                First checks math with checkIdentifier and finds it valid.
+                Gets pow from Math
+            Returns pow to resolveSignature -> CheckCallExpression
+            Resolve the call to pow.
+                getEffectiveCallArguments
+                chooseOverload
+                    hasCorrectArity(?, y) - passes for that one.
+                    getSignatureApplicabilityError
+                        getTypeAtPosition(signature, i);
+                        checkExpressionWithContextualType(?, number)
+                            checkExpression(?)
+    !!!!                            checkExpressionWorker - returns errorType for PartialApplicationElement
+                        Returns undefined. So no error for some reason...
+                ResolveCall returns the pow -call.
+        checkExpressionCached returns (number) as pow's return value.
+
+    Problem currently. The node and it's symbol return type doesn't match the initializer return type.
+    checkTypeAssignableToAndOptionallyElaborate(number, (number, number) => number)
+
+    In this function,
+        The 'type' variable is the LHS of the assignment.
+        The 'initializer' is the RHS of the assignment.
+
+
+    Mutation happening!:
+        checkTypeAssignableToAndOptionallyElaborate -> checkTypeRelatedToAndOptionallyElaborate -> isTypeRelatedTo
