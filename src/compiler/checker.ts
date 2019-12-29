@@ -33696,62 +33696,42 @@ namespace ts {
                     console.log('Partial application');
                     
                     const funcType = checkNonNullExpression(expr.expression);
-                    (funcType as any).__debugTypeToString();
-                    const pAType = createObjectType(ObjectFlags.Anonymous);
-                    let typeParams: Symbol[] = (funcType.symbol.valueDeclaration as any).parameters.map((n: Node) => n.symbol);
-                    // if (funcType.symbol.valueDeclaration.) {
-                    //     funcType.symbol.valueDeclaration.forEach(symbol => {
-                    //         if (symbol.flags & SymbolFlags.TypeParameter) {
-                    //             typeParams = append(typeParams, getDeclaredTypeOfSymbol(symbol));
-                    //         }
-                    //     });
-                    // }
         
-                    pAType.callSignatures = [createSignature(
+                    const callSignature = getSingleCallSignature(funcType);
+                    if (!callSignature) {
+                        return null;
+                    }
+
+                    let typeParams: Symbol[] = callSignature.parameters
+                        .map((param, i) => ({
+                            originalParam: param,
+                            isPartial: isPartialApplicationElement(expr.arguments[i]),
+                        }))
+                        .filter(({ isPartial }) => isPartial)
+                        .map(({ originalParam }) => originalParam);
+
+                    const pAType = {
+                        ...createObjectType(ObjectFlags.Anonymous, funcType.symbol),
+                        members: emptySymbols,
+                        properties: [],
+                        callSignatures: [createSignature(
                         undefined,
                         undefined,
                         undefined,
                         typeParams,
-                        (funcType as any).callSignatures![0]!.resolvedReturnType,
-                        (funcType as any).callSignatures![0]!.resolvedTypePredicate,
+                            getReturnTypeOfSingleNonGenericCallSignature(funcType),
+                            callSignature.resolvedTypePredicate,
                         expr.arguments.filter(isPartialApplicationElement).length,
                         (typeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
                             ? SignatureFlags.HasLiteralTypes
                             : SignatureFlags.None                        
-                    )]
+                        )],
+                        constructSignatures: [],
+                        // stringIndexInfo: ,
+                        // numberIndexInfo: ,
+                    };
 
                     return pAType;
-
-                    // ts.createArrowFunction(
-                    //     undefined,
-                    //     undefined,
-                    //     [
-                    //         ...expr.arguments
-                    //             .filter(isPartialApplicationElement)
-                    //             .map((partialApplicationIdentifier, i) =>
-                    //                 ts.createParameter(
-                    //                     undefined,
-                    //                     undefined,
-                    //                     undefined,
-                    //                     // partialApplicationIdentifier,
-                    //                     ts.createIdentifier("pa"+i),
-                    //                     undefined,
-                    //                     undefined,
-                    //                     undefined
-                    //                 )
-                    //             )
-                    //     ],
-                    //     undefined,
-                    //     ts.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                    //     node
-                    // );
-                      
-                    // const type = createObjectType(ObjectFlags.Anonymous, symbol);
-
-                    // const t: Type = {
-
-                    // };
-                    // return t;
                 }
                 const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                     getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
