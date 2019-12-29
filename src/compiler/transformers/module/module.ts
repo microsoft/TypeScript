@@ -1286,7 +1286,8 @@ namespace ts {
             }
             else {
                 temp = createTempVariable(/*recordTempVariable*/ undefined);
-                expression = flattenDestructuringAssignment(node.initializer as ObjectDestructuringAssignment | ArrayDestructuringAssignment, sourceElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
+                const assignment = createAssignment(node.initializer, temp);
+                expression = flattenDestructuringAssignment(assignment as ObjectDestructuringAssignment | ArrayDestructuringAssignment, sourceElementVisitor, context, FlattenLevel.All, /*needsValue*/ false, createAllExportExpressions);
             }
 
             const initializer = temp ? createVariableDeclarationList([createVariableDeclaration(temp)]) : node.initializer;

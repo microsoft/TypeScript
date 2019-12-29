@@ -23,5 +23,7 @@ else {
 	([[exportedFoo, nonexportedFoo]] = null as any);
 }
 
+for ({exportedFoo} of [{exportedFoo}]) {}
+
 export { nonexportedFoo };
 export { exportedFoo as foo, nonexportedFoo as nfoo };

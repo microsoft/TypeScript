@@ -1,0 +1,89 @@
+=== tests/cases/compiler/server.ts ===
+var foo = 2;
+>foo : number
+>2 : 2
+
+foo = 3;
+>foo = 3 : 3
+>foo : number
+>3 : 3
+
+var baz = 3;
+>baz : number
+>3 : 3
+
+baz = 4;
+>baz = 4 : 4
+>baz : number
+>4 : 4
+
+var buzz = 10;
+>buzz : number
+>10 : 10
+
+buzz += 3;
+>buzz += 3 : number
+>buzz : number
+>3 : 3
+
+var bizz = 8;
+>bizz : number
+>8 : 8
+
+bizz++; // compiles to exports.bizz = bizz += 1
+>bizz++ : number
+>bizz : number
+
+bizz--; // similarly
+>bizz-- : number
+>bizz : number
+
+++bizz; // compiles to exports.bizz = ++bizz
+>++bizz : number
+>bizz : number
+
+for (foo of [1, 2]) {}
+>foo : number
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+export var exportedFoo = 0;
+>exportedFoo : number
+>0 : 0
+
+for (exportedFoo of [1, 2]) {}
+>exportedFoo : number
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+export var doubleExportedFoo = 0;
+>doubleExportedFoo : number
+>0 : 0
+
+for (doubleExportedFoo of [1, 2]) {}
+>doubleExportedFoo : number
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+let bar = '';
+>bar : string
+>'' : ""
+
+for (bar in {}) {}
+>bar : string
+>{} : {}
+
+export { foo, bar, baz, baz as quux, buzz, bizz, doubleExportedFoo as otherFoo };
+>foo : number
+>bar : string
+>baz : number
+>baz : number
+>quux : number
+>buzz : number
+>bizz : number
+>doubleExportedFoo : number
+>otherFoo : number
+

@@ -43,12 +43,16 @@ else {
 >nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
 }
 
+for ({exportedFoo} of [{exportedFoo}]) {}
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 23, 6))
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 23, 24))
+
 export { nonexportedFoo };
->nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 23, 8))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 25, 8))
 
 export { exportedFoo as foo, nonexportedFoo as nfoo };
 >exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
->foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 24, 8))
+>foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 26, 8))
 >nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
->nfoo : Symbol(nfoo, Decl(destructuringAssignmentWithExportedName.ts, 24, 28))
+>nfoo : Symbol(nfoo, Decl(destructuringAssignmentWithExportedName.ts, 26, 28))
 

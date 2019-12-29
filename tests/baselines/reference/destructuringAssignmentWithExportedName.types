@@ -86,6 +86,13 @@ else {
 >null : null
 }
 
+for ({exportedFoo} of [{exportedFoo}]) {}
+>{exportedFoo} : { exportedFoo: any; }
+>exportedFoo : any
+>[{exportedFoo}] : { exportedFoo: any; }[]
+>{exportedFoo} : { exportedFoo: any; }
+>exportedFoo : any
+
 export { nonexportedFoo };
 >nonexportedFoo : any
 
