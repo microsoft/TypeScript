@@ -38,7 +38,7 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
     let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentity: x => x};
                                       ~~~~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:14:5: The expected type comes from the return type of this signature.
+!!! related TS6239 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:16:35: Did you mean to use the target 'arg' instead?
     
     interface Tuples {
         prop: [string, number];

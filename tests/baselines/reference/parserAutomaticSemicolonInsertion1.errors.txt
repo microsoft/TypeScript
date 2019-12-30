@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,5): error TS2322: Type 'Object' is not assignable to type 'I'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
-tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,5): error TS2322: Type 'Object' is not assignable to type '() => void'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature '(): void'.
 
@@ -15,18 +15,20 @@ tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAut
     var o: Object;
     o = i;
     i = o;
-    ~
+        ~
 !!! error TS2322: Type 'Object' is not assignable to type 'I'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+!!! related TS6240 tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts:8:5: Did you mean to access the property 'toString' of Object instead?
      
     var a: {
         (): void
     }
     o = a;
     a = o;
-    ~
+        ~
 !!! error TS2322: Type 'Object' is not assignable to type '() => void'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+!!! related TS6240 tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts:14:5: Did you mean to access the property 'toString' of Object instead?
     

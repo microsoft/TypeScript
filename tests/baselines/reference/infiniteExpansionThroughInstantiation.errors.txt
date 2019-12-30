@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(16,1): error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(16,8): error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
   Types of property 'data' are incompatible.
     Type 'List<string>' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(21,5): error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(21,12): error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
   Types of property 'data' are incompatible.
     Type 'List<T>' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'List<T>'.
@@ -24,20 +24,22 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansion
     var list: List<string>;
     var ownerList: OwnerList<string>;
     list = ownerList; 
-    ~~~~
+           ~~~~~~~~~
 !!! error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'List<string>' is not assignable to type 'string'.
+!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:16:8: Did you mean to access the property 'data' of OwnerList<string> instead?
     
     function other<T>(x: T) {
         var list: List<T>;
         var ownerList: OwnerList<T>;
         list = ownerList; 
-        ~~~~
+               ~~~~~~~~~
 !!! error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'List<T>' is not assignable to type 'T'.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'List<T>'.
+!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:21:12: Did you mean to access the property 'data' of OwnerList<T> instead?
     
     }
     

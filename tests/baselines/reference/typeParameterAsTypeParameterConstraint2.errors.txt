@@ -28,6 +28,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTy
     var r3 = foo(1, n);
                     ~
 !!! error TS2345: Argument of type 'NumberVariant' is not assignable to parameter of type 'number'.
+!!! related TS6240 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts:13:17: Did you mean to access the property 'x' of NumberVariant instead?
     
     function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
     foo2(1, { length: '' });

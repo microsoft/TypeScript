@@ -89,6 +89,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
                    ~~
 !!! error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'F2' provides no match for the signature '(x: string): string'.
+!!! related TS6240 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:34:16: Did you mean to access the property 'apply' of F2 instead?
     
     function fff<T extends { (): void }, U extends T>(x: T, y: U) {
         foo2(x);

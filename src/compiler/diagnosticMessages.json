@@ -4746,6 +4746,14 @@
         "code": 6238
     },
 
+    "Did you mean to use the target '{0}' instead?": {
+        "category": "Message",
+        "code": 6239
+    },
+    "Did you mean to access the property '{0}' of {1} instead?": {
+        "category": "Message",
+        "code": 6240
+    },
     "Projects to reference": {
         "category": "Message",
         "code": 6300
