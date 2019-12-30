@@ -49,3 +49,19 @@ class Test5<T> {
         x.p;
     }
 }
+
+class Test6 {
+    private get a() {
+        return 0;
+    }
+    private set a(v) {
+        v;
+    }
+    private b = 0;
+
+    public test() {
+        var x = new Test6();
+        x.a++;
+        x.b++;
+    }
+}
