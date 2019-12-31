@@ -5005,6 +5005,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
+        importsNotUsedAsValue?: ImportsNotUsedAsValue;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -5052,7 +5053,6 @@ namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
-        preserveUnusedImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -5123,6 +5123,11 @@ namespace ts {
         Preserve = 1,
         React = 2,
         ReactNative = 3
+    }
+
+    export const enum ImportsNotUsedAsValue {
+        Remove,
+        Preserve
     }
 
     export const enum NewLineKind {

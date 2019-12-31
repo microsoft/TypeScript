@@ -1,4 +1,4 @@
-// @preserveUnusedImports: true
+// @importsNotUsedAsValue: preserve
 
 // @Filename: a.ts
 export type A = {};

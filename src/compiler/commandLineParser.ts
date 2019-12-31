@@ -462,6 +462,16 @@ namespace ts {
             description: Diagnostics.Import_emit_helpers_from_tslib
         },
         {
+            name: "importsNotUsedAsValue",
+            type: createMapFromTemplate({
+                remove: ImportsNotUsedAsValue.Remove,
+                preserve: ImportsNotUsedAsValue.Preserve
+            }),
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Emit_behavior_for_imports_used_only_for_types
+        },
+        {
             name: "downlevelIteration",
             type: "boolean",
             affectsEmit: true,
@@ -867,13 +877,6 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
             transpileOptionValue: undefined
-        },
-        {
-            name: "preserveUnusedImports",
-            type: "boolean",
-            affectsEmit: true,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Emit_imports_that_are_unused_or_used_only_for_types
         },
         {
             name: "preserveConstEnums",

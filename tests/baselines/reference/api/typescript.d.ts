@@ -2631,6 +2631,7 @@ declare namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
+        importsNotUsedAsValue?: ImportsNotUsedAsValue;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2670,7 +2671,6 @@ declare namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
-        preserveUnusedImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -2727,6 +2727,10 @@ declare namespace ts {
         Preserve = 1,
         React = 2,
         ReactNative = 3
+    }
+    export enum ImportsNotUsedAsValue {
+        Remove = 0,
+        Preserve = 1
     }
     export enum NewLineKind {
         CarriageReturnLineFeed = 0,
