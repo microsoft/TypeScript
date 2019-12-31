@@ -1099,9 +1099,25 @@
         "category": "Error",
         "code": 1370
     },
-    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+    "Import is never used as a value and must use 'import type' when '--importsNotUsedAsValue' is 'error'.": {
         "category": "Error",
         "code": 1371
+    },
+    "Import may be converted to a type-only import.": {
+        "category": "Suggestion",
+        "code": 1372
+    },
+    "Convert to type-only import": {
+        "category": "Message",
+        "code": 1373
+    },
+    "Convert all imports not used as a value to type-only imports": {
+        "category": "Message",
+        "code": 1374
+    },
+    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1375
     },
 
     "The types of '{0}' are incompatible between these types.": {

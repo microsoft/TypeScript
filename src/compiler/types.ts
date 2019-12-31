@@ -5166,7 +5166,8 @@ namespace ts {
 
     export const enum ImportsNotUsedAsValue {
         Remove,
-        Preserve
+        Preserve,
+        Error
     }
 
     export const enum NewLineKind {

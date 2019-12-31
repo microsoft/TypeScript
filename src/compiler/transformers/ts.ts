@@ -2777,7 +2777,9 @@ namespace ts {
 
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-            return importClause || compilerOptions.importsNotUsedAsValue === ImportsNotUsedAsValue.Preserve
+            return importClause ||
+                compilerOptions.importsNotUsedAsValue === ImportsNotUsedAsValue.Preserve ||
+                compilerOptions.importsNotUsedAsValue === ImportsNotUsedAsValue.Error
                 ? updateImportDeclaration(
                     node,
                     /*decorators*/ undefined,

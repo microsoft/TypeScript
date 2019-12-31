@@ -33172,6 +33172,40 @@ namespace ts {
             return !isInAppropriateContext;
         }
 
+        function importClauseContainsReferencedImport(importClause: ImportClause) {
+            return importClause.name && isReferenced(importClause)
+                || importClause.namedBindings && namedBindingsContainsReferencedImport(importClause.namedBindings);
+
+            function isReferenced(declaration: Declaration) {
+                return !!getMergedSymbol(getSymbolOfNode(declaration)).isReferenced;
+            }
+            function namedBindingsContainsReferencedImport(namedBindings: NamedImportBindings) {
+                return isNamespaceImport(namedBindings)
+                    ? isReferenced(namedBindings)
+                    : some(namedBindings.elements, isReferenced);
+            }
+        }
+
+        function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
+            for (const statement of sourceFile.statements) {
+                if (
+                    isImportDeclaration(statement) &&
+                    statement.importClause &&
+                    !statement.importClause.isTypeOnly &&
+                    importClauseContainsReferencedImport(statement.importClause) &&
+                    !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true)
+                ) {
+                    const isError = compilerOptions.importsNotUsedAsValue === ImportsNotUsedAsValue.Error;
+                    errorOrSuggestion(
+                        isError,
+                        statement,
+                        isError
+                            ? Diagnostics.Import_is_never_used_as_a_value_and_must_use_import_type_when_importsNotUsedAsValue_is_error
+                            : Diagnostics.Import_may_be_converted_to_a_type_only_import);
+                }
+            }
+        }
+
         function checkExportSpecifier(node: ExportSpecifier) {
             checkAliasSymbol(node);
             if (getEmitDeclarations(compilerOptions)) {
@@ -33662,6 +33696,10 @@ namespace ts {
                             diagnostics.add(diag);
                         }
                     });
+                }
+
+                if (!node.isDeclarationFile && isExternalModule(node)) {
+                    checkImportsForTypeOnlyConversion(node);
                 }
 
                 if (isExternalOrCommonJsModule(node)) {

@@ -2751,7 +2751,8 @@ declare namespace ts {
     }
     export enum ImportsNotUsedAsValue {
         Remove = 0,
-        Preserve = 1
+        Preserve = 1,
+        Error = 2
     }
     export enum NewLineKind {
         CarriageReturnLineFeed = 0,
