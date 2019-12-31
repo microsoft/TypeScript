@@ -49,13 +49,14 @@ namespace ts {
         ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2020.bigint", "lib.es2020.bigint.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
-        ["esnext.bigint", "lib.esnext.bigint.d.ts"]
+        ["esnext.bigint", "lib.es2020.bigint.d.ts"]
     ];
 
     /**
@@ -291,7 +292,7 @@ namespace ts {
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_or_ESNEXT,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
         },
         {
             name: "module",
@@ -304,6 +305,7 @@ namespace ts {
                 umd: ModuleKind.UMD,
                 es6: ModuleKind.ES2015,
                 es2015: ModuleKind.ES2015,
+                es2020: ModuleKind.ES2020,
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
@@ -311,7 +313,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_or_ESNext,
+            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_es2020_or_ESNext,
         },
         {
             name: "lib",

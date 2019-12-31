@@ -854,7 +854,7 @@ namespace ts.Completions {
                         insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
                     }
                 }
-                if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
+                if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
                     return { kind: CompletionDataKind.JsDocParameterName, tag };
                 }
             }
@@ -1279,7 +1279,8 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, /*baseType*/ undefined, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
+            const baseType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.BaseConstraint);
+            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, baseType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -2396,8 +2397,10 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const validIdentifierResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-        if (isIdentifierText(name, target)) return validIdentifierResult;
+        const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+        if (isIdentifierText(name, target) || symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+            return validNameResult;
+        }
         switch (kind) {
             case CompletionKind.MemberLike:
                 return undefined;
@@ -2410,7 +2413,7 @@ namespace ts.Completions {
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
             case CompletionKind.String:
-                return validIdentifierResult;
+                return validNameResult;
             default:
                 Debug.assertNever(kind);
         }

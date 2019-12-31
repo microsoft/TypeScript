@@ -113,3 +113,4 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     const x = -12n; // should emit as const x = -12n
     const y: 12n = 12n; // should emit type 12n
     let z = 12n; // should emit type bigint in declaration file
+    
