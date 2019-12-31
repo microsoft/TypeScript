@@ -87,19 +87,27 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             // If there are trailing comments
             if (trailingCommentsHolder && trailingCommentsHolder.emitNode && trailingCommentsHolder.emitNode.trailingComments) {
 
-                // First we format our comment
-                // ex. " trailing comment " -> "/* trailing comment */"
-                const formattedComment = formatSynthesizedComment(trailingCommentsHolder.emitNode.trailingComments[0]);
+                // Used to keep track of all the comments
+                let comments = "";
+                // Loop through all the comments
+                trailingCommentsHolder.emitNode.trailingComments.forEach(comment => {
+                    // First we format our comment
+                    // ex. " trailing comment " -> "/* trailing comment */"
+                    const formattedComment = formatSynthesizedComment(comment);
 
-                // Add one space of padding to the comment
-                const paddedComment = ` ${formattedComment}`;
+                    // Add one space of padding to the comment
+                    const paddedComment = ` ${formattedComment}`;
+
+                    // Add comment to our comments string
+                    comments = comments + paddedComment;
+                });
 
                 // If it has a semi colon, we need to account for the extra character (i.e. 1)
                 // otherwise, we use 0
                 const semiColonPositionModifier = hasSemiColon(returnStatement) ? 1 : 0;
 
                 // Creates a text change from end of function body, with length of comment, for the comment.
-                newEdit = createTextChangeFromStartLength(func.body.end + semiColonPositionModifier, paddedComment.length, paddedComment);
+                newEdit = createTextChangeFromStartLength(func.body.end + semiColonPositionModifier, comments.length, comments);
             }
         }
         else {
