@@ -36,6 +36,16 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
+    /**
+     * used to check if the last character in the returnStatement is a semicolon
+     */
+    function hasSemiColon(returnStatement: ReturnStatement) {
+        // Grab the last character from the return statement
+        const lastChar = returnStatement.getFullText().substr(-1);
+        // Check if it is semi-colon
+        // I feel like there has to be a way using SyntaxKind.SemicolonToken
+        return lastChar === ";";
+    }
 
     // Taken from emitter.ts L4798
     function formatSynthesizedComment(comment: SynthesizedComment) {
@@ -84,17 +94,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 // Add one space of padding to the comment
                 const paddedComment = ` ${formattedComment}`;
 
-                // TODO - add some type of check to know if plus 1 is needed
-                // Could be a function that is like getSemiColonPositionModifier, if true, return 1, else return 0
-                // creates a text change from end of function body, with length of comment, for the comment.
-                // create a new range from end of function body to end of return statement
-                // + 1 accounts for the semi-colon
-                // Add function to check if
-                // function hasSemiColon(/* check next token. If semi colon return true, else false */) {
-                //     return true
-                // }
+                // If it has a semi colon, we need to account for the extra character (i.e. 1)
+                // otherwise, we use 0
+                const semiColonPositionModifier = hasSemiColon(returnStatement) ? 1 : 0;
 
-                newEdit = createTextChangeFromStartLength(func.body.end + 1, paddedComment.length, paddedComment);
+                // Creates a text change from end of function body, with length of comment, for the comment.
+                newEdit = createTextChangeFromStartLength(func.body.end + semiColonPositionModifier, paddedComment.length, paddedComment);
             }
         }
         else {
