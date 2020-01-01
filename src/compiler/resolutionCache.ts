@@ -12,7 +12,7 @@ namespace ts {
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
-        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<ReadonlyArray<string>>): void;
+        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<readonly string[]>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -25,7 +25,7 @@ namespace ts {
     }
 
     interface ResolutionWithFailedLookupLocations {
-        readonly failedLookupLocations: ReadonlyArray<string>;
+        readonly failedLookupLocations: readonly string[];
         isInvalidated?: boolean;
         refCount?: number;
     }
@@ -90,14 +90,28 @@ namespace ts {
             return false;
         }
 
-        const nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+        let nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
         if (nextDirectorySeparator === -1) {
             // ignore "/user", "c:/users" or "c:/folderAtRoot"
             return false;
         }
 
-        if (dirPath.charCodeAt(0) !== CharacterCodes.slash &&
-            dirPath.substr(rootLength, nextDirectorySeparator).search(/users/i) === -1) {
+        let pathPartForUserCheck = dirPath.substring(rootLength, nextDirectorySeparator + 1);
+        const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
+        if (isNonDirectorySeparatorRoot &&
+            dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
+            pathPartForUserCheck.search(/[a-zA-z]\$\//) === 0) { // Dos style nextPart
+            nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
+            if (nextDirectorySeparator === -1) {
+                // ignore "//vda1cs4850/c$/folderAtRoot"
+                return false;
+            }
+
+            pathPartForUserCheck = dirPath.substring(rootLength + pathPartForUserCheck.length, nextDirectorySeparator + 1);
+        }
+
+        if (isNonDirectorySeparatorRoot &&
+            pathPartForUserCheck.search(/users\//i) !== 0) {
             // Paths like c:/folderAtRoot/subFolder are allowed
             return true;
         }
@@ -105,7 +119,7 @@ namespace ts {
         for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
             searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
             if (searchIndex === 0) {
-                // Folder isnt at expected minimun levels
+                // Folder isnt at expected minimum levels
                 return false;
             }
         }
@@ -120,7 +134,7 @@ namespace ts {
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
-        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<ReadonlyArray<string>> | undefined;
+        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<readonly string[]> | undefined;
         let allFilesHaveInvalidatedResolution = false;
         const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
@@ -287,7 +301,7 @@ namespace ts {
         }
 
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-            names: ReadonlyArray<string>,
+            names: readonly string[],
             containingFile: string,
             redirectedReference: ResolvedProjectReference | undefined,
             cache: Map<Map<T>>,
@@ -295,7 +309,7 @@ namespace ts {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
             shouldRetryResolution: (t: T) => boolean,
-            reusedNames: ReadonlyArray<string> | undefined,
+            reusedNames: readonly string[] | undefined,
             logChanges: boolean): (R | undefined)[] {
 
             const path = resolutionHost.toPath(containingFile);
@@ -418,7 +432,7 @@ namespace ts {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
                 // Ensure failed look up is normalized path
                 failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
-                Debug.assert(failedLookupLocation.length === failedLookupLocationPath.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`); // tslint:disable-line
+                Debug.assert(failedLookupLocation.length === failedLookupLocationPath.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
                 const subDirectoryInRoot = failedLookupLocationPath.indexOf(directorySeparator, rootPath.length + 1);
                 if (subDirectoryInRoot !== -1) {
                     // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
@@ -655,6 +669,11 @@ namespace ts {
                         // Mark the file as needing re-evaluation of module resolution instead of using it blindly.
                         resolution.isInvalidated = true;
                         (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
+
+                        // When its a file with inferred types resolution, invalidate type reference directive resolution
+                        if (containingFilePath.endsWith(inferredTypesContainingFile)) {
+                            resolutionHost.onChangedAutomaticTypeDirectiveNames();
+                        }
                     }
                 });
             });
@@ -689,7 +708,7 @@ namespace ts {
             );
         }
 
-        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<ReadonlyArray<string>>) {
+        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<readonly string[]>) {
             Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
             filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
         }

@@ -1,4 +1,4 @@
-tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,9): error TS2769: No overload matches this call.
+tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,26): error TS2769: No overload matches this call.
   Overload 1 of 2, '(arg1: number[]): any', gave the following error.
     Type 'string' is not assignable to type 'number'.
 
@@ -13,7 +13,7 @@ tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,9): error TS2769: No ov
             this.test(["hi"]);
             this.test([]);
             this.test([1, 2, "hi", 5]); // Error
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(arg1: number[]): any', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.

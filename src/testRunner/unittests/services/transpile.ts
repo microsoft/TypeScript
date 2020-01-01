@@ -3,21 +3,21 @@ namespace ts {
 
         interface TranspileTestSettings {
             options?: TranspileOptions;
+            noSetFileName?: boolean;
         }
 
         function transpilesCorrectly(name: string, input: string, testSettings: TranspileTestSettings) {
             describe(name, () => {
-                let justName: string;
-                let transpileOptions: TranspileOptions;
-                let canUseOldTranspile: boolean;
-                let toBeCompiled: Harness.Compiler.TestFile[];
                 let transpileResult: TranspileOutput;
                 let oldTranspileResult: string;
                 let oldTranspileDiagnostics: Diagnostic[];
 
-                transpileOptions = testSettings.options || {};
+                const transpileOptions: TranspileOptions = testSettings.options || {};
                 if (!transpileOptions.compilerOptions) {
-                    transpileOptions.compilerOptions = {};
+                    transpileOptions.compilerOptions = { };
+                }
+                if (transpileOptions.compilerOptions.target === undefined) {
+                    transpileOptions.compilerOptions.target = ScriptTarget.ES3;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -27,19 +27,22 @@ namespace ts {
 
                 transpileOptions.compilerOptions.sourceMap = true;
 
-                if (!transpileOptions.fileName) {
-                    transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
+                let unitName = transpileOptions.fileName;
+                if (!unitName) {
+                    unitName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
+                    if (!testSettings.noSetFileName) {
+                        transpileOptions.fileName = unitName;
+                    }
                 }
 
                 transpileOptions.reportDiagnostics = true;
 
-                justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
-                toBeCompiled = [{
-                    unitName: transpileOptions.fileName,
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ]/ig, "") + (transpileOptions.compilerOptions.jsx ? Extension.Tsx : Extension.Ts);
+                const toBeCompiled = [{
+                    unitName,
                     content: input
                 }];
-
-                canUseOldTranspile = !transpileOptions.renamedDependencies;
+                const canUseOldTranspile = !transpileOptions.renamedDependencies;
 
                 before(() => {
                     transpileResult = transpileModule(input, transpileOptions);
@@ -56,19 +59,19 @@ namespace ts {
                     oldTranspileDiagnostics = undefined!;
                 });
 
+                /* eslint-disable no-null/no-null */
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"),
-                        // tslint:disable-next-line no-null-keyword
                         transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
                 });
 
                 if (canUseOldTranspile) {
                     it("Correct errors (old transpile) for " + justName, () => {
                         Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
-                            // tslint:disable-next-line no-null-keyword
                             oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                     });
                 }
+                /* eslint-enable no-null/no-null */
 
                 it("Correct output for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);
@@ -88,8 +91,8 @@ namespace ts {
 
         transpilesCorrectly("Generates no diagnostics for missing file references", `/// <reference path="file2.ts" />
 var x = 0;`, {
-                options: { compilerOptions: { module: ModuleKind.CommonJS } }
-            });
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
 
         transpilesCorrectly("Generates no diagnostics for missing module imports", `import {a} from "module2";`, {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }
@@ -408,6 +411,18 @@ var x = 0;`, {
             options: { compilerOptions: { typeRoots: ["./folder"] }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'incremental'", "x;", {
+            options: { compilerOptions: { incremental: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'composite'", "x;", {
+            options: { compilerOptions: { composite: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'tsbuildinfo'", "x;", {
+            options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
             `import * as ng from "angular2/core";` +
             `declare function foo(...args: any[]);` +
@@ -415,17 +430,18 @@ var x = 0;`, {
             `export class MyClass1 {` +
             `    constructor(private _elementRef: ng.ElementRef){}` +
             `}`, {
-            options: {
-                compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.CommonJS,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
-                    emitDecoratorMetadata: true,
-                    experimentalDecorators: true,
-                    isolatedModules: true,
+                options: {
+                    compilerOptions: {
+                        target: ScriptTarget.ES5,
+                        module: ModuleKind.CommonJS,
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        emitDecoratorMetadata: true,
+                        experimentalDecorators: true,
+                        isolatedModules: true,
+                    }
                 }
             }
-        });
+        );
 
         transpilesCorrectly("Correctly serialize metadata when transpile with System option",
             `import * as ng from "angular2/core";` +
@@ -434,17 +450,18 @@ var x = 0;`, {
             `export class MyClass1 {` +
             `    constructor(private _elementRef: ng.ElementRef){}` +
             `}`, {
-            options: {
-                compilerOptions: {
-                    target: ScriptTarget.ES5,
-                    module: ModuleKind.System,
-                    moduleResolution: ModuleResolutionKind.NodeJs,
-                    emitDecoratorMetadata: true,
-                    experimentalDecorators: true,
-                    isolatedModules: true,
+                options: {
+                    compilerOptions: {
+                        target: ScriptTarget.ES5,
+                        module: ModuleKind.System,
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        emitDecoratorMetadata: true,
+                        experimentalDecorators: true,
+                        isolatedModules: true,
+                    }
                 }
             }
-        });
+        );
 
         transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }
@@ -452,6 +469,10 @@ var x = 0;`, {
 
         transpilesCorrectly("Supports 'as const' arrays", `([] as const).forEach(k => console.log(k));`, {
             options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
+
+        transpilesCorrectly("Infer correct file extension", `const fn = <T>(a: T) => a`, {
+            noSetFileName: true
         });
     });
 }

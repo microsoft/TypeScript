@@ -71,9 +71,8 @@ namespace ts.OutliningElementsCollector {
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
         const regions: OutliningSpan[] = [];
         const lineStarts = sourceFile.getLineStarts();
-        for (let i = 0; i < lineStarts.length; i++) {
-            const currentLineStart = lineStarts[i];
-            const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
+        for (const currentLineStart of lineStarts) {
+            const lineEnd = sourceFile.getLineEndOfPosition(currentLineStart);
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
             const result = isRegionDelimiter(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
@@ -198,9 +197,14 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
                 return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxFragment:
+                return spanForJSXFragment(<JsxFragment>n);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
@@ -210,11 +214,24 @@ namespace ts.OutliningElementsCollector {
             return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
         }
 
+        function spanForJSXFragment(node: JsxFragment): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingFragment.getStart(sourceFile), node.closingFragment.getEnd());
+            const bannerText = "<>...</>";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
         function spanForJSXAttributes(node: JsxAttributes): OutliningSpan | undefined {
             if (node.properties.length === 0) {
                 return undefined;
             }
 
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
+        }
+
+        function spanForTemplateLiteral(node: TemplateExpression | NoSubstitutionTemplateLiteral) {
+            if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.text.length === 0) {
+                return undefined;
+            }
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 

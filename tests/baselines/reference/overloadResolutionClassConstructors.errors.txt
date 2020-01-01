@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,1): error TS2769: No overload matches this call.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(s: string): fn1', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(s: number): fn1', gave the following error.
@@ -46,7 +46,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     
     // No candidate overloads found
     new fn1({}); // Error
-    ~~~~~~~~~~~
+            ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(s: string): fn1', gave the following error.
 !!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'string'.

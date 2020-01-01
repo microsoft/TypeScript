@@ -144,7 +144,7 @@ namespace ts.textChanges {
 
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
-        readonly nodes: ReadonlyArray<Node>;
+        readonly nodes: readonly Node[];
         readonly options?: ReplaceWithMultipleNodesOptions;
     }
 
@@ -218,6 +218,7 @@ namespace ts.textChanges {
     export interface TextChangesContext {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
+        preferences: UserPreferences;
     }
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
@@ -230,7 +231,7 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
+        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly Statement[] }[] = [];
         private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
@@ -246,6 +247,18 @@ namespace ts.textChanges {
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+
+        public pushRaw(sourceFile: SourceFile, change: FileTextChanges) {
+            Debug.assertEqual(sourceFile.fileName, change.fileName);
+            for (const c of change.textChanges) {
+                this.changes.push({
+                    kind: ChangeKind.Text,
+                    sourceFile,
+                    text: c.newText,
+                    range: createTextRangeFromSpan(c.span),
+                });
+            }
+        }
 
         public deleteRange(sourceFile: SourceFile, range: TextRange): void {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -283,11 +296,11 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
         }
 
-        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
+        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
         }
 
-        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions): void {
+        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: readonly Node[], options: ChangeNodeOptions = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
@@ -295,7 +308,7 @@ namespace ts.textChanges {
             this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
         }
 
-        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
+        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
@@ -313,7 +326,7 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, createRange(pos), newNode, options);
         }
 
-        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
+        private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions = {}): void {
             this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
@@ -382,12 +395,12 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): boolean {
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
                 if (!endNode) {
-                    if (!isArrowFunction(node)) return; // Function missing parentheses, give up
+                    if (!isArrowFunction(node)) return false; // Function missing parentheses, give up
                     // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
                     endNode = first(node.parameters);
                 }
@@ -397,6 +410,7 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+            return true;
         }
 
         public tryInsertThisTypeAnnotation(sourceFile: SourceFile, node: ThisTypeAnnotatable, type: TypeNode): void {
@@ -406,7 +420,7 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, start, type, { prefix: "this: ", suffix });
         }
 
-        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
+        public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
             // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
             const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
@@ -448,7 +462,7 @@ namespace ts.textChanges {
             }
         }
 
-        private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
+        private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: readonly Statement[]): void {
             this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true));
         }
 
@@ -505,7 +519,7 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
         }
 
-        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
+        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: readonly Node[]): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
         }
@@ -704,6 +718,10 @@ namespace ts.textChanges {
             }
         }
 
+        public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
+            this.replaceRange(sourceFile, rangeOfNode(expression), createParen(expression));
+        }
+
         private finishClassesWithNodesInsertedAtStart(): void {
             this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
@@ -755,7 +773,7 @@ namespace ts.textChanges {
             return changes;
         }
 
-        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>): void {
+        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[]): void {
             this.newFiles.push({ oldFile, fileName, statements });
         }
     }
@@ -774,12 +792,12 @@ namespace ts.textChanges {
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
-    export function getNewFileText(statements: ReadonlyArray<Statement>, scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+    export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
         return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
     }
 
     namespace changesToText {
-        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+        export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
@@ -796,12 +814,12 @@ namespace ts.textChanges {
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
             const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
-        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
@@ -827,35 +845,43 @@ namespace ts.textChanges {
             return (options.prefix || "") + noIndent + (options.suffix || "");
         }
 
+        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+            return {
+                ...options,
+                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+            };
+        }
+
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
-            const { options: formatOptions } = formatContext;
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
             const initialIndentation =
                 indentation !== undefined
                     ? indentation
                     : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             if (delta === undefined) {
-                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+                delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
             const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
+            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
 
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
-            const omitTrailingSemicolon = !!sourceFile && !probablyUsesSemicolons(sourceFile);
-            const writer = createWriter(newLineCharacter, omitTrailingSemicolon);
+            const writer = createWriter(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true, omitTrailingSemicolon }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
 
-    export function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string {
+    export function applyChanges(text: string, changes: readonly TextChange[]): string {
         for (let i = changes.length - 1; i >= 0; i--) {
             const { span, newText } = changes[i];
             text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;
@@ -890,11 +916,11 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string, omitTrailingSemicolon?: boolean): TextChangesWriter {
+    function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
 
-        const writer = omitTrailingSemicolon ? getTrailingSemicolonOmittingWriter(createTextWriter(newLine)) : createTextWriter(newLine);
+        const writer = createTextWriter(newLine);
         const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
@@ -1048,6 +1074,8 @@ namespace ts.textChanges {
             getColumn,
             getIndent,
             isAtStartOfLine,
+            hasTrailingComment: () => writer.hasTrailingComment(),
+            hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
             clear
         };
     }

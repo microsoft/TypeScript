@@ -53,6 +53,7 @@ const x = -12n; // should emit as const x = -12n
 const y: 12n = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
 
+
 //// [bigintWithLib.js]
 // Test BigInt functions
 let bigintVal = BigInt(123);

@@ -1,0 +1,41 @@
+╭ name: foo
+├ kind: function
+├ file: /tests/cases/fourslash/callHierarchyFile.ts
+├ span:
+│ ╭ /tests/cases/fourslash/callHierarchyFile.ts:2:1-3:2
+│ │ 2: function foo() {
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/callHierarchyFile.ts:2:10-2:13
+│ │ 2: function foo() {
+│ │             ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: /tests/cases/fourslash/callHierarchyFile.ts
+│ │ ├ kind: script
+│ │ ├ file: /tests/cases/fourslash/callHierarchyFile.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyFile.ts:1:1-3:2
+│ │ │ │ 1: foo();
+│ │ │ │    ^^^^^^
+│ │ │ │ 2: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyFile.ts:1:1-1:1
+│ │ │ │ 1: foo();
+│ │ │ │    <
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyFile.ts:1:1-1:4
+│ │ │ 1: foo();
+│ │ │    ^^^
+│ ╰ ╰
+╰ outgoing: none

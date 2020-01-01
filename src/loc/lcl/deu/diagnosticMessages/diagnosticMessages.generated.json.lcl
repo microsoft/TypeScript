@@ -9529,7 +9529,7 @@
         <Str Cat="Text">
           <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["=" kann nur in einer Objektliteraleigenschaft innerhalb eines Destrukturierungsauftrags verwendet werden.]]></Val>
+            <Val><![CDATA["=" kann nur in einer Objektliteraleigenschaft innerhalb eines Destrukturierungszuweisung verwendet werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

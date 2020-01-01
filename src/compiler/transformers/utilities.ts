@@ -37,6 +37,10 @@ namespace ts {
         }
     }
 
+    export function getExportNeedsImportStarHelper(node: ExportDeclaration): boolean {
+        return !!getNamespaceDeclarationNode(node);
+    }
+
     export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean {
         if (!!getNamespaceDeclarationNode(node)) {
             return true;
@@ -70,7 +74,8 @@ namespace ts {
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
         let hasExportStarsToExportValues = false;
-        let hasImportStarOrImportDefault = false;
+        let hasImportStar = false;
+        let hasImportDefault = false;
 
         for (const node of sourceFile.statements) {
             switch (node.kind) {
@@ -80,7 +85,12 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    if (!hasImportStar && getImportNeedsImportStarHelper(<ImportDeclaration>node)) {
+                        hasImportStar = true;
+                    }
+                    if (!hasImportDefault && getImportNeedsImportDefaultHelper(<ImportDeclaration>node)) {
+                        hasImportDefault = true;
+                    }
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -99,13 +109,14 @@ namespace ts {
                             hasExportStarsToExportValues = true;
                         }
                         else {
+                            // export * as ns from "mod"
                             // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
                         }
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause!.elements) {
+                        for (const specifier of cast((<ExportDeclaration>node).exportClause, isNamedExports).elements) {
                             if (!uniqueExports.get(idText(specifier.name))) {
                                 const name = specifier.propertyName || specifier.name;
                                 exportSpecifiers.add(idText(name), specifier);
@@ -183,15 +194,8 @@ namespace ts {
             }
         }
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStarOrImportDefault);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
+        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
         if (externalHelpersImportDeclaration) {
-            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
@@ -250,6 +254,28 @@ namespace ts {
             isWellKnownSymbolSyntactically(expression);
     }
 
+    export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
+        return kind >= SyntaxKind.FirstCompoundAssignment
+            && kind <= SyntaxKind.LastCompoundAssignment;
+    }
+
+    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
+        switch (kind) {
+            case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
+            case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
+            case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
+            case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
+            case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
+            case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
+            case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+            case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
+            case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
+            case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
+        }
+    }
+
     /**
      * Adds super call and preceding prologue directives into the list of statements.
      *
@@ -298,31 +324,25 @@ namespace ts {
     }
 
     /**
-     * Gets all property declarations with initializers on either the static or instance side of a class.
+     * Gets all the static or all the instance property declarations of a class
      *
      * @param node The class node.
      * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
      */
-    export function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<PropertyDeclaration> {
-        return filter(node.members, isStatic ? isStaticInitializedProperty : isInstanceInitializedProperty);
+    export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
+        return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
     }
 
     /**
-     * Gets a value indicating whether a class element is a static property declaration with an initializer.
+     * Is a class element either a static or an instance property declaration with an initializer?
      *
      * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
      */
-    export function isStaticInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
-        return isInitializedProperty(member) && hasStaticModifier(member);
-    }
-
-    /**
-     * Gets a value indicating whether a class element is an instance property declaration with an initializer.
-     *
-     * @param member The class element node.
-     */
-    export function isInstanceInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
-        return isInitializedProperty(member) && !hasStaticModifier(member);
+    function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
+        return isPropertyDeclaration(member)
+            && (!!member.initializer || !requireInitializer)
+            && hasStaticModifier(member) === isStatic;
     }
 
     /**

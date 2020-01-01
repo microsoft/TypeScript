@@ -175,18 +175,18 @@ namespace ts {
                                     jsonSourceFile ?
                                         jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : createObjectLiteral() :
                                         createFunctionExpression(
-                                        /*modifiers*/ undefined,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        [
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
-                                        ],
-                                        /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
+                                            /*modifiers*/ undefined,
+                                            /*asteriskToken*/ undefined,
+                                            /*name*/ undefined,
+                                            /*typeParameters*/ undefined,
+                                            [
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                ...importAliasNames
+                                            ],
+                                            /*type*/ undefined,
+                                            transformAsynchronousModuleBody(node)
+                                        )
                                 ]
                             )
                         )
@@ -698,7 +698,7 @@ namespace ts {
             const promise = createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
-                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
+                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getUnscopedHelperName("__importStar")]);
             }
             return promise;
         }
@@ -713,7 +713,7 @@ namespace ts {
             let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
-                requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
+                requireCall = createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
             }
 
             let func: FunctionExpression | ArrowFunction;
@@ -747,17 +747,28 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+        function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+                return innerExpr;
+            }
+            if (getExportNeedsImportStarHelper(node)) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            return innerExpr;
+        }
+
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
-                return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+                return createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
             if (getImportNeedsImportDefaultHelper(node)) {
                 context.requestEmitHelper(importDefaultHelper);
-                return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
+                return createCall(getUnscopedHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
             }
             return innerExpr;
         }
@@ -967,7 +978,7 @@ namespace ts {
 
             const generatedName = getGeneratedNameForNode(node);
 
-            if (node.exportClause) {
+            if (node.exportClause && isNamedExports(node.exportClause)) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
@@ -1005,6 +1016,28 @@ namespace ts {
                         )
                     );
                 }
+
+                return singleOrMany(statements);
+            }
+            else if (node.exportClause) {
+                const statements: Statement[] = [];
+                // export * as ns from "mod";
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            createExpressionStatement(
+                                createExportExpression(
+                                    getSynthesizedClone(node.exportClause.name),
+                                    moduleKind !== ModuleKind.AMD ?
+                                        getHelperExpressionForExport(node, createRequireCall(node)) :
+                                        createIdentifier(idText(node.exportClause.name))
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    )
+                );
 
                 return singleOrMany(statements);
             }
@@ -1793,7 +1826,7 @@ namespace ts {
     function createExportStarHelper(context: TransformationContext, module: Expression) {
         const compilerOptions = context.getCompilerOptions();
         return compilerOptions.importHelpers
-            ? createCall(getHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
+            ? createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
             : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
     }
 
@@ -1808,6 +1841,7 @@ namespace ts {
     // emit helper for `import * as Name from "foo"`
     export const importStarHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportstar",
+        importName: "__importStar",
         scoped: false,
         text: `
 var __importStar = (this && this.__importStar) || function (mod) {
@@ -1822,6 +1856,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     // emit helper for `import Name from "foo"`
     export const importDefaultHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportdefault",
+        importName: "__importDefault",
         scoped: false,
         text: `
 var __importDefault = (this && this.__importDefault) || function (mod) {

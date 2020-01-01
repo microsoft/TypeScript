@@ -1,0 +1,11 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-1.ts ===
+const obj = {
+>obj : {}
+>{    #foo: 1} : {}
+
+    #foo: 1
+>#foo : number
+>1 : 1
+
+};
+

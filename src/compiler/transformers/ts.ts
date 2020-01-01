@@ -369,8 +369,8 @@ namespace ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
-                    // TypeScript accessibility and readonly modifiers are elided.
-
+                // TypeScript accessibility and readonly modifiers are elided
+                // falls through
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
                 case SyntaxKind.OptionalType:
@@ -400,12 +400,15 @@ namespace ts {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.LiteralType:
                     // TypeScript type nodes are elided.
+                    // falls through
 
                 case SyntaxKind.IndexSignature:
                     // TypeScript index signatures are elided.
+                    // falls through
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
+                    // falls through
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
@@ -577,7 +580,7 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: ReadonlyArray<PropertyDeclaration>) {
+        function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -607,7 +610,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
@@ -892,18 +895,18 @@ namespace ts {
             const members: ClassElement[] = [];
             const constructor = getFirstConstructorWithBody(node);
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
                     if (isIdentifier(parameter.name)) {
-                        members.push(aggregateTransformFlags(createProperty(
+                        members.push(setOriginalNode(aggregateTransformFlags(createProperty(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             parameter.name,
                             /*questionOrExclamationToken*/ undefined,
                             /*type*/ undefined,
-                            /*initializer*/ undefined)));
+                            /*initializer*/ undefined)), parameter));
                     }
                 }
             }
@@ -921,7 +924,7 @@ namespace ts {
          * @param isStatic A value indicating whether to retrieve static or instance members of
          *                 the class.
          */
-        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
+        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
             return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
         }
 
@@ -960,8 +963,8 @@ namespace ts {
          * A structure describing the decorators for a class element.
          */
         interface AllDecorators {
-            decorators: ReadonlyArray<Decorator> | undefined;
-            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined>;
+            decorators: readonly Decorator[] | undefined;
+            parameters?: readonly (readonly Decorator[] | undefined)[];
         }
 
         /**
@@ -971,7 +974,7 @@ namespace ts {
          * @param node The function-like node.
          */
         function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
-            let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
+            let decorators: (readonly Decorator[] | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
                 const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
@@ -1585,7 +1588,7 @@ namespace ts {
             return createIdentifier("Object");
         }
 
-        function serializeTypeList(types: ReadonlyArray<TypeNode>): SerializedTypeNode {
+        function serializeTypeList(types: readonly TypeNode[]): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode | undefined;
@@ -1713,7 +1716,7 @@ namespace ts {
             const left = serializeEntityNameAsExpressionFallback(node.left);
             const temp = createTempVariable(hoistVariableDeclaration);
             return createLogicalAnd(
-                    createLogicalAnd(
+                createLogicalAnd(
                     left.left,
                     createStrictInequality(createAssignment(temp, left.right), createVoidZero())
                 ),
@@ -1781,14 +1784,17 @@ namespace ts {
         }
 
         /**
-         * Gets an expression that represents a property name. For a computed property, a
-         * name is generated for the node.
+         * Gets an expression that represents a property name (for decorated properties or enums).
+         * For a computed property, a name is generated for the node.
          *
          * @param member The member whose name should be converted into an expression.
          */
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name!;
-            if (isComputedPropertyName(name)) {
+            if (isPrivateIdentifier(name)) {
+                return createIdentifier("");
+            }
+            else if (isComputedPropertyName(name)) {
                 return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
                     : name.expression;
@@ -1870,6 +1876,9 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
+            if (node.flags & NodeFlags.Ambient) {
+                return undefined;
+            }
             const updated = updateProperty(
                 node,
                 /*decorators*/ undefined,
@@ -1904,7 +1913,7 @@ namespace ts {
 
         function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, isParameterPropertyDeclaration);
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
             if (!some(parametersWithPropertyAssignments)) {
                 return visitFunctionBody(body, visitor, context);
             }
@@ -2177,7 +2186,7 @@ namespace ts {
                 return setTextRange(
                     createAssignment(
                         getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                        visitNode(node.initializer!, visitor, isExpression)
+                        visitNode(node.initializer, visitor, isExpression)
                     ),
                     /*location*/ node
                 );
@@ -2185,9 +2194,10 @@ namespace ts {
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
-            return updateVariableDeclaration(
+            return updateTypeScriptVariableDeclaration(
                 node,
                 visitNode(node.name, visitor, isBindingName),
+                /*exclaimationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
         }
@@ -2449,7 +2459,12 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+        function shouldEmitModuleDeclaration(nodeIn: ModuleDeclaration) {
+            const node = getParseTreeNode(nodeIn, isModuleDeclaration);
+            if (!node) {
+                // If we can't find a parse tree node, assume the node is instantiated.
+                return true;
+            }
             return isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules);
         }
 
@@ -2461,6 +2476,7 @@ namespace ts {
             return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
+                    && moduleKind !== ModuleKind.ES2020
                     && moduleKind !== ModuleKind.ESNext
                     && moduleKind !== ModuleKind.System);
         }
@@ -2837,7 +2853,7 @@ namespace ts {
             }
 
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExports, isNamedExports);
+            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedImportBindings);
             return exportClause
                 ? updateExportDeclaration(
                     node,
@@ -2858,6 +2874,14 @@ namespace ts {
             // Elide the named exports if all of its export specifiers were elided.
             const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
             return some(elements) ? updateNamedExports(node, elements) : undefined;
+        }
+
+        function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
+            return updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
+        }
+
+        function visitNamedExportBindings(node: NamedExportBindings): VisitResult<NamedExportBindings> {
+            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node);
         }
 
         /**
@@ -3246,9 +3270,10 @@ namespace ts {
 
                 const substitute = createLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
-                    const propertyName = isPropertyAccessExpression(node)
-                        ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression);
+                    const originalNode = getOriginalNode(node, isAccessExpression);
+                    const propertyName = isPropertyAccessExpression(originalNode)
+                        ? declarationNameToString(originalNode.name)
+                        : getTextOfNode(originalNode.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }
@@ -3282,7 +3307,7 @@ namespace ts {
         context.requestEmitHelper(decorateHelper);
         return setTextRange(
             createCall(
-                getHelperName("__decorate"),
+                getUnscopedHelperName("__decorate"),
                 /*typeArguments*/ undefined,
                 argumentsArray
             ),
@@ -3292,6 +3317,7 @@ namespace ts {
 
     export const decorateHelper: UnscopedEmitHelper = {
         name: "typescript:decorate",
+        importName: "__decorate",
         scoped: false,
         priority: 2,
         text: `
@@ -3306,7 +3332,7 @@ namespace ts {
     function createMetadataHelper(context: TransformationContext, metadataKey: string, metadataValue: Expression) {
         context.requestEmitHelper(metadataHelper);
         return createCall(
-            getHelperName("__metadata"),
+            getUnscopedHelperName("__metadata"),
             /*typeArguments*/ undefined,
             [
                 createLiteral(metadataKey),
@@ -3317,6 +3343,7 @@ namespace ts {
 
     export const metadataHelper: UnscopedEmitHelper = {
         name: "typescript:metadata",
+        importName: "__metadata",
         scoped: false,
         priority: 3,
         text: `
@@ -3329,7 +3356,7 @@ namespace ts {
         context.requestEmitHelper(paramHelper);
         return setTextRange(
             createCall(
-                getHelperName("__param"),
+                getUnscopedHelperName("__param"),
                 /*typeArguments*/ undefined,
                 [
                     createLiteral(parameterOffset),
@@ -3342,6 +3369,7 @@ namespace ts {
 
     export const paramHelper: UnscopedEmitHelper = {
         name: "typescript:param",
+        importName: "__param",
         scoped: false,
         priority: 4,
         text: `

@@ -1,0 +1,100 @@
+=== tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts ===
+function f<X>(arg: X) {
+>f : Symbol(f, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 0))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>arg : Symbol(arg, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 14))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+
+    type Cond1 = X extends [infer A] ? A : never;
+>Cond1 : Symbol(Cond1, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 23))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 33))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 33))
+
+    type Cond2 = X extends [infer A] ? A : never;
+>Cond2 : Symbol(Cond2, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 49))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 11))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 2, 33))
+>A : Symbol(A, Decl(identicalGenericConditionalsWithInferRelated.ts, 2, 33))
+
+    let x: Cond1 = null as any;
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+>Cond1 : Symbol(Cond1, Decl(identicalGenericConditionalsWithInferRelated.ts, 0, 23))
+
+    let y: Cond2 = null as any;
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+>Cond2 : Symbol(Cond2, Decl(identicalGenericConditionalsWithInferRelated.ts, 1, 49))
+
+    x = y; // is err, should be ok
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+
+    y = x; // is err, should be ok
+>y : Symbol(y, Decl(identicalGenericConditionalsWithInferRelated.ts, 5, 7))
+>x : Symbol(x, Decl(identicalGenericConditionalsWithInferRelated.ts, 4, 7))
+}
+
+// repro from https://github.com/microsoft/TypeScript/issues/26627
+export type Constructor<T> = new (...args: any[]) => T
+>Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 24))
+>args : Symbol(args, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 34))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 24))
+
+export type MappedResult<T> =
+>MappedResult : Symbol(MappedResult, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 54))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
+
+    T extends Boolean ? boolean :
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    T extends Number ? number :
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    T extends String ? string :
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    T
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
+
+
+interface X {
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 16, 5))
+
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
+>decode : Symbol(X.decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 19, 13))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 11))
+>Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+>ctor : Symbol(ctor, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 39))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 11))
+>MappedResult : Symbol(MappedResult, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 54))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 11))
+>Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 89))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 20, 89))
+}
+
+class Y implements X {
+>Y : Symbol(Y, Decl(identicalGenericConditionalsWithInferRelated.ts, 21, 1))
+>X : Symbol(X, Decl(identicalGenericConditionalsWithInferRelated.ts, 16, 5))
+
+    decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
+>decode : Symbol(Y.decode, Decl(identicalGenericConditionalsWithInferRelated.ts, 23, 22))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 11))
+>Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+>ctor : Symbol(ctor, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 39))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 11))
+>MappedResult : Symbol(MappedResult, Decl(identicalGenericConditionalsWithInferRelated.ts, 11, 54))
+>C : Symbol(C, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 11))
+>Constructor : Symbol(Constructor, Decl(identicalGenericConditionalsWithInferRelated.ts, 8, 1))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 89))
+>T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 89))
+
+        throw new Error()
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+

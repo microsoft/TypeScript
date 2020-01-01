@@ -61,7 +61,7 @@ let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatibl
 >x : Symbol(x, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 17))
 >c : Symbol(c, Decl(excessPropertyChecksWithNestedIntersections.ts, 21, 25))
 
-let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // should be an error
+let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 >f : Symbol(f, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 3))
 >D : Symbol(D, Decl(excessPropertyChecksWithNestedIntersections.ts, 12, 1))
 >a : Symbol(a, Decl(excessPropertyChecksWithNestedIntersections.ts, 22, 12))

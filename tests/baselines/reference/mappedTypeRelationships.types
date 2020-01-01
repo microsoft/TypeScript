@@ -668,3 +668,13 @@ function f90<T extends { x: number }>() {
 >1 : 1
 }
 
+function f<T extends { x: {} }>(): Partial<T> {
+>f : <T extends { x: {}; }>() => Partial<T>
+>x : {}
+
+    return undefined! as T;
+>undefined! as T : T
+>undefined! : never
+>undefined : undefined
+}
+
