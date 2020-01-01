@@ -8774,6 +8774,7 @@ namespace ts {
             sig.minArgumentCount = minArgumentCount;
             sig.target = undefined;
             sig.mapper = undefined;
+            sig.unionSignatures = undefined;
             return sig;
         }
 
@@ -8782,6 +8783,7 @@ namespace ts {
                 /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.flags & SignatureFlags.PropagatingFlags);
             result.target = sig.target;
             result.mapper = sig.mapper;
+            result.unionSignatures = sig.unionSignatures;
             return result;
         }
 
