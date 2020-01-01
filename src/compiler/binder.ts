@@ -1860,7 +1860,7 @@ namespace ts {
                 Accessor = 2
             }
 
-            if (inStrictMode) {
+            if (inStrictMode && !isAssignmentTarget(node)) {
                 const seen = createUnderscoreEscapedMap<ElementKind>();
 
                 for (const prop of node.properties) {
