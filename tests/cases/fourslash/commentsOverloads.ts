@@ -277,7 +277,7 @@ verify.completions(
         marker: "17",
         includes: [
             { name: "f1", text: "function f1(a: number): number (+1 overload)", documentation: "this is signature 1" },
-            { name: "f2", text: "function f2(a: number): number (+1 overload)", documentation: "this is signature 2\nthis is f2 var comment" },
+            { name: "f2", text: "function f2(a: number): number (+1 overload)" },
             { name: "f3", text: "function f3(a: number): number (+1 overload)" },
             { name: "f4", text: "function f4(a: number): number (+1 overload)", documentation: "this is signature 4 - with number parameter" },
         ],

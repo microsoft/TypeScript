@@ -492,6 +492,7 @@ namespace ts.SymbolDisplay {
                         const allSignatures = type.getNonNullableType().getCallSignatures();
                         if (allSignatures.length) {
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
+                            hasMultipleSignatures = allSignatures.length > 1;
                         }
                     }
                 }
@@ -625,10 +626,8 @@ namespace ts.SymbolDisplay {
             documentation = signature.getDocumentationComment(typeChecker);
             tags = signature.getJsDocTags();
 
-            if (documentation.length === 0 && allSignatures.length > 1) {
+            if (allSignatures.length > 1 && documentation.length === 0 && tags.length === 0) {
                 documentation = allSignatures[0].getDocumentationComment(typeChecker);
-            }
-            if (tags.length === 0 && allSignatures.length > 1) {
                 tags = allSignatures[0].getJsDocTags();
             }
         }
