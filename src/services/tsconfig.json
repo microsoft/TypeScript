@@ -4,6 +4,7 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
+        { "path": "../shims" },
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
@@ -17,6 +18,7 @@
         "documentRegistry.ts",
         "importTracker.ts",
         "findAllReferences.ts",
+        "callHierarchy.ts",
         "getEditsForFileRename.ts",
         "goToDefinition.ts",
         "jsDoc.ts",
@@ -47,6 +49,7 @@
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addMissingAwait.ts",
         "codefixes/addMissingConst.ts",
+        "codefixes/addMissingDeclareProperty.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/addNameToNamelessParameter.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
@@ -96,5 +99,7 @@
         "breakpoints.ts",
         "transform.ts",
         "shims.ts",
+        "globalThisShim.ts",
+        "exportAsModule.ts"
     ]
 }

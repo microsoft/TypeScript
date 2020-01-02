@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 // @declaration: true
 
 declare function isString(value: unknown): value is string;
@@ -36,6 +37,14 @@ function f01(x: unknown) {
         x;  // string | undefined
         assertDefined(x);
         x;  // string
+    }
+    if (!!true) {
+        assert(false);
+        x;  // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x;  // Unreachable
     }
 }
 
@@ -77,6 +86,10 @@ function f10(x: string | undefined) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test {
@@ -108,6 +121,10 @@ class Test {
         this.assertIsTest2();
         this.z;
     }
+    baz(x: number) {
+        this.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test2 extends Test {
@@ -125,4 +142,15 @@ declare class Wat {
     set p1(x: this is string);
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
+}
+
+function f20(x: unknown) {
+    const assert = (value: unknown): asserts value => {}
+    assert(typeof x === "string");  // Error
+    const a = [assert];
+    a[0](typeof x === "string");  // Error
+    const t1 = new Test();
+    t1.assert(typeof x === "string");  // Error
+    const t2: Test = new Test();
+    t2.assert(typeof x === "string");
 }

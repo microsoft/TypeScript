@@ -1,3 +1,29 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:04:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:04:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+12:04:00 AM - Updating output of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+
+12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -1879,32 +1905,32 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 249,
-          "end": 398,
+          "end": 429,
           "kind": "internal"
         },
         {
-          "pos": 400,
-          "end": 432,
+          "pos": 431,
+          "end": 463,
           "kind": "text"
         },
         {
-          "pos": 432,
-          "end": 944,
+          "pos": 463,
+          "end": 975,
           "kind": "internal"
         },
         {
-          "pos": 946,
-          "end": 949,
+          "pos": 977,
+          "end": 980,
           "kind": "text"
         },
         {
-          "pos": 949,
-          "end": 1482,
+          "pos": 980,
+          "end": 1513,
           "kind": "internal"
         },
         {
-          "pos": 1484,
-          "end": 1532,
+          "pos": 1515,
+          "end": 1563,
           "kind": "text"
         }
       ]
@@ -2060,18 +2086,19 @@ declare namespace N {
 declare class normalC {
 
 ----------------------------------------------------------------------
-internal: (249-398)
+internal: (249-429)
     /**@internal*/ constructor();
     /**@internal*/ prop: string;
     /**@internal*/ method(): void;
-    /**@internal*/ /**@internal*/ c: number;
+    /**@internal*/ get c(): number;
+    /**@internal*/ set c(val: number);
 ----------------------------------------------------------------------
-text: (400-432)
+text: (431-463)
 }
 declare namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (432-944)
+internal: (463-975)
     /**@internal*/ class C {
     }
     /**@internal*/ function foo(): void;
@@ -2092,11 +2119,11 @@ internal: (432-944)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (946-949)
+text: (977-980)
 }
 
 ----------------------------------------------------------------------
-internal: (949-1482)
+internal: (980-1513)
 /**@internal*/ declare class internalC {
 }
 /**@internal*/ declare function internalfoo(): void;
@@ -2117,7 +2144,7 @@ internal: (949-1482)
     c = 2
 }
 ----------------------------------------------------------------------
-text: (1484-1532)
+text: (1515-1563)
 declare class C {
     doSomething(): void;
 }

@@ -1,4 +1,4 @@
-tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts(14,12): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts(14,12): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
 ==== tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts (1 errors) ====
@@ -17,6 +17,6 @@ tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts(14,12): error T
         x;
         delete x;  // No effect
                ~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
         x;
     }

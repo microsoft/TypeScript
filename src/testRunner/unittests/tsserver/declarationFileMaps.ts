@@ -126,7 +126,8 @@ namespace ts.projectSystem {
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
-            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 1 } : { inferredProjects: 1 });
+            // If config file then userConfig project and bConfig project since it is referenced
+            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 2 } : { inferredProjects: 1 });
             return session;
         }
 
@@ -179,7 +180,7 @@ namespace ts.projectSystem {
         }
 
         function verifyUserTsConfigProject(session: TestSession) {
-            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aDts.path, userTsconfig.path]);
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aTs.path, userTsconfig.path]);
         }
 
         it("goToDefinition", () => {
@@ -224,7 +225,7 @@ namespace ts.projectSystem {
                     })
                 ],
             });
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
             verifyUserTsConfigProject(session);
 
             // Navigate to the definition
@@ -232,7 +233,7 @@ namespace ts.projectSystem {
             openFilesForSession([aTs], session);
 
             // UserTs configured project should be alive
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 3 });
             verifyUserTsConfigProject(session);
             verifyATsConfigProject(session);
 
@@ -421,7 +422,7 @@ namespace ts.projectSystem {
             const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
             checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
             openFilesForSession([bTs], session);
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
@@ -450,6 +451,13 @@ namespace ts.projectSystem {
                         name: "function f(): void",
                     },
                     references: [
+                        makeReferenceEntry({
+                            file: aTs,
+                            text: "f",
+                            options: { index: 1 },
+                            contextText: "function f() {}",
+                            isDefinition: true
+                        }),
                         {
                             fileName: bTs.path,
                             isDefinition: false,
@@ -457,13 +465,6 @@ namespace ts.projectSystem {
                             isWriteAccess: false,
                             textSpan: { start: 0, length: 1 },
                         },
-                        makeReferenceEntry({
-                            file: aTs,
-                            text: "f",
-                            options: { index: 1 },
-                            contextText: "function f() {}",
-                            isDefinition: true
-                        })
                     ],
                 }
             ]);

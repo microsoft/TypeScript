@@ -31,8 +31,10 @@ namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
+        reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
+        reScanQuestionToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -184,6 +186,8 @@ namespace ts {
         "&&": SyntaxKind.AmpersandAmpersandToken,
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
+        "??": SyntaxKind.QuestionQuestionToken,
+        "?.": SyntaxKind.QuestionDotToken,
         ":": SyntaxKind.ColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
@@ -899,8 +903,10 @@ namespace ts {
             reScanTemplateToken,
             scanJsxIdentifier,
             scanJsxAttributeValue,
+            reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
+            reScanQuestionToken,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -1329,20 +1335,6 @@ namespace ts {
             }
 
             return utf16EncodeAsString(escapedValue);
-        }
-
-        // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
-        function utf16EncodeAsString(codePoint: number): string {
-            Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-
-            if (codePoint <= 65535) {
-                return String.fromCharCode(codePoint);
-            }
-
-            const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
-            const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
-
-            return String.fromCharCode(codeUnit1, codeUnit2);
         }
 
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
@@ -1829,6 +1821,14 @@ namespace ts {
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            return token = SyntaxKind.QuestionDotToken;
+                        }
+                        if (text.charCodeAt(pos) === CharacterCodes.question) {
+                            pos++;
+                            return token = SyntaxKind.QuestionQuestionToken;
+                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;
@@ -1892,6 +1892,25 @@ namespace ts {
 
                         error(Diagnostics.Invalid_character);
                         pos++;
+                        return token = SyntaxKind.Unknown;
+                    case CharacterCodes.hash:
+                        if (pos !== 0 && text[pos + 1] === "!") {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
+                        pos++;
+                        if (isIdentifierStart(ch = text.charCodeAt(pos), languageVersion)) {
+                            pos++;
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos), languageVersion)) pos++;
+                            tokenValue = text.substring(tokenPos, pos);
+                            if (ch === CharacterCodes.backslash) {
+                                tokenValue += scanIdentifierParts();
+                            }
+                            return token = SyntaxKind.PrivateIdentifier;
+                        }
+                        error(Diagnostics.Invalid_character);
+                        // no `pos++` because already advanced past the '#'
                         return token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
@@ -2018,6 +2037,12 @@ namespace ts {
             return token;
         }
 
+        function reScanQuestionToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.QuestionToken;
+        }
+
         function scanJsxToken(): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
@@ -2113,6 +2138,11 @@ namespace ts {
                     // If this scans anything other than `{`, it's a parse error.
                     return scan();
             }
+        }
+
+        function reScanJsxAttributeValue(): SyntaxKind {
+            pos = tokenPos = startPos;
+            return scanJsxAttributeValue();
         }
 
         function scanJsDocToken(): JSDocSyntaxKind {
@@ -2313,5 +2343,26 @@ namespace ts {
             return 2;
         }
         return 1;
+    }
+
+    // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+    function utf16EncodeAsStringFallback(codePoint: number) {
+        Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+
+        if (codePoint <= 65535) {
+            return String.fromCharCode(codePoint);
+        }
+
+        const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
+        const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+
+        return String.fromCharCode(codeUnit1, codeUnit2);
+    }
+
+    const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => String.fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
+
+    /* @internal */
+    export function utf16EncodeAsString(codePoint: number) {
+        return utf16EncodeAsStringWorker(codePoint);
     }
 }

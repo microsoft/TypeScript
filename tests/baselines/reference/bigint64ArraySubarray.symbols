@@ -4,21 +4,21 @@ function bigInt64ArraySubarray() {
 
     var arr = new BigInt64Array(10);
 >arr : Symbol(arr, Decl(bigint64ArraySubarray.ts, 1, 7))
->BigInt64Array : Symbol(BigInt64Array, Decl(lib.esnext.bigint.d.ts, --, --), Decl(lib.esnext.bigint.d.ts, --, --))
+>BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
     arr.subarray();
->arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 >arr : Symbol(arr, Decl(bigint64ArraySubarray.ts, 1, 7))
->subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 
     arr.subarray(0);
->arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 >arr : Symbol(arr, Decl(bigint64ArraySubarray.ts, 1, 7))
->subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 
     arr.subarray(0, 10);
->arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>arr.subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 >arr : Symbol(arr, Decl(bigint64ArraySubarray.ts, 1, 7))
->subarray : Symbol(BigInt64Array.subarray, Decl(lib.esnext.bigint.d.ts, --, --))
+>subarray : Symbol(BigInt64Array.subarray, Decl(lib.es2020.bigint.d.ts, --, --))
 }
 

@@ -1032,7 +1032,7 @@
   "await_expression_is_only_allowed_within_an_async_function_1308": "Der Ausdruck \"await\" ist nur in einer asynchronen Funktion zulässig.",
   "await_expressions_cannot_be_used_in_a_parameter_initializer_2524": "await-Ausdrücke dürfen nicht in einem Parameterinitialisierer verwendet werden.",
   "baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1_6106": "Die Option \"baseUrl\" ist auf \"{0}\" festgelegt. Dieser Wert wird verwendet, um den nicht relativen Modulnamen \"{1}\" aufzulösen.",
-  "can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312": "\"=\" kann nur in einer Objektliteraleigenschaft innerhalb eines Destrukturierungsauftrags verwendet werden.",
+  "can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312": "\"=\" kann nur in einer Objektliteraleigenschaft innerhalb eines Destrukturierungszuweisung verwendet werden.",
   "case_or_default_expected_1130": "\"case\" oder \"default\" wurde erwartet.",
   "class_expressions_are_not_currently_supported_9003": "class-Ausdrücke werden zurzeit nicht unterstützt.",
   "const_declarations_can_only_be_declared_inside_a_block_1156": "const-Deklarationen können nur innerhalb eines Blocks deklariert werden.",

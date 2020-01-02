@@ -34,7 +34,7 @@ namespace ts.server {
         // We still want to check .js files in a JS-only inferred or external project (e.g. if the
         // file has '// @ts-check').
 
-        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) &&
+        if ((isInferredProject(project) || isExternalProject(project)) &&
             project.isJsOnlyProject()) {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             return scriptInfo && !scriptInfo.isJavaScript();
@@ -284,6 +284,7 @@ namespace ts.server {
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => readonly T[], areEqual: (a: T, b: T) => boolean) {
         const outputs: T[] = [];
+        projectService.loadAncestorProjectTree();
         projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
             outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
@@ -299,7 +300,7 @@ namespace ts.server {
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const outputs: T[] = [];
-        combineProjectOutputWorker<undefined>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             /*initialLocation*/ undefined,
@@ -310,7 +311,7 @@ namespace ts.server {
                     }
                 }
             },
-            /*getDefinition*/ undefined);
+        );
         return outputs;
     }
 
@@ -324,7 +325,7 @@ namespace ts.server {
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
@@ -335,7 +336,6 @@ namespace ts.server {
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs;
@@ -344,7 +344,7 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
         const info = infos && firstOrUndefined(infos);
-        return info && { fileName: info.fileName, pos: info.textSpan.start };
+        return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
     function combineProjectOutputForReferences(
@@ -354,7 +354,7 @@ namespace ts.server {
     ): readonly ReferencedSymbol[] {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker<DocumentPosition>(
+        combineProjectOutputWorker(
             projects,
             defaultProject,
             initialLocation,
@@ -384,7 +384,6 @@ namespace ts.server {
                     }
                 }
             },
-            () => getDefinitionLocation(defaultProject, initialLocation)
         );
 
         return outputs.filter(o => o.references.length !== 0);
@@ -417,8 +416,7 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>,
-        getDefinition: (() => DocumentPosition | undefined) | undefined,
+        cb: CombineProjectOutputCallback<TLocation>
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -430,15 +428,18 @@ namespace ts.server {
         });
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
-        if (getDefinition) {
-            const memGetDefinition = memoize(getDefinition);
-            projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project.projectName)) return;
-                const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
-                if (definition) {
-                    toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
-                }
-            });
+        if (initialLocation) {
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            if (defaultDefinition) {
+                projectService.loadAncestorProjectTree(seenProjects);
+                projectService.forEachEnabledProject(project => {
+                    if (!addToSeen(seenProjects, project)) return;
+                    const definition = mapDefinitionInProject(defaultDefinition, defaultProject, project);
+                    if (definition) {
+                        toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
+                    }
+                });
+            }
         }
 
         while (toDo && toDo.length) {
@@ -446,10 +447,33 @@ namespace ts.server {
         }
     }
 
-    function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
-        if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
+    function mapDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
+        // If the definition is actually from the project, definition is correct as is
+        if (!definition ||
+            project.containsFile(toNormalizedPath(definition.fileName)) &&
+            !isLocationProjectReferenceRedirect(project, definition)) {
+            return definition;
+        }
+        const mappedDefinition = definingProject.isSourceOfProjectReferenceRedirect(definition.fileName) ?
+            definition :
+            definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
+    }
+
+    function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
+        if (!location) return false;
+        const program = project.getLanguageService().getProgram();
+        if (!program) return false;
+        const sourceFile = program.getSourceFile(location.fileName);
+
+        // It is possible that location is attached to project but
+        // the program actually includes its redirect instead.
+        // This happens when rootFile in project is one of the file from referenced project
+        // Thus root is attached but program doesnt have the actual .ts file but .d.ts
+        // If this is not the file we were actually looking, return rest of the toDo
+        return !!sourceFile &&
+            sourceFile.resolvedPath !== sourceFile.path &&
+            sourceFile.resolvedPath !== project.toPath(location.fileName);
     }
 
     function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(
@@ -459,9 +483,12 @@ namespace ts.server {
         seenProjects: Map<true>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
-        if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
+        const { project, location } = projectAndLocation;
+        if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
+        // If this is not the file we were actually looking, return rest of the toDo
+        if (isLocationProjectReferenceRedirect(project, location)) return toDo;
         cb(projectAndLocation, (project, location) => {
-            seenProjects.set(projectAndLocation.project.projectName, true);
+            addToSeen(seenProjects, projectAndLocation.project);
             const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return undefined;
 
@@ -473,17 +500,25 @@ namespace ts.server {
             }
             const symlinkedProjectsMap = projectService.getSymlinkedProjects(originalScriptInfo);
             if (symlinkedProjectsMap) {
-                symlinkedProjectsMap.forEach((symlinkedProjects) => {
-                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
+                symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
+                    for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: { fileName: symlinkedPath, pos: originalLocation.pos } as TLocation }, toDo!, seenProjects);
                 });
             }
-            return originalLocation;
+            return originalLocation === location ? undefined : originalLocation;
         });
         return toDo;
     }
 
     function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
-        if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
+        if (addToSeen(seenProjects, projectAndLocation.project)) toDo.push(projectAndLocation);
+    }
+
+    function addToSeen(seenProjects: Map<true>, project: Project) {
+        return ts.addToSeen(seenProjects, getProjectKey(project));
+    }
+
+    function getProjectKey(project: Project) {
+        return isConfiguredProject(project) ? project.canonicalConfigFilePath : project.getProjectName();
     }
 
     function documentSpanLocation({ fileName, textSpan }: DocumentSpan): DocumentPosition {
@@ -1025,7 +1060,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 return {
                     definitions: this.mapDefinitionInfo(definitions, project),
-                    textSpan: toProcolTextSpan(textSpan, scriptInfo)
+                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
                 };
             }
 
@@ -1037,7 +1072,9 @@ namespace ts.server {
 
         private getEmitOutput(args: protocol.FileRequestArgs): EmitOutput {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEmitOutput(file);
+            return project.shouldEmitFile(project.getScriptInfo(file)) ?
+                project.getLanguageService().getEmitOutput(file) :
+                { emitSkipped: true, outputFiles: [] };
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1278,7 +1315,7 @@ namespace ts.server {
             if (info.canRename) {
                 const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
                 return identity<protocol.RenameInfoSuccess>(
-                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProcolTextSpan(triggerSpan, scriptInfo) });
+                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProtocolTextSpan(triggerSpan, scriptInfo) });
             }
             else {
                 return info;
@@ -1378,8 +1415,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
                 return spans.map(s => ({
-                    textSpan: toProcolTextSpan(s.textSpan, scriptInfo),
-                    hintSpan: toProcolTextSpan(s.hintSpan, scriptInfo),
+                    textSpan: toProtocolTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: toProtocolTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
                     autoCollapse: s.autoCollapse,
                     kind: s.kind
@@ -1568,7 +1605,7 @@ namespace ts.server {
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
-                    const convertedSpan = replacementSpan ? toProcolTextSpan(replacementSpan, scriptInfo) : undefined;
+                    const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                 }
@@ -1672,10 +1709,10 @@ namespace ts.server {
             }
         }
 
-        private createCheckList(fileNames: string[], defaultProject?: Project): PendingErrorCheck[] {
+        private createCheckList(fileNames: string[]): PendingErrorCheck[] {
             return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
                 const fileName = toNormalizedPath(uncheckedFileName);
-                const project = defaultProject || this.projectService.tryGetDefaultProjectForFile(fileName);
+                const project = this.projectService.tryGetDefaultProjectForFile(fileName);
                 return project && { fileName, project };
             });
         }
@@ -1738,7 +1775,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
-                spans: item.spans.map(span => toProcolTextSpan(span, scriptInfo)),
+                spans: item.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 childItems: this.mapLocationNavigationBarItems(item.childItems, scriptInfo),
                 indent: item.indent
             }));
@@ -1759,8 +1796,8 @@ namespace ts.server {
                 text: tree.text,
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
-                spans: tree.spans.map(span => toProcolTextSpan(span, scriptInfo)),
-                nameSpan: tree.nameSpan && toProcolTextSpan(tree.nameSpan, scriptInfo),
+                spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
             };
         }
@@ -2022,7 +2059,7 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                    ? spans.map(span => toProcolTextSpan(span, scriptInfo))
+                    ? spans.map(span => toProtocolTextSpan(span, scriptInfo))
                     : spans;
         }
 
@@ -2094,12 +2131,77 @@ namespace ts.server {
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
             const result: protocol.SelectionRange = {
-                textSpan: toProcolTextSpan(selectionRange.textSpan, scriptInfo),
+                textSpan: toProtocolTextSpan(selectionRange.textSpan, scriptInfo),
             };
             if (selectionRange.parent) {
                 result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
             }
             return result;
+        }
+
+        private toProtocolCallHierarchyItem(item: CallHierarchyItem, scriptInfo?: ScriptInfo): protocol.CallHierarchyItem {
+            if (!scriptInfo) {
+                const file = toNormalizedPath(item.file);
+                scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+                if (!scriptInfo) {
+                    this.projectService.logErrorForScriptInfoNotFound(file);
+                    return Errors.ThrowNoProject();
+                }
+            }
+            return {
+                name: item.name,
+                kind: item.kind,
+                file: item.file,
+                span: toProtocolTextSpan(item.span, scriptInfo),
+                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
+            };
+        }
+
+        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyIncomingCall {
+            return {
+                from: this.toProtocolCallHierarchyItem(incomingCall.from),
+                fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private toProtocolCallHierarchyOutgoingCall(outgoingCall: CallHierarchyOutgoingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyOutgoingCall {
+            return {
+                to: this.toProtocolCallHierarchyItem(outgoingCall.to),
+                fromSpans: outgoingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | protocol.CallHierarchyItem[] | undefined {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (scriptInfo) {
+                const position = this.getPosition(args, scriptInfo);
+                const result = project.getLanguageService().prepareCallHierarchy(file, position);
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
+            }
+            return undefined;
+        }
+
+        private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (!scriptInfo) {
+                this.projectService.logErrorForScriptInfoNotFound(file);
+                return Errors.ThrowNoProject();
+            }
+            const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
+            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call, scriptInfo));
+        }
+
+        private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (!scriptInfo) {
+                this.projectService.logErrorForScriptInfoNotFound(file);
+                return Errors.ThrowNoProject();
+            }
+            const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
+            return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
         }
 
         getCanonicalFileName(fileName: string) {
@@ -2119,7 +2221,7 @@ namespace ts.server {
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
-                const response: protocol.StatusResponseBody = { version };
+                const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
@@ -2467,6 +2569,15 @@ namespace ts.server {
             [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
                 return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.PrepareCallHierarchy]: (request: protocol.PrepareCallHierarchyRequest) => {
+                return this.requiredResponse(this.prepareCallHierarchy(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyIncomingCalls]: (request: protocol.ProvideCallHierarchyIncomingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyIncomingCalls(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
@@ -2590,7 +2701,7 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    function toProcolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+    function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
         return {
             start: scriptInfo.positionToLineOffset(textSpan.start),
             end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
@@ -2598,8 +2709,8 @@ namespace ts.server {
     }
 
     function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
-        const textSpan = toProcolTextSpan(span, scriptInfo);
-        const contextTextSpan = contextSpan && toProcolTextSpan(contextSpan, scriptInfo);
+        const textSpan = toProtocolTextSpan(span, scriptInfo);
+        const contextTextSpan = contextSpan && toProtocolTextSpan(contextSpan, scriptInfo);
         return contextTextSpan ?
             { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
             textSpan;

@@ -1591,17 +1591,22 @@ namespace ts {
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
-            const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
+            const propertyName = visitNode(member.name, visitor, isPropertyName);
+            let e: Expression;
+            if (!isPrivateIdentifier(propertyName) && context.getCompilerOptions().useDefineForClassFields) {
+                const name = isComputedPropertyName(propertyName) ? propertyName.expression
+                    : isIdentifier(propertyName) ? createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
+                    : propertyName;
+                e = createObjectDefinePropertyCall(receiver, name, createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
+            }
+            else {
+                const memberName = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ member.name);
+                e = createAssignment(memberName, memberFunction);
+            }
             setEmitFlags(memberFunction, EmitFlags.NoComments);
             setSourceMapRange(memberFunction, sourceMapRange);
-
-            const statement = setTextRange(
-                createExpressionStatement(
-                    createAssignment(memberName, memberFunction)
-                ),
-                /*location*/ member
-            );
+            const statement = setTextRange(createExpressionStatement(e), /*location*/ member);
 
             setOriginalNode(statement, member);
             setCommentRange(statement, commentRange);
@@ -1642,7 +1647,11 @@ namespace ts {
             setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
             setSourceMapRange(target, firstAccessor.name);
 
-            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
+            const visitedAccessorName = visitNode(firstAccessor.name, visitor, isPropertyName);
+            if (isPrivateIdentifier(visitedAccessorName)) {
+                return Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
+            }
+            const propertyName = createExpressionForPropertyName(visitedAccessorName);
             setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 

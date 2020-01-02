@@ -185,7 +185,7 @@ namespace ts.codefix {
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
-            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
@@ -233,14 +233,14 @@ namespace ts.codefix {
         let someSigHasRestParameter = false;
         for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            if (sig.hasRestParameter) {
+            if (signatureHasRestParameter(sig)) {
                 someSigHasRestParameter = true;
             }
-            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
+            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))) {
                 maxArgsSignature = sig;
             }
         }
-        const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
+        const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);

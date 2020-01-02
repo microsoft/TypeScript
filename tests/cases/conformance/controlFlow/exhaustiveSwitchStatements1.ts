@@ -197,3 +197,45 @@ function test4(value: 1 | 2) {
     }
     return x;
 }
+
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+
+declare const zoo: { animal: Animal } | undefined;
+
+function expression(): Animal {
+    switch (zoo?.animal ?? Animal.DOG) {
+        case Animal.DOG: return Animal.DOG
+        case Animal.CAT: return Animal.CAT
+    }
+}
+
+// Repro from #34840
+
+function foo() {
+    const foo: number | undefined = 0;
+    while (true) {
+        const stats = foo;
+        switch (stats) {
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
+// Repro from #35070
+
+type O = {
+    a: number,
+    b: number
+};
+type K = keyof O | 'c';
+function ff(o: O, k: K) {
+    switch(k) {
+        case 'c':
+            k = 'a';
+    }
+    k === 'c';  // Error
+    return o[k];
+}

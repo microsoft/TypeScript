@@ -68,7 +68,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementAndHasJSDoc) : findAncestor(selection, isStatement), "Should find a statement");
+        const firstStatement = Debug.assertDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
@@ -98,10 +98,6 @@ namespace ts.refactor {
             return node.members;
         }
         return undefined;
-    }
-
-    function isStatementAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
-        return isStatement(n) && hasJSDocNodes(n);
     }
 
     function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
