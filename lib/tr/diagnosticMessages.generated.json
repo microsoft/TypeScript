@@ -453,7 +453,7 @@
   "Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher_1220": "Oluşturucular yalnızca ECMEAScript 2015 veya üstü hedeflenirken kullanılabilir.",
   "Generic_type_0_requires_1_type_argument_s_2314": "'{0}' genel türü, {1} tür bağımsız değişkenini gerektiriyor.",
   "Generic_type_0_requires_between_1_and_2_type_arguments_2707": "'{0}' genel türü {1} ile {2} arasında bağımsız değişken gerektirir.",
-  "Generic_type_instantiation_is_excessively_deep_and_possibly_infinite_2550": "Genel tür oluşturma işlemi, fazla ayrıntılı ve büyük olasılıkla sınırsız.",
+  "Generic_type_instantiation_is_excessively_deep_and_possibly_infinite_2550": "Genel tür örneği oluşturma işlemi, fazla ayrıntılı ve büyük olasılıkla sınırsız.",
   "Getter_and_setter_accessors_do_not_agree_in_visibility_2379": "Alıcı ve ayarlayıcı erişimcileri görünürlükte anlaşamıyor.",
   "Global_module_exports_may_only_appear_at_top_level_1316": "Genel modül dışarı aktarmaları yalnızca en üst düzeyde görünebilir.",
   "Global_module_exports_may_only_appear_in_declaration_files_1315": "Genel modül dışarı aktarmaları yalnızca bildirim dosyalarında görünebilir.",

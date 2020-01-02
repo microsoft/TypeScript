@@ -309,7 +309,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A definite assignment assertion '!' is not permitted in this context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Утверждение определенного присваивания "!" запрещено в этом контексте.]]></Val>
+            <Val><![CDATA[Утверждение определенного назначения "!" запрещено в этом контексте.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -978,7 +978,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertion to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить утверждение определенного присваивания к свойству "{0}"]]></Val>
+            <Val><![CDATA[Добавить утверждение определенного назначения к свойству "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -987,7 +987,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertions to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить утверждения определенного присваивания ко всем неинициализированным свойствам]]></Val>
+            <Val><![CDATA[Добавить утверждения определенного назначения ко всем неинициализированным свойствам]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1227,7 +1227,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An AMD module cannot have multiple name assignments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Модуль AMD не может иметь несколько присваиваний имен.]]></Val>
+            <Val><![CDATA[Модуль AMD не может иметь несколько назначений имен.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1335,7 +1335,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment can only be used in a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Присваивание экспорта может быть использовано только в модуле.]]></Val>
+            <Val><![CDATA[Назначение экспорта может быть использовано только в модуле.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1344,7 +1344,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot be used in a module with other exported elements.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Присваивание экспорта нельзя использовать в модуле с другими экспортированными элементами.]]></Val>
+            <Val><![CDATA[Назначение экспорта нельзя использовать в модуле с другими экспортированными элементами.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1353,7 +1353,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot be used in a namespace.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Присваивание экспорта нельзя использовать в пространстве имен.]]></Val>
+            <Val><![CDATA[Назначение экспорта нельзя использовать в пространстве имен.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1362,7 +1362,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An export assignment cannot have modifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Присваивание экспорта не может иметь модификаторы.]]></Val>
+            <Val><![CDATA[Назначение экспорта не может иметь модификаторы.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3618,7 +3618,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Export assignment is not supported when '--module' flag is 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Присваивание экспорта не поддерживается, если флаг "--module" имеет значение "system".]]></Val>
+            <Val><![CDATA[Назначение экспорта не поддерживается, если флаг "--module" имеет значение "system".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5526,7 +5526,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all code paths return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Не все пути кода возвращают значение.]]></Val>
+            <Val><![CDATA[Не все пути к коду возвращают значение.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6621,7 +6621,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property assignment expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ожидалось присваивание свойства.]]></Val>
+            <Val><![CDATA[Ожидалось назначение свойства.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6903,7 +6903,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Report error when not all code paths in function return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Сообщать об ошибке, если не все пути кода в функции возвращают значение.]]></Val>
+            <Val><![CDATA[Сообщать об ошибке, если не все пути к коду в функции возвращают значение.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7869,7 +7869,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expression of an export assignment must be an identifier or qualified name in an ambient context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Выражение присваивания экспорта должно представлять собой идентификатор или полное имя в окружающем контексте.]]></Val>
+            <Val><![CDATA[Выражение назначения экспорта должно представлять собой идентификатор или полное имя в окружающем контексте.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9600,7 +9600,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Перечисления const можно использовать только в выражениях доступа к свойству или индексу, а также в правой части объявления импорта, присваивания экспорта или запроса типа.]]></Val>
+            <Val><![CDATA[Перечисления const можно использовать только в выражениях доступа к свойству или индексу, а также в правой части объявления импорта, назначения экспорта или запроса типа.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>

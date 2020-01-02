@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/intersection/intersectionMemberOfUnionNarrowsCorrectly.ts ===
+export type U = { kind?: 'A', a: string } | { kind?: 'B' } & { b: string };
+>U : Symbol(U, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 0))
+>kind : Symbol(kind, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 17))
+>a : Symbol(a, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 29))
+>kind : Symbol(kind, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 45))
+>b : Symbol(b, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 62))
+
+type Ex<T, U> = T extends U ? T : never;
+>Ex : Symbol(Ex, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 75))
+>T : Symbol(T, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 1, 8))
+>U : Symbol(U, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 1, 10))
+>T : Symbol(T, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 1, 8))
+>U : Symbol(U, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 1, 10))
+>T : Symbol(T, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 1, 8))
+
+declare let x: Ex<U, { kind?: 'A' }>
+>x : Symbol(x, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 2, 11))
+>Ex : Symbol(Ex, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 75))
+>U : Symbol(U, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 0))
+>kind : Symbol(kind, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 2, 22))
+
+x.a
+>x.a : Symbol(a, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 29))
+>x : Symbol(x, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 2, 11))
+>a : Symbol(a, Decl(intersectionMemberOfUnionNarrowsCorrectly.ts, 0, 29))
+

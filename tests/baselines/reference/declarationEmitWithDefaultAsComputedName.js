@@ -42,5 +42,5 @@ export default _default;
 //// [main.d.ts]
 import other from "./other";
 export declare const obj: {
-    [other.name]: number;
+    foo: number;
 };

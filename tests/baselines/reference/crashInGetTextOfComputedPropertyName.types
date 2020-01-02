@@ -57,7 +57,7 @@ const {
 >items : any
 >itemId : "some-id"
 >itemWithTSError : any
->{} : { some-id: any; }
+>{} : { "some-id": any; }
 
 } = objWithItems
 >objWithItems : ObjWithItems

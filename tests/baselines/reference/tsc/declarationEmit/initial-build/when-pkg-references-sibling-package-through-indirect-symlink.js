@@ -8,7 +8,7 @@ src/pkg3/src/keys.ts(2,14): error TS2742: The inferred type of 'ADMIN' cannot be
 /src/pkg3/node_modules/@raymondfeng/pkg2/dist/index.d.ts
 /src/pkg3/src/keys.ts
 /src/pkg3/src/index.ts
-exitCode:: 1
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/pkg3/dist/index.d.ts]

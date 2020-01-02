@@ -307,7 +307,7 @@ namespace ts.OrganizeImports {
         }
 
         const newExportSpecifiers: ExportSpecifier[] = [];
-        newExportSpecifiers.push(...flatMap(namedExports, i => (i.exportClause!).elements));
+        newExportSpecifiers.push(...flatMap(namedExports, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
         const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 
@@ -317,7 +317,11 @@ namespace ts.OrganizeImports {
                 exportDecl,
                 exportDecl.decorators,
                 exportDecl.modifiers,
-                updateNamedExports(exportDecl.exportClause!, sortedExportSpecifiers),
+                exportDecl.exportClause && (
+                    isNamedExports(exportDecl.exportClause) ?
+                        updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
+                        updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
+                ),
                 exportDecl.moduleSpecifier));
 
         return coalescedExports;

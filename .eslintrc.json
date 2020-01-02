@@ -54,6 +54,7 @@
         "simple-indent": "error",
         "debug-assert": "error",
         "no-keywords": "error",
+        "one-namespace-per-file": "error",
 
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],

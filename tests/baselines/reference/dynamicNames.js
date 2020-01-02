@@ -240,9 +240,9 @@ export declare const c4 = "a";
 export declare const c5 = 1;
 export declare const s2: typeof s0;
 export declare const o1: {
-    [c4]: number;
-    [c5]: string;
-    [s2]: boolean;
+    a: number;
+    1: string;
+    [s0]: boolean;
 };
 export declare const o1_c4: number;
 export declare const o1_c5: string;

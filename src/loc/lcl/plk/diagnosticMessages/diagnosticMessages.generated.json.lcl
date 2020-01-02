@@ -303,7 +303,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A definite assignment assertion '!' is not permitted in this context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Asercja określonego przydziału „!” nie jest dozwolona w tym kontekście.]]></Val>
+            <Val><![CDATA[Asercja określonego przypisania „!” nie jest dozwolona w tym kontekście.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5517,7 +5517,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all code paths return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie wszystkie ścieżki kodu zwracają wartość.]]></Val>
+            <Val><![CDATA[Nie wszystkie ścieżki w kodzie zwracają wartość.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6891,7 +6891,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Report error when not all code paths in function return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zgłoś błąd, gdy nie wszystkie ścieżki kodu zwracają wartość.]]></Val>
+            <Val><![CDATA[Zgłoś błąd, gdy nie wszystkie ścieżki w kodzie zwracają wartość.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

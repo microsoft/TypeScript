@@ -204,7 +204,7 @@ namespace ts.Completions.StringCompletions {
         const candidates: Signature[] = [];
         checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
         const types = flatMap(candidates, candidate => {
-            if (!candidate.hasRestParameter && argumentInfo.argumentCount > candidate.parameters.length) return;
+            if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
             const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);

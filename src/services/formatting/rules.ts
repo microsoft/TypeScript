@@ -433,9 +433,9 @@ namespace ts.formatting {
     }
 
     function isBinaryOpContext(context: FormattingContext): boolean {
-
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
@@ -855,13 +855,6 @@ namespace ts.formatting {
     }
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
-        const contextAncestor = findAncestor(context.currentTokenParent, ancestor => {
-            if (ancestor.end !== context.currentTokenSpan.end) {
-                return "quit";
-            }
-            return syntaxMayBeASICandidate(ancestor.kind);
-        });
-
-        return !!contextAncestor && isASICandidate(contextAncestor, context.sourceFile);
+        return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
     }
 }

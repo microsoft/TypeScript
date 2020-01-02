@@ -1,0 +1,124 @@
+/a/lib/tsc.js --w --p /a/rootFolder/project/tsconfig.json
+//// [/a/rootFolder/project/tsconfig.json]
+{"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
+
+//// [/a/rootFolder/project/Scripts/TypeScript.ts]
+var z = 10;
+
+//// [/a/rootFolder/project/Scripts/Javascript.js]
+var zz = 10;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/rootFolder/project/Static/scripts/Javascript.js]
+var zz = 10;
+
+
+//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
+var z = 10;
+
+
+
+Output::
+>> Screen clear
+12:00:21 AM - Starting compilation in watch mode...
+
+
+
+12:00:31 AM - Found 0 errors. Watching for file changes.
+
+
+Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
+Program options: {"module":0,"allowJs":true,"outDir":"/a/rootFolder/project/Static/scripts","watch":true,"project":"/a/rootFolder/project/tsconfig.json","configFilePath":"/a/rootFolder/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/a/rootFolder/project/Scripts/Javascript.js
+/a/rootFolder/project/Scripts/TypeScript.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/rootFolder/project/Scripts/Javascript.js
+/a/rootFolder/project/Scripts/TypeScript.ts
+
+WatchedFiles::
+/a/rootfolder/project/tsconfig.json:
+  {"pollingInterval":250}
+/a/rootfolder/project/scripts/javascript.js:
+  {"pollingInterval":250}
+/a/rootfolder/project/scripts/typescript.ts:
+  {"pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/rootfolder/project/node_modules/@types:
+  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/rootfolder/project/scripts:
+  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+Change:: Modify typescript file
+
+//// [/a/rootFolder/project/Scripts/TypeScript.ts]
+var zz30 = 100;
+
+//// [/a/rootFolder/project/Static/scripts/Javascript.js] file written with same contents
+//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
+var zz30 = 100;
+
+
+
+Output::
+>> Screen clear
+12:00:34 AM - File change detected. Starting incremental compilation...
+
+
+
+12:00:41 AM - Found 0 errors. Watching for file changes.
+
+
+Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
+Program options: {"module":0,"allowJs":true,"outDir":"/a/rootFolder/project/Static/scripts","watch":true,"project":"/a/rootFolder/project/tsconfig.json","configFilePath":"/a/rootFolder/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/a/rootFolder/project/Scripts/Javascript.js
+/a/rootFolder/project/Scripts/TypeScript.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/rootFolder/project/Scripts/Javascript.js
+/a/rootFolder/project/Scripts/TypeScript.ts
+
+WatchedFiles::
+/a/rootfolder/project/tsconfig.json:
+  {"pollingInterval":250}
+/a/rootfolder/project/scripts/javascript.js:
+  {"pollingInterval":250}
+/a/rootfolder/project/scripts/typescript.ts:
+  {"pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/rootfolder/project/node_modules/@types:
+  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/rootfolder/project/scripts:
+  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined

@@ -1,104 +1,8 @@
-namespace ts {
-    // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
-    // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.7";
-    /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0-dev`;
-}
-
-namespace ts {
-    /**
-     * Type of objects whose values are all of the same type.
-     * The `in` and `for-in` operators can *not* be safely used,
-     * since `Object.prototype` may be modified by outside code.
-     */
-    export interface MapLike<T> {
-        [index: string]: T;
-    }
-
-    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
-
-    export interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
-    }
-
-    /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<T> {
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
-        readonly size: number;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
-    }
-
-    /** ES6 Map interface. */
-    export interface Map<T> extends ReadonlyMap<T> {
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
-    }
-
-    /* @internal */
-    export interface MapConstructor {
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <T>(): Map<T>;
-    }
-
-    /** ES6 Iterator type. */
-    export interface Iterator<T> {
-        next(): { value: T, done?: false } | { value: never, done: true };
-    }
-
-    /** Array that is only intended to be pushed to, never read. */
-    export interface Push<T> {
-        push(...values: T[]): void;
-    }
-
-    /* @internal */
-    export type EqualityComparer<T> = (a: T, b: T) => boolean;
-
-    /* @internal */
-    export type Comparer<T> = (a: T, b: T) => Comparison;
-
-    /* @internal */
-    export const enum Comparison {
-        LessThan    = -1,
-        EqualTo     = 0,
-        GreaterThan = 1
-    }
-}
 
 /* @internal */
 namespace ts {
-    // Natives
-    // NOTE: This must be declared in a separate block from the one below so that we don't collide with the exported definition of `Map`.
-    declare const Map: (new <T>() => Map<T>) | undefined;
 
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    export function tryGetNativeMap(): MapConstructor | undefined {
-        // Internet Explorer's Map doesn't support iteration, so don't use it.
-        // eslint-disable-next-line no-in-operator
-        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
-    }
-}
-
-/* @internal */
-namespace ts {
     export const emptyArray: never[] = [] as never[];
-
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
 
     /** Create a new map. */
     export function createMap<T>(): Map<T> {
@@ -594,6 +498,17 @@ namespace ts {
         };
     }
 
+    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const mapped = mapValue(value, key);
+            if (mapped !== undefined) {
+                result.set(mapKey(key), mapped);
+            }
+        });
+        return result;
+    }
+
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
     export function singleIterator<T>(value: T): Iterator<T> {
@@ -715,10 +630,18 @@ namespace ts {
         return [...array1, ...array2];
     }
 
+    function selectIndex(_: unknown, i: number) {
+        return i;
+    }
+
+    export function indicesOf(array: readonly unknown[]): number[] {
+        return array.map(selectIndex);
+    }
+
     function deduplicateRelational<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
 
         let last = array[indices[0]];
@@ -1024,7 +947,7 @@ namespace ts {
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
         return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
@@ -1330,8 +1253,10 @@ namespace ts {
         return result;
     }
 
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+    export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
     export function clone<T>(object: T): T {
