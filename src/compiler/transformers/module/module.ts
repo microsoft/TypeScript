@@ -1010,7 +1010,7 @@ namespace ts {
                             setTextRange(
                                 createExpressionStatement(
                                     createExportExpression(getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
-                                    ),
+                                ),
                                 specifier),
                             specifier
                         )
