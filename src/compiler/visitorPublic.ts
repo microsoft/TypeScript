@@ -464,7 +464,7 @@ namespace ts {
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
                     visitNode((<PropertyAccessExpression>node).expression, visitor, isExpression),
-                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
+                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
 
             case SyntaxKind.ElementAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
@@ -798,6 +798,10 @@ namespace ts {
                 return updateNamespaceImport(<NamespaceImport>node,
                     visitNode((<NamespaceImport>node).name, visitor, isIdentifier));
 
+            case SyntaxKind.NamespaceExport:
+                    return updateNamespaceExport(<NamespaceExport>node,
+                        visitNode((<NamespaceExport>node).name, visitor, isIdentifier));
+
             case SyntaxKind.NamedImports:
                 return updateNamedImports(<NamedImports>node,
                     nodesVisitor((<NamedImports>node).elements, visitor, isImportSpecifier));
@@ -817,7 +821,7 @@ namespace ts {
                 return updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
                     visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.NamedExports:

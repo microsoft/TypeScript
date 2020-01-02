@@ -810,7 +810,7 @@ export function gfoo() {
                             [aDts, [aDts]],
                             [bDts, [bDts, aDts]],
                             [refs.path, [refs.path]],
-                            [cTs.path, [cTs.path, refs.path, bDts]]
+                            [cTs.path, [cTs.path, refs.path, bDts, aDts]]
                         ];
 
                         function createSolutionAndWatchMode() {
@@ -965,7 +965,7 @@ export function gfoo() {
                                     [aDts, [aDts]],
                                     [bDts, [bDts, aDts]],
                                     [nrefs.path, [nrefs.path]],
-                                    [cTs.path, [cTs.path, nrefs.path, bDts]]
+                                    [cTs.path, [cTs.path, nrefs.path, bDts, aDts]]
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(cTsconfig.path, cTsconfig.content),
@@ -1001,7 +1001,7 @@ export function gfoo() {
                                     [nrefs.path, [nrefs.path]],
                                     [bDts, [bDts, nrefs.path]],
                                     [refs.path, [refs.path]],
-                                    [cTs.path, [cTs.path, refs.path, bDts]],
+                                    [cTs.path, [cTs.path, refs.path, bDts, nrefs.path]],
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(bTsconfig.path, bTsconfig.content),
@@ -1055,7 +1055,7 @@ export function gfoo() {
                                     [aTs.path, [aTs.path]],
                                     [bDts, [bDts, aTs.path]],
                                     [refs.path, [refs.path]],
-                                    [cTs.path, [cTs.path, refs.path, bDts]],
+                                    [cTs.path, [cTs.path, refs.path, bDts, aTs.path]],
                                 ],
                                 // revert the update
                                 revert: host => host.writeFile(aTsconfig.path, aTsconfig.content),
@@ -1093,7 +1093,7 @@ export function gfoo() {
                                 [aDts, [aDts]],
                                 [bDts, [bDts, aDts]],
                                 [refs.path, [refs.path]],
-                                [cTsFile.path, [cTsFile.path, refs.path, bDts]]
+                                [cTsFile.path, [cTsFile.path, refs.path, bDts, aDts]]
                             ];
                             function getOutputFileStamps(host: TsBuildWatchSystem) {
                                 return expectedFiles.map(file => transformOutputToOutputFileStamp(file, host));
@@ -1240,6 +1240,46 @@ const a = {
     lastName: 'sdsd'
 };`);
                     sys.checkTimeoutQueueLengthAndRun(1); // build project
+                    sys.checkTimeoutQueueLength(0);
+                    return "Fix error";
+                }
+            ]
+        });
+    });
+
+    describe("unittests:: tsbuild:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
+        verifyTscWatch({
+            scenario: "reexport",
+            subScenario: "Reports errors correctly",
+            commandLineArgs: ["-b", "-w", "-verbose", "src"],
+            sys: () => createWatchedSystem(
+                [
+                    ...[
+                        "src/tsconfig.json",
+                        "src/main/tsconfig.json", "src/main/index.ts",
+                        "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts"
+                    ]
+                        .map(f => getFileFromProject("reexport", f)),
+                    { path: libFile.path, content: libContent }
+                ],
+                { currentDirectory: `${projectsLocation}/reexport` }
+            ),
+            changes: [
+                sys => {
+                    const content = sys.readFile(`${projectsLocation}/reexport/src/pure/session.ts`)!;
+                    sys.writeFile(`${projectsLocation}/reexport/src/pure/session.ts`, content.replace("// ", ""));
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src
+                    sys.checkTimeoutQueueLength(0);
+                    return "Introduce error";
+                },
+                sys => {
+                    const content = sys.readFile(`${projectsLocation}/reexport/src/pure/session.ts`)!;
+                    sys.writeFile(`${projectsLocation}/reexport/src/pure/session.ts`, content.replace("bar: ", "// bar: "));
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main
+                    sys.checkTimeoutQueueLengthAndRun(1); // build src
                     sys.checkTimeoutQueueLength(0);
                     return "Fix error";
                 }

@@ -164,11 +164,11 @@ export declare const m: typeof mod;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
@@ -199,8 +199,8 @@ export declare const m: typeof mod;
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -231,15 +231,15 @@ export declare const m: typeof mod;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
       },
@@ -257,7 +257,7 @@ export declare const m: typeof mod;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -267,7 +267,7 @@ export declare const m: typeof mod;
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -276,9 +276,9 @@ export declare const m: typeof mod;
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },
@@ -488,11 +488,11 @@ Change:: Build logic or update time stamps
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2489663677-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n",
         "signature": "-2489663677-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
@@ -523,8 +523,8 @@ Change:: Build logic or update time stamps
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -584,15 +584,15 @@ Change:: Build Tests
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2489663677-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n",
         "signature": "-2489663677-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
       },
@@ -610,7 +610,7 @@ Change:: Build Tests
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -620,7 +620,7 @@ Change:: Build Tests
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -629,9 +629,9 @@ Change:: Build Tests
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },
@@ -799,11 +799,11 @@ Change:: Build logic or update time stamps
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
@@ -834,8 +834,8 @@ Change:: Build logic or update time stamps
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -895,15 +895,15 @@ Change:: Build Tests
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
       },
@@ -921,7 +921,7 @@ Change:: Build Tests
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -931,7 +931,7 @@ Change:: Build Tests
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -940,9 +940,9 @@ Change:: Build Tests
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },
@@ -1128,11 +1128,11 @@ Change:: Build logic or update time stamps
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n",
         "signature": "-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
@@ -1163,8 +1163,8 @@ Change:: Build logic or update time stamps
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -1224,15 +1224,15 @@ Change:: Build Tests
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n",
         "signature": "-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
         "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
       },
@@ -1250,7 +1250,7 @@ Change:: Build Tests
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -1260,7 +1260,7 @@ Change:: Build Tests
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -1269,9 +1269,9 @@ Change:: Build Tests
     },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },

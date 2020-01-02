@@ -622,7 +622,10 @@ namespace ts.server {
         }
 
         positionToLineOffset(position: number): protocol.Location {
-            return this.textStorage.positionToLineOffset(position);
+            failIfInvalidPosition(position);
+            const location = this.textStorage.positionToLineOffset(position);
+            failIfInvalidLocation(location);
+            return location;
         }
 
         public isJavaScript() {
@@ -641,5 +644,18 @@ namespace ts.server {
                 this.sourceMapFilePath = undefined;
             }
         }
+    }
+
+    function failIfInvalidPosition(position: number) {
+        Debug.assert(typeof position === "number", `Expected position ${position} to be a number.`);
+        Debug.assert(position >= 0, `Expected position to be non-negative.`);
+    }
+
+    function failIfInvalidLocation(location: protocol.Location) {
+        Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
+        Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
+
+        Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
+        Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
     }
 }

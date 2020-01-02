@@ -37,7 +37,7 @@ namespace ts {
 
         showTSConfigCorrectly("Default initialized TSConfig", ["--showConfig"]);
 
-        showTSConfigCorrectly("Show TSConfig with files options", ["--showConfig", "file0.st", "file1.ts", "file2.ts"]);
+        showTSConfigCorrectly("Show TSConfig with files options", ["--showConfig", "file0.ts", "file1.ts", "file2.ts"]);
 
         showTSConfigCorrectly("Show TSConfig with boolean value compiler options", ["--showConfig", "--noUnusedLocals"]);
 

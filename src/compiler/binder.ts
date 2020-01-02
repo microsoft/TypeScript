@@ -56,9 +56,10 @@ namespace ts {
                 break;
             // 4. Export alias declarations pointing at only uninstantiated modules or things uninstantiated modules contain
             case SyntaxKind.ExportDeclaration:
-                if (!(node as ExportDeclaration).moduleSpecifier && !!(node as ExportDeclaration).exportClause) {
+                const exportDeclaration = node as ExportDeclaration;
+                if (!exportDeclaration.moduleSpecifier && exportDeclaration.exportClause && exportDeclaration.exportClause.kind === SyntaxKind.NamedExports) {
                     let state = ModuleInstanceState.NonInstantiated;
-                    for (const specifier of (node as ExportDeclaration).exportClause!.elements) {
+                    for (const specifier of exportDeclaration.exportClause.elements) {
                         const specifierState = getModuleInstanceStateForAliasTarget(specifier, visited);
                         if (specifierState > state) {
                             state = specifierState;
@@ -358,6 +359,16 @@ namespace ts {
                 if (isWellKnownSymbolSyntactically(name)) {
                     return getPropertyNameForKnownSymbolName(idText(name.name));
                 }
+                if (isPrivateIdentifier(name)) {
+                    // containingClass exists because private names only allowed inside classes
+                    const containingClass = getContainingClass(node);
+                    if (!containingClass) {
+                        // we can get here in cases where there is already a parse error.
+                        return undefined;
+                    }
+                    const containingClassSymbol = containingClass.symbol;
+                    return getSymbolNameForPrivateIdentifier(containingClassSymbol, name.escapedText);
+                }
                 return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
             }
             switch (node.kind) {
@@ -470,7 +481,6 @@ namespace ts {
                         if (isNamedDeclaration(node)) {
                             node.name.parent = node;
                         }
-
                         // Report errors every position with duplicate declaration
                         // Report errors on previous encountered declarations
                         let message = symbol.flags & SymbolFlags.BlockScopedVariable
@@ -1598,7 +1608,7 @@ namespace ts {
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>node.expression;
-                if (isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
+                if (isIdentifier(propertyAccess.name) && isNarrowableOperand(propertyAccess.expression) && isPushOrUnshiftIdentifier(propertyAccess.name)) {
                     currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
                 }
             }
@@ -2025,6 +2035,18 @@ namespace ts {
             return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
         }
 
+        // The binder visits every node, so this is a good place to check for
+        // the reserved private name (there is only one)
+        function checkPrivateIdentifier(node: PrivateIdentifier) {
+            if (node.escapedText === "#constructor") {
+                // Report error only if there are no parse errors in file
+                if (!file.parseDiagnostics.length) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        Diagnostics.constructor_is_a_reserved_word, declarationNameToString(node)));
+                }
+            }
+        }
+
         function checkStrictModeBinaryExpression(node: BinaryExpression) {
             if (inStrictMode && isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operatorToken.kind)) {
                 // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -2297,6 +2319,8 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
+                case SyntaxKind.PrivateIdentifier:
+                    return checkPrivateIdentifier(node as PrivateIdentifier);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const expr = node as PropertyAccessExpression | ElementAccessExpression;
@@ -2575,6 +2599,9 @@ namespace ts {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
+            else if (isNamespaceExport(node.exportClause)) {
+                declareSymbol(container.symbol.exports, container.symbol, node.exportClause, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
         }
 
         function bindImportClause(node: ImportClause) {
@@ -2653,6 +2680,12 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
             Debug.assert(isInJSFile(node));
+            // private identifiers *must* be declared (even in JS files)
+            const hasPrivateIdentifier = (isBinaryExpression(node) && isPropertyAccessExpression(node.left) && isPrivateIdentifier(node.left.name))
+                || (isPropertyAccessExpression(node) && isPrivateIdentifier(node.name));
+            if (hasPrivateIdentifier) {
+                return;
+            }
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -2955,7 +2988,12 @@ namespace ts {
             }
             else {
                 const s = forEachIdentifierInEntityName(e.expression, parent, action);
-                return action(getNameOrArgument(e), s && s.exports && s.exports.get(getElementOrPropertyAccessName(e)), s);
+                const name = getNameOrArgument(e);
+                // unreachable
+                if (isPrivateIdentifier(name)) {
+                    Debug.fail("unexpected PrivateIdentifier");
+                }
+                return action(name, s && s.exports && s.exports.get(getElementOrPropertyAccessName(e)), s);
             }
         }
 
@@ -3357,7 +3395,7 @@ namespace ts {
         const expression = node.expression;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         if (node.typeArguments) {
@@ -3401,7 +3439,7 @@ namespace ts {
         const leftKind = node.left.kind;
 
         if (operatorTokenKind === SyntaxKind.QuestionQuestionToken) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2020;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax
@@ -3760,7 +3798,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
@@ -3779,7 +3817,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (node.flags & NodeFlags.OptionalChain) {
-            transformFlags |= TransformFlags.ContainsESNext;
+            transformFlags |= TransformFlags.ContainsES2020;
         }
 
         // If an ElementAccessExpression starts with a super keyword, then it is
@@ -3898,9 +3936,12 @@ namespace ts {
 
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
-            case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                // async is ES2017 syntax, but may be ES2018 syntax (for async generators)
                 transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017;
+                break;
+            case SyntaxKind.AwaitExpression:
+                // await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017 | TransformFlags.ContainsAwait;
                 break;
 
             case SyntaxKind.TypeAssertionExpression:
@@ -4111,6 +4152,10 @@ namespace ts {
             case SyntaxKind.SourceFile:
                 break;
 
+            case SyntaxKind.NamespaceExport:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.ReturnStatement:
                 // Return statements may require an `await` in ES2018.
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertES2018;
@@ -4119,6 +4164,10 @@ namespace ts {
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
+                break;
+
+            case SyntaxKind.PrivateIdentifier:
+                transformFlags |= TransformFlags.ContainsClassFields;
                 break;
         }
 
