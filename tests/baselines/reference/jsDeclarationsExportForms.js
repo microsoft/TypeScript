@@ -113,7 +113,7 @@ __export(require("./cls"));
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var cls_1 = require("./cls");
-Object.defineProperty(exports, "Foo", { enumerable: true, get: () => cls_1.Foo });
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return cls_1.Foo; } });
 //// [bat.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

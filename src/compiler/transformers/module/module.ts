@@ -1548,13 +1548,14 @@ namespace ts {
                         createLiteral(name),
                         createObjectLiteral([
                             createPropertyAssignment("enumerable", createLiteral(/*value*/ true)),
-                            createPropertyAssignment("get", createArrowFunction(
+                            createPropertyAssignment("get", createFunctionExpression(
                                 /*modifiers*/ undefined,
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
                                 /*typeParameters*/ undefined,
                                 /*parameters*/ [],
                                 /*type*/ undefined,
-                                /*equalsGreaterThanToken*/ undefined,
-                                value
+                                createBlock([createReturn(value)])
                             ))
                         ])
                     ]
