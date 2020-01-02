@@ -4532,13 +4532,7 @@ namespace ts {
                     const returnType = getReturnTypeOfSignature(signature);
                     returnTypeNode = returnType && typeToTypeNodeHelper(returnType, context);
                 }
-                if (context.flags & NodeBuilderFlags.SuppressAnyReturnType
-                    && kind !== SyntaxKind.FunctionType && kind !== SyntaxKind.ConstructorType) {
-                    if (returnTypeNode && returnTypeNode.kind === SyntaxKind.AnyKeyword) {
-                        returnTypeNode = undefined;
-                    }
-                }
-                else if (!returnTypeNode) {
+                if (!returnTypeNode) {
                     returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum

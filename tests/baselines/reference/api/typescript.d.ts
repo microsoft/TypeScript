@@ -2110,6 +2110,7 @@ declare namespace ts {
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
         UseOnlyExternalAliasing = 128,
+        /** @deprecated Ignored */
         SuppressAnyReturnType = 256,
         WriteTypeParametersInQualifiedName = 512,
         MultilineObjectLiterals = 1024,
@@ -2138,6 +2139,7 @@ declare namespace ts {
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
+        /** @deprecated Ignored */
         SuppressAnyReturnType = 256,
         MultilineObjectLiterals = 1024,
         WriteClassExpressionAsTypeLiteral = 2048,

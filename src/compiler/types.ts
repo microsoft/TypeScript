@@ -3619,6 +3619,7 @@ namespace ts {
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
+        /** @deprecated Ignored */
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
         WriteTypeParametersInQualifiedName      = 1 << 9,
         MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
@@ -3660,6 +3661,7 @@ namespace ts {
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         // hole because `UseOnlyExternalAliasing` is here in node builder flags, but functions which take old flags use `SymbolFormatFlags` instead
+        /** @deprecated Ignored */
         SuppressAnyReturnType                   = 1 << 8,  // If the return type is any-like, don't offer a return type.
         // hole because `WriteTypeParametersInQualifiedName` is here in node builder flags, but functions which take old flags use `SymbolFormatFlags` for this instead
         MultilineObjectLiterals                 = 1 << 10, // Always print object literals across multiple lines (only used to map into node builder flags)
