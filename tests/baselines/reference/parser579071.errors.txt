@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser579071.ts(1,9): error TS1262: Invalid regular expression literal: '/fo(o/'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser579071.ts (1 errors) ====
+    var x = /fo(o/;
+            ~~~~~~
+!!! error TS1262: Invalid regular expression literal: '/fo(o/'.

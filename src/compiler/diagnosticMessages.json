@@ -859,6 +859,10 @@
         "category": "Error",
         "code": 1261
     },
+    "Invalid regular expression literal: '{0}'.": {
+        "category": "Error",
+        "code": 1262
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

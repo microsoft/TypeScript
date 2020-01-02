@@ -2370,6 +2370,12 @@ namespace ts {
                     const tokenText = scanner.getTokenText();
                     (<TemplateLiteralLikeNode>node).rawText = tokenText.substring(1, tokenText.length - (scanner.isUnterminated() ? 0 : isLast ? 1 : 2));
                     break;
+
+                case SyntaxKind.RegularExpressionLiteral:
+                    if (!isValidRegularExpressionLiteral(node.text)) {
+                        parseErrorAtCurrentToken(Diagnostics.Invalid_regular_expression_literal_Colon_0, node.text);
+                    }
+                    break;
             }
 
             if (scanner.hasExtendedUnicodeEscape()) {
@@ -2394,6 +2400,15 @@ namespace ts {
             finishNode(node);
 
             return node;
+        }
+
+        function isValidRegularExpressionLiteral(text: string) {
+            try {
+                new RegExp(text);
+                return true;
+            } catch {
+                return false;
+            }
         }
 
         // TYPES
