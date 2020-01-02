@@ -34,7 +34,7 @@ getPoint().c.x;
 import "./d";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noIndirectImports":true}}
+{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,9 +54,26 @@ interface Array<T> { length: number; [n: number]: T; }
 exports.__esModule = true;
 
 
+//// [/user/username/projects/myproject/a.d.ts]
+export interface Point {
+    name: string;
+    c: Coords;
+}
+export interface Coords {
+    x2: number;
+    y: number;
+}
+
+
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
+
+
+//// [/user/username/projects/myproject/b.d.ts]
+import { Point } from "./a";
+export interface PointWrapper extends Point {
+}
 
 
 //// [/user/username/projects/myproject/c.js]
@@ -75,6 +92,11 @@ exports.getPoint = getPoint;
 ;
 
 
+//// [/user/username/projects/myproject/c.d.ts]
+import { PointWrapper } from "./b";
+export declare function getPoint(): PointWrapper;
+
+
 //// [/user/username/projects/myproject/d.js]
 "use strict";
 exports.__esModule = true;
@@ -82,10 +104,18 @@ var c_1 = require("./c");
 c_1.getPoint().c.x;
 
 
+//// [/user/username/projects/myproject/d.d.ts]
+export {};
+
+
 //// [/user/username/projects/myproject/e.js]
 "use strict";
 exports.__esModule = true;
 require("./d");
+
+
+//// [/user/username/projects/myproject/e.d.ts]
+import "./d";
 
 
 
@@ -100,11 +130,11 @@ c.ts(6,13): error TS2322: Type '{ x: number; y: number; }' is not assignable to 
 d.ts(2,14): error TS2339: Property 'x' does not exist on type 'Coords'.
 
 
-12:00:40 AM - Found 2 errors. Watching for file changes.
+12:00:50 AM - Found 2 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"noIndirectImports":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -160,11 +190,23 @@ export interface Coords {
 }
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/a.d.ts]
+export interface Point {
+    name: string;
+    c: Coords;
+}
+export interface Coords {
+    x: number;
+    y: number;
+}
+
+
 //// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/b.d.ts] file written with same contents
 
 Output::
 >> Screen clear
-12:00:44 AM - File change detected. Starting incremental compilation...
+12:00:54 AM - File change detected. Starting incremental compilation...
 
 
 c.ts(6,13): error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
@@ -173,11 +215,11 @@ c.ts(6,13): error TS2322: Type '{ x: number; y: number; }' is not assignable to 
 d.ts(2,14): error TS2339: Property 'x' does not exist on type 'Coords'.
 
 
-12:00:51 AM - Found 2 errors. Watching for file changes.
+12:01:07 AM - Found 2 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"noIndirectImports":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts

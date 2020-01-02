@@ -19,7 +19,7 @@ export class C
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noIndirectImports":true,"declaration":true}}
+{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -42,10 +42,6 @@ var b = new b_1.B();
 console.log(b.c.d);
 
 
-//// [/user/username/projects/myproject/a.d.ts]
-export {};
-
-
 
 Output::
 >> Screen clear
@@ -53,11 +49,11 @@ Output::
 
 
 
-12:00:30 AM - Found 0 errors. Watching for file changes.
+12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/c.d.ts
@@ -105,15 +101,15 @@ export class C
 
 Output::
 >> Screen clear
-12:00:34 AM - File change detected. Starting incremental compilation...
+12:00:32 AM - File change detected. Starting incremental compilation...
 
 
 
-12:00:35 AM - Found 0 errors. Watching for file changes.
+12:00:33 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/c.d.ts

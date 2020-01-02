@@ -69,14 +69,14 @@ namespace ts.tscWatch {
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `config with --noIndirectImports/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { noIndirectImports: true })
+                subScenario: `config with --assumeChangesOnlyAffectDirectDependencies/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true })
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `config with --noIndirectImports and --declaration/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { noIndirectImports: true, declaration: true })
+                subScenario: `config with --assumeChangesOnlyAffectDirectDependencies and --declaration/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, declaration: true })
             });
         }
 

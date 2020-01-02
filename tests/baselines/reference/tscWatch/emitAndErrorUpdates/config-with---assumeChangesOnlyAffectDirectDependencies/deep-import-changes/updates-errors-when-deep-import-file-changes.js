@@ -19,7 +19,7 @@ export class C
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noIndirectImports":true,"declaration":true}}
+{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -46,12 +46,6 @@ var C = /** @class */ (function () {
 exports.C = C;
 
 
-//// [/user/username/projects/myproject/c.d.ts]
-export declare class C {
-    d: number;
-}
-
-
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 exports.__esModule = true;
@@ -65,23 +59,12 @@ var B = /** @class */ (function () {
 exports.B = B;
 
 
-//// [/user/username/projects/myproject/b.d.ts]
-import { C } from './c';
-export declare class B {
-    c: C;
-}
-
-
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 exports.__esModule = true;
 var b_1 = require("./b");
 var b = new b_1.B();
 console.log(b.c.d);
-
-
-//// [/user/username/projects/myproject/a.d.ts]
-export {};
 
 
 
@@ -91,11 +74,11 @@ Output::
 
 
 
-12:00:38 AM - Found 0 errors. Watching for file changes.
+12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/c.ts
@@ -150,26 +133,19 @@ var C = /** @class */ (function () {
 exports.C = C;
 
 
-//// [/user/username/projects/myproject/c.d.ts]
-export declare class C {
-    d2: number;
-}
-
-
 //// [/user/username/projects/myproject/b.js] file written with same contents
-//// [/user/username/projects/myproject/b.d.ts] file written with same contents
 
 Output::
 >> Screen clear
-12:00:42 AM - File change detected. Starting incremental compilation...
+12:00:36 AM - File change detected. Starting incremental compilation...
 
 
 
-12:00:55 AM - Found 0 errors. Watching for file changes.
+12:00:43 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/c.ts

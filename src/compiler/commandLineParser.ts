@@ -201,12 +201,12 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
-            name: "noIndirectImports",
+            name: "assumeChangesOnlyAffectDirectDependencies",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Skip_checking_and_generating_d_ts_files_for_files_indirectly_importing_affected_file
+            description: Diagnostics.Assumes_that_changes_in_any_change_in_a_file_will_only_affect_the_files_directly_depending_on_it
         },
         {
             name: "locale",

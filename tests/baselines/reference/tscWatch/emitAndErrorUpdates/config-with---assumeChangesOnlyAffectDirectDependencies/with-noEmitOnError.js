@@ -15,7 +15,7 @@ console.log("hi");
 export { }
 
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
-{"compilerOptions":{"outDir":"./dev-build","noEmitOnError":true,"noIndirectImports":true,"declaration":true}}
+{"compilerOptions":{"outDir":"./dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -45,7 +45,7 @@ src/main.ts(4,1): error TS1005: ',' expected.
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -93,12 +93,6 @@ const a = {
 exports.__esModule = true;
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
-export interface A {
-    name: string;
-}
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 exports.__esModule = true;
@@ -107,18 +101,10 @@ var a = {
 };
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
-export {};
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
 "use strict";
 exports.__esModule = true;
 console.log("hi");
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
-export {};
 
 
 
@@ -128,11 +114,11 @@ Output::
 
 
 
-12:00:59 AM - Found 0 errors. Watching for file changes.
+12:00:53 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts

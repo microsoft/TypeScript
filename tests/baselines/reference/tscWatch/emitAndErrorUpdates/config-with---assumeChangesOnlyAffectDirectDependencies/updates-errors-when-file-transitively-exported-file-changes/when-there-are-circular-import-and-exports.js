@@ -22,9 +22,9 @@ export * from "./data";
 export * from "./tools/public";
 
 //// [/user/username/projects/myproject/lib2/data.ts]
-import { ITest } from "lib1/public";
+import { ITest } from "lib1/public"; import { Data2 } from "./data2";
 export class Data {
-    public test() {
+    public dat?: Data2; public test() {
         const result: ITest = {
             title: "title"
         }
@@ -32,8 +32,14 @@ export class Data {
     }
 }
 
+//// [/user/username/projects/myproject/lib2/data2.ts]
+import { Data } from "./data";
+export class Data2 {
+    public dat?: Data;
+}
+
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":".","noIndirectImports":true,"declaration":true}}
+{"files":["app.ts"],"compilerOptions":{"baseUrl":".","assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -53,19 +59,9 @@ interface Array<T> { length: number; [n: number]: T; }
 exports.__esModule = true;
 
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
-export interface ITest {
-    title: string;
-}
-
-
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
 exports.__esModule = true;
-
-
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts]
-export * from "./tools.interface";
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
@@ -73,8 +69,15 @@ export * from "./tools.interface";
 exports.__esModule = true;
 
 
-//// [/user/username/projects/myproject/lib1/public.d.ts]
-export * from "./tools/public";
+//// [/user/username/projects/myproject/lib2/data2.js]
+"use strict";
+exports.__esModule = true;
+var Data2 = /** @class */ (function () {
+    function Data2() {
+    }
+    return Data2;
+}());
+exports.Data2 = Data2;
 
 
 //// [/user/username/projects/myproject/lib2/data.js]
@@ -94,13 +97,6 @@ var Data = /** @class */ (function () {
 exports.Data = Data;
 
 
-//// [/user/username/projects/myproject/lib2/data.d.ts]
-import { ITest } from "lib1/public";
-export declare class Data {
-    test(): ITest;
-}
-
-
 //// [/user/username/projects/myproject/lib2/public.js]
 "use strict";
 function __export(m) {
@@ -108,10 +104,6 @@ function __export(m) {
 }
 exports.__esModule = true;
 __export(require("./data"));
-
-
-//// [/user/username/projects/myproject/lib2/public.d.ts]
-export * from "./data";
 
 
 //// [/user/username/projects/myproject/app.js]
@@ -127,29 +119,24 @@ var App = /** @class */ (function () {
 exports.App = App;
 
 
-//// [/user/username/projects/myproject/app.d.ts]
-export declare class App {
-    constructor();
-}
-
-
 
 Output::
 >> Screen clear
-12:00:37 AM - Starting compilation in watch mode...
+12:00:39 AM - Starting compilation in watch mode...
 
 
 
-12:01:02 AM - Found 0 errors. Watching for file changes.
+12:00:54 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/tools.interface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
 /user/username/projects/myproject/lib2/data.ts
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
@@ -159,6 +146,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
 /user/username/projects/myproject/lib2/data.ts
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
@@ -177,6 +165,8 @@ WatchedFiles::
 /user/username/projects/myproject/lib1/tools/public.ts:
   {"pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {"pollingInterval":250}
+/user/username/projects/myproject/lib2/data2.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
   {"pollingInterval":250}
@@ -197,31 +187,25 @@ export interface ITest {
 }
 
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
-export interface ITest {
-    title2: string;
-}
-
-
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
 
 Output::
 >> Screen clear
-12:01:06 AM - File change detected. Starting incremental compilation...
+12:00:58 AM - File change detected. Starting incremental compilation...
 
 
 
-12:01:19 AM - Found 0 errors. Watching for file changes.
+12:01:05 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","noIndirectImports":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/tools.interface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
 /user/username/projects/myproject/lib2/data.ts
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
@@ -244,6 +228,8 @@ WatchedFiles::
 /user/username/projects/myproject/lib1/tools/public.ts:
   {"pollingInterval":250}
 /user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {"pollingInterval":250}
+/user/username/projects/myproject/lib2/data2.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
   {"pollingInterval":250}
