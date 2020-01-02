@@ -62,7 +62,18 @@ exports.__esModule = true;
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 exports.__esModule = true;
 __export(require("./tools.interface"));
@@ -71,7 +82,18 @@ __export(require("./tools.interface"));
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 exports.__esModule = true;
 __export(require("./tools/public"));
@@ -108,7 +130,18 @@ exports.Data = Data;
 //// [/user/username/projects/myproject/lib2/public.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 exports.__esModule = true;
 __export(require("./data"));

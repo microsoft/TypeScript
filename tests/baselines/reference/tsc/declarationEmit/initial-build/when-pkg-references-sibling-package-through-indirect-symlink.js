@@ -18,7 +18,18 @@ export * from './keys';
 //// [/src/pkg3/dist/index.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./keys"));

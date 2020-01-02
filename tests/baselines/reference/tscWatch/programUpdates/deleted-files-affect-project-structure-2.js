@@ -30,7 +30,18 @@ exports.y = 1;
 //// [/a/b/f2.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 exports.__esModule = true;
 __export(require("../c/f3"));
@@ -39,7 +50,18 @@ __export(require("../c/f3"));
 //// [/a/b/f1.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 exports.__esModule = true;
 __export(require("./f2"));

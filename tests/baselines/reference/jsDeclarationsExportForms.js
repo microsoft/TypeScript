@@ -75,14 +75,36 @@ exports.func = func;
 //// [bar.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./cls"));
 //// [bar2.js]
 "use strict";
 function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    for (var p in m) b(p);
+    function b(p) {
+        if (!exports.hasOwnProperty(p))
+            Object.create
+                ? Object.defineProperty(exports, p, {
+                      enumerable: true,
+                      get: function() {
+                          return m[p];
+                      }
+                  })
+                : (exports[p] = m[p]);
+    }
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./func"));
@@ -91,7 +113,7 @@ __export(require("./cls"));
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var cls_1 = require("./cls");
-exports.Foo = cls_1.Foo;
+Object.defineProperty(exports, "Foo", { enumerable: true, get: () => cls_1.Foo });
 //// [bat.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
