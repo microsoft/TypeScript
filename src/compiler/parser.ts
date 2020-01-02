@@ -2406,7 +2406,8 @@ namespace ts {
             try {
                 new RegExp(text);
                 return true;
-            } catch {
+            }
+            catch {
                 return false;
             }
         }
