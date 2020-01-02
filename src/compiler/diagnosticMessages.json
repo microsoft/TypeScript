@@ -4366,7 +4366,7 @@
         "category": "Message",
         "code": 6383
     },
-    "Assumes that changes in any change in a file will only affect the files directly depending on it.": {
+    "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
     },

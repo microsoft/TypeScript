@@ -207,7 +207,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Assumes_that_changes_in_any_change_in_a_file_will_only_affect_the_files_directly_depending_on_it
+            description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
         },
         {
             name: "locale",
