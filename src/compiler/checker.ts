@@ -12788,7 +12788,7 @@ namespace ts {
 
         /** We approximate own properties as non-methods plus methods that are inside the object literal */
         function isSpreadableProperty(prop: Symbol): boolean {
-            return !some(prop.declarations, decl => isPropertyDeclaration(decl) && decl.name.kind === SyntaxKind.PrivateIdentifier) &&
+            return !some(prop.declarations, isPrivateIdentifierPropertyDeclaration) &&
                 (!(prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) ||
                     !prop.declarations.some(decl => isClassLike(decl.parent)));
         }
