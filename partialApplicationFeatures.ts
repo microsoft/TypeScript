@@ -1,9 +1,20 @@
-const square = Math.pow(?, 2);
+let y = 2;
+const square = Math.pow(?, y);
 const num: number = square(5);
+y = 3;
+console.log(square(4));
+
+function simple(a) { return a; };
+const simplePartial = simple(?);
 
 const addMulSub = (a: number, b: number, c: number, d: number) => (a + b) * c - d;
 const f = addMulSub(?, 100, ?, ?);
-f(1, 2, 3);
+console.log(f(1, 2, 3));
+console.log(addMulSub(1, 100, 2, 3));
+const f2 = addMulSub(?, 100, Math.random(), ?);
+console.log(f2(1, 2));
+console.log(f2(1, 2));
+console.log(addMulSub(1, 100, 50, 2));
 
 // const fiveSquared = square(5);
 

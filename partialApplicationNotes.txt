@@ -33,24 +33,31 @@ checkVariableLikeDeclaration results in problem:
         B) () => (x: number) => number
         C) (2) => (x: number) => number
 
-    But it's a callExpression here. This means that the function is checked as if it's called. Means that correct option is not(?) valid unless a lot of hacking is done.
-        Should it then be a ((x) => (2, x) => 2)()?
     We run checkExpressionCached(initializer):
-        We go to CheckCallExpression -> getResolvedSignature -> resolveSignature which actually goes and checks Math.pow -function call.
-            Retrieves .pow from Math.
-                First checks math with checkIdentifier and finds it valid.
-                Gets pow from Math
+        We go to CheckCallExpression -> getResolvedSignature -> resolveSignature -> resolveCallExpression which actually goes and checks Math.pow -function call.
+            checkExpression -> checkExpressionWorker -> checkPropertyAccessExpression
+                checkNonNullExpression: Retrieves Math.
+                    First checks math with checkIdentifier and finds it valid.
+                checkPropertyAccessExpressionOrQualifiedName: Retrives .pow from Math
+                    Gets pow from Math
             Returns pow to resolveSignature -> CheckCallExpression
-            Resolve the call to pow.
+            resolveCall: Resolve the call to pow.
                 getEffectiveCallArguments
-                chooseOverload
-                    hasCorrectArity(?, y) - passes for that one.
-                    getSignatureApplicabilityError
-                        getTypeAtPosition(signature, i);
-                        checkExpressionWithContextualType(?, number)
-                            checkExpression(?)
-    !!!!                            checkExpressionWorker - returns errorType for PartialApplicationElement
-                        Returns undefined. So no error for some reason...
+                    Resolved [PartialApplicationElement, NumericLiteral]
+                    chooseOverload
+                        hasCorrectArity(?, y) - passes for that one.
+                        getSignatureApplicabilityError
+                            arg 0 (?):
+                                getTypeAtPosition(signature, i);
+                                checkExpressionWithContextualType(?, number)
+                                    checkExpression(?)
+            !!!!                            checkExpressionWorker - returns errorType for PartialApplicationElement
+                            arg 0 (?):
+                                getTypeAtPosition(signature, i);
+                                checkExpressionWithContextualType(?, number)
+                                    checkExpression(?)
+            !!!!                            checkExpressionWorker - returns errorType for PartialApplicationElement
+                            Returns undefined. So no error for some reason...
                 ResolveCall returns the pow -call.
         checkExpressionCached returns (number) as pow's return value.
 
