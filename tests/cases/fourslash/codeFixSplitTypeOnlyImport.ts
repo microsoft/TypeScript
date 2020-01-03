@@ -17,7 +17,7 @@
 goTo.file("/c.ts");
 
 verify.codeFix({
-  errorCode: ts.Diagnostics.Type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code,
+  errorCode: ts.Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code,
   description: ts.Diagnostics.Split_into_two_separate_import_declarations.message,
   applyChanges: false,
   index: 0,

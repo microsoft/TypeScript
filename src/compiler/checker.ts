@@ -2046,7 +2046,7 @@ namespace ts {
                     error(
                         errorLocation,
                         isTypeOnlyEnumAlias(symbol)
-                            ? Diagnostics.Type_only_enum_0_cannot_be_used_as_a_value
+                            ? Diagnostics.Enum_0_cannot_be_used_as_a_value_because_only_its_type_has_been_imported
                             : Diagnostics.Cannot_use_namespace_0_as_a_value,
                         unescapeLeadingUnderscores(name));
                     return true;
@@ -33200,8 +33200,8 @@ namespace ts {
                         isError,
                         statement,
                         isError
-                            ? Diagnostics.Import_is_never_used_as_a_value_and_must_use_import_type_when_importsNotUsedAsValue_is_error
-                            : Diagnostics.Import_may_be_converted_to_a_type_only_import);
+                            ? Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValue_is_set_to_error
+                            : Diagnostics.This_import_may_be_converted_to_a_type_only_import);
                 }
             }
         }
@@ -36793,7 +36793,7 @@ namespace ts {
 
         function checkGrammarImportClause(node: ImportClause): boolean {
             if (node.isTypeOnly && node.name && node.namedBindings) {
-                return grammarErrorOnNode(node, Diagnostics.Type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+                return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
             }
             return false;
         }

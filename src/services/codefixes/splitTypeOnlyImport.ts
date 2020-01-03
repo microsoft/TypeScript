@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.Type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
+    const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
     const fixId = "splitTypeOnlyImport";
     registerCodeFix({
         errorCodes,

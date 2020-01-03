@@ -1063,11 +1063,11 @@
         "category": "Error",
         "code": 1361
     },
-    "Type-only enum '{0}' cannot be used as a value.": {
+    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
         "category": "Error",
         "code": 1362
     },
-    "Type-only import can specify a default import or named bindings, but not both.": {
+    "A type-only import can specify a default import or named bindings, but not both.": {
         "category": "Error",
         "code": 1363
     },
@@ -1087,7 +1087,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Emit behavior for imports used only for types": {
+    "Specify emit/checking behavior for imports that are only used for types": {
         "category": "Message",
         "code": 1368
     },
@@ -1095,15 +1095,15 @@
         "category": "Message",
         "code": 1369
     },
-    "Only ES2015 imports may use 'import type'.": {
+    "Only ECMAScript imports may use 'import type'.": {
         "category": "Error",
         "code": 1370
     },
-    "Import is never used as a value and must use 'import type' when '--importsNotUsedAsValue' is 'error'.": {
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.": {
         "category": "Error",
         "code": 1371
     },
-    "Import may be converted to a type-only import.": {
+    "This import may be converted to a type-only import.": {
         "category": "Suggestion",
         "code": 1372
     },

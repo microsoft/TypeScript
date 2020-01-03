@@ -6424,7 +6424,7 @@ namespace ts {
             parseSemicolon();
             const finished = finishNode(node);
             if (isTypeOnly) {
-                parseErrorAtRange(finished, Diagnostics.Only_ES2015_imports_may_use_import_type);
+                parseErrorAtRange(finished, Diagnostics.Only_ECMAScript_imports_may_use_import_type);
             }
             return finished;
         }

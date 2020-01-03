@@ -472,7 +472,7 @@ namespace ts {
             }),
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Emit_behavior_for_imports_used_only_for_types
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
         },
         {
             name: "downlevelIteration",
