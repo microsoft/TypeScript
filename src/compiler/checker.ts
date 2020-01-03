@@ -23127,10 +23127,6 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
             if (isPrivateIdentifier(right)) {
-                if (isOptionalChain(node)) {
-                    grammarErrorOnNode(right, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
-                    return anyType;
-                }
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
             }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
