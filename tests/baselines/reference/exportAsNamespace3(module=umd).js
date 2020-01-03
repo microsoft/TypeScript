@@ -44,11 +44,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
         if (Object.hasOwnProperty.call(mod, p))
             Object.create
                 ? Object.defineProperty(result, p, {
-                      enumerable: true,
-                      get: function() {
-                          return mod[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return mod[p];
+                    }
+                })
                 : (result[p] = mod[p]);
     }
 };
@@ -81,11 +81,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
         if (Object.hasOwnProperty.call(mod, p))
             Object.create
                 ? Object.defineProperty(result, p, {
-                      enumerable: true,
-                      get: function() {
-                          return mod[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return mod[p];
+                    }
+                })
                 : (result[p] = mod[p]);
     }
 };

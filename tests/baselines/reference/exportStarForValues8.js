@@ -49,11 +49,11 @@ define(["require", "exports", "file2", "file3"], function (require, exports, fil
             if (!exports.hasOwnProperty(p))
                 Object.create
                     ? Object.defineProperty(exports, p, {
-                          enumerable: true,
-                          get: function() {
-                              return m[p];
-                          }
-                      })
+                        enumerable: true,
+                        get: function () {
+                            return m[p];
+                        }
+                    })
                     : (exports[p] = m[p]);
         }
     }
@@ -71,11 +71,11 @@ define(["require", "exports", "file4"], function (require, exports, file4_1) {
             if (!exports.hasOwnProperty(p))
                 Object.create
                     ? Object.defineProperty(exports, p, {
-                          enumerable: true,
-                          get: function() {
-                              return m[p];
-                          }
-                      })
+                        enumerable: true,
+                        get: function () {
+                            return m[p];
+                        }
+                    })
                     : (exports[p] = m[p]);
         }
     }

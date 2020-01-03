@@ -1846,11 +1846,11 @@ namespace ts {
                     if (!exports.hasOwnProperty(p))
                         Object.create
                             ? Object.defineProperty(exports, p, {
-                                  enumerable: true,
-                                  get: function() {
-                                      return m[p];
-                                  }
-                              })
+                                enumerable: true,
+                                get: function () {
+                                    return m[p];
+                                }
+                            })
                             : (exports[p] = m[p]);
                 }
             }`
@@ -1887,11 +1887,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
         if (Object.hasOwnProperty.call(mod, p))
             Object.create
                 ? Object.defineProperty(result, p, {
-                      enumerable: true,
-                      get: function() {
-                          return mod[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return mod[p];
+                    }
+                })
                 : (result[p] = mod[p]);
     }
 };`

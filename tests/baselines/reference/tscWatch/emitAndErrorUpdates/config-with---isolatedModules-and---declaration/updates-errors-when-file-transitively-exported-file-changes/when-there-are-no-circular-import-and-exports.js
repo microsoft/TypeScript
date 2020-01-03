@@ -67,11 +67,11 @@ function __export(m) {
         if (!exports.hasOwnProperty(p))
             Object.create
                 ? Object.defineProperty(exports, p, {
-                      enumerable: true,
-                      get: function() {
-                          return m[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return m[p];
+                    }
+                })
                 : (exports[p] = m[p]);
     }
 }
@@ -91,11 +91,11 @@ function __export(m) {
         if (!exports.hasOwnProperty(p))
             Object.create
                 ? Object.defineProperty(exports, p, {
-                      enumerable: true,
-                      get: function() {
-                          return m[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return m[p];
+                    }
+                })
                 : (exports[p] = m[p]);
     }
 }
@@ -139,11 +139,11 @@ function __export(m) {
         if (!exports.hasOwnProperty(p))
             Object.create
                 ? Object.defineProperty(exports, p, {
-                      enumerable: true,
-                      get: function() {
-                          return m[p];
-                      }
-                  })
+                    enumerable: true,
+                    get: function () {
+                        return m[p];
+                    }
+                })
                 : (exports[p] = m[p]);
     }
 }

@@ -63,11 +63,11 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
             if (!exports.hasOwnProperty(p))
                 Object.create
                     ? Object.defineProperty(exports, p, {
-                          enumerable: true,
-                          get: function() {
-                              return m[p];
-                          }
-                      })
+                        enumerable: true,
+                        get: function () {
+                            return m[p];
+                        }
+                    })
                     : (exports[p] = m[p]);
         }
     }
