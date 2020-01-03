@@ -584,7 +584,7 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": typeof internal.EventEmitter; }' have no overlap.
+node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": typeof internal.EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -847,7 +847,7 @@ node_modules/npm/lib/utils/locker.js(28,20): error TS2339: Property 'config' doe
 node_modules/npm/lib/utils/locker.js(29,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/locker.js(65,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/map-to-registry.js(98,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
+node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
 node_modules/npm/lib/utils/metrics-launch.js(12,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(13,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(14,30): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1160,7 +1160,7 @@ node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module '
 node_modules/npm/test/tap/ci.js(7,33): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/ci.js(10,23): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/ci.js(11,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/circular-dep.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/circular-dep.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/circular-dep.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/circular-dep.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-basic.js(1,20): error TS2307: Cannot find module 'tap'.
@@ -1201,7 +1201,7 @@ node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 
 node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/debug-logs.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/dedupe-scoped.js(6,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/dedupe.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/dedupe.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/dedupe.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/dedupe.js(8,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/deprecate.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1216,7 +1216,7 @@ node_modules/npm/test/tap/doctor.js(66,11): error TS2339: Property 'load' does n
 node_modules/npm/test/tap/doctor.js(82,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/doctor.js(86,34): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/extraneous-dep-cycle-ls-ok.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/false-name.js(12,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/false-name.js(12,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/false-name.js(15,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/false-name.js(17,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/fetch-package-metadata.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1291,15 +1291,15 @@ node_modules/npm/test/tap/install-at-locally.js(7,20): error TS2307: Cannot find
 node_modules/npm/test/tap/install-bad-dep-format.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bad-man.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bin-null.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-only-development.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-cli-only-development.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-cli-only-development.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-only-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-cli-only-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-cli-only-production.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-cli-only-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-cli-production-nosave.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/install-cli-production-nosave.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-cli-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-cli-production.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-cli-production.js(8,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-cli-unicode.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/install-cli-unicode.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1338,9 +1338,9 @@ node_modules/npm/test/tap/install-save-prefix.js(46,23): error TS2345: Argument 
 node_modules/npm/test/tap/install-save-prefix.js(78,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-save-prefix.js(110,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-save-prefix.js(142,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
-node_modules/npm/test/tap/install-scoped-already-installed.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-scoped-already-installed.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-scoped-already-installed.js(8,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-scoped-link.js(4,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-scoped-link.js(4,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-scoped-link.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(4,21): error TS2307: Cannot find module 'tacks'.
@@ -1352,7 +1352,7 @@ node_modules/npm/test/tap/install-shrinkwrapped-git.js(60,12): error TS2339: Pro
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(65,12): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(106,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-test-cli-without-package-lock.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-windows-newlines.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/install-windows-newlines.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/install-windows-newlines.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1698,7 +1698,7 @@ node_modules/npm/test/tap/tree-style.js(3,20): error TS2307: Cannot find module 
 node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
+node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/uninstall-package.js(8,20): error TS2307: Cannot find module 'tap'.
