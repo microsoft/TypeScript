@@ -1,10 +1,7 @@
 /* @internal */
 namespace ts.refactor.convertStringOrTemplateLiteral {
-    const refactorName = "Convert string concatenation or template literal";
-    const toTemplateLiteralActionName = "Convert to template literal";
-
-    const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_string_concatenation_or_template_literal);
-    const toTemplateLiteralDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_literal);
+    const refactorName = "Convert to template string";
+    const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
@@ -15,7 +12,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
         if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && isStringConcatenationValid(maybeBinary)) {
-            refactorInfo.actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
+            refactorInfo.actions.push({ name: refactorName, description: refactorDescription });
             return [refactorInfo];
         }
         return emptyArray;
@@ -36,12 +33,12 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return node;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: typeof toTemplateLiteralActionName): RefactorEditInfo | undefined {
+    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
 
         switch (actionName) {
-            case toTemplateLiteralActionName:
+            case refactorDescription:
                 return { edits: getEditsForToTemplateLiteral(context, node) };
             default:
                 return Debug.fail("invalid action");

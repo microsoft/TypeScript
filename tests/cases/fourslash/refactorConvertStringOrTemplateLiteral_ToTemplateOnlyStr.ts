@@ -4,9 +4,9 @@
 
 goTo.select("x", "y");
 edit.applyRefactor({
-    refactorName: "Convert string concatenation or template literal",
-    actionName: "Convert to template literal",
-    actionDescription: "Convert to template literal",
+    refactorName: "Convert to template string",
+    actionName: "Convert to template string",
+    actionDescription: ts.Diagnostics.Convert_to_template_string.message,
     newContent:
 "const foo = `foobar rocks fantastically`",
 });

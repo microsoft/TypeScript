@@ -5341,13 +5341,9 @@
         "category": "Message",
         "code": 95095
     },
-    "Convert string concatenation or template literal": {
+    "Convert to template string": {
         "category": "Message",
         "code": 95096
-    },
-    "Convert to template literal": {
-        "category": "Message",
-        "code": 95097
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
