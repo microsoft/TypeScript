@@ -2,11 +2,9 @@
 namespace ts.refactor.convertStringOrTemplateLiteral {
     const refactorName = "Convert string concatenation or template literal";
     const toTemplateLiteralActionName = "Convert to template literal";
-    const toStringConcatenationActionName = "Convert to string concatenation";
 
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_string_concatenation_or_template_literal);
     const toTemplateLiteralDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_literal);
-    const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
@@ -20,14 +18,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             refactorInfo.actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
             return [refactorInfo];
         }
-
-        const templateLiteral = findAncestor(node, n => isTemplateLiteral(n));
-
-        if (templateLiteral && !isTaggedTemplateExpression(templateLiteral.parent)) {
-            refactorInfo.actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
-            return [refactorInfo];
-        }
-
         return emptyArray;
     }
 
@@ -46,17 +36,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return node;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getEditsForAction(context: RefactorContext, actionName: typeof toTemplateLiteralActionName): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
 
         switch (actionName) {
             case toTemplateLiteralActionName:
                 return { edits: getEditsForToTemplateLiteral(context, node) };
-
-            case toStringConcatenationActionName:
-                return { edits: getEditsForToStringConcatenation(context, node) };
-
             default:
                 return Debug.fail("invalid action");
         }
@@ -85,33 +71,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
     }
 
-    const templateSpanToExpressions = (file: SourceFile) => (templateSpan: TemplateSpan): Expression[] => {
-        const { expression, literal } = templateSpan;
-        const text = literal.text;
-        copyTrailingAsLeadingComments(templateSpan, expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-        return text.length === 0 ? [expression] : [expression, createStringLiteral(text)];
-    };
-
-    function getEditsForToStringConcatenation(context: RefactorContext, node: Node) {
-        const templateLiteral = findAncestor(node, n => isTemplateLiteral(n))! as TemplateLiteral;
-
-        if (isTemplateExpression(templateLiteral)) {
-            const { head, templateSpans } = templateLiteral;
-            const spanToExpressionWithComment = templateSpanToExpressions(context.file);
-            const arrayOfNodes = templateSpans.map(spanToExpressionWithComment)
-                                              .reduce((accumulator, nextArray) => accumulator.concat(nextArray));
-
-            if (head.text.length !== 0) arrayOfNodes.unshift(createStringLiteral(head.text));
-
-            const singleExpressionOrBinary = makeSingleExpressionOrBinary(arrayOfNodes);
-            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteral, singleExpressionOrBinary));
-        }
-        else {
-            const stringLiteral = createStringLiteral(templateLiteral.text);
-            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, node, stringLiteral));
-        }
-    }
-
     function isNotEqualsOperator(node: BinaryExpression) {
         return node.operatorToken.kind !== SyntaxKind.EqualsToken;
     }
@@ -121,26 +80,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             expr = expr.parent;
         }
         return expr;
-    }
-
-    function makeSingleExpressionOrBinary(nodes: readonly Expression[]): Expression {
-        if (nodes.length > 1) {
-            const left = nodes[0];
-            const right = nodes[1];
-
-            const binary = createBinary(left, SyntaxKind.PlusToken, right);
-            return arrayToTree(nodes, 2, binary);
-        }
-
-        return nodes[0];
-    }
-
-    function arrayToTree(nodes: readonly Expression[], index: number, accumulator: BinaryExpression): Expression {
-        if (nodes.length === index) return accumulator;
-
-        const right = nodes[index];
-        const binary = createBinary(accumulator, SyntaxKind.PlusToken, right);
-        return arrayToTree(nodes, index + 1, binary);
     }
 
     function isStringConcatenationValid(node: Node): boolean {
