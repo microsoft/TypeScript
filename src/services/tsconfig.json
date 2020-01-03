@@ -95,6 +95,7 @@
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
         "refactors/convertParamsToDestructuredObject.ts",
+        "refactors/convertStringOrTemplateLiteral.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",

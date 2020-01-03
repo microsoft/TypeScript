@@ -5349,6 +5349,10 @@
         "category": "Message",
         "code": 95095
     },
+    "Convert to template string": {
+        "category": "Message",
+        "code": 95096
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
