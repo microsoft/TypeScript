@@ -2625,7 +2625,6 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
                 // falls through
-
             case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
                     return parent.name === name ? parent : undefined;
@@ -2643,6 +2642,8 @@ namespace ts {
                         ? binExp
                         : undefined;
                 }
+            case SyntaxKind.PrivateIdentifier:
+                return isDeclaration(parent) && parent.name === name ? parent : undefined;
             default:
                 return undefined;
         }
