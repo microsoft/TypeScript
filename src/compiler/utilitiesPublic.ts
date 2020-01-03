@@ -1721,6 +1721,21 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
+    export function isTypeOnlyImportOrExportName(node: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier) {
+            return false;
+        }
+        switch (node.parent.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return (node.parent as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            case SyntaxKind.ImportClause:
+                return (node.parent as ImportClause).isTypeOnly;
+            default:
+                return false;
+        }
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }

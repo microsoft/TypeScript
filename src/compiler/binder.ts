@@ -517,8 +517,13 @@ namespace ts {
                             }
                         }
 
-                        const declarationName = getNameOfDeclaration(node) || node;
                         const relatedInformation: DiagnosticRelatedInformation[] = [];
+                        if (isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasModifier(node, ModifierFlags.Export) && symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)) {
+                            // export type T; - may have meant export type { T }?
+                            relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
+                        }
+
+                        const declarationName = getNameOfDeclaration(node) || node;
                         forEach(symbol.declarations, (declaration, index) => {
                             const decl = getNameOfDeclaration(declaration) || declaration;
                             const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
@@ -531,7 +536,7 @@ namespace ts {
                         });
 
                         const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
-                        file.bindDiagnostics.push(multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag);
+                        file.bindDiagnostics.push(addRelatedInfo(diag, ...relatedInformation));
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }

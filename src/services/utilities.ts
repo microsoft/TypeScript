@@ -1357,12 +1357,12 @@ namespace ts {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
-    export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference): ImportDeclaration {
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
         return createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined, isTypeOnly)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
@@ -2326,7 +2326,45 @@ namespace ts {
     export function isInsideNodeModules(fileOrDirectory: string): boolean {
         return contains(getPathComponents(fileOrDirectory), "node_modules");
     }
-    // #endregion
+
+    export function isDiagnosticWithLocation(diagnostic: Diagnostic): diagnostic is DiagnosticWithLocation {
+        return diagnostic.file !== undefined && diagnostic.start !== undefined && diagnostic.length !== undefined;
+    }
+
+    export function findDiagnosticForNode(node: Node, sortedFileDiagnostics: readonly Diagnostic[]): DiagnosticWithLocation | undefined {
+        const span: Partial<TextSpan> = createTextSpanFromNode(node);
+        const index = binarySearchKey(sortedFileDiagnostics, span, identity, compareTextSpans);
+        if (index >= 0) {
+            const diagnostic = sortedFileDiagnostics[index];
+            Debug.assertEqual(diagnostic.file, node.getSourceFile(), "Diagnostics proided to 'findDiagnosticForNode' must be from a single SourceFile");
+            return cast(diagnostic, isDiagnosticWithLocation);
+        }
+    }
+
+    export function getDiagnosticsWithinSpan(span: TextSpan, sortedFileDiagnostics: readonly Diagnostic[]): readonly DiagnosticWithLocation[] {
+        let index = binarySearchKey(sortedFileDiagnostics, span.start, diag => diag.start, compareValues);
+        if (index < 0) {
+            index = ~index;
+        }
+        while (sortedFileDiagnostics[index - 1]?.start === span.start) {
+            index--;
+        }
+
+        const result: DiagnosticWithLocation[] = [];
+        const end = textSpanEnd(span);
+        while (true) {
+            const diagnostic = tryCast(sortedFileDiagnostics[index], isDiagnosticWithLocation);
+            if (!diagnostic || diagnostic.start > end) {
+                break;
+            }
+            if (textSpanContainsTextSpan(span, diagnostic)) {
+                result.push(diagnostic);
+            }
+            index++;
+        }
+
+        return result;
+    }
 
     /* @internal */
     export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
@@ -2351,4 +2389,6 @@ namespace ts {
     export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
+
+    // #endregion
 }

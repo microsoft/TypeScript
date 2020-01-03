@@ -1509,6 +1509,13 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    /**
+     * Compare two TextSpans, first by `start`, then by `length`.
+     */
+    export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<TextSpan> | undefined): Comparison {
+        return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
+    }
+
     export function min<T>(a: T, b: T, compare: Comparer<T>): T {
         return compare(a, b) === Comparison.LessThan ? a : b;
     }
@@ -1914,10 +1921,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
-        return arg => {
+    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+        return (...args) => {
             for (const f of fs) {
-                if (f(arg)) {
+                if (f(...args)) {
                     return true;
                 }
             }

@@ -2477,6 +2477,7 @@ namespace ts {
     export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent: ImportDeclaration;
+        isTypeOnly: boolean;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
@@ -2501,6 +2502,7 @@ namespace ts {
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
+        isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
         exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
@@ -5041,6 +5043,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
+        importsNotUsedAsValue?: ImportsNotUsedAsValue;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -5160,6 +5163,12 @@ namespace ts {
         Preserve = 1,
         React = 2,
         ReactNative = 3
+    }
+
+    export const enum ImportsNotUsedAsValue {
+        Remove,
+        Preserve,
+        Error
     }
 
     export const enum NewLineKind {

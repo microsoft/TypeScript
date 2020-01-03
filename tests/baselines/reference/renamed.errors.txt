@@ -1,0 +1,17 @@
+/c.ts(2,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+
+
+==== /a.ts (0 errors) ====
+    class A { a!: string }
+    export type { A as B };
+    
+==== /b.ts (0 errors) ====
+    export type { B as C } from './a';
+    
+==== /c.ts (1 errors) ====
+    import type { C as D } from './b';
+    const d: D = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+    

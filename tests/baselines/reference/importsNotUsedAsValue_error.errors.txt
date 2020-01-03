@@ -1,0 +1,37 @@
+/b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+/c.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+/e.ts(1,1): error TS6192: All imports in import declaration are unused.
+
+
+==== /a.ts (0 errors) ====
+    export default class {}
+    export class A {}
+    export type B = {};
+    
+==== /b.ts (1 errors) ====
+    import { A, B } from './a'; // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+    let a: A;
+    let b: B;
+    console.log(a, b);
+    
+==== /c.ts (1 errors) ====
+    import Default, * as named from './a'; // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+    let a: Default;
+    let b: named.B;
+    console.log(a, b);
+    
+==== /d.ts (0 errors) ====
+    import Default, { A } from './a';
+    const a = A;
+    let b: Default;
+    console.log(a, b);
+    
+==== /e.ts (1 errors) ====
+    import { A, B } from './a'; // noUnusedLocals error only
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6192: All imports in import declaration are unused.
+    

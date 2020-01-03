@@ -40,6 +40,18 @@ namespace ts {
         return result;
     }
 
+    export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
+    export function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
+        return isTransientSymbol(symbol) && !!symbol.immediateTarget;
+    }
+
+    export function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
+        return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
+    }
+
     const stringWriter = createSingleLineStringWriter();
 
     function createSingleLineStringWriter(): EmitTextWriter {
@@ -1767,7 +1779,7 @@ namespace ts {
         }
     }
 
-    export function isExternalModuleImportEqualsDeclaration(node: Node) {
+    export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
 
@@ -5880,6 +5892,9 @@ namespace ts {
     }
 
     export function addRelatedInfo<T extends Diagnostic>(diagnostic: T, ...relatedInformation: DiagnosticRelatedInformation[]): T {
+        if (!relatedInformation.length) {
+            return diagnostic;
+        }
         if (!diagnostic.relatedInformation) {
             diagnostic.relatedInformation = [];
         }

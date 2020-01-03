@@ -353,7 +353,7 @@ namespace ts.refactor {
                     changes.replaceNode(
                         sourceFile,
                         importDecl.importClause,
-                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined, importDecl.importClause.isTypeOnly)
                     );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {

@@ -231,7 +231,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => createExportSpecifier(e.name, e.name));
                             const exportClause = createNamedExports(exportSpecifiers);
-                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier, ed.isTypeOnly);
 
                             return newEd as Node as T;
                         }

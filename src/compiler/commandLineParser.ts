@@ -473,6 +473,17 @@ namespace ts {
             description: Diagnostics.Import_emit_helpers_from_tslib
         },
         {
+            name: "importsNotUsedAsValue",
+            type: createMapFromTemplate({
+                remove: ImportsNotUsedAsValue.Remove,
+                preserve: ImportsNotUsedAsValue.Preserve,
+                error: ImportsNotUsedAsValue.Error
+            }),
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
+        },
+        {
             name: "downlevelIteration",
             type: "boolean",
             affectsEmit: true,
