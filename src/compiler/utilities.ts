@@ -3865,9 +3865,11 @@ namespace ts {
 
     /**
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
-     * parsed in a JavaScript file, gets the type annotation from JSDoc.
+     * parsed in a JavaScript file, gets the type annotation from JSDoc.  Also gets the type of
+     * functions only the JSDoc case.
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
+        if (!isInJSFile(node) && isFunctionDeclaration(node)) return undefined;
         const type = (node as HasType).type;
         if (type || !isInJSFile(node)) return type;
         return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
