@@ -70,8 +70,8 @@ namespace ts.formatting {
             rule("NoSpaceAfterUnaryPrefixOperator", unaryPrefixOperators, unaryPrefixExpressions, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPreincrementOperator", SyntaxKind.PlusPlusToken, unaryPreincrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPredecrementOperator", SyntaxKind.MinusMinusToken, unaryPredecrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
 
             // More unary operator special-casing.
             // DevDiv 181814: Be careful when removing leading whitespace
@@ -788,6 +788,25 @@ namespace ts.formatting {
 
     function isNonNullAssertionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.NonNullExpression;
+    }
+
+    function isNotStatementConditionContext(context: FormattingContext): boolean {
+        return !isStatementConditionContext(context);
+    }
+
+    function isStatementConditionContext(context: FormattingContext): boolean {
+        switch (context.contextNode.kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
