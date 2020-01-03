@@ -203,6 +203,14 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
+            name: "assumeChangesOnlyAffectDirectDependencies",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
+        },
+        {
             name: "locale",
             type: "string",
             category: Diagnostics.Advanced_Options,
