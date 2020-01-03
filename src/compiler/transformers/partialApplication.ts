@@ -11,7 +11,7 @@ namespace ts {
                 const visitor = (node: ts.Node): ts.Node => {
                     if (ts.isCallExpression(node)) {
                         if (node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
-                            const capturedFunctionIdentifier = ts.createIdentifier(`_${
+                            const capturedFunctionIdentifier = ts.createUniqueName(`_${
                                 ts.isIdentifier(node.expression)
                                     ? node.expression.escapedText
                                     : ts.isPropertyAccessExpression(node.expression)
@@ -36,7 +36,7 @@ namespace ts {
                                     identifier: (
                                         isPartialApplicationElement(arg)
                                             ? createIdentifier(getOrigfuncArgName(index))
-                                            : !ts.isLiteralKind(arg.kind) && createIdentifier(getOrigfuncArgName(index))
+                                            : !ts.isLiteralKind(arg.kind) && createUniqueName(getOrigfuncArgName(index))
                                         ) || undefined
                                 }));
                             args
