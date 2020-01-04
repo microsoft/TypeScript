@@ -1,0 +1,406 @@
+=== tests/cases/conformance/types/awaited/awaited.ts ===
+// simple
+declare const p0: Promise<number>;
+>p0 : Symbol(p0, Decl(awaited.ts, 1, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+p0.then(x => x);
+>p0.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p0 : Symbol(p0, Decl(awaited.ts, 1, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 2, 8))
+>x : Symbol(x, Decl(awaited.ts, 2, 8))
+
+declare const p1: Promise<Promise<number>>;
+>p1 : Symbol(p1, Decl(awaited.ts, 4, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+p1.then(x => x);
+>p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p1 : Symbol(p1, Decl(awaited.ts, 4, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 5, 8))
+>x : Symbol(x, Decl(awaited.ts, 5, 8))
+
+declare const p2: Promise<number | Promise<number>>;
+>p2 : Symbol(p2, Decl(awaited.ts, 7, 13))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+p2.then(x => x);
+>p2.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p2 : Symbol(p2, Decl(awaited.ts, 7, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 8, 8))
+>x : Symbol(x, Decl(awaited.ts, 8, 8))
+
+// generics
+declare const f: boolean;
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+
+declare function makePromise<T>(x: T): Promise<T>;
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>T : Symbol(T, Decl(awaited.ts, 12, 29))
+>x : Symbol(x, Decl(awaited.ts, 12, 32))
+>T : Symbol(T, Decl(awaited.ts, 12, 29))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(awaited.ts, 12, 29))
+
+makePromise(1).then(x => x);
+>makePromise(1).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 13, 20))
+>x : Symbol(x, Decl(awaited.ts, 13, 20))
+
+makePromise("a").then(x => x);
+>makePromise("a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 14, 22))
+>x : Symbol(x, Decl(awaited.ts, 14, 22))
+
+makePromise({ a: 1 }).then(x => x);
+>makePromise({ a: 1 }).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>a : Symbol(a, Decl(awaited.ts, 15, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 15, 27))
+>x : Symbol(x, Decl(awaited.ts, 15, 27))
+
+makePromise(f ? 1 : "a").then(x => x);
+>makePromise(f ? 1 : "a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 16, 30))
+>x : Symbol(x, Decl(awaited.ts, 16, 30))
+
+function f0<U>(u: U) {
+>f0 : Symbol(f0, Decl(awaited.ts, 16, 38))
+>U : Symbol(U, Decl(awaited.ts, 18, 12))
+>u : Symbol(u, Decl(awaited.ts, 18, 15))
+>U : Symbol(U, Decl(awaited.ts, 18, 12))
+
+    return makePromise(u).then(x => x);
+>makePromise(u).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>u : Symbol(u, Decl(awaited.ts, 18, 15))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 19, 31))
+>x : Symbol(x, Decl(awaited.ts, 19, 31))
+}
+f0(1).then(x => x);
+>f0(1).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f0 : Symbol(f0, Decl(awaited.ts, 16, 38))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 21, 11))
+>x : Symbol(x, Decl(awaited.ts, 21, 11))
+
+f0("a").then(x => x);
+>f0("a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f0 : Symbol(f0, Decl(awaited.ts, 16, 38))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 22, 13))
+>x : Symbol(x, Decl(awaited.ts, 22, 13))
+
+f0(f ? 1 : "a").then(x => x);
+>f0(f ? 1 : "a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f0 : Symbol(f0, Decl(awaited.ts, 16, 38))
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 23, 21))
+>x : Symbol(x, Decl(awaited.ts, 23, 21))
+
+f0(makePromise(1)).then(x => x);
+>f0(makePromise(1)).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f0 : Symbol(f0, Decl(awaited.ts, 16, 38))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 24, 24))
+>x : Symbol(x, Decl(awaited.ts, 24, 24))
+
+function f1<U, V>(u: U, v: V) {
+>f1 : Symbol(f1, Decl(awaited.ts, 24, 32))
+>U : Symbol(U, Decl(awaited.ts, 26, 12))
+>V : Symbol(V, Decl(awaited.ts, 26, 14))
+>u : Symbol(u, Decl(awaited.ts, 26, 18))
+>U : Symbol(U, Decl(awaited.ts, 26, 12))
+>v : Symbol(v, Decl(awaited.ts, 26, 23))
+>V : Symbol(V, Decl(awaited.ts, 26, 14))
+
+    return makePromise(u).then(x => {
+>makePromise(u).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>u : Symbol(u, Decl(awaited.ts, 26, 18))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 27, 31))
+
+        if (f) return x;
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+>x : Symbol(x, Decl(awaited.ts, 27, 31))
+
+        return makePromise(v).then(x => x);
+>makePromise(v).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>v : Symbol(v, Decl(awaited.ts, 26, 23))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 29, 35))
+>x : Symbol(x, Decl(awaited.ts, 29, 35))
+
+    });
+}
+f1(1, "a").then(x => x);
+>f1(1, "a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(awaited.ts, 24, 32))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 32, 16))
+>x : Symbol(x, Decl(awaited.ts, 32, 16))
+
+f1(makePromise(1), makePromise("a")).then(x => x);
+>f1(makePromise(1), makePromise("a")).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(awaited.ts, 24, 32))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 33, 42))
+>x : Symbol(x, Decl(awaited.ts, 33, 42))
+
+function f2<U>(u: U) {
+>f2 : Symbol(f2, Decl(awaited.ts, 33, 50))
+>U : Symbol(U, Decl(awaited.ts, 35, 12))
+>u : Symbol(u, Decl(awaited.ts, 35, 15))
+>U : Symbol(U, Decl(awaited.ts, 35, 12))
+
+    return makePromise(u).then(x => {
+>makePromise(u).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>u : Symbol(u, Decl(awaited.ts, 35, 15))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 36, 31))
+
+        if (f) return x;
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+>x : Symbol(x, Decl(awaited.ts, 36, 31))
+
+        return Promise.reject("b");
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+    });
+}
+f2(1).then(x => x);
+>f2(1).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f2 : Symbol(f2, Decl(awaited.ts, 33, 50))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 41, 11))
+>x : Symbol(x, Decl(awaited.ts, 41, 11))
+
+f2(makePromise(1)).then(x => x);
+>f2(makePromise(1)).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f2 : Symbol(f2, Decl(awaited.ts, 33, 50))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 42, 24))
+>x : Symbol(x, Decl(awaited.ts, 42, 24))
+
+function f3<U, V>(u: U, v: V) {
+>f3 : Symbol(f3, Decl(awaited.ts, 42, 32))
+>U : Symbol(U, Decl(awaited.ts, 44, 12))
+>V : Symbol(V, Decl(awaited.ts, 44, 14))
+>u : Symbol(u, Decl(awaited.ts, 44, 18))
+>U : Symbol(U, Decl(awaited.ts, 44, 12))
+>v : Symbol(v, Decl(awaited.ts, 44, 23))
+>V : Symbol(V, Decl(awaited.ts, 44, 14))
+
+    return makePromise(u).catch(x => v);
+>makePromise(u).catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>u : Symbol(u, Decl(awaited.ts, 44, 18))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 45, 32))
+>v : Symbol(v, Decl(awaited.ts, 44, 23))
+}
+f3(1, "a").then(x => x);
+>f3(1, "a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f3 : Symbol(f3, Decl(awaited.ts, 42, 32))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 47, 16))
+>x : Symbol(x, Decl(awaited.ts, 47, 16))
+
+f3(makePromise(1), makePromise("a")).then(x => x);
+>f3(makePromise(1), makePromise("a")).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f3 : Symbol(f3, Decl(awaited.ts, 42, 32))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 48, 42))
+>x : Symbol(x, Decl(awaited.ts, 48, 42))
+
+function f4<U, V>(u: U, v: V) {
+>f4 : Symbol(f4, Decl(awaited.ts, 48, 50))
+>U : Symbol(U, Decl(awaited.ts, 50, 12))
+>V : Symbol(V, Decl(awaited.ts, 50, 14))
+>u : Symbol(u, Decl(awaited.ts, 50, 18))
+>U : Symbol(U, Decl(awaited.ts, 50, 12))
+>v : Symbol(v, Decl(awaited.ts, 50, 23))
+>V : Symbol(V, Decl(awaited.ts, 50, 14))
+
+    return makePromise(u).catch(x => {
+>makePromise(u).catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>u : Symbol(u, Decl(awaited.ts, 50, 18))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 51, 32))
+
+        if (f) return v;
+>f : Symbol(f, Decl(awaited.ts, 11, 13))
+>v : Symbol(v, Decl(awaited.ts, 50, 23))
+
+        return Promise.reject("b");
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+
+    });
+}
+f4(1, "a").then(x => x);
+>f4(1, "a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f4 : Symbol(f4, Decl(awaited.ts, 48, 50))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 56, 16))
+>x : Symbol(x, Decl(awaited.ts, 56, 16))
+
+f4(makePromise(1), makePromise("a")).then(x => x);
+>f4(makePromise(1), makePromise("a")).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f4 : Symbol(f4, Decl(awaited.ts, 48, 50))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 57, 42))
+>x : Symbol(x, Decl(awaited.ts, 57, 42))
+
+async function f5<U>(u: Promise<U>) {
+>f5 : Symbol(f5, Decl(awaited.ts, 57, 50))
+>U : Symbol(U, Decl(awaited.ts, 59, 18))
+>u : Symbol(u, Decl(awaited.ts, 59, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(awaited.ts, 59, 18))
+
+    return await u;
+>u : Symbol(u, Decl(awaited.ts, 59, 21))
+}
+f5(makePromise(1)).then(x => x);
+>f5(makePromise(1)).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f5 : Symbol(f5, Decl(awaited.ts, 57, 50))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 62, 24))
+>x : Symbol(x, Decl(awaited.ts, 62, 24))
+
+f5(makePromise(makePromise(1))).then(x => x);
+>f5(makePromise(makePromise(1))).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f5 : Symbol(f5, Decl(awaited.ts, 57, 50))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>makePromise : Symbol(makePromise, Decl(awaited.ts, 11, 25))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(awaited.ts, 63, 37))
+>x : Symbol(x, Decl(awaited.ts, 63, 37))
+
+async function f6<U>(u: Promise<Promise<U>>) {
+>f6 : Symbol(f6, Decl(awaited.ts, 63, 45))
+>U : Symbol(U, Decl(awaited.ts, 65, 18))
+>u : Symbol(u, Decl(awaited.ts, 65, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(awaited.ts, 65, 18))
+
+    return await u;
+>u : Symbol(u, Decl(awaited.ts, 65, 21))
+}
+
+// assignability
+let v0: number;
+>v0 : Symbol(v0, Decl(awaited.ts, 70, 3))
+
+let v1: awaited number;
+>v1 : Symbol(v1, Decl(awaited.ts, 71, 3))
+
+let v2: awaited Promise<number>;
+>v2 : Symbol(v2, Decl(awaited.ts, 72, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+v0 = v1;
+>v0 : Symbol(v0, Decl(awaited.ts, 70, 3))
+>v1 : Symbol(v1, Decl(awaited.ts, 71, 3))
+
+v0 = v2;
+>v0 : Symbol(v0, Decl(awaited.ts, 70, 3))
+>v2 : Symbol(v2, Decl(awaited.ts, 72, 3))
+
+v1 = v0;
+>v1 : Symbol(v1, Decl(awaited.ts, 71, 3))
+>v0 : Symbol(v0, Decl(awaited.ts, 70, 3))
+
+v1 = v2;
+>v1 : Symbol(v1, Decl(awaited.ts, 71, 3))
+>v2 : Symbol(v2, Decl(awaited.ts, 72, 3))
+
+v2 = v0;
+>v2 : Symbol(v2, Decl(awaited.ts, 72, 3))
+>v0 : Symbol(v0, Decl(awaited.ts, 70, 3))
+
+v2 = v1;
+>v2 : Symbol(v2, Decl(awaited.ts, 72, 3))
+>v1 : Symbol(v1, Decl(awaited.ts, 71, 3))
+
+function f7<U>() {
+>f7 : Symbol(f7, Decl(awaited.ts, 78, 8))
+>U : Symbol(U, Decl(awaited.ts, 80, 12))
+
+    let v0: awaited U;
+>v0 : Symbol(v0, Decl(awaited.ts, 81, 7))
+>U : Symbol(U, Decl(awaited.ts, 80, 12))
+
+    let v1: awaited Promise<U>;
+>v1 : Symbol(v1, Decl(awaited.ts, 82, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(awaited.ts, 80, 12))
+
+    v0 = v1;
+>v0 : Symbol(v0, Decl(awaited.ts, 81, 7))
+>v1 : Symbol(v1, Decl(awaited.ts, 82, 7))
+
+    v1 = v0;
+>v1 : Symbol(v1, Decl(awaited.ts, 82, 7))
+>v0 : Symbol(v0, Decl(awaited.ts, 81, 7))
+}
+
+async function f8<U>() {
+>f8 : Symbol(f8, Decl(awaited.ts, 85, 1))
+>U : Symbol(U, Decl(awaited.ts, 87, 18))
+
+    let pu: Promise<U>;
+>pu : Symbol(pu, Decl(awaited.ts, 88, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(awaited.ts, 87, 18))
+
+    let v0: awaited U;
+>v0 : Symbol(v0, Decl(awaited.ts, 89, 7))
+>U : Symbol(U, Decl(awaited.ts, 87, 18))
+
+    let v1: awaited Promise<U>;
+>v1 : Symbol(v1, Decl(awaited.ts, 90, 7))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>U : Symbol(U, Decl(awaited.ts, 87, 18))
+
+    v0 = await pu;
+>v0 : Symbol(v0, Decl(awaited.ts, 89, 7))
+>pu : Symbol(pu, Decl(awaited.ts, 88, 7))
+
+    v1 = await pu;
+>v1 : Symbol(v1, Decl(awaited.ts, 90, 7))
+>pu : Symbol(pu, Decl(awaited.ts, 88, 7))
+}

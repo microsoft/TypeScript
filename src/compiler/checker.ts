@@ -3938,6 +3938,11 @@ namespace ts {
                     context.approximateLength += 2;
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
+                if (type.flags & TypeFlags.Awaited) {
+                    const awaitedTypeNode = typeToTypeNodeHelper((<AwaitedType>type).typeVariable, context);
+                    context.approximateLength += 9;
+                    return createTypeOperatorNode(SyntaxKind.AwaitedKeyword, awaitedTypeNode);
+                }
                 if (type.flags & TypeFlags.Conditional) {
                     const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
                     const saveInferTypeParameters = context.inferTypeParameters;
@@ -9739,6 +9744,10 @@ namespace ts {
                     constraintDepth--;
                     return result;
                 }
+                if (t.flags & TypeFlags.Awaited) {
+                    const basePromiseType = getBaseConstraint((<AwaitedType>t).typeVariable);
+                    return basePromiseType ? getAwaitedType(basePromiseType) : undefined;
+                }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
                 }
@@ -11967,6 +11976,9 @@ namespace ts {
                     case SyntaxKind.ReadonlyKeyword:
                         links.resolvedType = getTypeFromTypeNode(node.type);
                         break;
+                    case SyntaxKind.AwaitedKeyword:
+                        links.resolvedType = getAwaitedType(getTypeFromTypeNode(node.type)) ?? unknownType;
+                        break;
                     default:
                         throw Debug.assertNever(node.operator);
                 }
@@ -13451,6 +13463,9 @@ namespace ts {
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
+            }
+            if (flags & TypeFlags.Awaited) {
+                return getAwaitedType(instantiateType((<AwaitedType>type).typeVariable, mapper)) ?? unknownType;
             }
             if (flags & TypeFlags.Substitution) {
                 const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
@@ -15342,6 +15357,15 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Awaited && source.flags & TypeFlags.Awaited) {
+                    // An `awaited S` is related to an `awaited T` if `S` is related to `T`:
+                    //
+                    //  S <: T ⇒ awaited S <: awaited T
+                    //
+                    if (result = isRelatedTo((<AwaitedType>source).typeVariable, (<AwaitedType>target).typeVariable, reportErrors)) {
+                        return result;
+                    }
+                }
                 else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
@@ -15453,6 +15477,21 @@ namespace ts {
                                 resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
+                        }
+                    }
+                }
+                else if (source.flags & TypeFlags.Awaited) {
+                    // An `awaited S` is related to `T` if `awaited C` is related to `T`, where `C` is the
+                    // constraint of `S`:
+                    //
+                    //  S <: C ^ awaited C <: T ⇒ awaited S <: T
+                    //
+                    // For example `awaited Promise<number>` is assignable to `number`.
+                    const constraint = getConstraintOfType((<AwaitedType>source).typeVariable);
+                    const awaitedConstraint = constraint && getAwaitedType(constraint);
+                    if (awaitedConstraint) {
+                        if (result = isRelatedTo(awaitedConstraint, target, reportErrors)) {
+                            return result;
                         }
                     }
                 }
@@ -17686,12 +17725,19 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
+                else if (source.flags & TypeFlags.Awaited && target.flags && TypeFlags.Awaited) {
+                    inferFromTypes((<AwaitedType>source).typeVariable, (<AwaitedType>target).typeVariable);
+                }
                 else if (target.flags & TypeFlags.Conditional) {
                     const savePriority = priority;
                     priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
                     const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
                     inferToMultipleTypes(source, targetTypes, target.flags);
                     priority = savePriority;
+                }
+                else if (target.flags & TypeFlags.Awaited) {
+                    const targetTypes = [(<AwaitedType>target).typeVariable, createPromiseLikeType((<AwaitedType>target).typeVariable)];
+                    inferToMultipleTypes(source, targetTypes, target.flags);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
@@ -21138,7 +21184,10 @@ namespace ts {
                 const contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
                     if (functionFlags & FunctionFlags.Async) { // Async function
-                        const contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
+                        let contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
+                        if (contextualAwaitedType && contextualAwaitedType.flags & TypeFlags.Awaited) {
+                            contextualAwaitedType = (<AwaitedType>contextualAwaitedType).typeVariable;
+                        }
                         return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                     }
                     return contextualReturnType; // Regular function
@@ -21150,7 +21199,10 @@ namespace ts {
         function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
             const contextualType = getContextualType(node);
             if (contextualType) {
-                const contextualAwaitedType = getAwaitedType(contextualType);
+                let contextualAwaitedType = getAwaitedType(contextualType);
+                if (contextualAwaitedType && contextualAwaitedType.flags & TypeFlags.Awaited) {
+                    contextualAwaitedType = (<AwaitedType>contextualAwaitedType).typeVariable;
+                }
                 return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
             }
             return undefined;
@@ -29207,9 +29259,9 @@ namespace ts {
          * @param type The type of the promise.
          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
          */
-        function getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined {
+        function getPromisedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
             //
-            //  { // promise
+            //  { // type
             //      then( // thenFunction
             //          onfulfilled: ( // onfulfilledParameterType
             //              value: T // valueParameterType
@@ -29218,20 +29270,21 @@ namespace ts {
             //  }
             //
 
-            if (isTypeAny(promise)) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
 
-            const typeAsPromise = <PromiseOrAwaitableType>promise;
+            const typeAsPromise = <PromiseOrAwaitableType>type;
             if (typeAsPromise.promisedTypeOfPromise) {
                 return typeAsPromise.promisedTypeOfPromise;
             }
 
-            if (isReferenceToType(promise, getGlobalPromiseType(/*reportErrors*/ false))) {
-                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>promise)[0];
+            if (isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, getGlobalPromiseLikeType(/*reportErrors*/ false))) {
+                return typeAsPromise.promisedTypeOfPromise = getTypeArguments(<GenericType>type)[0];
             }
 
-            const thenFunction = getTypeOfPropertyOfType(promise, "then" as __String)!; // TODO: GH#18217
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
             if (isTypeAny(thenFunction)) {
                 return undefined;
             }
@@ -29272,6 +29325,32 @@ namespace ts {
             return awaitedType || errorType;
         }
 
+        /**
+         * Gets or creates an `awaited T` type for a type variable.
+         *
+         * The "awaited type" of a type variable cannot be determined until it is instantiated. As
+         * a result, an `AwaitedType` for the type variable is created that can be instantiated
+         * or related later.
+         */
+        function getAwaitedTypeForGenericType(type: TypeVariable) {
+            if (!type.resolvedAwaitedType) {
+                type.resolvedAwaitedType = <AwaitedType>createType(TypeFlags.Awaited);
+                type.resolvedAwaitedType.typeVariable = type;
+            }
+            return type.resolvedAwaitedType;
+        }
+
+        /**
+         * Gets the "awaited type" of a type.
+         *
+         * The "awaited type" of an expression is its "promised type" if the expression is a
+         * Promise-like type; otherwise, it is the type of the expression. If the "promised
+         * type" is itself a Promise-like, the "promised type" is recursively unwrapped until a
+         * non-promise type is found.
+         *
+         * This is used to reflect the runtime behavior of the `await` keyword and the `awaited T`
+         * type.
+         */
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
             const typeAsAwaitable = <PromiseOrAwaitableType>type;
             if (typeAsAwaitable.awaitedTypeOfType) {
@@ -29279,25 +29358,56 @@ namespace ts {
             }
 
             if (isTypeAny(type)) {
-                return typeAsAwaitable.awaitedTypeOfType = type;
+                return type;
             }
 
-            if (type.flags & TypeFlags.Union) {
-                let types: Type[] | undefined;
-                for (const constituentType of (<UnionType>type).types) {
-                    types = append<Type>(types, getAwaitedType(constituentType, errorNode, diagnosticMessage, arg0));
-                }
+            // For a union, get a union of the awaited types of each constituent.
+            //
+            // For example:
+            //
+            //   awaited (number | string)          -> number | string
+            //   awaited (number | Promise<string>) -> number | string
+            //   awaited (T | string)               -> awaited T | string
+            //   awaited (T | Promise<string>)      -> awaited T | string
+            //   awaited (T | Promise<never>)       -> awaited T
+            //   awaited (T | U)                    -> awaited T | awaited U
+            //
+            return typeAsAwaitable.awaitedTypeOfType =
+                mapType(type, errorNode ? constituentType => getAwaitedTypeWorker(constituentType, errorNode, diagnosticMessage, arg0) : getAwaitedTypeWorker);
+        }
 
-                if (!types) {
-                    return undefined;
-                }
+        function getAwaitedTypeWorker(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
+            // If the type is already an awaited type, return it.
+            //
+            // For example:
+            //
+            //   awaited T -> awaited T
+            //
+            if (type.flags & TypeFlags.Awaited) {
+                return type;
+            }
 
-                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types);
+            // We cannot resolve the awaited type for a type variable until it is instantiated. As
+            // such, we create an `awaited T` type that can either be instantiated or related later.
+            //
+            // For example:
+            //
+            //   T -> awaited T
+            //
+            if (maybeTypeOfKind(type, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
+                return getAwaitedTypeForGenericType(<TypeVariable>type);
+            }
+
+            const typeAsAwaitable = <PromiseOrAwaitableType>type;
+
+            // Use the cached type if already computed.
+            if (typeAsAwaitable.awaitedTypeOfType) {
+                return typeAsAwaitable.awaitedTypeOfType;
             }
 
             const promisedType = getPromisedTypeOfPromise(type);
             if (promisedType) {
-                if (type.id === promisedType.id || awaitedTypeStack.indexOf(promisedType.id) >= 0) {
+                if (type.id === promisedType.id || awaitedTypeStack.lastIndexOf(promisedType.id) >= 0) {
                     // Verify that we don't have a bad actor in the form of a promise whose
                     // promised type is the same as the promise type, or a mutually recursive
                     // promise. If so, we return undefined as we cannot guess the shape. If this
