@@ -12,5 +12,4 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts(2,11): erro
     ~~~~~~~~
 !!! error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number>'.
 !!! error TS2322:   Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number>'.
-!!! related TS6240 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts:2:11: Did you mean to access the property '[Symbol.iterator]' of Generator<(x: any) => any, void, unknown> instead?
     }

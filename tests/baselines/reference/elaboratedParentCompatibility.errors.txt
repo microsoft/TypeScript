@@ -1,0 +1,122 @@
+tests/cases/compiler/elaboratedParentCompatibility.ts(12,8): error TS2322: Type 'boolean' is not assignable to type 'House'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(15,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(16,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(17,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(20,25): error TS2322: Type 'W' is not assignable to type 'typeof W'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(23,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+tests/cases/compiler/elaboratedParentCompatibility.ts(25,20): error TS2322: Type 'string' is not assignable to type 'C'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(31,5): error TS2322: Type 'string' is not assignable to type 'C'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(32,20): error TS2322: Type 'string' is not assignable to type 'C'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(35,12): error TS2322: Type 'string' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(40,5): error TS2322: Type 'string' is not assignable to type '{ a: string; c: boolean; }'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(42,41): error TS2322: Type 'string' is not assignable to type '{ a: string; c: boolean; }'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(46,29): error TS2740: Type '<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]' is missing the following properties from type 'number[]': pop, push, concat, join, and 15 more.
+tests/cases/compiler/elaboratedParentCompatibility.ts(52,22): error TS2559: Type 'number' has no properties in common with type 'WeakType'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(53,5): error TS2322: Type 'number' is not assignable to type 'Record<string, number>'.
+tests/cases/compiler/elaboratedParentCompatibility.ts(54,49): error TS2322: Type 'number' is not assignable to type '{ c: number; } & Record<string, number>'.
+  Type 'number' is not assignable to type '{ c: number; }'.
+
+
+==== tests/cases/compiler/elaboratedParentCompatibility.ts (16 errors) ====
+    interface Person {
+        residence: House;
+    }
+    
+    interface House {
+        isHouseOfPain: boolean;
+    }
+    
+    declare let home: House;
+    declare let person: Person; 
+    
+    home = person.residence.isHouseOfPain; 
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'House'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:12:8: 'person.residence' is compatible with the original type. Perhaps you meant to use that instead.
+    
+    declare function fnHouse(home: House): void;
+    fnHouse(person.residence.isHouseOfPain) // Suggest person.residence
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:15:9: 'person.residence' is compatible with the original type. Perhaps you meant to use that instead.
+    fnHouse((person.residence).isHouseOfPain) // Suggest person.residence
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:16:9: 'person.residence' is compatible with the original type. Perhaps you meant to use that instead.
+    fnHouse(person["residence"].isHouseOfPain) // No suggestion here only suggest on dotted access
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'House'.
+    
+    enum W { A, B, C }
+    let wStatic: typeof W = W.A; // Suggest W
+                            ~~~
+!!! error TS2322: Type 'W' is not assignable to type 'typeof W'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:20:25: 'W' is compatible with the original type. Perhaps you meant to use that instead.
+    
+    class C {
+        name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        method (): C {
+            let c: C = this.name; // Suggest this
+                       ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'C'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:25:20: 'this' is compatible with the original type. Perhaps you meant to use that instead.
+            return c;
+        }
+    }
+    
+    declare function getC(): C;
+    let cInstance:C = getC().name // No suggestion, not a dotted name
+        ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'C'.
+    let cInstance2:C = cInstance.name //Suggest cInstance
+                       ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'C'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:32:20: 'cInstance' is compatible with the original type. Perhaps you meant to use that instead.
+    
+    function g<T extends { value: string }>(o: T): T {
+        return o.value; // Suggestion on type parameter
+               ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:35:12: 'o' is compatible with the original type. Perhaps you meant to use that instead.
+    }
+    
+    type U = { a: string, c: boolean } | { a: string, d: number, e: string } | { a: string }
+    declare let u: U;
+    let c1: { a: string, c: boolean } = u.a // No suggestion here parent is not compatible
+        ~~
+!!! error TS2322: Type 'string' is not assignable to type '{ a: string; c: boolean; }'.
+    if('c' in u) {
+        let c2: { a: string, c: boolean } = u.a // Suggestion here, parent is compatible
+                                            ~~~
+!!! error TS2322: Type 'string' is not assignable to type '{ a: string; c: boolean; }'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:42:41: 'u' is compatible with the original type. Perhaps you meant to use that instead.
+    }
+    
+    declare const arr: number[];
+    const arrLength: number[] = arr.map // Suggest the array 
+                                ~~~~~~~
+!!! error TS2740: Type '<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]' is missing the following properties from type 'number[]': pop, push, concat, join, and 15 more.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:46:29: 'arr' is compatible with the original type. Perhaps you meant to use that instead.
+    
+    
+    type WeakType = { a?: number; b?: number; }
+    declare let ow: { prop: { a: number }, prop2: { c: number} };
+    
+    let weak: WeakType = ow.prop.a // Suggest ow.prop
+                         ~~~~~~~~~
+!!! error TS2559: Type 'number' has no properties in common with type 'WeakType'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:52:22: 'ow.prop' is compatible with the original type. Perhaps you meant to use that instead.
+    let r: Record<string, number> = ow.prop.a // No suggestion if target type just has an index signature (prop and prop2 would be valid)
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'Record<string, number>'.
+    let r2: {c: number } & Record<string, number> = ow.prop2.c // prop2 suggested
+                                                    ~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type '{ c: number; } & Record<string, number>'.
+!!! error TS2322:   Type 'number' is not assignable to type '{ c: number; }'.
+!!! related TS6239 tests/cases/compiler/elaboratedParentCompatibility.ts:54:49: 'ow.prop2' is compatible with the original type. Perhaps you meant to use that instead.
+    
+    

@@ -1,0 +1,200 @@
+=== tests/cases/compiler/elaboratedParentCompatibility.ts ===
+interface Person {
+    residence: House;
+>residence : House
+}
+
+interface House {
+    isHouseOfPain: boolean;
+>isHouseOfPain : boolean
+}
+
+declare let home: House;
+>home : House
+
+declare let person: Person; 
+>person : Person
+
+home = person.residence.isHouseOfPain; 
+>home = person.residence.isHouseOfPain : boolean
+>home : House
+>person.residence.isHouseOfPain : boolean
+>person.residence : House
+>person : Person
+>residence : House
+>isHouseOfPain : boolean
+
+declare function fnHouse(home: House): void;
+>fnHouse : (home: House) => void
+>home : House
+
+fnHouse(person.residence.isHouseOfPain) // Suggest person.residence
+>fnHouse(person.residence.isHouseOfPain) : void
+>fnHouse : (home: House) => void
+>person.residence.isHouseOfPain : boolean
+>person.residence : House
+>person : Person
+>residence : House
+>isHouseOfPain : boolean
+
+fnHouse((person.residence).isHouseOfPain) // Suggest person.residence
+>fnHouse((person.residence).isHouseOfPain) : void
+>fnHouse : (home: House) => void
+>(person.residence).isHouseOfPain : boolean
+>(person.residence) : House
+>person.residence : House
+>person : Person
+>residence : House
+>isHouseOfPain : boolean
+
+fnHouse(person["residence"].isHouseOfPain) // No suggestion here only suggest on dotted access
+>fnHouse(person["residence"].isHouseOfPain) : void
+>fnHouse : (home: House) => void
+>person["residence"].isHouseOfPain : boolean
+>person["residence"] : House
+>person : Person
+>"residence" : "residence"
+>isHouseOfPain : boolean
+
+enum W { A, B, C }
+>W : W
+>A : W.A
+>B : W.B
+>C : W.C
+
+let wStatic: typeof W = W.A; // Suggest W
+>wStatic : typeof W
+>W : typeof W
+>W.A : W.A
+>W : typeof W
+>A : W.A
+
+class C {
+>C : C
+
+    name: string;
+>name : string
+
+    method (): C {
+>method : () => C
+
+        let c: C = this.name; // Suggest this
+>c : C
+>this.name : string
+>this : this
+>name : string
+
+        return c;
+>c : C
+    }
+}
+
+declare function getC(): C;
+>getC : () => C
+
+let cInstance:C = getC().name // No suggestion, not a dotted name
+>cInstance : C
+>getC().name : string
+>getC() : C
+>getC : () => C
+>name : string
+
+let cInstance2:C = cInstance.name //Suggest cInstance
+>cInstance2 : C
+>cInstance.name : string
+>cInstance : C
+>name : string
+
+function g<T extends { value: string }>(o: T): T {
+>g : <T extends { value: string; }>(o: T) => T
+>value : string
+>o : T
+
+    return o.value; // Suggestion on type parameter
+>o.value : string
+>o : T
+>value : string
+}
+
+type U = { a: string, c: boolean } | { a: string, d: number, e: string } | { a: string }
+>U : U
+>a : string
+>c : boolean
+>a : string
+>d : number
+>e : string
+>a : string
+
+declare let u: U;
+>u : U
+
+let c1: { a: string, c: boolean } = u.a // No suggestion here parent is not compatible
+>c1 : { a: string; c: boolean; }
+>a : string
+>c : boolean
+>u.a : string
+>u : U
+>a : string
+
+if('c' in u) {
+>'c' in u : boolean
+>'c' : "c"
+>u : U
+
+    let c2: { a: string, c: boolean } = u.a // Suggestion here, parent is compatible
+>c2 : { a: string; c: boolean; }
+>a : string
+>c : boolean
+>u.a : string
+>u : { a: string; c: boolean; }
+>a : string
+}
+
+declare const arr: number[];
+>arr : number[]
+
+const arrLength: number[] = arr.map // Suggest the array 
+>arrLength : number[]
+>arr.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>arr : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+
+
+type WeakType = { a?: number; b?: number; }
+>WeakType : WeakType
+>a : number | undefined
+>b : number | undefined
+
+declare let ow: { prop: { a: number }, prop2: { c: number} };
+>ow : { prop: {    a: number;}; prop2: {    c: number;}; }
+>prop : { a: number; }
+>a : number
+>prop2 : { c: number; }
+>c : number
+
+let weak: WeakType = ow.prop.a // Suggest ow.prop
+>weak : WeakType
+>ow.prop.a : number
+>ow.prop : { a: number; }
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+>prop : { a: number; }
+>a : number
+
+let r: Record<string, number> = ow.prop.a // No suggestion if target type just has an index signature (prop and prop2 would be valid)
+>r : Record<string, number>
+>ow.prop.a : number
+>ow.prop : { a: number; }
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+>prop : { a: number; }
+>a : number
+
+let r2: {c: number } & Record<string, number> = ow.prop2.c // prop2 suggested
+>r2 : { c: number; } & Record<string, number>
+>c : number
+>ow.prop2.c : number
+>ow.prop2 : { c: number; }
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+>prop2 : { c: number; }
+>c : number
+
+

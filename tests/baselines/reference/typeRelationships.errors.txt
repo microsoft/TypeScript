@@ -18,7 +18,7 @@ tests/cases/conformance/types/thisType/typeRelationships.ts(36,21): error TS2322
                         ~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'this'.
 !!! error TS2322:   'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
-!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:9:21: Did you mean to use the target 'C' instead?
+!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:9:21: 'this' is compatible with the original type. Perhaps you meant to use that instead.
         }
         f2() {
             var a: C[];
@@ -47,12 +47,12 @@ tests/cases/conformance/types/thisType/typeRelationships.ts(36,21): error TS2322
             this.d = this.c;  // Error
                      ~~~~~~
 !!! error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
-!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:35:18: Did you mean to use the target 'D' instead?
+!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:35:18: 'this' is compatible with the original type. Perhaps you meant to use that instead.
             this.self = this.d;  // Error
                         ~~~~~~
 !!! error TS2322: Type 'D' is not assignable to type 'this'.
 !!! error TS2322:   'D' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'D'.
-!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:36:21: Did you mean to use the target 'D' instead?
+!!! related TS6239 tests/cases/conformance/types/thisType/typeRelationships.ts:36:21: 'this' is compatible with the original type. Perhaps you meant to use that instead.
             this.c = this.d;
         }
     }

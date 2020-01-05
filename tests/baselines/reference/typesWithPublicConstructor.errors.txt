@@ -1,4 +1,4 @@
-tests/cases/conformance/types/members/typesWithPublicConstructor.ts(8,21): error TS2322: Type 'Function' is not assignable to type '() => void'.
+tests/cases/conformance/types/members/typesWithPublicConstructor.ts(8,5): error TS2322: Type 'Function' is not assignable to type '() => void'.
   Type 'Function' provides no match for the signature '(): void'.
 tests/cases/conformance/types/members/typesWithPublicConstructor.ts(15,10): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/members/typesWithPublicConstructor.ts(16,5): error TS2322: Type 'Function' is not assignable to type '(x: number) => void'.
@@ -14,10 +14,9 @@ tests/cases/conformance/types/members/typesWithPublicConstructor.ts(16,5): error
     
     var c = new C();
     var r: () => void = c.constructor;
-                        ~~~~~~~~~~~~~
+        ~
 !!! error TS2322: Type 'Function' is not assignable to type '() => void'.
 !!! error TS2322:   Type 'Function' provides no match for the signature '(): void'.
-!!! related TS6240 tests/cases/conformance/types/members/typesWithPublicConstructor.ts:8:21: Did you mean to access the property 'toString' of Function instead?
     
     class C2 {
         public constructor(x: number);

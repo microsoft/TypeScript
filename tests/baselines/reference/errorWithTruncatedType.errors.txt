@@ -14,5 +14,5 @@ tests/cases/compiler/errorWithTruncatedType.ts(10,17): error TS2322: Type '{ pro
     var s: string = x;
                     ~
 !!! error TS2322: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }' is not assignable to type 'string'.
-!!! related TS6240 tests/cases/compiler/errorWithTruncatedType.ts:10:17: Did you mean to access the property 'propertyWithAnExceedinglyLongName1' of { propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; } instead?
+!!! related TS6241 tests/cases/compiler/errorWithTruncatedType.ts:10:17: Did you mean to access one of these 'propertyWithAnExceedinglyLongName1', 'propertyWithAnExceedinglyLongName2', 'propertyWithAnExceedinglyLongName3', 'propertyWithAnExceedinglyLongName4', 'propertyWithAnExceedinglyLongName5' properties on 'x' instead?
     

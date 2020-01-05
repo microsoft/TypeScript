@@ -1,7 +1,7 @@
-tests/cases/compiler/enumAssignmentCompat2.ts(25,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
-tests/cases/compiler/enumAssignmentCompat2.ts(27,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
+tests/cases/compiler/enumAssignmentCompat2.ts(25,17): error TS2322: Type 'typeof W' is not assignable to type 'number'.
+tests/cases/compiler/enumAssignmentCompat2.ts(27,19): error TS2322: Type 'W' is not assignable to type 'typeof W'.
 tests/cases/compiler/enumAssignmentCompat2.ts(29,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat2.ts(31,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
+tests/cases/compiler/enumAssignmentCompat2.ts(31,18): error TS2322: Type 'W' is not assignable to type 'WStatic'.
 tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
 
 
@@ -33,12 +33,12 @@ tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number'
     var z: number = W; // error
                     ~
 !!! error TS2322: Type 'typeof W' is not assignable to type 'number'.
-!!! related TS6230 tests/cases/compiler/enumAssignmentCompat2.ts:25:17: Did you mean to access the property 'a' of typeof W instead?
+!!! related TS6241 tests/cases/compiler/enumAssignmentCompat2.ts:25:17: Did you mean to access one of these 'a', 'b', 'c' properties on 'W' instead?
     var a: number = W.a;
     var b: typeof W = W.a; // error
                       ~~~
 !!! error TS2322: Type 'W' is not assignable to type 'typeof W'.
-!!! related TS6229 tests/cases/compiler/enumAssignmentCompat2.ts:27:19: Did you mean to use the target 'W' instead?
+!!! related TS6239 tests/cases/compiler/enumAssignmentCompat2.ts:27:19: 'W' is compatible with the original type. Perhaps you meant to use that instead.
     var c: typeof W.a = W.a;
     var d: typeof W = 3; // error
         ~
@@ -47,7 +47,7 @@ tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number'
     var f: WStatic = W.a; // error
                      ~~~
 !!! error TS2322: Type 'W' is not assignable to type 'WStatic'.
-!!! related TS6229 tests/cases/compiler/enumAssignmentCompat2.ts:31:18: Did you mean to use the target 'W' instead?
+!!! related TS6239 tests/cases/compiler/enumAssignmentCompat2.ts:31:18: 'W' is compatible with the original type. Perhaps you meant to use that instead.
     var g: WStatic = 5; // error
         ~
 !!! error TS2322: Type 'number' is not assignable to type 'WStatic'.

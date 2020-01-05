@@ -32,7 +32,7 @@ tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2741: Property 'ins
          ~~~~~
 !!! error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
 !!! related TS2728 tests/cases/compiler/typeofInternalModules.ts:3:22: 'C' is declared here.
-!!! related TS6240 tests/cases/compiler/typeofInternalModules.ts:19:6: Did you mean to access the property 'instantiated' of typeof Outer instead?
+!!! related TS6240 tests/cases/compiler/typeofInternalModules.ts:19:6: Did you mean to access the 'instantiated' property on 'Outer' instead?
     x5 = Outer.instantiated;
     var x6: typeof importUninst;
                    ~~~~~~~~~~~~

@@ -1,0 +1,211 @@
+=== tests/cases/compiler/elaboratedParentCompatibility.ts ===
+interface Person {
+>Person : Symbol(Person, Decl(elaboratedParentCompatibility.ts, 0, 0))
+
+    residence: House;
+>residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>House : Symbol(House, Decl(elaboratedParentCompatibility.ts, 2, 1))
+}
+
+interface House {
+>House : Symbol(House, Decl(elaboratedParentCompatibility.ts, 2, 1))
+
+    isHouseOfPain: boolean;
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+}
+
+declare let home: House;
+>home : Symbol(home, Decl(elaboratedParentCompatibility.ts, 8, 11))
+>House : Symbol(House, Decl(elaboratedParentCompatibility.ts, 2, 1))
+
+declare let person: Person; 
+>person : Symbol(person, Decl(elaboratedParentCompatibility.ts, 9, 11))
+>Person : Symbol(Person, Decl(elaboratedParentCompatibility.ts, 0, 0))
+
+home = person.residence.isHouseOfPain; 
+>home : Symbol(home, Decl(elaboratedParentCompatibility.ts, 8, 11))
+>person.residence.isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+>person.residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>person : Symbol(person, Decl(elaboratedParentCompatibility.ts, 9, 11))
+>residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+
+declare function fnHouse(home: House): void;
+>fnHouse : Symbol(fnHouse, Decl(elaboratedParentCompatibility.ts, 11, 38))
+>home : Symbol(home, Decl(elaboratedParentCompatibility.ts, 13, 25))
+>House : Symbol(House, Decl(elaboratedParentCompatibility.ts, 2, 1))
+
+fnHouse(person.residence.isHouseOfPain) // Suggest person.residence
+>fnHouse : Symbol(fnHouse, Decl(elaboratedParentCompatibility.ts, 11, 38))
+>person.residence.isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+>person.residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>person : Symbol(person, Decl(elaboratedParentCompatibility.ts, 9, 11))
+>residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+
+fnHouse((person.residence).isHouseOfPain) // Suggest person.residence
+>fnHouse : Symbol(fnHouse, Decl(elaboratedParentCompatibility.ts, 11, 38))
+>(person.residence).isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+>person.residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>person : Symbol(person, Decl(elaboratedParentCompatibility.ts, 9, 11))
+>residence : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+
+fnHouse(person["residence"].isHouseOfPain) // No suggestion here only suggest on dotted access
+>fnHouse : Symbol(fnHouse, Decl(elaboratedParentCompatibility.ts, 11, 38))
+>person["residence"].isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+>person : Symbol(person, Decl(elaboratedParentCompatibility.ts, 9, 11))
+>"residence" : Symbol(Person.residence, Decl(elaboratedParentCompatibility.ts, 0, 18))
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedParentCompatibility.ts, 4, 17))
+
+enum W { A, B, C }
+>W : Symbol(W, Decl(elaboratedParentCompatibility.ts, 16, 42))
+>A : Symbol(W.A, Decl(elaboratedParentCompatibility.ts, 18, 8))
+>B : Symbol(W.B, Decl(elaboratedParentCompatibility.ts, 18, 11))
+>C : Symbol(W.C, Decl(elaboratedParentCompatibility.ts, 18, 14))
+
+let wStatic: typeof W = W.A; // Suggest W
+>wStatic : Symbol(wStatic, Decl(elaboratedParentCompatibility.ts, 19, 3))
+>W : Symbol(W, Decl(elaboratedParentCompatibility.ts, 16, 42))
+>W.A : Symbol(W.A, Decl(elaboratedParentCompatibility.ts, 18, 8))
+>W : Symbol(W, Decl(elaboratedParentCompatibility.ts, 16, 42))
+>A : Symbol(W.A, Decl(elaboratedParentCompatibility.ts, 18, 8))
+
+class C {
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+
+    name: string;
+>name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+
+    method (): C {
+>method : Symbol(C.method, Decl(elaboratedParentCompatibility.ts, 22, 17))
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+
+        let c: C = this.name; // Suggest this
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 24, 11))
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+>this.name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+>this : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+>name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+
+        return c;
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 24, 11))
+    }
+}
+
+declare function getC(): C;
+>getC : Symbol(getC, Decl(elaboratedParentCompatibility.ts, 27, 1))
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+
+let cInstance:C = getC().name // No suggestion, not a dotted name
+>cInstance : Symbol(cInstance, Decl(elaboratedParentCompatibility.ts, 30, 3))
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+>getC().name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+>getC : Symbol(getC, Decl(elaboratedParentCompatibility.ts, 27, 1))
+>name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+
+let cInstance2:C = cInstance.name //Suggest cInstance
+>cInstance2 : Symbol(cInstance2, Decl(elaboratedParentCompatibility.ts, 31, 3))
+>C : Symbol(C, Decl(elaboratedParentCompatibility.ts, 19, 28))
+>cInstance.name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+>cInstance : Symbol(cInstance, Decl(elaboratedParentCompatibility.ts, 30, 3))
+>name : Symbol(C.name, Decl(elaboratedParentCompatibility.ts, 21, 9))
+
+function g<T extends { value: string }>(o: T): T {
+>g : Symbol(g, Decl(elaboratedParentCompatibility.ts, 31, 33))
+>T : Symbol(T, Decl(elaboratedParentCompatibility.ts, 33, 11))
+>value : Symbol(value, Decl(elaboratedParentCompatibility.ts, 33, 22))
+>o : Symbol(o, Decl(elaboratedParentCompatibility.ts, 33, 40))
+>T : Symbol(T, Decl(elaboratedParentCompatibility.ts, 33, 11))
+>T : Symbol(T, Decl(elaboratedParentCompatibility.ts, 33, 11))
+
+    return o.value; // Suggestion on type parameter
+>o.value : Symbol(value, Decl(elaboratedParentCompatibility.ts, 33, 22))
+>o : Symbol(o, Decl(elaboratedParentCompatibility.ts, 33, 40))
+>value : Symbol(value, Decl(elaboratedParentCompatibility.ts, 33, 22))
+}
+
+type U = { a: string, c: boolean } | { a: string, d: number, e: string } | { a: string }
+>U : Symbol(U, Decl(elaboratedParentCompatibility.ts, 35, 1))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 10))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 37, 21))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 38))
+>d : Symbol(d, Decl(elaboratedParentCompatibility.ts, 37, 49))
+>e : Symbol(e, Decl(elaboratedParentCompatibility.ts, 37, 60))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 76))
+
+declare let u: U;
+>u : Symbol(u, Decl(elaboratedParentCompatibility.ts, 38, 11))
+>U : Symbol(U, Decl(elaboratedParentCompatibility.ts, 35, 1))
+
+let c1: { a: string, c: boolean } = u.a // No suggestion here parent is not compatible
+>c1 : Symbol(c1, Decl(elaboratedParentCompatibility.ts, 39, 3))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 39, 9))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 39, 20))
+>u.a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 10), Decl(elaboratedParentCompatibility.ts, 37, 38), Decl(elaboratedParentCompatibility.ts, 37, 76))
+>u : Symbol(u, Decl(elaboratedParentCompatibility.ts, 38, 11))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 10), Decl(elaboratedParentCompatibility.ts, 37, 38), Decl(elaboratedParentCompatibility.ts, 37, 76))
+
+if('c' in u) {
+>u : Symbol(u, Decl(elaboratedParentCompatibility.ts, 38, 11))
+
+    let c2: { a: string, c: boolean } = u.a // Suggestion here, parent is compatible
+>c2 : Symbol(c2, Decl(elaboratedParentCompatibility.ts, 41, 7))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 41, 13))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 41, 24))
+>u.a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 10))
+>u : Symbol(u, Decl(elaboratedParentCompatibility.ts, 38, 11))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 37, 10))
+}
+
+declare const arr: number[];
+>arr : Symbol(arr, Decl(elaboratedParentCompatibility.ts, 44, 13))
+
+const arrLength: number[] = arr.map // Suggest the array 
+>arrLength : Symbol(arrLength, Decl(elaboratedParentCompatibility.ts, 45, 5))
+>arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(elaboratedParentCompatibility.ts, 44, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+
+type WeakType = { a?: number; b?: number; }
+>WeakType : Symbol(WeakType, Decl(elaboratedParentCompatibility.ts, 45, 35))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 48, 17))
+>b : Symbol(b, Decl(elaboratedParentCompatibility.ts, 48, 29))
+
+declare let ow: { prop: { a: number }, prop2: { c: number} };
+>ow : Symbol(ow, Decl(elaboratedParentCompatibility.ts, 49, 11))
+>prop : Symbol(prop, Decl(elaboratedParentCompatibility.ts, 49, 17))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 49, 25))
+>prop2 : Symbol(prop2, Decl(elaboratedParentCompatibility.ts, 49, 38))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 49, 47))
+
+let weak: WeakType = ow.prop.a // Suggest ow.prop
+>weak : Symbol(weak, Decl(elaboratedParentCompatibility.ts, 51, 3))
+>WeakType : Symbol(WeakType, Decl(elaboratedParentCompatibility.ts, 45, 35))
+>ow.prop.a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 49, 25))
+>ow.prop : Symbol(prop, Decl(elaboratedParentCompatibility.ts, 49, 17))
+>ow : Symbol(ow, Decl(elaboratedParentCompatibility.ts, 49, 11))
+>prop : Symbol(prop, Decl(elaboratedParentCompatibility.ts, 49, 17))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 49, 25))
+
+let r: Record<string, number> = ow.prop.a // No suggestion if target type just has an index signature (prop and prop2 would be valid)
+>r : Symbol(r, Decl(elaboratedParentCompatibility.ts, 52, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ow.prop.a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 49, 25))
+>ow.prop : Symbol(prop, Decl(elaboratedParentCompatibility.ts, 49, 17))
+>ow : Symbol(ow, Decl(elaboratedParentCompatibility.ts, 49, 11))
+>prop : Symbol(prop, Decl(elaboratedParentCompatibility.ts, 49, 17))
+>a : Symbol(a, Decl(elaboratedParentCompatibility.ts, 49, 25))
+
+let r2: {c: number } & Record<string, number> = ow.prop2.c // prop2 suggested
+>r2 : Symbol(r2, Decl(elaboratedParentCompatibility.ts, 53, 3))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 53, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ow.prop2.c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 49, 47))
+>ow.prop2 : Symbol(prop2, Decl(elaboratedParentCompatibility.ts, 49, 38))
+>ow : Symbol(ow, Decl(elaboratedParentCompatibility.ts, 49, 11))
+>prop2 : Symbol(prop2, Decl(elaboratedParentCompatibility.ts, 49, 38))
+>c : Symbol(c, Decl(elaboratedParentCompatibility.ts, 49, 47))
+
+

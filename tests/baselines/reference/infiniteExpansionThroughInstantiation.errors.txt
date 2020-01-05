@@ -28,7 +28,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansion
 !!! error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'List<string>' is not assignable to type 'string'.
-!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:16:8: Did you mean to access the property 'data' of OwnerList<string> instead?
+!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:16:8: Did you mean to access the 'data' property on 'ownerList' instead?
     
     function other<T>(x: T) {
         var list: List<T>;
@@ -39,7 +39,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansion
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'List<T>' is not assignable to type 'T'.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'List<T>'.
-!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:21:12: Did you mean to access the property 'data' of OwnerList<T> instead?
+!!! related TS6240 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:21:12: Did you mean to access the 'data' property on 'ownerList' instead?
     
     }
     

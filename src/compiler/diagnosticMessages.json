@@ -4746,13 +4746,21 @@
         "code": 6238
     },
 
-    "Did you mean to use the target '{0}' instead?": {
+    "'{0}' is compatible with the original type. Perhaps you meant to use that instead.": {
         "category": "Message",
         "code": 6239
     },
-    "Did you mean to access the property '{0}' of {1} instead?": {
+    "Did you mean to access the '{0}' property on '{1}' instead?": {
         "category": "Message",
         "code": 6240
+    },
+    "Did you mean to access one of these {0} properties on '{1}' instead?": {
+        "category": "Message",
+        "code": 6241
+    },
+    "Did you mean to access an enum member of '{0}' instead?": {
+        "category": "Message",
+        "code": 6242
     },
     "Projects to reference": {
         "category": "Message",

@@ -1,0 +1,225 @@
+=== tests/cases/compiler/elaboratedMissingChildAccess.ts ===
+interface Person {
+>Person : Symbol(Person, Decl(elaboratedMissingChildAccess.ts, 0, 0))
+
+    residence: House;
+>residence : Symbol(Person.residence, Decl(elaboratedMissingChildAccess.ts, 0, 18))
+>House : Symbol(House, Decl(elaboratedMissingChildAccess.ts, 4, 1))
+
+    birthDay: Date;
+>birthDay : Symbol(Person.birthDay, Decl(elaboratedMissingChildAccess.ts, 1, 21))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    anniversary?: Date
+>anniversary : Symbol(Person.anniversary, Decl(elaboratedMissingChildAccess.ts, 2, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+interface House {
+>House : Symbol(House, Decl(elaboratedMissingChildAccess.ts, 4, 1))
+
+    isHouseOfPain: boolean;
+>isHouseOfPain : Symbol(House.isHouseOfPain, Decl(elaboratedMissingChildAccess.ts, 6, 17))
+
+    occupants: number;
+>occupants : Symbol(House.occupants, Decl(elaboratedMissingChildAccess.ts, 7, 27))
+
+    heatingBill: number;
+>heatingBill : Symbol(House.heatingBill, Decl(elaboratedMissingChildAccess.ts, 8, 22))
+
+    waterBill: number;
+>waterBill : Symbol(House.waterBill, Decl(elaboratedMissingChildAccess.ts, 9, 24))
+
+    gasBill: number;
+>gasBill : Symbol(House.gasBill, Decl(elaboratedMissingChildAccess.ts, 10, 22))
+
+    size: number;
+>size : Symbol(House.size, Decl(elaboratedMissingChildAccess.ts, 11, 20))
+
+    rooms: number;
+>rooms : Symbol(House.rooms, Decl(elaboratedMissingChildAccess.ts, 12, 17))
+}
+
+declare let home: House;
+>home : Symbol(home, Decl(elaboratedMissingChildAccess.ts, 16, 11))
+>House : Symbol(House, Decl(elaboratedMissingChildAccess.ts, 4, 1))
+
+declare let person: Person; 
+>person : Symbol(person, Decl(elaboratedMissingChildAccess.ts, 17, 11))
+>Person : Symbol(Person, Decl(elaboratedMissingChildAccess.ts, 0, 0))
+
+home = person;  // Suggest residence
+>home : Symbol(home, Decl(elaboratedMissingChildAccess.ts, 16, 11))
+>person : Symbol(person, Decl(elaboratedMissingChildAccess.ts, 17, 11))
+
+let isHouseOfPain: boolean = home; // Suggest isHouseOfPain
+>isHouseOfPain : Symbol(isHouseOfPain, Decl(elaboratedMissingChildAccess.ts, 20, 3))
+>home : Symbol(home, Decl(elaboratedMissingChildAccess.ts, 16, 11))
+
+let bill: number = home; /// To many possibilities, do not make suggestions
+>bill : Symbol(bill, Decl(elaboratedMissingChildAccess.ts, 21, 3))
+>home : Symbol(home, Decl(elaboratedMissingChildAccess.ts, 16, 11))
+
+let someDate: Date  = person; // Suggest birthDay
+>someDate : Symbol(someDate, Decl(elaboratedMissingChildAccess.ts, 22, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>person : Symbol(person, Decl(elaboratedMissingChildAccess.ts, 17, 11))
+
+let someDateOrUndefined: Date | undefined  = person; // Suggest birthDay or anniversary
+>someDateOrUndefined : Symbol(someDateOrUndefined, Decl(elaboratedMissingChildAccess.ts, 23, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>person : Symbol(person, Decl(elaboratedMissingChildAccess.ts, 17, 11))
+
+enum W { A, B, C }
+>W : Symbol(W, Decl(elaboratedMissingChildAccess.ts, 23, 52))
+>A : Symbol(W.A, Decl(elaboratedMissingChildAccess.ts, 25, 8))
+>B : Symbol(W.B, Decl(elaboratedMissingChildAccess.ts, 25, 11))
+>C : Symbol(W.C, Decl(elaboratedMissingChildAccess.ts, 25, 14))
+
+let w: W = W;  // Special suggestion for enums
+>w : Symbol(w, Decl(elaboratedMissingChildAccess.ts, 26, 3))
+>W : Symbol(W, Decl(elaboratedMissingChildAccess.ts, 23, 52))
+>W : Symbol(W, Decl(elaboratedMissingChildAccess.ts, 23, 52))
+
+class C {
+>C : Symbol(C, Decl(elaboratedMissingChildAccess.ts, 26, 13))
+
+    name: string;
+>name : Symbol(C.name, Decl(elaboratedMissingChildAccess.ts, 28, 9))
+
+    method () {
+>method : Symbol(C.method, Decl(elaboratedMissingChildAccess.ts, 29, 17))
+
+        let name: string = this; // Suggestion on this
+>name : Symbol(name, Decl(elaboratedMissingChildAccess.ts, 31, 11))
+>this : Symbol(C, Decl(elaboratedMissingChildAccess.ts, 26, 13))
+
+        return name;
+>name : Symbol(name, Decl(elaboratedMissingChildAccess.ts, 31, 11))
+    }
+}
+
+declare function getC(): C;
+>getC : Symbol(getC, Decl(elaboratedMissingChildAccess.ts, 34, 1))
+>C : Symbol(C, Decl(elaboratedMissingChildAccess.ts, 26, 13))
+
+let fn: () => string = new C(); // No suggestion here, not a dotted access
+>fn : Symbol(fn, Decl(elaboratedMissingChildAccess.ts, 37, 3))
+>C : Symbol(C, Decl(elaboratedMissingChildAccess.ts, 26, 13))
+
+let cInstance = new C();
+>cInstance : Symbol(cInstance, Decl(elaboratedMissingChildAccess.ts, 38, 3))
+>C : Symbol(C, Decl(elaboratedMissingChildAccess.ts, 26, 13))
+
+fn = cInstance; // Suggestion here
+>fn : Symbol(fn, Decl(elaboratedMissingChildAccess.ts, 37, 3))
+>cInstance : Symbol(cInstance, Decl(elaboratedMissingChildAccess.ts, 38, 3))
+
+fn = getC() // No suggestion here either, not a dotted parameter
+>fn : Symbol(fn, Decl(elaboratedMissingChildAccess.ts, 37, 3))
+>getC : Symbol(getC, Decl(elaboratedMissingChildAccess.ts, 34, 1))
+
+
+function g<T extends { value: string }>(o: T): string {
+>g : Symbol(g, Decl(elaboratedMissingChildAccess.ts, 40, 11))
+>T : Symbol(T, Decl(elaboratedMissingChildAccess.ts, 43, 11))
+>value : Symbol(value, Decl(elaboratedMissingChildAccess.ts, 43, 22))
+>o : Symbol(o, Decl(elaboratedMissingChildAccess.ts, 43, 40))
+>T : Symbol(T, Decl(elaboratedMissingChildAccess.ts, 43, 11))
+
+    return o; // Suggestion on type parameter (value)
+>o : Symbol(o, Decl(elaboratedMissingChildAccess.ts, 43, 40))
+}
+
+
+type U = { a: string, c: boolean } | { a: string, d: number, e: string }
+>U : Symbol(U, Decl(elaboratedMissingChildAccess.ts, 45, 1))
+>a : Symbol(a, Decl(elaboratedMissingChildAccess.ts, 48, 10))
+>c : Symbol(c, Decl(elaboratedMissingChildAccess.ts, 48, 21))
+>a : Symbol(a, Decl(elaboratedMissingChildAccess.ts, 48, 38))
+>d : Symbol(d, Decl(elaboratedMissingChildAccess.ts, 48, 49))
+>e : Symbol(e, Decl(elaboratedMissingChildAccess.ts, 48, 60))
+
+declare let u: U;
+>u : Symbol(u, Decl(elaboratedMissingChildAccess.ts, 50, 11))
+>U : Symbol(U, Decl(elaboratedMissingChildAccess.ts, 45, 1))
+
+let a: string = u;
+>a : Symbol(a, Decl(elaboratedMissingChildAccess.ts, 51, 3))
+>u : Symbol(u, Decl(elaboratedMissingChildAccess.ts, 50, 11))
+
+let c: boolean = u; // No suggestion here, since valid member is not on all constituents
+>c : Symbol(c, Decl(elaboratedMissingChildAccess.ts, 52, 3))
+>u : Symbol(u, Decl(elaboratedMissingChildAccess.ts, 50, 11))
+
+if( 'c' in u) {
+>u : Symbol(u, Decl(elaboratedMissingChildAccess.ts, 50, 11))
+
+    let c2: boolean = u; // Suggestion here 
+>c2 : Symbol(c2, Decl(elaboratedMissingChildAccess.ts, 55, 7))
+>u : Symbol(u, Decl(elaboratedMissingChildAccess.ts, 50, 11))
+}
+
+declare const o: Object;
+>o : Symbol(o, Decl(elaboratedMissingChildAccess.ts, 58, 13))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const fn2: (v: Object) => boolean = o; // No suggestions from Object (isPrototypeOf would be valid)
+>fn2 : Symbol(fn2, Decl(elaboratedMissingChildAccess.ts, 59, 5))
+>v : Symbol(v, Decl(elaboratedMissingChildAccess.ts, 59, 12))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(elaboratedMissingChildAccess.ts, 58, 13))
+
+declare const f: Function;
+>f : Symbol(f, Decl(elaboratedMissingChildAccess.ts, 61, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const fnLength: number = f // No suggestions from Function 
+>fnLength : Symbol(fnLength, Decl(elaboratedMissingChildAccess.ts, 62, 5))
+>f : Symbol(f, Decl(elaboratedMissingChildAccess.ts, 61, 13))
+
+declare const arr: number[];
+>arr : Symbol(arr, Decl(elaboratedMissingChildAccess.ts, 64, 13))
+
+const arrLength: number = arr // Suggest length from array
+>arrLength : Symbol(arrLength, Decl(elaboratedMissingChildAccess.ts, 65, 5))
+>arr : Symbol(arr, Decl(elaboratedMissingChildAccess.ts, 64, 13))
+
+const fn3: <U>(callbackfn: (value: number) => U) => U[]= arr; // Suggest 'map', 'filter'
+>fn3 : Symbol(fn3, Decl(elaboratedMissingChildAccess.ts, 66, 5))
+>U : Symbol(U, Decl(elaboratedMissingChildAccess.ts, 66, 12))
+>callbackfn : Symbol(callbackfn, Decl(elaboratedMissingChildAccess.ts, 66, 15))
+>value : Symbol(value, Decl(elaboratedMissingChildAccess.ts, 66, 28))
+>U : Symbol(U, Decl(elaboratedMissingChildAccess.ts, 66, 12))
+>U : Symbol(U, Decl(elaboratedMissingChildAccess.ts, 66, 12))
+>arr : Symbol(arr, Decl(elaboratedMissingChildAccess.ts, 64, 13))
+
+type WeakType = { a?: number; b?: number; }
+>WeakType : Symbol(WeakType, Decl(elaboratedMissingChildAccess.ts, 66, 61))
+>a : Symbol(a, Decl(elaboratedMissingChildAccess.ts, 68, 17))
+>b : Symbol(b, Decl(elaboratedMissingChildAccess.ts, 68, 29))
+
+declare let ow: { prop: { a: number }, prop2: { c: number} };
+>ow : Symbol(ow, Decl(elaboratedMissingChildAccess.ts, 69, 11))
+>prop : Symbol(prop, Decl(elaboratedMissingChildAccess.ts, 69, 17))
+>a : Symbol(a, Decl(elaboratedMissingChildAccess.ts, 69, 25))
+>prop2 : Symbol(prop2, Decl(elaboratedMissingChildAccess.ts, 69, 38))
+>c : Symbol(c, Decl(elaboratedMissingChildAccess.ts, 69, 47))
+
+let weak: WeakType = ow // Suggest prop
+>weak : Symbol(weak, Decl(elaboratedMissingChildAccess.ts, 71, 3))
+>WeakType : Symbol(WeakType, Decl(elaboratedMissingChildAccess.ts, 66, 61))
+>ow : Symbol(ow, Decl(elaboratedMissingChildAccess.ts, 69, 11))
+
+let r: Record<string, number> = ow // No suggestion if target type just has an index signature (prop and prop2 would be valid)
+>r : Symbol(r, Decl(elaboratedMissingChildAccess.ts, 72, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ow : Symbol(ow, Decl(elaboratedMissingChildAccess.ts, 69, 11))
+
+let r2: {c: number } & Record<string, number> = ow // prop2 suggested
+>r2 : Symbol(r2, Decl(elaboratedMissingChildAccess.ts, 73, 3))
+>c : Symbol(c, Decl(elaboratedMissingChildAccess.ts, 73, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ow : Symbol(ow, Decl(elaboratedMissingChildAccess.ts, 69, 11))
+
+

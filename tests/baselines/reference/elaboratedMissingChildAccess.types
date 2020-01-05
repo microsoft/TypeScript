@@ -1,0 +1,208 @@
+=== tests/cases/compiler/elaboratedMissingChildAccess.ts ===
+interface Person {
+    residence: House;
+>residence : House
+
+    birthDay: Date;
+>birthDay : Date
+
+    anniversary?: Date
+>anniversary : Date | undefined
+}
+
+interface House {
+    isHouseOfPain: boolean;
+>isHouseOfPain : boolean
+
+    occupants: number;
+>occupants : number
+
+    heatingBill: number;
+>heatingBill : number
+
+    waterBill: number;
+>waterBill : number
+
+    gasBill: number;
+>gasBill : number
+
+    size: number;
+>size : number
+
+    rooms: number;
+>rooms : number
+}
+
+declare let home: House;
+>home : House
+
+declare let person: Person; 
+>person : Person
+
+home = person;  // Suggest residence
+>home = person : Person
+>home : House
+>person : Person
+
+let isHouseOfPain: boolean = home; // Suggest isHouseOfPain
+>isHouseOfPain : boolean
+>home : House
+
+let bill: number = home; /// To many possibilities, do not make suggestions
+>bill : number
+>home : House
+
+let someDate: Date  = person; // Suggest birthDay
+>someDate : Date
+>person : Person
+
+let someDateOrUndefined: Date | undefined  = person; // Suggest birthDay or anniversary
+>someDateOrUndefined : Date | undefined
+>person : Person
+
+enum W { A, B, C }
+>W : W
+>A : W.A
+>B : W.B
+>C : W.C
+
+let w: W = W;  // Special suggestion for enums
+>w : W
+>W : typeof W
+
+class C {
+>C : C
+
+    name: string;
+>name : string
+
+    method () {
+>method : () => string
+
+        let name: string = this; // Suggestion on this
+>name : string
+>this : this
+
+        return name;
+>name : string
+    }
+}
+
+declare function getC(): C;
+>getC : () => C
+
+let fn: () => string = new C(); // No suggestion here, not a dotted access
+>fn : () => string
+>new C() : C
+>C : typeof C
+
+let cInstance = new C();
+>cInstance : C
+>new C() : C
+>C : typeof C
+
+fn = cInstance; // Suggestion here
+>fn = cInstance : C
+>fn : () => string
+>cInstance : C
+
+fn = getC() // No suggestion here either, not a dotted parameter
+>fn = getC() : C
+>fn : () => string
+>getC() : C
+>getC : () => C
+
+
+function g<T extends { value: string }>(o: T): string {
+>g : <T extends { value: string; }>(o: T) => string
+>value : string
+>o : T
+
+    return o; // Suggestion on type parameter (value)
+>o : T
+}
+
+
+type U = { a: string, c: boolean } | { a: string, d: number, e: string }
+>U : U
+>a : string
+>c : boolean
+>a : string
+>d : number
+>e : string
+
+declare let u: U;
+>u : U
+
+let a: string = u;
+>a : string
+>u : U
+
+let c: boolean = u; // No suggestion here, since valid member is not on all constituents
+>c : boolean
+>u : U
+
+if( 'c' in u) {
+>'c' in u : boolean
+>'c' : "c"
+>u : U
+
+    let c2: boolean = u; // Suggestion here 
+>c2 : boolean
+>u : { a: string; c: boolean; }
+}
+
+declare const o: Object;
+>o : Object
+
+const fn2: (v: Object) => boolean = o; // No suggestions from Object (isPrototypeOf would be valid)
+>fn2 : (v: Object) => boolean
+>v : Object
+>o : Object
+
+declare const f: Function;
+>f : Function
+
+const fnLength: number = f // No suggestions from Function 
+>fnLength : number
+>f : Function
+
+declare const arr: number[];
+>arr : number[]
+
+const arrLength: number = arr // Suggest length from array
+>arrLength : number
+>arr : number[]
+
+const fn3: <U>(callbackfn: (value: number) => U) => U[]= arr; // Suggest 'map', 'filter'
+>fn3 : <U>(callbackfn: (value: number) => U) => U[]
+>callbackfn : (value: number) => U
+>value : number
+>arr : number[]
+
+type WeakType = { a?: number; b?: number; }
+>WeakType : WeakType
+>a : number | undefined
+>b : number | undefined
+
+declare let ow: { prop: { a: number }, prop2: { c: number} };
+>ow : { prop: {    a: number;}; prop2: {    c: number;}; }
+>prop : { a: number; }
+>a : number
+>prop2 : { c: number; }
+>c : number
+
+let weak: WeakType = ow // Suggest prop
+>weak : WeakType
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+
+let r: Record<string, number> = ow // No suggestion if target type just has an index signature (prop and prop2 would be valid)
+>r : Record<string, number>
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+
+let r2: {c: number } & Record<string, number> = ow // prop2 suggested
+>r2 : { c: number; } & Record<string, number>
+>c : number
+>ow : { prop: { a: number; }; prop2: { c: number; }; }
+
+

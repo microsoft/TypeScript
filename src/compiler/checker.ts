@@ -16056,11 +16056,13 @@ namespace ts {
                 if(elaborateDidYouMeanToCallOrConstruct(node, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
                     return true;
                 }
-                if(elaborateDidYouMeanAccessParent(node, source, target, headMessage, containingMessageChain, errorOutputContainer)) {
-                    return true;
-                }
-                if(elaborateDidYouMeanAccessChildProperty(node, source, target, headMessage, containingMessageChain, errorOutputContainer)) {
-                    return true;
+                if(isDottedName(node)) {
+                    if(elaborateDidYouMeanAccessParent(node, source, target, headMessage, containingMessageChain, errorOutputContainer)) {
+                        return true;
+                    }
+                    if(elaborateDidYouMeanAccessChildProperty(node, source, target, headMessage, containingMessageChain, errorOutputContainer)) {
+                        return true;
+                    }
                 }
             }
             switch (node.kind) {
@@ -16095,39 +16097,61 @@ namespace ts {
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
 
-            // We only offer this suggestion if we are dealing with an identifier, a property acessess or a call expression
-            // Other type of nodes are less likely to be forgotten property accesses
-            if(!(isIdentifier(node) || isPropertyAccessExpression(node) || isCallExpression(node))) return false;
             // Also don't offer this error message if the target type is likely to match any property on the source type
-            if(isTypeAny(target) || isWeakType(target) || isIndexSignatureOnlyType(target) || isEmptyObjectType(target)) return false;
-            if(target === globalObjectType || target === globalFunctionType) return false;
+            if (isIndexSignatureOnlyType(target) || isEmptyObjectType(target)) return false;
+            if (target === voidType || target === globalObjectType || target === globalFunctionType) return false;
+            if (maybeTypeOfKind(source, TypeFlags.Primitive)) return false;
 
-            const properties = getPropertiesOfObjectType(source);
-            for(const sourceProperty of properties) {
+            const properties = getPropertiesOfType(getApparentType(source));
+            if (properties.length === 0) return false;
+
+            const candidateProperties: Symbol[] = [];
+            let isEnumObject = true;
+            for (const sourceProperty of properties) {
                 const sourcePropertyType = getTypeOfSymbol(sourceProperty);
 
+                isEnumObject = isEnumObject && !!(sourcePropertyType.flags & TypeFlags.EnumLiteral);
                 // We don't offer the suggestion for properties of type any, too many false positives.
                 if(isTypeAny(sourcePropertyType)) continue;
 
-                if(!sourceProperty.parent) continue;
-
-                const declaringType = getTypeOfSymbol(sourceProperty.parent);
+                const parentSymbol = getParentOfSymbol(sourceProperty);
+                const declaringType = parentSymbol && getDeclaredTypeOfSymbol(parentSymbol);
                 // Do not offer suggestions from Object or Function
-                if(declaringType === globalObjectType || declaringType === globalFunctionType) continue;
+                if (declaringType && (declaringType === globalObjectType || declaringType === globalFunctionType)) continue;
 
-                if(isTypeAssignableTo(sourcePropertyType, target)) {
-                    const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
-                    checkTypeAssignableTo(source, target, node, headMessage, containingMessageChain, resultObj);
-                    const diagnostic = resultObj.errors![resultObj.errors!.length - 1];
+                if (isTypeAssignableTo(sourcePropertyType, target)) {
+                    candidateProperties.push(sourceProperty);
+                }
+            }
+            if (0 < candidateProperties.length && candidateProperties.length <= 5 || isEnumObject) {
+                const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
+                checkTypeAssignableTo(source, target, node, headMessage, containingMessageChain, resultObj);
+                const diagnostic = resultObj.errors![resultObj.errors!.length - 1];
 
+                if(isEnumObject) {
                     addRelatedInfo(diagnostic, createDiagnosticForNode(
                         node,
-                        Diagnostics.Did_you_mean_to_access_the_property_0_of_1_instead,
-                        symbolToString(sourceProperty),
-                        typeToString(source)
+                        Diagnostics.Did_you_mean_to_access_an_enum_member_of_0_instead,
+                        tryGetDottedNameToString(node)
                     ));
-                    return true;
                 }
+                else if (candidateProperties.length === 1) {
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(
+                        node,
+                        Diagnostics.Did_you_mean_to_access_the_0_property_on_1_instead,
+                        symbolToString(candidateProperties[0]),
+                        tryGetDottedNameToString(node)
+                    ));
+                }
+                else {
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(
+                        node,
+                        Diagnostics.Did_you_mean_to_access_one_of_these_0_properties_on_1_instead,
+                        map(candidateProperties, s => "'" + symbolToString(s) + "'").join(", "),
+                        tryGetDottedNameToString(node)
+                    ));
+                }
+                return true;
             }
             return false;
         }
@@ -16140,9 +16164,10 @@ namespace ts {
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
+
             // Don't offer this error message if the target type is likely to match any property on the source type
-            if(isTypeAny(target) || isWeakType(target) || isIndexSignatureOnlyType(target) || isEmptyObjectType(target)) return false;
-            if(target === globalObjectType || target === globalFunctionType) return false;
+            if(isIndexSignatureOnlyType(target) || isEmptyObjectType(target)) return false;
+            if(target === voidType || target === globalObjectType || target === globalFunctionType) return false;
 
             let propertyExpression = node;
             while(isPropertyAccessExpression(propertyExpression)) {
@@ -16154,8 +16179,8 @@ namespace ts {
 
                     addRelatedInfo(diagnostic, createDiagnosticForNode(
                         propertyExpression.expression,
-                        Diagnostics.Did_you_mean_to_use_the_target_0_instead,
-                        symbolToString(getSymbolAtLocation(propertyExpression.expression)!)
+                        Diagnostics._0_is_compatible_with_the_original_type_Perhaps_you_meant_to_use_that_instead,
+                        tryGetDottedNameToString(propertyExpression.expression)
                     ));
                     return true;
                 }

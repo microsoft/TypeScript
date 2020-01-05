@@ -75,7 +75,7 @@ tests/cases/compiler/typeName1.ts(23,16): error TS2322: Type 'typeof C' is not a
     var x15:number=C;
                    ~
 !!! error TS2322: Type 'typeof C' is not assignable to type 'number'.
-!!! related TS6240 tests/cases/compiler/typeName1.ts:23:16: Did you mean to access the property 'zeek' of typeof C instead?
+!!! related TS6240 tests/cases/compiler/typeName1.ts:23:16: Did you mean to access the 'zeek' property on 'C' instead?
     
     
     
