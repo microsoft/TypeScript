@@ -2963,6 +2963,8 @@ namespace ts {
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: readonly number[];
         /* @internal */ classifiableNames?: ReadonlyUnderscoreEscapedMap<true>;
+        // Comments containing @ts-* directives, in order.
+        /* @internal */ commentDirectives?: CommentDirective[];
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -2980,6 +2982,18 @@ namespace ts {
         /* @internal */ localJsxFactory?: EntityName;
 
         /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+    }
+
+    /* @internal */
+    export interface CommentDirective {
+        range: TextRange;
+        type: CommentDirectiveType,
+    }
+
+    /* @internal */
+    export const enum CommentDirectiveType {
+        ExpectError,
+        Ignore,
     }
 
     /*@internal*/
@@ -6564,6 +6578,12 @@ namespace ts {
         set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
         get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
+    }
+
+    /* @internal */
+    export interface CommentDirectivesMap {
+        getUnusedExpectations(): CommentDirective[];
+        markUsed(matchedLine: number): boolean;
     }
 
     export interface UserPreferences {

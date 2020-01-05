@@ -842,6 +842,7 @@ namespace ts {
 
         function clearState() {
             // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.clearCommentDirectives();
             scanner.setText("");
             scanner.setOnError(undefined);
 
@@ -875,6 +876,7 @@ namespace ts {
 
             setExternalModuleIndicator(sourceFile);
 
+            sourceFile.commentDirectives = scanner.getCommentDirectives();
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;

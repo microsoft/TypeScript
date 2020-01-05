@@ -1,0 +1,23 @@
+=== tests/cases/conformance/directives/ts-ignore.ts ===
+// @ts-ignore with additional commenting
+var invalidCommentedFancy: number = 'nope';
+>invalidCommentedFancy : Symbol(invalidCommentedFancy, Decl(ts-ignore.ts, 1, 3))
+
+// @ts-ignore with additional commenting
+var validCommentedFancy: string = 'nope';
+>validCommentedFancy : Symbol(validCommentedFancy, Decl(ts-ignore.ts, 4, 3))
+
+// @ts-ignore
+var invalidCommentedPlain: number = 'nope';
+>invalidCommentedPlain : Symbol(invalidCommentedPlain, Decl(ts-ignore.ts, 7, 3))
+
+// @ts-ignore
+var validCommentedPlain: string = 'nope';
+>validCommentedPlain : Symbol(validCommentedPlain, Decl(ts-ignore.ts, 10, 3))
+
+var invalidPlain: number = 'nope';
+>invalidPlain : Symbol(invalidPlain, Decl(ts-ignore.ts, 12, 3))
+
+var validPlain: string = 'nope';
+>validPlain : Symbol(validPlain, Decl(ts-ignore.ts, 14, 3))
+

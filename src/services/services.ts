@@ -614,6 +614,7 @@ namespace ts {
         private namedDeclarations: Map<Declaration[]> | undefined;
         public ambientModuleNames!: string[];
         public checkJsDirective: CheckJsDirective | undefined;
+        public errorExpectations: TextRange[] | undefined;
         public possiblyContainDynamicImport?: boolean;
         public pragmas!: PragmaMap;
         public localJsxFactory: EntityName | undefined;
