@@ -457,9 +457,12 @@ namespace ts.codefix {
             Array: t => checker.createArrayType(t),
             Promise: t => checker.createPromiseType(t),
         };
-        const builtins = [
+        const builtinPrimitives = [
             checker.getStringType(),
             checker.getNumberType(),
+        ];
+        const builtins = [
+            ...builtinPrimitives,
             checker.createArrayType(checker.getAnyType()),
             checker.createPromiseType(checker.getAnyType()),
         ];
@@ -967,11 +970,8 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
-            if (usage.properties && usage.properties.size
-                || usage.calls && usage.calls.length
-                || usage.constructs && usage.constructs.length
-                || usage.stringIndex) {
-                types.push(inferStructuralType(usage));
+            if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
+                types.push(inferLiteralOrStructuralType(usage));
             }
 
             types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
@@ -980,7 +980,12 @@ namespace ts.codefix {
             return types;
         }
 
-        function inferStructuralType(usage: Usage) {
+        function inferLiteralOrStructuralType(usage: Usage) {
+            const matchingBuiltins = builtinPrimitives.filter(builtin => allPropertiesAreAssignableToUsage(builtin, usage));
+            if (matchingBuiltins.length === 1) {
+                return matchingBuiltins[0];
+            }
+
             const members = createUnderscoreEscapedMap<Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
@@ -1016,7 +1021,11 @@ namespace ts.codefix {
                     return !sigs.length || !checker.isTypeAssignableTo(source, getFunctionFromCalls(propUsage.calls));
                 }
                 else {
-                    return !checker.isTypeAssignableTo(source, combineFromUsage(propUsage));
+                    const combinedPropUsage = combineFromUsage(propUsage);
+                    if (combinedPropUsage.flags & TypeFlags.Void) {
+                        return false;
+                    }
+                    return !checker.isTypeAssignableTo(source, combinedPropUsage);
                 }
             });
         }
