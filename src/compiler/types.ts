@@ -2104,6 +2104,13 @@ namespace ts {
         readonly name: never;
     }
 
+    export interface PipelineOperator extends Expression, JSDocContainer {
+        kind: SyntaxKind.PipelineExpression;
+        barGreaterThanToken: BarGreaterThanToken;
+        body: ConciseBody;
+        name: never;
+    }
+
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
