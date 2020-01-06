@@ -6981,7 +6981,7 @@ namespace ts {
                     getTypeWithFacts(type, TypeFacts.NEUndefined) :
                     type;
             }
-            return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration)], UnionReduction.Subtype);
+            return widenTypeInferredFromInitializer(declaration, getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), checkDeclarationInitializer(declaration)], UnionReduction.Subtype));
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -7098,7 +7098,7 @@ namespace ts {
             // Use the type of the initializer expression if one is present and the declaration is
             // not a parameter of a contextually typed function
             if (declaration.initializer && !isParameterOfContextuallyTypedFunction(declaration)) {
-                const type = checkDeclarationInitializer(declaration);
+                const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration));
                 return addOptionality(type, isOptional);
             }
 
@@ -7330,7 +7330,11 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean, reportErrors?: boolean): Type {
             if (element.initializer) {
-                return addOptionality(checkDeclarationInitializer(element));
+                // The type implied by a binding pattern is independent of context, so we check the initializer with no
+                // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
+                // pattern.
+                const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
+                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, contextualType)));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -21195,9 +21199,10 @@ namespace ts {
         }
 
         function getContextualTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const parentDeclaration = declaration.parent.parent;
+            const parent = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
-            const parentType = getContextualTypeForVariableLikeDeclaration(parentDeclaration);
+            const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
+                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent);
             if (parentType && !isBindingPattern(name) && !isComputedNonLiteralName(name)) {
                 const nameType = getLiteralTypeFromPropertyName(name);
                 if (isTypeUsableAsPropertyName(nameType)) {
@@ -27661,27 +27666,13 @@ namespace ts {
             return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
         }
 
-        function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
+        function checkDeclarationInitializer(declaration: HasExpressionInitializer, contextualType?: Type | undefined) {
             const initializer = getEffectiveInitializer(declaration)!;
-            const type = getQuickTypeOfExpression(initializer) || checkExpressionCached(initializer);
-            const padded = isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
+            const type = getQuickTypeOfExpression(initializer) ||
+                (contextualType ? checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, CheckMode.Normal) : checkExpressionCached(initializer));
+            return isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
                 isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
                 padTupleType(type, declaration.name) : type;
-            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                isDeclarationReadonly(declaration) ||
-                isTypeAssertion(initializer) ||
-                isLiteralOfContextualType(padded, getContextualType(initializer)) ? padded : getWidenedLiteralType(padded);
-            if (isInJSFile(declaration)) {
-                if (widened.flags & TypeFlags.Nullable) {
-                    reportImplicitAny(declaration, anyType);
-                    return anyType;
-                }
-                else if (isEmptyArrayLiteralType(widened)) {
-                    reportImplicitAny(declaration, anyArrayType);
-                    return anyArrayType;
-                }
-            }
-            return widened;
         }
 
         function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
@@ -27698,6 +27689,21 @@ namespace ts {
                 }
             }
             return createTupleType(elementTypes, type.target.minLength, /*hasRestElement*/ false, type.target.readonly);
+        }
+
+        function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
+            if (isInJSFile(declaration)) {
+                if (widened.flags & TypeFlags.Nullable) {
+                    reportImplicitAny(declaration, anyType);
+                    return anyType;
+                }
+                else if (isEmptyArrayLiteralType(widened)) {
+                    reportImplicitAny(declaration, anyArrayType);
+                    return anyArrayType;
+                }
+            }
+            return widened;
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
