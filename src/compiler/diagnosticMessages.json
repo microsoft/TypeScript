@@ -639,7 +639,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+    "Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.": {
         "category": "Error",
         "code": 1205
     },
@@ -1059,9 +1059,65 @@
         "category": "Error",
         "code": 1360
     },
-    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+    "Type-only {0} must reference a type, but '{1}' is a value.": {
         "category": "Error",
         "code": 1361
+    },
+    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+        "category": "Error",
+        "code": 1362
+    },
+    "A type-only import can specify a default import or named bindings, but not both.": {
+        "category": "Error",
+        "code": 1363
+    },
+    "Convert to type-only export": {
+        "category": "Message",
+        "code": 1364
+    },
+    "Convert all re-exported types to type-only exports": {
+        "category": "Message",
+        "code": 1365
+    },
+    "Split into two separate import declarations": {
+        "category": "Message",
+        "code": 1366
+    },
+    "Split all invalid type-only imports": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Specify emit/checking behavior for imports that are only used for types": {
+        "category": "Message",
+        "code": 1368
+    },
+    "Did you mean '{0}'?": {
+        "category": "Message",
+        "code": 1369
+    },
+    "Only ECMAScript imports may use 'import type'.": {
+        "category": "Error",
+        "code": 1370
+    },
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
+        "category": "Error",
+        "code": 1371
+    },
+    "This import may be converted to a type-only import.": {
+        "category": "Suggestion",
+        "code": 1372
+    },
+    "Convert to type-only import": {
+        "category": "Message",
+        "code": 1373
+    },
+    "Convert all imports not used as a value to type-only imports": {
+        "category": "Message",
+        "code": 1374
+    },
+    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1375
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -4366,6 +4422,10 @@
         "category": "Message",
         "code": 6383
     },
+    "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
+        "category": "Message",
+        "code": 6384
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -5348,6 +5408,10 @@
     "Prefix all incorrect property declarations with 'declare'": {
         "category": "Message",
         "code": 95095
+    },
+    "Convert to template string": {
+        "category": "Message",
+        "code": 95096
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

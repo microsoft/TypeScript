@@ -2,6 +2,10 @@
 namespace ts.SymbolDisplay {
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+        while (isTypeOnlyAlias(symbol)) {
+            symbol = symbol.immediateTarget;
+        }
+
         const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         if (result !== ScriptElementKind.unknown) {
             return result;
@@ -15,8 +19,6 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-        if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-
         if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
         if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
         if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
@@ -123,6 +125,10 @@ namespace ts.SymbolDisplay {
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
         location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+
+        while (isTypeOnlyAlias(symbol)) {
+            symbol = symbol.immediateTarget;
+        }
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] | undefined;

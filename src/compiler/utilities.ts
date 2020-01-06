@@ -40,6 +40,18 @@ namespace ts {
         return result;
     }
 
+    export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
+    export function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
+        return isTransientSymbol(symbol) && !!symbol.immediateTarget;
+    }
+
+    export function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
+        return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
+    }
+
     const stringWriter = createSingleLineStringWriter();
 
     function createSingleLineStringWriter(): EmitTextWriter {
@@ -1767,7 +1779,7 @@ namespace ts {
         }
     }
 
-    export function isExternalModuleImportEqualsDeclaration(node: Node) {
+    export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
 
@@ -2625,7 +2637,6 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
                 if (isComputedPropertyName(parent)) return parent.parent;
                 // falls through
-
             case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
                     return parent.name === name ? parent : undefined;
@@ -2643,6 +2654,8 @@ namespace ts {
                         ? binExp
                         : undefined;
                 }
+            case SyntaxKind.PrivateIdentifier:
+                return isDeclaration(parent) && parent.name === name ? parent : undefined;
             default:
                 return undefined;
         }
@@ -3852,9 +3865,11 @@ namespace ts {
 
     /**
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
-     * parsed in a JavaScript file, gets the type annotation from JSDoc.
+     * parsed in a JavaScript file, gets the type annotation from JSDoc.  Also gets the type of
+     * functions only the JSDoc case.
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
+        if (!isInJSFile(node) && isFunctionDeclaration(node)) return undefined;
         const type = (node as HasType).type;
         if (type || !isInJSFile(node)) return type;
         return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
@@ -5879,6 +5894,9 @@ namespace ts {
     }
 
     export function addRelatedInfo<T extends Diagnostic>(diagnostic: T, ...relatedInformation: DiagnosticRelatedInformation[]): T {
+        if (!relatedInformation.length) {
+            return diagnostic;
+        }
         if (!diagnostic.relatedInformation) {
             diagnostic.relatedInformation = [];
         }

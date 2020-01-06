@@ -1,0 +1,14 @@
+=== /a.ts ===
+const A = {};
+>A : Symbol(A, Decl(a.ts, 0, 5))
+
+export type { A };
+>A : Symbol(A, Decl(a.ts, 1, 13))
+
+export const AA = {};
+>AA : Symbol(AA, Decl(a.ts, 2, 12))
+
+=== /b.ts ===
+export type { AA } from './a';
+>AA : Symbol(AA, Decl(b.ts, 0, 13))
+

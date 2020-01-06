@@ -3048,6 +3048,10 @@ namespace ts {
         }
 
         function emitImportClause(node: ImportClause) {
+            if (node.isTypeOnly) {
+                emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+                writeSpace();
+            }
             emit(node.name);
             if (node.name && node.namedBindings) {
                 emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
@@ -3089,6 +3093,10 @@ namespace ts {
         function emitExportDeclaration(node: ExportDeclaration) {
             let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                nextPos = emitTokenWithComment(SyntaxKind.TypeKeyword, nextPos, writeKeyword, node);
+                writeSpace();
+            }
             if (node.exportClause) {
                 emit(node.exportClause);
             }

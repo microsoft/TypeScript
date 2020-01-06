@@ -738,7 +738,15 @@ namespace FourSlash {
             }
 
             if (!range) {
-                this.raiseError(`goToDefinitionsAndBoundSpan failed - found a TextSpan ${JSON.stringify(defs.textSpan)} when it wasn't expected.`);
+                const marker = this.getMarkerByName(startMarkerName);
+                const startFile = marker.fileName;
+                const fileContent = this.getFileContent(startFile);
+                const spanContent = fileContent.slice(defs.textSpan.start, ts.textSpanEnd(defs.textSpan));
+                const spanContentWithMarker = spanContent.slice(0, marker.position - defs.textSpan.start) + `/*${startMarkerName}*/` + spanContent.slice(marker.position - defs.textSpan.start);
+                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
+                    .split(/\r?\n/).map(line => " ".repeat(6) + line).join(ts.sys.newLine);
+                this.raiseError(`goToDefinitionsAndBoundSpan failed. Found a starting TextSpan around '${spanContent}' in '${startFile}' (at position ${defs.textSpan.start}). `
+                    + `If this is the correct input span, put a fourslash range around it: \n\n${suggestedFileContent}\n`);
             }
             else {
                 this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
