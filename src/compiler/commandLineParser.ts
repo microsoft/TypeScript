@@ -473,11 +473,11 @@ namespace ts {
             description: Diagnostics.Import_emit_helpers_from_tslib
         },
         {
-            name: "importsNotUsedAsValue",
+            name: "importsNotUsedAsValues",
             type: createMapFromTemplate({
-                remove: ImportsNotUsedAsValue.Remove,
-                preserve: ImportsNotUsedAsValue.Preserve,
-                error: ImportsNotUsedAsValue.Error
+                remove: importsNotUsedAsValues.Remove,
+                preserve: importsNotUsedAsValues.Preserve,
+                error: importsNotUsedAsValues.Error
             }),
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,

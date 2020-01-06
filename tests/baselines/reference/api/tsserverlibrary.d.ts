@@ -2651,7 +2651,7 @@ declare namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
-        importsNotUsedAsValue?: ImportsNotUsedAsValue;
+        importsNotUsedAsValues?: importsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2750,7 +2750,7 @@ declare namespace ts {
         React = 2,
         ReactNative = 3
     }
-    export enum ImportsNotUsedAsValue {
+    export enum importsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
         Error = 2

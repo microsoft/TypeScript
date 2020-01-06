@@ -1,5 +1,5 @@
-/b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
-/c.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+/b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+/c.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 /e.ts(1,1): error TS6192: All imports in import declaration are unused.
 
 
@@ -11,7 +11,7 @@
 ==== /b.ts (1 errors) ====
     import { A, B } from './a'; // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
     let a: A;
     let b: B;
     console.log(a, b);
@@ -19,7 +19,7 @@
 ==== /c.ts (1 errors) ====
     import Default, * as named from './a'; // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.
+!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
     let a: Default;
     let b: named.B;
     console.log(a, b);

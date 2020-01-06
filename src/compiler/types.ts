@@ -5043,7 +5043,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
-        importsNotUsedAsValue?: ImportsNotUsedAsValue;
+        importsNotUsedAsValues?: importsNotUsedAsValues;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -5165,7 +5165,7 @@ namespace ts {
         ReactNative = 3
     }
 
-    export const enum ImportsNotUsedAsValue {
+    export const enum importsNotUsedAsValues {
         Remove,
         Preserve,
         Error
