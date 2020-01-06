@@ -2688,6 +2688,7 @@ declare namespace ts {
         project?: string;
         reactNamespace?: string;
         jsxFactory?: string;
+        jsxFragFactory?: string;
         composite?: boolean;
         incremental?: boolean;
         tsBuildInfoFile?: string;
