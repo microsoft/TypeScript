@@ -977,7 +977,7 @@ namespace ts {
         name: string;
         kind: ScriptElementKind;
         kindModifiers?: string; // see ScriptElementKindModifier, comma separated
-        sortText: string;
+        sortText: Completions.SortText;
         insertText?: string;
         /**
          * An optional span that indicates the text to be replaced by this completion item.

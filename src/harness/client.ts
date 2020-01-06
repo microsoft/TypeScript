@@ -204,7 +204,7 @@ namespace ts.server {
                         return res;
                     }
 
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: Completions.SortText }; // TODO: GH#18217
                 })
             };
         }

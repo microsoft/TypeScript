@@ -1,4 +1,3 @@
-/* @internal */
 namespace ts.Completions {
     export enum SortText {
         LocationPriority = "0",
@@ -9,8 +8,10 @@ namespace ts.Completions {
         AutoImportSuggestions = "5",
         JavascriptIdentifiers = "6"
     }
+    /* @internal */
     export type Log = (message: string) => void;
 
+    /* @internal */
     const enum SymbolOriginInfoKind {
         ThisType            = 1 << 0,
         SymbolMember        = 1 << 1,
@@ -22,10 +23,12 @@ namespace ts.Completions {
         SymbolMemberExport   = SymbolMember | Export,
     }
 
+    /* @internal */
     interface SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
     }
 
+    /* @internal */
     interface SymbolOriginInfoExport extends SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
         moduleSymbol: Symbol;
@@ -56,8 +59,10 @@ namespace ts.Completions {
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
      */
+    /* @internal */
     type SymbolOriginInfoMap = (SymbolOriginInfo | SymbolOriginInfoExport | undefined)[];
 
+    /* @internal */
     type SymbolSortTextMap = (SortText | undefined)[];
 
     const enum KeywordCompletionFilters {
@@ -74,18 +79,21 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
+    /* @internal */
     export interface AutoImportSuggestion {
         symbol: Symbol;
         symbolName: string;
         skipFilter: boolean;
         origin: SymbolOriginInfoExport;
     }
+    /* @internal */
     export interface ImportSuggestionsForFileCache {
         clear(): void;
         get(fileName: string, checker: TypeChecker, projectVersion?: string): readonly AutoImportSuggestion[] | undefined;
         set(fileName: string, suggestions: readonly AutoImportSuggestion[], projectVersion?: string): void;
         isEmpty(): boolean;
     }
+    /* @internal */
     export function createImportSuggestionsForFileCache(): ImportSuggestionsForFileCache {
         let cache: readonly AutoImportSuggestion[] | undefined;
         let projectVersion: string | undefined;
@@ -131,6 +139,7 @@ namespace ts.Completions {
         };
     }
 
+    /* @internal */
     export function getCompletionsAtPosition(
         host: LanguageServiceHost,
         program: Program,
@@ -422,6 +431,7 @@ namespace ts.Completions {
         return origin && originIsExport(origin) ? stripQuotes(origin.moduleSymbol.name) : undefined;
     }
 
+    /* @internal */
     export function getCompletionEntriesFromSymbols(
         symbols: readonly Symbol[],
         entries: Push<CompletionEntry>,
@@ -571,11 +581,13 @@ namespace ts.Completions {
             : symbol.name;
     }
 
+    /* @internal */
     export interface CompletionEntryIdentifier {
         name: string;
         source?: string;
     }
 
+    /* @internal */
     export function getCompletionEntryDetails(
         program: Program,
         log: Log,
@@ -633,6 +645,7 @@ namespace ts.Completions {
         return createCompletionDetails(name, ScriptElementKindModifier.none, kind, [displayPart(name, kind2)]);
     }
 
+    /* @internal */
     export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
         const { displayParts, documentation, symbolKind, tags } =
             checker.runWithCancellationToken(cancellationToken, checker =>
@@ -641,6 +654,7 @@ namespace ts.Completions {
         return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }
 
+    /* @internal */
     export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
         return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source };
     }
@@ -682,6 +696,7 @@ namespace ts.Completions {
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
+    /* @internal */
     export function getCompletionEntrySymbol(
         program: Program,
         log: Log,
@@ -695,6 +710,7 @@ namespace ts.Completions {
     }
 
     const enum CompletionDataKind { Data, JsDocTagName, JsDocTag, JsDocParameterName }
+    /* @internal */
     /** true: after the `=` sign but no identifier has been typed yet. Else is the Identifier after the initializer. */
     type IsJsxInitializer = boolean | Identifier;
     interface CompletionData {
@@ -717,6 +733,7 @@ namespace ts.Completions {
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
+    /* @internal */
     export const enum CompletionKind {
         ObjectPropertyDeclaration,
         Global,

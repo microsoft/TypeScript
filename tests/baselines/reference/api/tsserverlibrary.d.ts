@@ -5641,7 +5641,7 @@ declare namespace ts {
         name: string;
         kind: ScriptElementKind;
         kindModifiers?: string;
-        sortText: string;
+        sortText: Completions.SortText;
         insertText?: string;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
@@ -5891,6 +5891,18 @@ declare namespace ts {
 declare namespace ts {
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
+}
+declare namespace ts.Completions {
+    export enum SortText {
+        LocationPriority = "0",
+        OptionalMember = "1",
+        MemberDeclaredBySpreadAssignment = "2",
+        SuggestedClassMembers = "3",
+        GlobalsOrKeywords = "4",
+        AutoImportSuggestions = "5",
+        JavascriptIdentifiers = "6"
+    }
+    export {};
 }
 declare namespace ts {
     interface DocumentHighlights {
@@ -7616,7 +7628,7 @@ declare namespace ts.server.protocol {
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
          */
-        sortText: string;
+        sortText: Completions.SortText;
         /**
          * Text to insert instead of `name`.
          * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,

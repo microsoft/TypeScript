@@ -2058,7 +2058,7 @@ namespace ts.server.protocol {
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
          */
-        sortText: string;
+        sortText: Completions.SortText;
         /**
          * Text to insert instead of `name`.
          * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
