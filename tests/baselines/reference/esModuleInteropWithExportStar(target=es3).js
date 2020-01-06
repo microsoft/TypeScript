@@ -14,13 +14,15 @@ export {x as y} from "./fs";
 
 //// [mjts.js]
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
-    Object.defineProperty(o, k, {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, {
         enumerable: true,
         get: function() { return m[k]; }
     });
-}) : (function(o, m, k) {
-    o[k] = m[k];
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
 }));
 var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
     Object.defineProperty(o, "default", {
@@ -45,6 +47,6 @@ var fs = __importStar(require("./fs"));
 fs;
 __exportStar(require("./fs"), exports);
 var fs_1 = require("./fs");
-exports.x = fs_1.x;
+__createBinding(exports, fs_1, "x");
 var fs_2 = require("./fs");
-exports.y = fs_2.x;
+__createBinding(exports, fs_2, "x", "y");

@@ -209,13 +209,15 @@ export * from "class-module";
 //// [main.js]
 "use strict";
 /// <reference path="modules.d.ts"/>
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
-    Object.defineProperty(o, k, {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, {
         enumerable: true,
         get: function() { return m[k]; }
     });
-}) : (function(o, m, k) {
-    o[k] = m[k];
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
@@ -282,25 +284,25 @@ class_1.a;
 class_module_1.a;
 // named export
 var interface_2 = require("interface");
-exports.a1 = interface_2.a;
+__createBinding(exports, interface_2, "a", "a1");
 var variable_2 = require("variable");
-exports.a2 = variable_2.a;
+__createBinding(exports, variable_2, "a", "a2");
 var interface_variable_2 = require("interface-variable");
-exports.a3 = interface_variable_2.a;
+__createBinding(exports, interface_variable_2, "a", "a3");
 var module_2 = require("module");
-exports.a4 = module_2.a;
+__createBinding(exports, module_2, "a", "a4");
 var interface_module_2 = require("interface-module");
-exports.a5 = interface_module_2.a;
+__createBinding(exports, interface_module_2, "a", "a5");
 var variable_module_2 = require("variable-module");
-exports.a6 = variable_module_2.a;
+__createBinding(exports, variable_module_2, "a", "a6");
 var function_2 = require("function");
-exports.a7 = function_2.a;
+__createBinding(exports, function_2, "a", "a7");
 var function_module_2 = require("function-module");
-exports.a8 = function_module_2.a;
+__createBinding(exports, function_module_2, "a", "a8");
 var class_2 = require("class");
-exports.a9 = class_2.a;
+__createBinding(exports, class_2, "a", "a9");
 var class_module_2 = require("class-module");
-exports.a0 = class_module_2.a;
+__createBinding(exports, class_module_2, "a", "a0");
 __exportStar(require("variable"), exports);
 __exportStar(require("interface-variable"), exports);
 __exportStar(require("module"), exports);

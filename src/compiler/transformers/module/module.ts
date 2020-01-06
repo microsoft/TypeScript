@@ -991,20 +991,34 @@ namespace ts {
                     );
                 }
                 for (const specifier of node.exportClause.elements) {
-                    const exportedValue = createPropertyAccess(
-                        generatedName,
-                        specifier.propertyName || specifier.name
-                    );
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                createExpressionStatement(
-                                    createExportExpression(getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
+                    if (languageVersion === ScriptTarget.ES3) {
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    createExpressionStatement(
+                                        createCreateBindingHelper(context, generatedName, createLiteral(specifier.propertyName || specifier.name), specifier.propertyName ? createLiteral(specifier.name!) : undefined)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
+                    else {
+                        const exportedValue = createPropertyAccess(
+                            generatedName,
+                            specifier.propertyName || specifier.name
+                        );
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    createExpressionStatement(
+                                        createExportExpression(getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
                 }
 
                 return singleOrMany(statements);
@@ -1831,15 +1845,22 @@ namespace ts {
         scoped: false,
         priority: 1,
         text: `
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
-    Object.defineProperty(o, k, {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, {
         enumerable: true,
         get: function() { return m[k]; }
     });
-}) : (function(o, m, k) {
-    o[k] = m[k];
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
 }));`
     };
+
+    function createCreateBindingHelper(context: TransformationContext, module: Expression, inputName: Expression, outputName: Expression | undefined) {
+        context.requestEmitHelper(createBindingHelper);
+        return createCall(getUnscopedHelperName("__createBinding"), /*typeArguments*/ undefined, [createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
+    }
 
     export const setModuleDefaultHelper: UnscopedEmitHelper = {
         name: "typescript:commonjscreatevalue",
@@ -1855,7 +1876,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });`
-    }
+    };
 
     // emit output for the __export helper function
     const exportStarHelper: UnscopedEmitHelper = {
@@ -1870,7 +1891,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
             }`
     };
 
-    function createExportStarHelper(context:TransformationContext, module: Expression) {
+    function createExportStarHelper(context: TransformationContext, module: Expression) {
         context.requestEmitHelper(exportStarHelper);
         return createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")]);
     }
