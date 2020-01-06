@@ -1,0 +1,9 @@
+tests/cases/compiler/declarationEmitInvalidReferenceAllowJs.ts(1,22): error TS6229: No file under 'tests/cases/compiler/invalid' found with any supported extension.
+
+
+==== tests/cases/compiler/declarationEmitInvalidReferenceAllowJs.ts (1 errors) ====
+    /// <reference path="invalid" />
+                         ~~~~~~~
+!!! error TS6229: No file under 'tests/cases/compiler/invalid' found with any supported extension.
+    var x = 0; 
+    

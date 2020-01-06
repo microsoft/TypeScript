@@ -4252,6 +4252,10 @@
         "category": "Message",
         "code": 6228
     },
+    "No file under '{0}' found with any supported extension.": {
+        "category": "Error",
+        "code": 6229
+    },
 
     "Projects to reference": {
         "category": "Message",

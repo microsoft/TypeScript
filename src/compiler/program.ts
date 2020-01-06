@@ -2249,7 +2249,7 @@ namespace ts {
                 }
 
                 const sourceFileWithAddedExtension = forEach(supportedExtensions, extension => getSourceFile(fileName + extension));
-                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + Extension.Ts);
+                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.No_file_under_0_found_with_any_supported_extension, fileName);
                 return sourceFileWithAddedExtension;
             }
         }
