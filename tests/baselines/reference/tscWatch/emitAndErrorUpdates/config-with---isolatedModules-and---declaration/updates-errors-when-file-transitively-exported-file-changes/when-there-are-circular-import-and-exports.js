@@ -67,22 +67,19 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) b(p);
-    function b(p) {
-        if (!exports.hasOwnProperty(p))
-            Object.create
-                ? Object.defineProperty(exports, p, {
-                    enumerable: true,
-                    get: function () {
-                        return m[p];
-                    }
-                })
-                : (exports[p] = m[p]);
-    }
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools.interface"));
+__exportStar(require("./tools.interface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
@@ -91,22 +88,19 @@ export * from "./tools.interface";
 
 //// [/user/username/projects/myproject/lib1/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) b(p);
-    function b(p) {
-        if (!exports.hasOwnProperty(p))
-            Object.create
-                ? Object.defineProperty(exports, p, {
-                    enumerable: true,
-                    get: function () {
-                        return m[p];
-                    }
-                })
-                : (exports[p] = m[p]);
-    }
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./tools/public"));
+__exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.d.ts]
@@ -159,22 +153,19 @@ export declare class Data {
 
 //// [/user/username/projects/myproject/lib2/public.js]
 "use strict";
-function __export(m) {
-    for (var p in m) b(p);
-    function b(p) {
-        if (!exports.hasOwnProperty(p))
-            Object.create
-                ? Object.defineProperty(exports, p, {
-                    enumerable: true,
-                    get: function () {
-                        return m[p];
-                    }
-                })
-                : (exports[p] = m[p]);
-    }
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
-__export(require("./data"));
+__exportStar(require("./data"), exports);
 
 
 //// [/user/username/projects/myproject/lib2/public.d.ts]

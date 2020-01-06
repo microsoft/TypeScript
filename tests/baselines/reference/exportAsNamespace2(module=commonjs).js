@@ -22,23 +22,28 @@ exports.a = 1;
 exports.b = 2;
 //// [1.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) b(k);
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
-    function b(p) {
-        if (Object.hasOwnProperty.call(mod, p))
-            Object.create
-                ? Object.defineProperty(result, p, {
-                    enumerable: true,
-                    get: function () {
-                        return mod[p];
-                    }
-                })
-                : (result[p] = mod[p]);
-    }
 };
 exports.__esModule = true;
 exports.ns = __importStar(require("./0"));
@@ -46,23 +51,28 @@ ns.a;
 ns.b;
 //// [2.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) b(k);
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
-    function b(p) {
-        if (Object.hasOwnProperty.call(mod, p))
-            Object.create
-                ? Object.defineProperty(result, p, {
-                    enumerable: true,
-                    get: function () {
-                        return mod[p];
-                    }
-                })
-                : (result[p] = mod[p]);
-    }
 };
 exports.__esModule = true;
 var foo = __importStar(require("./1"));

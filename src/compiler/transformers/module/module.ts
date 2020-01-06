@@ -103,11 +103,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(updated, exportStarHelper);
-            }
             addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
@@ -435,11 +430,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(body, exportStarHelper);
-            }
             if (needUMDDynamicImportHelper) {
                 addEmitHelper(body, dynamicImportUMDHelper);
             }
@@ -1835,32 +1825,54 @@ namespace ts {
         }
     }
 
-    // emit output for the __export helper function
-    const exportStarHelper: EmitHelper = {
-        name: "typescript:export-star",
-        scoped: true,
+    export const createBindingHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatebinding",
+        importName: "__createBinding",
+        scoped: false,
+        priority: 1,
         text: `
-            function __export(m) {
-                for (var p in m) b(p);
-                function b(p) {
-                    if (!exports.hasOwnProperty(p))
-                        Object.create
-                            ? Object.defineProperty(exports, p, {
-                                enumerable: true,
-                                get: function () {
-                                    return m[p];
-                                }
-                            })
-                            : (exports[p] = m[p]);
-                }
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));`
+    };
+
+    export const setModuleDefaultHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatevalue",
+        importName: "__setModuleDefault",
+        scoped: false,
+        priority: 1,
+        text: `
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", {
+        enumerable: true,
+        value: v
+    });
+}) : function(o, v) {
+    o["default"] = v;
+});`
+    }
+
+    // emit output for the __export helper function
+    const exportStarHelper: UnscopedEmitHelper = {
+        name: "typescript:export-star",
+        importName: "__exportStar",
+        scoped: false,
+        dependencies: [createBindingHelper],
+        priority: 2,
+        text: `
+            var __exportStar = (this && this.__exportStar) || function(m, exports) {
+                for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
             }`
     };
 
-    function createExportStarHelper(context: TransformationContext, module: Expression) {
-        const compilerOptions = context.getCompilerOptions();
-        return compilerOptions.importHelpers
-            ? createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
-            : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+    function createExportStarHelper(context:TransformationContext, module: Expression) {
+        context.requestEmitHelper(exportStarHelper);
+        return createCall(getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import
@@ -1876,24 +1888,15 @@ namespace ts {
         name: "typescript:commonjsimportstar",
         importName: "__importStar",
         scoped: false,
+        dependencies: [createBindingHelper, setModuleDefaultHelper],
+        priority: 2,
         text: `
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) b(k);
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
-    function b(p) {
-        if (Object.hasOwnProperty.call(mod, p))
-            Object.create
-                ? Object.defineProperty(result, p, {
-                    enumerable: true,
-                    get: function () {
-                        return mod[p];
-                    }
-                })
-                : (result[p] = mod[p]);
-    }
 };`
     };
 

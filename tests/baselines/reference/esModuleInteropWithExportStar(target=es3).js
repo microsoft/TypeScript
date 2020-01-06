@@ -1,16 +1,19 @@
-//// [tests/cases/compiler/esModuleInteropImportCall.ts] ////
+//// [tests/cases/compiler/esModuleInteropWithExportStar.ts] ////
 
-//// [foo.d.ts]
-declare function foo(): void;
-declare namespace foo {}
-export = foo;
+//// [fs.d.ts]
+export const x: number;
+//// [mjts.ts]
+import * as fs from "./fs";
 
-//// [index.ts]
-import("./foo").then(f => {
-    f.default;
-});
+fs;
 
-//// [index.js]
+export * from "./fs";
+export {x} from "./fs";
+export {x as y} from "./fs";
+
+
+//// [mjts.js]
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
     Object.defineProperty(o, k, {
         enumerable: true,
@@ -34,6 +37,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-Promise.resolve().then(function () { return __importStar(require("./foo")); }).then(function (f) {
-    f["default"];
-});
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+}
+exports.__esModule = true;
+var fs = __importStar(require("./fs"));
+fs;
+__exportStar(require("./fs"), exports);
+var fs_1 = require("./fs");
+exports.x = fs_1.x;
+var fs_2 = require("./fs");
+exports.y = fs_2.x;

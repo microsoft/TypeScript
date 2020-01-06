@@ -209,19 +209,16 @@ export * from "class-module";
 //// [main.js]
 "use strict";
 /// <reference path="modules.d.ts"/>
-function __export(m) {
-    for (var p in m) b(p);
-    function b(p) {
-        if (!exports.hasOwnProperty(p))
-            Object.create
-                ? Object.defineProperty(exports, p, {
-                    enumerable: true,
-                    get: function () {
-                        return m[p];
-                    }
-                })
-                : (exports[p] = m[p]);
-    }
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k) {
+    Object.defineProperty(o, k, {
+        enumerable: true,
+        get: function() { return m[k]; }
+    });
+}) : (function(o, m, k) {
+    o[k] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 }
 exports.__esModule = true;
 var z2 = require("variable");
@@ -304,12 +301,12 @@ var class_2 = require("class");
 exports.a9 = class_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
-__export(require("variable"));
-__export(require("interface-variable"));
-__export(require("module"));
-__export(require("interface-module"));
-__export(require("variable-module"));
-__export(require("function"));
-__export(require("function-module"));
-__export(require("class"));
-__export(require("class-module"));
+__exportStar(require("variable"), exports);
+__exportStar(require("interface-variable"), exports);
+__exportStar(require("module"), exports);
+__exportStar(require("interface-module"), exports);
+__exportStar(require("variable-module"), exports);
+__exportStar(require("function"), exports);
+__exportStar(require("function-module"), exports);
+__exportStar(require("class"), exports);
+__exportStar(require("class-module"), exports);
