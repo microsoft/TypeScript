@@ -19255,7 +19255,7 @@ interface BlobCallback {
 }
 
 interface CustomElementConstructor {
-    (): HTMLElement;
+    new (): HTMLElement;
 }
 
 interface DecodeErrorCallback {
