@@ -3165,6 +3165,16 @@ namespace ts {
                     createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
             }
+
+            if (options.jsxFragFactory) {
+                if (!options.jsxFactory) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragFactory", "jsxFactory");
+                }
+                if (!parseIsolatedEntityName(options.jsxFragFactory, languageVersion)) {
+                    createOptionValueDiagnostic("jsxFragFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragFactory);
+                }
+            }
+
             else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace);
             }

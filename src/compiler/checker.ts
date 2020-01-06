@@ -22400,10 +22400,14 @@ namespace ts {
         function checkJsxFragment(node: JsxFragment): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
 
-            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || getSourceFileOfNode(node).pragmas.has("jsx"))) {
+            // by default, jsx: react will emit with React.createElement and React.Fragment
+            // if a custom jsxFactory is used, ensure jsxFragFactory or jsxFrag pragma is defined too
+            const nodeSourceFile = getSourceFileOfNode(node);
+            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
+                && !compilerOptions.jsxFragFactory && !nodeSourceFile.pragmas.has("jsxFrag")) {
                 error(node, compilerOptions.jsxFactory
-                    ? Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory
-                    : Diagnostics.JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma);
+                    ? Diagnostics.JSX_fragment_needs_corresponding_jsxFragFactory_compiler_option_when_using_jsxFactory_compiler_option
+                    : Diagnostics.JSX_fragment_needs_corresponding_jsxFrag_prama_when_using_jsx_pragma);
             }
 
             checkJsxChildren(node);
@@ -34951,6 +34955,26 @@ namespace ts {
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity,
+                getJsxFragFactoryEntity: (location): EntityName | undefined => {
+                    if (location) {
+                        const file = getSourceFileOfNode(location);
+                        if (file) {
+                            if (file.localJsxFragFactory) {
+                                return file.localJsxFragFactory;
+                            }
+                            const jsxFragPragmas = file.pragmas.get("jsxFrag");
+                            const jsxFragPragma = Array.isArray(jsxFragPragmas) ? jsxFragPragmas[0] : jsxFragPragmas;
+                            if (jsxFragPragma) {
+                                file.localJsxFragFactory = parseIsolatedEntityName(jsxFragPragma.arguments.factory, languageVersion);
+                                return file.localJsxFragFactory;
+                            }
+                        }
+                    }
+
+                    if (compilerOptions.jsxFragFactory) {
+                        return parseIsolatedEntityName(compilerOptions.jsxFragFactory, languageVersion);
+                    }
+                },
                 getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
                     accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
                     const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;

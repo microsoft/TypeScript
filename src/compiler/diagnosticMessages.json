@@ -4847,11 +4847,11 @@
         "category": "Error",
         "code": 17015
     },
-    "JSX fragment is not supported when using --jsxFactory": {
+    "JSX fragment needs corresponding `jsxFragFactory` compiler option when using `jsxFactory` compiler option.": {
         "category": "Error",
         "code": 17016
     },
-    "JSX fragment is not supported when using an inline JSX factory pragma": {
+    "JSX fragment needs corresponding @jsxFrag prama when using @jsx pragma.": {
         "category": "Error",
         "code": 17017
     },
@@ -5505,5 +5505,13 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
+    },
+    "Invalid value for 'jsxFragFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 18031
+    },
+    "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with `jsxFactory` compiler option specified, e.g. 'Preact.Fragment'.": {
+        "category": "Message",
+        "code": 18032
     }
 }

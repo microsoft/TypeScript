@@ -136,6 +136,7 @@ namespace ts {
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                context.getEmitResolver().getJsxFragFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
                 node,

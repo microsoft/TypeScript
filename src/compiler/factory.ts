@@ -135,6 +135,15 @@ namespace ts {
             );
     }
 
+    function createJsxFragFactoryExpression(jsxFragFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+        return jsxFragFactoryEntity ?
+            createJsxFactoryExpressionFromEntityName(jsxFragFactoryEntity, parent) :
+            createPropertyAccess(
+                createReactNamespace(reactNamespace, parent),
+                "Fragment"
+            );
+    }
+
     export function createExpressionForJsxElement(jsxFactoryEntity: EntityName | undefined, reactNamespace: string, tagName: Expression, props: Expression, children: readonly Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
@@ -167,14 +176,9 @@ namespace ts {
         );
     }
 
-    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
-        const tagName = createPropertyAccess(
-            createReactNamespace(reactNamespace, parentElement),
-            "Fragment"
-        );
-
-        const argumentsList = [<Expression>tagName];
-        argumentsList.push(createNull());
+    export function createExpressionForJsxFragment(jsxFactoryEntity: EntityName | undefined, jsxFragFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        const tagName = createJsxFragFactoryExpression(jsxFragFactoryEntity, reactNamespace, parentElement);
+        const argumentsList = [<Expression>tagName, createNull()];
 
         if (children && children.length > 0) {
             if (children.length > 1) {
