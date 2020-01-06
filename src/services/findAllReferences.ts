@@ -337,9 +337,7 @@ namespace ts.FindAllReferences {
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: node.kind === SyntaxKind.DefaultKeyword
-                || !!getDeclarationFromName(node)
-                || isLiteralComputedPropertyDeclarationName(node),
+            isDefinition: isDefinitionForReference(node),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
@@ -468,6 +466,13 @@ namespace ts.FindAllReferences {
     function isWriteAccessForReference(node: Node): boolean {
         const decl = getDeclarationFromName(node);
         return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
+    }
+
+    function isDefinitionForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword
+            || !!getDeclarationFromName(node)
+            || isLiteralComputedPropertyDeclarationName(node)
+            || (node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent));
     }
 
     /**
