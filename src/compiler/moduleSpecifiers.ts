@@ -171,7 +171,7 @@ namespace ts.moduleSpecifiers {
         return match ? match.length : 0;
     }
 
-    function comparePathsByNumberOfDirectrorySeparators(a: string, b: string) {
+    function comparePathsByNumberOfDirectorySeparators(a: string, b: string) {
         return compareValues(
             numberOfDirectorySeparators(a),
             numberOfDirectorySeparators(b)
@@ -216,7 +216,6 @@ namespace ts.moduleSpecifiers {
         for (
             let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
             allFileNames.size !== 0;
-            directory = getDirectoryPath(directory)
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
             let pathsInDirectory: string[] | undefined;
@@ -228,10 +227,18 @@ namespace ts.moduleSpecifiers {
             });
             if (pathsInDirectory) {
                 if (pathsInDirectory.length > 1) {
-                    pathsInDirectory.sort(comparePathsByNumberOfDirectrorySeparators);
+                    pathsInDirectory.sort(comparePathsByNumberOfDirectorySeparators);
                 }
                 sortedPaths.push(...pathsInDirectory);
             }
+            const newDirectory = getDirectoryPath(directory);
+            if (newDirectory === directory) break;
+            directory = newDirectory;
+        }
+        if (allFileNames.size) {
+            const remainingPaths = arrayFrom(allFileNames.values());
+            if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByNumberOfDirectorySeparators);
+            sortedPaths.push(...remainingPaths);
         }
         return sortedPaths;
     }
