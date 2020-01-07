@@ -11541,7 +11541,7 @@ namespace ts {
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            if (isEmptyAnonymousObjectType(type) && type !== anyFunctionType) {
+            if (isEmptyAnonymousObjectType(type)) {
                 if (!(includes & TypeFlags.IncludesEmptyObject)) {
                     includes |= TypeFlags.IncludesEmptyObject;
                     typeSet.set(type.id.toString(), type);
@@ -14190,7 +14190,8 @@ namespace ts {
         }
 
         function isEmptyResolvedType(t: ResolvedType) {
-            return t.properties.length === 0 &&
+            return t !== anyFunctionType &&
+                t.properties.length === 0 &&
                 t.callSignatures.length === 0 &&
                 t.constructSignatures.length === 0 &&
                 !t.stringIndexInfo &&
