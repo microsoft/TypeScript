@@ -453,10 +453,13 @@ namespace ts {
         return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
     }
 
-    export function idText(identifier: Identifier): string {
-        return unescapeLeadingUnderscores(identifier.escapedText);
+    export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
+        return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
+        if (symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+            return idText(symbol.valueDeclaration.name);
+        }
         return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
@@ -465,7 +468,7 @@ namespace ts {
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
      * will be merged with)
      */
-    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | undefined {
+    function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateIdentifier | undefined {
         const hostNode = declaration.parent.parent;
         if (!hostNode) {
             return undefined;
@@ -524,7 +527,7 @@ namespace ts {
         return false;
     }
 
-    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | undefined {
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined {
         return declaration.name || nameForNamelessJSDocTypedef(declaration);
     }
 
@@ -671,6 +674,26 @@ namespace ts {
     /** Gets the JSDoc class tag for the node if present */
     export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
         return getFirstJSDocTag(node, isJSDocClassTag);
+    }
+
+    /** Gets the JSDoc public tag for the node if present */
+    export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPublicTag);
+    }
+
+    /** Gets the JSDoc private tag for the node if present */
+    export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPrivateTag);
+    }
+
+    /** Gets the JSDoc protected tag for the node if present */
+    export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocProtectedTag);
+    }
+
+    /** Gets the JSDoc protected tag for the node if present */
+    export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined {
+        return getFirstJSDocTag(node, isJSDocReadonlyTag);
     }
 
     /** Gets the JSDoc enum tag for the node if present */
@@ -856,6 +879,14 @@ namespace ts {
 
     export function isComputedPropertyName(node: Node): node is ComputedPropertyName {
         return node.kind === SyntaxKind.ComputedPropertyName;
+    }
+
+    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
+        return node.kind === SyntaxKind.PrivateIdentifier;
+    }
+
+    export function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier {
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
     }
 
     // Signature elements
@@ -1346,6 +1377,14 @@ namespace ts {
         return node.kind === SyntaxKind.NamespaceImport;
     }
 
+    export function isNamespaceExport(node: Node): node is NamespaceExport {
+        return node.kind === SyntaxKind.NamespaceExport;
+    }
+
+    export function isNamedExportBindings(node: Node): node is NamedExportBindings {
+        return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
+    }
+
     export function isNamedImports(node: Node): node is NamedImports {
         return node.kind === SyntaxKind.NamedImports;
     }
@@ -1547,6 +1586,22 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocClassTag;
     }
 
+    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
+        return node.kind === SyntaxKind.JSDocPublicTag;
+    }
+
+    export function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag {
+        return node.kind === SyntaxKind.JSDocPrivateTag;
+    }
+
+    export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
+        return node.kind === SyntaxKind.JSDocProtectedTag;
+    }
+
+    export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
+        return node.kind === SyntaxKind.JSDocReadonlyTag;
+    }
+
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }
@@ -1666,6 +1721,21 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
+    export function isTypeOnlyImportOrExportName(node: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier) {
+            return false;
+        }
+        switch (node.parent.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return (node.parent as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            case SyntaxKind.ImportClause:
+                return (node.parent as ImportClause).isTypeOnly;
+            default:
+                return false;
+        }
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
@@ -1675,6 +1745,17 @@ namespace ts {
     /* @internal */
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    }
+
+    // Private Identifiers
+    /*@internal*/
+    export function isPrivateIdentifierPropertyDeclaration(node: Node): node is PrivateIdentifierPropertyDeclaration {
+        return isPropertyDeclaration(node) && isPrivateIdentifier(node.name);
+    }
+
+    /*@internal*/
+    export function isPrivateIdentifierPropertyAccessExpression(node: Node): node is PrivateIdentifierPropertyAccessExpression {
+        return isPropertyAccessExpression(node) && isPrivateIdentifier(node.name);
     }
 
     // Keywords
@@ -2227,6 +2308,7 @@ namespace ts {
             || kind === SyntaxKind.ModuleDeclaration
             || kind === SyntaxKind.NamespaceExportDeclaration
             || kind === SyntaxKind.NamespaceImport
+            || kind === SyntaxKind.NamespaceExport
             || kind === SyntaxKind.Parameter
             || kind === SyntaxKind.PropertyAssignment
             || kind === SyntaxKind.PropertyDeclaration

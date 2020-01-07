@@ -240,7 +240,9 @@ namespace ts.FindAllReferences {
             }
 
             if (decl.kind === SyntaxKind.ExportDeclaration) {
-                searchForNamedImport(decl.exportClause);
+                if (decl.exportClause && isNamedExports(decl.exportClause)) {
+                    searchForNamedImport(decl.exportClause);
+                }
                 return;
             }
 
@@ -326,7 +328,7 @@ namespace ts.FindAllReferences {
         return !!forEachPossibleImportOrExportStatement(sourceFileLike, statement => {
             if (!isExportDeclaration(statement)) return;
             const { exportClause, moduleSpecifier } = statement;
-            return !moduleSpecifier && exportClause &&
+            return !moduleSpecifier && exportClause && isNamedExports(exportClause) &&
                 exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
         });
     }

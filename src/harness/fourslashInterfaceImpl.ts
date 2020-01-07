@@ -541,9 +541,14 @@ namespace FourSlashInterface {
             this.state.getEditsForFileRename(options);
         }
 
+        public baselineCallHierarchy() {
+            this.state.baselineCallHierarchy();
+        }
+
         public moveToNewFile(options: MoveToNewFileOptions): void {
             this.state.moveToNewFile(options);
         }
+
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
@@ -1547,7 +1552,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string;
+        readonly description: string | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
@@ -1604,6 +1609,9 @@ namespace FourSlashInterface {
         readonly findInComments?: boolean;
         readonly ranges: readonly RenameLocationOptions[];
         readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
+    export interface DiagnosticIgnoredInterpolations {
+        template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }

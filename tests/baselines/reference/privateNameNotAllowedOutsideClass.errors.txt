@@ -1,0 +1,14 @@
+tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts(1,7): error TS1134: Variable declaration expected.
+tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts(1,12): error TS1134: Variable declaration expected.
+tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts(1,14): error TS1134: Variable declaration expected.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts (3 errors) ====
+    const #foo = 3;
+          ~~~~
+!!! error TS1134: Variable declaration expected.
+               ~
+!!! error TS1134: Variable declaration expected.
+                 ~
+!!! error TS1134: Variable declaration expected.
+    

@@ -56,8 +56,8 @@ const {
     items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/
 >items : any
 >itemId : "some-id"
->itemWithTSError : any
->{} : { "some-id": any; }
+>itemWithTSError : AB
+>{} : {}
 
 } = objWithItems
 >objWithItems : ObjWithItems
@@ -65,7 +65,7 @@ const {
 // in order to re-produce the error, uncomment next line:
 typeof itemWithTSError // :(
 >typeof itemWithTSError : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->itemWithTSError : any
+>itemWithTSError : AB
 
 // will result in:
 // Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined
