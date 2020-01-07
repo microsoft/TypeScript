@@ -996,7 +996,7 @@ namespace ts {
                             setOriginalNode(
                                 setTextRange(
                                     createExpressionStatement(
-                                        createCreateBindingHelper(context, generatedName, createLiteral(specifier.propertyName || specifier.name), specifier.propertyName ? createLiteral(specifier.name!) : undefined)
+                                        createCreateBindingHelper(context, generatedName, createLiteral(specifier.propertyName || specifier.name), specifier.propertyName ? createLiteral(specifier.name) : undefined)
                                     ),
                                     specifier),
                                 specifier
