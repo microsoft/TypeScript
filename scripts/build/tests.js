@@ -1,5 +1,4 @@
 // @ts-check
-const gulp = require("gulp");
 const del = require("del");
 const fs = require("fs");
 const os = require("os");
@@ -124,8 +123,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
-            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
-            const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
+            await exec("node", [process.argv[1], "clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
+            const { exitCode } = await exec("node", [process.argv[1], "local", "--lkg=false"], { cancelToken });
             if (exitCode !== 0) {
                 errorStatus = exitCode;
                 error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
