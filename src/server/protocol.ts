@@ -2090,7 +2090,7 @@ namespace ts.server.protocol {
          * If true, this completion was generated from traversing the name table of an unchecked JS file,
          * and therefore may not be accurate.
          */
-        isUncheckedCompletion?: true;
+        isFromUncheckedFile?: true;
     }
 
     /**

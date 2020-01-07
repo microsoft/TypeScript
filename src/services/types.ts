@@ -988,7 +988,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         isRecommended?: true;
-        isUncheckedCompletion?: true;
+        isFromUncheckedFile?: true;
     }
 
     export interface CompletionEntryDetails {

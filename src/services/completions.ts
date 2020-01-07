@@ -311,7 +311,7 @@ namespace ts.Completions {
                     kind: ScriptElementKind.warning,
                     kindModifiers: "",
                     sortText: SortText.JavascriptIdentifiers,
-                    isUncheckedCompletion: true
+                    isFromUncheckedFile: true
                 });
             }
         });
