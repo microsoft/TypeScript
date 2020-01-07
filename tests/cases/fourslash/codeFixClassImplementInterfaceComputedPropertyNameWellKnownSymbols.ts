@@ -43,11 +43,11 @@ class C implements I<number> {
         throw new Error("Method not implemented.");
     }
     [Symbol.isConcatSpreadable]: boolean;
-    [Symbol.iterator](): any {
+    [Symbol.iterator]() {
         throw new Error("Method not implemented.");
     }
     [Symbol.match]: boolean;
-    [Symbol.replace](...args: {}): any {
+    [Symbol.replace](...args: {}) {
         throw new Error("Method not implemented.");
     }
     [Symbol.search](str: string): number {
