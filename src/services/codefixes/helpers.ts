@@ -155,7 +155,7 @@ namespace ts.codefix {
         body: Block | undefined,
     ): MethodDeclaration | undefined {
         const program = context.program;
-        const signatureDeclaration = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation, getNoopSymbolTrackerWithResolver(context));
+        const signatureDeclaration = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
         if (!signatureDeclaration) {
             return undefined;
         }
