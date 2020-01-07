@@ -1,7 +1,7 @@
 Exit Code: 1
 Standard output:
 ../../../../built/local/lib.es5.d.ts(1433,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../node_modules/@types/node/globals.d.ts(231,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
+../../../../node_modules/@types/node/globals.d.ts(235,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -23,7 +23,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
-  Type '{}' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 229 more.
+  Type '{}' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 225 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(107,5): error TS2322: Type 'Timeout' is not assignable to type 'number'.
@@ -143,7 +143,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(393,50): error TS2345: Argument of type '-1' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(396,27): error TS2339: Property 'focus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(447,26): error TS2339: Property 'breadcrumb' does not exist on type 'ChildNode'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(457,30): error TS2339: Property 'breadcrumb' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(457,30): error TS2339: Property 'breadcrumb' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(473,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(481,17): error TS2339: Property 'setTextContentTruncatedIfNeeded' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(488,38): error TS2554: Expected 2 arguments, but got 1.
@@ -3867,7 +3867,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(107,9)
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(111,9): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(119,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(122,25): error TS2345: Argument of type 'Element' is not assignable to parameter of type 'Icon'.
-  Type 'Element' is missing the following properties from type 'Icon': createdCallback, _descriptor, _spriteSheet, _iconType, and 117 more.
+  Type 'Element' is missing the following properties from type 'Icon': createdCallback, _descriptor, _spriteSheet, _iconType, and 113 more.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(133,9): error TS2339: Property 'ConsoleSidebar' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(147,27): error TS2322: Type 'Element' is not assignable to type 'Icon'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleSidebar.js(177,67): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4609,6 +4609,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1946,29): 
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1951,18): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1951,41): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1961,55): error TS2339: Property 'element' does not exist on type 'NODE_TYPE'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1962,19): error TS2445: Property 'dataTableBody' is protected and only accessible within class 'DataGrid<NODE_TYPE>' and its subclasses.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1966,26): error TS2339: Property '_attach' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1980,24): error TS2339: Property '_detach' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(1989,68): error TS2339: Property 'children' does not exist on type 'NODE_TYPE'.
@@ -4649,6 +4650,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(10
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(133,33): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(167,33): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(176,20): error TS2339: Property 'window' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(195,52): error TS2445: Property 'attached' is protected and only accessible within class 'ViewportDataGridNode<NODE_TYPE>' and its subclasses.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(206,35): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(243,33): error TS2339: Property 'flatChildren' does not exist on type 'NODE_TYPE'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/ViewportDataGrid.js(256,50): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
@@ -4990,7 +4992,7 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(74
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,48): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,60): error TS2339: Property 'pageY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(753,20): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 174 more.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 170 more.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,28): error TS2339: Property 'deepElementFromPoint' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,70): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(771,20): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
@@ -5482,11 +5484,10 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(10
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1056,29): error TS2339: Property '_section' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1073,24): error TS2339: Property '_section' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1074,29): error TS2339: Property '_section' does not exist on type 'ChildNode'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1075,7): error TS2739: Type 'Node' is missing the following properties from type 'ChildNode': after, before, remove, replaceWith
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1087,7): error TS2740: Type 'ChildNode' is missing the following properties from type 'Element': assignedSlot, attributes, classList, className, and 68 more.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1088,38): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1090,36): error TS2339: Property '_section' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1099,7): error TS2740: Type 'Node' is missing the following properties from type 'Element': assignedSlot, attributes, classList, className, and 72 more.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1099,7): error TS2322: Type 'ChildNode' is not assignable to type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1100,38): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1102,36): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1232,7): error TS2322: Type 'StylePropertiesSection' is not assignable to type 'this'.
@@ -6896,8 +6897,18 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(137
 node_modules/chrome-devtools-frontend/front_end/network/NetworkConfigView.js(138,34): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(121,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(241,33): error TS2339: Property 'request' does not exist on type 'ViewportDataGridNode<any>'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(318,24): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(319,24): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(334,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(335,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(370,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(371,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(388,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(389,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(392,25): error TS2339: Property 'displayType' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(393,25): error TS2339: Property 'displayType' does not exist on type 'NetworkNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(409,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(410,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(413,12): error TS2339: Property '_initiatorCell' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(413,33): error TS2339: Property '_initiatorCell' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(414,17): error TS2339: Property '_initiatorCell' does not exist on type 'NetworkNode'.
@@ -6907,6 +6918,20 @@ node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(4
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(416,19): error TS2339: Property '_linkifiedInitiatorAnchor' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(416,49): error TS2339: Property '_linkifiedInitiatorAnchor' does not exist on type 'NetworkNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(416,91): error TS2339: Property '_initiatorCell' does not exist on type 'NetworkNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(427,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(428,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(444,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(445,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(460,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(461,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(482,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(483,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(501,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(502,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(518,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(519,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(541,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
+node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(542,22): error TS2446: Property 'requestOrFirstKnownChildRequest' is protected and only accessible through an instance of class 'NetworkRequestNode'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(695,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(696,13): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/NetworkDataGridNode.js(810,10): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -8410,6 +8435,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(131,
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(133,15): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(135,15): error TS2339: Property 'populateChildren' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(140,17): error TS2349: This expression is not callable.
   Each member of the union type '(<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => any) | (<T>(comparator: (arg0: T, arg1: T) => any, force: boolean) => void)' has signatures, but none of those signatures are compatible with each other.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(153,49): error TS2339: Property '_searchMatchedSelfColumn' does not exist on type 'ProfileDataGridNode'.
@@ -8537,6 +8563,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxControll
 node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxController.js(97,25): error TS2339: Property 'selectedIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(63,17): error TS2339: Property 'populate' does not exist on type 'TopDownProfileDataGridTree | TopDownProfileDataGridNode'.
   Property 'populate' does not exist on type 'TopDownProfileDataGridTree'.
+node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(65,15): error TS2339: Property 'save' does not exist on type 'TopDownProfileDataGridTree | TopDownProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(148,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(168,40): error TS2345: Argument of type 'S' is not assignable to parameter of type 'S'.
   'S' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
@@ -10500,6 +10527,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1023,17
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1024,29): error TS2322: Type 'Element' is not assignable to type 'Icon'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1045,26): error TS2339: Property 'draggable' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1055,51): error TS2339: Property 'hasFocus' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1073,29): error TS2445: Property 'rename' is protected and only accessible within class 'NavigatorView' and its subclasses.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1190,14): error TS2339: Property 'parent' does not exist on type 'NavigatorTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1191,12): error TS2339: Property 'parent' does not exist on type 'NavigatorTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(1236,27): error TS2339: Property 'valuesArray' does not exist on type 'Map<string, NavigatorTreeNode>'.
@@ -10670,6 +10698,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(438
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(443,29): error TS2339: Property 'clientX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(443,44): error TS2339: Property 'clientY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(444,5): error TS2741: Property 'hide' is missing in type '{ box: any; show: (popover: GlassPane) => Promise<true>; }' but required in type '{ box: AnchorBox; show: (arg0: GlassPane) => Promise<boolean>; hide: () => any; }'.
+node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(488,27): error TS2445: Property 'codeMirror' is protected and only accessible within class 'CodeMirrorTextEditor' and its subclasses.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(511,24): error TS2339: Property 'pushAll' does not exist on type 'ToolbarItem[]'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(512,25): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(547,31): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -11183,7 +11212,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.j
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(248,81): error TS2339: Property '_overviewIndex' does not exist on type 'TimelineCategory'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(384,7): error TS2322: Type 'Promise<HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)>' is not assignable to type 'Promise<HTMLImageElement>'.
   Type 'HTMLImageElement | (new (width?: number, height?: number) => HTMLImageElement)' is not assignable to type 'HTMLImageElement'.
-    Type 'new (width?: number, height?: number) => HTMLImageElement' is missing the following properties from type 'HTMLImageElement': align, alt, border, complete, and 261 more.
+    Type 'new (width?: number, height?: number) => HTMLImageElement' is missing the following properties from type 'HTMLImageElement': align, alt, border, complete, and 257 more.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(457,17): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(483,31): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineEventOverview.js(524,28): error TS2339: Property 'peekLast' does not exist on type 'TimelineFrame[]'.

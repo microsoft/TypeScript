@@ -390,31 +390,31 @@ namespace ts.projectSystem {
 
         it("Reports errors correctly when file referenced by inferred project root, is opened right after closing the root file", () => {
             const app: File = {
-                path: `${projectRoot}/src/client/app.js`,
+                path: `${tscWatch.projectRoot}/src/client/app.js`,
                 content: ""
             };
             const serverUtilities: File = {
-                path: `${projectRoot}/src/server/utilities.js`,
+                path: `${tscWatch.projectRoot}/src/server/utilities.js`,
                 content: `function getHostName() { return "hello"; } export { getHostName };`
             };
             const backendTest: File = {
-                path: `${projectRoot}/test/backend/index.js`,
+                path: `${tscWatch.projectRoot}/test/backend/index.js`,
                 content: `import { getHostName } from '../../src/server/utilities';export default getHostName;`
             };
             const files = [libFile, app, serverUtilities, backendTest];
             const host = createServerHost(files);
             const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true });
-            openFilesForSession([{ file: app, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: app, projectRootPath: tscWatch.projectRoot }], session);
             const service = session.getProjectService();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
             checkProjectActualFiles(project, [libFile.path, app.path]);
-            openFilesForSession([{ file: backendTest, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: backendTest, projectRootPath: tscWatch.projectRoot }], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             checkProjectActualFiles(project, files.map(f => f.path));
             checkErrors([backendTest.path, app.path]);
             closeFilesForSession([backendTest], session);
-            openFilesForSession([{ file: serverUtilities.path, projectRootPath: projectRoot }], session);
+            openFilesForSession([{ file: serverUtilities.path, projectRootPath: tscWatch.projectRoot }], session);
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
@@ -865,17 +865,17 @@ declare module '@custom/plugin' {
     describe("unittests:: tsserver:: Project Errors with resolveJsonModule", () => {
         function createSessionForTest({ include }: { include: readonly string[]; }) {
             const test: File = {
-                path: `${projectRoot}/src/test.ts`,
+                path: `${tscWatch.projectRoot}/src/test.ts`,
                 content: `import * as blabla from "./blabla.json";
 declare var console: any;
 console.log(blabla);`
             };
             const blabla: File = {
-                path: `${projectRoot}/src/blabla.json`,
+                path: `${tscWatch.projectRoot}/src/blabla.json`,
                 content: "{}"
             };
             const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         resolveJsonModule: true,

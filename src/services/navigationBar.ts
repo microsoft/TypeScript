@@ -141,7 +141,7 @@ namespace ts.NavigationBar {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
             entityName = entityName.expression;
-            if (nameText === "prototype") continue;
+            if (nameText === "prototype" || isPrivateIdentifier(name)) continue;
             names.push(name);
         }
         names.push(entityName);
@@ -901,6 +901,7 @@ namespace ts.NavigationBar {
         return "<function>";
     }
 
+    // See also 'tryGetPropertyAccessOrIdentifierToString'
     function getCalledExpressionName(expr: Expression): string | undefined {
         if (isIdentifier(expr)) {
             return expr.text;
