@@ -867,9 +867,14 @@ namespace FourSlash {
                 }
             }
 
+            if (isFromUncheckedFile !== undefined) {
+                if (actual.isFromUncheckedFile !== isFromUncheckedFile) {
+                    this.raiseError(`Expected 'isFromUncheckedFile' value '${actual.isFromUncheckedFile}' to equal '${isFromUncheckedFile}'`);
+                }
+            }
+
             assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' value '${actual.hasAction}' to equal '${hasAction}'`);
             assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' value '${actual.isRecommended}' to equal '${isRecommended}'`);
-            assert.equal(actual.isFromUncheckedFile, isFromUncheckedFile, `Expected 'isFromUncheckedFile' value '${actual.isFromUncheckedFile}' to equal '${isFromUncheckedFile}'`);
             assert.equal(actual.source, source, `Expected 'source' value '${actual.source}' to equal '${source}'`);
             assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
