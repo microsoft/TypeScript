@@ -569,7 +569,8 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: watchEnvironment:: file names on case insensitive file system", () => {
-        function verifyFileNames(projectRoot: string) {
+        function verifyFileNames(projectRoot: string, projectRootPath: string) {
+            const keyMapper = (str: string) => str.replace(projectRoot, projectRootPath);
             const file: File = {
                 path: `${projectRoot}/foo.ts`,
                 content: `import { foo } from "bar"`
@@ -580,11 +581,11 @@ namespace ts.projectSystem {
             const expectedWatchFiles = [libFile.path, `${projectRoot}/tsconfig.json`, `${projectRoot}/jsconfig.json`];
             checkWatchedFilesDetailed(
                 host,
-                expectedWatchFiles.map(toLowerCase),
+                expectedWatchFiles.map(keyMapper),
                 1,
                 arrayToMap(
                     expectedWatchFiles,
-                    toLowerCase,
+                    keyMapper,
                     fileName => [{
                         fileName,
                         pollingInterval: PollingInterval.Low
@@ -595,12 +596,12 @@ namespace ts.projectSystem {
             const expectedWatchedDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/node_modules/@types`];
             checkWatchedDirectoriesDetailed(
                 host,
-                expectedWatchedDirectories.map(toLowerCase),
+                expectedWatchedDirectories.map(keyMapper),
                 1,
                 /*recursive*/ true,
                 arrayToMap(
                     expectedWatchedDirectories,
-                    toLowerCase,
+                    keyMapper,
                     directoryName => [{
                         directoryName,
                         fallbackPollingInterval: PollingInterval.Medium,
@@ -611,11 +612,15 @@ namespace ts.projectSystem {
         }
 
         it("project with ascii file names", () => {
-            verifyFileNames(`${tscWatch.projects}/I`);
+            verifyFileNames("/User/userName/Projects/I", "/user/username/projects/i");
+        });
+
+        it("project with ascii file names with i", () => {
+            verifyFileNames("/User/userName/Projects/i", "/user/username/projects/i");
         });
 
         it("project with unicode file names", () => {
-            verifyFileNames(`${tscWatch.projects}/İ`);
+            verifyFileNames("/User/userName/Projects/İ", "/user/username/projects/İ");
         });
     });
 }

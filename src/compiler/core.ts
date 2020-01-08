@@ -1399,6 +1399,32 @@ namespace ts {
     /** Returns lower case string */
     export function toLowerCase(x: string) { return x.toLowerCase(); }
 
+    const fileNameLowerCaseRegExp = /[^İi̇ıßa-z0-9\\/:\-_\. ]+/g;
+    export function toFileNameLowerCase(x: string) {
+        // Handle special characters and make those case sensitive instead
+        //
+        // |-#--|-Character-|-Char code-|-Desc------------------------------------------------------|
+        // | 1. | i         | 105       | Ascii i                                                   |
+        // | 2. | I         | 73        | Ascii I                                                   |
+        // |-------- Special characters ------------------------------------------------------------|
+        // | 3. | İ         | 304       | Uppper case I with dot above                              |
+        // | 4. | i̇         | 105,775   | Lower case of İ (3rd item)                                |
+        // | 5. | İ         | 73,775    | Upper case of i̇ (4th item), lower case is i̇ (4th item)    |
+        // | 6. | ı         | 305       | Lower case i without dot, upper case is I (2nd item)      |
+        // | 7. | ß         | 223       | Lower case sharp s
+        //
+        // Because item 3 is special where in its lowercase character has its own
+        // upper case form we cant convert its case.
+        // Rest special characters are either already in lower case format or
+        // they have corresponding upper case character so they dont need special handling
+        //
+        // But to avoid having to do string building for most common cases, also ignore
+        // a-z, 0-9, i̇, ı, ß, \, /, ., : and space
+        return fileNameLowerCaseRegExp.test(x) ?
+            x.replace(fileNameLowerCaseRegExp, toLowerCase) :
+            x;
+    }
+
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
         throw new Error("Not implemented");
@@ -1860,7 +1886,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames ? identity : toLowerCase;
+        return useCaseSensitiveFileNames ? identity : toFileNameLowerCase;
     }
 
     /** Represents a "prefix*suffix" pattern. */

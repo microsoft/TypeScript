@@ -2219,7 +2219,7 @@ namespace ts.server {
         }
 
         getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 

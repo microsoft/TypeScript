@@ -2610,7 +2610,7 @@ namespace ts {
         errors: Push<Diagnostic>,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedTsconfig | undefined {
-        const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toLowerCase(extendedConfigPath);
+        const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toFileNameLowerCase(extendedConfigPath);
         let value: ExtendedConfigCacheEntry | undefined;
         let extendedResult: TsConfigSourceFile;
         let extendedConfig: ParsedTsconfig | undefined;
@@ -2914,7 +2914,7 @@ namespace ts {
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: readonly FileExtensionInfo[] = []): ExpandResult {
         basePath = normalizePath(basePath);
 
-        const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
+        const keyMapper = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
@@ -3083,7 +3083,7 @@ namespace ts {
         const match = wildcardDirectoryPattern.exec(spec);
         if (match) {
             return {
-                key: useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase(),
+                key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
                 flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }

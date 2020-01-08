@@ -2438,7 +2438,7 @@ namespace ts {
                 addFileToRefFileMap(fileName, file, refFile);
 
                 if (host.useCaseSensitiveFileNames()) {
-                    const pathLowerCase = path.toLowerCase();
+                    const pathLowerCase = toFileNameLowerCase(path);
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase!.get(pathLowerCase);
                     if (existingFile) {

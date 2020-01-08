@@ -792,7 +792,7 @@ namespace ts.server {
             // //server/location
             //         ^ <- from 0 to this position
             const firstSlash = path.indexOf(directorySeparator, 2);
-            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
+            return firstSlash !== -1 ? toFileNameLowerCase(path.substring(0, firstSlash)) : path;
         }
         const rootLength = getRootLength(path);
         if (rootLength === 0) {
@@ -801,7 +801,7 @@ namespace ts.server {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
             // rooted path that starts with c:/... - extract drive letter
-            return path.charAt(0).toLowerCase();
+            return toFileNameLowerCase(path.charAt(0));
         }
         if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
             // rooted path that starts with slash - /somename - use key for current drive

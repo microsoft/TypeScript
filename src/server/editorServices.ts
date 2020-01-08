@@ -3354,7 +3354,7 @@ namespace ts.server {
                 else {
                     let exclude = false;
                     if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
-                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
