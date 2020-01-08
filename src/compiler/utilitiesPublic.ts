@@ -1721,16 +1721,14 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportName(node: Node): boolean {
-        if (node.kind !== SyntaxKind.Identifier) {
-            return false;
-        }
-        switch (node.parent.kind) {
+    export function isTypeOnlyImportOrExportName(node: Node): node is Identifier | ImportSpecifier | ExportSpecifier {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return isImportClause(node.parent) // default import name
+                    || isNamespaceImport(node.parent) && node.parent.parent.isTypeOnly; // namespace import name
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node.parent as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
-            case SyntaxKind.ImportClause:
-                return (node.parent as ImportClause).isTypeOnly;
+                return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
             default:
                 return false;
         }
