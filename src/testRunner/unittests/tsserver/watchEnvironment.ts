@@ -613,5 +613,9 @@ namespace ts.projectSystem {
         it("project with ascii file names", () => {
             verifyFileNames(`${tscWatch.projects}/I`);
         });
+
+        it("project with unicode file names", () => {
+            verifyFileNames(`${tscWatch.projects}/İ`);
+        });
     });
 }
