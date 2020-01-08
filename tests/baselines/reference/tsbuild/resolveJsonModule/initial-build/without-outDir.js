@@ -10,10 +10,6 @@
 exitCode:: ExitStatus.Success
 
 
-//// [/src/src/hello.d.ts]
-export declare const hello: string;
-
-
 //// [/src/src/index.d.ts]
 declare const _default: string;
 export default _default;
