@@ -1248,7 +1248,20 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? projectRootPath || this.currentDirectory : getDirectoryPath(info.path));
+                this.getOrCreateSingleInferredWithoutProjectRoot(
+                    info.isDynamic ?
+                        projectRootPath || this.currentDirectory :
+                        getDirectoryPath(
+                            isRootedDiskPath(info.fileName) ?
+                                info.fileName :
+                                getNormalizedAbsolutePath(
+                                    info.fileName,
+                                    projectRootPath ?
+                                        this.getNormalizedAbsolutePath(projectRootPath) :
+                                        this.currentDirectory
+                                )
+                        )
+                );
 
             project.addRoot(info);
             if (info.containingProjects[0] !== project) {
