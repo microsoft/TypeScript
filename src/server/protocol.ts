@@ -236,6 +236,12 @@ namespace ts.server.protocol {
          * Contains extra information that plugin can include to be passed on
          */
         metadata?: unknown;
+
+        /**
+         * Time spent updating the program graph, in milliseconds.
+         */
+        /* @internal */
+        updateGraphDurationMs?: number;
     }
 
     /**
