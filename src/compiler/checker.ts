@@ -15863,7 +15863,10 @@ namespace ts {
                             }
                         }
                     }
-                    if (unionParent && !result) {
+                    if (unionParent && !result && targetIsOptional) {
+                        result = isRelatedTo(source, undefinedType);
+                    }
+                    if (unionParent && !result && source.flags & TypeFlags.Union) {
                         // The easiest way to get the right errors here is to un-defer (which may be costly)
                         // If it turns out this is too costly too often, we can replicate the error handling logic within
                         // typeRelatedToSomeType without the discriminatable type branch (as that requires a manifest union
