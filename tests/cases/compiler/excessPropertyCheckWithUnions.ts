@@ -127,3 +127,29 @@ F2({
     prop1,
     prop2,
 });
+
+// Repro from #34611
+
+interface IValue {
+  value: string
+}
+
+interface StringKeys {
+    [propertyName: string]: IValue;
+};
+
+interface NumberKeys {
+    [propertyName: number]: IValue;
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+    foo: "asdfsadffsd"
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error

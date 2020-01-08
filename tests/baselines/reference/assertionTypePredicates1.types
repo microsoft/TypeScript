@@ -151,6 +151,36 @@ function f01(x: unknown) {
         x;  // string
 >x : string
     }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false);
+>assert(false) : void
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false && x === undefined);
+>assert(false && x === undefined) : void
+>assert : (value: unknown) => asserts value
+>false && x === undefined : false
+>false : false
+>x === undefined : boolean
+>x : unknown
+>undefined : undefined
+
+        x;  // Unreachable
+>x : unknown
+    }
 }
 
 function f02(x: string | undefined) {
@@ -293,6 +323,21 @@ function f10(x: string | undefined) {
 >x : string
 >length : number
     }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assert(false);
+>Debug.assert(false) : void
+>Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug : typeof Debug
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : string | undefined
+    }
 }
 
 class Test {
@@ -392,6 +437,20 @@ class Test {
 >this.z : number
 >this : this & Test2
 >z : number
+    }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        this.assert(false);
+>this.assert(false) : void
+>this.assert : (value: unknown) => asserts value
+>this : this
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
     }
 }
 

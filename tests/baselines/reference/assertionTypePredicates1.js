@@ -35,6 +35,14 @@ function f01(x: unknown) {
         assertDefined(x);
         x;  // string
     }
+    if (!!true) {
+        assert(false);
+        x;  // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x;  // Unreachable
+    }
 }
 
 function f02(x: string | undefined) {
@@ -75,6 +83,10 @@ function f10(x: string | undefined) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test {
@@ -105,6 +117,10 @@ class Test {
         }
         this.assertIsTest2();
         this.z;
+    }
+    baz(x: number) {
+        this.assert(false);
+        x;  // Unreachable
     }
 }
 
@@ -180,6 +196,14 @@ function f01(x) {
         assertDefined(x);
         x; // string
     }
+    if (!!true) {
+        assert(false);
+        x; // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x; // Unreachable
+    }
 }
 function f02(x) {
     if (!!true) {
@@ -215,6 +239,10 @@ function f10(x) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x; // Unreachable
+    }
 }
 var Test = /** @class */ (function () {
     function Test() {
@@ -249,6 +277,10 @@ var Test = /** @class */ (function () {
         }
         this.assertIsTest2();
         this.z;
+    };
+    Test.prototype.baz = function (x) {
+        this.assert(false);
+        x; // Unreachable
     };
     return Test;
 }());
@@ -295,6 +327,7 @@ declare class Test {
     assertThis(): asserts this;
     bar(): void;
     foo(x: unknown): void;
+    baz(x: number): void;
 }
 declare class Test2 extends Test {
     z: number;

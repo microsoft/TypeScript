@@ -25,3 +25,4 @@ import("./locales/" + localeName + ".js").then(bar => {
 >bar : Symbol(bar, Decl(importCallExpressionShouldNotGetParen.ts, 5, 47))
 
 });
+

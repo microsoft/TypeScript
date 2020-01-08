@@ -1,0 +1,38 @@
+=== /a.ts ===
+export class A<T> { a!: T }
+>A : A<T>
+>a : T
+
+export type { A as B };
+>A : A<T>
+>B : A<T>
+
+=== /b.ts ===
+import type { A } from './a';
+>A : import("/a").A<T>
+
+import { B } from './a';
+>B : any
+
+let a: A<string> = { a: "" };
+>a : import("/a").A<string>
+>{ a: "" } : { a: string; }
+>a : string
+>"" : ""
+
+let b: B<number> = { a: 3 };
+>b : import("/a").A<number>
+>{ a: 3 } : { a: number; }
+>a : number
+>3 : 3
+
+let c: A<boolean> = {};
+>c : import("/a").A<boolean>
+>{} : {}
+
+let d: B = { a: "" };
+>d : any
+>{ a: "" } : { a: string; }
+>a : string
+>"" : ""
+

@@ -1,0 +1,26 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(2,12): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(3,13): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(4,15): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(9,14): error TS18019: 'abstract' modifier cannot be used with a private identifier
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts (4 errors) ====
+    class A {
+        public #foo = 3;         // Error
+               ~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        private #bar = 3;        // Error
+                ~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        protected #baz = 3;      // Error
+                  ~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        readonly #qux = 3;       // OK
+    }
+    
+    abstract class B {
+        abstract #quux = 3;      // Error
+                 ~~~~~
+!!! error TS18019: 'abstract' modifier cannot be used with a private identifier
+    }
+    

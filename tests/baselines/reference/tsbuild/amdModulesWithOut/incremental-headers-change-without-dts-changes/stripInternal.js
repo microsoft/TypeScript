@@ -12,7 +12,7 @@
 
 12:08:00 AM - Updating output of project '/src/app/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/app/module.d.ts]

@@ -48,16 +48,16 @@ function f1(obj) {
     let { a: a2, b: b2 } = obj, r2 = __rest(obj, ["a", "b"]);
     let { 'a': a3 } = obj, r3 = __rest(obj, ['a']);
     let { ['a']: a4 } = obj, r4 = __rest(obj, ['a']);
-    let _a = a, a5 = obj[_a], r5 = __rest(obj, [typeof _a === "symbol" ? _a : _a + ""]);
+    let _a = obj, _b = a, a5 = _a[_b], r5 = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
 }
 const sa = Symbol();
 const sb = Symbol();
 function f2(obj) {
-    let _a = sa, a1 = obj[_a], _b = sb, b1 = obj[_b], r1 = __rest(obj, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + ""]);
+    let _a = obj, _b = sa, a1 = _a[_b], _c = sb, b1 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }
 function f3(obj, k1, k2) {
-    let _a = k1, a1 = obj[_a], _b = k2, a2 = obj[_b], r1 = __rest(obj, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + ""]);
+    let _a = obj, _b = k1, a1 = _a[_b], _c = k2, a2 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }
 function f4(obj, k1, k2) {
-    let _a = k1, a1 = obj[_a], _b = k2, a2 = obj[_b], r1 = __rest(obj, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + ""]);
+    let _a = obj, _b = k1, a1 = _a[_b], _c = k2, a2 = _a[_c], r1 = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
 }

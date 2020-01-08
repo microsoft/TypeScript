@@ -1,0 +1,95 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndMethods.ts ===
+class A {
+>A : A
+
+    #foo(a: number) {}
+>#foo : (a: number) => void
+>a : number
+
+    async #bar(a: number) {}
+>#bar : (a: number) => Promise<void>
+>a : number
+
+    async *#baz(a: number) {
+>#baz : (a: number) => AsyncGenerator<never, number, unknown>
+>a : number
+
+        return 3;
+>3 : 3
+    }
+    #_quux: number;
+>#_quux : number
+
+    get #quux (): number {
+>#quux : number
+
+        return this.#_quux;
+>this.#_quux : number
+>this : this
+    }
+    set #quux (val: number) {
+>#quux : number
+>val : number
+
+        this.#_quux = val; 
+>this.#_quux = val : number
+>this.#_quux : number
+>this : this
+>val : number
+    }
+    constructor () {
+        this.#foo(30);
+>this.#foo(30) : void
+>this.#foo : (a: number) => void
+>this : this
+>30 : 30
+
+        this.#bar(30);
+>this.#bar(30) : Promise<void>
+>this.#bar : (a: number) => Promise<void>
+>this : this
+>30 : 30
+
+        this.#baz(30);
+>this.#baz(30) : AsyncGenerator<never, number, unknown>
+>this.#baz : (a: number) => AsyncGenerator<never, number, unknown>
+>this : this
+>30 : 30
+
+        this.#quux = this.#quux + 1;
+>this.#quux = this.#quux + 1 : number
+>this.#quux : number
+>this : this
+>this.#quux + 1 : number
+>this.#quux : number
+>this : this
+>1 : 1
+
+        this.#quux++;
+>this.#quux++ : number
+>this.#quux : number
+>this : this
+ }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    #foo(a: string) {}
+>#foo : (a: string) => void
+>a : string
+
+    constructor () {
+        super();
+>super() : void
+>super : typeof A
+
+        this.#foo("str");
+>this.#foo("str") : void
+>this.#foo : (a: string) => void
+>this : this
+>"str" : "str"
+    }
+}
+

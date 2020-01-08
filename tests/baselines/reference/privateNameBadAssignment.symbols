@@ -1,0 +1,29 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts ===
+exports.#nope = 1;           // Error (outside class body)
+function A() { }
+>A : Symbol(A, Decl(privateNameBadAssignment.ts, 0, 18))
+
+A.prototype.#no = 2;         // Error (outside class body)
+>A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(privateNameBadAssignment.ts, 0, 18))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+class B {}
+>B : Symbol(B, Decl(privateNameBadAssignment.ts, 2, 20))
+
+B.#foo = 3;                  // Error (outside class body)
+>B : Symbol(B, Decl(privateNameBadAssignment.ts, 2, 20))
+
+class C {
+>C : Symbol(C, Decl(privateNameBadAssignment.ts, 5, 11))
+
+    #bar = 6;
+>#bar : Symbol(C.#bar, Decl(privateNameBadAssignment.ts, 7, 9))
+
+    constructor () {
+        exports.#bar = 6;    // Error
+        this.#foo = 3;       // Error (undeclared)
+>this : Symbol(C, Decl(privateNameBadAssignment.ts, 5, 11))
+    }
+}
+

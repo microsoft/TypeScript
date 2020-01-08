@@ -25,5 +25,5 @@ const classes = { definition: "class C", ranges: [r0] };
 const bs = { definition: "(alias) class C\nexport C", ranges: [r1] };
 const imports = { definition: "(alias) class C\nimport C", ranges: importRanges };
 verify.referenceGroups(r0, [classes, bs, imports]);
-verify.referenceGroups(r1, [bs, imports, classes]);
+verify.referenceGroups(r1, [classes, bs, imports]);
 verify.referenceGroups(importRanges, [imports, bs, classes]);

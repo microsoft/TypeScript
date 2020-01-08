@@ -100,11 +100,13 @@ namespace ts {
             if (isFlags) {
                 let result = "";
                 let remainingFlags = value;
-                for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-                    const [enumValue, enumName] = members[i];
-                    if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                for (const [enumValue, enumName] of members) {
+                    if (enumValue > value) {
+                        break;
+                    }
+                    if (enumValue !== 0 && enumValue & value) {
+                        result = `${result}${result ? "|" : ""}${enumName}`;
                         remainingFlags &= ~enumValue;
-                        result = `${enumName}${result ? "|" : ""}${result}`;
                     }
                 }
                 if (remainingFlags === 0) {
@@ -221,6 +223,40 @@ namespace ts {
 
         let isDebugInfoEnabled = false;
 
+        interface ExtendedDebugModule {
+            init(_ts: typeof ts): void;
+            formatControlFlowGraph(flowNode: FlowNode): string;
+        }
+
+        let extendedDebugModule: ExtendedDebugModule | undefined;
+
+        function extendedDebug() {
+            enableDebugInfo();
+            if (!extendedDebugModule) {
+                throw new Error("Debugging helpers could not be loaded.");
+            }
+            return extendedDebugModule;
+        }
+
+        export function printControlFlowGraph(flowNode: FlowNode) {
+            return console.log(formatControlFlowGraph(flowNode));
+        }
+
+        export function formatControlFlowGraph(flowNode: FlowNode) {
+            return extendedDebug().formatControlFlowGraph(flowNode);
+        }
+
+        export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
+            if (isDebugInfoEnabled) {
+                if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+                    Object.defineProperties(flowNode, {
+                        __debugFlowFlags: { get(this: FlowNode) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
+                        __debugToString: { value(this: FlowNode) { return formatControlFlowGraph(this); } }
+                    });
+                }
+            }
+        }
+
         /**
          * Injects debug information into frequently used types.
          */
@@ -264,6 +300,21 @@ namespace ts {
                         }
                     });
                 }
+            }
+
+            // attempt to load extended debugging information
+            try {
+                if (sys && sys.require) {
+                    const basePath = getDirectoryPath(resolvePath(sys.getExecutingFilePath()));
+                    const result = sys.require(basePath, "./compiler-debug") as RequireResult<ExtendedDebugModule>;
+                    if (!result.error) {
+                        result.module.init(ts);
+                        extendedDebugModule = result.module;
+                    }
+                }
+            }
+            catch {
+                // do nothing
             }
 
             isDebugInfoEnabled = true;

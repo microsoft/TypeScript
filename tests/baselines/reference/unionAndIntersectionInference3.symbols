@@ -205,3 +205,107 @@ let y2 = foo2(sx);  // { extra: number }
 >foo2 : Symbol(foo2, Decl(unionAndIntersectionInference3.ts, 42, 57))
 >sx : Symbol(sx, Decl(unionAndIntersectionInference3.ts, 46, 11))
 
+// Repro from #33490
+
+declare class Component<P> { props: P }
+>Component : Symbol(Component, Decl(unionAndIntersectionInference3.ts, 52, 18))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 56, 24))
+>props : Symbol(Component.props, Decl(unionAndIntersectionInference3.ts, 56, 28))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 56, 24))
+
+export type ComponentClass<P> = new (props: P) => Component<P>;
+>ComponentClass : Symbol(ComponentClass, Decl(unionAndIntersectionInference3.ts, 56, 39))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 58, 27))
+>props : Symbol(props, Decl(unionAndIntersectionInference3.ts, 58, 37))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 58, 27))
+>Component : Symbol(Component, Decl(unionAndIntersectionInference3.ts, 52, 18))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 58, 27))
+
+export type FunctionComponent<P> = (props: P) => null;
+>FunctionComponent : Symbol(FunctionComponent, Decl(unionAndIntersectionInference3.ts, 58, 63))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 59, 30))
+>props : Symbol(props, Decl(unionAndIntersectionInference3.ts, 59, 36))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 59, 30))
+
+export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
+>ComponentType : Symbol(ComponentType, Decl(unionAndIntersectionInference3.ts, 59, 54))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 61, 26))
+>FunctionComponent : Symbol(FunctionComponent, Decl(unionAndIntersectionInference3.ts, 58, 63))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 61, 26))
+>ComponentClass : Symbol(ComponentClass, Decl(unionAndIntersectionInference3.ts, 56, 39))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 61, 26))
+
+export interface RouteComponentProps { route: string }
+>RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+>route : Symbol(RouteComponentProps.route, Decl(unionAndIntersectionInference3.ts, 63, 38))
+
+declare function withRouter<
+>withRouter : Symbol(withRouter, Decl(unionAndIntersectionInference3.ts, 63, 54))
+
+  P extends RouteComponentProps,
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 65, 28))
+>RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+
+  C extends ComponentType<P>
+>C : Symbol(C, Decl(unionAndIntersectionInference3.ts, 66, 32))
+>ComponentType : Symbol(ComponentType, Decl(unionAndIntersectionInference3.ts, 59, 54))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 65, 28))
+
+>(
+  component: C & ComponentType<P>
+>component : Symbol(component, Decl(unionAndIntersectionInference3.ts, 68, 2))
+>C : Symbol(C, Decl(unionAndIntersectionInference3.ts, 66, 32))
+>ComponentType : Symbol(ComponentType, Decl(unionAndIntersectionInference3.ts, 59, 54))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 65, 28))
+
+): ComponentClass<Omit<P, keyof RouteComponentProps>>;
+>ComponentClass : Symbol(ComponentClass, Decl(unionAndIntersectionInference3.ts, 56, 39))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 65, 28))
+>RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+
+interface Props extends RouteComponentProps { username: string }
+>Props : Symbol(Props, Decl(unionAndIntersectionInference3.ts, 70, 54))
+>RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
+>username : Symbol(Props.username, Decl(unionAndIntersectionInference3.ts, 72, 45))
+
+declare const MyComponent: ComponentType<Props>;
+>MyComponent : Symbol(MyComponent, Decl(unionAndIntersectionInference3.ts, 74, 13))
+>ComponentType : Symbol(ComponentType, Decl(unionAndIntersectionInference3.ts, 59, 54))
+>Props : Symbol(Props, Decl(unionAndIntersectionInference3.ts, 70, 54))
+
+withRouter(MyComponent);
+>withRouter : Symbol(withRouter, Decl(unionAndIntersectionInference3.ts, 63, 54))
+>MyComponent : Symbol(MyComponent, Decl(unionAndIntersectionInference3.ts, 74, 13))
+
+// Repro from #33490
+
+type AB<T> = { a: T } | { b: T };
+>AB : Symbol(AB, Decl(unionAndIntersectionInference3.ts, 76, 24))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 80, 8))
+>a : Symbol(a, Decl(unionAndIntersectionInference3.ts, 80, 14))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 80, 8))
+>b : Symbol(b, Decl(unionAndIntersectionInference3.ts, 80, 25))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 80, 8))
+
+// T & AB<U> normalizes to T & { a: U } | T & { b: U } below
+declare function foo<T, U>(obj: T & AB<U>): [T, U];
+>foo : Symbol(foo, Decl(unionAndIntersectionInference3.ts, 80, 33))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 83, 21))
+>U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 83, 23))
+>obj : Symbol(obj, Decl(unionAndIntersectionInference3.ts, 83, 27))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 83, 21))
+>AB : Symbol(AB, Decl(unionAndIntersectionInference3.ts, 76, 24))
+>U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 83, 23))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 83, 21))
+>U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 83, 23))
+
+declare let ab: AB<string>;
+>ab : Symbol(ab, Decl(unionAndIntersectionInference3.ts, 84, 11))
+>AB : Symbol(AB, Decl(unionAndIntersectionInference3.ts, 76, 24))
+
+let z = foo(ab);  // [AB<string>, string]
+>z : Symbol(z, Decl(unionAndIntersectionInference3.ts, 86, 3))
+>foo : Symbol(foo, Decl(unionAndIntersectionInference3.ts, 80, 33))
+>ab : Symbol(ab, Decl(unionAndIntersectionInference3.ts, 84, 11))
+

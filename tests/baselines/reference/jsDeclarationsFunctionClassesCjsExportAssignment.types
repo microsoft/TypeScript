@@ -16,7 +16,7 @@ function Timer(timeout) {
 module.exports = Timer;
 >module.exports = Timer : typeof Timer
 >module.exports : typeof Timer
->module : { "tests/cases/conformance/jsdoc/declarations/timer": typeof Timer; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/timer\"": typeof Timer; }
 >exports : typeof Timer
 >Timer : typeof Timer
 
@@ -41,7 +41,7 @@ function Hook(handle) {
 module.exports = Hook;
 >module.exports = Hook : typeof Hook
 >module.exports : typeof Hook
->module : { "tests/cases/conformance/jsdoc/declarations/hook": typeof Hook; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/hook\"": typeof Hook; }
 >exports : typeof Hook
 >Hook : typeof Hook
 
@@ -131,7 +131,7 @@ Context.prototype = {
 module.exports = Context;
 >module.exports = Context : typeof Context
 >module.exports : typeof Context
->module : { "tests/cases/conformance/jsdoc/declarations/context": typeof Context; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": typeof Context; }
 >exports : typeof Context
 >Context : typeof Context
 

@@ -338,3 +338,59 @@ F2({
 
 });
 
+// Repro from #34611
+
+interface IValue {
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 127, 3))
+
+  value: string
+>value : Symbol(IValue.value, Decl(excessPropertyCheckWithUnions.ts, 131, 18))
+}
+
+interface StringKeys {
+>StringKeys : Symbol(StringKeys, Decl(excessPropertyCheckWithUnions.ts, 133, 1))
+
+    [propertyName: string]: IValue;
+>propertyName : Symbol(propertyName, Decl(excessPropertyCheckWithUnions.ts, 136, 5))
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 127, 3))
+
+};
+
+interface NumberKeys {
+>NumberKeys : Symbol(NumberKeys, Decl(excessPropertyCheckWithUnions.ts, 137, 2))
+
+    [propertyName: number]: IValue;
+>propertyName : Symbol(propertyName, Decl(excessPropertyCheckWithUnions.ts, 140, 5))
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 127, 3))
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+>ObjectDataSpecification : Symbol(ObjectDataSpecification, Decl(excessPropertyCheckWithUnions.ts, 141, 1))
+>StringKeys : Symbol(StringKeys, Decl(excessPropertyCheckWithUnions.ts, 133, 1))
+>NumberKeys : Symbol(NumberKeys, Decl(excessPropertyCheckWithUnions.ts, 137, 2))
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+>dataSpecification : Symbol(dataSpecification, Decl(excessPropertyCheckWithUnions.ts, 146, 5))
+>ObjectDataSpecification : Symbol(ObjectDataSpecification, Decl(excessPropertyCheckWithUnions.ts, 141, 1))
+
+    foo: "asdfsadffsd"
+>foo : Symbol(foo, Decl(excessPropertyCheckWithUnions.ts, 146, 52))
+
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+>obj1 : Symbol(obj1, Decl(excessPropertyCheckWithUnions.ts, 152, 5))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 152, 15))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 152, 41))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 152, 65))
+
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
+>obj2 : Symbol(obj2, Decl(excessPropertyCheckWithUnions.ts, 153, 5))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 153, 15))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 153, 39))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 153, 55))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 153, 61))
+

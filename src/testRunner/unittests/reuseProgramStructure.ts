@@ -928,13 +928,13 @@ namespace ts {
         }
 
         function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
-            const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system)).getCurrentProgram().getProgram();
+            const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
 
         function verifyProgramWithConfigFile(system: System, configFileName: string) {
-            const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, system)).getCurrentProgram().getProgram();
-            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented)!; // TODO: GH#18217
+            const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, /*watchOptionsToExtend*/ undefined, system)).getCurrentProgram().getProgram();
+            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, /*watchOptionsToExtend*/ undefined, system, notImplemented)!; // TODO: GH#18217
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
