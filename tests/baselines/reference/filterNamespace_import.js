@@ -49,8 +49,8 @@ exports["default"] = ns;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-ns_1["default"].Class; // Error
-ns_1["default"].Value; // Error
+ns.Class; // Error
+ns.Value; // Error
 var c;
 var t = "";
 var n = { a: '' };
