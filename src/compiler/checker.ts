@@ -1851,7 +1851,7 @@ namespace ts {
                         error(errorLocation, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializer.name), declarationNameToString(<Identifier>errorLocation));
                     }
                 }
-                if (result && errorLocation && meaning & SymbolFlags.Value && isInExpressionContext(errorLocation)) {
+                if (result && errorLocation && meaning & SymbolFlags.Value && !(errorLocation.flags & NodeFlags.Ambient) && isInExpressionContext(errorLocation)) {
                     const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
                     if (typeOnlyDeclaration) {
                         const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
