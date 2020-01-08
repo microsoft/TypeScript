@@ -2486,6 +2486,7 @@ namespace ts {
                     }
                     else {
                         const alias = getImmediateAliasedSymbol(symbol);
+                        links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
                         links.typeOnlyDeclaration = !!alias && getTypeOnlyAliasDeclaration(alias);
                     }
                 }
