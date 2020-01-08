@@ -22,6 +22,21 @@ namespace ts {
         All = Value | Type | Namespace
     }
 
+    export function getMeaningFromSymbol(symbol: Symbol, checker: TypeChecker): SemanticMeaning {
+        const flags = skipAlias(symbol, checker).flags;
+        let meaning = SemanticMeaning.None;
+        if (flags & SymbolFlags.Type) {
+            meaning |= SemanticMeaning.Type;
+        }
+        if (flags & SymbolFlags.Namespace) {
+            meaning |= SemanticMeaning.Namespace;
+        }
+        if (flags & SymbolFlags.Value) {
+            meaning |= SemanticMeaning.Value;
+        }
+        return meaning;
+    }
+
     export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -125,6 +140,40 @@ namespace ts {
         //     import a = |b.c|.d; // Namespace
         const name = node.kind === SyntaxKind.QualifiedName ? node : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
         return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
+    }
+
+    export function isContextTokenValueLocation(contextToken: Node) {
+        return contextToken &&
+            contextToken.kind === SyntaxKind.TypeOfKeyword &&
+            (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent));
+    }
+
+    export function isContextTokenTypeLocation(contextToken: Node): boolean {
+        if (contextToken) {
+            const parentKind = contextToken.parent.kind;
+            switch (contextToken.kind) {
+                case SyntaxKind.ColonToken:
+                    return parentKind === SyntaxKind.PropertyDeclaration ||
+                        parentKind === SyntaxKind.PropertySignature ||
+                        parentKind === SyntaxKind.Parameter ||
+                        parentKind === SyntaxKind.VariableDeclaration ||
+                        isFunctionLikeKind(parentKind);
+
+                case SyntaxKind.EqualsToken:
+                    return parentKind === SyntaxKind.TypeAliasDeclaration;
+
+                case SyntaxKind.AsKeyword:
+                    return parentKind === SyntaxKind.AsExpression;
+
+                case SyntaxKind.LessThanToken:
+                    return parentKind === SyntaxKind.TypeReference ||
+                        parentKind === SyntaxKind.TypeAssertionExpression;
+
+                case SyntaxKind.ExtendsKeyword:
+                    return parentKind === SyntaxKind.TypeParameter;
+            }
+        }
+        return false;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
@@ -1135,6 +1184,41 @@ namespace ts {
     export function hasDocComment(sourceFile: SourceFile, position: number): boolean {
         const token = getTokenAtPosition(sourceFile, position);
         return !!findAncestor(token, isJSDoc);
+    }
+
+    /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
+    export function getJSDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
+        const jsdoc = findAncestor(node, isJSDoc);
+        return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
+    }
+
+    export type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
+
+    export function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
+        switch (tag.kind) {
+            case SyntaxKind.JSDocParameterTag:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocReturnTag:
+            case SyntaxKind.JSDocTypeTag:
+            case SyntaxKind.JSDocTypedefTag:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isTypePositionInJSDocTag(tag: JSDocTag, position: number, sourceFile: SourceFile): boolean {
+        if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+            const currentToken = getTokenAtPosition(sourceFile, position);
+            if (!currentToken ||
+                (!isDeclarationName(currentToken) &&
+                    (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
+                        (<JSDocPropertyTag>currentToken.parent).name !== currentToken))) {
+                // Use as type location if inside tag's type expression
+                return tag.typeExpression.getStart(sourceFile) <= position && position <= tag.typeExpression.getEnd();
+            }
+        }
+        return false;
     }
 
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {

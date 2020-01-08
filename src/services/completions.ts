@@ -525,6 +525,7 @@ namespace ts.Completions {
         symbolToOriginInfoMap: SymbolOriginInfoMap;
         previousToken: Node | undefined;
         readonly isJsxInitializer: IsJsxInitializer;
+        readonly isTypeOnlyLocation: boolean;
     }
     function getSymbolCompletionFromEntryId(
         program: Program,
@@ -543,7 +544,7 @@ namespace ts.Completions {
             return { type: "request", request: completionData };
         }
 
-        const { symbols, literals, location, completionKind, symbolToOriginInfoMap, previousToken, isJsxInitializer } = completionData;
+        const { symbols, literals, location, completionKind, symbolToOriginInfoMap, previousToken, isJsxInitializer, isTypeOnlyLocation } = completionData;
 
         const literal = find(literals, l => completionNameForLiteral(l) === entryId.name);
         if (literal !== undefined) return { type: "literal", literal };
@@ -556,7 +557,7 @@ namespace ts.Completions {
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind);
             return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
-                ? { type: "symbol" as const, symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer }
+                ? { type: "symbol" as const, symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer, isTypeOnlyLocation }
                 : undefined;
         }) || { type: "none" };
     }
@@ -613,8 +614,8 @@ namespace ts.Completions {
                 }
             }
             case "symbol": {
-                const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences);
+                const { symbol, location, symbolToOriginInfoMap, previousToken, isTypeOnlyLocation } = symbolCompletion;
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, isTypeOnlyLocation);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -661,6 +662,7 @@ namespace ts.Completions {
         previousToken: Node | undefined,
         formatContext: formatting.FormatContext,
         preferences: UserPreferences,
+        isTypeOnlyLocation: boolean,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo || !originIsExport(symbolOriginInfo)) {
@@ -674,6 +676,7 @@ namespace ts.Completions {
             moduleSymbol,
             sourceFile,
             getSymbolName(symbol, symbolOriginInfo, compilerOptions.target!),
+            isTypeOnlyLocation ? SemanticMeaning.Type | SemanticMeaning.Namespace : SemanticMeaning.All,
             host,
             program,
             formatContext,
@@ -714,6 +717,7 @@ namespace ts.Completions {
         readonly isJsxInitializer: IsJsxInitializer;
         readonly insideJsDocTagTypeExpression: boolean;
         readonly symbolToSortTextMap: SymbolSortTextMap;
+        readonly isTypeOnlyLocation: boolean;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -794,7 +798,7 @@ namespace ts.Completions {
         const typeChecker = program.getTypeChecker();
 
         let start = timestamp();
-        let currentToken = getTokenAtPosition(sourceFile, position); // TODO: GH#15853
+        const currentToken = getTokenAtPosition(sourceFile, position); // TODO: GH#15853
         // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
 
         log("getCompletionData: Get current token: " + (timestamp() - start));
@@ -839,20 +843,13 @@ namespace ts.Completions {
             // Completion should work inside certain JsDoc tags. For example:
             //     /** @type {number | string} */
             // Completion should work in the brackets
-            const tag = getJsDocTagAtPosition(currentToken, position);
+            const tag = getJSDocTagAtPosition(currentToken, position);
             if (tag) {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     return { kind: CompletionDataKind.JsDocTagName };
                 }
-                if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
-                    currentToken = getTokenAtPosition(sourceFile, position);
-                    if (!currentToken ||
-                        (!isDeclarationName(currentToken) &&
-                            (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                                (<JSDocPropertyTag>currentToken.parent).name !== currentToken))) {
-                        // Use as type location if inside tag's type expression
-                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
-                    }
+                if (isTypePositionInJSDocTag(tag, position, sourceFile)) {
+                    insideJsDocTagTypeExpression = true;
                 }
                 if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
                     return { kind: CompletionDataKind.JsDocParameterName, tag };
@@ -1012,6 +1009,7 @@ namespace ts.Completions {
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
         const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
+        const isTypeOnly = isTypeOnlyCompletion();
 
         if (isRightOfDot || isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
@@ -1061,23 +1059,9 @@ namespace ts.Completions {
             previousToken,
             isJsxInitializer,
             insideJsDocTagTypeExpression,
-            symbolToSortTextMap
+            symbolToSortTextMap,
+            isTypeOnlyLocation: isTypeOnly
         };
-
-        type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
-
-        function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
-            switch (tag.kind) {
-                case SyntaxKind.JSDocParameterTag:
-                case SyntaxKind.JSDocPropertyTag:
-                case SyntaxKind.JSDocReturnTag:
-                case SyntaxKind.JSDocTypeTag:
-                case SyntaxKind.JSDocTypedefTag:
-                    return true;
-                default:
-                    return false;
-            }
-        }
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -1329,7 +1313,6 @@ namespace ts.Completions {
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
             isInSnippetScope = isSnippetScope(scopeNode);
 
-            const isTypeOnly = isTypeOnlyCompletion();
             const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
@@ -1445,40 +1428,6 @@ namespace ts.Completions {
                 (isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker)
                  || isPartOfTypeNode(location)
                  || isContextTokenTypeLocation(contextToken));
-        }
-
-        function isContextTokenValueLocation(contextToken: Node) {
-            return contextToken &&
-                contextToken.kind === SyntaxKind.TypeOfKeyword &&
-                (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent));
-        }
-
-        function isContextTokenTypeLocation(contextToken: Node): boolean {
-            if (contextToken) {
-                const parentKind = contextToken.parent.kind;
-                switch (contextToken.kind) {
-                    case SyntaxKind.ColonToken:
-                        return parentKind === SyntaxKind.PropertyDeclaration ||
-                            parentKind === SyntaxKind.PropertySignature ||
-                            parentKind === SyntaxKind.Parameter ||
-                            parentKind === SyntaxKind.VariableDeclaration ||
-                            isFunctionLikeKind(parentKind);
-
-                    case SyntaxKind.EqualsToken:
-                        return parentKind === SyntaxKind.TypeAliasDeclaration;
-
-                    case SyntaxKind.AsKeyword:
-                        return parentKind === SyntaxKind.AsExpression;
-
-                    case SyntaxKind.LessThanToken:
-                        return parentKind === SyntaxKind.TypeReference ||
-                            parentKind === SyntaxKind.TypeAssertionExpression;
-
-                    case SyntaxKind.ExtendsKeyword:
-                        return parentKind === SyntaxKind.TypeParameter;
-                }
-            }
-            return false;
         }
 
         /** True if symbol is a type or a module containing at least one type. */
@@ -2534,12 +2483,6 @@ namespace ts.Completions {
 
     function keywordForNode(node: Node): SyntaxKind {
         return isIdentifier(node) ? node.originalKeywordKind || SyntaxKind.Unknown : node.kind;
-    }
-
-    /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
-    function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
-        const jsdoc = findAncestor(node, isJSDoc);
-        return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
     function getPropertiesForObjectExpression(contextualType: Type, baseConstrainedType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {

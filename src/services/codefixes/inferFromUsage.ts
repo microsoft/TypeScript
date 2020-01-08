@@ -322,6 +322,7 @@ namespace ts.codefix {
                     moduleSymbol,
                     sourceFile,
                     symbol.name,
+                    SemanticMeaning.Type,
                     host,
                     program,
                     formatContext,
