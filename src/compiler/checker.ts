@@ -19777,13 +19777,22 @@ namespace ts {
             }
 
             function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
-                // We are in a branch of obj?.foo === value or obj?.foo !== value. We remove undefined and null from
-                // the type of obj if (a) the operator is === and the type of value doesn't include undefined or (b) the
-                // operator is !== and the type of value is undefined.
-                const effectiveTrue = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken ? assumeTrue : !assumeTrue;
-                const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
-                const valueNonNullish = !(getTypeFacts(getTypeOfExpression(value)) & (doubleEquals ? TypeFacts.EQUndefinedOrNull : TypeFacts.EQUndefined));
-                return effectiveTrue === valueNonNullish ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+                // We are in a branch of obj?.foo === value (or any one of the other equality operators). We narrow obj as follows:
+                // When operator is === and type of value excludes undefined, null and undefined is removed from type of obj in true branch.
+                // When operator is !== and type of value excludes undefined, null and undefined is removed from type of obj in false branch.
+                // When operator is == and type of value excludes null and undefined, null and undefined is removed from type of obj in true branch.
+                // When operator is != and type of value excludes null and undefined, null and undefined is removed from type of obj in false branch.
+                // When operator is === and type of value is undefined, null and undefined is removed from type of obj in false branch.
+                // When operator is !== and type of value is undefined, null and undefined is removed from type of obj in true branch.
+                // When operator is == and type of value is null or undefined, null and undefined is removed from type of obj in false branch.
+                // When operator is != and type of value is null or undefined, null and undefined is removed from type of obj in true branch.
+                const equalsOperator = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+                const nullableFlags = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? TypeFlags.Nullable : TypeFlags.Undefined;
+                const valueType = getTypeOfExpression(value);
+                // Note that we include any and unknown in the exclusion test because their domain includes null and undefined.
+                const removeNullable = equalsOperator !== assumeTrue && everyType(valueType, t => !!(t.flags & nullableFlags)) ||
+                    equalsOperator === assumeTrue && everyType(valueType, t => !(t.flags & (TypeFlags.AnyOrUnknown | nullableFlags)));
+                return removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
