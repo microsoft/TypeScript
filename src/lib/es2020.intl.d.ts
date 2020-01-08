@@ -44,5 +44,5 @@ declare namespace Intl {
             locales: string | string[],
             options?: RelativeTimeFormatOptions,
         ): string[];
-    }
+    };
 }
