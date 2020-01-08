@@ -21,5 +21,5 @@ exports["default"] = A;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-new a_1["default"]();
+new A();
 var a = { a: '' };
