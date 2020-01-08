@@ -1,18 +1,18 @@
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 namespace RWC {
-    function runWithIOLog(ioLog: IoLog, fn: (oldIO: Harness.IO) => void) {
+    function runWithIOLog(ioLog: Playback.IoLog, fn: (oldIO: Harness.IO) => void) {
         const oldIO = Harness.IO;
 
         const wrappedIO = Playback.wrapIO(oldIO);
         wrappedIO.startReplayFromData(ioLog);
-        Harness.IO = wrappedIO;
+        Harness.setHarnessIO(wrappedIO);
 
         try {
             fn(oldIO);
         }
         finally {
             wrappedIO.endReplay();
-            Harness.IO = oldIO;
+            Harness.setHarnessIO(oldIO);
         }
     }
 
@@ -51,7 +51,7 @@ namespace RWC {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts!: ts.ParsedCommandLine;
 
-                const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)!), Harness.IO, `internal/cases/rwc/${baseName}`);
+                const ioLog: Playback.IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)!), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = !!ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
@@ -207,29 +207,29 @@ namespace RWC {
             });
         });
     }
-}
 
-class RWCRunner extends RunnerBase {
-    public enumerateTestFiles() {
-        // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return Harness.IO.getDirectories("internal/cases/rwc/");
-    }
-
-    public kind(): TestRunnerKind {
-        return "rwc";
-    }
-
-    /** Setup the runner's tests so that they are ready to be executed by the harness
-     *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
-     */
-    public initializeTests(): void {
-        // Read in and evaluate the test list
-        for (const test of this.tests && this.tests.length ? this.tests : this.getTestFiles()) {
-            this.runTest(typeof test === "string" ? test : test.file);
+    export class RWCRunner extends Harness.RunnerBase {
+        public enumerateTestFiles() {
+            // see also: `enumerateTestFiles` in tests/webTestServer.ts
+            return Harness.IO.getDirectories("internal/cases/rwc/");
         }
-    }
 
-    private runTest(jsonFileName: string) {
-        RWC.runRWCTest(jsonFileName);
+        public kind(): Harness.TestRunnerKind {
+            return "rwc";
+        }
+
+        /** Setup the runner's tests so that they are ready to be executed by the harness
+         *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
+         */
+        public initializeTests(): void {
+            // Read in and evaluate the test list
+            for (const test of this.tests && this.tests.length ? this.tests : this.getTestFiles()) {
+                this.runTest(typeof test === "string" ? test : test.file);
+            }
+        }
+
+        private runTest(jsonFileName: string) {
+            runRWCTest(jsonFileName);
+        }
     }
 }

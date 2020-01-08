@@ -995,13 +995,13 @@ namespace ts.projectSystem {
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
             const file: TestFSWithWatch.File = {
-                path: `${projects}/a/b/app.js`,
+                path: `${tscWatch.projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = `${projects}/a/cache`;
+            const cachePath = `${tscWatch.projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: `${projects}/node_modules/commander/index.js`,
+                path: `${tscWatch.projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
@@ -1025,12 +1025,12 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
             checkWatchedDirectories(host, [
-                `${projects}/node_modules`,
-                `${projects}/a/node_modules`,
-                `${projects}/a/b/node_modules`,
-                `${projects}/a/node_modules/@types`,
-                `${projects}/a/b/node_modules/@types`,
-                `${projects}/a/b/bower_components`
+                `${tscWatch.projects}/node_modules`,
+                `${tscWatch.projects}/a/node_modules`,
+                `${tscWatch.projects}/a/b/node_modules`,
+                `${tscWatch.projects}/a/node_modules/@types`,
+                `${tscWatch.projects}/a/b/node_modules/@types`,
+                `${tscWatch.projects}/a/b/bower_components`
             ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });

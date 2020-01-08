@@ -7,7 +7,7 @@ namespace ts.projectSystem {
 
         function createSessionWithEventHandler(files: File[], useLargeTsFile: boolean) {
             const largeFile: File = {
-                path: `${projectRoot}/${getLargeFile(useLargeTsFile)}`,
+                path: `${tscWatch.projectRoot}/${getLargeFile(useLargeTsFile)}`,
                 content: "export var x = 10;",
                 fileSize: server.maxFileSize + 1
             };
@@ -35,11 +35,11 @@ namespace ts.projectSystem {
         function verifyLargeFile(useLargeTsFile: boolean) {
             it("when large file is included by tsconfig", () => {
                 const file: File = {
-                    path: `${projectRoot}/src/file.ts`,
+                    path: `${tscWatch.projectRoot}/src/file.ts`,
                     content: "export var y = 10;"
                 };
                 const tsconfig: File = {
-                    path: `${projectRoot}/tsconfig.json`,
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
                     content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } })
                 };
                 const files = [file, libFile, tsconfig];
@@ -52,7 +52,7 @@ namespace ts.projectSystem {
 
             it("when large file is included by module resolution", () => {
                 const file: File = {
-                    path: `${projectRoot}/src/file.ts`,
+                    path: `${tscWatch.projectRoot}/src/file.ts`,
                     content: `export var y = 10;import {x} from "./large"`
                 };
                 const files = [file, libFile];

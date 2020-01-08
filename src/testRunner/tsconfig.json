@@ -16,6 +16,7 @@
     "references": [
         { "path": "../shims", "prepend": true },
         { "path": "../compiler", "prepend": true },
+        { "path": "../executeCommandLine", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
@@ -24,6 +25,16 @@
     ],
 
     "files": [
+        "compilerRef.ts",
+        "evaluatorRef.ts",
+        "fakesRef.ts",
+        "vpathRef.ts",
+        "vfsRef.ts",
+        "fourslashRef.ts",
+        "playbackRef.ts",
+        "utilsRef.ts",
+        "documentsRef.ts",
+
         "fourslashRunner.ts",
         "compilerRunner.ts",
         "projectsRunner.ts",
@@ -39,7 +50,6 @@
 
         "unittests/services/extract/helpers.ts",
         "unittests/tsbuild/helpers.ts",
-        "../tsc/executeCommandLine.ts",
         "unittests/tsc/helpers.ts",
         "unittests/tscWatch/helpers.ts",
         "unittests/tsserver/helpers.ts",
@@ -73,6 +83,7 @@
         "unittests/config/projectReferences.ts",
         "unittests/config/showConfig.ts",
         "unittests/config/tsconfigParsing.ts",
+        "unittests/config/tsconfigParsingWatchOptions.ts",
         "unittests/evaluation/asyncArrow.ts",
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/awaiter.ts",
@@ -107,6 +118,7 @@
         "unittests/tsbuild/lateBoundSymbol.ts",
         "unittests/tsbuild/missingExtendedFile.ts",
         "unittests/tsbuild/moduleSpecifiers.ts",
+        "unittests/tsbuild/noEmitOnError.ts",
         "unittests/tsbuild/outFile.ts",
         "unittests/tsbuild/referencesWithRootDirInParent.ts",
         "unittests/tsbuild/resolveJsonModule.ts",
@@ -120,6 +132,7 @@
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
         "unittests/tscWatch/emitAndErrorUpdates.ts",
+        "unittests/tscWatch/forceConsistentCasingInFileNames.ts",
         "unittests/tscWatch/incremental.ts",
         "unittests/tscWatch/programUpdates.ts",
         "unittests/tscWatch/resolutionCache.ts",

@@ -1,9 +1,5 @@
 Exit Code: 1
 Standard output:
-lib/ContextModuleFactory.js(15,35): error TS2300: Duplicate identifier 'Module'.
-lib/ContextModuleFactory.js(16,66): error TS2300: Duplicate identifier 'ModuleFactoryCreateData'.
-lib/ContextModuleFactory.js(17,62): error TS2300: Duplicate identifier 'ModuleFactoryResult'.
-lib/ContextModuleFactory.js(18,59): error TS2300: Duplicate identifier 'ContextDependency'.
 lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
 lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
 lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.

@@ -117,12 +117,12 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
+                    if (suggestion.symbol.declarations?.length) {
                         suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                            ? suggestion.symbol.declarations[0].localSymbol ?? suggestion.symbol.declarations[0].symbol
                             : suggestion.symbol.declarations[0].symbol);
                     }
-                    if (suggestion.origin.moduleSymbol.declarations) {
+                    if (suggestion.origin.moduleSymbol.declarations?.length) {
                         suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
                     }
                 });
@@ -1279,7 +1279,7 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
+            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, /*baseType*/ undefined, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -1624,6 +1624,9 @@ namespace ts.Completions {
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
+                if (typeChecker.isUndefinedSymbol(symbol)) {
+                    return;
+                }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
                 results.push({
@@ -1795,10 +1798,11 @@ namespace ts.Completions {
             let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                const typeForObject = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completion);
-                if (!typeForObject) return GlobalsSearch.Fail;
-                isNewIdentifierLocation = hasIndexSignature(typeForObject);
-                typeMembers = getPropertiesForObjectExpression(typeForObject, objectLikeContainer, typeChecker);
+                const instantiatedType = typeChecker.getContextualType(objectLikeContainer);
+                const baseType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
+                if (!instantiatedType || !baseType) return GlobalsSearch.Fail;
+                isNewIdentifierLocation = hasIndexSignature(instantiatedType || baseType);
+                typeMembers = getPropertiesForObjectExpression(instantiatedType, baseType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }
             else {
@@ -1826,8 +1830,14 @@ namespace ts.Completions {
                 if (canGetType) {
                     const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                     if (!typeForObject) return GlobalsSearch.Fail;
-                    // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
-                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter((symbol) => !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier));
+                    // In a binding pattern, get only known properties (unless in the same scope).
+                    // Everywhere else we will get all possible properties.
+                    const containerClass = getContainingClass(objectLikeContainer);
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(symbol =>
+                        // either public
+                        !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier)
+                        // or we're in it
+                        || containerClass && contains(typeForObject.symbol.declarations, containerClass));
                     existingMembers = objectLikeContainer.elements;
                 }
             }
@@ -2529,15 +2539,19 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
-        return contextualType.isUnion()
-            ? checker.getAllPossiblePropertiesOfTypes(contextualType.types.filter(memberType =>
+    function getPropertiesForObjectExpression(contextualType: Type, baseConstrainedType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+        const type = baseConstrainedType && !(baseConstrainedType.flags & TypeFlags.AnyOrUnknown)
+            ? checker.getUnionType([contextualType, baseConstrainedType])
+            : contextualType;
+
+        return type.isUnion()
+            ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
                 !(memberType.flags & TypeFlags.Primitive ||
                     checker.isArrayLikeType(memberType) ||
                     typeHasCallOrConstructSignatures(memberType, checker) ||
                     checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
-            : contextualType.getApparentProperties();
+            : type.getApparentProperties();
     }
 
     /**

@@ -102,16 +102,33 @@ namespace ts {
             ]
         });
 
+        showTSConfigCorrectly("Show TSConfig with watch options", ["-p", "tsconfig.json"], {
+            watchOptions: {
+                watchFile: "DynamicPriorityPolling"
+            },
+            include: [
+                "./src/**/*"
+            ]
+        });
+
         // Bulk validation of all option declarations
         for (const option of optionDeclarations) {
-            if (option.name === "project") continue;
-            let configObject: object | undefined;
+            baselineOption(option, /*isCompilerOptions*/ true);
+        }
+
+        for (const option of optionsForWatch) {
+            baselineOption(option, /*isCompilerOptions*/ false);
+        }
+
+        function baselineOption(option: CommandLineOption, isCompilerOptions: boolean) {
+            if (option.name === "project") return;
             let args: string[];
+            let optionValue: object | undefined;
             switch (option.type) {
                 case "boolean": {
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
-                        configObject = { compilerOptions: { [option.name]: true } };
+                        optionValue = { [option.name]: true };
                     }
                     else {
                         args = [`--${option.name}`];
@@ -121,7 +138,7 @@ namespace ts {
                 case "list": {
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
-                        configObject = { compilerOptions: { [option.name]: [] } };
+                        optionValue = { [option.name]: [] };
                     }
                     else {
                         args = [`--${option.name}`];
@@ -131,7 +148,7 @@ namespace ts {
                 case "string": {
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
-                        configObject = { compilerOptions: { [option.name]: "someString" } };
+                        optionValue = { [option.name]: "someString" };
                     }
                     else {
                         args = [`--${option.name}`, "someString"];
@@ -141,7 +158,7 @@ namespace ts {
                 case "number": {
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
-                        configObject = { compilerOptions: { [option.name]: 0 } };
+                        optionValue = { [option.name]: 0 };
                     }
                     else {
                         args = [`--${option.name}`, "0"];
@@ -150,7 +167,7 @@ namespace ts {
                 }
                 case "object": {
                     args = ["-p", "tsconfig.json"];
-                    configObject = { compilerOptions: { [option.name]: {} } };
+                    optionValue = { [option.name]: {} };
                     break;
                 }
                 default: {
@@ -159,7 +176,7 @@ namespace ts {
                     const val = iterResult.value;
                     if (option.isTSConfigOnly) {
                         args = ["-p", "tsconfig.json"];
-                        configObject = { compilerOptions: { [option.name]: val } };
+                        optionValue = { [option.name]: val };
                     }
                     else {
                         args = [`--${option.name}`, val];
@@ -167,6 +184,9 @@ namespace ts {
                     break;
                 }
             }
+
+            const configObject = optionValue &&
+                (isCompilerOptions ? { compilerOptions: optionValue } : { watchOptions: optionValue });
             showTSConfigCorrectly(`Shows tsconfig for single option/${option.name}`, args, configObject);
         }
     });
