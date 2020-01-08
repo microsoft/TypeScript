@@ -310,3 +310,86 @@ const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Er
 >a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 113, 55))
 >c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 113, 61))
 
+// Repro from #33732
+
+interface I1 {
+>I1 : Symbol(I1, Decl(excessPropertyCheckWithUnions.ts, 113, 73))
+
+    prop1: string;
+>prop1 : Symbol(I1.prop1, Decl(excessPropertyCheckWithUnions.ts, 117, 14))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(excessPropertyCheckWithUnions.ts, 119, 1))
+
+    prop2: string;
+>prop2 : Symbol(I2.prop2, Decl(excessPropertyCheckWithUnions.ts, 121, 14))
+}
+
+interface I3 extends Record<string, string> {
+>I3 : Symbol(I3, Decl(excessPropertyCheckWithUnions.ts, 123, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+}
+
+type Properties =
+>Properties : Symbol(Properties, Decl(excessPropertyCheckWithUnions.ts, 127, 1))
+
+    | { [key: string]: never }
+>key : Symbol(key, Decl(excessPropertyCheckWithUnions.ts, 130, 9))
+
+    | I1
+>I1 : Symbol(I1, Decl(excessPropertyCheckWithUnions.ts, 113, 73))
+
+    | I2
+>I2 : Symbol(I2, Decl(excessPropertyCheckWithUnions.ts, 119, 1))
+
+    | I3
+>I3 : Symbol(I3, Decl(excessPropertyCheckWithUnions.ts, 123, 1))
+
+    ;
+
+
+declare const prop1: string;
+>prop1 : Symbol(prop1, Decl(excessPropertyCheckWithUnions.ts, 137, 13))
+
+declare const prop2: string | undefined;
+>prop2 : Symbol(prop2, Decl(excessPropertyCheckWithUnions.ts, 138, 13))
+
+function F1(_arg: { props: Properties }) { }
+>F1 : Symbol(F1, Decl(excessPropertyCheckWithUnions.ts, 138, 40))
+>_arg : Symbol(_arg, Decl(excessPropertyCheckWithUnions.ts, 140, 12))
+>props : Symbol(props, Decl(excessPropertyCheckWithUnions.ts, 140, 19))
+>Properties : Symbol(Properties, Decl(excessPropertyCheckWithUnions.ts, 127, 1))
+
+F1({
+>F1 : Symbol(F1, Decl(excessPropertyCheckWithUnions.ts, 138, 40))
+
+    props: {
+>props : Symbol(props, Decl(excessPropertyCheckWithUnions.ts, 141, 4))
+
+        prop1,
+>prop1 : Symbol(prop1, Decl(excessPropertyCheckWithUnions.ts, 142, 12))
+
+        prop2,
+>prop2 : Symbol(prop2, Decl(excessPropertyCheckWithUnions.ts, 143, 14))
+
+    },
+});
+
+function F2(_props: Properties) { }
+>F2 : Symbol(F2, Decl(excessPropertyCheckWithUnions.ts, 146, 3))
+>_props : Symbol(_props, Decl(excessPropertyCheckWithUnions.ts, 148, 12))
+>Properties : Symbol(Properties, Decl(excessPropertyCheckWithUnions.ts, 127, 1))
+
+F2({
+>F2 : Symbol(F2, Decl(excessPropertyCheckWithUnions.ts, 146, 3))
+
+    prop1,
+>prop1 : Symbol(prop1, Decl(excessPropertyCheckWithUnions.ts, 149, 4))
+
+    prop2,
+>prop2 : Symbol(prop2, Decl(excessPropertyCheckWithUnions.ts, 150, 10))
+
+});
+
