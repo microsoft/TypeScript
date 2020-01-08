@@ -3,3 +3,4 @@
 /// <reference lib="es2020.promise" />
 /// <reference lib="es2020.string" />
 /// <reference lib="es2020.symbol.wellknown" />
+/// <reference lib="es2020.intl" />
