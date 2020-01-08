@@ -493,7 +493,7 @@ namespace ts.textChanges {
             if (getMembersOrProperties(cls).length === 0) {
                 if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile })) {
                     // For `class C {\n}`, don't add the trailing "\n"
-                    const [open, close] = getClassOrObjectBraceEnds(cls, sourceFile)
+                    const [open, close] = getClassOrObjectBraceEnds(cls, sourceFile);
                     const shouldSuffix = open && close && positionsAreOnSameLine(open, close, sourceFile);
                     return { prefix: this.newLineCharacter, suffix: comma + (shouldSuffix ? this.newLineCharacter : "") };
                 }
