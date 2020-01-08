@@ -184,7 +184,7 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(149,5): error TS
         assert(typeof x === "string");  // Error
         ~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2728 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:144:11: 'assert' is declared here.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:144:11: 'assert' needs an explicit type annotation.
         const a = [assert];
         a[0](typeof x === "string");  // Error
         ~~~~
@@ -193,7 +193,7 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(149,5): error TS
         t1.assert(typeof x === "string");  // Error
         ~~~~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2728 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:148:11: 't1' is declared here.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:148:11: 't1' needs an explicit type annotation.
         const t2: Test = new Test();
         t2.assert(typeof x === "string");
     }
