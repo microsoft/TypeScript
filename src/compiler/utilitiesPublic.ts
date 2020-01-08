@@ -1729,6 +1729,8 @@ namespace ts {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
                 return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            case SyntaxKind.NamespaceImport:
+                return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
                 return (node as ImportClause).isTypeOnly;
             default:
