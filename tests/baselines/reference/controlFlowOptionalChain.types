@@ -1249,6 +1249,85 @@ function f15(o: Thing | undefined, value: number) {
     }
 }
 
+function f15a(o: Thing | undefined, value: unknown) {
+>f15a : (o: Thing | undefined, value: unknown) => void
+>o : Thing | undefined
+>value : unknown
+
+    if (o?.foo === value) {
+>o?.foo === value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : unknown
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    if (o?.foo !== value) {
+>o?.foo !== value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : unknown
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    if (o?.foo == value) {
+>o?.foo == value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : unknown
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    if (o?.foo != value) {
+>o?.foo != value : boolean
+>o?.foo : string | number | undefined
+>o : Thing | undefined
+>foo : string | number | undefined
+>value : unknown
+
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+    else {
+        o.foo;  // Error
+>o.foo : string | number
+>o : Thing | undefined
+>foo : string | number
+    }
+}
+
 function f16(o: Thing | undefined) {
 >f16 : (o: Thing | undefined) => void
 >o : Thing | undefined
@@ -1885,4 +1964,70 @@ function extractCoordinates(f: Feature): number[] {
 >geometry : { type: string; coordinates: number[]; }
 >coordinates : number[]
 }
+
+// Repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+>someProperty : unknown
+}
+
+let lastSomeProperty: unknown | undefined;
+>lastSomeProperty : unknown
+
+function someFunction(someOptionalObject: SomeObject | undefined): void {
+>someFunction : (someOptionalObject: SomeObject | undefined) => void
+>someOptionalObject : SomeObject | undefined
+
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+>someOptionalObject?.someProperty !== lastSomeProperty : boolean
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+>lastSomeProperty : unknown
+
+        console.log(someOptionalObject);
+>console.log(someOptionalObject) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>someOptionalObject : SomeObject | undefined
+
+        console.log(someOptionalObject.someProperty);  // Error
+>console.log(someOptionalObject.someProperty) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>someOptionalObject.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+
+        lastSomeProperty = someOptionalObject?.someProperty;
+>lastSomeProperty = someOptionalObject?.someProperty : unknown
+>lastSomeProperty : unknown
+>someOptionalObject?.someProperty : unknown
+>someOptionalObject : SomeObject | undefined
+>someProperty : unknown
+    }
+}
+
+const someObject: SomeObject = {
+>someObject : SomeObject
+>{    someProperty: 42} : { someProperty: number; }
+
+    someProperty: 42
+>someProperty : number
+>42 : 42
+
+};
+
+someFunction(someObject);
+>someFunction(someObject) : void
+>someFunction : (someOptionalObject: SomeObject | undefined) => void
+>someObject : SomeObject
+
+someFunction(undefined);
+>someFunction(undefined) : void
+>someFunction : (someOptionalObject: SomeObject | undefined) => void
+>undefined : undefined
 
