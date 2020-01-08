@@ -19789,7 +19789,7 @@ namespace ts {
                 const equalsOperator = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                 const nullableFlags = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? TypeFlags.Nullable : TypeFlags.Undefined;
                 const valueType = getTypeOfExpression(value);
-                // Note that we include any and unknown the exclusion test because their domain includes null and undefined.
+                // Note that we include any and unknown in the exclusion test because their domain includes null and undefined.
                 const removeNullable = equalsOperator !== assumeTrue && everyType(valueType, t => !!(t.flags & nullableFlags)) ||
                     equalsOperator === assumeTrue && everyType(valueType, t => !(t.flags & (TypeFlags.AnyOrUnknown | nullableFlags)));
                 return removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
