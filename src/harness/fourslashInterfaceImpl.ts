@@ -541,9 +541,14 @@ namespace FourSlashInterface {
             this.state.getEditsForFileRename(options);
         }
 
+        public baselineCallHierarchy() {
+            this.state.baselineCallHierarchy();
+        }
+
         public moveToNewFile(options: MoveToNewFileOptions): void {
             this.state.moveToNewFile(options);
         }
+
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }

@@ -1784,14 +1784,17 @@ namespace ts {
         }
 
         /**
-         * Gets an expression that represents a property name. For a computed property, a
-         * name is generated for the node.
+         * Gets an expression that represents a property name (for decorated properties or enums).
+         * For a computed property, a name is generated for the node.
          *
          * @param member The member whose name should be converted into an expression.
          */
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name!;
-            if (isComputedPropertyName(name)) {
+            if (isPrivateIdentifier(name)) {
+                return createIdentifier("");
+            }
+            else if (isComputedPropertyName(name)) {
                 return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
                     : name.expression;
@@ -2473,6 +2476,7 @@ namespace ts {
             return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
+                    && moduleKind !== ModuleKind.ES2020
                     && moduleKind !== ModuleKind.ESNext
                     && moduleKind !== ModuleKind.System);
         }
@@ -2756,7 +2760,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced.
+         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve'.
          *
          * @param node The import declaration node.
          */
@@ -2766,10 +2770,16 @@ namespace ts {
                 //  import "foo";
                 return node;
             }
+            if (node.importClause.isTypeOnly) {
+                // Always elide type-only imports
+                return undefined;
+            }
 
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-            return importClause
+            return importClause ||
+                compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Preserve ||
+                compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Error
                 ? updateImportDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -2785,10 +2795,13 @@ namespace ts {
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+            if (node.isTypeOnly) {
+                return undefined;
+            }
             // Elide the import clause if we elide both its name and its named bindings.
             const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
             const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-            return (name || namedBindings) ? updateImportClause(node, name, namedBindings) : undefined;
+            return (name || namedBindings) ? updateImportClause(node, name, namedBindings, /*isTypeOnly*/ false) : undefined;
         }
 
         /**
@@ -2838,6 +2851,10 @@ namespace ts {
          * @param node The export declaration node.
          */
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+            if (node.isTypeOnly) {
+                return undefined;
+            }
+
             if (!node.exportClause) {
                 // Elide a star export if the module it references does not export a value.
                 return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier!) ? node : undefined;
@@ -2849,14 +2866,15 @@ namespace ts {
             }
 
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExports, isNamedExports);
+            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedImportBindings);
             return exportClause
                 ? updateExportDeclaration(
                     node,
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     exportClause,
-                    node.moduleSpecifier)
+                    node.moduleSpecifier,
+                    node.isTypeOnly)
                 : undefined;
         }
 
@@ -2870,6 +2888,14 @@ namespace ts {
             // Elide the named exports if all of its export specifiers were elided.
             const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
             return some(elements) ? updateNamedExports(node, elements) : undefined;
+        }
+
+        function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
+            return updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
+        }
+
+        function visitNamedExportBindings(node: NamedExportBindings): VisitResult<NamedExportBindings> {
+            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node);
         }
 
         /**
@@ -2903,10 +2929,24 @@ namespace ts {
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             if (isExternalModuleImportEqualsDeclaration(node)) {
-                // Elide external module `import=` if it is not referenced.
-                return resolver.isReferencedAliasDeclaration(node)
-                    ? visitEachChild(node, visitor, context)
-                    : undefined;
+                const isReferenced = resolver.isReferencedAliasDeclaration(node);
+                // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
+                if (!isReferenced && compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Preserve) {
+                    return setOriginalNode(
+                        setTextRange(
+                            createImportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*importClause*/ undefined,
+                                node.moduleReference.expression,
+                            ),
+                            node,
+                        ),
+                        node,
+                    );
+                }
+
+                return isReferenced ? visitEachChild(node, visitor, context) : undefined;
             }
 
             if (!shouldEmitImportEqualsDeclaration(node)) {

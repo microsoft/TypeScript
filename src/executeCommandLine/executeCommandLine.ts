@@ -241,9 +241,15 @@ namespace ts {
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
-            printVersion(sys);
-            printHelp(sys, getOptionsForHelp(commandLine));
-            return sys.exit(ExitStatus.Success);
+            if (commandLine.options.showConfig) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
+            else {
+                printVersion(sys);
+                printHelp(sys, getOptionsForHelp(commandLine));
+                return sys.exit(ExitStatus.Success);
+            }
         }
 
         const currentDirectory = sys.getCurrentDirectory();
@@ -663,6 +669,7 @@ namespace ts {
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
+                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
             }
             else {
@@ -732,16 +739,4 @@ namespace ts {
 
         return;
     }
-}
-
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
-}
-
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
-}
-
-if (ts.sys.setBlocking) {
-    ts.sys.setBlocking();
 }

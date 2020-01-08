@@ -1,9 +1,7 @@
 /// <reference types="node"/>
-import { normalize } from "path";
+import { normalize, relative } from "path";
 import assert = require("assert");
 import { readFileSync, writeFileSync } from "fs";
-const args = process.argv.slice(2);
-
 
 /**
  * A minimal description for a parsed package.json object.
@@ -15,9 +13,11 @@ interface PackageJson {
 }
 
 function main(): void {
+    const args = process.argv.slice(2);
     if (args.length < 3) {
+        const thisProgramName = relative(process.cwd(), __filename);
         console.log("Usage:");
-        console.log("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>");
+        console.log(`\tnode ${thisProgramName} <dev|insiders> <package.json location> <file containing version>`);
         return;
     }
 

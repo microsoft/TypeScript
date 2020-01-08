@@ -686,7 +686,8 @@ namespace ts {
                 return visibleDefaultBinding && updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    /*namedBindings*/ undefined
+                    /*namedBindings*/ undefined,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -695,7 +696,8 @@ namespace ts {
                 return visibleDefaultBinding || namedBindings ? updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, updateImportClause(
                     decl.importClause,
                     visibleDefaultBinding,
-                    namedBindings
+                    namedBindings,
+                    decl.importClause.isTypeOnly,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
             }
             // Named imports (optionally with visible default)
@@ -708,7 +710,8 @@ namespace ts {
                     updateImportClause(
                         decl.importClause,
                         visibleDefaultBinding,
-                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined
+                        bindingList && bindingList.length ? updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
+                        decl.importClause.isTypeOnly,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier)
                 );
@@ -851,6 +854,9 @@ namespace ts {
                         return cleanup(ctor);
                     }
                     case SyntaxKind.MethodDeclaration: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const sig = createSignatureDeclaration(
                             SyntaxKind.MethodSignature,
                             ensureTypeParams(input, input.typeParameters),
@@ -863,6 +869,9 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                         return cleanup(updateGetAccessor(
                             input,
@@ -874,6 +883,9 @@ namespace ts {
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateSetAccessor(
                             input,
                             /*decorators*/ undefined,
@@ -883,6 +895,9 @@ namespace ts {
                             /*body*/ undefined));
                     }
                     case SyntaxKind.PropertyDeclaration:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateProperty(
                             input,
                             /*decorators*/ undefined,
@@ -893,6 +908,9 @@ namespace ts {
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.PropertySignature:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updatePropertySignature(
                             input,
                             ensureModifiers(input),
@@ -902,6 +920,9 @@ namespace ts {
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.MethodSignature: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(updateMethodSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
@@ -1015,7 +1036,13 @@ namespace ts {
                     resultHasScopeMarker = true;
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
-                    return updateExportDeclaration(input, /*decorators*/ undefined, input.modifiers, input.exportClause, rewriteModuleSpecifier(input, input.moduleSpecifier));
+                    return updateExportDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        input.modifiers,
+                        input.exportClause,
+                        rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        input.isTypeOnly);
                 }
                 case SyntaxKind.ExportAssignment: {
                     // Always visible if the parent node isn't dropped for being not visible
@@ -1283,7 +1310,20 @@ namespace ts {
                         }));
                         getSymbolAccessibilityDiagnostic = oldDiag;
                     }
-                    const members = createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationSubtree)));
+
+                    const hasPrivateIdentifier = some(input.members, member => !!member.name && isPrivateIdentifier(member.name));
+                    const privateIdentifier = hasPrivateIdentifier ? [
+                        createProperty(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createPrivateIdentifier("#private"),
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        )
+                    ] : undefined;
+                    const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree));
+                    const members = createNodeArray(memberNodes);
 
                     const extendsClause = getEffectiveBaseTypeNode(input);
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {

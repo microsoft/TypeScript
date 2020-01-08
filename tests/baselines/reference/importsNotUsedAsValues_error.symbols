@@ -1,0 +1,74 @@
+=== /a.ts ===
+export default class {}
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 23))
+
+export type B = {};
+>B : Symbol(B, Decl(a.ts, 1, 17))
+
+=== /b.ts ===
+import { A, B } from './a'; // Error
+>A : Symbol(A, Decl(b.ts, 0, 8))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+
+let a: A;
+>a : Symbol(a, Decl(b.ts, 1, 3))
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+let b: B;
+>b : Symbol(b, Decl(b.ts, 2, 3))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.ts, 1, 3))
+>b : Symbol(b, Decl(b.ts, 2, 3))
+
+=== /c.ts ===
+import Default, * as named from './a'; // Error
+>Default : Symbol(Default, Decl(c.ts, 0, 6))
+>named : Symbol(named, Decl(c.ts, 0, 15))
+
+let a: Default;
+>a : Symbol(a, Decl(c.ts, 1, 3))
+>Default : Symbol(Default, Decl(c.ts, 0, 6))
+
+let b: named.B;
+>b : Symbol(b, Decl(c.ts, 2, 3))
+>named : Symbol(named, Decl(c.ts, 0, 15))
+>B : Symbol(named.B, Decl(a.ts, 1, 17))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(c.ts, 1, 3))
+>b : Symbol(b, Decl(c.ts, 2, 3))
+
+=== /d.ts ===
+import Default, { A } from './a';
+>Default : Symbol(Default, Decl(d.ts, 0, 6))
+>A : Symbol(A, Decl(d.ts, 0, 17))
+
+const a = A;
+>a : Symbol(a, Decl(d.ts, 1, 5))
+>A : Symbol(A, Decl(d.ts, 0, 17))
+
+let b: Default;
+>b : Symbol(b, Decl(d.ts, 2, 3))
+>Default : Symbol(Default, Decl(d.ts, 0, 6))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(d.ts, 1, 5))
+>b : Symbol(b, Decl(d.ts, 2, 3))
+
+=== /e.ts ===
+import { A, B } from './a'; // noUnusedLocals error only
+>A : Symbol(A, Decl(e.ts, 0, 8))
+>B : Symbol(B, Decl(e.ts, 0, 11))
+

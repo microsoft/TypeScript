@@ -100,11 +100,11 @@ export class someClass { }
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map",
         "signature": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
         "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map"
       },
@@ -135,8 +135,8 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
       "./index.ts"
     ]
   },
@@ -153,15 +153,15 @@ export class someClass { }
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
       },
-      "../core/index.ts": {
+      "../core/index.d.ts": {
         "version": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map",
         "signature": "-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map"
       },
-      "../core/anothermodule.ts": {
+      "../core/anothermodule.d.ts": {
         "version": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
         "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map"
       },
-      "../logic/index.ts": {
+      "../logic/index.d.ts": {
         "version": "-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
         "signature": "-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"
       },
@@ -179,7 +179,7 @@ export class someClass { }
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -189,7 +189,7 @@ export class someClass { }
       ]
     },
     "exportedModulesMap": {
-      "../logic/index.ts": [
+      "../logic/index.d.ts": [
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
@@ -198,9 +198,9 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      "../core/anothermodule.ts",
-      "../core/index.ts",
-      "../logic/index.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
       "./index.ts"
     ]
   },

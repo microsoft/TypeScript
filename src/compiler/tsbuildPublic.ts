@@ -16,6 +16,7 @@ namespace ts {
         /*@internal*/ listFiles?: boolean;
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
+        assumeChangesOnlyAffectDirectDependencies?: boolean;
 
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;

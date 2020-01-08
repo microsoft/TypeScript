@@ -45,26 +45,38 @@ namespace ts.tscWatch {
         function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `with default config/${input.subScenario}`,
+                subScenario: `default/${input.subScenario}`,
                 configFile: () => input.configFile?.() || config
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `with default config and --declaration/${input.subScenario}`,
+                subScenario: `defaultAndD/${input.subScenario}`,
                 configFile: () => changeCompilerOptions(input, { declaration: true })
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `config with --isolatedModules/${input.subScenario}`,
+                subScenario: `isolatedModules/${input.subScenario}`,
                 configFile: () => changeCompilerOptions(input, { isolatedModules: true })
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
-                subScenario: `config with --isolatedModules and --declaration/${input.subScenario}`,
+                subScenario: `isolatedModulesAndD/${input.subScenario}`,
                 configFile: () => changeCompilerOptions(input, { isolatedModules: true, declaration: true })
+            });
+
+            verifyEmitAndErrorUpdatesWorker({
+                ...input,
+                subScenario: `assumeChangesOnlyAffectDirectDependencies/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true })
+            });
+
+            verifyEmitAndErrorUpdatesWorker({
+                ...input,
+                subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${input.subScenario}`,
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, declaration: true })
             });
         }
 
@@ -79,7 +91,7 @@ console.log(b.c.d);`
 
             function verifyDeepImportChange(subScenario: string, bFile: File, cFile: File) {
                 verifyEmitAndErrorUpdates({
-                    subScenario: `deep import changes/${subScenario}`,
+                    subScenario: `deepImportChanges/${subScenario}`,
                     files: () => [aFile, bFile, cFile],
                     changes: [
                         sys => {
@@ -179,7 +191,7 @@ getPoint().c.x;`
                 content: `import "./d";`
             };
             verifyEmitAndErrorUpdates({
-                subScenario: "updates errors in file not exporting a deep multilevel import that changes",
+                subScenario: "file not exporting a deep multilevel import that changes",
                 files: () => [aFile, bFile, cFile, dFile, eFile],
                 changes: [
                     sys => {

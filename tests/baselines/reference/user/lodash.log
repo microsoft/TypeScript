@@ -392,10 +392,8 @@ node_modules/lodash/templateSettings.js(63,12): error TS2322: Type '{ escape: (s
   Object literal may only specify known properties, and ''escape'' does not exist in type 'Function'.
 node_modules/lodash/throttle.js(59,28): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/throttle.js(60,30): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/throttle.js(62,31): error TS2345: Argument of type '{ leading: boolean; maxWait: number | undefined; trailing: boolean; }' is not assignable to parameter of type '{ leading?: boolean; maxWait?: number; trailing?: boolean; }'.
-  Types of property 'maxWait' are incompatible.
-    Type 'number | undefined' is not assignable to type 'number'.
-      Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/throttle.js(64,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/toLower.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
 node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
 node_modules/lodash/transform.js(46,37): error TS2554: Expected 0-1 arguments, but got 2.
