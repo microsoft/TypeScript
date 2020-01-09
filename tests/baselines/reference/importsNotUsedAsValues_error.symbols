@@ -6,6 +6,11 @@ export class A {}
 export type B = {};
 >B : Symbol(B, Decl(a.ts, 1, 17))
 
+export const enum C { One, Two }
+>C : Symbol(C, Decl(a.ts, 2, 19))
+>One : Symbol(C.One, Decl(a.ts, 3, 21))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
 === /b.ts ===
 import { A, B } from './a'; // Error
 >A : Symbol(A, Decl(b.ts, 0, 8))
@@ -71,4 +76,59 @@ console.log(a, b);
 import { A, B } from './a'; // noUnusedLocals error only
 >A : Symbol(A, Decl(e.ts, 0, 8))
 >B : Symbol(B, Decl(e.ts, 0, 11))
+
+=== /f.ts ===
+import { C } from './a';
+>C : Symbol(C, Decl(f.ts, 0, 8))
+
+import type { C as D } from './a';
+>C : Symbol(C, Decl(a.ts, 2, 19))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+
+C.One;
+>C.One : Symbol(C.One, Decl(a.ts, 3, 21))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>One : Symbol(C.One, Decl(a.ts, 3, 21))
+
+let c: D = C.Two;
+>c : Symbol(c, Decl(f.ts, 3, 3))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+>C.Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+let d: D.Two = C.Two;
+>d : Symbol(d, Decl(f.ts, 4, 3))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C.Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+console.log(c, d);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(f.ts, 3, 3))
+>d : Symbol(d, Decl(f.ts, 4, 3))
+
+=== /g.ts ===
+import { C } from './a';
+>C : Symbol(C, Decl(g.ts, 0, 8))
+
+let c: C;
+>c : Symbol(c, Decl(g.ts, 1, 3))
+>C : Symbol(C, Decl(g.ts, 0, 8))
+
+let d: C.Two;
+>d : Symbol(d, Decl(g.ts, 2, 3))
+>C : Symbol(C, Decl(g.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+console.log(c, d);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(g.ts, 1, 3))
+>d : Symbol(d, Decl(g.ts, 2, 3))
 
