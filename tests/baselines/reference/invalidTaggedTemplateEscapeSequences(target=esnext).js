@@ -1,4 +1,4 @@
-//// [invalidTaggedTemplateEscapeSequences_esnext.ts]
+//// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
 }
@@ -25,7 +25,7 @@ const a13 = tag`${ 100 }\x0` // \\x0
 const a14 = tag`${ 100 }\x00` // \x00
 
 
-//// [invalidTaggedTemplateEscapeSequences_esnext.js]
+//// [invalidTaggedTemplateEscapeSequences.js]
 function tag(str, ...args) {
     return str;
 }

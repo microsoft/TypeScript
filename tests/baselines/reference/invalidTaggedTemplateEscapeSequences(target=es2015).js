@@ -1,4 +1,4 @@
-//// [invalidTaggedTemplateEscapeSequences_es2015.ts]
+//// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
 }
@@ -25,7 +25,7 @@ const a13 = tag`${ 100 }\x0` // \\x0
 const a14 = tag`${ 100 }\x00` // \x00
 
 
-//// [invalidTaggedTemplateEscapeSequences_es2015.js]
+//// [invalidTaggedTemplateEscapeSequences.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;

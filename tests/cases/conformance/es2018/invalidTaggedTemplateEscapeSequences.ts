@@ -1,3 +1,5 @@
+// @target: ES5, ES2015, esnext
+
 function tag (str: any, ...args: any[]): any {
   return str
 }

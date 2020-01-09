@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_es2015.ts ===
+=== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts ===
 function tag (str: any, ...args: any[]): any {
 >tag : (str: any, ...args: any[]) => any
 >str : any
