@@ -2960,6 +2960,26 @@ namespace FourSlash {
             }
         }
 
+        public verifyCodeFixAllAvailable(negative: boolean, fixName: string) {
+            const availableFixes = this.getCodeFixes(this.activeFile.fileName);
+            const hasFix = availableFixes.some(fix => fix.fixName === fixName && fix.fixId);
+            if (negative && hasFix) {
+                this.raiseError(`Expected not to find a fix with the name '${fixName}', but one exists.`);
+            }
+            else if (!negative && !hasFix) {
+                if (availableFixes.some(fix => fix.fixName === fixName)) {
+                    this.raiseError(`Found a fix with the name '${fixName}', but fix-all is not available.`);
+                }
+
+                this.raiseError(
+                    `Expected to find a fix with the name '${fixName}', but none exists.` +
+                    availableFixes.length
+                        ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
+                        : ""
+                );
+            }
+        }
+
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
             const isAvailable = this.getApplicableRefactors(this.getMarkerByName(markerName)).length > 0;
             if (negative && isAvailable) {

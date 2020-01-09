@@ -15,3 +15,5 @@ verify.codeFix({
   x + y;
 }`
 });
+
+verify.not.codeFixAllAvailable("addMissingAwait");

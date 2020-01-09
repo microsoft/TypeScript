@@ -191,6 +191,10 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
+        public codeFixAllAvailable(fixName: string) {
+            this.state.verifyCodeFixAllAvailable(this.negative, fixName);
+        }
+
         public applicableRefactorAvailableAtMarker(markerName: string) {
             this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
         }
