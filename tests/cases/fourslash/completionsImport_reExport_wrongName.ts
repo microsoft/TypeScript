@@ -15,8 +15,22 @@ goTo.marker("");
 verify.completions({
     marker: "",
     includes: [
-        { name: "x", source: "/a", sourceDisplay: "./a", text: "const x: 0", hasAction: true },
-        { name: "y", source: "/index", sourceDisplay: ".", text: "(alias) const y: 0\nexport y", hasAction: true },
+        {
+            name: "x",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "const x: 0",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
+        {
+            name: "y",
+            source: "/index",
+            sourceDisplay: ".",
+            text: "(alias) const y: 0\nexport y",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
     ],
     preferences: { includeCompletionsForModuleExports: true },
 });

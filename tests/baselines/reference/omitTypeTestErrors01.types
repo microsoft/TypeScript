@@ -11,28 +11,28 @@ interface Foo {
 }
 
 export type Bar = Omit<Foo, "c">;
->Bar : Omit<Foo, "c">
+>Bar : Pick<Foo, "a" | "b">
 
 export type Baz = Omit<Foo, "b" | "c">;
->Baz : Omit<Foo, "c" | "b">
+>Baz : Pick<Foo, "a">
 
 export function getBarC(bar: Bar) {
->getBarC : (bar: Omit<Foo, "c">) => any
->bar : Omit<Foo, "c">
+>getBarC : (bar: Pick<Foo, "a" | "b">) => any
+>bar : Pick<Foo, "a" | "b">
 
     return bar.c;
 >bar.c : any
->bar : Omit<Foo, "c">
+>bar : Pick<Foo, "a" | "b">
 >c : any
 }
 
 export function getBazB(baz: Baz) {
->getBazB : (baz: Omit<Foo, "c" | "b">) => any
->baz : Omit<Foo, "c" | "b">
+>getBazB : (baz: Pick<Foo, "a">) => any
+>baz : Pick<Foo, "a">
 
     return baz.b;
 >baz.b : any
->baz : Omit<Foo, "c" | "b">
+>baz : Pick<Foo, "a">
 >b : any
 }
 

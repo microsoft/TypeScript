@@ -51,7 +51,7 @@ Baz.name;
 
 // Using ES6 generator
 function* gen() {
->gen : () => IterableIterator<number>
+>gen : () => Generator<number, void, unknown>
 
     let i = 0;
 >i : number
@@ -73,7 +73,7 @@ function* gen() {
 }
 
 function* gen2() {
->gen2 : () => IterableIterator<number>
+>gen2 : () => Generator<number, void, unknown>
 
     let i = 0;
 >i : number

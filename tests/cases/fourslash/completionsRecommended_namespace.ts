@@ -38,6 +38,7 @@ verify.completions(
             kindModifiers: "export",
             hasAction: true,
             isRecommended: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         preferences: { includeCompletionsForModuleExports: true },
     },

@@ -1,0 +1,34 @@
+/b.ts(2,1): error TS2708: Cannot use namespace 'types' as a value.
+/b.ts(3,1): error TS2708: Cannot use namespace 'types' as a value.
+/b.ts(4,14): error TS2694: Namespace '"/a"' has no exported member 'Value'.
+/b.ts(5,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+/b.ts(6,7): error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
+
+
+==== /a.ts (0 errors) ====
+    export class A { a!: string }
+    export class B { b!: number }
+    export type C<T> = T;
+    export const Value = {};
+    
+==== /b.ts (5 errors) ====
+    import type * as types from './a';
+    types;
+    ~~~~~
+!!! error TS2708: Cannot use namespace 'types' as a value.
+    types.Value;
+    ~~~~~
+!!! error TS2708: Cannot use namespace 'types' as a value.
+    let v: types.Value;
+                 ~~~~~
+!!! error TS2694: Namespace '"/a"' has no exported member 'Value'.
+    const a: types.A = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:18: 'a' is declared here.
+    const b: types.B = {};
+          ~
+!!! error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
+!!! related TS2728 /a.ts:2:18: 'b' is declared here.
+    const c: types.C<string> = "";
+    

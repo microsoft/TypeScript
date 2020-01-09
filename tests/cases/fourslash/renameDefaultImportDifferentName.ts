@@ -1,21 +1,20 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: B.ts
-////export default class /*1*/[|{| "isWriteAccess": true, "isDefinition": true |}C|] {
+////[|export default class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
 ////    test() {
 ////    }
-////}
+////}|]
 
 // @Filename: A.ts
-////import [|{| "isWriteAccess": true, "isDefinition": true |}B|] from "./B";
+////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] from "./B";|]
 ////let b = new [|B|]();
 ////b.test();
 
 goTo.marker("1");
 verify.occurrencesAtPositionCount(1);
 
-const ranges = test.ranges();
-const [C, B0, B1] = ranges;
+const [CDef, C, B0Def, B0, B1] = test.ranges();
 const bRanges = [B0, B1];
 const classes = { definition: "class C", ranges: [C] };
 const imports = { definition: "(alias) class B\nimport B", ranges: [B0, B1] };

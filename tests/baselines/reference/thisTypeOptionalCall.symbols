@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/thisType/thisTypeOptionalCall.ts ===
+function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
+>maybeBind : Symbol(maybeBind, Decl(thisTypeOptionalCall.ts, 0, 0))
+>T : Symbol(T, Decl(thisTypeOptionalCall.ts, 0, 19))
+>A : Symbol(A, Decl(thisTypeOptionalCall.ts, 0, 21))
+>R : Symbol(R, Decl(thisTypeOptionalCall.ts, 0, 38))
+>obj : Symbol(obj, Decl(thisTypeOptionalCall.ts, 0, 42))
+>T : Symbol(T, Decl(thisTypeOptionalCall.ts, 0, 19))
+>fn : Symbol(fn, Decl(thisTypeOptionalCall.ts, 0, 49))
+>this : Symbol(this, Decl(thisTypeOptionalCall.ts, 0, 56))
+>T : Symbol(T, Decl(thisTypeOptionalCall.ts, 0, 19))
+>args : Symbol(args, Decl(thisTypeOptionalCall.ts, 0, 64))
+>A : Symbol(A, Decl(thisTypeOptionalCall.ts, 0, 21))
+>R : Symbol(R, Decl(thisTypeOptionalCall.ts, 0, 38))
+>args : Symbol(args, Decl(thisTypeOptionalCall.ts, 0, 99))
+>A : Symbol(A, Decl(thisTypeOptionalCall.ts, 0, 21))
+>R : Symbol(R, Decl(thisTypeOptionalCall.ts, 0, 38))
+
+    return fn?.bind(obj);
+>fn?.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(thisTypeOptionalCall.ts, 0, 49))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(thisTypeOptionalCall.ts, 0, 42))
+}

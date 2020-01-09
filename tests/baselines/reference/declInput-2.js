@@ -54,13 +54,13 @@ var M;
 declare module M {
     class C {
     }
-    class E {
+    export class E {
     }
-    interface I1 {
+    export interface I1 {
     }
     interface I2 {
     }
-    class D {
+    export class D {
         private c;
         m1: number;
         m2: string;
@@ -75,4 +75,5 @@ declare module M {
         m262(i: I2): void;
         m3(): C;
     }
+    export {};
 }

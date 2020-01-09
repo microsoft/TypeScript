@@ -430,16 +430,16 @@ declare function funcReturnConstCall(): symbol;
 declare function funcReturnLetCall(): symbol;
 declare function funcReturnVarCall(): symbol;
 declare function funcReturnConstCallWithTypeQuery(): typeof constCall;
-declare function genFuncYieldConstCall(): IterableIterator<symbol>;
-declare function genFuncYieldLetCall(): IterableIterator<symbol>;
-declare function genFuncYieldVarCall(): IterableIterator<symbol>;
+declare function genFuncYieldConstCall(): Generator<symbol, void, unknown>;
+declare function genFuncYieldLetCall(): Generator<symbol, void, unknown>;
+declare function genFuncYieldVarCall(): Generator<symbol, void, unknown>;
 declare function genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall>;
 declare function asyncFuncReturnConstCall(): Promise<symbol>;
 declare function asyncFuncReturnLetCall(): Promise<symbol>;
 declare function asyncFuncReturnVarCall(): Promise<symbol>;
-declare function asyncGenFuncYieldConstCall(): AsyncIterableIterator<symbol>;
-declare function asyncGenFuncYieldLetCall(): AsyncIterableIterator<symbol>;
-declare function asyncGenFuncYieldVarCall(): AsyncIterableIterator<symbol>;
+declare function asyncGenFuncYieldConstCall(): AsyncGenerator<symbol, void, unknown>;
+declare function asyncGenFuncYieldLetCall(): AsyncGenerator<symbol, void, unknown>;
+declare function asyncGenFuncYieldVarCall(): AsyncGenerator<symbol, void, unknown>;
 declare class C {
     static readonly readonlyStaticCall: unique symbol;
     static readonly readonlyStaticType: unique symbol;
@@ -502,8 +502,8 @@ declare const o2: {
     c: symbol;
     method1(): symbol;
     method2(): Promise<symbol>;
-    method3(): AsyncIterableIterator<symbol>;
-    method4(): IterableIterator<symbol>;
+    method3(): AsyncGenerator<symbol, void, unknown>;
+    method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 };
 declare class C0 {
@@ -521,8 +521,8 @@ declare class C0 {
     f: symbol;
     method1(): symbol;
     method2(): Promise<symbol>;
-    method3(): AsyncIterableIterator<symbol>;
-    method4(): IterableIterator<symbol>;
+    method3(): AsyncGenerator<symbol, void, unknown>;
+    method4(): Generator<symbol, void, unknown>;
     method5(p?: symbol): symbol;
 }
 declare class C1 {

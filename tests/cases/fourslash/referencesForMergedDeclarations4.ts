@@ -2,17 +2,17 @@
 
 // class and instantiated module
 
-////class [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
+////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
-////}
+////}|]
 ////
-////module [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
+////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}testClass|] {
 ////    export interface Bar {
 ////
 ////    }
 ////    export var s = 0;
-////}
+////}|]
 ////
 ////var c1: [|testClass|];
 ////var c2: [|testClass|].Bar;
@@ -22,4 +22,4 @@
 ////[|testClass|].s;
 ////new [|testClass|]();
 
-verify.singleReferenceGroup("class testClass\nnamespace testClass");
+verify.singleReferenceGroup("class testClass\nnamespace testClass", "testClass");

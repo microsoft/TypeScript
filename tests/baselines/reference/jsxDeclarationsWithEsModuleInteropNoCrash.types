@@ -1,0 +1,58 @@
+=== tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+/// <reference path="react16.d.ts" />
+import PropTypes from 'prop-types';
+>PropTypes : typeof PropTypes
+
+import React from 'react';
+>React : typeof React
+
+const propTypes = {
+>propTypes : { bar: PropTypes.Requireable<boolean>; }
+>{  bar: PropTypes.bool,} : { bar: PropTypes.Requireable<boolean>; }
+
+  bar: PropTypes.bool,
+>bar : PropTypes.Requireable<boolean>
+>PropTypes.bool : PropTypes.Requireable<boolean>
+>PropTypes : typeof PropTypes
+>bool : PropTypes.Requireable<boolean>
+
+};
+
+const defaultProps = {
+>defaultProps : { bar: boolean; }
+>{  bar: false,} : { bar: boolean; }
+
+  bar: false,
+>bar : boolean
+>false : false
+
+};
+
+function Foo({ bar }) {
+>Foo : typeof Foo
+>bar : any
+
+  return <div>{bar}</div>;
+><div>{bar}</div> : JSX.Element
+>div : any
+>bar : any
+>div : any
+}
+
+Foo.propTypes = propTypes;
+>Foo.propTypes = propTypes : { bar: PropTypes.Requireable<boolean>; }
+>Foo.propTypes : { bar: PropTypes.Requireable<boolean>; }
+>Foo : typeof Foo
+>propTypes : { bar: PropTypes.Requireable<boolean>; }
+>propTypes : { bar: PropTypes.Requireable<boolean>; }
+
+Foo.defaultProps = defaultProps;
+>Foo.defaultProps = defaultProps : { bar: boolean; }
+>Foo.defaultProps : { bar: boolean; }
+>Foo : typeof Foo
+>defaultProps : { bar: boolean; }
+>defaultProps : { bar: boolean; }
+
+export default Foo;
+>Foo : typeof Foo
+

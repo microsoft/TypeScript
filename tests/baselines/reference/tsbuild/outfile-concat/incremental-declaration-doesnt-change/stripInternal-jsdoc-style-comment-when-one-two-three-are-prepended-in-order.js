@@ -1,3 +1,29 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/third --verbose
+12:04:00 AM - Projects in this build: 
+    * src/first/tsconfig.json
+    * src/second/tsconfig.json
+    * src/third/tsconfig.json
+
+12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+
+12:04:00 AM - Building project '/src/first/tsconfig.json'...
+
+12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+
+12:04:00 AM - Updating output of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+
+12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+
+12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -1725,10 +1751,10 @@ sourceFile:../second/second_part2.ts
 //// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/second/",
+    "commonSourceDirectory": "../second",
     "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
     ],
     "js": {
       "sections": [
@@ -1736,7 +1762,7 @@ sourceFile:../second/second_part2.ts
           "pos": 0,
           "end": 127,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
+          "data": "../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
@@ -1758,7 +1784,7 @@ sourceFile:../second/second_part2.ts
           "pos": 0,
           "end": 157,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
+          "data": "../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -1779,32 +1805,32 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 234,
-          "end": 308,
+          "end": 339,
           "kind": "internal"
         },
         {
-          "pos": 310,
-          "end": 342,
+          "pos": 341,
+          "end": 373,
           "kind": "text"
         },
         {
-          "pos": 342,
-          "end": 734,
+          "pos": 373,
+          "end": 765,
           "kind": "internal"
         },
         {
-          "pos": 736,
-          "end": 739,
+          "pos": 767,
+          "end": 770,
           "kind": "text"
         },
         {
-          "pos": 739,
-          "end": 1152,
+          "pos": 770,
+          "end": 1183,
           "kind": "internal"
         },
         {
-          "pos": 1154,
-          "end": 1202,
+          "pos": 1185,
+          "end": 1233,
           "kind": "text"
         }
       ]
@@ -1817,7 +1843,7 @@ sourceFile:../second/second_part2.ts
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-prepend: (0-127):: /src/first/bin/first-output.js texts:: 1
+prepend: (0-127):: ../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-127)
 var s = "Hello, world";
@@ -1937,7 +1963,7 @@ var C = (function () {
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-157):: ../first/bin/first-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
 internal: (0-39)
 interface TheFirst {
@@ -1960,18 +1986,19 @@ declare namespace N {
 declare class normalC {
 
 ----------------------------------------------------------------------
-internal: (234-308)
+internal: (234-339)
     constructor();
     prop: string;
     method(): void;
-    c: number;
+    get c(): number;
+    set c(val: number);
 ----------------------------------------------------------------------
-text: (310-342)
+text: (341-373)
 }
 declare namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (342-734)
+internal: (373-765)
     class C {
     }
     function foo(): void;
@@ -1992,11 +2019,11 @@ internal: (342-734)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (736-739)
+text: (767-770)
 }
 
 ----------------------------------------------------------------------
-internal: (739-1152)
+internal: (770-1183)
 declare class internalC {
 }
 declare function internalfoo(): void;
@@ -2017,13 +2044,16 @@ declare enum internalEnum {
     c = 2
 }
 ----------------------------------------------------------------------
-text: (1154-1202)
+text: (1185-1233)
 declare class C {
     doSomething(): void;
 }
 
 ======================================================================
 
+//// [/src/first/bin/first-output.d.ts] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map] file written with same contents
+//// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -2212,11 +2242,11 @@ sourceFile:../first_part3.ts
 //// [/src/first/bin/first-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "..",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
     ],
     "js": {
       "sections": [
@@ -4072,9 +4102,9 @@ sourceFile:../../third_part1.ts
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/third/",
+    "commonSourceDirectory": "../..",
     "sourceFiles": [
-      "/src/third/third_part1.ts"
+      "../../third_part1.ts"
     ],
     "js": {
       "sections": [
@@ -4082,7 +4112,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 3179,
           "kind": "prepend",
-          "data": "/src/2/second-output.js",
+          "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
@@ -4104,7 +4134,7 @@ sourceFile:../../third_part1.ts
           "pos": 0,
           "end": 276,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
+          "data": "../../../2/second-output.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -4128,7 +4158,7 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3179):: /src/2/second-output.js texts:: 1
+prepend: (0-3179):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-3179)
 var s = "Hello, world";
@@ -4250,7 +4280,7 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-276):: /src/2/second-output.d.ts texts:: 1
+prepend: (0-276):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-276)
 declare const s = "Hello, world";

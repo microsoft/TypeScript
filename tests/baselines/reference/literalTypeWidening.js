@@ -136,6 +136,13 @@ function test<T extends { a: string, b: string }>(obj: T): T {
     return { a: 'hello', ...rest } as T;
 }
 
+// Repro from #32169
+
+declare function f<T>(x: T): NonNullable<T>;
+enum E { A, B }
+const a = f(E.A);
+const b: E.A = a;
+
 
 //// [literalTypeWidening.js]
 "use strict";
@@ -267,3 +274,10 @@ function test(obj) {
     var a = obj.a, rest = __rest(obj, ["a"]);
     return __assign({ a: 'hello' }, rest);
 }
+var E;
+(function (E) {
+    E[E["A"] = 0] = "A";
+    E[E["B"] = 1] = "B";
+})(E || (E = {}));
+var a = f(E.A);
+var b = a;

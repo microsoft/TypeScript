@@ -59,12 +59,13 @@ var Test;
 
 //// [declarationEmitExpressionInExtends5.d.ts]
 declare namespace Test {
-    interface IFace {
+    export interface IFace {
     }
-    class SomeClass implements IFace {
+    export class SomeClass implements IFace {
     }
     const Derived_base: new () => IFace;
-    class Derived extends Derived_base {
+    export class Derived extends Derived_base {
     }
-    function getClass<T>(): new () => T;
+    export function getClass<T>(): new () => T;
+    export {};
 }

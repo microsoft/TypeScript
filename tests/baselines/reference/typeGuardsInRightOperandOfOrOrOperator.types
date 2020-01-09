@@ -194,7 +194,7 @@ function foo7(x: number | string | boolean) {
 >x : boolean
 >x.toString() : string
 >x.toString : () => string
->x : boolean
+>x : true
 >toString : () => string
 }
 

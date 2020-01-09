@@ -36,12 +36,15 @@ namespace ts.codefix {
 
         let suggestion: string | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
-            Debug.assert(node.kind === SyntaxKind.Identifier);
-            const containingType = checker.getTypeAtLocation(node.parent.expression);
+            Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (property access)");
+            let containingType = checker.getTypeAtLocation(node.parent.expression);
+            if (node.parent.flags & NodeFlags.OptionalChain) {
+                containingType = checker.getNonNullableType(containingType);
+            }
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else if (isImportSpecifier(node.parent) && node.parent.name === node) {
-            Debug.assert(node.kind === SyntaxKind.Identifier);
+            Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (import)");
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {

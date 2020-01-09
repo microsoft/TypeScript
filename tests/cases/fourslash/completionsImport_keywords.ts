@@ -34,8 +34,17 @@ verify.completions(
     {
         marker: "unique",
         exact: [
-            "globalThis", ...completion.globalsVars, "undefined",
-            { name: "unique", source: "/a", sourceDisplay: "./a", text: "(alias) const unique: 0\nexport unique", hasAction: true },
+            completion.globalThisEntry,
+            ...completion.globalsVars,
+            completion.undefinedVarEntry,
+            {
+                name: "unique",
+                source: "/a",
+                sourceDisplay: "./a",
+                text: "(alias) const unique: 0\nexport unique",
+                hasAction: true,
+                sortText: completion.SortText.AutoImportSuggestions
+            },
             ...completion.globalKeywords.filter(e => e.name !== "unique"),
         ],
         preferences,

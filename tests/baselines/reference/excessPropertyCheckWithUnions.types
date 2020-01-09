@@ -278,3 +278,89 @@ const abac: AB = {
     }
 }
 
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+>Button : Button
+>tag : "button"
+>type : "submit" | undefined
+
+type Anchor = { tag: 'a'; type?: string; href: string };
+>Anchor : Anchor
+>tag : "a"
+>type : string | undefined
+>href : string
+
+type Union = Button | Anchor;
+>Union : Union
+
+const obj: Union = {
+>obj : Union
+>{    tag: 'button',    type: 'submit',    // should have error here    href: 'foo',} : { tag: "button"; type: "submit"; href: string; }
+
+    tag: 'button',
+>tag : "button"
+>'button' : "button"
+
+    type: 'submit',
+>type : "submit"
+>'submit' : "submit"
+
+    // should have error here
+    href: 'foo',
+>href : string
+>'foo' : "foo"
+
+};
+
+// Repro from #34611
+
+interface IValue {
+  value: string
+>value : string
+}
+
+interface StringKeys { 
+    [propertyName: string]: IValue;
+>propertyName : string
+
+};
+
+interface NumberKeys {
+    [propertyName: number]: IValue;
+>propertyName : number
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+>ObjectDataSpecification : ObjectDataSpecification
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+>dataSpecification : ObjectDataSpecification
+>{  // Error    foo: "asdfsadffsd"} : { foo: string; }
+
+    foo: "asdfsadffsd"
+>foo : string
+>"asdfsadffsd" : "asdfsadffsd"
+
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+>obj1 : { [x: string]: number; } | { [x: number]: number; }
+>x : string
+>x : number
+>{ a: 'abc' } : { a: string; }
+>a : string
+>'abc' : "abc"
+
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
+>obj2 : { [x: string]: number; } | { a: number; }
+>x : string
+>a : number
+>{ a: 5, c: 'abc' } : { a: number; c: string; }
+>a : number
+>5 : 5
+>c : string
+>'abc' : "abc"
+

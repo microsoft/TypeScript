@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassNameConflict.ts ===
+class A {
+>A : A
+
+    #foo: string;
+>#foo : string
+
+    constructor() {
+        class A {
+>A : A
+
+            #foo: string;
+>#foo : string
+        }
+    }
+}
+

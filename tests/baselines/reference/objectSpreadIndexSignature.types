@@ -42,9 +42,9 @@ declare const b: boolean;
 >b : boolean
 
 indexed3 = { ...b ? indexed3 : undefined };
->indexed3 = { ...b ? indexed3 : undefined } : {} | { [n: string]: number; }
+>indexed3 = { ...b ? indexed3 : undefined } : { [n: string]: number; }
 >indexed3 : { [n: string]: number; }
->{ ...b ? indexed3 : undefined } : {} | { [n: string]: number; }
+>{ ...b ? indexed3 : undefined } : { [n: string]: number; }
 >b ? indexed3 : undefined : { [n: string]: number; } | undefined
 >b : boolean
 >indexed3 : { [n: string]: number; }

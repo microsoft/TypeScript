@@ -4,13 +4,13 @@
 
 // @Filename: /a.js
 /////** @enum {string} */
-////const [|{| "isWriteAccess": true, "isDefinition": true |}E|] = { A: "" };
+////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}E|] = { A: "" };|]
 ////[|E|]["A"];
 /////** @type {[|E|]} */
 ////const e = [|E|].A;
 
 verify.singleReferenceGroup(
-`enum E
+`type E = string
 const E: {
     A: string;
-}`);
+}`, "E");

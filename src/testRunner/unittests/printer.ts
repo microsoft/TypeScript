@@ -54,7 +54,7 @@ namespace ts {
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
             // github #14948
-            // tslint:disable-next-line no-invalid-template-strings
+            // eslint-disable-next-line no-template-curly-in-string
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
 
             // github #18071
@@ -65,6 +65,17 @@ namespace ts {
             printsCorrectly("classHeritageClauses", {}, printer => printer.printFile(createSourceFile(
                 "source.ts",
                 `class A extends B implements C implements D {}`,
+                ScriptTarget.ES2017
+            )));
+
+            // github #35093
+            printsCorrectly("definiteAssignmentAssertions", {}, printer => printer.printFile(createSourceFile(
+                "source.ts",
+                `class A {
+                    prop!: string;
+                }
+                
+                let x!: string;`,
                 ScriptTarget.ES2017
             )));
         });
@@ -124,9 +135,8 @@ namespace ts {
                 EmitHint.Unspecified,
                 createNew(
                     createPropertyAccess(
-                        createCall(
-                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
-                            "x"),
+                        createCall(createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                        "x"),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
                 ),

@@ -3,8 +3,9 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2020:
             case ModuleKind.ES2015:
-                return transformES2015Module;
+                return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
             default:
@@ -44,6 +45,7 @@ namespace ts {
         addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformClassFields);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
@@ -51,6 +53,10 @@ namespace ts {
 
         if (languageVersion < ScriptTarget.ESNext) {
             transformers.push(transformESNext);
+        }
+
+        if (languageVersion < ScriptTarget.ES2020) {
+            transformers.push(transformES2020);
         }
 
         if (languageVersion < ScriptTarget.ES2019) {
@@ -138,7 +144,7 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: ReadonlyArray<T>, transformers: ReadonlyArray<TransformerFactory<T>>, allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];

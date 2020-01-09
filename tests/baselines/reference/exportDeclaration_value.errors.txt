@@ -1,0 +1,18 @@
+/a.ts(2,15): error TS1361: Type-only export must reference a type, but 'A' is a value.
+/b.ts(1,15): error TS1361: Type-only export must reference a type, but 'AA' is a value.
+
+
+==== /a.ts (1 errors) ====
+    const A = {};
+    export type { A };
+                  ~
+!!! error TS1361: Type-only export must reference a type, but 'A' is a value.
+!!! related TS2728 /a.ts:1:7: 'A' is declared here.
+    export const AA = {};
+    
+==== /b.ts (1 errors) ====
+    export type { AA } from './a';
+                  ~~
+!!! error TS1361: Type-only export must reference a type, but 'AA' is a value.
+!!! related TS2728 /a.ts:3:14: 'AA' is declared here.
+    

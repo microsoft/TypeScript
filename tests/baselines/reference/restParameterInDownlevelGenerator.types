@@ -1,7 +1,7 @@
 === tests/cases/conformance/generators/restParameterInDownlevelGenerator.ts ===
 // https://github.com/Microsoft/TypeScript/issues/30653
 function * mergeStringLists(...strings: string[]) {
->mergeStringLists : (...strings: string[]) => IterableIterator<any>
+>mergeStringLists : (...strings: string[]) => Generator<never, void, unknown>
 >strings : string[]
 
     for (var str of strings);

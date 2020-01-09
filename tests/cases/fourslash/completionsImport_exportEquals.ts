@@ -17,12 +17,22 @@ const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForM
 verify.completions(
     {
         marker: "0",
-        includes: { name: "a", source: "/a", hasAction: true, },
+        includes: {
+            name: "a",
+            source: "/a",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         preferences,
     },
     {
         marker: "1",
-        includes: { name: "b", source: "/a", hasAction: true },
+        includes: {
+            name: "b",
+            source: "/a",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         preferences,
     }
 );
@@ -33,7 +43,7 @@ verify.applyCodeActionFromCompletion("1", {
     source: "/a",
     description: `Import 'b' from module "./a"`,
     newFileContent:
-`import { b } from "./a";
+`import type { b } from "./a";
 
 a;
 let x: b;`,
@@ -44,7 +54,7 @@ verify.applyCodeActionFromCompletion("0", {
     source: "/a",
     description: `Import 'a' from module "./a"`,
     newFileContent:
-`import { b } from "./a";
+`import type { b } from "./a";
 import a = require("./a");
 
 a;

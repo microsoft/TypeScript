@@ -141,7 +141,9 @@ export declare class ClassWithPrivateNamedMethods {
     static [s](): void;
 }
 export declare class ClassWithPrivateNamedAccessors {
-    [s]: any;
-    static [s]: any;
+    get [s](): any;
+    set [s](v: any);
+    static get [s](): any;
+    static set [s](v: any);
 }
 export {};

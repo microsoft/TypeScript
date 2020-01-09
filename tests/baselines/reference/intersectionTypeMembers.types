@@ -148,3 +148,61 @@ const de: D & E = {
     }
 }
 
+// Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
+interface F {
+    nested: { doublyNested: { g: string; } }
+>nested : { doublyNested: { g: string; }; }
+>doublyNested : { g: string; }
+>g : string
+}
+
+interface G {
+    nested: { doublyNested: { h: string; } }
+>nested : { doublyNested: { h: string; }; }
+>doublyNested : { h: string; }
+>h : string
+}
+
+const defg: D & E & F & G = {
+>defg : D & E & F & G
+>{    nested: {        doublyNested: {            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }; }
+
+    nested: {
+>nested : { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }
+>{        doublyNested: {            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: string; f: string; g: string; h: string; }; different: { e: number; }; other: { g: number; }; }
+
+        doublyNested: {
+>doublyNested : { d: string; f: string; g: string; h: string; }
+>{            d: 'yes',            f: 'no',            g: 'ok',            h: 'affirmative'        } : { d: string; f: string; g: string; h: string; }
+
+            d: 'yes',
+>d : string
+>'yes' : "yes"
+
+            f: 'no',
+>f : string
+>'no' : "no"
+
+            g: 'ok',
+>g : string
+>'ok' : "ok"
+
+            h: 'affirmative'
+>h : string
+>'affirmative' : "affirmative"
+
+        },
+        different: { e: 12 },
+>different : { e: number; }
+>{ e: 12 } : { e: number; }
+>e : number
+>12 : 12
+
+        other: { g: 101 }
+>other : { g: number; }
+>{ g: 101 } : { g: number; }
+>g : number
+>101 : 101
+    }
+}
+

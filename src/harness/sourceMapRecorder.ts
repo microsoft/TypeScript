@@ -44,7 +44,7 @@ namespace Harness.SourceMapRecorder {
         let sourceMapNames: string[] | null | undefined;
 
         let jsFile: documents.TextDocument;
-        let jsLineMap: ReadonlyArray<number>;
+        let jsLineMap: readonly number[];
         let tsCode: string;
         let tsLineMap: number[];
 
@@ -153,11 +153,11 @@ namespace Harness.SourceMapRecorder {
             writeJsFileLines(jsLineMap.length);
         }
 
-        function getTextOfLine(line: number, lineMap: ReadonlyArray<number>, code: string) {
+        function getTextOfLine(line: number, lineMap: readonly number[], code: string) {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
             const text = code.substring(startPos, endPos);
-            return line === 0 ? utils.removeByteOrderMark(text) : text;
+            return line === 0 ? Utils.removeByteOrderMark(text) : text;
         }
 
         function writeJsFileLines(endJsLine: number) {
@@ -275,7 +275,7 @@ namespace Harness.SourceMapRecorder {
         }
     }
 
-    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapEmitResult>, program: ts.Program, jsFiles: ReadonlyArray<documents.TextDocument>, declarationFiles: ReadonlyArray<documents.TextDocument>) {
+    export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
 
         for (let i = 0; i < sourceMapDataList.length; i++) {
@@ -301,7 +301,8 @@ namespace Harness.SourceMapRecorder {
 
             SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData.sourceMap, currentFile);
             const mapper = ts.decodeMappings(sourceMapData.sourceMap.mappings);
-            for (let { value: decodedSourceMapping, done } = mapper.next(); !done; { value: decodedSourceMapping, done } = mapper.next()) {
+            for (let iterResult = mapper.next(); !iterResult.done; iterResult = mapper.next()) {
+                const decodedSourceMapping = iterResult.value;
                 const currentSourceFile = ts.isSourceMapping(decodedSourceMapping)
                     ? program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex])
                     : undefined;
@@ -321,11 +322,11 @@ namespace Harness.SourceMapRecorder {
         return sourceMapRecorder.lines.join("\r\n");
     }
 
-    export function getSourceMapRecordWithVFS(fs: vfs.FileSystem, sourceMapFile: string) {
+    export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
         let prevSourceFile: documents.TextDocument | undefined;
         const files = ts.createMap<documents.TextDocument>();
-        const sourceMap = ts.tryParseRawSourceMap(fs.readFileSync(sourceMapFile, "utf8"));
+        const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
         if (sourceMap) {
             const mapDirectory = ts.getDirectoryPath(sourceMapFile);
             const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory) : mapDirectory;
@@ -335,7 +336,8 @@ namespace Harness.SourceMapRecorder {
 
             SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMap, currentFile);
             const mapper = ts.decodeMappings(sourceMap.mappings);
-            for (let { value: decodedSourceMapping, done } = mapper.next(); !done; { value: decodedSourceMapping, done } = mapper.next()) {
+            for (let iterResult = mapper.next(); !iterResult.done; iterResult = mapper.next()) {
+                const decodedSourceMapping = iterResult.value;
                 const currentSourceFile = ts.isSourceMapping(decodedSourceMapping)
                     ? getFile(sourceFileAbsolutePaths[decodedSourceMapping.sourceIndex])
                     : undefined;
@@ -357,7 +359,7 @@ namespace Harness.SourceMapRecorder {
         function getFile(path: string) {
             const existing = files.get(path);
             if (existing) return existing;
-            const value = new documents.TextDocument(path, fs.readFileSync(path, "utf8"));
+            const value = new documents.TextDocument(path, sys.readFile(path, "utf8")!);
             files.set(path, value);
             return value;
         }

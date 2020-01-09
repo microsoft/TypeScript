@@ -1,0 +1,7 @@
+tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts(1,1): error TS1260: Keywords cannot contain escape characters.
+
+
+==== tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts (1 errors) ====
+    \u0076ar x = "hello";
+    ~~~~~~~~
+!!! error TS1260: Keywords cannot contain escape characters.

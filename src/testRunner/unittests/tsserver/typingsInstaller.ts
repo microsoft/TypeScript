@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     import validatePackageName = JsTyping.validatePackageName;
-    import PackageNameValidationResult = JsTyping.PackageNameValidationResult;
+    import NameValidationResult = JsTyping.NameValidationResult;
 
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
@@ -840,6 +840,7 @@ namespace ts.projectSystem {
             const watchedFilesExpected = createMap<number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
+            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -948,7 +949,8 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: `
                 import * as fs from "fs";
-                import * as commander from "commander";`
+                import * as commander from "commander";
+                import * as component from "@ember/component";`
             };
             const cachePath = "/a/cache";
             const node = {
@@ -959,14 +961,19 @@ namespace ts.projectSystem {
                 path: cachePath + "/node_modules/@types/commander/index.d.ts",
                 content: "export let y: string"
             };
+            const emberComponentDirectory = "ember__component";
+            const emberComponent = {
+                path: `${cachePath}/node_modules/@types/${emberComponentDirectory}/index.d.ts`,
+                content: "export let x: number"
+            };
             const host = createServerHost([file]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
-                    const installedTypings = ["@types/node", "@types/commander"];
-                    const typingFiles = [node, commander];
+                    const installedTypings = ["@types/node", "@types/commander", `@types/${emberComponentDirectory}`];
+                    const typingFiles = [node, commander, emberComponent];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -980,24 +987,25 @@ namespace ts.projectSystem {
 
             assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
             assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
+            assert.isTrue(host.fileExists(emberComponent.path), "typings for 'commander' should be created");
 
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path, emberComponent.path]);
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
             const file: TestFSWithWatch.File = {
-                path: "/a/b/app.js",
+                path: `${tscWatch.projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = "/a/cache";
+            const cachePath = `${tscWatch.projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: "/node_modules/commander/index.js",
+                path: `${tscWatch.projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
-            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
             const host = createServerHost([file, commanderJS]);
             const installer = new (class extends Installer {
@@ -1013,10 +1021,17 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
-            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedFiles(host, [...getConfigFilesToWatch(getDirectoryPath(file.path)), "/a/lib/lib.d.ts"]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
-            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+            checkWatchedDirectories(host, [
+                `${tscWatch.projects}/node_modules`,
+                `${tscWatch.projects}/a/node_modules`,
+                `${tscWatch.projects}/a/b/node_modules`,
+                `${tscWatch.projects}/a/node_modules/@types`,
+                `${tscWatch.projects}/a/b/node_modules/@types`,
+                `${tscWatch.projects}/a/b/bower_components`
+            ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
@@ -1255,21 +1270,44 @@ namespace ts.projectSystem {
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
-            assert.equal(validatePackageName(packageName), PackageNameValidationResult.NameTooLong);
+            assert.equal(validatePackageName(packageName), NameValidationResult.NameTooLong);
         });
-        it("name cannot start with dot", () => {
-            assert.equal(validatePackageName(".foo"), PackageNameValidationResult.NameStartsWithDot);
+        it("package name cannot start with dot", () => {
+            assert.equal(validatePackageName(".foo"), NameValidationResult.NameStartsWithDot);
         });
-        it("name cannot start with underscore", () => {
-            assert.equal(validatePackageName("_foo"), PackageNameValidationResult.NameStartsWithUnderscore);
+        it("package name cannot start with underscore", () => {
+            assert.equal(validatePackageName("_foo"), NameValidationResult.NameStartsWithUnderscore);
         });
-        it("scoped packages not supported", () => {
-            assert.equal(validatePackageName("@scope/bar"), PackageNameValidationResult.ScopedPackagesNotSupported);
+        it("package non URI safe characters are not supported", () => {
+            assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsNonURISafeCharacters);
+            assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsNonURISafeCharacters);
         });
-        it("non URI safe characters are not supported", () => {
-            assert.equal(validatePackageName("  scope  "), PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
-            assert.equal(validatePackageName("a/b/c"), PackageNameValidationResult.NameContainsNonURISafeCharacters);
+        it("scoped package name is supported", () => {
+            assert.equal(validatePackageName("@scope/bar"), NameValidationResult.Ok);
+        });
+        it("scoped name in scoped package name cannot start with dot", () => {
+            assert.deepEqual(validatePackageName("@.scope/bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+            assert.deepEqual(validatePackageName("@.scope/.bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+        });
+        it("scope name in scoped package name cannot start with underscore", () => {
+            assert.deepEqual(validatePackageName("@_scope/bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+            assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+        });
+        it("scope name in scoped package name with non URI safe characters are not supported", () => {
+            assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        });
+        it("package name in scoped package name cannot start with dot", () => {
+            assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
+        });
+        it("package name in scoped package name cannot start with underscore", () => {
+            assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
+        });
+        it("package name in scoped package name with non URI safe characters are not supported", () => {
+            assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
+            assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
         });
     });
 
@@ -1301,7 +1339,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
-            assert.isTrue(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
+            assert.isTrue(messages.indexOf("'; say ‘Hello from TypeScript!’ #':: Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
         });
     });
 
@@ -1772,6 +1810,70 @@ namespace ts.projectSystem {
                     import * as b from "foo/a/b";
                     import * as c from "foo/a/c";
             `, ["foo"], [fooAA, fooAB, fooAC]);
+        });
+
+        it("should handle node core modules", () => {
+            const file: TestFSWithWatch.File = {
+                path: "/a/b/app.js",
+                content: `// @ts-check
+
+const net = require("net");
+const stream = require("stream");`
+            };
+            const nodeTyping: TestFSWithWatch.File = {
+                path: `${globalTypingsCacheLocation}/node_modules/node/index.d.ts`,
+                content: `
+declare module "net" {
+    export type n = number;
+}
+declare module "stream" {
+    export type s = string;
+}`,
+            };
+
+            const host = createServerHost([file, libFile]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("node") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, ["node"], [nodeTyping], cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(file.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [file.path, libFile.path]);
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/ undefined,
+                arrayIterator([{
+                    fileName: file.path,
+                    changes: arrayIterator([{
+                        span: {
+                            start: file.content.indexOf(`"stream"`) + 2,
+                            length: 0
+                        },
+                        newText: " "
+                    }])
+                }]),
+                /*closedFiles*/ undefined
+            );
+            // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
+            // and schedules the update graph because of this.
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+
+            // Here, since typings doesnt contain node typings and resolution fails and
+            // node typings go out of project,
+            // but because we handle core node modules when resolving from typings cache
+            // node typings are included in the project
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         });
     });
 

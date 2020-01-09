@@ -62,3 +62,30 @@ new Elem('' as ElChildren); // error
 >'' as ElChildren : ElChildren
 >'' : ""
 
+// Repro from #31766
+
+interface I { a: string }
+>a : string
+
+type DeepPartial<T> =
+>DeepPartial : DeepPartial<T>
+
+    T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
+
+declare function f<T>(t: T, partial: DeepPartial<T>): T;
+>f : <T>(t: T, partial: DeepPartial<T>) => T
+>t : T
+>partial : DeepPartial<T>
+
+function g(p1: I, p2: Partial<I>): I {
+>g : (p1: I, p2: Partial<I>) => I
+>p1 : I
+>p2 : Partial<I>
+
+  return f(p1, p2);
+>f(p1, p2) : I
+>f : <T>(t: T, partial: DeepPartial<T>) => T
+>p1 : I
+>p2 : Partial<I>
+}
+

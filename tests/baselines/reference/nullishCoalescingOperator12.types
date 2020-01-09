@@ -1,0 +1,16 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator12.ts ===
+const obj: { arr: any[] } = { arr: [] };
+>obj : { arr: any[]; }
+>arr : any[]
+>{ arr: [] } : { arr: never[]; }
+>arr : never[]
+>[] : never[]
+
+for (const i of obj?.arr ?? []) { }
+>i : any
+>obj?.arr ?? [] : any[]
+>obj?.arr : any[]
+>obj : { arr: any[]; }
+>arr : any[]
+>[] : never[]
+
