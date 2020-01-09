@@ -2707,34 +2707,7 @@ namespace ts {
         return false;
     }
 
-    // An alias symbol is created by one of the following declarations:
-    // import <symbol> = ...
-    // import <symbol> from ...
-    // import * as <symbol> from ...
-    // import { x as <symbol> } from ...
-    // export { x as <symbol> } from ...
-    // export * as ns <symbol> from ...
-    // export = <EntityNameExpression>
-    // export default <EntityNameExpression>
-    // module.exports = <EntityNameExpression>
-    // {<Identifier>}
-    // {name: <EntityNameExpression>}
-    export function isAliasSymbolDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-            node.kind === SyntaxKind.NamespaceExportDeclaration ||
-            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
-            node.kind === SyntaxKind.NamespaceImport ||
-            node.kind === SyntaxKind.NamespaceExport ||
-            node.kind === SyntaxKind.ImportSpecifier ||
-            node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
-            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
-            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
-    }
-
-    function isAliasableExpression(e: Expression) {
+    export function isAliasableExpression(e: Expression) {
         return isEntityNameExpression(e) || isClassExpression(e);
     }
 
