@@ -2532,6 +2532,15 @@ namespace ts {
             }
         }
 
+        // Aliases that resolve to const enums are not marked as referenced because they are not emitted,
+        // but their usage in value positions must be tracked to determine if the import can be type-only.
+        function markConstEnumAliasAsReferenced(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.constEnumReferenced) {
+                links.constEnumReferenced = true;
+            }
+        }
+
         // This function is only for imports with entity names
         function getSymbolOfPartOfRightHandSideOfImportEquals(entityName: EntityName, dontResolveAlias?: boolean): Symbol | undefined {
             // There are three things we might try to look for. In the following examples,
@@ -20211,12 +20220,13 @@ namespace ts {
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) &&
-                !isInTypeQuery(location) &&
-                ((compilerOptions.preserveConstEnums && isExportOrExportExpression(location)) || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) &&
-                !getTypeOnlyAliasDeclaration(symbol)
-            ) {
-                markAliasSymbolAsReferenced(symbol);
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
+                if (compilerOptions.preserveConstEnums && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
+                    markAliasSymbolAsReferenced(symbol);
+                }
+                else {
+                    markConstEnumAliasAsReferenced(symbol);
+                }
             }
         }
 
@@ -33045,17 +33055,15 @@ namespace ts {
         }
 
         function importClauseContainsReferencedImport(importClause: ImportClause) {
-            return importClause.name && isReferenced(importClause)
-                || importClause.namedBindings && namedBindingsContainsReferencedImport(importClause.namedBindings);
+            return forEachImportClauseDeclaration(importClause, declaration => {
+                return !!getSymbolOfNode(declaration).isReferenced;
+            });
+        }
 
-            function isReferenced(declaration: Declaration) {
-                return !!getMergedSymbol(getSymbolOfNode(declaration)).isReferenced;
-            }
-            function namedBindingsContainsReferencedImport(namedBindings: NamedImportBindings) {
-                return isNamespaceImport(namedBindings)
-                    ? isReferenced(namedBindings)
-                    : some(namedBindings.elements, isReferenced);
-            }
+        function importClauseContainsConstEnumUsedAsValue(importClause: ImportClause) {
+            return forEachImportClauseDeclaration(importClause, declaration => {
+                return !!getSymbolLinks(getSymbolOfNode(declaration)).constEnumReferenced;
+            });
         }
 
         function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
@@ -33065,7 +33073,8 @@ namespace ts {
                     statement.importClause &&
                     !statement.importClause.isTypeOnly &&
                     importClauseContainsReferencedImport(statement.importClause) &&
-                    !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true)
+                    !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
+                    !importClauseContainsConstEnumUsedAsValue(statement.importClause)
                 ) {
                     const isError = compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Error;
                     errorOrSuggestion(
