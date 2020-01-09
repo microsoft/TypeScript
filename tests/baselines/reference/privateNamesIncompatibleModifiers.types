@@ -1,0 +1,29 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts ===
+class A {
+>A : A
+
+    public #foo = 3;         // Error
+>#foo : number
+>3 : 3
+
+    private #bar = 3;        // Error
+>#bar : number
+>3 : 3
+
+    protected #baz = 3;      // Error
+>#baz : number
+>3 : 3
+
+    readonly #qux = 3;       // OK
+>#qux : 3
+>3 : 3
+}
+
+abstract class B {
+>B : B
+
+    abstract #quux = 3;      // Error
+>#quux : number
+>3 : 3
+}
+

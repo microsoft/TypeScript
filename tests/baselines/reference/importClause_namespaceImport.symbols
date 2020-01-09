@@ -1,0 +1,42 @@
+=== /a.ts ===
+export class A { a!: string }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>a : Symbol(A.a, Decl(a.ts, 0, 16))
+
+export class B { b!: number }
+>B : Symbol(B, Decl(a.ts, 0, 29))
+>b : Symbol(B.b, Decl(a.ts, 1, 16))
+
+export type C<T> = T;
+>C : Symbol(C, Decl(a.ts, 1, 29))
+>T : Symbol(T, Decl(a.ts, 2, 14))
+>T : Symbol(T, Decl(a.ts, 2, 14))
+
+export const Value = {};
+>Value : Symbol(Value, Decl(a.ts, 3, 12))
+
+=== /b.ts ===
+import type * as types from './a';
+>types : Symbol(types, Decl(b.ts, 0, 11))
+
+types;
+types.Value;
+let v: types.Value;
+>v : Symbol(v, Decl(b.ts, 3, 3))
+>types : Symbol(types, Decl(b.ts, 0, 11))
+
+const a: types.A = {};
+>a : Symbol(a, Decl(b.ts, 4, 5))
+>types : Symbol(types, Decl(b.ts, 0, 11))
+>A : Symbol(types.A)
+
+const b: types.B = {};
+>b : Symbol(b, Decl(b.ts, 5, 5))
+>types : Symbol(types, Decl(b.ts, 0, 11))
+>B : Symbol(types.B)
+
+const c: types.C<string> = "";
+>c : Symbol(c, Decl(b.ts, 6, 5))
+>types : Symbol(types, Decl(b.ts, 0, 11))
+>C : Symbol(types.C, Decl(a.ts, 1, 29))
+

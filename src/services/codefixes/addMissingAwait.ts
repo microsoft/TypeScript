@@ -106,9 +106,7 @@ namespace ts.codefix {
 
         return expression
             && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
-            && isInsideAwaitableBody(expression)
-                ? expression
-                : undefined;
+            && isInsideAwaitableBody(expression) ? expression : undefined;
     }
 
     interface AwaitableInitializer {
@@ -259,6 +257,7 @@ namespace ts.codefix {
                 sourceFile,
                 insertionSite.parent.expression,
                 createParen(createAwait(insertionSite.parent.expression)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite)) {
@@ -268,6 +267,7 @@ namespace ts.codefix {
                 }
             }
             changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
         }
         else {
             if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
@@ -277,6 +277,13 @@ namespace ts.codefix {
                 }
             }
             changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+        }
+    }
+
+    function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+        const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
+        if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
+            changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
         }
     }
 }

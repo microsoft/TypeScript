@@ -1,0 +1,10 @@
+tests/cases/conformance/salsa/thisPropertyAssignmentComputed.js(1,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'typeof globalThis'.
+  No index signature with a parameter of type 'string' was found on type 'typeof globalThis'.
+
+
+==== tests/cases/conformance/salsa/thisPropertyAssignmentComputed.js (1 errors) ====
+    this["a" + "b"] = 0
+    ~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'typeof globalThis'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'typeof globalThis'.
+    

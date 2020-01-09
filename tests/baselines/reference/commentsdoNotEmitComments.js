@@ -144,7 +144,8 @@ declare class c {
     constructor();
     b: number;
     myFoo(): number;
-    prop1: number;
+    get prop1(): number;
+    set prop1(val: number);
     foo1(a: number): string;
     foo1(b: string): string;
 }

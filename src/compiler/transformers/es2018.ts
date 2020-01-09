@@ -26,7 +26,7 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
-        let topLevel: boolean;
+        let hasLexicalThis: boolean;
 
         let currentSourceFile: SourceFile;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
@@ -75,11 +75,11 @@ namespace ts {
             return node;
         }
 
-        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
-            if (topLevel) {
-                topLevel = false;
+        function doWithLexicalThis<T, U>(cb: (value: T) => U, value: T) {
+            if (!hasLexicalThis) {
+                hasLexicalThis = true;
                 const result = cb(value);
-                topLevel = true;
+                hasLexicalThis = false;
                 return result;
             }
             return cb(value);
@@ -119,17 +119,17 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return doOutsideOfTopLevel(visitConstructorDeclaration, node as ConstructorDeclaration);
+                    return doWithLexicalThis(visitConstructorDeclaration, node as ConstructorDeclaration);
                 case SyntaxKind.MethodDeclaration:
-                    return doOutsideOfTopLevel(visitMethodDeclaration, node as MethodDeclaration);
+                    return doWithLexicalThis(visitMethodDeclaration, node as MethodDeclaration);
                 case SyntaxKind.GetAccessor:
-                    return doOutsideOfTopLevel(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                    return doWithLexicalThis(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
                 case SyntaxKind.SetAccessor:
-                    return doOutsideOfTopLevel(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                    return doWithLexicalThis(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
-                    return doOutsideOfTopLevel(visitFunctionDeclaration, node as FunctionDeclaration);
+                    return doWithLexicalThis(visitFunctionDeclaration, node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
-                    return doOutsideOfTopLevel(visitFunctionExpression, node as FunctionExpression);
+                    return doWithLexicalThis(visitFunctionExpression, node as FunctionExpression);
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
@@ -152,7 +152,7 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return doOutsideOfTopLevel(visitDefault, node);
+                    return doWithLexicalThis(visitDefault, node);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -236,7 +236,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
+        function chunkObjectLiteralElements(elements: readonly ObjectLiteralElementLike[]): Expression[] {
             let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
@@ -312,7 +312,7 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile): SourceFile {
             exportedVariableStatement = false;
-            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
+            hasLexicalThis = !isEffectiveStrictModeSourceFile(node, compilerOptions);
             const visited = visitEachChild(node, visitor, context);
             const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
                 createVariableStatement(/*modifiers*/ undefined,
@@ -809,7 +809,7 @@ namespace ts {
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
                     ),
-                    !topLevel
+                    hasLexicalThis
                 )
             );
 
@@ -1069,9 +1069,7 @@ namespace ts {
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
         if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
-            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
-                              /*typeArguments*/ undefined,
-                              attributesSegments);
+            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return createCall(

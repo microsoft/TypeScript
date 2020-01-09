@@ -457,10 +457,10 @@ declare module exportTests {
     class C3_public {
         private getC2_private;
         private setC2_private;
-        private readonly c2;
+        private get c2();
         getC1_public(): C1_public;
         setC1_public(arg: C1_public): void;
-        readonly c1: C1_public;
+        get c1(): C1_public;
     }
 }
 declare module mAmbient {

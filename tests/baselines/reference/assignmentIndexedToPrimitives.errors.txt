@@ -8,7 +8,7 @@ tests/cases/compiler/assignmentIndexedToPrimitives.ts(8,7): error TS2322: Type '
 tests/cases/compiler/assignmentIndexedToPrimitives.ts(9,7): error TS2322: Type 'string[]' is not assignable to type '"01"'.
 tests/cases/compiler/assignmentIndexedToPrimitives.ts(11,7): error TS2322: Type '{ 0: number; }' is not assignable to type 'number'.
 tests/cases/compiler/assignmentIndexedToPrimitives.ts(13,7): error TS2322: Type '{ 0: number; }' is not assignable to type 'string'.
-tests/cases/compiler/assignmentIndexedToPrimitives.ts(14,7): error TS2322: Type '{ "0": number; }' is not assignable to type 'string'.
+tests/cases/compiler/assignmentIndexedToPrimitives.ts(14,7): error TS2322: Type '{ 0: number; }' is not assignable to type 'string'.
 tests/cases/compiler/assignmentIndexedToPrimitives.ts(15,7): error TS2322: Type '{ 0: string; }' is not assignable to type 'string'.
 
 
@@ -48,7 +48,7 @@ tests/cases/compiler/assignmentIndexedToPrimitives.ts(15,7): error TS2322: Type 
 !!! error TS2322: Type '{ 0: number; }' is not assignable to type 'string'.
     const so2: string = { "0": 1 };
           ~~~
-!!! error TS2322: Type '{ "0": number; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ 0: number; }' is not assignable to type 'string'.
     const so3: string = { 0: "1" };
           ~~~
 !!! error TS2322: Type '{ 0: string; }' is not assignable to type 'string'.

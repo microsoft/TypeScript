@@ -55,7 +55,7 @@ export { Bar }
 
 === tests/cases/conformance/types/import/usage.ts ===
 export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
->x : Point<{ x: number; }>
+>x : import("tests/cases/conformance/types/import/foo")<{ x: number; }>
 >x : number
 >{ x: 0, y: 0, data: {x: 12} } : { x: number; y: number; data: { x: number; }; }
 >x : number
