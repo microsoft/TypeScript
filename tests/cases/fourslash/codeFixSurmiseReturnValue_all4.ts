@@ -59,7 +59,7 @@
 
 verify.codeFixAll({
     fixId: "fixWrapTheBlockWithParen",
-    fixAllDescription: "Surmise all return value",
+    fixAllDescription: "Correct all return expressions",
     newFileContent:
 `interface A {
     bar: string
