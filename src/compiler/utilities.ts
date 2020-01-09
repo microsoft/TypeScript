@@ -1808,6 +1808,10 @@ namespace ts {
         return !!node && !!(node.flags & NodeFlags.JsonFile);
     }
 
+    export function isSourceFileNotJson(file: SourceFile) {
+        return !isJsonSourceFile(file);
+    }
+
     export function isInJSDoc(node: Node | undefined): boolean {
         return !!node && !!(node.flags & NodeFlags.JSDoc);
     }
