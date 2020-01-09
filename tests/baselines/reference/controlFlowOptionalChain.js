@@ -327,6 +327,33 @@ function f15(o: Thing | undefined, value: number) {
     }
 }
 
+function f15a(o: Thing | undefined, value: unknown) {
+    if (o?.foo === value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo !== value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo == value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo != value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
 function f16(o: Thing | undefined) {
     if (o?.foo === undefined) {
         o.foo;  // Error
@@ -526,6 +553,29 @@ function extractCoordinates(f: Feature): number[] {
     }
     return f.geometry.coordinates;
 }
+
+// Repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+}
+
+let lastSomeProperty: unknown | undefined;
+
+function someFunction(someOptionalObject: SomeObject | undefined): void {
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+        console.log(someOptionalObject);
+        console.log(someOptionalObject.someProperty);  // Error
+        lastSomeProperty = someOptionalObject?.someProperty;
+    }
+}
+
+const someObject: SomeObject = {
+    someProperty: 42
+};
+
+someFunction(someObject);
+someFunction(undefined);
 
 
 //// [controlFlowOptionalChain.js]
@@ -809,6 +859,32 @@ function f15(o, value) {
         o.foo;
     }
 }
+function f15a(o, value) {
+    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+}
 function f16(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === undefined) {
         o.foo; // Error
@@ -982,3 +1058,16 @@ function extractCoordinates(f) {
     }
     return f.geometry.coordinates;
 }
+var lastSomeProperty;
+function someFunction(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
+        console.log(someOptionalObject);
+        console.log(someOptionalObject.someProperty); // Error
+        lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
+    }
+}
+var someObject = {
+    someProperty: 42
+};
+someFunction(someObject);
+someFunction(undefined);
