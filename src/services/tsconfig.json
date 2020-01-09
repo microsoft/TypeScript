@@ -62,7 +62,7 @@
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixSpelling.ts",
-        "codefixes/returnValueSurmise.ts",
+        "codefixes/returnValueCorrect.ts",
         "codefixes/fixAddMissingMember.ts",
         "codefixes/fixAddMissingNewOperator.ts",
         "codefixes/fixCannotFindModule.ts",
