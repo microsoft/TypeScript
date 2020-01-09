@@ -55,7 +55,7 @@ lib/Page.js(94,33): error TS2345: Argument of type 'CDPSession' is not assignabl
 lib/Page.js(147,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(220,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(388,20): error TS2503: Cannot find namespace 'Protocol'.
-lib/Page.js(451,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 223 more.
+lib/Page.js(451,7): error TS2740: Type '(...args: any[]) => Promise<any>' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 222 more.
 lib/Page.js(461,9): error TS2349: This expression is not callable.
   Type 'Window' has no call signatures.
 lib/Page.js(497,15): error TS2503: Cannot find namespace 'Protocol'.
