@@ -196,7 +196,6 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
-        SourceOrTarget = Source | Target,
     }
 
     const enum MappedTypeModifiers {
@@ -16274,6 +16273,7 @@ namespace ts {
                     return indexTypeRelatedTo(indexType, targetType, reportErrors);
                 }
                 if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source)) {
+                    // Intersection constituents are never considered to have an inferred index signature
                     let related = eachPropertyRelatedTo(source, targetType, kind, reportErrors);
                     if (related && kind === IndexKind.String) {
                         const numberIndexType = getIndexTypeOfType(source, IndexKind.Number);
