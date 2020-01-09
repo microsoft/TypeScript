@@ -7153,7 +7153,7 @@ namespace ts {
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, start) :
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, start);
                     const comment = parseTagComments(indent + scanner.getStartPos() - start);
-                    const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
+                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
                         isNameFirst = true;
@@ -7456,20 +7456,19 @@ namespace ts {
                     return parseChildParameterOrPropertyTag(PropertyLikeParse.Property, indent) as JSDocTypeTag | JSDocPropertyTag | false;
                 }
 
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, parentName?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     let canParseTag = true;
                     let seenAsterisk = false;
                     while (true) {
                         switch (nextTokenJSDoc()) {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
-                                    const child = tryParseChildTag(target, indent);
-                                    if (child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
-                                        target !== PropertyLikeParse.CallbackParameter &&
-                                        name && (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
+                                    const maybeChild = tryParseChildTag(target, indent);
+                                    if (maybeChild && (maybeChild.kind === SyntaxKind.JSDocParameterTag || maybeChild.kind === SyntaxKind.JSDocPropertyTag) &&
+                                        parentName && (ts.isIdentifier(maybeChild.name) || !escapedTextsEqual(parentName, maybeChild.name.left))) {
                                         return false;
                                     }
-                                    return child;
+                                    return maybeChild;
                                 }
                                 seenAsterisk = false;
                                 break;
