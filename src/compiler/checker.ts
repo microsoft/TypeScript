@@ -18452,32 +18452,6 @@ namespace ts {
             return false;
         }
 
-        // Return true if target is a property access xxx.yyy, source is a property access xxx.zzz, the declared
-        // type of xxx is a union type, and yyy is a property that is possibly a discriminant. We consider a property
-        // a possible discriminant if its type differs in the constituents of containing union type, and if every
-        // choice is a unit type or a union of unit types.
-        function containsMatchingReferenceDiscriminant(source: Node, target: Node) {
-            let name;
-            return isAccessExpression(target) &&
-                containsMatchingReference(source, target.expression) &&
-                (name = getAccessedPropertyName(target)) !== undefined &&
-                isDiscriminantProperty(getDeclaredTypeOfReference(target.expression), name);
-        }
-
-        function getDeclaredTypeOfReference(expr: Node): Type | undefined {
-            if (expr.kind === SyntaxKind.Identifier) {
-                return getTypeOfSymbol(getResolvedSymbol(<Identifier>expr));
-            }
-            if (isAccessExpression(expr)) {
-                const type = getDeclaredTypeOfReference(expr.expression);
-                if (type) {
-                    const propName = getAccessedPropertyName(expr);
-                    return propName !== undefined ? getTypeOfPropertyOfType(type, propName) : undefined;
-                }
-            }
-            return undefined;
-        }
-
         function isDiscriminantProperty(type: Type | undefined, name: __String) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
@@ -19509,9 +19483,6 @@ namespace ts {
                         type = narrowTypeByDiscriminant(type, expr as AccessExpression,
                             t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                     }
-                    else if (containsMatchingReferenceDiscriminant(reference, expr)) {
-                        type = declaredType;
-                    }
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -19696,9 +19667,6 @@ namespace ts {
                 if (isMatchingReferenceDiscriminant(expr, declaredType)) {
                     return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
-                if (containsMatchingReferenceDiscriminant(reference, expr)) {
-                    return declaredType;
-                }
                 return type;
             }
 
@@ -19757,9 +19725,6 @@ namespace ts {
                         }
                         if (isMatchingReferenceDiscriminant(right, declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
-                        }
-                        if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
-                            return declaredType;
                         }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
@@ -20171,9 +20136,6 @@ namespace ts {
                 }
                 if (isMatchingReferenceDiscriminant(expr, declaredType)) {
                     return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
-                }
-                if (containsMatchingReferenceDiscriminant(reference, expr)) {
-                    return declaredType;
                 }
                 return type;
             }
