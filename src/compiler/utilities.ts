@@ -2317,11 +2317,15 @@ namespace ts {
     }
 
     function getSourceOfAssignment(node: Node): Node | undefined {
-        return isExpressionStatement(node) &&
-            node.expression && isBinaryExpression(node.expression) &&
-            node.expression.operatorToken.kind === SyntaxKind.EqualsToken
-            ? node.expression.right
-            : undefined;
+        getInitializerOfBinaryExpression
+        if(isExpressionStatement(node) && isBinaryExpression(node.expression) && node.expression.operatorToken.kind === SyntaxKind.EqualsToken) {
+            let cur = node.expression
+            while (isBinaryExpression(cur.right) && cur.right.operatorToken.kind === SyntaxKind.EqualsToken) {
+                cur = cur.right;
+            }
+            return cur.right;
+        }
+        return undefined;
     }
 
     function getSourceOfDefaultedAssignment(node: Node): Node | undefined {
