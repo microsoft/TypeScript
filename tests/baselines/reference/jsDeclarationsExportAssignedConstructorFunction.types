@@ -1,4 +1,5 @@
 === tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js ===
+/** @constructor */
 module.exports.MyClass = function() {
 >module.exports.MyClass = function() {    this.x = 1} : typeof MyClass
 >module.exports.MyClass : typeof MyClass
@@ -10,32 +11,25 @@ module.exports.MyClass = function() {
 
     this.x = 1
 >this.x = 1 : 1
->this.x : any
->this : typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction")
->x : any
+>this.x : number
+>this : this
+>x : number
 >1 : 1
 }
 module.exports.MyClass.prototype = {
->module.exports.MyClass.prototype = {    a: function() {        this.b = 2    }} : { a: typeof a; }
->module.exports.MyClass.prototype : { a: typeof a; }
+>module.exports.MyClass.prototype = {    a: function() {    }} : { a: () => void; }
+>module.exports.MyClass.prototype : { a: () => void; }
 >module.exports.MyClass : typeof MyClass
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction")
 >module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction\"": typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction")
 >MyClass : typeof MyClass
->prototype : { a: typeof a; }
->{    a: function() {        this.b = 2    }} : { a: typeof a; }
+>prototype : { a: () => void; }
+>{    a: function() {    }} : { a: () => void; }
 
     a: function() {
->a : typeof a
->function() {        this.b = 2    } : typeof a
-
-        this.b = 2
->this.b = 2 : 2
->this.b : any
->this : this
->b : any
->2 : 2
+>a : () => void
+>function() {    } : () => void
     }
 }
 
