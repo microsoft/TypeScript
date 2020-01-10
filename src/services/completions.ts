@@ -1800,9 +1800,14 @@ namespace ts.Completions {
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = typeChecker.getContextualType(objectLikeContainer);
-                const baseType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
-                if (!instantiatedType || !baseType) return GlobalsSearch.Fail;
-                isNewIdentifierLocation = hasIndexSignature(instantiatedType || baseType);
+                if (!instantiatedType) return GlobalsSearch.Fail;
+                const uninstantiatedType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Uninstantiated);
+                let baseType;
+                if (!(uninstantiatedType && uninstantiatedType.flags & TypeFlags.IndexedAccess)) {
+                    baseType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
+                }
+
+                isNewIdentifierLocation = hasIndexSignature(instantiatedType);
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, baseType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }

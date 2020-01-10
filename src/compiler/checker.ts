@@ -21337,11 +21337,19 @@ namespace ts {
             return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex, contextFlags);
         }
 
-        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, contextFlags?: ContextFlags): Type {
+        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, contextFlags?: ContextFlags): Type | undefined {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             let signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
-            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !hasTypeArguments(callTarget)) {
+
+            if (contextFlags && contextFlags & ContextFlags.Uninstantiated) {
+                return signature.target ? getTypeAtPosition(signature.target, argIndex) : undefined;
+            }
+
+            if (contextFlags && contextFlags & ContextFlags.BaseConstraint) {
+                if (!signature.target || hasTypeArguments(callTarget)) {
+                    return undefined;
+                }
                 signature = getBaseSignature(signature.target);
             }
 

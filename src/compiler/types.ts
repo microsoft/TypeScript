@@ -3605,6 +3605,7 @@ namespace ts {
         Signature      = 1 << 0, // Obtaining contextual signature
         NoConstraints  = 1 << 1, // Don't obtain type variable constraints
         BaseConstraint = 1 << 2, // Use base constraint type for completions
+        Uninstantiated = 1 << 3, // Attempt to get the type from an uninstantiated signature
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
