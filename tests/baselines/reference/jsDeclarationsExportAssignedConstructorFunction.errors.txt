@@ -1,0 +1,18 @@
+tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js(2,10): error TS2339: Property 'x' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction")'.
+tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js(6,14): error TS2339: Property 'b' does not exist on type 'MyClass'.
+
+
+==== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js (2 errors) ====
+    module.exports.MyClass = function() {
+        this.x = 1
+             ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction")'.
+    }
+    module.exports.MyClass.prototype = {
+        a: function() {
+            this.b = 2
+                 ~
+!!! error TS2339: Property 'b' does not exist on type 'MyClass'.
+        }
+    }
+    
