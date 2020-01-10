@@ -1852,7 +1852,7 @@ namespace ts {
                     }
                 }
                 if (result && errorLocation && meaning & SymbolFlags.Value && !(errorLocation.flags & NodeFlags.Ambient) && isInExpressionContext(errorLocation)) {
-                    const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
+                    const typeOnlyDeclaration = undefined as any;
                     if (typeOnlyDeclaration) {
                         const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                             ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
