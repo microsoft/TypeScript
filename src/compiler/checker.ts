@@ -2476,22 +2476,20 @@ namespace ts {
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
         function getTypeOnlyAliasDeclaration(symbol: Symbol): Identifier | ImportSpecifier | ExportSpecifier | undefined {
+            if (!(symbol.flags & SymbolFlags.Alias)) {
+                return undefined;
+            }
             const links = getSymbolLinks(symbol);
             if (links.typeOnlyDeclaration === undefined) {
-                if (symbol.flags & SymbolFlags.Alias) {
-                    const node = getDeclarationOfAliasSymbol(symbol);
-                    if (!node) return Debug.fail();
-                    if (isTypeOnlyImportOrExportName(node)) {
-                        links.typeOnlyDeclaration = node;
-                    }
-                    else {
-                        const alias = getImmediateAliasedSymbol(symbol);
-                        links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
-                        links.typeOnlyDeclaration = !!alias && getTypeOnlyAliasDeclaration(alias);
-                    }
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
+                if (isTypeOnlyImportOrExportName(node)) {
+                    links.typeOnlyDeclaration = node;
                 }
                 else {
-                    links.typeOnlyDeclaration = false;
+                    const alias = getImmediateAliasedSymbol(symbol);
+                    links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
+                    links.typeOnlyDeclaration = !!alias && getTypeOnlyAliasDeclaration(alias);
                 }
             }
             return links.typeOnlyDeclaration || undefined;
