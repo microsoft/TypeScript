@@ -23336,7 +23336,7 @@ namespace ts {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
                     const flowContainer = getControlFlowContainer(node);
-                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent) {
+                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent && !(declaration.flags & NodeFlags.Ambient)) {
                         assumeUninitialized = true;
                     }
                 }
