@@ -16,6 +16,7 @@ namespace ts {
         let lastToken: SyntaxKind;
         let currentToken: SyntaxKind;
         let braceNesting = 0;
+        let templateNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
@@ -23,12 +24,23 @@ namespace ts {
         function nextToken() {
             lastToken = currentToken;
             currentToken = scanner.scan();
-            if (currentToken === SyntaxKind.OpenBraceToken) {
+            if (currentToken === SyntaxKind.CloseBraceToken && templateNesting > 0) {
+                currentToken = scanner.reScanTemplateToken(/* isTaggedTemplate */ true);
+            }
+
+            if (currentToken === SyntaxKind.TemplateHead) {
+                templateNesting++;
+            }
+            else if (currentToken === SyntaxKind.TemplateTail) {
+                templateNesting--;
+            }
+            else if (currentToken === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
             }
             else if (currentToken === SyntaxKind.CloseBraceToken) {
                 braceNesting--;
             }
+
             return currentToken;
         }
 

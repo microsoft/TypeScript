@@ -659,5 +659,49 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 isLibFile: false
             });
         });
+
+        it("Correctly ignores ES6 imports in string templates", () => {
+            test("`import def from 'm1'`;",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+        it("Correctly ignores ES6 imports in string templates following another template", () => {
+            // eslint-disable-next-line no-template-curly-in-string
+            test("`${foo}`;\n`import def from 'm1'`;",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+        it("Correctly recognizes ES6 imports after template", () => {
+            // eslint-disable-next-line no-template-curly-in-string
+            test("`${foo}`;\nimport def from 'm1';",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "m1", pos: 26, end: 28 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
     });
 });
