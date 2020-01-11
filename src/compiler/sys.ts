@@ -1092,7 +1092,7 @@ namespace ts {
     declare const __filename: string;
     declare const __dirname: string;
 
-    export function getNodeMajorVersion(): number | undefined {
+    function getNodeVersion(): { major: number, minor: number } | undefined {
         if (typeof process === "undefined") {
             return undefined;
         }
@@ -1104,7 +1104,17 @@ namespace ts {
         if (dot === -1) {
             return undefined;
         }
-        return parseInt(version.substring(1, dot));
+        const major = parseInt(version.substring(1, dot));
+
+        const nextDot = version.indexOf(".", dot + 1);
+        const end = nextDot === -1 ? version.length : nextDot;
+        const minor = parseInt(version.substring(dot + 1, end));
+
+        return { major, minor };
+    }
+
+    export function getNodeMajorVersion(): number | undefined {
+        return getNodeVersion()?.major;
     }
 
     declare const ChakraHost: {
@@ -1161,9 +1171,15 @@ namespace ts {
                 from?(input: string, encoding?: string): any;
             } = require("buffer").Buffer;
 
-            const nodeVersion = getNodeMajorVersion();
-            const isNode4OrLater = nodeVersion! >= 4;
+            const nodeVersion = getNodeVersion()!;
+            const isNode4OrLater = nodeVersion.major >= 4;
             const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
+
+            // Stat is no longer required as of Node 10.10
+            // (https://github.com/nodejs/node/commit/ad97314418286b66a3c714b47559a7437b7cba85)
+            const getAccessibleFileSystemEntries = nodeVersion.major > 10 || (nodeVersion.major === 10 && nodeVersion.minor >= 10)
+                ? getAccessibleFileSystemEntriesWithoutStat
+                : getAccessibleFileSystemEntriesWithStat;
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1614,7 +1630,44 @@ namespace ts {
                 }
             }
 
-            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+            function getAccessibleFileSystemEntriesWithStat(path: string): FileSystemEntries {
+                perfLogger.logEvent("ReadDir: " + (path || "."));
+                try {
+                    const entries = _fs.readdirSync(path || ".").sort();
+                    const files: string[] = [];
+                    const directories: string[] = [];
+                    for (const entry of entries) {
+                        // This is necessary because on some file system node fails to exclude
+                        // "." and "..". See https://github.com/nodejs/node/issues/4002
+                        if (entry === "." || entry === "..") {
+                            continue;
+                        }
+                        const name = combinePaths(path, entry);
+
+                        let stat: any;
+                        try {
+                            stat = _fs.statSync(name);
+                        }
+                        catch (e) {
+                            continue;
+                        }
+
+                        if (stat.isFile()) {
+                            files.push(entry);
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(entry);
+                        }
+                    }
+                    return { files, directories };
+                }
+                catch (e) {
+                    return emptyFileSystemEntries;
+                }
+            }
+
+            // This version is faster, but isn't supported prior to 10.10.
+            function getAccessibleFileSystemEntriesWithoutStat(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
                     const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
