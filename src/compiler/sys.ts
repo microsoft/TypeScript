@@ -1617,30 +1617,21 @@ namespace ts {
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
-                    const entries = _fs.readdirSync(path || ".").sort();
+                    const entries = _fs.readdirSync(path || ".", { withFileTypes: true }).sort();
                     const files: string[] = [];
                     const directories: string[] = [];
                     for (const entry of entries) {
+                        const entryName = entry.name;
                         // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
-                        if (entry === "." || entry === "..") {
+                        if (entryName === "." || entryName === "..") {
                             continue;
                         }
-                        const name = combinePaths(path, entry);
-
-                        let stat: any;
-                        try {
-                            stat = _fs.statSync(name);
+                        if (entry.isFile()) {
+                            files.push(entryName);
                         }
-                        catch (e) {
-                            continue;
-                        }
-
-                        if (stat.isFile()) {
-                            files.push(entry);
-                        }
-                        else if (stat.isDirectory()) {
-                            directories.push(entry);
+                        else if (entry.isDirectory()) {
+                            directories.push(entryName);
                         }
                     }
                     return { files, directories };
