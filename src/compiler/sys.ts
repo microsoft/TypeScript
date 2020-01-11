@@ -1617,7 +1617,7 @@ namespace ts {
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
-                    const entries = _fs.readdirSync(path || ".", { withFileTypes: true }).sort();
+                    const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                     const files: string[] = [];
                     const directories: string[] = [];
                     for (const entry of entries) {
@@ -1634,7 +1634,7 @@ namespace ts {
                             directories.push(entryName);
                         }
                     }
-                    return { files, directories };
+                    return { files: files.sort(), directories: directories.sort() };
                 }
                 catch (e) {
                     return emptyFileSystemEntries;
