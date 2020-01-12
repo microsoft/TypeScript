@@ -6,7 +6,6 @@ Node.js version is 12.14.0 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 XX of XX: [@azure/core-auth] completed successfully in ? seconds
 XX of XX: [@azure/logger] completed successfully in ? seconds
 XX of XX: [@azure/core-http] completed successfully in ? seconds
@@ -23,6 +22,7 @@ XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
 XX of XX: [@azure/storage-blob] completed successfully in ? seconds
 XX of XX: [@azure/cognitiveservices-textanalytics] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
+XX of XX: [@azure/core-tracing] completed successfully in ? seconds
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -33,20 +33,20 @@ os-name (guessing 'osName')
 created dist/index.js in ?s
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X-preview.11 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.11 extract-api script.
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 XX of XX: [@azure/service-bus] completed successfully in ? seconds
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.6 build:es6: `tsc -p tsconfig.json`
+npm ERR! @azure/storage-file-datalake@X.X.X-preview.7 build:es6: `tsc -p tsconfig.json`
 npm ERR! Exit status 2
 npm ERR! 
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.6 build:es?script.
+npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.7 build:es?script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
@@ -57,7 +57,6 @@ XX of XX: [testhub] completed successfully in ? seconds
 SUCCESS (23)
 ================================
 @azure/abort-controller (? seconds)
-@azure/core-tracing (? seconds)
 @azure/core-auth (? seconds)
 @azure/logger (? seconds)
 @azure/core-http (? seconds)
@@ -74,6 +73,7 @@ SUCCESS (23)
 @azure/storage-blob (? seconds)
 @azure/cognitiveservices-textanalytics (? seconds)
 @azure/core-arm (? seconds)
+@azure/core-tracing (? seconds)
 @azure/service-bus (? seconds)
 @azure/storage-file-share (? seconds)
 @azure/storage-queue (? seconds)
@@ -97,13 +97,6 @@ FAILURE (4)
 @azure/app-configuration ( ? seconds)
 >>> @azure/app-configuration
 tsc -p . && rollup -c 2>&1 && npm run extract-api
-samples/listRevisions.ts(43,32): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
-  Types of property '[Symbol.asyncIterator]' are incompatible.
-    Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
-      Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListRevisionsPage>' is not assignable to type 'AsyncIterator<ConfigurationSetting>'.
-        Types of property 'next' are incompatible.
-          Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
-            Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
 test/testHelpers.ts(74,31): error TS2322: Type 'PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type 'AsyncIterable<ConfigurationSetting>'.
   Types of property '[Symbol.asyncIterator]' are incompatible.
     Type '() => PagedAsyncIterableIterator<ConfigurationSetting, ListConfigurationSettingPage>' is not assignable to type '() => AsyncIterator<ConfigurationSetting>'.
@@ -139,20 +132,20 @@ src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterato
 @azure/keyvault-certificates ( ? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/keyvault-certificates@X.X.X-preview.11 extract-api: `tsc -p . && api-extractor run --local`
+npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/keyvault-certificates@X.X.X-preview.11 extract-api script.
+npm ERR! Failed at the @azure/keyvault-certificates@X.X.X extract-api script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 @azure/storage-file-datalake (? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
-npm ERR! @azure/storage-file-datalake@X.X.X-preview.6 build:es6: `tsc -p tsconfig.json`
+npm ERR! @azure/storage-file-datalake@X.X.X-preview.7 build:es6: `tsc -p tsconfig.json`
 npm ERR! Exit status 2
 npm ERR!
-npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.6 build:es?script.
+npm ERR! Failed at the @azure/storage-file-datalake@X.X.X-preview.7 build:es?script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

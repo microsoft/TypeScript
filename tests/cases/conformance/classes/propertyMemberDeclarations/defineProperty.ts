@@ -4,6 +4,7 @@ var x: "p" = "p"
 class A {
     a = this.y
     b
+    public c;
     ["computed"] = 13
     ;[x] = 14
     m() { }
@@ -12,8 +13,10 @@ class A {
     declare notEmitted;
 }
 class B {
+    public a;
 }
 class C extends B {
+    declare public a;
     z = this.ka
     constructor(public ka: number) {
         super()

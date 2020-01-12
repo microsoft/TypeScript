@@ -611,28 +611,29 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
+        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean) {
             if (isFile(fileOrDirectoryOrSymLink)) {
                 const file = this.toFsFile(fileOrDirectoryOrSymLink);
                 // file may already exist when updating existing type declaration file
                 if (!this.fs.get(file.path)) {
-                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch);
                     this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
             else if (isSymLink(fileOrDirectoryOrSymLink)) {
                 const symLink = this.toFsSymLink(fileOrDirectoryOrSymLink);
                 Debug.assert(!this.fs.get(symLink.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath));
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch);
                 this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectoryOrSymLink.path, this.currentDirectory);
-                this.ensureFolder(fullPath);
+                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch);
+                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
         }
 
-        private ensureFolder(fullPath: string): FsFolder {
+        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined): FsFolder {
             const path = this.toPath(fullPath);
             let folder = this.fs.get(path) as FsFolder;
             if (!folder) {
@@ -640,8 +641,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 const baseFullPath = getDirectoryPath(fullPath);
                 if (fullPath !== baseFullPath) {
                     // Add folder in the base folder
-                    const baseFolder = this.ensureFolder(baseFullPath);
-                    this.addFileOrFolderInFolder(baseFolder, folder);
+                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch);
+                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch);
                 }
                 else {
                     // root folder

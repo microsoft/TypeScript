@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/externalModules/typeOnly/importsNotUsedAsValue_error.ts] ////
+//// [tests/cases/conformance/externalModules/typeOnly/importsNotUsedAsValues_error.ts] ////
 
 //// [a.ts]
 export default class {}

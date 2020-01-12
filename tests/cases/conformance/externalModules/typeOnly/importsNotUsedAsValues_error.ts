@@ -1,4 +1,4 @@
-// @importsNotUsedAsValue: error
+// @importsNotUsedAsValues: error
 // @noUnusedLocals: true
 
 // @Filename: /a.ts
