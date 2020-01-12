@@ -1,5 +1,6 @@
 // @strict: true
 // @target: es6
+// @strictPropertyInitialization: false
 
 class C<T> {
     #foo: T;

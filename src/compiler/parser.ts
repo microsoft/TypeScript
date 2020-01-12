@@ -4680,10 +4680,12 @@ namespace ts {
             const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
-            // checker will error on private identifiers in optional chains, so don't have to catch them here
             propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
             if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
+                if (isPrivateIdentifier(propertyAccess.name)) {
+                    parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
+                }
             }
             return finishNode(propertyAccess);
         }
