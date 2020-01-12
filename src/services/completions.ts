@@ -910,9 +910,6 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
-                        if (isMetaProperty(node)) {
-                            return undefined;
-                        }
                         if (node.end === contextToken.pos &&
                             isCallExpression(node) &&
                             node.getChildCount(sourceFile) &&
@@ -1147,9 +1144,13 @@ namespace ts.Completions {
             }
 
             if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
-                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
-                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
-                return;
+                const metaPropertyAccessIdentifier = node.name.text;
+                // Check whether this MetaProperty node already had its metadata accessed
+                if (metaPropertyAccessIdentifier !== "target" && metaPropertyAccessIdentifier !== "meta") {
+                    const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
+                    symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
+                    return;
+                }
             }
 
             if (!isTypeLocation) {
