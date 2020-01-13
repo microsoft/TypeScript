@@ -933,4 +933,118 @@ console.log(blabla);`
             });
         });
     });
+
+    describe("unittests:: tsserver:: Project Errors with npm install when", () => {
+        function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
+            const main: File = {
+                path: `${tscWatch.projectRoot}/src/main.ts`,
+                content: "import * as _a from '@angular/core';"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const projectFiles = [main, libFile, config];
+            const host = createServerHost(projectFiles);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            openFilesForSession([{ file: main, projectRootPath: tscWatch.projectRoot }], session);
+            const span = protocolTextSpanFromSubstring(main.content, `'@angular/core'`);
+            const moduleNotFoundErr: protocol.Diagnostic[] = [
+                createDiagnostic(
+                    span.start,
+                    span.end,
+                    Diagnostics.Cannot_find_module_0,
+                    ["@angular/core"]
+                )
+            ];
+            const expectedRecursiveWatches = arrayToMap([`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/node_modules/@types`], identity, () => 1);
+            verifyProject();
+            verifyErrors(moduleNotFoundErr);
+
+            let npmInstallComplete = false;
+
+            // Simulate npm install
+            let filesAndFoldersToAdd: (File | Folder)[] = [
+                { path: `${tscWatch.projectRoot}/node_modules` }, // This should queue update
+                { path: `${tscWatch.projectRoot}/node_modules/.staging` },
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel` },
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/core-js-db53158d` },
+            ];
+            verifyWhileNpmInstall({ timeouts: 2, semantic: moduleNotFoundErr });
+
+            filesAndFoldersToAdd = [
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`, content: `export const x = 10;` },
+                { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
+            ];
+            // Since we added/removed in .staging no timeout
+            verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });
+
+            filesAndFoldersToAdd = [];
+            // Move things from staging to node_modules without triggering watch
+            const moduleFile: File = {
+                path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
+                content: `export const y = 10;`
+            };
+            host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
+            // Since we added/removed in .staging no timeout
+            verifyWhileNpmInstall({ timeouts: 0, semantic: moduleNotFoundErr });
+
+            // Remove staging folder to remove errors
+            host.deleteFolder(`${tscWatch.projectRoot}/node_modules/.staging`, /*recursive*/ true);
+            npmInstallComplete = true;
+            projectFiles.push(moduleFile);
+            // Additional watch for watching script infos from node_modules
+            expectedRecursiveWatches.set(`${tscWatch.projectRoot}/node_modules`, 2);
+            verifyWhileNpmInstall({ timeouts: 2, semantic: [] });
+
+            function verifyWhileNpmInstall({ timeouts, semantic }: { timeouts: number; semantic: protocol.Diagnostic[] }) {
+                filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
+                if (npmInstallComplete || timeoutDuringPartialInstallation) {
+                    host.checkTimeoutQueueLengthAndRun(timeouts);
+                }
+                else {
+                    host.checkTimeoutQueueLength(2);
+                }
+                verifyProject();
+                verifyErrors(semantic, !npmInstallComplete && !timeoutDuringPartialInstallation ? 2 : undefined);
+            }
+
+            function verifyProject() {
+                checkNumberOfConfiguredProjects(service, 1);
+
+                const project = service.configuredProjects.get(config.path)!;
+                checkProjectActualFiles(project, map(projectFiles, f => f.path));
+
+                checkWatchedFilesDetailed(host, mapDefined(projectFiles, f => f === main || f === moduleFile ? undefined : f.path), 1);
+                checkWatchedDirectoriesDetailed(host, expectedRecursiveWatches, /*recursive*/ true);
+                checkWatchedDirectories(host, [], /*recursive*/ false);
+            }
+
+            function verifyErrors(semantic: protocol.Diagnostic[], existingTimeouts?: number) {
+                verifyGetErrRequest({
+                    session,
+                    host,
+                    expected: [{
+                        file: main,
+                        syntax: [],
+                        semantic,
+                        suggestion: []
+                    }],
+                    existingTimeouts
+                });
+
+            }
+        }
+
+        it("timeouts occur inbetween installation", () => {
+            verifyNpmInstall(/*timeoutDuringPartialInstallation*/ true);
+        });
+
+        it("timeout occurs after installation", () => {
+            verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
+        });
+    });
 }

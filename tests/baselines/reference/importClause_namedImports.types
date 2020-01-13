@@ -1,0 +1,33 @@
+=== /abc.ts ===
+export class A {}
+>A : A
+
+export type B  = { b: string };
+>B : B
+>b : string
+
+export const C = "";
+>C : ""
+>"" : ""
+
+=== /d.ts ===
+import type { A, B, C } from './abc';
+>A : import("/abc").A
+>B : B
+>C : any
+
+new A();
+>new A() : any
+>A : any
+
+declare let a: A;
+>a : import("/abc").A
+
+declare let b: B;
+>b : B
+
+b.b;
+>b.b : string
+>b : B
+>b : string
+

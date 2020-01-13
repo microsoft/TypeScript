@@ -1,0 +1,14 @@
+tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts(3,5): error TS6133: '#unused' is declared but its value is never read.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts (1 errors) ====
+    export class A {
+        #used = "used";
+        #unused = "unused";
+        ~~~~~~~
+!!! error TS6133: '#unused' is declared but its value is never read.
+        constructor () {
+            console.log(this.#used);
+        }
+    }
+    

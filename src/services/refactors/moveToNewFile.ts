@@ -353,7 +353,7 @@ namespace ts.refactor {
                     changes.replaceNode(
                         sourceFile,
                         importDecl.importClause,
-                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                        updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined, importDecl.importClause.isTypeOnly)
                     );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -708,7 +708,7 @@ namespace ts.refactor {
     }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? tryCast(d.expression.left.name, isIdentifier) : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {

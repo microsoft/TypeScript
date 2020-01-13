@@ -925,7 +925,7 @@ namespace ts.FindAllReferences {
                 // The other two forms seem to be handled downstream (e.g. in `skipPastExportOrImportSpecifier`), so special-casing the first form
                 // here appears to be intentional).
                 const {
-                    text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol).escapedName)),
+                    text = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol)),
                     allSearchSymbols = [symbol],
                 } = searchOptions;
                 const escapedText = escapeLeadingUnderscores(text);
@@ -1087,7 +1087,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private));
+                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }
@@ -1231,9 +1231,9 @@ namespace ts.FindAllReferences {
         function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
             // Compare the length so we filter out strict superstrings of the symbol we are looking for
             switch (node.kind) {
+                case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.Identifier:
-                    return (node as Identifier).text.length === searchSymbolName.length;
-
+                    return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral: {
                     const str = node as StringLiteralLike;

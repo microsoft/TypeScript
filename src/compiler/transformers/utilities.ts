@@ -254,6 +254,28 @@ namespace ts {
             isWellKnownSymbolSyntactically(expression);
     }
 
+    export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
+        return kind >= SyntaxKind.FirstCompoundAssignment
+            && kind <= SyntaxKind.LastCompoundAssignment;
+    }
+
+    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
+        switch (kind) {
+            case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
+            case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
+            case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
+            case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
+            case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
+            case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
+            case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+            case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
+            case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
+            case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
+        }
+    }
+
     /**
      * Adds super call and preceding prologue directives into the list of statements.
      *
@@ -323,8 +345,14 @@ namespace ts {
             && hasStaticModifier(member) === isStatic;
     }
 
-    export function isInitializedProperty(member: ClassElement, requireInitializer: boolean): member is PropertyDeclaration {
-        return isPropertyDeclaration(member) && (!!member.initializer || !requireInitializer);
+    /**
+     * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
+     *
+     * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
+     */
+    export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+        return member.kind === SyntaxKind.PropertyDeclaration
+            && (<PropertyDeclaration>member).initializer !== undefined;
     }
-
 }

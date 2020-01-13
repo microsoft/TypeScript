@@ -50,6 +50,7 @@ namespace ts {
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
+        ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
@@ -200,6 +201,14 @@ namespace ts {
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_incremental_compilation,
             transpileOptionValue: undefined
+        },
+        {
+            name: "assumeChangesOnlyAffectDirectDependencies",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
         },
         {
             name: "locale",
@@ -462,6 +471,17 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "importsNotUsedAsValues",
+            type: createMapFromTemplate({
+                remove: importsNotUsedAsValues.Remove,
+                preserve: importsNotUsedAsValues.Preserve,
+                error: importsNotUsedAsValues.Error
+            }),
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
         },
         {
             name: "downlevelIteration",

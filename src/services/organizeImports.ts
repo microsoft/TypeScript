@@ -322,7 +322,8 @@ namespace ts.OrganizeImports {
                         updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
                         updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                 ),
-                exportDecl.moduleSpecifier));
+                exportDecl.moduleSpecifier,
+                exportDecl.isTypeOnly));
 
         return coalescedExports;
 
@@ -362,7 +363,7 @@ namespace ts.OrganizeImports {
             importDeclaration,
             importDeclaration.decorators,
             importDeclaration.modifiers,
-            updateImportClause(importDeclaration.importClause!, name, namedBindings), // TODO: GH#18217
+            updateImportClause(importDeclaration.importClause!, name, namedBindings, importDeclaration.importClause!.isTypeOnly), // TODO: GH#18217
             importDeclaration.moduleSpecifier);
     }
 

@@ -45,7 +45,14 @@ namespace ts.OutliningElementsCollector {
             if (span) out.push(span);
 
             depthRemaining--;
-            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
+            if (isCallExpression(n)) {
+                depthRemaining++;
+                visitNonImportNode(n.expression);
+                depthRemaining--;
+                n.arguments.forEach(visitNonImportNode);
+                n.typeArguments?.forEach(visitNonImportNode);
+            }
+            else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
                 visitNonImportNode(n.expression);
                 visitNonImportNode(n.thenStatement);

@@ -30,6 +30,10 @@ namespace ts {
         readonly text: string;
     }
 
+    export interface PrivateIdentifier {
+        readonly text: string;
+    }
+
     export interface Symbol {
         readonly name: string;
         getFlags(): SymbolFlags;
