@@ -29265,6 +29265,13 @@ namespace ts {
                     case SyntaxKind.BindingElement:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
+                    case SyntaxKind.Identifier: // https://github.com/microsoft/TypeScript/issues/36098
+                    // Identifiers are used as declarations of assignment declarations whose parents may be
+                    // SyntaxKind.CallExpression - `Object.defineProperty(thing, "aField", {value: 42});`
+                    // SyntaxKind.ElementAccessExpression - `thing["aField"] = 42;` or `thing["aField"];` (with a doc comment on it)
+                    // or SyntaxKind.PropertyAccessExpression - `thing.aField = 42;`
+                    // all of which are pretty much always values, or at least imply a value meaning.
+                    // It may be apprpriate to treat these as aliases in the future.
                         return DeclarationSpaces.ExportValue;
                     default:
                         return Debug.failBadSyntaxKind(d);
