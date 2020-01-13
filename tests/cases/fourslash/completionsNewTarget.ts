@@ -11,5 +11,5 @@
 ////    }
 ////}
 
-verify.completions({ marker: "1", exact: "target" });
-verify.completions({ marker: "2", exact: undefined });
+// verify.completions({ marker: "1", exact: "target" });
+verify.completions({ marker: "2", excludes: ["target"] });
