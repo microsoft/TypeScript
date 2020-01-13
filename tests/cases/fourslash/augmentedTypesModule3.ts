@@ -15,4 +15,4 @@ verify.quickInfoAt("2", "var r: typeof m2g");
 
 goTo.marker('3');
 edit.insert('(');
-verify.signatureHelp({ text: "m2g(): void" });
+verify.signatureHelp({ text: "m2g(): void" });verify.completions({ marker: "1", excludes: ["y"] });
