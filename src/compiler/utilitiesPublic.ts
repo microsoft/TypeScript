@@ -1721,14 +1721,11 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportName(node: Node): node is Identifier | ImportSpecifier | ExportSpecifier {
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
         switch (node.kind) {
-            case SyntaxKind.Identifier:
-                return isImportClause(node.parent) // default import name
-                    || isNamespaceImport(node.parent) && node.parent.parent.isTypeOnly; // namespace import name
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
