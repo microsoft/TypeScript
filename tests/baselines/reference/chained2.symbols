@@ -32,14 +32,10 @@ import types from './c';
 >types : Symbol(types, Decl(d.ts, 0, 6))
 
 new types.A();
->types.A : Symbol(types.A, Decl(b.ts, 2, 8))
 >types : Symbol(types, Decl(d.ts, 0, 6))
->A : Symbol(types.A, Decl(b.ts, 2, 8))
 
 new types.B();
->types.B : Symbol(types.B, Decl(b.ts, 2, 11))
 >types : Symbol(types, Decl(d.ts, 0, 6))
->B : Symbol(types.B, Decl(b.ts, 2, 11))
 
 const a: types.A = {};
 >a : Symbol(a, Decl(d.ts, 3, 5))

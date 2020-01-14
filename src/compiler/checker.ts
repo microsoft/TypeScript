@@ -3210,7 +3210,7 @@ namespace ts {
         }
 
         function symbolIsValue(symbol: Symbol): boolean {
-            return !!(symbol.flags & SymbolFlags.Value || symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value);
+            return !!(symbol.flags & SymbolFlags.Value || symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && !getTypeOnlyAliasDeclaration(symbol));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -23237,9 +23237,6 @@ namespace ts {
             }
             if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
                 markAliasReferenced(parentSymbol, node);
-            }
-            if (prop && parentSymbol && parentSymbol.flags & SymbolFlags.Alias) {
-                checkSymbolUsageInExpressionContext(prop, right.escapedText, right, /*skipContextCheck*/ true);
             }
 
             let propType: Type;
