@@ -73,8 +73,15 @@ namespace ts {
         nonRecursive?: boolean;
     }
 
-    export function isPathIgnored(path: Path) {
-        return some(ignoredPaths, searchPath => stringContains(path, searchPath));
+    export function removeIgnoredPath(path: Path): Path | undefined {
+        // Consider whole staging folder as if node_modules changed.
+        if (endsWith(path, "/node_modules/.staging")) {
+            return removeSuffix(path, "/.staging") as Path;
+        }
+
+        return some(ignoredPaths, searchPath => stringContains(path, searchPath)) ?
+            undefined :
+            path;
     }
 
     /**
@@ -722,7 +729,9 @@ namespace ts {
             }
             else {
                 // If something to do with folder/file starting with "." in node_modules folder, skip it
-                if (isPathIgnored(fileOrDirectoryPath)) return false;
+                const updatedPath = removeIgnoredPath(fileOrDirectoryPath);
+                if (!updatedPath) return false;
+                fileOrDirectoryPath = updatedPath;
 
                 // prevent saving an open file from over-eagerly triggering invalidation
                 if (resolutionHost.fileIsOpen(fileOrDirectoryPath)) {

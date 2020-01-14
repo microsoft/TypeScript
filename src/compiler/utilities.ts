@@ -1800,6 +1800,10 @@ namespace ts {
         return !!node && !!(node.flags & NodeFlags.JsonFile);
     }
 
+    export function isSourceFileNotJson(file: SourceFile) {
+        return !isJsonSourceFile(file);
+    }
+
     export function isInJSDoc(node: Node | undefined): boolean {
         return !!node && !!(node.flags & NodeFlags.JSDoc);
     }
@@ -2319,9 +2323,9 @@ namespace ts {
 
     function getSourceOfAssignment(node: Node): Node | undefined {
         return isExpressionStatement(node) &&
-            node.expression && isBinaryExpression(node.expression) &&
+            isBinaryExpression(node.expression) &&
             node.expression.operatorToken.kind === SyntaxKind.EqualsToken
-            ? node.expression.right
+            ? getRightMostAssignedExpression(node.expression)
             : undefined;
     }
 
