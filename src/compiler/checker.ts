@@ -1851,23 +1851,31 @@ namespace ts {
                         error(errorLocation, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializer.name), declarationNameToString(<Identifier>errorLocation));
                     }
                 }
-                if (result && errorLocation && meaning & SymbolFlags.Value && !(errorLocation.flags & NodeFlags.Ambient) && isInExpressionContext(errorLocation)) {
-                    const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
-                    if (typeOnlyDeclaration) {
-                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
-                            ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
-                            : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                        const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
-                            ? Diagnostics._0_was_exported_here
-                            : Diagnostics._0_was_imported_here;
-                        const unescapedName = unescapeLeadingUnderscores(name);
-                        addRelatedInfo(
-                            error(errorLocation, message, unescapedName),
-                            createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, unescapedName));
-                    }
+                if (result && errorLocation && meaning & SymbolFlags.Value) {
+                    checkSymbolUsageInExpressionContext(result, name, errorLocation);
                 }
             }
             return result;
+        }
+
+
+
+        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node, skipContextCheck?: boolean) {
+            if (!(useSite.flags & NodeFlags.Ambient) && (skipContextCheck || isInExpressionContext(useSite))) {
+                const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
+                if (typeOnlyDeclaration) {
+                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                        ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
+                        : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
+                    const relatedMessage = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                        ? Diagnostics._0_was_exported_here
+                        : Diagnostics._0_was_imported_here;
+                    const unescapedName = unescapeLeadingUnderscores(name);
+                    addRelatedInfo(
+                        error(useSite, message, unescapedName),
+                        createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, unescapedName));
+                }
+            }
         }
 
         function getIsDeferredContext(location: Node, lastLocation: Node | undefined): boolean {
@@ -23229,6 +23237,9 @@ namespace ts {
             }
             if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
                 markAliasReferenced(parentSymbol, node);
+            }
+            if (prop && parentSymbol && parentSymbol.flags & SymbolFlags.Alias) {
+                checkSymbolUsageInExpressionContext(prop, right.escapedText, right, /*skipContextCheck*/ true);
             }
 
             let propType: Type;
