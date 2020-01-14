@@ -33101,13 +33101,9 @@ namespace ts {
                     !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
                     !importClauseContainsConstEnumUsedAsValue(statement.importClause)
                 ) {
-                    const isError = compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Error;
-                    errorOrSuggestion(
-                        isError,
+                    error(
                         statement,
-                        isError
-                            ? Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error
-                            : Diagnostics.This_import_may_be_converted_to_a_type_only_import);
+                        Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error);
                 }
             }
         }
@@ -33604,7 +33600,10 @@ namespace ts {
                     });
                 }
 
-                if (!node.isDeclarationFile && isExternalModule(node)) {
+                if (compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error &&
+                    !node.isDeclarationFile &&
+                    isExternalModule(node)
+                ) {
                     checkImportsForTypeOnlyConversion(node);
                 }
 

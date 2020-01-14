@@ -1103,10 +1103,6 @@
         "category": "Error",
         "code": 1371
     },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
-    },
     "Convert to type-only import": {
         "category": "Message",
         "code": 1373

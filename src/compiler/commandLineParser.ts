@@ -475,9 +475,9 @@ namespace ts {
         {
             name: "importsNotUsedAsValues",
             type: createMapFromTemplate({
-                remove: importsNotUsedAsValues.Remove,
-                preserve: importsNotUsedAsValues.Preserve,
-                error: importsNotUsedAsValues.Error
+                remove: ImportsNotUsedAsValues.Remove,
+                preserve: ImportsNotUsedAsValues.Preserve,
+                error: ImportsNotUsedAsValues.Error
             }),
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
