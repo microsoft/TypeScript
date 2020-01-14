@@ -27137,6 +27137,7 @@ namespace ts {
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
             }
+            // TODO: make into trampoline
             let leftType: Type;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 leftType = checkTruthinessExpression(left, checkMode);
@@ -27146,6 +27147,18 @@ namespace ts {
             }
 
             let rightType = checkExpression(right, checkMode);
+            return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
+        }
+
+        function checkBinaryLikeExpressionWorker(
+            left: Expression,
+            operatorToken: Node,
+            right: Expression,
+            leftType: Type,
+            rightType: Type,
+            errorNode?: Node
+        ): Type {
+            const operator = operatorToken.kind;    
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:

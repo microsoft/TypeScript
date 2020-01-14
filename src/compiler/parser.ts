@@ -50,6 +50,54 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    function* visitNodeGen<T, U, N>(cbNode: (node: Node) => Generator<U, T, N>, node: Node | undefined): Generator<U, T | undefined, N> {
+        if (!node) return;
+        const gen = cbNode(node);
+        let o = gen.next();
+        for (;!o.done; o = gen.next()) {
+            yield o.value;
+        }
+        return o.value;
+    }
+
+    /* @internal */
+    function* visitNodesGen<T, U, N>(cbNode: (node: Node) => Generator<U, T, N>, cbNodes: ((node: NodeArray<Node>) => Generator<U, T | undefined, N>) | undefined, nodes: NodeArray<Node> | undefined): Generator<U, T | undefined, N> {
+        if (nodes) {
+            if (cbNodes) {
+                const gen = cbNodes(nodes);
+                let o = gen.next();
+                for (;!o.done; o = gen.next()) {
+                    yield o.value;
+                }
+                return o.value;
+            }
+            for (const node of nodes) {
+                const gen = cbNode(node);
+                let o = gen.next();
+                for (;!o.done; o = gen.next()) {
+                    yield o.value;
+                }
+                if (o.value) {
+                    return o.value;
+                }
+            }
+        }
+    }
+
+    /* @internal */
+    function* sequenceGen<T, U, N>(...args: Generator<U, T, N>[]): Generator<U, T | undefined, N> {
+        for (const gen of args) {
+            let o = gen.next();
+            for (;!o.done; o = gen.next()) {
+                yield o.value;
+            }
+            if (o.value) {
+                return o.value;
+            }
+        }
+    }
+
     /*@internal*/
     export function isJSDocLikeText(text: string, start: number) {
         return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
@@ -522,6 +570,583 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function* forEachChildGen<T, U, N>(node: Node, cbNode: (node: Node) => Generator<T, U | undefined, N>, cbNodes?: (nodes: NodeArray<Node>) => Generator<T, U | undefined, N>): Generator<T, U | undefined, N> {
+        if (!node || node.kind <= SyntaxKind.LastToken) {
+            return;
+        }
+        let gen: Generator<T, U | undefined, N> | undefined;
+        switch (node.kind) {
+            case SyntaxKind.QualifiedName:
+                gen = sequenceGen(visitNodeGen(cbNode, (<QualifiedName>node).left),
+                    visitNodeGen(cbNode, (<QualifiedName>node).right));
+                break;
+            case SyntaxKind.TypeParameter:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypeParameterDeclaration>node).name),
+                    visitNodeGen(cbNode, (<TypeParameterDeclaration>node).constraint),
+                    visitNodeGen(cbNode, (<TypeParameterDeclaration>node).default),
+                    visitNodeGen(cbNode, (<TypeParameterDeclaration>node).expression));
+                break;
+            case SyntaxKind.ShorthandPropertyAssignment:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ShorthandPropertyAssignment>node).name),
+                    visitNodeGen(cbNode, (<ShorthandPropertyAssignment>node).questionToken),
+                    visitNodeGen(cbNode, (<ShorthandPropertyAssignment>node).exclamationToken),
+                    visitNodeGen(cbNode, (<ShorthandPropertyAssignment>node).equalsToken),
+                    visitNodeGen(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer));
+                break;
+            case SyntaxKind.SpreadAssignment:
+                gen = sequenceGen(visitNodeGen(cbNode, (<SpreadAssignment>node).expression));
+                break;
+            case SyntaxKind.Parameter:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ParameterDeclaration>node).dotDotDotToken),
+                    visitNodeGen(cbNode, (<ParameterDeclaration>node).name),
+                    visitNodeGen(cbNode, (<ParameterDeclaration>node).questionToken),
+                    visitNodeGen(cbNode, (<ParameterDeclaration>node).type),
+                    visitNodeGen(cbNode, (<ParameterDeclaration>node).initializer));
+                break;
+            case SyntaxKind.PropertyDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<PropertyDeclaration>node).name),
+                    visitNodeGen(cbNode, (<PropertyDeclaration>node).questionToken),
+                    visitNodeGen(cbNode, (<PropertyDeclaration>node).exclamationToken),
+                    visitNodeGen(cbNode, (<PropertyDeclaration>node).type),
+                    visitNodeGen(cbNode, (<PropertyDeclaration>node).initializer));
+                break;
+            case SyntaxKind.PropertySignature:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<PropertySignature>node).name),
+                    visitNodeGen(cbNode, (<PropertySignature>node).questionToken),
+                    visitNodeGen(cbNode, (<PropertySignature>node).type),
+                    visitNodeGen(cbNode, (<PropertySignature>node).initializer));
+                break;
+            case SyntaxKind.PropertyAssignment:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<PropertyAssignment>node).name),
+                    visitNodeGen(cbNode, (<PropertyAssignment>node).questionToken),
+                    visitNodeGen(cbNode, (<PropertyAssignment>node).initializer));
+                break;
+            case SyntaxKind.VariableDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<VariableDeclaration>node).name),
+                    visitNodeGen(cbNode, (<VariableDeclaration>node).exclamationToken),
+                    visitNodeGen(cbNode, (<VariableDeclaration>node).type),
+                    visitNodeGen(cbNode, (<VariableDeclaration>node).initializer));
+                break;
+            case SyntaxKind.BindingElement:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<BindingElement>node).dotDotDotToken),
+                    visitNodeGen(cbNode, (<BindingElement>node).propertyName),
+                    visitNodeGen(cbNode, (<BindingElement>node).name),
+                    visitNodeGen(cbNode, (<BindingElement>node).initializer));
+                break;
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodesGen(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters),
+                    visitNodesGen(cbNode, cbNodes, (<SignatureDeclaration>node).parameters),
+                    visitNodeGen(cbNode, (<SignatureDeclaration>node).type));
+                break;
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ArrowFunction:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).asteriskToken),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).name),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).questionToken),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).exclamationToken),
+                    visitNodesGen(cbNode, cbNodes, (<FunctionLikeDeclaration>node).typeParameters),
+                    visitNodesGen(cbNode, cbNodes, (<FunctionLikeDeclaration>node).parameters),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).type),
+                    visitNodeGen(cbNode, (<ArrowFunction>node).equalsGreaterThanToken),
+                    visitNodeGen(cbNode, (<FunctionLikeDeclaration>node).body));
+                break;
+            case SyntaxKind.TypeReference:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypeReferenceNode>node).typeName),
+                    visitNodesGen(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments));
+                break;
+            case SyntaxKind.TypePredicate:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypePredicateNode>node).assertsModifier),
+                    visitNodeGen(cbNode, (<TypePredicateNode>node).parameterName),
+                    visitNodeGen(cbNode, (<TypePredicateNode>node).type));
+                break;
+            case SyntaxKind.TypeQuery:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypeQueryNode>node).exprName));
+                break;
+            case SyntaxKind.TypeLiteral:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<TypeLiteralNode>node).members));
+                break;
+            case SyntaxKind.ArrayType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ArrayTypeNode>node).elementType));
+                break;
+            case SyntaxKind.TupleType:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<TupleTypeNode>node).elementTypes));
+                break;
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types));
+                break;
+            case SyntaxKind.ConditionalType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ConditionalTypeNode>node).checkType),
+                    visitNodeGen(cbNode, (<ConditionalTypeNode>node).extendsType),
+                    visitNodeGen(cbNode, (<ConditionalTypeNode>node).trueType),
+                    visitNodeGen(cbNode, (<ConditionalTypeNode>node).falseType));
+                break;
+            case SyntaxKind.InferType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<InferTypeNode>node).typeParameter));
+                break;
+            case SyntaxKind.ImportType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ImportTypeNode>node).argument),
+                    visitNodeGen(cbNode, (<ImportTypeNode>node).qualifier),
+                    visitNodesGen(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments));
+                break;
+            case SyntaxKind.ParenthesizedType:
+            case SyntaxKind.TypeOperator:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type));
+                break;
+            case SyntaxKind.IndexedAccessType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<IndexedAccessTypeNode>node).objectType),
+                    visitNodeGen(cbNode, (<IndexedAccessTypeNode>node).indexType));
+                break;
+            case SyntaxKind.MappedType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<MappedTypeNode>node).readonlyToken),
+                    visitNodeGen(cbNode, (<MappedTypeNode>node).typeParameter),
+                    visitNodeGen(cbNode, (<MappedTypeNode>node).questionToken),
+                    visitNodeGen(cbNode, (<MappedTypeNode>node).type));
+                break;
+            case SyntaxKind.LiteralType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<LiteralTypeNode>node).literal));
+                break;
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<BindingPattern>node).elements));
+                break;
+            case SyntaxKind.ArrayLiteralExpression:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<ArrayLiteralExpression>node).elements));
+                break;
+            case SyntaxKind.ObjectLiteralExpression:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<ObjectLiteralExpression>node).properties));
+                break;
+            case SyntaxKind.PropertyAccessExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<PropertyAccessExpression>node).expression),
+                    visitNodeGen(cbNode, (<PropertyAccessExpression>node).questionDotToken),
+                    visitNodeGen(cbNode, (<PropertyAccessExpression>node).name));
+                break;
+            case SyntaxKind.ElementAccessExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ElementAccessExpression>node).expression),
+                    visitNodeGen(cbNode, (<ElementAccessExpression>node).questionDotToken),
+                    visitNodeGen(cbNode, (<ElementAccessExpression>node).argumentExpression));
+                break;
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<CallExpression>node).expression),
+                    visitNodeGen(cbNode, (<CallExpression>node).questionDotToken),
+                    visitNodesGen(cbNode, cbNodes, (<CallExpression>node).typeArguments),
+                    visitNodesGen(cbNode, cbNodes, (<CallExpression>node).arguments));
+                break;
+            case SyntaxKind.TaggedTemplateExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TaggedTemplateExpression>node).tag),
+                    visitNodeGen(cbNode, (<TaggedTemplateExpression>node).questionDotToken),
+                    visitNodesGen(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments),
+                    visitNodeGen(cbNode, (<TaggedTemplateExpression>node).template));
+                break;
+            case SyntaxKind.TypeAssertionExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypeAssertion>node).type),
+                    visitNodeGen(cbNode, (<TypeAssertion>node).expression));
+                break;
+            case SyntaxKind.ParenthesizedExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ParenthesizedExpression>node).expression));
+                break;
+            case SyntaxKind.DeleteExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<DeleteExpression>node).expression));
+                break;
+            case SyntaxKind.TypeOfExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TypeOfExpression>node).expression));
+                break;
+            case SyntaxKind.VoidExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<VoidExpression>node).expression));
+                break;
+            case SyntaxKind.PrefixUnaryExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<PrefixUnaryExpression>node).operand));
+                break;
+            case SyntaxKind.YieldExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<YieldExpression>node).asteriskToken),
+                    visitNodeGen(cbNode, (<YieldExpression>node).expression));
+                break;
+            case SyntaxKind.AwaitExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<AwaitExpression>node).expression));
+                break;
+            case SyntaxKind.PostfixUnaryExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<PostfixUnaryExpression>node).operand));
+                break;
+            case SyntaxKind.BinaryExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<BinaryExpression>node).left),
+                    visitNodeGen(cbNode, (<BinaryExpression>node).operatorToken),
+                    visitNodeGen(cbNode, (<BinaryExpression>node).right));
+                break;
+            case SyntaxKind.AsExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<AsExpression>node).expression),
+                    visitNodeGen(cbNode, (<AsExpression>node).type));
+                break;
+            case SyntaxKind.NonNullExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<NonNullExpression>node).expression));
+                break;
+            case SyntaxKind.MetaProperty:
+                gen = sequenceGen(visitNodeGen(cbNode, (<MetaProperty>node).name));
+                break;
+            case SyntaxKind.ConditionalExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ConditionalExpression>node).condition),
+                    visitNodeGen(cbNode, (<ConditionalExpression>node).questionToken),
+                    visitNodeGen(cbNode, (<ConditionalExpression>node).whenTrue),
+                    visitNodeGen(cbNode, (<ConditionalExpression>node).colonToken),
+                    visitNodeGen(cbNode, (<ConditionalExpression>node).whenFalse));
+                break;
+            case SyntaxKind.SpreadElement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<SpreadElement>node).expression));
+                break;
+            case SyntaxKind.Block:
+            case SyntaxKind.ModuleBlock:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<Block>node).statements));
+                break;
+            case SyntaxKind.SourceFile:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<SourceFile>node).statements),
+                    visitNodeGen(cbNode, (<SourceFile>node).endOfFileToken));
+                break;
+            case SyntaxKind.VariableStatement:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<VariableStatement>node).declarationList));
+                break;
+            case SyntaxKind.VariableDeclarationList:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<VariableDeclarationList>node).declarations));
+                break;
+            case SyntaxKind.ExpressionStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ExpressionStatement>node).expression));
+                break;
+            case SyntaxKind.IfStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<IfStatement>node).expression),
+                    visitNodeGen(cbNode, (<IfStatement>node).thenStatement),
+                    visitNodeGen(cbNode, (<IfStatement>node).elseStatement));
+                break;
+            case SyntaxKind.DoStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<DoStatement>node).statement),
+                    visitNodeGen(cbNode, (<DoStatement>node).expression));
+                break;
+            case SyntaxKind.WhileStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<WhileStatement>node).expression),
+                    visitNodeGen(cbNode, (<WhileStatement>node).statement));
+                break;
+            case SyntaxKind.ForStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ForStatement>node).initializer),
+                    visitNodeGen(cbNode, (<ForStatement>node).condition),
+                    visitNodeGen(cbNode, (<ForStatement>node).incrementor),
+                    visitNodeGen(cbNode, (<ForStatement>node).statement));
+                break;
+            case SyntaxKind.ForInStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ForInStatement>node).initializer),
+                    visitNodeGen(cbNode, (<ForInStatement>node).expression),
+                    visitNodeGen(cbNode, (<ForInStatement>node).statement));
+                break;
+            case SyntaxKind.ForOfStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ForOfStatement>node).awaitModifier),
+                    visitNodeGen(cbNode, (<ForOfStatement>node).initializer),
+                    visitNodeGen(cbNode, (<ForOfStatement>node).expression),
+                    visitNodeGen(cbNode, (<ForOfStatement>node).statement));
+                break;
+            case SyntaxKind.ContinueStatement:
+            case SyntaxKind.BreakStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<BreakOrContinueStatement>node).label));
+                break;
+            case SyntaxKind.ReturnStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ReturnStatement>node).expression));
+                break;
+            case SyntaxKind.WithStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<WithStatement>node).expression),
+                    visitNodeGen(cbNode, (<WithStatement>node).statement));
+                break;
+            case SyntaxKind.SwitchStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<SwitchStatement>node).expression),
+                    visitNodeGen(cbNode, (<SwitchStatement>node).caseBlock));
+                break;
+            case SyntaxKind.CaseBlock:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<CaseBlock>node).clauses));
+                break;
+            case SyntaxKind.CaseClause:
+                gen = sequenceGen(visitNodeGen(cbNode, (<CaseClause>node).expression),
+                    visitNodesGen(cbNode, cbNodes, (<CaseClause>node).statements));
+                break;
+            case SyntaxKind.DefaultClause:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<DefaultClause>node).statements));
+                break;
+            case SyntaxKind.LabeledStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<LabeledStatement>node).label),
+                    visitNodeGen(cbNode, (<LabeledStatement>node).statement));
+                break;
+            case SyntaxKind.ThrowStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ThrowStatement>node).expression));
+                break;
+            case SyntaxKind.TryStatement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TryStatement>node).tryBlock),
+                    visitNodeGen(cbNode, (<TryStatement>node).catchClause),
+                    visitNodeGen(cbNode, (<TryStatement>node).finallyBlock));
+                break;
+            case SyntaxKind.CatchClause:
+                gen = sequenceGen(visitNodeGen(cbNode, (<CatchClause>node).variableDeclaration),
+                    visitNodeGen(cbNode, (<CatchClause>node).block));
+                break;
+            case SyntaxKind.Decorator:
+                gen = sequenceGen(visitNodeGen(cbNode, (<Decorator>node).expression));
+                break;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ClassLikeDeclaration>node).name),
+                    visitNodesGen(cbNode, cbNodes, (<ClassLikeDeclaration>node).typeParameters),
+                    visitNodesGen(cbNode, cbNodes, (<ClassLikeDeclaration>node).heritageClauses),
+                    visitNodesGen(cbNode, cbNodes, (<ClassLikeDeclaration>node).members));
+                break;
+            case SyntaxKind.InterfaceDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<InterfaceDeclaration>node).name),
+                    visitNodesGen(cbNode, cbNodes, (<InterfaceDeclaration>node).typeParameters),
+                    visitNodesGen(cbNode, cbNodes, (<ClassDeclaration>node).heritageClauses),
+                    visitNodesGen(cbNode, cbNodes, (<InterfaceDeclaration>node).members));
+                break;
+            case SyntaxKind.TypeAliasDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<TypeAliasDeclaration>node).name),
+                    visitNodesGen(cbNode, cbNodes, (<TypeAliasDeclaration>node).typeParameters),
+                    visitNodeGen(cbNode, (<TypeAliasDeclaration>node).type));
+                break;
+            case SyntaxKind.EnumDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<EnumDeclaration>node).name),
+                    visitNodesGen(cbNode, cbNodes, (<EnumDeclaration>node).members));
+                break;
+            case SyntaxKind.EnumMember:
+                gen = sequenceGen(visitNodeGen(cbNode, (<EnumMember>node).name),
+                    visitNodeGen(cbNode, (<EnumMember>node).initializer));
+                break;
+            case SyntaxKind.ModuleDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ModuleDeclaration>node).name),
+                    visitNodeGen(cbNode, (<ModuleDeclaration>node).body));
+                break;
+            case SyntaxKind.ImportEqualsDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ImportEqualsDeclaration>node).name),
+                    visitNodeGen(cbNode, (<ImportEqualsDeclaration>node).moduleReference));
+                break;
+            case SyntaxKind.ImportDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ImportDeclaration>node).importClause),
+                    visitNodeGen(cbNode, (<ImportDeclaration>node).moduleSpecifier));
+                break;
+            case SyntaxKind.ImportClause:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ImportClause>node).name),
+                    visitNodeGen(cbNode, (<ImportClause>node).namedBindings));
+                break;
+            case SyntaxKind.NamespaceExportDeclaration:
+                gen = sequenceGen(visitNodeGen(cbNode, (<NamespaceExportDeclaration>node).name));
+                break;
+
+            case SyntaxKind.NamespaceImport:
+                gen = sequenceGen(visitNodeGen(cbNode, (<NamespaceImport>node).name));
+                break;
+            case SyntaxKind.NamespaceExport:
+                gen = sequenceGen(visitNodeGen(cbNode, (<NamespaceExport>node).name));
+                break;
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<NamedImportsOrExports>node).elements));
+                break;
+            case SyntaxKind.ExportDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ExportDeclaration>node).exportClause),
+                    visitNodeGen(cbNode, (<ExportDeclaration>node).moduleSpecifier));
+                break;
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ImportOrExportSpecifier>node).propertyName),
+                    visitNodeGen(cbNode, (<ImportOrExportSpecifier>node).name));
+                break;
+            case SyntaxKind.ExportAssignment:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators),
+                    visitNodesGen(cbNode, cbNodes, node.modifiers),
+                    visitNodeGen(cbNode, (<ExportAssignment>node).expression));
+                break;
+            case SyntaxKind.TemplateExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TemplateExpression>node).head), visitNodesGen(cbNode, cbNodes, (<TemplateExpression>node).templateSpans));
+                break;
+            case SyntaxKind.TemplateSpan:
+                gen = sequenceGen(visitNodeGen(cbNode, (<TemplateSpan>node).expression), visitNodeGen(cbNode, (<TemplateSpan>node).literal));
+                break;
+            case SyntaxKind.ComputedPropertyName:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ComputedPropertyName>node).expression));
+                break;
+            case SyntaxKind.HeritageClause:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<HeritageClause>node).types));
+                break;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ExpressionWithTypeArguments>node).expression),
+                    visitNodesGen(cbNode, cbNodes, (<ExpressionWithTypeArguments>node).typeArguments));
+                break;
+            case SyntaxKind.ExternalModuleReference:
+                gen = sequenceGen(visitNodeGen(cbNode, (<ExternalModuleReference>node).expression));
+                break;
+            case SyntaxKind.MissingDeclaration:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, node.decorators));
+                break;
+            case SyntaxKind.CommaListExpression:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<CommaListExpression>node).elements));
+                break;
+
+            case SyntaxKind.JsxElement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxElement>node).openingElement),
+                    visitNodesGen(cbNode, cbNodes, (<JsxElement>node).children),
+                    visitNodeGen(cbNode, (<JsxElement>node).closingElement));
+                break;
+            case SyntaxKind.JsxFragment:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxFragment>node).openingFragment),
+                    visitNodesGen(cbNode, cbNodes, (<JsxFragment>node).children),
+                    visitNodeGen(cbNode, (<JsxFragment>node).closingFragment));
+                break;
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxOpeningLikeElement>node).tagName),
+                    visitNodesGen(cbNode, cbNodes, (<JsxOpeningLikeElement>node).typeArguments),
+                    visitNodeGen(cbNode, (<JsxOpeningLikeElement>node).attributes));
+                break;
+            case SyntaxKind.JsxAttributes:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<JsxAttributes>node).properties));
+                break;
+            case SyntaxKind.JsxAttribute:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxAttribute>node).name),
+                    visitNodeGen(cbNode, (<JsxAttribute>node).initializer));
+                break;
+            case SyntaxKind.JsxSpreadAttribute:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxSpreadAttribute>node).expression));
+                break;
+            case SyntaxKind.JsxExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JsxExpression).dotDotDotToken),
+                    visitNodeGen(cbNode, (node as JsxExpression).expression));
+                break;
+            case SyntaxKind.JsxClosingElement:
+                gen = sequenceGen(visitNodeGen(cbNode, (<JsxClosingElement>node).tagName));
+                break;
+
+            case SyntaxKind.OptionalType:
+            case SyntaxKind.RestType:
+            case SyntaxKind.JSDocTypeExpression:
+            case SyntaxKind.JSDocNonNullableType:
+            case SyntaxKind.JSDocNullableType:
+            case SyntaxKind.JSDocOptionalType:
+            case SyntaxKind.JSDocVariadicType:
+                gen = sequenceGen(visitNodeGen(cbNode, (<OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode>node).type));
+                break;
+            case SyntaxKind.JSDocFunctionType:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<JSDocFunctionType>node).parameters),
+                    visitNodeGen(cbNode, (<JSDocFunctionType>node).type));
+                break;
+            case SyntaxKind.JSDocComment:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<JSDoc>node).tags));
+                break;
+            case SyntaxKind.JSDocParameterTag:
+            case SyntaxKind.JSDocPropertyTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    ...((node as JSDocPropertyLikeTag).isNameFirst
+                        ? [visitNodeGen(cbNode, (<JSDocPropertyLikeTag>node).name),
+                            visitNodeGen(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)]
+                        : [visitNodeGen(cbNode, (<JSDocPropertyLikeTag>node).typeExpression),
+                            visitNodeGen(cbNode, (<JSDocPropertyLikeTag>node).name)]));
+                break;
+            case SyntaxKind.JSDocAuthorTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName));
+                break;
+            case SyntaxKind.JSDocAugmentsTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    visitNodeGen(cbNode, (<JSDocAugmentsTag>node).class));
+                break;
+            case SyntaxKind.JSDocTemplateTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    visitNodeGen(cbNode, (<JSDocTemplateTag>node).constraint),
+                    visitNodesGen(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters));
+                break;
+            case SyntaxKind.JSDocTypedefTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    ...((node as JSDocTypedefTag).typeExpression &&
+                        (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
+                        ? [visitNodeGen(cbNode, (<JSDocTypedefTag>node).typeExpression),
+                            visitNodeGen(cbNode, (<JSDocTypedefTag>node).fullName)]
+                        : [visitNodeGen(cbNode, (<JSDocTypedefTag>node).fullName),
+                            visitNodeGen(cbNode, (<JSDocTypedefTag>node).typeExpression)]));
+                break;
+            case SyntaxKind.JSDocCallbackTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    visitNodeGen(cbNode, (node as JSDocCallbackTag).fullName),
+                    visitNodeGen(cbNode, (node as JSDocCallbackTag).typeExpression));
+                break;
+            case SyntaxKind.JSDocReturnTag:
+            case SyntaxKind.JSDocTypeTag:
+            case SyntaxKind.JSDocThisTag:
+            case SyntaxKind.JSDocEnumTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName),
+                    visitNodeGen(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression));
+                break;
+            case SyntaxKind.JSDocSignature:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (<JSDocSignature>node).typeParameters as NodeArray<JSDocTemplateTag>),
+                    visitNodesGen(cbNode, cbNodes, (<JSDocSignature>node).parameters as NodeArray<JSDocParameterTag>),
+                    visitNodeGen(cbNode, (<JSDocSignature>node).type));
+                break;
+            case SyntaxKind.JSDocTypeLiteral:
+                gen = sequenceGen(visitNodesGen(cbNode, cbNodes, (node as JSDocTypeLiteral).jsDocPropertyTags as NodeArray<JSDocPropertyLikeTag>));
+                break;
+            case SyntaxKind.JSDocTag:
+            case SyntaxKind.JSDocClassTag:
+            case SyntaxKind.JSDocPublicTag:
+            case SyntaxKind.JSDocPrivateTag:
+            case SyntaxKind.JSDocProtectedTag:
+            case SyntaxKind.JSDocReadonlyTag:
+                gen = sequenceGen(visitNodeGen(cbNode, (node as JSDocTag).tagName));
+                break;
+            case SyntaxKind.PartiallyEmittedExpression:
+                gen = sequenceGen(visitNodeGen(cbNode, (<PartiallyEmittedExpression>node).expression));
+                break;
+        }
+        if (gen) {
+            let o = gen.next();
+            for (;!o.done; o = gen.next()) {
+                yield o.value;
+            }
+        }
+    }
+
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         performance.mark("beforeParse");
         let result: SourceFile;
@@ -904,28 +1529,35 @@ namespace ts {
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
+            const queue: [Node, Node[]][] = [[rootNode, gatherChildren(rootNode)]];
+
+            for (const [parent, children] of queue) {
+                bindParentToChildren(parent, children);
+            }
             return;
 
-            function visitNode(n: Node): void {
-                // walk down setting parents that differ from the parent we think it should be.  This
-                // allows us to quickly bail out of setting parents for subtrees during incremental
-                // parsing
-                if (n.parent !== parent) {
-                    n.parent = parent;
+            function gatherChildren(node: Node) {
+                const children: Node[] = [];
+                forEachChild(node, n => void children.push(n));
+                return children;
+            }
 
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (hasJSDocNodes(n)) {
-                        for (const jsDoc of n.jsDoc!) {
-                            jsDoc.parent = n;
-                            parent = jsDoc;
-                            forEachChild(jsDoc, visitNode);
+            function bindParentToChildren(parent: Node, children: readonly Node[]) {
+                for (const child of children) {
+                    child.parent = parent;
+                    const grandchildren = gatherChildren(child);
+                    if (length(grandchildren)) {
+                        queue.push([child, grandchildren]);
+                    }
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDoc of child.jsDoc!) {
+                            jsDoc.parent = child;
+                            const grandchildren = gatherChildren(jsDoc);
+                            if (length(grandchildren)) {
+                                queue.push([jsDoc, grandchildren]);
+                            }
                         }
                     }
-                    parent = saveParent;
                 }
             }
         }

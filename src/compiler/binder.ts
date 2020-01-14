@@ -250,7 +250,7 @@ namespace ts {
             Debug.attachFlowNodeDebugInfo(reportedUnreachableFlow);
 
             if (!file.locals) {
-                bind(file);
+                doBind(file);
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
                 delayedBindJSDocTypedefTag();
@@ -600,7 +600,7 @@ namespace ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
-        function bindContainer(node: Node, containerFlags: ContainerFlags) {
+        function* bindContainer(node: Node, containerFlags: ContainerFlags) {
             // Before we recurse into a node's children, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
@@ -665,7 +665,10 @@ namespace ts {
                 currentContinueTarget = undefined;
                 activeLabelList = undefined;
                 hasExplicitReturn = false;
-                bindChildren(node);
+                const gen = bindChildren(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
@@ -696,11 +699,17 @@ namespace ts {
             }
             else if (containerFlags & ContainerFlags.IsInterface) {
                 seenThisKeyword = false;
-                bindChildren(node);
+                const gen = bindChildren(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
             }
             else {
-                bindChildren(node);
+                const gen = bindChildren(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
 
             container = saveContainer;
@@ -708,43 +717,66 @@ namespace ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindChildren(node: Node): void {
+        function* bindChildren(node: Node) {
             if (skipTransformFlagAggregation) {
-                bindChildrenWorker(node);
+                const gen = bindChildrenWorker(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
             else if (node.transformFlags & TransformFlags.HasComputedFlags) {
                 skipTransformFlagAggregation = true;
-                bindChildrenWorker(node);
+                const gen = bindChildrenWorker(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 skipTransformFlagAggregation = false;
                 subtreeTransformFlags |= node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
                 subtreeTransformFlags = 0;
-                bindChildrenWorker(node);
+                const gen = bindChildrenWorker(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 subtreeTransformFlags = savedSubtreeTransformFlags | computeTransformFlagsForNode(node, subtreeTransformFlags);
             }
         }
 
-        function bindEachFunctionsFirst(nodes: NodeArray<Node> | undefined): void {
-            bindEach(nodes, n => n.kind === SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
-            bindEach(nodes, n => n.kind !== SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
+        function* bindEachFunctionsFirst(nodes: NodeArray<Node> | undefined) {
+            const gen = bindEach(nodes, n => n.kind === SyntaxKind.FunctionDeclaration ? n : undefined);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
+            const gen2 = bindEach(nodes, n => n.kind !== SyntaxKind.FunctionDeclaration ? n : undefined);
+            for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                yield o.value;
+            }
         }
 
-        function bindEach(nodes: NodeArray<Node> | undefined, bindFunction: (node: Node) => void = bind): void {
+        function* bindEach(nodes: NodeArray<Node> | undefined, bindFunction: (node: Node) => Node | undefined = n => n) {
             if (nodes === undefined) {
                 return;
             }
 
             if (skipTransformFlagAggregation) {
-                forEach(nodes, bindFunction);
+                for (const node of nodes) {
+                    const res = bindFunction(node);
+                    if (res) {
+                        yield res;
+                    }
+                }
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
                 subtreeTransformFlags = TransformFlags.None;
                 let nodeArrayFlags = TransformFlags.None;
                 for (const node of nodes) {
-                    bindFunction(node);
+                    const res = bindFunction(node);
+                    if (res) {
+                        yield res;
+                    }
                     nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
                 }
                 nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
@@ -752,107 +784,222 @@ namespace ts {
             }
         }
 
-        function bindEachChild(node: Node) {
-            forEachChild(node, bind, bindEach);
+        function* justYield(node: Node) {
+            yield node;
         }
 
-        function bindChildrenWorker(node: Node): void {
+        function* bindEachChild(node: Node) {
+            const gen = forEachChildGen(node, justYield, bindEach);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
+        }
+
+        function* bindChildrenWorker(node: Node) {
             if (checkUnreachable(node)) {
-                bindEachChild(node);
-                bindJSDoc(node);
+                const gen = bindEachChild(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
+                const gen2 = bindJSDoc(node);
+                for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                    yield o.value;
+                }
                 return;
             }
             if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
                 node.flowNode = currentFlow;
             }
             switch (node.kind) {
-                case SyntaxKind.WhileStatement:
-                    bindWhileStatement(<WhileStatement>node);
+                case SyntaxKind.WhileStatement: {
+                    const gen = bindWhileStatement(<WhileStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.DoStatement:
-                    bindDoStatement(<DoStatement>node);
+                }
+                case SyntaxKind.DoStatement: {
+                    const gen = bindDoStatement(<DoStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.ForStatement:
-                    bindForStatement(<ForStatement>node);
+                }
+                case SyntaxKind.ForStatement: {
+                    const gen = bindForStatement(<ForStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                    bindForInOrForOfStatement(<ForInOrOfStatement>node);
+                case SyntaxKind.ForOfStatement: {
+                    const gen = bindForInOrForOfStatement(<ForInOrOfStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.IfStatement:
-                    bindIfStatement(<IfStatement>node);
+                }
+                case SyntaxKind.IfStatement: {
+                    const gen = bindIfStatement(<IfStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ThrowStatement:
-                    bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
+                case SyntaxKind.ThrowStatement: {
+                    const gen = bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 case SyntaxKind.BreakStatement:
-                case SyntaxKind.ContinueStatement:
-                    bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                case SyntaxKind.ContinueStatement: {
+                    const gen = bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.TryStatement:
-                    bindTryStatement(<TryStatement>node);
+                }
+                case SyntaxKind.TryStatement: {
+                    const gen = bindTryStatement(<TryStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.SwitchStatement:
-                    bindSwitchStatement(<SwitchStatement>node);
+                }
+                case SyntaxKind.SwitchStatement: {
+                    const gen = bindSwitchStatement(<SwitchStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.CaseBlock:
-                    bindCaseBlock(<CaseBlock>node);
+                }
+                case SyntaxKind.CaseBlock: {
+                    const gen = bindCaseBlock(<CaseBlock>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.CaseClause:
-                    bindCaseClause(<CaseClause>node);
+                }
+                case SyntaxKind.CaseClause: {
+                    const gen = bindCaseClause(<CaseClause>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.ExpressionStatement:
-                    bindExpressionStatement(<ExpressionStatement>node);
+                }
+                case SyntaxKind.ExpressionStatement: {
+                    const gen = bindExpressionStatement(<ExpressionStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.LabeledStatement:
-                    bindLabeledStatement(<LabeledStatement>node);
+                }
+                case SyntaxKind.LabeledStatement: {
+                    const gen = bindLabeledStatement(<LabeledStatement>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.PrefixUnaryExpression:
-                    bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
+                }
+                case SyntaxKind.PrefixUnaryExpression: {
+                    const gen = bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.PostfixUnaryExpression:
-                    bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
+                }
+                case SyntaxKind.PostfixUnaryExpression: {
+                    const gen = bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.BinaryExpression:
-                    bindBinaryExpressionFlow(<BinaryExpression>node);
+                }
+                case SyntaxKind.BinaryExpression: {
+                    const gen = bindBinaryExpressionFlow(<BinaryExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.DeleteExpression:
-                    bindDeleteExpressionFlow(<DeleteExpression>node);
+                }
+                case SyntaxKind.DeleteExpression: {
+                    const gen = bindDeleteExpressionFlow(<DeleteExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.ConditionalExpression:
-                    bindConditionalExpressionFlow(<ConditionalExpression>node);
+                }
+                case SyntaxKind.ConditionalExpression: {
+                    const gen = bindConditionalExpressionFlow(<ConditionalExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.VariableDeclaration:
-                    bindVariableDeclarationFlow(<VariableDeclaration>node);
+                }
+                case SyntaxKind.VariableDeclaration: {
+                    const gen = bindVariableDeclarationFlow(<VariableDeclaration>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                    bindAccessExpressionFlow(<AccessExpression>node);
+                case SyntaxKind.ElementAccessExpression: {
+                    const gen = bindAccessExpressionFlow(<AccessExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                case SyntaxKind.CallExpression:
-                    bindCallExpressionFlow(<CallExpression>node);
+                }
+                case SyntaxKind.CallExpression: {
+                    const gen = bindCallExpressionFlow(<CallExpression>node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocEnumTag:
-                    bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                case SyntaxKind.JSDocEnumTag: {
+                    const gen = bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile: {
-                    bindEachFunctionsFirst((node as SourceFile).statements);
-                    bind((node as SourceFile).endOfFileToken);
+                    const gen = bindEachFunctionsFirst((node as SourceFile).statements);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
+                    yield (node as SourceFile).endOfFileToken;
                     break;
                 }
                 case SyntaxKind.Block:
-                case SyntaxKind.ModuleBlock:
-                    bindEachFunctionsFirst((node as Block).statements);
+                case SyntaxKind.ModuleBlock: {
+                    const gen = bindEachFunctionsFirst((node as Block).statements);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
-                default:
-                    bindEachChild(node);
+                }
+                default: {
+                    const gen = bindEachChild(node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     break;
+                }
             }
-            bindJSDoc(node);
+            const gen = bindJSDoc(node);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
@@ -1051,30 +1198,36 @@ namespace ts {
                 !(isOptionalChain(node.parent) && node.parent.expression === node);
         }
 
-        function doWithConditionalBranches<T>(action: (value: T) => void, value: T, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function* doWithConditionalBranches<T, R, N>(action: (value: T) => Generator<T, R, N>, value: T, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             const savedTrueTarget = currentTrueTarget;
             const savedFalseTarget = currentFalseTarget;
             currentTrueTarget = trueTarget;
             currentFalseTarget = falseTarget;
-            action(value);
+            const gen = action(value);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             currentTrueTarget = savedTrueTarget;
             currentFalseTarget = savedFalseTarget;
         }
 
-        function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
+        function* bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const gen = doWithConditionalBranches(justYield, node, trueTarget, falseTarget);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (!node || !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
-        function bindIterativeStatement(node: Statement, breakTarget: FlowLabel, continueTarget: FlowLabel): void {
+        function* bindIterativeStatement(node: Statement, breakTarget: FlowLabel, continueTarget: FlowLabel) {
             const saveBreakTarget = currentBreakTarget;
             const saveContinueTarget = currentContinueTarget;
             currentBreakTarget = breakTarget;
             currentContinueTarget = continueTarget;
-            bind(node);
+            yield node;
             currentBreakTarget = saveBreakTarget;
             currentContinueTarget = saveContinueTarget;
         }
@@ -1089,82 +1242,106 @@ namespace ts {
             return target;
         }
 
-        function bindWhileStatement(node: WhileStatement): void {
+        function* bindWhileStatement(node: WhileStatement) {
             const preWhileLabel = setContinueTarget(node, createLoopLabel());
             const preBodyLabel = createBranchLabel();
             const postWhileLabel = createBranchLabel();
             addAntecedent(preWhileLabel, currentFlow);
             currentFlow = preWhileLabel;
-            bindCondition(node.expression, preBodyLabel, postWhileLabel);
+            const gen = bindCondition(node.expression, preBodyLabel, postWhileLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             currentFlow = finishFlowLabel(preBodyLabel);
-            bindIterativeStatement(node.statement, postWhileLabel, preWhileLabel);
+            const gen2 = bindIterativeStatement(node.statement, postWhileLabel, preWhileLabel);
+            for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                yield o.value;
+            }
             addAntecedent(preWhileLabel, currentFlow);
             currentFlow = finishFlowLabel(postWhileLabel);
         }
 
-        function bindDoStatement(node: DoStatement): void {
+        function* bindDoStatement(node: DoStatement) {
             const preDoLabel = createLoopLabel();
             const preConditionLabel = setContinueTarget(node, createBranchLabel());
             const postDoLabel = createBranchLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
-            bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
+            const gen = bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             addAntecedent(preConditionLabel, currentFlow);
             currentFlow = finishFlowLabel(preConditionLabel);
-            bindCondition(node.expression, preDoLabel, postDoLabel);
+            const gen2 = bindCondition(node.expression, preDoLabel, postDoLabel);
+            for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                yield o.value;
+            }
             currentFlow = finishFlowLabel(postDoLabel);
         }
 
-        function bindForStatement(node: ForStatement): void {
+        function* bindForStatement(node: ForStatement) {
             const preLoopLabel = setContinueTarget(node, createLoopLabel());
             const preBodyLabel = createBranchLabel();
             const postLoopLabel = createBranchLabel();
-            bind(node.initializer);
+            yield node.initializer;
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
-            bindCondition(node.condition, preBodyLabel, postLoopLabel);
+            const gen = bindCondition(node.condition, preBodyLabel, postLoopLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             currentFlow = finishFlowLabel(preBodyLabel);
-            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
-            bind(node.incrementor);
+            const gen2 = bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+            for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                yield o.value;
+            }
+            yield node.incrementor;
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = finishFlowLabel(postLoopLabel);
         }
 
-        function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
+        function* bindForInOrForOfStatement(node: ForInOrOfStatement) {
             const preLoopLabel = setContinueTarget(node, createLoopLabel());
             const postLoopLabel = createBranchLabel();
-            bind(node.expression);
+            yield node.expression;
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             if (node.kind === SyntaxKind.ForOfStatement) {
-                bind(node.awaitModifier);
+                yield node.awaitModifier;
             }
             addAntecedent(postLoopLabel, currentFlow);
-            bind(node.initializer);
+            yield node.initializer;
             if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
                 bindAssignmentTargetFlow(node.initializer);
             }
-            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+            const gen = bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = finishFlowLabel(postLoopLabel);
         }
 
-        function bindIfStatement(node: IfStatement): void {
+        function* bindIfStatement(node: IfStatement) {
             const thenLabel = createBranchLabel();
             const elseLabel = createBranchLabel();
             const postIfLabel = createBranchLabel();
-            bindCondition(node.expression, thenLabel, elseLabel);
+            const gen = bindCondition(node.expression, thenLabel, elseLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             currentFlow = finishFlowLabel(thenLabel);
-            bind(node.thenStatement);
+            yield node.thenStatement;
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(elseLabel);
-            bind(node.elseStatement);
+            yield node.elseStatement;
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(postIfLabel);
         }
 
-        function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
-            bind(node.expression);
+        function* bindReturnOrThrow(node: ReturnStatement | ThrowStatement) {
+            yield node.expression;
             if (node.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
                 if (currentReturnTarget) {
@@ -1191,8 +1368,8 @@ namespace ts {
             }
         }
 
-        function bindBreakOrContinueStatement(node: BreakOrContinueStatement): void {
-            bind(node.label);
+        function* bindBreakOrContinueStatement(node: BreakOrContinueStatement) {
+            yield node.label;
             if (node.label) {
                 const activeLabel = findActiveLabel(node.label.escapedText);
                 if (activeLabel) {
@@ -1205,7 +1382,7 @@ namespace ts {
             }
         }
 
-        function bindTryStatement(node: TryStatement): void {
+        function* bindTryStatement(node: TryStatement) {
             const preFinallyLabel = createBranchLabel();
             // We conservatively assume that *any* code in the try block can cause an exception, but we only need
             // to track code that causes mutations (because only mutations widen the possible control flow type of
@@ -1218,7 +1395,7 @@ namespace ts {
             currentReturnTarget = createBranchLabel();
             currentExceptionTarget = node.catchClause ? createBranchLabel() : currentReturnTarget;
             addAntecedent(currentExceptionTarget, currentFlow);
-            bind(node.tryBlock);
+            yield node.tryBlock;
             addAntecedent(preFinallyLabel, currentFlow);
             const flowAfterTry = currentFlow;
             let flowAfterCatch = unreachableFlow;
@@ -1230,7 +1407,7 @@ namespace ts {
                 // acts like a second try block.
                 currentExceptionTarget = currentReturnTarget;
                 addAntecedent(currentExceptionTarget, currentFlow);
-                bind(node.catchClause);
+                yield node.catchClause;
                 addAntecedent(preFinallyLabel, currentFlow);
                 flowAfterCatch = currentFlow;
             }
@@ -1257,7 +1434,7 @@ namespace ts {
                 const preFinallyFlow: PreFinallyFlow = initFlowNode({ flags: FlowFlags.PreFinally, antecedent: exceptionTarget, lock: {} });
                 addAntecedent(preFinallyLabel, preFinallyFlow);
                 currentFlow = finishFlowLabel(preFinallyLabel);
-                bind(node.finallyBlock);
+                yield node.finallyBlock;
                 // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
                 // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
                 // result in an unreachable current control flow.
@@ -1279,14 +1456,14 @@ namespace ts {
             }
         }
 
-        function bindSwitchStatement(node: SwitchStatement): void {
+        function* bindSwitchStatement(node: SwitchStatement) {
             const postSwitchLabel = createBranchLabel();
-            bind(node.expression);
+            yield node.expression;
             const saveBreakTarget = currentBreakTarget;
             const savePreSwitchCaseFlow = preSwitchCaseFlow;
             currentBreakTarget = postSwitchLabel;
             preSwitchCaseFlow = currentFlow;
-            bind(node.caseBlock);
+            yield node.caseBlock;
             addAntecedent(postSwitchLabel, currentFlow);
             const hasDefault = forEach(node.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
             // We mark a switch statement as possibly exhaustive if it has no default clause and if all
@@ -1301,7 +1478,7 @@ namespace ts {
             currentFlow = finishFlowLabel(postSwitchLabel);
         }
 
-        function bindCaseBlock(node: CaseBlock): void {
+        function* bindCaseBlock(node: CaseBlock) {
             const savedSubtreeTransformFlags = subtreeTransformFlags;
             subtreeTransformFlags = 0;
             const clauses = node.clauses;
@@ -1310,7 +1487,7 @@ namespace ts {
             for (let i = 0; i < clauses.length; i++) {
                 const clauseStart = i;
                 while (!clauses[i].statements.length && i + 1 < clauses.length) {
-                    bind(clauses[i]);
+                    yield clauses[i];
                     i++;
                 }
                 const preCaseLabel = createBranchLabel();
@@ -1318,7 +1495,7 @@ namespace ts {
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];
-                bind(clause);
+                yield clause;
                 fallthroughFlow = currentFlow;
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
                     clause.fallthroughFlowNode = currentFlow;
@@ -1328,16 +1505,19 @@ namespace ts {
             subtreeTransformFlags |= savedSubtreeTransformFlags;
         }
 
-        function bindCaseClause(node: CaseClause): void {
+        function* bindCaseClause(node: CaseClause) {
             const saveCurrentFlow = currentFlow;
             currentFlow = preSwitchCaseFlow!;
-            bind(node.expression);
+            yield node.expression;
             currentFlow = saveCurrentFlow;
-            bindEach(node.statements);
+            const gen = bindEach(node.statements);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
         }
 
-        function bindExpressionStatement(node: ExpressionStatement): void {
-            bind(node.expression);
+        function* bindExpressionStatement(node: ExpressionStatement) {
+            yield node.expression;
             // A top level call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
             if (node.expression.kind === SyntaxKind.CallExpression) {
@@ -1348,7 +1528,7 @@ namespace ts {
             }
         }
 
-        function bindLabeledStatement(node: LabeledStatement): void {
+        function* bindLabeledStatement(node: LabeledStatement) {
             const postStatementLabel = createBranchLabel();
             activeLabelList = {
                 next: activeLabelList,
@@ -1357,8 +1537,8 @@ namespace ts {
                 continueTarget: undefined,
                 referenced: false
             };
-            bind(node.label);
-            bind(node.statement);
+            yield node.label;
+            yield node.statement;
             if (!activeLabelList.referenced && !options.allowUnusedLabels) {
                 errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
             }
@@ -1405,57 +1585,84 @@ namespace ts {
             }
         }
 
-        function bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function* bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             const preRightLabel = createBranchLabel();
             if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                bindCondition(node.left, preRightLabel, falseTarget);
+                const gen = bindCondition(node.left, preRightLabel, falseTarget);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
             else {
-                bindCondition(node.left, trueTarget, preRightLabel);
+                const gen = bindCondition(node.left, trueTarget, preRightLabel);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
             currentFlow = finishFlowLabel(preRightLabel);
-            bind(node.operatorToken);
-            bindCondition(node.right, trueTarget, falseTarget);
+            yield node.operatorToken;
+            const gen = bindCondition(node.right, trueTarget, falseTarget);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
         }
 
-        function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
+        function* bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
             if (node.operator === SyntaxKind.ExclamationToken) {
                 const saveTrueTarget = currentTrueTarget;
                 currentTrueTarget = currentFalseTarget;
                 currentFalseTarget = saveTrueTarget;
-                bindEachChild(node);
+                const gen = bindEachChild(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 currentFalseTarget = currentTrueTarget;
                 currentTrueTarget = saveTrueTarget;
             }
             else {
-                bindEachChild(node);
+                const gen = bindEachChild(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
                     bindAssignmentTargetFlow(node.operand);
                 }
             }
         }
 
-        function bindPostfixUnaryExpressionFlow(node: PostfixUnaryExpression) {
-            bindEachChild(node);
+        function* bindPostfixUnaryExpressionFlow(node: PostfixUnaryExpression) {
+            const gen = bindEachChild(node);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
                 bindAssignmentTargetFlow(node.operand);
             }
         }
 
-        function bindBinaryExpressionFlow(node: BinaryExpression) {
+        function* bindBinaryExpressionFlow(node: BinaryExpression) {
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
-                    bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                    const gen = bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                     currentFlow = finishFlowLabel(postExpressionLabel);
                 }
                 else {
-                    bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
+                    const gen = bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                 }
             }
             else {
-                bindEachChild(node);
+                const gen = bindEachChild(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
                     if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
@@ -1468,25 +1675,31 @@ namespace ts {
             }
         }
 
-        function bindDeleteExpressionFlow(node: DeleteExpression) {
-            bindEachChild(node);
+        function* bindDeleteExpressionFlow(node: DeleteExpression) {
+            const gen = bindEachChild(node);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
                 bindAssignmentTargetFlow(node.expression);
             }
         }
 
-        function bindConditionalExpressionFlow(node: ConditionalExpression) {
+        function* bindConditionalExpressionFlow(node: ConditionalExpression) {
             const trueLabel = createBranchLabel();
             const falseLabel = createBranchLabel();
             const postExpressionLabel = createBranchLabel();
-            bindCondition(node.condition, trueLabel, falseLabel);
+            const gen = bindCondition(node.condition, trueLabel, falseLabel);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             currentFlow = finishFlowLabel(trueLabel);
-            bind(node.questionToken);
-            bind(node.whenTrue);
+            yield node.questionToken;
+            yield node.whenTrue;
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(falseLabel);
-            bind(node.colonToken);
-            bind(node.whenFalse);
+            yield node.colonToken;
+            yield node.whenFalse;
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlowLabel(postExpressionLabel);
         }
@@ -1503,53 +1716,68 @@ namespace ts {
             }
         }
 
-        function bindVariableDeclarationFlow(node: VariableDeclaration) {
-            bindEachChild(node);
+        function* bindVariableDeclarationFlow(node: VariableDeclaration) {
+            const gen = bindEachChild(node);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
             }
         }
 
-        function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
+        function* bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
             node.tagName.parent = node;
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
                 setParentPointers(node, node.fullName);
             }
         }
 
-        function bindJSDocClassTag(node: JSDocClassTag) {
-            bindEachChild(node);
+        function bindJSDocClassTag(node: JSDocClassTag): void { // intentionally not a generator
+            const gen = bindEachChild(node);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                doBind(o.value);
+            }
             const host = getHostSignatureFromJSDoc(node);
             if (host && host.kind !== SyntaxKind.MethodDeclaration) {
                 addDeclarationToSymbol(host.symbol, host, SymbolFlags.Class);
             }
         }
 
-        function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
-            doWithConditionalBranches(bind, node, trueTarget, falseTarget);
+        function* bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const gen = doWithConditionalBranches(justYield, node, trueTarget, falseTarget);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
-        function bindOptionalChainRest(node: OptionalChain) {
-            bind(node.questionDotToken);
+        function* bindOptionalChainRest(node: OptionalChain) {
+            yield node.questionDotToken;
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    bind(node.name);
+                    yield node.name;
                     break;
                 case SyntaxKind.ElementAccessExpression:
-                    bind(node.argumentExpression);
+                    yield node.argumentExpression;
                     break;
                 case SyntaxKind.CallExpression:
-                    bindEach(node.typeArguments);
-                    bindEach(node.arguments);
+                    const gen = bindEach(node.typeArguments);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
+                    const gen2 = bindEach(node.arguments);
+                    for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                        yield o.value;
+                    }
                     break;
             }
         }
 
-        function bindOptionalChain(node: OptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function* bindOptionalChain(node: OptionalChain, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             // For an optional chain, we emulate the behavior of a logical expression:
             //
             // a?.b         -> a && a.b
@@ -1562,40 +1790,61 @@ namespace ts {
             // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
             // chain node. We then treat the entire node as the right side of the expression.
             const preChainLabel = node.questionDotToken ? createBranchLabel() : undefined;
-            bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
+            const gen = bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
+            for (let o = gen.next(); !o.done; o = gen.next()) {
+                yield o.value;
+            }
             if (preChainLabel) {
                 currentFlow = finishFlowLabel(preChainLabel);
             }
-            doWithConditionalBranches(bindOptionalChainRest, node, trueTarget, falseTarget);
+            const gen2 = doWithConditionalBranches(bindOptionalChainRest, node, trueTarget, falseTarget);
+            for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                yield o.value;
+            }
             if (isOutermostOptionalChain(node)) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
         }
 
-        function bindOptionalChainFlow(node: OptionalChain) {
+        function* bindOptionalChainFlow(node: OptionalChain) {
             if (isTopLevelLogicalExpression(node)) {
                 const postExpressionLabel = createBranchLabel();
-                bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
+                const gen = bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 currentFlow = finishFlowLabel(postExpressionLabel);
             }
             else {
-                bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
+                const gen = bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
         }
 
-        function bindAccessExpressionFlow(node: AccessExpression) {
+        function* bindAccessExpressionFlow(node: AccessExpression) {
             if (isOptionalChain(node)) {
-                bindOptionalChainFlow(node);
+                const gen = bindOptionalChainFlow(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
             else {
-                bindEachChild(node);
+                const gen = bindEachChild(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
         }
 
-        function bindCallExpressionFlow(node: CallExpression) {
+        function* bindCallExpressionFlow(node: CallExpression) {
             if (isOptionalChain(node)) {
-                bindOptionalChainFlow(node);
+                const gen = bindOptionalChainFlow(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
             }
             else {
                 // If the target of the call expression is a function expression or arrow function we have
@@ -1603,12 +1852,21 @@ namespace ts {
                 // the current control flow (which includes evaluation of the IIFE arguments).
                 const expr = skipParentheses(node.expression);
                 if (expr.kind === SyntaxKind.FunctionExpression || expr.kind === SyntaxKind.ArrowFunction) {
-                    bindEach(node.typeArguments);
-                    bindEach(node.arguments);
-                    bind(node.expression);
+                    const gen = bindEach(node.typeArguments);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
+                    const gen2 = bindEach(node.arguments);
+                    for (let o = gen2.next(); !o.done; o = gen2.next()) {
+                        yield o.value;
+                    }
+                    yield node.expression;
                 }
                 else {
-                    bindEachChild(node);
+                    const gen = bindEachChild(node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                 }
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
@@ -1956,7 +2214,7 @@ namespace ts {
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
-                bind(typeAlias.typeExpression);
+                doBind(typeAlias.typeExpression);
                 const declName = getNameOfDeclaration(typeAlias);
                 if ((isJSDocEnumTag(typeAlias) || !typeAlias.fullName) && declName && isPropertyAccessEntityNameExpression(declName.parent)) {
                     // typedef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
@@ -1998,7 +2256,7 @@ namespace ts {
                     bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 }
                 else {
-                    bind(typeAlias.fullName);
+                    doBind(typeAlias.fullName);
                 }
             }
             container = saveContainer;
@@ -2209,7 +2467,21 @@ namespace ts {
             }
         }
 
-        function bind(node: Node | undefined): void {
+        function doBind(node: Node | undefined) {
+            const workers: Generator<Node | undefined, unknown, void>[] = [bindNode(node)];
+            while (workers.length) {
+                const gen = workers[workers.length - 1];
+                const val = gen.next();
+                if (val.done) {
+                    workers.pop();
+                }
+                else if (val.value) {
+                    workers.push(bindNode(val.value));
+                }
+            }
+        }
+
+        function* bindNode(node: Node | undefined) {
             if (!node) {
                 return;
             }
@@ -2247,10 +2519,16 @@ namespace ts {
                 parent = node;
                 const containerFlags = getContainerFlags(node);
                 if (containerFlags === ContainerFlags.None) {
-                    bindChildren(node);
+                    const gen = bindChildren(node);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                 }
                 else {
-                    bindContainer(node, containerFlags);
+                    const gen = bindContainer(node, containerFlags);
+                    for (let o = gen.next(); !o.done; o = gen.next()) {
+                        yield o.value;
+                    }
                 }
                 parent = saveParent;
             }
@@ -2258,17 +2536,20 @@ namespace ts {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
                 const saveParent = parent;
                 if (node.kind === SyntaxKind.EndOfFileToken) parent = node;
-                bindJSDoc(node);
+                const gen = bindJSDoc(node);
+                for (let o = gen.next(); !o.done; o = gen.next()) {
+                    yield o.value;
+                }
                 parent = saveParent;
             }
             inStrictMode = saveInStrictMode;
         }
 
-        function bindJSDoc(node: Node) {
+        function* bindJSDoc(node: Node) {
             if (hasJSDocNodes(node)) {
                 if (isInJSFile(node)) {
                     for (const j of node.jsDoc!) {
-                        bind(j);
+                        yield j;
                     }
                 }
                 else {
