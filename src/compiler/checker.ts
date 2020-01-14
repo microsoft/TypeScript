@@ -1851,17 +1851,15 @@ namespace ts {
                         error(errorLocation, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializer.name), declarationNameToString(<Identifier>errorLocation));
                     }
                 }
-                if (result && errorLocation && meaning & SymbolFlags.Value) {
+                if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias) {
                     checkSymbolUsageInExpressionContext(result, name, errorLocation);
                 }
             }
             return result;
         }
 
-
-
-        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node, skipContextCheck?: boolean) {
-            if (!(useSite.flags & NodeFlags.Ambient) && (skipContextCheck || isInExpressionContext(useSite))) {
+        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node) {
+            if (!(useSite.flags & NodeFlags.Ambient) && isInExpressionContext(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
                     const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
