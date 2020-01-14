@@ -1771,6 +1771,13 @@ namespace ts {
         }
     }
 
+    export function isPartOfTypeQuery(node: Node) {
+        while (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier) {
+            node = node.parent;
+        }
+        return node.kind === SyntaxKind.TypeQuery;
+    }
+
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
