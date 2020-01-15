@@ -1111,6 +1111,11 @@ namespace ts.server {
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
                             project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            if (!info.isAttached(project)) {
+                                project.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                                this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                            }
                         }
                         return;
                     }

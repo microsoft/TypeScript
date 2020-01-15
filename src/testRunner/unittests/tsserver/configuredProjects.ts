@@ -923,6 +923,116 @@ declare var console: {
             const service = createProjectService(host);
             service.openClientFile(file.path);
         });
+
+        describe("when creating new file", () => {
+            const foo: File = {
+                path: `${tscWatch.projectRoot}/src/foo.ts`,
+                content: "export function foo() { }"
+            };
+            const bar: File = {
+                path: `${tscWatch.projectRoot}/src/bar.ts`,
+                content: "export function bar() { }"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["./src"]
+                })
+            };
+            const fooBar: File = {
+                path: `${tscWatch.projectRoot}/src/fooBar.ts`,
+                content: "export function fooBar() { }"
+            };
+            function verifySessionWorker({ openFileBeforeCreating, checkProjectBeforeError, checkProjectAfterError, }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+                const host = createServerHost([foo, bar, config, libFile]);
+                const session = createSession(host, {
+                    //logger: createLoggerWritingToConsole(),
+                    canUseEvents: true
+                });
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: foo.path,
+                        fileContent: foo.content,
+                        projectRootPath: tscWatch.projectRoot
+                    }
+                });
+                if (!openFileBeforeCreating) {
+                    host.writeFile(fooBar.path, fooBar.content);
+                }
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: fooBar.path,
+                        fileContent: fooBar.content,
+                        projectRootPath: tscWatch.projectRoot
+                    }
+                });
+                if (openFileBeforeCreating) {
+                    host.writeFile(fooBar.path, fooBar.content);
+                }
+                const service = session.getProjectService();
+                checkProjectBeforeError(service);
+                verifyGetErrRequest({
+                    session,
+                    host,
+                    expected: errorOnNewFileBeforeOldFile ?
+                        [
+                            { file: fooBar, syntax: [], semantic: [], suggestion: [] },
+                            { file: foo, syntax: [], semantic: [], suggestion: [] },
+                        ] :
+                        [
+                            { file: foo, syntax: [], semantic: [], suggestion: [] },
+                            { file: fooBar, syntax: [], semantic: [], suggestion: [] },
+                        ],
+                    existingTimeouts: 2
+                });
+                checkProjectAfterError(service);
+            }
+            interface VerifySession {
+                openFileBeforeCreating: boolean;
+                checkProjectBeforeError: (service: server.ProjectService) => void;
+                checkProjectAfterError: (service: server.ProjectService) => void;
+            }
+            function verifySession(input: VerifySession) {
+                it("when error on new file are asked before old one", () => {
+                    verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ true);
+                });
+
+                it("when error on new file are asked after old one", () => {
+                    verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ false);
+                });
+            }
+            describe("when new file creation directory watcher is invoked before file is opened in editor", () => {
+                verifySession({
+                    openFileBeforeCreating: false,
+                    checkProjectBeforeError: service => {
+                        checkNumberOfProjects(service, { configuredProjects: 1 });
+                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
+                    },
+                    checkProjectAfterError: service => {
+                        checkNumberOfProjects(service, { configuredProjects: 1 });
+                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
+                    }
+                });
+            });
+
+            describe("when new file creation directory watcher is invoked after file is opened in editor", () => {
+                verifySession({
+                    openFileBeforeCreating: true,
+                    checkProjectBeforeError: service => {
+                        checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, libFile.path, config.path]);
+                        checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
+                    },
+                    checkProjectAfterError: service => {
+                        checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
+                        checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
+                    }
+                });
+            });
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {
