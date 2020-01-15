@@ -12869,8 +12869,9 @@ namespace ts {
 
         /** We approximate own properties as non-methods plus methods that are inside the object literal */
         function isSpreadableProperty(prop: Symbol): boolean {
-            return !(prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) ||
-                !prop.declarations.some(decl => isClassLike(decl.parent));
+            return !some(prop.declarations, isPrivateIdentifierPropertyDeclaration) &&
+                (!(prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) ||
+                    !prop.declarations.some(decl => isClassLike(decl.parent)));
         }
 
         function getSpreadSymbol(prop: Symbol, readonly: boolean) {
@@ -20385,26 +20386,7 @@ namespace ts {
                 }
             }
             else if (!assumeInitialized && !(getFalsyFlags(type) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
-                const diag = error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
-
-                // See GH:32846 - if the user is using a variable whose type is () => T1 | ... | undefined
-                // they may have meant to specify the type as (() => T1 | ...) | undefined
-                // This is assumed if: the type is a FunctionType, the return type is a Union, the last constituent of
-                // the union is `undefined`
-                if (type.symbol && type.symbol.declarations.length === 1 && isFunctionTypeNode(type.symbol.declarations[0])) {
-                    const funcTypeNode = <FunctionTypeNode>type.symbol.declarations[0];
-                    const returnType = getReturnTypeFromAnnotation(funcTypeNode);
-                    if (returnType && returnType.flags & TypeFlags.Union) {
-                        const unionTypes = (<UnionTypeNode>funcTypeNode.type).types;
-                        if (unionTypes && unionTypes[unionTypes.length - 1].kind === SyntaxKind.UndefinedKeyword) {
-                            const parenedFuncType = getMutableClone(funcTypeNode);
-                            // Highlight to the end of the second to last constituent of the union
-                            parenedFuncType.end = unionTypes[unionTypes.length - 2].end;
-                            addRelatedInfo(diag, createDiagnosticForNode(parenedFuncType, Diagnostics.Did_you_mean_to_parenthesize_this_function_type));
-                        }
-                    }
-                }
-
+                error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
             }
