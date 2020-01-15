@@ -26,9 +26,9 @@ lib/FrameManager.js(151,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(173,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(230,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(668,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/JSHandle.js(33,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/JSHandle.js(147,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/JSHandle.js(238,29): error TS2503: Cannot find namespace 'Protocol'.
+lib/JSHandle.js(32,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/JSHandle.js(146,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/JSHandle.js(237,29): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(32,30): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(159,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(178,15): error TS2503: Cannot find namespace 'Protocol'.

@@ -3,18 +3,18 @@ Standard output:
 node_modules/bluebird/js/release/assert.js(11,30): error TS2339: Property 'constructor$' does not exist on type 'Error'.
 node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: This condition will always return 'false' since the types 'PromiseConstructor' and 'typeof Promise' have no overlap.
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
-node_modules/bluebird/js/release/debuggability.js(252,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
-node_modules/bluebird/js/release/debuggability.js(259,26): error TS2339: Property 'detail' does not exist on type 'Event'.
-node_modules/bluebird/js/release/debuggability.js(285,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
-node_modules/bluebird/js/release/debuggability.js(328,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/bluebird/js/release/debuggability.js(225,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(232,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(258,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
+node_modules/bluebird/js/release/debuggability.js(301,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
-node_modules/bluebird/js/release/debuggability.js(589,19): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/debuggability.js(660,59): error TS2554: Expected 0 arguments, but got 1.
-node_modules/bluebird/js/release/debuggability.js(834,5): error TS2721: Cannot invoke an object which is possibly 'null'.
-node_modules/bluebird/js/release/debuggability.js(852,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(858,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(897,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(977,4): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(562,19): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/debuggability.js(633,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(807,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/release/debuggability.js(825,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(831,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(870,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(950,4): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2350: Only a void function can be called with the 'new' keyword.
