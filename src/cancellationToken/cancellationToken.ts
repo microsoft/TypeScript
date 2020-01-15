@@ -9,13 +9,14 @@ interface ServerCancellationToken {
 }
 
 function pipeExists(name: string): boolean {
-    try {
-        fs.statSync(name);
-        return true;
-    }
-    catch (e) {
-        return false;
-    }
+    // Unlike statSync, existsSync doesn't throw an exception if the target doesn't exist.
+    // A comment in the node code suggests they're stuck with that decision for back compat
+    // (https://github.com/nodejs/node/blob/9da241b600182a9ff400f6efc24f11a6303c27f7/lib/fs.js#L222).
+    // Caveat: If a named pipe does exist, the first call to existsSync will return true, as for
+    // statSync.  Subsequent calls will return false, whereas statSync would throw an exception
+    // indicating that the pipe was busy.  The difference is immaterial, since our statSync
+    // implementation returned false from its catch block.
+    return fs.existsSync(name);
 }
 
 function createCancellationToken(args: string[]): ServerCancellationToken {
