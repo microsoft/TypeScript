@@ -464,7 +464,7 @@ namespace ts {
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
                     visitNode((<PropertyAccessExpression>node).expression, visitor, isExpression),
-                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
+                    visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
 
             case SyntaxKind.ElementAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
@@ -792,11 +792,16 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return updateImportClause(<ImportClause>node,
                     visitNode((<ImportClause>node).name, visitor, isIdentifier),
-                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
+                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings),
+                    (node as ImportClause).isTypeOnly);
 
             case SyntaxKind.NamespaceImport:
                 return updateNamespaceImport(<NamespaceImport>node,
                     visitNode((<NamespaceImport>node).name, visitor, isIdentifier));
+
+            case SyntaxKind.NamespaceExport:
+                    return updateNamespaceExport(<NamespaceExport>node,
+                        visitNode((<NamespaceExport>node).name, visitor, isIdentifier));
 
             case SyntaxKind.NamedImports:
                 return updateNamedImports(<NamedImports>node,
@@ -817,8 +822,9 @@ namespace ts {
                 return updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
-                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression),
+                    (node as ExportDeclaration).isTypeOnly);
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,

@@ -524,10 +524,10 @@ ${indentText}${text}`;
 
     export const version = "FakeTSVersion";
 
-    export function patchHostForBuildInfoReadWrite(host: ts.CompilerHost | ts.SolutionBuilderHost<ts.BuilderProgram>) {
-        const originalReadFile = host.readFile;
-        host.readFile = (path, encoding) => {
-            const value = originalReadFile.call(host, path, encoding);
+    export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
+        const originalReadFile = sys.readFile;
+        sys.readFile = (path, encoding) => {
+            const value = originalReadFile.call(sys, path, encoding);
             if (!value || !ts.isBuildInfoFile(path)) return value;
             const buildInfo = ts.getBuildInfo(value);
             ts.Debug.assert(buildInfo.version === version);
@@ -535,24 +535,17 @@ ${indentText}${text}`;
             return ts.getBuildInfoText(buildInfo);
         };
 
-        if (host.writeFile) {
-            const originalWriteFile = host.writeFile;
-            host.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-                if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(host, fileName, content, writeByteOrderMark);
+        if (sys.writeFile) {
+            const originalWriteFile = sys.writeFile;
+            sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
+                if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
                 const buildInfo = ts.getBuildInfo(content);
                 sanitizeBuildInfoProgram(buildInfo);
                 buildInfo.version = version;
-                originalWriteFile.call(host, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+                originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
             };
         }
-    }
-
-    export function patchSolutionBuilderHost(host: ts.SolutionBuilderHost<ts.BuilderProgram>, sys: System) {
-        patchHostForBuildInfoReadWrite(host);
-
-        ts.Debug.assert(host.now === undefined);
-        host.now = () => new Date(sys.vfs.time());
-        ts.Debug.assertDefined(host.createHash);
+        return sys;
     }
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
@@ -565,7 +558,7 @@ ${indentText}${text}`;
 
         static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
             const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
-            patchSolutionBuilderHost(host, host.sys);
+            patchHostForBuildInfoReadWrite(host.sys);
             return host;
         }
 
@@ -610,6 +603,10 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
             for (const { diagnostic } of this.diagnostics) {
                 out(diagnostic);
             }
+        }
+
+        now() {
+            return this.sys.now();
         }
     }
 }

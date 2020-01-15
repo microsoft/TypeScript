@@ -26,15 +26,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type 
       Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(87,5): error TS2322: Type '{ tag: "button"; type: "submit"; href: string; }' is not assignable to type 'Union'.
   Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(107,7): error TS2322: Type '{ foo: string; }' is not assignable to type 'ObjectDataSpecification'.
-  Types of property 'foo' are incompatible.
-    Type 'string' is not assignable to type 'IValue | undefined'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(113,7): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: number; } | { [x: number]: number; }'.
-  Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number | undefined'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,7): error TS2322: Type '{ a: number; c: string; }' is not assignable to type '{ [x: string]: number; } | { a: number; }'.
-  Types of property 'c' are incompatible.
-    Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(108,5): error TS2322: Type 'string' is not assignable to type 'IValue'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(113,67): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (14 errors) ====
@@ -185,23 +179,17 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,7): error TS2322: Type
     
     
     const dataSpecification: ObjectDataSpecification = {  // Error
-          ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'ObjectDataSpecification'.
-!!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'IValue | undefined'.
         foo: "asdfsadffsd"
+        ~~~
+!!! error TS2322: Type 'string' is not assignable to type 'IValue'.
     };
     
     // Repro from #34611
     
     const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
-          ~~~~
-!!! error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: number; } | { [x: number]: number; }'.
-!!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
+                                                                      ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
-          ~~~~
-!!! error TS2322: Type '{ a: number; c: string; }' is not assignable to type '{ [x: string]: number; } | { a: number; }'.
-!!! error TS2322:   Types of property 'c' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
+                                                                  ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

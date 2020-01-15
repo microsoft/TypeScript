@@ -591,6 +591,8 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
+        private updateGraphDurationMs: number | undefined;
+
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
 
@@ -648,11 +650,21 @@ namespace ts.server {
                 syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
+            this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+        }
+
+        private performanceEventHandler(event: PerformanceEvent) {
+            switch (event.kind) {
+                case "UpdateGraph": {
+                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                    break;
+                }
+            }
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -795,7 +807,9 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
+                updateGraphDurationMs: this.updateGraphDurationMs,
             };
+
             if (success) {
                 let metadata: unknown;
                 if (isArray(info)) {
@@ -1060,7 +1074,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 return {
                     definitions: this.mapDefinitionInfo(definitions, project),
-                    textSpan: toProcolTextSpan(textSpan, scriptInfo)
+                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
                 };
             }
 
@@ -1315,7 +1329,7 @@ namespace ts.server {
             if (info.canRename) {
                 const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
                 return identity<protocol.RenameInfoSuccess>(
-                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProcolTextSpan(triggerSpan, scriptInfo) });
+                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProtocolTextSpan(triggerSpan, scriptInfo) });
             }
             else {
                 return info;
@@ -1415,8 +1429,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
                 return spans.map(s => ({
-                    textSpan: toProcolTextSpan(s.textSpan, scriptInfo),
-                    hintSpan: toProcolTextSpan(s.hintSpan, scriptInfo),
+                    textSpan: toProtocolTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: toProtocolTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
                     autoCollapse: s.autoCollapse,
                     kind: s.kind
@@ -1605,7 +1619,7 @@ namespace ts.server {
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
-                    const convertedSpan = replacementSpan ? toProcolTextSpan(replacementSpan, scriptInfo) : undefined;
+                    const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                 }
@@ -1775,7 +1789,7 @@ namespace ts.server {
                 text: item.text,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
-                spans: item.spans.map(span => toProcolTextSpan(span, scriptInfo)),
+                spans: item.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 childItems: this.mapLocationNavigationBarItems(item.childItems, scriptInfo),
                 indent: item.indent
             }));
@@ -1796,8 +1810,8 @@ namespace ts.server {
                 text: tree.text,
                 kind: tree.kind,
                 kindModifiers: tree.kindModifiers,
-                spans: tree.spans.map(span => toProcolTextSpan(span, scriptInfo)),
-                nameSpan: tree.nameSpan && toProcolTextSpan(tree.nameSpan, scriptInfo),
+                spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
+                nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
             };
         }
@@ -2059,7 +2073,7 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                    ? spans.map(span => toProcolTextSpan(span, scriptInfo))
+                    ? spans.map(span => toProtocolTextSpan(span, scriptInfo))
                     : spans;
         }
 
@@ -2131,12 +2145,77 @@ namespace ts.server {
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
             const result: protocol.SelectionRange = {
-                textSpan: toProcolTextSpan(selectionRange.textSpan, scriptInfo),
+                textSpan: toProtocolTextSpan(selectionRange.textSpan, scriptInfo),
             };
             if (selectionRange.parent) {
                 result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
             }
             return result;
+        }
+
+        private toProtocolCallHierarchyItem(item: CallHierarchyItem, scriptInfo?: ScriptInfo): protocol.CallHierarchyItem {
+            if (!scriptInfo) {
+                const file = toNormalizedPath(item.file);
+                scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+                if (!scriptInfo) {
+                    this.projectService.logErrorForScriptInfoNotFound(file);
+                    return Errors.ThrowNoProject();
+                }
+            }
+            return {
+                name: item.name,
+                kind: item.kind,
+                file: item.file,
+                span: toProtocolTextSpan(item.span, scriptInfo),
+                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
+            };
+        }
+
+        private toProtocolCallHierarchyIncomingCall(incomingCall: CallHierarchyIncomingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyIncomingCall {
+            return {
+                from: this.toProtocolCallHierarchyItem(incomingCall.from),
+                fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private toProtocolCallHierarchyOutgoingCall(outgoingCall: CallHierarchyOutgoingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyOutgoingCall {
+            return {
+                to: this.toProtocolCallHierarchyItem(outgoingCall.to),
+                fromSpans: outgoingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            };
+        }
+
+        private prepareCallHierarchy(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyItem | protocol.CallHierarchyItem[] | undefined {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (scriptInfo) {
+                const position = this.getPosition(args, scriptInfo);
+                const result = project.getLanguageService().prepareCallHierarchy(file, position);
+                return result && mapOneOrMany(result, item => this.toProtocolCallHierarchyItem(item, scriptInfo));
+            }
+            return undefined;
+        }
+
+        private provideCallHierarchyIncomingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyIncomingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (!scriptInfo) {
+                this.projectService.logErrorForScriptInfoNotFound(file);
+                return Errors.ThrowNoProject();
+            }
+            const incomingCalls = project.getLanguageService().provideCallHierarchyIncomingCalls(file, this.getPosition(args, scriptInfo));
+            return incomingCalls.map(call => this.toProtocolCallHierarchyIncomingCall(call, scriptInfo));
+        }
+
+        private provideCallHierarchyOutgoingCalls(args: protocol.FileLocationRequestArgs): protocol.CallHierarchyOutgoingCall[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+            if (!scriptInfo) {
+                this.projectService.logErrorForScriptInfoNotFound(file);
+                return Errors.ThrowNoProject();
+            }
+            const outgoingCalls = project.getLanguageService().provideCallHierarchyOutgoingCalls(file, this.getPosition(args, scriptInfo));
+            return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
         }
 
         getCanonicalFileName(fileName: string) {
@@ -2504,6 +2583,15 @@ namespace ts.server {
             [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
                 return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.PrepareCallHierarchy]: (request: protocol.PrepareCallHierarchyRequest) => {
+                return this.requiredResponse(this.prepareCallHierarchy(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyIncomingCalls]: (request: protocol.ProvideCallHierarchyIncomingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyIncomingCalls(request.arguments));
+            },
+            [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
+                return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
@@ -2549,6 +2637,9 @@ namespace ts.server {
 
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
+
+            this.updateGraphDurationMs = undefined;
+
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
@@ -2627,7 +2718,7 @@ namespace ts.server {
         readonly project: Project;
     }
 
-    function toProcolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
+    function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
         return {
             start: scriptInfo.positionToLineOffset(textSpan.start),
             end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
@@ -2635,8 +2726,8 @@ namespace ts.server {
     }
 
     function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
-        const textSpan = toProcolTextSpan(span, scriptInfo);
-        const contextTextSpan = contextSpan && toProcolTextSpan(contextSpan, scriptInfo);
+        const textSpan = toProtocolTextSpan(span, scriptInfo);
+        const contextTextSpan = contextSpan && toProtocolTextSpan(contextSpan, scriptInfo);
         return contextTextSpan ?
             { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
             textSpan;

@@ -3,8 +3,9 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2020:
             case ModuleKind.ES2015:
-                return transformES2015Module;
+                return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
             default:
@@ -52,6 +53,10 @@ namespace ts {
 
         if (languageVersion < ScriptTarget.ESNext) {
             transformers.push(transformESNext);
+        }
+
+        if (languageVersion < ScriptTarget.ES2020) {
+            transformers.push(transformES2020);
         }
 
         if (languageVersion < ScriptTarget.ES2019) {

@@ -743,6 +743,51 @@ namespace ts.server {
             return notImplemented();
         }
 
+        private convertCallHierarchyItem(item: protocol.CallHierarchyItem): CallHierarchyItem {
+            return {
+                file: item.file,
+                name: item.name,
+                kind: item.kind,
+                span: this.decodeSpan(item.span, item.file),
+                selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+            };
+        }
+
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.PrepareCallHierarchyResponse>(request);
+            return response.body && mapOneOrMany(response.body, item => this.convertCallHierarchyItem(item));
+        }
+
+        private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {
+            return {
+                from: this.convertCallHierarchyItem(item.from),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file))
+            };
+        }
+
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
+        }
+
+        private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
+            return {
+                to: this.convertCallHierarchyItem(item.to),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file))
+            };
+        }
+
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
+        }
+
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
