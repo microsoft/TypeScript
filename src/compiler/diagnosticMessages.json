@@ -1119,7 +1119,6 @@
         "category": "Error",
         "code": 1375
     },
-
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
