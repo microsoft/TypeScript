@@ -1374,7 +1374,6 @@ namespace ts {
         return typeof x === "number";
     }
 
-    // export function tryCast<TOut extends Exclude<TIn, undefined>, TIn = any>(value: TIn | undefined, test: (value: Exclude<TIn, undefined>) => value is TOut): TOut | undefined;
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {

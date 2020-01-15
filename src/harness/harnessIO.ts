@@ -451,7 +451,7 @@ namespace Harness {
                         throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                     }
                 }
-                else if (result.dts.size !== result.getNumberOfJsFiles(/*includeJson*/ true)) {
+                else if (result.dts.size !== result.getNumberOfJsFiles(/*includeJson*/ false)) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }

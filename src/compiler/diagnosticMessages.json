@@ -1099,7 +1099,7 @@
         "category": "Error",
         "code": 1370
     },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
     },
@@ -2854,6 +2854,10 @@
     "The left-hand side of a 'for...of' statement may not be an optional property access.": {
         "category": "Error",
         "code": 2781
+    },
+    "'{0}' needs an explicit type annotation.": {
+        "category": "Message",
+        "code": 2782
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

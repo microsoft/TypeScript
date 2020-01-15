@@ -591,6 +591,8 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
+        private updateGraphDurationMs: number | undefined;
+
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
 
@@ -648,11 +650,21 @@ namespace ts.server {
                 syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
+            this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+        }
+
+        private performanceEventHandler(event: PerformanceEvent) {
+            switch (event.kind) {
+                case "UpdateGraph": {
+                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                    break;
+                }
+            }
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -795,7 +807,9 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
+                updateGraphDurationMs: this.updateGraphDurationMs,
             };
+
             if (success) {
                 let metadata: unknown;
                 if (isArray(info)) {
@@ -2623,6 +2637,9 @@ namespace ts.server {
 
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
+
+            this.updateGraphDurationMs = undefined;
+
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();

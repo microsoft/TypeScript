@@ -2077,7 +2077,7 @@ namespace ts.Completions {
             switch (contextToken.kind) {
                 case SyntaxKind.CommaToken:
                     return containingNodeKind === SyntaxKind.VariableDeclaration ||
-                        containingNodeKind === SyntaxKind.VariableDeclarationList ||
+                        isVariableDeclarationListButNotTypeArgument(contextToken) ||
                         containingNodeKind === SyntaxKind.VariableStatement ||
                         containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                         isFunctionLikeButNotConstructor(containingNodeKind) ||
@@ -2207,6 +2207,11 @@ namespace ts.Completions {
             }
 
             return false;
+        }
+
+        function isVariableDeclarationListButNotTypeArgument(node: Node): boolean {
+            return node.parent.kind === SyntaxKind.VariableDeclarationList
+                && !isPossiblyTypeArgumentPosition(node, sourceFile, typeChecker);
         }
 
         /**

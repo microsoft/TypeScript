@@ -523,16 +523,18 @@ namespace ts.textChanges {
             // Rules:
             // - Always insert leading newline.
             // - For object literals:
-            //   - Add a trailing comma of there are existing members in the node.
-            //   - Add a leading comma if there are existing insertions and the node is empty (because we didn't add a trailing comma per the previous rule).
+            //   - Add a trailing comma if there are existing members in the node, or the source file is not a JSON file
+            //     (because trailing commas are generally illegal in a JSON file).
+            //   - Add a leading comma if the source file is not a JSON file, there are existing insertions,
+            //     and the node is empty (because we didn't add a trailing comma per the previous rule).
             // - Only insert a trailing newline if body is single-line and there are no other insertions for the node.
-            //   NOTE: This is handled in finishClassesWithNodesInsertedAtStart.
+            //   NOTE: This is handled in `finishClassesWithNodesInsertedAtStart`.
 
             const members = getMembersOrProperties(cls);
             const isEmpty = members.length === 0;
             const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
-            const insertLeadingComma = isObjectLiteralExpression(cls) && isEmpty && !isFirstInsertion;
-            const insertTrailingComma = isObjectLiteralExpression(cls) && !isEmpty;
+            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
             return {
                 indentation,
                 prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
@@ -761,14 +763,16 @@ namespace ts.textChanges {
         private finishClassesWithNodesInsertedAtStart(): void {
             this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
-                const isEmpty = getMembersOrProperties(node).length === 0;
-                const isSingleLine = positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile);
-                if (isEmpty && isSingleLine && openBraceEnd !== closeBraceEnd - 1) {
-                    // For `class C { }` remove the whitespace inside the braces.
-                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
-                }
-                if (isSingleLine) {
-                    this.insertText(sourceFile, closeBraceEnd - 1, this.newLineCharacter);
+                if (openBraceEnd !== undefined && closeBraceEnd !== undefined) {
+                    const isEmpty = getMembersOrProperties(node).length === 0;
+                    const isSingleLine = positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile);
+                    if (isEmpty && isSingleLine && openBraceEnd !== closeBraceEnd - 1) {
+                        // For `class C { }` remove the whitespace inside the braces.
+                        this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                    }
+                    if (isSingleLine) {
+                        this.insertText(sourceFile, closeBraceEnd - 1, this.newLineCharacter);
+                    }
                 }
             });
         }
@@ -824,8 +828,10 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number, number] {
-        return [findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile)!.end, findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)!.end];
+    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
+        const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
+        const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
+        return [open?.end, close?.end];
     }
     function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
         return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
