@@ -36,12 +36,13 @@ namespace ts.codefix {
 
         let suggestion: string | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
-            Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (property access)");
+            Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
             let containingType = checker.getTypeAtLocation(node.parent.expression);
             if (node.parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
             }
-            suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
+            const name = node as Identifier | PrivateIdentifier;
+            suggestion = checker.getSuggestionForNonexistentProperty(name, containingType);
         }
         else if (isImportSpecifier(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (import)");
