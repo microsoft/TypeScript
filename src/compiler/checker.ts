@@ -1865,7 +1865,12 @@ namespace ts {
         }
 
         function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node) {
-            if (!(useSite.flags & NodeFlags.Ambient) && !isPartOfTypeQuery(useSite) && isExpressionNode(useSite)) {
+            if (
+                !(useSite.flags & NodeFlags.Ambient) &&
+                !isPartOfTypeQuery(useSite) &&
+                !isPartOfPossiblyValidComputedPropertyNameExpression(useSite) &&
+                isExpressionNode(useSite)
+            ) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
                     const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier

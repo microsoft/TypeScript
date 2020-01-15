@@ -1778,6 +1778,13 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
+    export function isPartOfPossiblyValidComputedPropertyNameExpression(node: Node) {
+        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+            node = node.parent;
+        }
+        return node.kind === SyntaxKind.ComputedPropertyName;
+    }
+
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
