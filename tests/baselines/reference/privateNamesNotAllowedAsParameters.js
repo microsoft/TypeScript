@@ -5,12 +5,6 @@ class A {
 
 
 //// [privateNamesNotAllowedAsParameters.js]
-var _foo;
 class A {
-    constructor() {
-        _foo.set(this, void 0);
-    }
-    setFoo() { }
+    setFoo(#foo) { }
 }
-_foo = new WeakMap();
-{ }
