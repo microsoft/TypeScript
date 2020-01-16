@@ -2425,19 +2425,48 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
-        function emitBinaryExpression(node: BinaryExpression) {
-            const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-            const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-            const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+        function* generateEmitMaybeBinaryExpression(node: Expression) {
+            if (isBinaryExpression(node)) {
+                const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
+                const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
 
-            emitExpression(node.left);
-            increaseIndentIf(indentBeforeOperator, isCommaOperator);
-            emitLeadingCommentsOfPosition(node.operatorToken.pos);
-            writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-            increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-            emitExpression(node.right);
-            decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                yield node.left;
+                increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                emitLeadingCommentsOfPosition(node.operatorToken.pos);
+                writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                yield node.right;
+                decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+            }
+            else {
+                emitExpression(node);
+            }
+        }
+
+        function emitBinaryExpression(node: BinaryExpression) {
+            const work = [generateEmitMaybeBinaryExpression(node)];
+            while (work.length) {
+                const res = work[work.length - 1].next();
+                if (!res.done) {
+                    // If the generator is incomplete, we need to create a new generator with the yielded value, and run that to completion
+                    work.push(generateEmitMaybeBinaryExpression(res.value));
+                }
+                else {
+                    // If the generator is complete, then we have either an intermedidate result, or the final result
+                    if (work.length === 1) {
+                        // If the last element of the work queue is complete, return
+                        return;
+                    }
+                    else {
+                        // otherwise, remove the finished generator
+                        work.pop();
+                    }
+                }
+            }
+
+            return Debug.fail("Unreachable state in emitBinaryExpression!");
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {

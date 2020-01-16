@@ -27113,11 +27113,30 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
-                return checkExpression(node.right, checkMode);
+            const work = [generateTypeForMaybeBinaryExpression(node, checkMode)];
+            let lastResult: Type | undefined;
+            while (work.length) {
+                const res = work[work.length - 1].next(...(lastResult ? [lastResult] : []));
+                lastResult = undefined;
+                if (!res.done) {
+                    // If the generator is incomplete, we need to create a new generator with the yielded value, and run that to completion
+                    work.push(generateTypeForMaybeBinaryExpression(res.value, checkMode));
+                }
+                else {
+                    // If the generator is complete, then we have either an intermedidate result, or the final result
+                    if (work.length === 1) {
+                        // If the last element of the work queue is complete, return it
+                        return res.value;
+                    }
+                    else {
+                        // otherwise, the result is the type requested for the prior generator on the stack
+                        lastResult = res.value;
+                        work.pop();
+                    }
+                }
             }
-            checkGrammarNullishCoalesceWithLogicalExpression(node);
-            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
+
+            return Debug.fail("Unreachable state in checkBinaryExpression!");
         }
 
         function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
@@ -27132,12 +27151,37 @@ namespace ts {
             }
         }
 
+        function* generateTypeForMaybeBinaryExpression(node: Expression, checkMode: CheckMode | undefined): Generator<Expression, Type, Type> {
+            if (isBinaryExpression(node)) {
+                if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
+                    return checkExpression(node.right, checkMode);
+                }
+                checkGrammarNullishCoalesceWithLogicalExpression(node);
+                const operator = node.operatorToken.kind;
+                if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                    return checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword);
+                }
+                const leftType = yield node.left;
+                if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                    checkTruthinessOfType(leftType, node.left);
+                }
+                const rightType = yield node.right;
+                
+                return checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
+            }
+            else {
+                return checkExpression(node, checkMode);
+            }
+        }
+
+        // Note that this and the `BinaryExpression` case of `generateTypeForMaybeBinaryExpression` above should behave the same
+        // Unfortunately, they cannot be combined unless the caller of `checkBinaryLikeExpression` is prepared to create a trampoline
+        // like `checkBinaryExpression` does.
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
             }
-            // TODO: make into trampoline
             let leftType: Type;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                 leftType = checkTruthinessExpression(left, checkMode);
@@ -30761,12 +30805,15 @@ namespace ts {
             checkSourceElement(node.statement);
         }
 
-        function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
-            const type = checkExpression(node, checkMode);
+        function checkTruthinessOfType(type: Type, node: Node) {
             if (type.flags & TypeFlags.Void) {
                 error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
             }
             return type;
+        }
+
+        function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
+            return checkTruthinessOfType(checkExpression(node, checkMode), node);
         }
 
         function checkForStatement(node: ForStatement) {

@@ -21,6 +21,29 @@ namespace Harness {
         type?: string;
     }
 
+    function* forEachASTNode(node: ts.Node) {
+        const work = [(function*() { yield node })()];
+        while (work.length) {
+            const res = work[work.length - 1].next();
+            if (!res.done) {
+                yield res.value;
+                // If the generator is incomplete, we need to create a new generator with the yielded value, and run that to completion
+                work.push(ts.forEachChildGen(res.value, function*(node) { yield node }));
+            }
+            else {
+                // If the generator is complete, then we have either an intermedidate result, or the final result
+                if (work.length === 1) {
+                    // If the last element of the work queue is complete, return
+                    return;
+                }
+                else {
+                    // otherwise, remove the finished generator
+                    work.pop();
+                }
+            }
+        }
+    }
+
     export class TypeWriterWalker {
         currentSourceFile!: ts.SourceFile;
 
@@ -53,19 +76,15 @@ namespace Harness {
         }
 
         private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
-            if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
-                const result = this.writeTypeOrSymbol(node, isSymbolWalk);
-                if (result) {
-                    yield result;
-                }
-            }
-
-            const children: ts.Node[] = [];
-            ts.forEachChild(node, child => void children.push(child));
-            for (const child of children) {
-                const gen = this.visitNode(child, isSymbolWalk);
-                for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-                    yield value;
+            const gen = forEachASTNode(node);
+            let res = gen.next();
+            for (; !res.done; res = gen.next()) {
+                const {value: node} = res;
+                if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
+                    const result = this.writeTypeOrSymbol(node, isSymbolWalk);
+                    if (result) {
+                        yield result;
+                    }
                 }
             }
         }
