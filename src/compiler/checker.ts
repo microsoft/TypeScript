@@ -27166,7 +27166,7 @@ namespace ts {
                     checkTruthinessOfType(leftType, node.left);
                 }
                 const rightType = yield node.right;
-                
+
                 return checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
             }
             else {
@@ -27190,7 +27190,7 @@ namespace ts {
                 leftType = checkExpression(left, checkMode);
             }
 
-            let rightType = checkExpression(right, checkMode);
+            const rightType = checkExpression(right, checkMode);
             return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
         }
 
@@ -27202,7 +27202,7 @@ namespace ts {
             rightType: Type,
             errorNode?: Node
         ): Type {
-            const operator = operatorToken.kind;    
+            const operator = operatorToken.kind;
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:

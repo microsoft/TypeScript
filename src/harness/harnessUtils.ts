@@ -81,17 +81,17 @@ namespace Utils {
                 assert.isFalse(node.end < 0, "node.end < 0");
                 assert.isFalse(node.end < node.pos, "node.end < node.pos");
                 assert.equal(node.parent, parent, "node.parent !== parent");
-    
+
                 if (parent) {
                     // Make sure each child is contained within the parent.
                     assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
                     assert.isFalse(node.end > parent.end, "node.end > parent.end");
                 }
-    
+
                 ts.forEachChild(node, child => {
                     queue.push([child, node]);
                 });
-    
+
                 // Make sure each of the children is in order.
                 let currentPos = 0;
                 ts.forEachChild(node,
@@ -103,18 +103,18 @@ namespace Utils {
                         assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
                         assert.isFalse(array.end > node.end, "array.end > node.end");
                         assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
-    
+
                         for (const item of array) {
                             assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
                             currentPos = item.end;
                         }
-    
+
                         currentPos = array.end;
                     });
-    
+
                 const childNodesAndArrays: any[] = [];
                 ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
-    
+
                 for (const childName in node) {
                     if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
                         // for now ignore jsdoc comments

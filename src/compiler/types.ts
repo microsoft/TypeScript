@@ -6160,7 +6160,7 @@ namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitGenerator: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,

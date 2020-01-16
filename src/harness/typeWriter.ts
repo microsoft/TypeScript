@@ -22,13 +22,13 @@ namespace Harness {
     }
 
     function* forEachASTNode(node: ts.Node) {
-        const work = [(function*() { yield node })()];
+        const work = [(function*() { yield node; })()];
         while (work.length) {
             const res = work[work.length - 1].next();
             if (!res.done) {
                 yield res.value;
                 // If the generator is incomplete, we need to create a new generator with the yielded value, and run that to completion
-                work.push(ts.forEachChildGen(res.value, function*(node) { yield node }));
+                work.push(ts.forEachChildGen(res.value, function*(node) { yield node; }));
             }
             else {
                 // If the generator is complete, then we have either an intermedidate result, or the final result
