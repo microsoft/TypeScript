@@ -1,6 +1,7 @@
 /* @internal */
 namespace ts.codefix {
-    export const importFixId = "fixMissingImport";
+    export const importFixName = "import";
+    const importFixId = "fixMissingImport";
     const errorCodes: readonly number[] = [
         Diagnostics.Cannot_find_name_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
@@ -542,7 +543,7 @@ namespace ts.codefix {
         const changes = textChanges.ChangeTracker.with(context, tracker => {
             diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, quotePreference);
         });
-        return createCodeFixAction("import", changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
+        return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
     }
     function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): DiagnosticAndArguments {
         switch (fix.kind) {
