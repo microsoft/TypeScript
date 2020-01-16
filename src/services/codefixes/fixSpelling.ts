@@ -14,27 +14,27 @@ namespace ts.codefix {
             const { sourceFile } = context;
             const info = getInfo(sourceFile, context.span.start, context);
             if (!info) return undefined;
-            const { node, suggestion } = info;
+            const { node, suggestedSymbol } = info;
             const { target } = context.host.getCompilationSettings();
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, target!));
-            return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target!));
+            return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file, diag.start, context);
             const { target } = context.host.getCompilationSettings();
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, target!);
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target!);
         }),
     });
 
-    function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase): { node: Node, suggestion: string } | undefined {
+    function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase): { node: Node, suggestedSymbol: Symbol } | undefined {
         // This is the identifier of the misspelled word. eg:
         // this.speling = 1;
         //      ^^^^^^^
         const node = getTokenAtPosition(sourceFile, pos);
         const checker = context.program.getTypeChecker();
 
-        let suggestion: string | undefined;
+        let suggestedSymbol: Symbol | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
             Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
             let containingType = checker.getTypeAtLocation(node.parent.expression);
@@ -42,29 +42,36 @@ namespace ts.codefix {
                 containingType = checker.getNonNullableType(containingType);
             }
             const name = node as Identifier | PrivateIdentifier;
-            suggestion = checker.getSuggestionForNonexistentProperty(name, containingType);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(name, containingType);
         }
         else if (isImportSpecifier(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier, "Expected an identifier for spelling (import)");
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {
-                suggestion = checker.getSuggestionForNonexistentExport(node as Identifier, resolvedSourceFile.symbol);
+                suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node as Identifier, resolvedSourceFile.symbol);
             }
         }
         else {
             const meaning = getMeaningFromLocation(node);
             const name = getTextOfNode(node);
             Debug.assert(name !== undefined, "name should be defined");
-            suggestion = checker.getSuggestionForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
         }
 
-        return suggestion === undefined ? undefined : { node, suggestion };
+        return suggestedSymbol === undefined ? undefined : { node, suggestedSymbol };
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string, target: ScriptTarget) {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
+        const suggestion = symbolName(suggestedSymbol);
         if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
-            changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+            const valDecl = suggestedSymbol.valueDeclaration;
+            if (isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
+                changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+            }
+            else {
+                changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+            }
         }
         else {
             changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
