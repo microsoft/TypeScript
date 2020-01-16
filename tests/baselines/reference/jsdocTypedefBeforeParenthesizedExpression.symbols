@@ -1,0 +1,12 @@
+=== tests/cases/compiler/test.js ===
+;
+No type information for this code./** @typedef {object} NotADuplicateIdentifier */
+No type information for this code.
+No type information for this code.(2 * 2);
+No type information for this code.
+No type information for this code./** @typedef {object} AlsoNotADuplicate */
+No type information for this code.
+No type information for this code.(2 * 2) + 1;
+No type information for this code.
+No type information for this code.
+No type information for this code.
