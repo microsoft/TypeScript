@@ -1,10 +1,15 @@
 namespace ts.projectSystem {
+    export function verifyDynamic(service: server.ProjectService, path: string) {
+        const info = Debug.assertDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
+        assert.isTrue(info.isDynamic);
+    }
+
     describe("unittests:: tsserver:: Untitled files", () => {
         const untitledFile = "untitled:^Untitled-1";
         it("Can convert positions to locations", () => {
             const aTs: File = { path: "/proj/a.ts", content: "" };
             const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
-            const session = createSession(createServerHost([aTs, tsconfig]));
+            const session = createSession(createServerHost([aTs, tsconfig]), { useInferredProjectPerProjectRoot: true });
 
             openFilesForSession([aTs], session);
 
@@ -14,7 +19,7 @@ namespace ts.projectSystem {
                 scriptKindName: "TS",
                 projectRootPath: "/proj",
             });
-
+            verifyDynamic(session.getProjectService(), `/proj/untitled:^untitled-1`);
             const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
                 file: untitledFile,
                 startLine: 3,
@@ -48,11 +53,11 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: tscWatch.projectRoot });
-            const service = createProjectService(host, { logger: createLoggerWritingToConsole() });
+            const service = createProjectService(host);
             service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, tscWatch.projectRoot);
-            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects.get("tsconfig.json")!, ["tsconfig.json"]);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+            verifyDynamic(service, `${tscWatch.projectRoot}/${untitledFile}`);
 
             const untitled: File = {
                 path: `${tscWatch.projectRoot}/Untitled-1.ts`,
@@ -70,6 +75,9 @@ namespace ts.projectSystem {
             checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
 
             service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, tscWatch.projectRoot);
+            verifyDynamic(service, `${tscWatch.projectRoot}/${untitledFile}`);
+            checkProjectActualFiles(service.configuredProjects.get(config.path)!, [untitled.path, libFile.path, config.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
         });
     });
 }

@@ -221,6 +221,7 @@ namespace ts.projectSystem {
 
             checkNumberOfExternalProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 0);
+            verifyDynamic(projectService, "/^scriptdocument1 file1.ts");
 
             externalFiles[0].content = "let x =1;";
             projectService.applyChangesInOpenFiles(arrayIterator(externalFiles));
