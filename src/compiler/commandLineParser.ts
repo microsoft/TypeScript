@@ -480,6 +480,7 @@ namespace ts {
                 error: importsNotUsedAsValues.Error
             }),
             affectsEmit: true,
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
         },

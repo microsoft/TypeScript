@@ -101,7 +101,7 @@ namespace ts.server {
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
                     success: false,
-                    updateGraphDurationMs: undefined,
+                    performanceData: undefined,
                 };
                 expect(lastSent).to.deep.equal(expected);
             });
@@ -128,7 +128,7 @@ namespace ts.server {
                     request_seq: 0,
                     seq: 0,
                     body: undefined,
-                    updateGraphDurationMs: undefined,
+                    performanceData: undefined,
                 });
             });
             it("should handle literal types in request", () => {
@@ -329,7 +329,7 @@ namespace ts.server {
                     request_seq: 0,
                     seq: 0,
                     body: undefined,
-                    updateGraphDurationMs: undefined,
+                    performanceData: undefined,
                 });
             });
         });
@@ -420,7 +420,7 @@ namespace ts.server {
                     command,
                     body,
                     success: true,
-                    updateGraphDurationMs: undefined,
+                    performanceData: undefined,
                 });
             });
         });
@@ -540,7 +540,7 @@ namespace ts.server {
                 command,
                 body,
                 success: true,
-                updateGraphDurationMs: undefined,
+                performanceData: undefined,
             });
         });
         it("can add and respond to new protocol handlers", () => {

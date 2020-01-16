@@ -1123,6 +1123,45 @@ foo().hello`
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates errors and emit when importsNotUsedAsValues changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `export class C {}`
+                };
+                const bFile: File = {
+                    path: `${projectRoot}/b.ts`,
+                    content: `import {C} from './a';
+export function f(p: C) { return p; }`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "remove"';
+                },
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "error"';
+                },
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return 'Set to "preserve"';
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "updates errors when ambient modules of program changes",
             commandLineArgs: ["-w"],
             sys: () => {
