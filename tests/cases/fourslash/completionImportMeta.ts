@@ -4,12 +4,10 @@
 ////import./*1*/
 
 // @Filename: b.ts
-////declare global {
-////  interface ImportMeta {
-////    url: string;
-////  }
-////}
 ////import.meta./*2*/
+
+// @Filename: c.ts
+////import./*3*/meta
 
 verify.completions(
   {
@@ -18,7 +16,10 @@ verify.completions(
   },
   {
     marker: "2",
-    includes: ["url"],
-    excludes: ["meta"]
+    exact: undefined
+  },
+  {
+    marker: "3",
+    exact: "meta"
   }
 );

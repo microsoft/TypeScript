@@ -1145,8 +1145,9 @@ namespace ts.Completions {
 
             if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
                 const metaPropertyAccessIdentifier = node.name.text;
+                const dotToken = node.getChildAt(1);
                 // Check whether this MetaProperty node already had its metadata accessed
-                if (metaPropertyAccessIdentifier !== "target" && metaPropertyAccessIdentifier !== "meta") {
+                if (dotToken === contextToken || metaPropertyAccessIdentifier !== "target" && metaPropertyAccessIdentifier !== "meta") {
                     const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
                     symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
                     return;
