@@ -1,5 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Untitled files", () => {
+        const untitledFile = "untitled:^Untitled-1";
         it("Can convert positions to locations", () => {
             const aTs: File = { path: "/proj/a.ts", content: "" };
             const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
@@ -7,7 +8,6 @@ namespace ts.projectSystem {
 
             openFilesForSession([aTs], session);
 
-            const untitledFile = "untitled:^Untitled-1";
             executeSessionRequestNoResponse<protocol.OpenRequest>(session, protocol.CommandTypes.Open, {
                 file: untitledFile,
                 fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
@@ -40,6 +40,36 @@ namespace ts.projectSystem {
                     commands: undefined,
                 },
             ]);
+        });
+
+        it("opening untitled files", () => {
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: tscWatch.projectRoot });
+            const service = createProjectService(host, { logger: createLoggerWritingToConsole() });
+            service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, tscWatch.projectRoot);
+            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects.get("tsconfig.json")!, ["tsconfig.json"]);
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+
+            const untitled: File = {
+                path: `${tscWatch.projectRoot}/Untitled-1.ts`,
+                content: "const x = 10;"
+            };
+            host.writeFile(untitled.path, untitled.content);
+            host.checkTimeoutQueueLength(0);
+            service.openClientFile(untitled.path, untitled.content, /*scriptKind*/ undefined, tscWatch.projectRoot);
+            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects.get(config.path)!, [untitled.path, libFile.path, config.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+
+            service.closeClientFile(untitledFile);
+            checkProjectActualFiles(service.configuredProjects.get(config.path)!, [untitled.path, libFile.path, config.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+
+            service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, tscWatch.projectRoot);
         });
     });
 }
