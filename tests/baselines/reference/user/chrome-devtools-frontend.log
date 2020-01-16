@@ -1,7 +1,7 @@
 Exit Code: 1
 Standard output:
 ../../../../built/local/lib.es5.d.ts(1433,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../node_modules/@types/node/globals.d.ts(235,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
+../../../../node_modules/@types/node/globals.d.ts(168,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -12,7 +12,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
-  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 873 more.
+  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 871 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,49): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Window & typeof globalThis' provides no match for the signature 'new (): any'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
@@ -23,7 +23,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
-  Type '{}' is missing the following properties from type 'Window': applicationCache, caches, clientInformation, closed, and 225 more.
+  Type '{}' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 224 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(107,5): error TS2322: Type 'Timeout' is not assignable to type 'number'.
@@ -4992,7 +4992,7 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(74
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,48): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,60): error TS2339: Property 'pageY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(753,20): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 170 more.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 169 more.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,28): error TS2339: Property 'deepElementFromPoint' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,70): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(771,20): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
@@ -7749,13 +7749,8 @@ node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.j
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(267,17): error TS2304: Cannot find name 'FileEntry'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(278,17): error TS2304: Cannot find name 'FileError'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(317,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(344,31): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(rawString: string): string', gave the following error.
-    Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
-      Type 'ArrayBuffer' is not assignable to type 'string'.
-  Overload 2 of 2, '(data: string): string', gave the following error.
-    Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
-      Type 'ArrayBuffer' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(344,31): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
+  Type 'ArrayBuffer' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(357,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(364,17): error TS2304: Cannot find name 'FileEntry'.
 node_modules/chrome-devtools-frontend/front_end/persistence/IsolatedFileSystem.js(372,17): error TS2304: Cannot find name 'FileWriter'.

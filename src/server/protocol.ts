@@ -236,6 +236,17 @@ namespace ts.server.protocol {
          * Contains extra information that plugin can include to be passed on
          */
         metadata?: unknown;
+
+        /* @internal */
+        performanceData?: PerformanceData;
+    }
+
+    /* @internal */
+    export interface PerformanceData {
+        /**
+         * Time spent updating the program graph, in milliseconds.
+         */
+        updateGraphDurationMs?: number;
     }
 
     /**
