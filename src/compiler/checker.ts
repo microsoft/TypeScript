@@ -29150,7 +29150,7 @@ namespace ts {
             }
         }
 
-        function checkExportsOnMergedDeclarations(node: Node): void {
+        function checkExportsOnMergedDeclarations(node: Declaration): void {
             if (!produceDiagnostics) {
                 return;
             }
@@ -32456,6 +32456,7 @@ namespace ts {
             checkGrammarDecoratorsAndModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
+            checkExportsOnMergedDeclarations(node);
             checkTypeParameters(node.typeParameters);
             checkSourceElement(node.type);
             registerForUnusedIdentifiersCheck(node);
