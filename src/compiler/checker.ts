@@ -1868,7 +1868,7 @@ namespace ts {
             if (
                 !(useSite.flags & NodeFlags.Ambient) &&
                 !isPartOfTypeQuery(useSite) &&
-                !isPartOfPossiblyValidComputedPropertyNameExpression(useSite) &&
+                !isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite) &&
                 isExpressionNode(useSite)
             ) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);

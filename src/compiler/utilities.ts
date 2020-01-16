@@ -1778,11 +1778,22 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
-    export function isPartOfPossiblyValidComputedPropertyNameExpression(node: Node) {
+    export function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
         while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
             node = node.parent;
         }
-        return node.kind === SyntaxKind.ComputedPropertyName;
+        if (node.kind !== SyntaxKind.ComputedPropertyName) {
+            return false;
+        }
+        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+            return true;
+        }
+        const containerKind = node.parent.parent.kind;
+        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+    }
+
+    export function isAbstractDeclarationName(node: Node) {
+        return isDeclarationName(node) && hasModifier(node, ModifierFlags.Abstract);
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
