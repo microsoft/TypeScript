@@ -1,6 +1,7 @@
+/// <reference path="fourslash.ts" />
+
 ////class K {
 ////    #value: number;
-////    bar() { this.#value; }
 ////
 ////    foo() {
 ////        #value/**/;
@@ -8,11 +9,11 @@
 ////}
 
 verify.codeFix({
+  index: 0,
   description: "Add 'this.' to unresolved variable",
   newFileContent:
 `class K {
     #value: number;
-    bar() { this.#value; }
 
     foo() {
         this.#value;

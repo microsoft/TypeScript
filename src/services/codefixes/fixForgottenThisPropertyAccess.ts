@@ -2,11 +2,10 @@
 namespace ts.codefix {
     const fixId = "forgottenThisPropertyAccess";
     const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
-    const duplicateIdentifierCode = Diagnostics.Duplicate_identifier_0.code;
     const errorCodes = [
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
+        Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
         didYouMeanStaticMemberCode,
-        duplicateIdentifierCode,
     ];
     registerCodeFix({
         errorCodes,
@@ -33,11 +32,7 @@ namespace ts.codefix {
 
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
-        if (isPrivateIdentifier(node) && diagCode === duplicateIdentifierCode) {
-            return { node, className: undefined };
-        }
-
-        if (isIdentifier(node) && diagCode !== duplicateIdentifierCode) {
+        if (isIdentifier(node)) {
             return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
         }
     }
