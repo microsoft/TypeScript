@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @type {(()=>string)[]}
+ */
+
+let queue = [];
+>queue : (() => string)[]
+>[] : never[]
+
+while (queue.length) {
+>queue.length : number
+>queue : (() => string)[]
+>length : number
+
+    const top = /** @nonnull */(queue.pop());
+>top : (() => string) | undefined
+>(queue.pop()) : (() => string) | undefined
+>queue.pop() : (() => string) | undefined
+>queue.pop : () => (() => string) | undefined
+>queue : (() => string)[]
+>pop : () => (() => string) | undefined
+
+    top();
+>top() : string
+>top : () => string
+}
+

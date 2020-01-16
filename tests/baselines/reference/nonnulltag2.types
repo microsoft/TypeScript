@@ -1,0 +1,42 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+class ElementWrapper {
+>ElementWrapper : ElementWrapper
+
+    /**
+     * @type {string}
+     * @nonnull
+     */
+    element
+>element : string
+
+    constructor() {
+        this.init();
+>this.init() : void
+>this.init : () => void
+>this : this
+>init : () => void
+    }
+
+    init() {
+>init : () => void
+
+        this.element = "123"
+>this.element = "123" : "123"
+>this.element : string
+>this : this
+>element : string
+>"123" : "123"
+    }
+
+    getElementStyle() {
+>getElementStyle : () => void
+
+        this.element.toLowerCase() // error: element is possibly undefined
+>this.element.toLowerCase() : string
+>this.element.toLowerCase : () => string
+>this.element : string
+>this : this
+>element : string
+>toLowerCase : () => string
+    }
+}

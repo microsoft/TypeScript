@@ -1,0 +1,38 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+class ElementWrapper {
+>ElementWrapper : Symbol(ElementWrapper, Decl(a.js, 0, 0))
+
+    /**
+     * @type {string}
+     * @nonnull
+     */
+    element
+>element : Symbol(ElementWrapper.element, Decl(a.js, 0, 22))
+
+    constructor() {
+        this.init();
+>this.init : Symbol(ElementWrapper.init, Decl(a.js, 9, 5))
+>this : Symbol(ElementWrapper, Decl(a.js, 0, 0))
+>init : Symbol(ElementWrapper.init, Decl(a.js, 9, 5))
+    }
+
+    init() {
+>init : Symbol(ElementWrapper.init, Decl(a.js, 9, 5))
+
+        this.element = "123"
+>this.element : Symbol(ElementWrapper.element, Decl(a.js, 0, 22))
+>this : Symbol(ElementWrapper, Decl(a.js, 0, 0))
+>element : Symbol(ElementWrapper.element, Decl(a.js, 0, 22))
+    }
+
+    getElementStyle() {
+>getElementStyle : Symbol(ElementWrapper.getElementStyle, Decl(a.js, 13, 5))
+
+        this.element.toLowerCase() // error: element is possibly undefined
+>this.element.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.element : Symbol(ElementWrapper.element, Decl(a.js, 0, 22))
+>this : Symbol(ElementWrapper, Decl(a.js, 0, 0))
+>element : Symbol(ElementWrapper.element, Decl(a.js, 0, 22))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+    }
+}

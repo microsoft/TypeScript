@@ -21712,7 +21712,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression: {
                     // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                     const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
-                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent, contextFlags);
+                    const type = tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent, contextFlags);
+                    return type && getJSDocNonNullTag(node) ? getNonNullableType(type) : type;
                 }
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
@@ -27982,10 +27983,8 @@ namespace ts {
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             const tag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
-            if (tag) {
-                return checkAssertionWorker(tag, tag.typeExpression.type, node.expression, checkMode);
-            }
-            return checkExpression(node.expression, checkMode);
+            const type = tag ? checkAssertionWorker(tag, tag.typeExpression.type, node.expression, checkMode) : checkExpression(node.expression, checkMode);
+            return getJSDocNonNullTag(node) ? getNonNullableType(type) : type;
         }
 
         function checkExpressionWorker(node: Expression | QualifiedName, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
@@ -32376,7 +32375,7 @@ namespace ts {
                 if (getModifierFlags(member) & ModifierFlags.Ambient) {
                     continue;
                 }
-                if (isInstancePropertyWithoutInitializer(member)) {
+                if (isInstancePropertyWithoutInitializer(member) && !isNonNullPropertyWithJSDoc(member)) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
@@ -32388,6 +32387,10 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function isNonNullPropertyWithJSDoc (node: Node) {
+            return !!(isInJSFile(node) && getJSDocNonNullTag(node));
         }
 
         function isInstancePropertyWithoutInitializer(node: Node) {

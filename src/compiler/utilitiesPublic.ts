@@ -726,6 +726,10 @@ namespace ts {
         return undefined;
     }
 
+    export function getJSDocNonNullTag(node: Node): JSDocNonNullTag | undefined {
+        return getFirstJSDocTag(node, jsJSDocNonNullTag);
+    }
+
     /**
      * Gets the type node for the node if provided via JSDoc.
      *
@@ -1620,6 +1624,10 @@ namespace ts {
 
     export function isJSDocTypeTag(node: Node): node is JSDocTypeTag {
         return node.kind === SyntaxKind.JSDocTypeTag;
+    }
+
+    export function jsJSDocNonNullTag(node: Node): node is JSDocNonNullTag {
+        return node.kind === SyntaxKind.JSDocNonNullTag;
     }
 
     export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {

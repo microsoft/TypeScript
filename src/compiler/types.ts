@@ -483,6 +483,7 @@ namespace ts {
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
+        JSDocNonNullTag,
 
         // Synthesized list
         SyntaxList,
@@ -2635,6 +2636,10 @@ namespace ts {
 
     export interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
+    }
+
+    export interface JSDocNonNullTag extends JSDocTag {
+        kind: SyntaxKind.JSDocNonNullTag;
     }
 
     /**

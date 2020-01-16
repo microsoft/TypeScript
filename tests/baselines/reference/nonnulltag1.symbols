@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @type {(()=>string)[]}
+ */
+
+let queue = [];
+>queue : Symbol(queue, Decl(a.js, 4, 3))
+
+while (queue.length) {
+>queue.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>queue : Symbol(queue, Decl(a.js, 4, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    const top = /** @nonnull */(queue.pop());
+>top : Symbol(top, Decl(a.js, 6, 9))
+>queue.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>queue : Symbol(queue, Decl(a.js, 4, 3))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+
+    top();
+>top : Symbol(top, Decl(a.js, 6, 9))
+}
+
