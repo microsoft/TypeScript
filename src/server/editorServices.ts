@@ -1104,7 +1104,7 @@ namespace ts.server {
                 this.host,
                 directory,
                 fileOrDirectory => {
-                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    let fileOrDirectoryPath: Path | undefined = this.toPath(fileOrDirectory);
                     const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
 
                     // don't trigger callback on open, existing files
@@ -1115,7 +1115,8 @@ namespace ts.server {
                         return;
                     }
 
-                    if (isPathIgnored(fileOrDirectoryPath)) return;
+                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
+                    if (!fileOrDirectoryPath) return;
                     const configFilename = project.getConfigFilePath();
 
                     if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
@@ -2272,8 +2273,8 @@ namespace ts.server {
                 this.host,
                 watchDir,
                 (fileOrDirectory) => {
-                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    if (isPathIgnored(fileOrDirectoryPath)) return;
+                    const fileOrDirectoryPath = removeIgnoredPath(this.toPath(fileOrDirectory));
+                    if (!fileOrDirectoryPath) return;
 
                     // Has extension
                     Debug.assert(result.refCount > 0);

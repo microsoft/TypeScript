@@ -2318,9 +2318,9 @@ namespace ts {
 
     function getSourceOfAssignment(node: Node): Node | undefined {
         return isExpressionStatement(node) &&
-            node.expression && isBinaryExpression(node.expression) &&
+            isBinaryExpression(node.expression) &&
             node.expression.operatorToken.kind === SyntaxKind.EqualsToken
-            ? node.expression.right
+            ? getRightMostAssignedExpression(node.expression)
             : undefined;
     }
 

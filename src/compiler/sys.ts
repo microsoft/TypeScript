@@ -1617,23 +1617,32 @@ namespace ts {
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
                 perfLogger.logEvent("ReadDir: " + (path || "."));
                 try {
-                    const entries = _fs.readdirSync(path || ".").sort();
+                    const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                     const files: string[] = [];
                     const directories: string[] = [];
-                    for (const entry of entries) {
+                    for (const dirent of entries) {
+                        // withFileTypes is not supported before Node 10.10.
+                        const entry = typeof dirent === "string" ? dirent : dirent.name;
+
                         // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (entry === "." || entry === "..") {
                             continue;
                         }
-                        const name = combinePaths(path, entry);
 
                         let stat: any;
-                        try {
-                            stat = _fs.statSync(name);
+                        if (typeof dirent === "string" || dirent.isSymbolicLink()) {
+                            const name = combinePaths(path, entry);
+
+                            try {
+                                stat = _fs.statSync(name);
+                            }
+                            catch (e) {
+                                continue;
+                            }
                         }
-                        catch (e) {
-                            continue;
+                        else {
+                            stat = dirent;
                         }
 
                         if (stat.isFile()) {
@@ -1643,6 +1652,8 @@ namespace ts {
                             directories.push(entry);
                         }
                     }
+                    files.sort();
+                    directories.sort();
                     return { files, directories };
                 }
                 catch (e) {
@@ -1677,8 +1688,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
-                perfLogger.logEvent("ReadDir: " + path);
-                return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+                return getAccessibleFileSystemEntries(path).directories.slice();
             }
 
             function realpath(path: string): string {

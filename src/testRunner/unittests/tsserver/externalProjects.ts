@@ -226,6 +226,27 @@ namespace ts.projectSystem {
             projectService.applyChangesInOpenFiles(arrayIterator(externalFiles));
         });
 
+        it("when file name starts with ^", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: "const x = 10;"
+            };
+            const app: File = {
+                path: `${tscWatch.projectRoot}/^app.ts`,
+                content: "const y = 10;"
+            };
+            const host = createServerHost([file, app, libFile]);
+            const service = createProjectService(host);
+            service.openExternalProjects([{
+                projectFileName: `${tscWatch.projectRoot}/myproject.njsproj`,
+                rootFiles: [
+                    toExternalFile(file.path),
+                    toExternalFile(app.path)
+                ],
+                options: { },
+            }]);
+        });
+
         it("external project that included config files", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

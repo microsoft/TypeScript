@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsdoc/constructorTagOnNestedBinaryExpression.js ===
+// Fixes #35021
+/** @constructor */
+a = b = function c () {
+>a = b = function c () {    console.log(this)} : typeof c
+>a : error
+>b = function c () {    console.log(this)} : typeof c
+>b : error
+>function c () {    console.log(this)} : typeof c
+>c : typeof c
+
+    console.log(this)
+>console.log(this) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>this : this
+
+};
+
