@@ -398,14 +398,15 @@ declare namespace ts {
         JSDocTemplateTag = 320,
         JSDocTypedefTag = 321,
         JSDocPropertyTag = 322,
-        SyntaxList = 323,
-        NotEmittedStatement = 324,
-        PartiallyEmittedExpression = 325,
-        CommaListExpression = 326,
-        MergeDeclarationMarker = 327,
-        EndOfDeclarationMarker = 328,
-        SyntheticReferenceExpression = 329,
-        Count = 330,
+        JSDocNonNullTag = 323,
+        SyntaxList = 324,
+        NotEmittedStatement = 325,
+        PartiallyEmittedExpression = 326,
+        CommaListExpression = 327,
+        MergeDeclarationMarker = 328,
+        EndOfDeclarationMarker = 329,
+        SyntheticReferenceExpression = 330,
+        Count = 331,
         FirstAssignment = 62,
         LastAssignment = 74,
         FirstCompoundAssignment = 63,
@@ -1623,6 +1624,9 @@ declare namespace ts {
     }
     export interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
+    }
+    export interface JSDocNonNullTag extends JSDocTag {
+        kind: SyntaxKind.JSDocNonNullTag;
     }
     /**
      * Note that `@extends` is a synonym of `@augments`.
@@ -3514,6 +3518,7 @@ declare namespace ts {
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
+    function getJSDocNonNullTag(node: Node): JSDocNonNullTag | undefined;
     /**
      * Gets the type node for the node if provided via JSDoc.
      *
@@ -3721,6 +3726,7 @@ declare namespace ts {
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
+    function jsJSDocNonNullTag(node: Node): node is JSDocNonNullTag;
     function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag;
     function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag;
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
