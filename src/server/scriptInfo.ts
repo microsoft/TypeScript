@@ -272,7 +272,8 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return fileName[0] === "^";
+        return fileName[0] === "^" ||
+            (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
     }
 
     /*@internal*/

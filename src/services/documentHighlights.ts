@@ -66,8 +66,12 @@ namespace ts {
                 case SyntaxKind.SwitchKeyword:
                     return useParent(node.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
                 case SyntaxKind.CaseKeyword:
-                case SyntaxKind.DefaultKeyword:
-                    return useParent(node.parent.parent.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
+                case SyntaxKind.DefaultKeyword: {
+                    if (isDefaultClause(node.parent) || isCaseClause(node.parent)) {
+                        return useParent(node.parent.parent.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
+                    }
+                    return undefined;
+                }
                 case SyntaxKind.BreakKeyword:
                 case SyntaxKind.ContinueKeyword:
                     return useParent(node.parent, isBreakOrContinueStatement, getBreakOrContinueStatementOccurrences);

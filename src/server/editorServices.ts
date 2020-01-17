@@ -1304,7 +1304,7 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            const fileExists = this.host.fileExists(info.fileName);
+            const fileExists = info.isDynamic ? false : this.host.fileExists(info.fileName);
             info.close(fileExists);
             this.stopWatchingConfigFilesForClosedScriptInfo(info);
 

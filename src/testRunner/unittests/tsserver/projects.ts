@@ -1094,6 +1094,7 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
+            verifyDynamic(projectService, `/${file.path}`);
 
             assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
@@ -1124,6 +1125,7 @@ var x = 10;`
             const host = createServerHost([libFile]);
             const projectService = createProjectService(host);
             projectService.openClientFile(file.path, file.content);
+            verifyDynamic(projectService, projectService.toPath(file.path));
 
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
@@ -1152,6 +1154,7 @@ var x = 10;`
                 const projectService = session.getProjectService();
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
                 checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
+                verifyDynamic(projectService, `${tscWatch.projectRoot}/${file.path}`);
 
                 session.executeCommandSeq<protocol.OutliningSpansRequest>({
                     command: protocol.CommandTypes.GetOutliningSpans,
