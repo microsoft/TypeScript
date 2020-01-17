@@ -1144,9 +1144,9 @@ namespace ts.Completions {
             }
 
             if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword) && contextToken === node.getChildAt(1)) {
-                    const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
-                    symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
-                    return;
+                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
+                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
+                return;
             }
 
             if (!isTypeLocation) {
