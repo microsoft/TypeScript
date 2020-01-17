@@ -379,6 +379,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: transform.emitNodeWithNotification,
+                isEmitNotificationEnabled: transform.isEmitNotificationEnabled,
                 substituteNode: transform.substituteNode,
             });
 
@@ -437,6 +438,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
+                isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
@@ -819,6 +821,7 @@ namespace ts {
         const {
             hasGlobalName,
             onEmitNode = noEmitNotification,
+            isEmitNotificationEnabled,
             substituteNode = noEmitSubstitution,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
@@ -1160,7 +1163,7 @@ namespace ts {
             lastNode = node;
             lastSubstitution = undefined;
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
             pipelinePhase(emitHint, node);
 
             Debug.assert(lastNode === node);
@@ -1172,16 +1175,16 @@ namespace ts {
             return substitute || node;
         }
 
-        function getPipelinePhase(phase: PipelinePhase, node: Node) {
+        function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
             switch (phase) {
                 case PipelinePhase.Notification:
-                    if (onEmitNode !== noEmitNotification) {
+                    if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
                     // falls through
 
                 case PipelinePhase.Substitution:
-                    if (substituteNode !== noEmitSubstitution) {
+                    if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
                     // falls through
@@ -1206,13 +1209,13 @@ namespace ts {
             }
         }
 
-        function getNextPipelinePhase(currentPhase: PipelinePhase, node: Node) {
-            return getPipelinePhase(currentPhase + 1, node);
+        function getNextPipelinePhase(currentPhase: PipelinePhase, emitHint: EmitHint, node: Node) {
+            return getPipelinePhase(currentPhase + 1, emitHint, node);
         }
 
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
             onEmitNode(hint, node, pipelinePhase);
             Debug.assert(lastNode === node);
         }
@@ -1653,9 +1656,8 @@ namespace ts {
 
         function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node || lastSubstitution === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, node);
-            lastSubstitution = substituteNode(hint, node);
-            pipelinePhase(hint, lastSubstitution);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, hint, node);
+            pipelinePhase(hint, lastSubstitution!);
             Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
@@ -2425,48 +2427,78 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
-        function emitBinaryExpressionWorker(node: BinaryExpression, state: number) {
-            switch (state) {
-                case 0: {
-                    return node.left;
-                }
-                case 1: {
-                    const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-                    const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                    const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                    increaseIndentIf(indentBeforeOperator, isCommaOperator);
-                    emitLeadingCommentsOfPosition(node.operatorToken.pos);
-                    writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-                    emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-                    increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-                    return node.right;
-                }
-                case 2: {
-                    const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-                    const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
-                    decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
-                    return;
-                }
-                default: return Debug.fail(`Invalid state ${state} for emitBinaryExpressionWorker`);
-            }
-        }
-
+        /**
+         * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
+         * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
+         * not require notification/substitution/comment/sourcemap decorations.
+         */
         function emitBinaryExpression(node: BinaryExpression) {
             const work: [BinaryExpression, number][] = [[node, 0]];
             while (work.length) {
                 const res = work[work.length - 1];
-                const next = emitBinaryExpressionWorker(...res);
+                let next: Expression | undefined;
+                node = res[0];
+                switch (res[1]) {
+                    case 0: {
+                        next = node.left;
+                        break;
+                    }
+                    case 1: {
+                        const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                        emitLeadingCommentsOfPosition(node.operatorToken.pos);
+                        writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                        emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                        increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                        next = node.right;
+                        break;
+                    }
+                    case 2: {
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        break;
+                    }
+                    default: return Debug.fail(`Invalid state ${res[1]} for emitBinaryExpressionWorker`);
+                }
+
                 if (!next) {
+                    // This unit of work is complete, remove it from the queue
                     work.pop();
                     continue;
                 }
+
+                // Advance the state of this unit of work,
                 res[1]++;
-                if (isBinaryExpression(next)) {
+
+                // Then actually do the work of emitting the node `next` returned by the prior state
+
+                // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
+                // binary expression handling, where possible, to the contained work queue
+
+                // #region trampolinePipelineEmit
+                const savedLastNode = lastNode;
+                const savedLastSubstitution = lastSubstitution;
+                lastNode = next;
+                lastSubstitution = undefined;
+    
+                const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
+                if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
+                    // If the target pipeline phase is emit directly, and the next node's also a binary expression,
+                    // skip all the intermediate indirection and push the expression directly onto the work stack
                     work.push([next, 0]);
                 }
                 else {
-                    emitExpression(next);
+                    pipelinePhase(EmitHint.Expression, next);
                 }
+    
+                Debug.assert(lastNode === next);
+
+                lastNode = savedLastNode;
+                lastSubstitution = savedLastSubstitution;
+                // #endregion trampolinePipelineEmit
             }
         }
 
@@ -4803,7 +4835,7 @@ namespace ts {
             forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
             exitComment();
 
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint, node);
             if (emitFlags & EmitFlags.NoNestedComments) {
                 commentsDisabled = true;
                 pipelinePhase(hint, node);
@@ -5076,7 +5108,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node || lastSubstitution === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, hint, node);
             if (isUnparsedSource(node) || isUnparsedPrepend(node)) {
                 pipelinePhase(hint, node);
             }

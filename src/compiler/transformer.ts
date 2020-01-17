@@ -225,6 +225,7 @@ namespace ts {
             transformed,
             substituteNode,
             emitNodeWithNotification,
+            isEmitNotificationEnabled,
             dispose,
             diagnostics
         };
@@ -288,12 +289,7 @@ namespace ts {
         function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
             if (node) {
-                if (isEmitNotificationEnabled(node)) {
-                    onEmitNode(hint, node, emitCallback);
-                }
-                else {
-                    emitCallback(hint, node);
-                }
+                onEmitNode(hint, node, emitCallback);
             }
         }
 
