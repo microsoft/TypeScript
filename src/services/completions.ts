@@ -1143,15 +1143,10 @@ namespace ts.Completions {
                 }
             }
 
-            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
-                const metaPropertyAccessIdentifier = node.name.text;
-                const dotToken = node.getChildAt(1);
-                // Check whether this MetaProperty node already had its metadata accessed
-                if (dotToken === contextToken || metaPropertyAccessIdentifier !== "target" && metaPropertyAccessIdentifier !== "meta") {
+            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword) && contextToken === node.getChildAt(1)) {
                     const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
                     symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
                     return;
-                }
             }
 
             if (!isTypeLocation) {
