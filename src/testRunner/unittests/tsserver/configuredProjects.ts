@@ -1029,6 +1029,7 @@ declare var console: {
                         checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
                         checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
                         checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
+                        assert.isTrue(service.inferredProjects[0].dirty);
                     }
                 });
             });
