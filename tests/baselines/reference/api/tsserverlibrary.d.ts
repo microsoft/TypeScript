@@ -9482,7 +9482,7 @@ declare namespace ts.server {
         private getCompileOnSaveAffectedFileList;
         private emitFile;
         private getSignatureHelpItems;
-        private createCheckList;
+        private toPendingErrorCheck;
         private getDiagnostics;
         private change;
         private reload;
