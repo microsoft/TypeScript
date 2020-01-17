@@ -27113,30 +27113,59 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            const work = [generateTypeForMaybeBinaryExpression(node, checkMode)];
+            const work: [BinaryExpression, number, Type | undefined][] = [[node, 0, undefined]];
             let lastResult: Type | undefined;
             while (work.length) {
-                const res = work[work.length - 1].next(...(lastResult ? [lastResult] : []));
-                lastResult = undefined;
-                if (!res.done) {
-                    // If the generator is incomplete, we need to create a new generator with the yielded value, and run that to completion
-                    work.push(generateTypeForMaybeBinaryExpression(res.value, checkMode));
-                }
-                else {
-                    // If the generator is complete, then we have either an intermedidate result, or the final result
-                    if (work.length === 1) {
-                        // If the last element of the work queue is complete, return it
-                        return res.value;
+                const res = work[work.length - 1];
+                node = res[0];
+                switch(res[1]) {
+                    case 0: {
+                        if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
+                            lastResult = checkExpression(node.right, checkMode);
+                            work.pop();
+                            break;
+                        }
+                        checkGrammarNullishCoalesceWithLogicalExpression(node);
+                        const operator = node.operatorToken.kind;
+                        if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                            lastResult = checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword);
+                            work.pop();
+                            break;
+                        }
+                        maybeCheckExpression(node.left);
+                        res[1]++;
+                        break;
                     }
-                    else {
-                        // otherwise, the result is the type requested for the prior generator on the stack
-                        lastResult = res.value;
+                    case 1: {
+                        const leftType = res[2] = lastResult!;
+                        const operator = node.operatorToken.kind;
+                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                            checkTruthinessOfType(leftType, node.left);
+                        }
+                        maybeCheckExpression(node.right);
+                        res[1]++;
+                        break;
+                    }
+                    case 2: {
+                        const leftType = res[2]!;
+                        const rightType = lastResult!;
+                        lastResult = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
                         work.pop();
+                        break;
                     }
                 }
             }
 
-            return Debug.fail("Unreachable state in checkBinaryExpression!");
+            return lastResult!;
+
+            function maybeCheckExpression(node: Expression) {
+                if (isBinaryExpression(node)) {
+                    work.push([node, 0, undefined]);
+                }
+                else {
+                    lastResult = checkExpression(node, checkMode);
+                }
+            }
         }
 
         function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
@@ -27151,32 +27180,8 @@ namespace ts {
             }
         }
 
-        function* generateTypeForMaybeBinaryExpression(node: Expression, checkMode: CheckMode | undefined): Generator<Expression, Type, Type> {
-            if (isBinaryExpression(node)) {
-                if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
-                    return checkExpression(node.right, checkMode);
-                }
-                checkGrammarNullishCoalesceWithLogicalExpression(node);
-                const operator = node.operatorToken.kind;
-                if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    return checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword);
-                }
-                const leftType = yield node.left;
-                if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                    checkTruthinessOfType(leftType, node.left);
-                }
-                const rightType = yield node.right;
-
-                return checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
-            }
-            else {
-                return checkExpression(node, checkMode);
-            }
-        }
-
-        // Note that this and the `BinaryExpression` case of `generateTypeForMaybeBinaryExpression` above should behave the same
-        // Unfortunately, they cannot be combined unless the caller of `checkBinaryLikeExpression` is prepared to create a trampoline
-        // like `checkBinaryExpression` does.
+        // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some
+        // expression-wide checks and does not use a work stack to fold nested binary expressions into the same callstack frame
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
