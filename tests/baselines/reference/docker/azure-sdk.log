@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 12.14.0 (LTS)
+Node.js version is 12.14.1 (LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
@@ -19,10 +19,11 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
-XX of XX: [@azure/cognitiveservices-textanalytics] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
+XX of XX: [@azure/ai-text-analytics] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -54,7 +55,7 @@ XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (23)
+SUCCESS (22)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -70,8 +71,7 @@ SUCCESS (23)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
-@azure/storage-blob (? seconds)
-@azure/cognitiveservices-textanalytics (? seconds)
+@azure/ai-text-analytics (? seconds)
 @azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
 @azure/service-bus (? seconds)
@@ -80,9 +80,12 @@ SUCCESS (23)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (1)
+SUCCESS WITH WARNINGS (2)
 ================================
+@azure/storage-blob (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
 @azure/cosmos (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -115,7 +118,7 @@ test/testHelpers.ts(92,31): error TS2322: Type 'PagedAsyncIterableIterator<Confi
         Types of property 'next' are incompatible.
           Type '() => Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type '(value?: any) => Promise<IteratorResult<ConfigurationSetting>>'.
             Type 'Promise<{ done?: boolean | undefined; value: ConfigurationSetting; }>' is not assignable to type 'Promise<IteratorResult<ConfigurationSetting>>'.
-@azure/eventhubs-checkpointstore-blob ( ? seconds)
+@azure/eventhubs-checkpointstore-blob (? seconds)
 >>> @azure/eventhubs-checkpointstore-blob
 tsc -p . && rollup -c 2>&1 && npm run extract-api
 src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterator<BlobItem, ContainerListBlobFlatSegmentResponse>' is not assignable to type 'AsyncIterable<BlobItem>'.
@@ -129,7 +132,7 @@ src/blobCheckpointStore.ts(50,32): error TS2322: Type 'PagedAsyncIterableIterato
                 Types of property 'done' are incompatible.
                   Type 'boolean | undefined' is not assignable to type 'boolean'.
                     Type 'undefined' is not assignable to type 'boolean'.
-@azure/keyvault-certificates ( ? seconds)
+@azure/keyvault-certificates (? seconds)
 npm ERR! code ELIFECYCLE
 npm ERR! errno 2
 npm ERR! @azure/keyvault-certificates@X.X.X extract-api: `tsc -p . && api-extractor run --local`
@@ -156,7 +159,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-
+XX of XX: [@azure/storage-blob] completed with warnings in ? seconds
 XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
