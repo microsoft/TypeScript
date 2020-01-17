@@ -4204,7 +4204,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Getter and setter accessors do not agree in visibility.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[getter 和 setter 存取子的可視性不符。]]></Val>
+            <Val><![CDATA[getter 和 setter 存取子的可見度不符。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
