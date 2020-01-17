@@ -306,6 +306,7 @@ namespace ts {
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
+        const arrayVariances = [VarianceFlags.Covariant];
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -15406,6 +15407,9 @@ namespace ts {
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
+                    if (variances === emptyArray) {
+                        return Ternary.Maybe;
+                    }
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
                     if (varianceResult !== undefined) {
                         return varianceResult;
@@ -15602,6 +15606,12 @@ namespace ts {
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
+                        // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
+                        // effectively means we measure variance only from type parameter occurrences that aren't nested in
+                        // recursive instantiations of the generic type.
+                        if (variances === emptyArray) {
+                            return Ternary.Maybe;
+                        }
                         const varianceResult = relateVariances(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), variances, intersectionState);
                         if (varianceResult !== undefined) {
                             return varianceResult;
@@ -16421,8 +16431,7 @@ namespace ts {
         // a digest of the type comparisons that occur for each type argument when instantiations of the
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
-        // returns the emptyArray singleton if we're not in strictFunctionTypes mode or if the function
-        // has been invoked recursively for the given generic type.
+        // returns the emptyArray singleton when invoked recursively for the given generic type.
         function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
@@ -16465,9 +16474,9 @@ namespace ts {
         }
 
         function getVariances(type: GenericType): VarianceFlags[] {
-            // Arrays and tuples are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
+            // Arrays and tuples are known to be covariant, no need to spend time computing this.
             if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
-                return emptyArray;
+                return arrayVariances;
             }
             return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
         }
