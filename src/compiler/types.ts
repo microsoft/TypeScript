@@ -5968,8 +5968,8 @@ namespace ts {
 
         /**
          * Indicates if a given node needs an emit notification
-         * 
-         * @param node The node to emit. 
+         *
+         * @param node The node to emit.
          */
         isEmitNotificationEnabled?(node: Node): boolean;
 

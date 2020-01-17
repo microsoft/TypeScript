@@ -2483,7 +2483,7 @@ namespace ts {
                 const savedLastSubstitution = lastSubstitution;
                 lastNode = next;
                 lastSubstitution = undefined;
-    
+
                 const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
                 if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
                     // If the target pipeline phase is emit directly, and the next node's also a binary expression,
@@ -2493,7 +2493,7 @@ namespace ts {
                 else {
                     pipelinePhase(EmitHint.Expression, next);
                 }
-    
+
                 Debug.assert(lastNode === next);
 
                 lastNode = savedLastNode;
