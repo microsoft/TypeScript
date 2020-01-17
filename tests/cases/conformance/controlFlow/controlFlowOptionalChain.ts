@@ -578,3 +578,15 @@ const someObject: SomeObject = {
 
 someFunction(someObject);
 someFunction(undefined);
+
+// Repro from #35970
+
+let i = 0;
+declare const arr: { tag: ("left" | "right") }[];
+
+while (arr[i]?.tag === "left") {
+    i += 1;
+    if (arr[i]?.tag === "right") {
+        console.log("I should ALSO be reachable");
+    }
+}
