@@ -2,8 +2,7 @@
     "compilerOptions": {
         "pretty": true,
         "lib": ["es2015.iterable", "es2015.generator", "es5"],
-        "target": "es2015",
-        "moduleResolution": "node",
+        "target": "es5",
         "rootDir": ".",
 
         "declaration": true,
