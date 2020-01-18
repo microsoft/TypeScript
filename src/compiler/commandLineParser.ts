@@ -763,6 +763,7 @@ namespace ts {
         {
             name: "resolveJsonModule",
             type: "boolean",
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Include_modules_imported_with_json_extension
         },
