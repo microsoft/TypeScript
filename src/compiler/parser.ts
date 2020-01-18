@@ -904,16 +904,17 @@ namespace ts {
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            const queue: [Node, Node[]][] = [[rootNode, gatherChildren(rootNode)]];
-
-            for (const [parent, children] of queue) {
+            const stack: [Node, Node[]][] = [[rootNode, gatherChildren(rootNode)]];
+            while (stack.length) {
+                const [parent, children] = stack.pop()!;
                 bindParentToChildren(parent, children);
             }
+
             return;
 
             function gatherChildren(node: Node) {
                 const children: Node[] = [];
-                forEachChild(node, n => void children.push(n));
+                forEachChild(node, n => void children.unshift(n)); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
                 return children;
             }
 
@@ -922,14 +923,14 @@ namespace ts {
                     child.parent = parent;
                     const grandchildren = gatherChildren(child);
                     if (length(grandchildren)) {
-                        queue.push([child, grandchildren]);
+                        stack.push([child, grandchildren]);
                     }
                     if (hasJSDocNodes(child)) {
                         for (const jsDoc of child.jsDoc!) {
                             jsDoc.parent = child;
                             const grandchildren = gatherChildren(jsDoc);
                             if (length(grandchildren)) {
-                                queue.push([jsDoc, grandchildren]);
+                                stack.push([jsDoc, grandchildren]);
                             }
                         }
                     }
