@@ -1175,7 +1175,7 @@ export function f(p: C) { return p; }`
                 };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { moduleResolution: "node"} })
+                    content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } })
                 };
                 return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: projectRoot });
             },
