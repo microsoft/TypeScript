@@ -14,7 +14,7 @@ namespace ts.codefix {
                 );
                 changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
             });
-            return [createCodeFixActionNoFixId("addEmptyExportDeclaration", changes, Diagnostics.Add_export_to_make_this_file_into_a_module)];
+            return [createCodeFixActionWithoutFixAll("addEmptyExportDeclaration", changes, Diagnostics.Add_export_to_make_this_file_into_a_module)];
         },
     });
 }

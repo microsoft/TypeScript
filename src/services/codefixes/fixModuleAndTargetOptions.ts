@@ -16,7 +16,7 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, changes => {
                     setJsonCompilerOptionValue(changes, configFile, "module", createStringLiteral("esnext"));
                 });
-                codeFixes.push(createCodeFixActionNoFixId("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]));
+                codeFixes.push(createCodeFixActionWithoutFixAll("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]));
             }
 
             const target = getEmitScriptTarget(compilerOptions);
@@ -35,7 +35,7 @@ namespace ts.codefix {
                     setJsonCompilerOptionValues(tracker, configFile, options);
                 });
 
-                codeFixes.push(createCodeFixActionNoFixId("fixTargetOption", changes, [Diagnostics.Set_the_target_option_in_your_configuration_file_to_0, "es2017"]));
+                codeFixes.push(createCodeFixActionWithoutFixAll("fixTargetOption", changes, [Diagnostics.Set_the_target_option_in_your_configuration_file_to_0, "es2017"]));
             }
 
             return codeFixes.length ? codeFixes : undefined;
