@@ -1556,7 +1556,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string | DiagnosticIgnoredInterpolations;
+        readonly description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
