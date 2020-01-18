@@ -920,6 +920,7 @@ namespace ts {
 
             function bindParentToChildren(parent: Node, children: readonly Node[]) {
                 for (const child of children) {
+                    if (child.parent === parent) continue; // already bound, assume subtree is bound
                     child.parent = parent;
                     const grandchildren = gatherChildren(child);
                     if (length(grandchildren)) {
