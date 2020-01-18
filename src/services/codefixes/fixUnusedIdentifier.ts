@@ -56,7 +56,7 @@ namespace ts.codefix {
                     tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
                 if (deletion.length) {
                     const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)]));
+                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
                 }
             }
 

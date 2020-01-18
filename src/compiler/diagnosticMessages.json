@@ -4928,7 +4928,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'": {
+    "Remove unused declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
