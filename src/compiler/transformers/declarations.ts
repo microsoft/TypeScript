@@ -442,7 +442,7 @@ namespace ts {
                 p.dotDotDotToken,
                 filterBindingPatternInitializers(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || createToken(SyntaxKind.QuestionToken)) : undefined,
-                ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+                ensureType(p, type || p.type, TypeElisionStrategyForPrivates.PreserveOriginal), // preserve types from private parameter properties, since the type is still needed for the parameter side
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
@@ -476,10 +476,24 @@ namespace ts {
             | PropertyDeclaration
             | PropertySignature;
 
-        function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
-            if (!ignorePrivate && hasModifier(node, ModifierFlags.Private)) {
-                // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
-                return;
+        const enum TypeElisionStrategyForPrivates {
+            /** Keep the original type declaration around */
+            PreserveOriginal,
+            /** Drop types if its containing declaration is `private`. */
+            Drop,
+            /** Explicitly declare the type with `any`. */
+            ExplicitAny,
+        }
+
+        function ensureType(node: HasInferredType, type: TypeNode | undefined, privateStrategy = TypeElisionStrategyForPrivates.Drop): TypeNode | undefined {
+            if (privateStrategy !== TypeElisionStrategyForPrivates.PreserveOriginal && hasModifier(node, ModifierFlags.Private)) {
+                switch (privateStrategy) {
+                    case TypeElisionStrategyForPrivates.Drop:
+                        // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
+                        return;
+                    case TypeElisionStrategyForPrivates.ExplicitAny:
+                        return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                }
             }
             if (shouldPrintWithInitializer(node)) {
                 // Literal const declarations will have an initializer ensured rather than a type
@@ -876,13 +890,16 @@ namespace ts {
                             return cleanup(/*returnValue*/ undefined);
                         }
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                        // We have to make sure that ignorePrivate is set because TypeScript 3.6.0 to 3.6.4 thinks it's an implicit any error.
+                        const ensuredType = ensureType(input, accessorType, TypeElisionStrategyForPrivates.ExplicitAny);
+
                         return cleanup(updateGetAccessor(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
-                            ensureType(input, accessorType),
+                            ensuredType,
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
