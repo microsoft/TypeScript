@@ -245,6 +245,38 @@ namespace ts.tscWatch {
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates semantic diagnostics and declaration files if keyofStringsOnly changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aTs: File = {
+                    path: "/a.ts",
+                    content: `
+                        let v: keyof any;
+                        v.charAt(0);
+                        export const e = v;
+                    `,
+                };
+                const tsconfig: File = {
+                    path: "/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: { declaration: true }
+                    })
+                };
+                return createWatchedSystem([libFile, aTs, tsconfig]);
+            },
+            changes: [
+                sys => {
+                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                        compilerOptions: { declaration: true, keyofStringsOnly: true }
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    return "Enable keyofStringsOnly";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "files explicitly excluded in config file",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {

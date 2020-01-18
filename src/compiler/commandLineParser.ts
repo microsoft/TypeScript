@@ -974,6 +974,8 @@ namespace ts {
         {
             name: "keyofStringsOnly",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
         },
