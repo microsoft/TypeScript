@@ -1,0 +1,32 @@
+=== /a.js ===
+class A {
+>A : A
+
+    /** @return {number} */
+    method() { }
+>method : () => number
+}
+/** @implements A */
+class B  {
+>B : B
+
+    method() { return 0 }
+>method : () => number
+>0 : 0
+}
+
+/** @implements A */
+class B2  {
+>B2 : B2
+
+    /** @return {string} */
+    method() { return "" }
+>method : () => string
+>"" : ""
+}
+
+/** @implements A */
+class B3  {
+>B3 : B3
+}
+

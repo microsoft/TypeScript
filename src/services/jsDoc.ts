@@ -129,8 +129,9 @@ namespace ts.JsDoc {
     function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
+            case SyntaxKind.JSDocImplementsTag:
             case SyntaxKind.JSDocAugmentsTag:
-                return withNode((tag as JSDocAugmentsTag).class);
+                return withNode((tag as JSDocHeritageTag).class);
             case SyntaxKind.JSDocTemplateTag:
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:

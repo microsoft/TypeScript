@@ -479,9 +479,10 @@ namespace ts {
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
+            case SyntaxKind.JSDocImplementsTag:
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
+                    visitNode(cbNode, (<JSDocHeritageTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
@@ -6922,9 +6923,12 @@ namespace ts {
                         case "author":
                             tag = parseAuthorTag(start, tagName, margin);
                             break;
+                        case "implements":
+                            tag = parseHeritageTag(start, tagName, SyntaxKind.JSDocImplementsTag);
+                            break;
                         case "augments":
                         case "extends":
-                            tag = parseAugmentsTag(start, tagName);
+                            tag = parseHeritageTag(start, tagName, SyntaxKind.JSDocAugmentsTag);
                             break;
                         case "class":
                         case "constructor":
@@ -7276,8 +7280,8 @@ namespace ts {
                     }
                 }
 
-                function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {
-                    const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, start);
+                function parseHeritageTag(start: number, tagName: Identifier, kind: SyntaxKind.JSDocAugmentsTag | SyntaxKind.JSDocImplementsTag): JSDocHeritageTag {
+                    const result = <JSDocHeritageTag>createNode(kind, start);
                     result.tagName = tagName;
                     result.class = parseExpressionWithTypeArgumentsForAugments();
                     return finishNode(result);

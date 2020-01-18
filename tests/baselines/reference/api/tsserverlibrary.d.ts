@@ -383,29 +383,30 @@ declare namespace ts {
         JSDocSignature = 305,
         JSDocTag = 306,
         JSDocAugmentsTag = 307,
-        JSDocAuthorTag = 308,
-        JSDocClassTag = 309,
-        JSDocPublicTag = 310,
-        JSDocPrivateTag = 311,
-        JSDocProtectedTag = 312,
-        JSDocReadonlyTag = 313,
-        JSDocCallbackTag = 314,
-        JSDocEnumTag = 315,
-        JSDocParameterTag = 316,
-        JSDocReturnTag = 317,
-        JSDocThisTag = 318,
-        JSDocTypeTag = 319,
-        JSDocTemplateTag = 320,
-        JSDocTypedefTag = 321,
-        JSDocPropertyTag = 322,
-        SyntaxList = 323,
-        NotEmittedStatement = 324,
-        PartiallyEmittedExpression = 325,
-        CommaListExpression = 326,
-        MergeDeclarationMarker = 327,
-        EndOfDeclarationMarker = 328,
-        SyntheticReferenceExpression = 329,
-        Count = 330,
+        JSDocImplementsTag = 308,
+        JSDocAuthorTag = 309,
+        JSDocClassTag = 310,
+        JSDocPublicTag = 311,
+        JSDocPrivateTag = 312,
+        JSDocProtectedTag = 313,
+        JSDocReadonlyTag = 314,
+        JSDocCallbackTag = 315,
+        JSDocEnumTag = 316,
+        JSDocParameterTag = 317,
+        JSDocReturnTag = 318,
+        JSDocThisTag = 319,
+        JSDocTypeTag = 320,
+        JSDocTemplateTag = 321,
+        JSDocTypedefTag = 322,
+        JSDocPropertyTag = 323,
+        SyntaxList = 324,
+        NotEmittedStatement = 325,
+        PartiallyEmittedExpression = 326,
+        CommaListExpression = 327,
+        MergeDeclarationMarker = 328,
+        EndOfDeclarationMarker = 329,
+        SyntheticReferenceExpression = 330,
+        Count = 331,
         FirstAssignment = 62,
         LastAssignment = 74,
         FirstCompoundAssignment = 63,
@@ -434,9 +435,9 @@ declare namespace ts {
         LastStatement = 241,
         FirstNode = 153,
         FirstJSDocNode = 294,
-        LastJSDocNode = 322,
+        LastJSDocNode = 323,
         FirstJSDocTagNode = 306,
-        LastJSDocTagNode = 322,
+        LastJSDocTagNode = 323,
     }
     export enum NodeFlags {
         None = 0,
@@ -1145,7 +1146,7 @@ declare namespace ts {
     }
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause | JSDocAugmentsTag;
+        parent: HeritageClause | JSDocHeritageTag;
         expression: LeftHandSideExpression;
     }
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -1625,11 +1626,11 @@ declare namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
     /**
+     * Represents @augments @extends and @implements
      * Note that `@extends` is a synonym of `@augments`.
-     * Both tags are represented by this interface.
      */
-    export interface JSDocAugmentsTag extends JSDocTag {
-        kind: SyntaxKind.JSDocAugmentsTag;
+    export interface JSDocHeritageTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag | SyntaxKind.JSDocImplementsTag;
         class: ExpressionWithTypeArguments & {
             expression: Identifier | PropertyAccessEntityNameExpression;
         };
@@ -3493,7 +3494,9 @@ declare namespace ts {
      */
     function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean;
     /** Gets the JSDoc augments tag for the node if present */
-    function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
+    function getJSDocAugmentsTag(node: Node): JSDocHeritageTag | undefined;
+    /** Gets the JSDoc implements tags for the node if present */
+    function getJSDocImplementsTags(node: Node): readonly JSDocHeritageTag[];
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
     /** Gets the JSDoc public tag for the node if present */
@@ -3535,7 +3538,9 @@ declare namespace ts {
     function getJSDocReturnType(node: Node): TypeNode | undefined;
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
     function getJSDocTags(node: Node): readonly JSDocTag[];
-    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    /** Gets all JSDoc tags that match a specified predicate */
+    function getAllJSDocTags<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): readonly T[];
+    /** Gets all JSDoc tags of a specified kind */
     function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[];
     /**
      * Gets the effective type parameters. If the node was parsed in a
@@ -3710,7 +3715,8 @@ declare namespace ts {
     function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
-    function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
+    function isJSDocAugmentsTag(node: Node): node is JSDocHeritageTag;
+    function isJSDocImplementsTag(node: Node): node is JSDocHeritageTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
     function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
     function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;

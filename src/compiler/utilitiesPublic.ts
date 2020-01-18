@@ -667,8 +667,13 @@ namespace ts {
     }
 
     /** Gets the JSDoc augments tag for the node if present */
-    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined {
+    export function getJSDocAugmentsTag(node: Node): JSDocHeritageTag | undefined {
         return getFirstJSDocTag(node, isJSDocAugmentsTag);
+    }
+
+    /** Gets the JSDoc implements tags for the node if present */
+    export function getJSDocImplementsTags(node: Node): readonly JSDocHeritageTag[] {
+        return getAllJSDocTags(node, isJSDocImplementsTag);
     }
 
     /** Gets the JSDoc class tag for the node if present */
@@ -787,7 +792,12 @@ namespace ts {
         return find(getJSDocTags(node), predicate);
     }
 
-    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    /** Gets all JSDoc tags that match a specified predicate */
+    export function getAllJSDocTags<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): readonly T[] {
+        return getJSDocTags(node).filter(predicate);
+    }
+
+    /** Gets all JSDoc tags of a specified kind */
     export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[] {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
@@ -1578,8 +1588,12 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocAuthorTag;
     }
 
-    export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
+    export function isJSDocAugmentsTag(node: Node): node is JSDocHeritageTag {
         return node.kind === SyntaxKind.JSDocAugmentsTag;
+    }
+
+    export function isJSDocImplementsTag(node: Node): node is JSDocHeritageTag {
+        return node.kind === SyntaxKind.JSDocImplementsTag;
     }
 
     export function isJSDocClassTag(node: Node): node is JSDocClassTag {

@@ -468,6 +468,7 @@ namespace ts {
         JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
+        JSDocImplementsTag,
         JSDocAuthorTag,
         JSDocClassTag,
         JSDocPublicTag,
@@ -1973,7 +1974,7 @@ namespace ts {
 
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause | JSDocAugmentsTag;
+        parent: HeritageClause | JSDocHeritageTag;
         expression: LeftHandSideExpression;
     }
 
@@ -2638,11 +2639,11 @@ namespace ts {
     }
 
     /**
+     * Represents @augments @extends and @implements
      * Note that `@extends` is a synonym of `@augments`.
-     * Both tags are represented by this interface.
      */
-    export interface JSDocAugmentsTag extends JSDocTag {
-        kind: SyntaxKind.JSDocAugmentsTag;
+    export interface JSDocHeritageTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag | SyntaxKind.JSDocImplementsTag;
         class: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression };
     }
 

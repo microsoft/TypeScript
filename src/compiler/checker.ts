@@ -29853,7 +29853,14 @@ namespace ts {
             checkSignatureDeclaration(node);
         }
 
-        function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
+        function checkJSDocImplementsTag(node: JSDocHeritageTag): void {
+            const classLike = getJSDocHost(node);
+            if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
+                error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
+                return;
+            }
+        }
+        function checkJSDocAugmentsTag(node: JSDocHeritageTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
@@ -32113,7 +32120,7 @@ namespace ts {
                 }
             }
 
-            const implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
+            const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
                 for (const typeRefNode of implementedTypeNodes) {
                     if (!isEntityNameExpression(typeRefNode.expression)) {
@@ -33331,7 +33338,9 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
-                    return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
+                    return checkJSDocAugmentsTag(node as JSDocHeritageTag);
+                case SyntaxKind.JSDocImplementsTag:
+                    return checkJSDocImplementsTag(node as JSDocHeritageTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
