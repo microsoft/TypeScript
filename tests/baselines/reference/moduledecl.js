@@ -457,7 +457,7 @@ declare module exportTests {
     class C3_public {
         private getC2_private;
         private setC2_private;
-        private get c2();
+        private get c2(): any;
         getC1_public(): C1_public;
         setC1_public(arg: C1_public): void;
         get c1(): C1_public;

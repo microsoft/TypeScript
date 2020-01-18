@@ -494,7 +494,7 @@ declare class c1 {
     /** sum with property*/
     private pp2;
     /** getter property*/
-    private get pp3();
+    private get pp3(): any;
     /** setter property*/
     private set pp3(value);
     /** Constructor method*/
@@ -513,7 +513,7 @@ declare class c1 {
     set nc_p3(value: number);
     private nc_pp1;
     private nc_pp2;
-    private get nc_pp3();
+    private get nc_pp3(): any;
     private set nc_pp3(value);
     static nc_s1: number;
     static nc_s2(b: number): number;
@@ -525,7 +525,7 @@ declare class c1 {
     set a_p3(value: number);
     private a_pp1;
     private a_pp2;
-    private get a_pp3();
+    private get a_pp3(): any;
     private set a_pp3(value);
     static a_s1: number;
     static a_s2(b: number): number;
@@ -544,7 +544,7 @@ declare class c1 {
     /** sum with property */
     private b_pp2;
     /** getter property */
-    private get b_pp3();
+    private get b_pp3(): any;
     /** setter property */
     private set b_pp3(value);
     /** s1 is static property of c1 */

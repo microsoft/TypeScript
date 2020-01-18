@@ -277,7 +277,7 @@ export declare class c1 {
     /** setter property*/
     set p3(/** this is value*/ value: number);
     /** private getter property*/
-    private get pp3();
+    private get pp3(): any;
     /** private setter property*/
     private set pp3(value);
     /** static getter property*/
@@ -286,7 +286,7 @@ export declare class c1 {
     static set s3(/** this is value*/ value: number);
     get nc_p3(): number;
     set nc_p3(value: number);
-    private get nc_pp3();
+    private get nc_pp3(): any;
     private set nc_pp3(value);
     static get nc_s3(): string;
     static set nc_s3(value: string);
@@ -301,7 +301,7 @@ declare class c2 {
     /** setter property*/
     set p3(/** this is value*/ value: number);
     /** private getter property*/
-    private get pp3();
+    private get pp3(): any;
     /** private setter property*/
     private set pp3(value);
     /** static getter property*/
@@ -310,7 +310,7 @@ declare class c2 {
     static set s3(/** this is value*/ value: number);
     get nc_p3(): number;
     set nc_p3(value: number);
-    private get nc_pp3();
+    private get nc_pp3(): any;
     private set nc_pp3(value);
     static get nc_s3(): string;
     static set nc_s3(value: string);

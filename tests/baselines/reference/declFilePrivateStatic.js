@@ -51,7 +51,7 @@ declare class C {
     static y: number;
     private static a;
     static b(): void;
-    private static get c();
+    private static get c(): any;
     static get d(): number;
     private static set e(value);
     static set f(v: any);

@@ -149,10 +149,10 @@ declare class C {
     private readonly a1;
     protected readonly a2: number;
     readonly a3: number;
-    private get b1();
+    private get b1(): any;
     protected get b2(): number;
     get b3(): number;
-    private get c1();
+    private get c1(): any;
     private set c1(value);
     protected get c2(): number;
     protected set c2(value: number);
@@ -161,10 +161,10 @@ declare class C {
     private static readonly s1;
     protected static readonly s2: number;
     static readonly s3: number;
-    private static get t1();
+    private static get t1(): any;
     protected static get t2(): number;
     static get t3(): number;
-    private static get u1();
+    private static get u1(): any;
     private static set u1(value);
     protected static get u2(): number;
     protected static set u2(value: number);

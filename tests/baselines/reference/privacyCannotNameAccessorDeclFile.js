@@ -418,13 +418,13 @@ export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidge
 /// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 export declare class publicClassWithWithPrivateGetAccessorTypes {
     static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
-    private static get myPrivateStaticMethod();
+    private static get myPrivateStaticMethod(): any;
     get myPublicMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
-    private get myPrivateMethod();
+    private get myPrivateMethod(): any;
     static get myPublicStaticMethod1(): import("GlobalWidgets").Widget3;
-    private static get myPrivateStaticMethod1();
+    private static get myPrivateStaticMethod1(): any;
     get myPublicMethod1(): import("GlobalWidgets").Widget3;
-    private get myPrivateMethod1();
+    private get myPrivateMethod1(): any;
 }
 export declare class publicClassWithPrivateModuleGetAccessorTypes {
     static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;

@@ -225,7 +225,7 @@ declare class a {
         y: number;
     };
     private static d2;
-    private static get p3();
+    private static get p3(): any;
     private pv3;
     private foo;
 }

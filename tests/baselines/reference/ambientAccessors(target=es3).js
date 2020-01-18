@@ -21,10 +21,10 @@ declare class C {
 declare class C {
     static get a(): string;
     static set a(value: string);
-    private static get b();
+    private static get b(): any;
     private static set b(value);
     get x(): string;
     set x(value: string);
-    private get y();
+    private get y(): any;
     private set y(value);
 }

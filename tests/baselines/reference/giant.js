@@ -1124,7 +1124,7 @@ export declare class eC {
     psF(param: any): void;
     set psF(param: any);
     private rgF;
-    private get rgF();
+    private get rgF(): any;
     private rsF;
     private set rsF(value);
     static tV: any;
@@ -1176,7 +1176,7 @@ export declare module eM {
         psF(param: any): void;
         set psF(param: any);
         private rgF;
-        private get rgF();
+        private get rgF(): any;
         private rsF;
         private set rsF(value);
         static tV: any;
@@ -1241,7 +1241,7 @@ export declare module eM {
         psF(param: any): void;
         set psF(param: any);
         private rgF;
-        private get rgF();
+        private get rgF(): any;
         private rsF;
         private set rsF(value);
         static tV: any;
@@ -1281,7 +1281,7 @@ export declare class eaC {
     psF(param: any): void;
     set psF(param: any);
     private rgF;
-    private get rgF();
+    private get rgF(): any;
     private rsF;
     private set rsF(value);
     static tV: any;
