@@ -5445,10 +5445,6 @@
         "category": "Error",
         "code": 18007
     },
-    "'#!' can only be used at the start of a file.": {
-        "category": "Error",
-        "code": 18008
-    },
     "Private identifiers cannot be used as parameters": {
         "category": "Error",
         "code": 18009
