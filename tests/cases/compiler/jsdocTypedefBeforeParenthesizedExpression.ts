@@ -1,14 +1,20 @@
 // @allowJs: true
-// @checkJs: true
 // @noEmit: true
 
 // @filename: test.js
-;
-/** @typedef {object} NotADuplicateIdentifier */
+// @ts-check
+/** @typedef {number} NotADuplicateIdentifier */
 
 (2 * 2);
 
-/** @typedef {object} AlsoNotADuplicate */
+/** @typedef {number} AlsoNotADuplicate */
 
 (2 * 2) + 1;
 
+
+/**
+ * 
+ * @param a {NotADuplicateIdentifier}
+ * @param b {AlsoNotADuplicate}
+ */
+function makeSureTypedefsAreStillRecognized(a, b) {}
