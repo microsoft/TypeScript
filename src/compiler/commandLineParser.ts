@@ -818,6 +818,7 @@ namespace ts {
         {
             name: "noErrorTruncation",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_truncate_error_messages
         },
