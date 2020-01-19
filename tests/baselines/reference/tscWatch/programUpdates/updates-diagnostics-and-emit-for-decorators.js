@@ -13,13 +13,22 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a.ts]
+import {B} from './b'
 @((_) => {})
-export class C {
-    constructor(p: number) {}
+export class A {
+    constructor(p: B) {}
 }
 
+//// [/b.ts]
+export class B {}
+
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6"}}
+{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
+
+//// [/b.js]
+export class B {
+}
+
 
 //// [/a.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -28,34 +37,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-let C = class C {
+import './b';
+let A = class A {
     constructor(p) { }
 };
-C = __decorate([
+A = __decorate([
     ((_) => { })
-], C);
-export { C };
+], A);
+export { A };
 
 
 
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+12:00:15 AM - Starting compilation in watch mode...
 
 
-a.ts(2,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+
+a.ts(3,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
 
 
-12:00:16 AM - Found 1 error. Watching for file changes.
+12:00:20 AM - Found 2 errors. Watching for file changes.
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
+Program options: {"target":2,"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
@@ -63,6 +77,8 @@ WatchedFiles::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:
+  {"pollingInterval":250}
+/b.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
   {"pollingInterval":250}
@@ -78,25 +94,29 @@ exitCode:: ExitStatus.undefined
 Change:: Enable experimentalDecorators
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","experimentalDecorators":true}}
+{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
 
 
 Output::
 >> Screen clear
-12:00:19 AM - File change detected. Starting incremental compilation...
+12:00:23 AM - File change detected. Starting incremental compilation...
 
 
+a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 
-12:00:20 AM - Found 0 errors. Watching for file changes.
+
+12:00:24 AM - Found 1 error. Watching for file changes.
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
+Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
@@ -104,6 +124,8 @@ WatchedFiles::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:
+  {"pollingInterval":250}
+/b.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
   {"pollingInterval":250}
@@ -119,8 +141,9 @@ exitCode:: ExitStatus.undefined
 Change:: Enable emitDecoratorMetadata
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","experimentalDecorators":true,"emitDecoratorMetadata":true}}
+{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
 
+//// [/b.js] file written with same contents
 //// [/a.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -131,33 +154,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let C = class C {
+import { B } from './b';
+let A = class A {
     constructor(p) { }
 };
-C = __decorate([
+A = __decorate([
     ((_) => { }),
-    __metadata("design:paramtypes", [Number])
-], C);
-export { C };
+    __metadata("design:paramtypes", [B])
+], A);
+export { A };
 
 
 
 Output::
 >> Screen clear
-12:00:23 AM - File change detected. Starting incremental compilation...
+12:00:27 AM - File change detected. Starting incremental compilation...
 
 
 
-12:00:27 AM - Found 0 errors. Watching for file changes.
+12:00:34 AM - Found 0 errors. Watching for file changes.
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
+Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/b.ts
 /a.ts
 /a/lib/lib.d.ts
 
@@ -165,6 +191,8 @@ WatchedFiles::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:
+  {"pollingInterval":250}
+/b.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
   {"pollingInterval":250}

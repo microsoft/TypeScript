@@ -250,30 +250,35 @@ namespace ts.tscWatch {
             sys: () => {
                 const aTs: File = {
                     path: "/a.ts",
-                    content: `@((_) => {})
-export class C {
-    constructor(p: number) {}
+                    content: `import {B} from './b'
+@((_) => {})
+export class A {
+    constructor(p: B) {}
 }`,
+                };
+                const bTs: File = {
+                    path: "/b.ts",
+                    content: `export class B {}`,
                 };
                 const tsconfig: File = {
                     path: "/tsconfig.json",
                     content: JSON.stringify({
-                        compilerOptions: { target: "es6" }
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
                     })
                 };
-                return createWatchedSystem([libFile, aTs, tsconfig]);
+                return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
             },
             changes: [
                 sys => {
                     sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { target: "es6", experimentalDecorators: true }
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
                     }));
                     sys.checkTimeoutQueueLengthAndRun(1);
                     return "Enable experimentalDecorators";
                 },
                 sys => {
                     sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { target: "es6", experimentalDecorators: true, emitDecoratorMetadata: true }
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
                     }));
                     sys.checkTimeoutQueueLengthAndRun(1);
                     return "Enable emitDecoratorMetadata";
