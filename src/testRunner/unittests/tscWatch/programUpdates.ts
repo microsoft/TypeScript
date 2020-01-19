@@ -1133,7 +1133,7 @@ class D extends C { prop = 1; }`
                 };
                 const config: File = {
                     path: `/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { target: "es6"} })
+                    content: JSON.stringify({ compilerOptions: { target: "es6" } })
                 };
                 return createWatchedSystem([aFile, config, libFile]);
             },
