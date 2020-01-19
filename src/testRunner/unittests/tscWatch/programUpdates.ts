@@ -1123,6 +1123,31 @@ foo().hello`
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates diagnostics and emit when useDefineForClassFields changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `/a.ts`,
+                    content: `class C { get prop() { return 1; } }
+class D extends C { prop = 1; }`
+                };
+                const config: File = {
+                    path: `/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { target: "es6"} })
+                };
+                return createWatchedSystem([aFile, config, libFile]);
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable useDefineForClassFields";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "updates errors and emit when importsNotUsedAsValues changes",
             commandLineArgs: ["-w"],
             sys: () => {
