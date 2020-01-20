@@ -10,3 +10,4 @@ tests/cases/compiler/objectLiteralWithSemicolons4.ts(3,1): error TS1005: ',' exp
     ;
     ~
 !!! error TS1005: ',' expected.
+!!! related TS1007 tests/cases/compiler/objectLiteralWithSemicolons4.ts:1:9: The parser expected to find a '}' to match the '{' token here.
