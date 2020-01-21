@@ -1,19 +1,19 @@
 tests/cases/compiler/awaitInNonAsyncFunction.ts(4,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(9,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(10,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(10,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(14,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(15,3): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(15,3): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(19,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(20,10): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(20,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(24,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(25,9): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(25,9): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(30,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(31,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(34,7): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expression is only allowed within an async function.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(35,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 tests/cases/compiler/awaitInNonAsyncFunction.ts(39,5): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
+tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1376: Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.
 
 
 ==== tests/cases/compiler/awaitInNonAsyncFunction.ts (16 errors) ====
@@ -26,7 +26,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
       return await p;
              ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:3:10: Did you mean to mark this function as 'async'?
     }
     
@@ -37,7 +37,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
       return await p;
              ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:8:17: Did you mean to mark this function as 'async'?
     }
     
@@ -48,7 +48,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
       await p;
       ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:13:28: Did you mean to mark this function as 'async'?
     }
     
@@ -59,7 +59,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
       return await p;
              ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:18:19: Did you mean to mark this function as 'async'?
     };
     
@@ -70,7 +70,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
       yield await p;
             ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:23:11: Did you mean to mark this function as 'async'?
     }
     
@@ -81,7 +81,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
         await p;
         ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
       }
       method(p: Promise<number>) {
       for await (const _ of []);
@@ -90,7 +90,7 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
         await p;
         ~~~~~
-!!! error TS1308: 'await' expression is only allowed within an async function.
+!!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 !!! related TS1356 tests/cases/compiler/awaitInNonAsyncFunction.ts:33:3: Did you mean to mark this function as 'async'?
       }
     }
@@ -100,4 +100,4 @@ tests/cases/compiler/awaitInNonAsyncFunction.ts(40,1): error TS1375: 'await' out
 !!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
     await null;
     ~~~~~
-!!! error TS1375: 'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.
+!!! error TS1376: Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.

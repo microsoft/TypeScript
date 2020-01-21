@@ -28,7 +28,7 @@ verify.getSuggestionDiagnostics([
 verify.codeFixAvailable(
     [
         "Infer parameter types from usage",
-        "Remove declaration for: 'p'",
+        "Remove unused declaration for: 'p'",
         "Prefix 'p' with an underscore",
-        "Remove declaration for: 'x'"
+        "Remove unused declaration for: 'x'"
     ].map(description => ({ description })));

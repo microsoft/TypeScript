@@ -477,33 +477,69 @@ namespace ts.textChanges {
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
             this.insertNodeAtStartWorker(sourceFile, cls, newElement);
         }
+
         public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
             this.insertNodeAtStartWorker(sourceFile, obj, newElement);
         }
 
         private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
-            const clsStart = cls.getStart(sourceFile);
-            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
-                + this.formatContext.options.indentSize!;
-            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, { indentation, ...this.getInsertNodeAtStartPrefixSuffix(sourceFile, cls) });
+            const indentation = this.guessIndentationFromExistingMembers(sourceFile, cls) ?? this.computeIndentationForNewMember(sourceFile, cls);
+            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, cls, indentation));
         }
 
-        private getInsertNodeAtStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): { prefix: string, suffix: string } {
-            const comma = isObjectLiteralExpression(cls) ? "," : "";
-            if (getMembersOrProperties(cls).length === 0) {
-                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile })) {
-                    // For `class C {\n}`, don't add the trailing "\n"
-                    const [open, close] = getClassOrObjectBraceEnds(cls, sourceFile);
-                    const shouldSuffix = open && close && positionsAreOnSameLine(open, close, sourceFile);
-                    return { prefix: this.newLineCharacter, suffix: comma + (shouldSuffix ? this.newLineCharacter : "") };
+        /**
+         * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
+         * new lines and must share the same indentation.
+         */
+        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+            let indentation: number | undefined;
+            let lastRange: TextRange = cls;
+            for (const member of getMembersOrProperties(cls)) {
+                if (rangeStartPositionsAreOnSameLine(lastRange, member, sourceFile)) {
+                    // each indented member must be on a new line
+                    return undefined;
                 }
-                else {
-                    return { prefix: "", suffix: comma + this.newLineCharacter };
+                const memberStart = member.getStart(sourceFile);
+                const memberIndentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(memberStart, sourceFile), memberStart, sourceFile, this.formatContext.options);
+                if (indentation === undefined) {
+                    indentation = memberIndentation;
                 }
+                else if (memberIndentation !== indentation) {
+                    // indentation of multiple members is not consistent
+                    return undefined;
+                }
+                lastRange = member;
             }
-            else {
-                return { prefix: this.newLineCharacter, suffix: comma };
-            }
+            return indentation;
+        }
+
+        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+            const clsStart = cls.getStart(sourceFile);
+            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
+                + (this.formatContext.options.indentSize ?? 4);
+        }
+
+        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, indentation: number): InsertNodeOptions {
+            // Rules:
+            // - Always insert leading newline.
+            // - For object literals:
+            //   - Add a trailing comma if there are existing members in the node, or the source file is not a JSON file
+            //     (because trailing commas are generally illegal in a JSON file).
+            //   - Add a leading comma if the source file is not a JSON file, there are existing insertions,
+            //     and the node is empty (because we didn't add a trailing comma per the previous rule).
+            // - Only insert a trailing newline if body is single-line and there are no other insertions for the node.
+            //   NOTE: This is handled in `finishClassesWithNodesInsertedAtStart`.
+
+            const members = getMembersOrProperties(cls);
+            const isEmpty = members.length === 0;
+            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
+            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
+            return {
+                indentation,
+                prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
+                suffix: insertTrailingComma ? "," : ""
+            };
         }
 
         public insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void {
@@ -544,6 +580,7 @@ namespace ts.textChanges {
                 prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
             };
         }
+
         private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -726,9 +763,16 @@ namespace ts.textChanges {
         private finishClassesWithNodesInsertedAtStart(): void {
             this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
-                // For `class C { }` remove the whitespace inside the braces.
-                if (openBraceEnd && closeBraceEnd && positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
-                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                if (openBraceEnd !== undefined && closeBraceEnd !== undefined) {
+                    const isEmpty = getMembersOrProperties(node).length === 0;
+                    const isSingleLine = positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile);
+                    if (isEmpty && isSingleLine && openBraceEnd !== closeBraceEnd - 1) {
+                        // For `class C { }` remove the whitespace inside the braces.
+                        this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                    }
+                    if (isSingleLine) {
+                        this.insertText(sourceFile, closeBraceEnd - 1, this.newLineCharacter);
+                    }
                 }
             });
         }
