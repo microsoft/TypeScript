@@ -2355,7 +2355,7 @@ namespace ts {
                             }
                         }
                         else {
-                            if (moduleSymbol.exports && moduleSymbol.exports.has(InternalSymbolName.Default)) {
+                            if (moduleSymbol.exports?.has(InternalSymbolName.Default)) {
                                 error(
                                     name,
                                     Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead,
@@ -2364,12 +2364,33 @@ namespace ts {
                                 );
                             }
                             else {
-                                error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+                                reportNonExportedMember(name, declarationName, moduleSymbol, moduleName);
                             }
                         }
                     }
                     return symbol;
                 }
+            }
+        }
+
+        function reportNonExportedMember(name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+            const localSymbol = moduleSymbol.valueDeclaration.locals?.get(name.escapedText);
+            const exports = moduleSymbol.exports;
+
+            if (localSymbol) {
+                const exportedSymbol = exports && !exports.has(InternalSymbolName.ExportEquals)
+                    ? find(symbolsToArray(exports), symbol => !!getSymbolIfSameReference(symbol, localSymbol))
+                    : undefined;
+                const diagnostic = exportedSymbol
+                    ? error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, symbolToString(exportedSymbol))
+                    : error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName);
+
+                addRelatedInfo(diagnostic,
+                    createDiagnosticForNode(localSymbol.valueDeclaration, Diagnostics._0_is_declared_here, declarationName)
+                );
+            }
+            else {
+                error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
             }
         }
 
