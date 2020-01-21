@@ -128,7 +128,7 @@ namespace ts {
                 }
             }
 
-            const sourceFileDirectory = getDirectoryPath(sourceFile.path);
+            const sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
             // Handle triple slash references
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
@@ -211,21 +211,21 @@ namespace ts {
             // Create the reference map, and set the file infos
             for (const sourceFile of newProgram.getSourceFiles()) {
                 const version = Debug.assertDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
-                const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.path) : undefined;
+                const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath) : undefined;
                 if (referencedMap) {
                     const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);
                     if (newReferences) {
-                        referencedMap.set(sourceFile.path, newReferences);
+                        referencedMap.set(sourceFile.resolvedPath, newReferences);
                     }
                     // Copy old visible to outside files map
                     if (useOldState) {
-                        const exportedModules = oldState!.exportedModulesMap!.get(sourceFile.path);
+                        const exportedModules = oldState!.exportedModulesMap!.get(sourceFile.resolvedPath);
                         if (exportedModules) {
-                            exportedModulesMap!.set(sourceFile.path, exportedModules);
+                            exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
                         }
                     }
                 }
-                fileInfos.set(sourceFile.path, { version, signature: oldInfo && oldInfo.signature });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature });
             }
 
             return {
@@ -306,11 +306,11 @@ namespace ts {
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (state.hasCalledUpdateShapeSignature.has(sourceFile.path) || cacheToUpdateSignature.has(sourceFile.path)) {
+            if (state.hasCalledUpdateShapeSignature.has(sourceFile.resolvedPath) || cacheToUpdateSignature.has(sourceFile.resolvedPath)) {
                 return false;
             }
 
-            const info = state.fileInfos.get(sourceFile.path);
+            const info = state.fileInfos.get(sourceFile.resolvedPath);
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
@@ -319,8 +319,8 @@ namespace ts {
                 latestSignature = sourceFile.version;
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
                     // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.path) : undefined;
-                    exportedModulesMapCache.set(sourceFile.path, references || false);
+                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
                 }
             }
             else {
@@ -348,7 +348,7 @@ namespace ts {
                 }
 
             }
-            cacheToUpdateSignature.set(sourceFile.path, latestSignature);
+            cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
 
             return !prevSignature || latestSignature !== prevSignature;
         }
@@ -358,13 +358,13 @@ namespace ts {
          */
         function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ComputingExportedModulesMap) {
             if (!exportedModulesFromDeclarationEmit) {
-                exportedModulesMapCache.set(sourceFile.path, false);
+                exportedModulesMapCache.set(sourceFile.resolvedPath, false);
                 return;
             }
 
             let exportedModules: Map<true> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
-            exportedModulesMapCache.set(sourceFile.path, exportedModules || false);
+            exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules || false);
 
             function addExportedModule(exportedModulePath: Path | undefined) {
                 if (exportedModulePath) {
@@ -411,7 +411,7 @@ namespace ts {
 
             // Get the references, traversing deep from the referenceMap
             const seenMap = createMap<true>();
-            const queue = [sourceFile.path];
+            const queue = [sourceFile.resolvedPath];
             while (queue.length) {
                 const path = queue.pop()!;
                 if (!seenMap.has(path)) {
@@ -541,7 +541,7 @@ namespace ts {
             const seenFileNamesMap = createMap<SourceFile>();
 
             // Start with the paths this file was referenced by
-            seenFileNamesMap.set(sourceFileWithUpdatedShape.path, sourceFileWithUpdatedShape);
+            seenFileNamesMap.set(sourceFileWithUpdatedShape.resolvedPath, sourceFileWithUpdatedShape);
             const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.resolvedPath);
             while (queue.length > 0) {
                 const currentPath = queue.pop()!;

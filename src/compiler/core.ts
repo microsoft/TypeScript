@@ -2,30 +2,7 @@
 /* @internal */
 namespace ts {
 
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    export function tryGetNativeMap(): MapConstructor | undefined {
-        // Internet Explorer's Map doesn't support iteration, so don't use it.
-        // Natives
-        // NOTE: TS doesn't strictly allow in-line declares, but if we suppress the error, the declaration
-        // is still used for typechecking _and_ correctly elided, which is out goal, as this prevents us from
-        // needing to pollute an outer scope with a declaration of `Map` just to satisfy the checks in this function
-        //@ts-ignore
-        declare const Map: (new <T>() => Map<T>) | undefined;
-        // eslint-disable-next-line no-in-operator
-        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
-    }
-
     export const emptyArray: never[] = [] as never[];
-
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
 
     /** Create a new map. */
     export function createMap<T>(): Map<T> {
@@ -521,6 +498,17 @@ namespace ts {
         };
     }
 
+    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const mapped = mapValue(value, key);
+            if (mapped !== undefined) {
+                result.set(mapKey(key), mapped);
+            }
+        });
+        return result;
+    }
+
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
     export function singleIterator<T>(value: T): Iterator<T> {
@@ -642,10 +630,18 @@ namespace ts {
         return [...array1, ...array2];
     }
 
+    function selectIndex(_: unknown, i: number) {
+        return i;
+    }
+
+    export function indicesOf(array: readonly unknown[]): number[] {
+        return array.map(selectIndex);
+    }
+
     function deduplicateRelational<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
 
         let last = array[indices[0]];
@@ -951,7 +947,7 @@ namespace ts {
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
         return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
@@ -1257,8 +1253,10 @@ namespace ts {
         return result;
     }
 
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+    export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
     export function clone<T>(object: T): T {
@@ -1271,6 +1269,11 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
+     *
+     * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
+     */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {
@@ -1509,6 +1512,13 @@ namespace ts {
      */
     export function compareValues(a: number | undefined, b: number | undefined): Comparison {
         return compareComparableValues(a, b);
+    }
+
+    /**
+     * Compare two TextSpans, first by `start`, then by `length`.
+     */
+    export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<TextSpan> | undefined): Comparison {
+        return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
     }
 
     export function min<T>(a: T, b: T, compare: Comparer<T>): T {
@@ -1916,10 +1926,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
-        return arg => {
+    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+        return (...args) => {
             for (const f of fs) {
-                if (f(arg)) {
+                if (f(...args)) {
                     return true;
                 }
             }

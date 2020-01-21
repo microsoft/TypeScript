@@ -10,10 +10,6 @@
 exitCode:: ExitStatus.Success
 
 
-//// [/src/dist/src/hello.d.ts]
-export declare const hello: string;
-
-
 //// [/src/dist/src/hello.json]
 {
     "hello": "world"

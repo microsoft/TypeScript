@@ -4,8 +4,8 @@
 ////    x: number,
 ////    y: number
 ////    z: number;
-////    f(),
-////    g()
+////    f(): number,
+////    g(): any
 ////    h();
 ////}
 ////
@@ -18,8 +18,8 @@ verify.codeFix({
     x: number,
     y: number
     z: number;
-    f(),
-    g()
+    f(): number,
+    g(): any
     h();
 }
 
@@ -27,7 +27,7 @@ class C1 implements I1 {
     x: number;
     y: number;
     z: number;
-    f() {
+    f(): number {
         throw new Error("Method not implemented.");
     }
     g() {

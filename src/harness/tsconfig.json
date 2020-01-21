@@ -19,14 +19,14 @@
     ],
 
     "files": [
-        "collections.ts",
-        "utils.ts",
-        "documents.ts",
-        "vpath.ts",
-        "vfs.ts",
-        "compiler.ts",
-        "evaluator.ts",
-        "fakes.ts",
+        "collectionsImpl.ts",
+        "util.ts",
+        "documentsUtil.ts",
+        "vpathUtil.ts",
+        "vfsUtil.ts",
+        "compilerImpl.ts",
+        "evaluatorImpl.ts",
+        "fakesHosts.ts",
         "client.ts",
 
         "runnerbase.ts",
@@ -36,8 +36,8 @@
         "harnessIO.ts",
         "harnessLanguageService.ts",
         "virtualFileSystemWithWatch.ts",
-        "fourslash.ts",
-        "fourslashInterface.ts",
+        "fourslashImpl.ts",
+        "fourslashInterfaceImpl.ts",
         "typeWriter.ts",
         "loggedIO.ts"
     ]

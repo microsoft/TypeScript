@@ -6,7 +6,11 @@ namespace ts.projectSystem {
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
-                content: "{}"
+                content: JSON.stringify({
+                    watchOptions: {
+                        synchronousWatchDirectory: true
+                    }
+                })
             };
             const index: File = {
                 path: `${projectSrcFolder}/index.ts`,
@@ -244,6 +248,300 @@ namespace ts.projectSystem {
 
         it("for file of style //vda1cs4850/c$/users/username/myprojects/project/x.js", () => {
             verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js");
+        });
+    });
+
+    describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler options", () => {
+        it("with watchFile option as host configuration", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1));
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: protocol.CommandTypes.Configure,
+                arguments: {
+                    watchOptions: {
+                        watchFile: protocol.WatchFileKind.UseFsEvents
+                    }
+                }
+            });
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            // Instead of polling watch (= watchedFiles), uses fsWatch
+            checkWatchedFiles(host, emptyArray);
+            checkWatchedDirectoriesDetailed(
+                host,
+                files.map(f => f.path.toLowerCase()),
+                1,
+                /*recursive*/ false,
+                arrayToMap(
+                    files,
+                    f => f.path.toLowerCase(),
+                    f => [{
+                        fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+            checkWatchedDirectoriesDetailed(
+                host,
+                ["/a/b", "/a/b/node_modules/@types"],
+                1,
+                /*recursive*/ true,
+                arrayToMap(
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    identity,
+                    () => [{
+                        fallbackPollingInterval: PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+        });
+
+        it("with watchDirectory option as host configuration", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: protocol.CommandTypes.Configure,
+                arguments: {
+                    watchOptions: {
+                        watchDirectory: protocol.WatchDirectoryKind.UseFsEvents
+                    }
+                }
+            });
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            checkWatchedFilesDetailed(
+                host,
+                files.map(f => f.path.toLowerCase()),
+                1,
+                arrayToMap(
+                    files,
+                    f => f.path.toLowerCase(),
+                    () => [PollingInterval.Low]
+                )
+            );
+            checkWatchedDirectoriesDetailed(
+                host,
+                ["/a/b", "/a/b/node_modules/@types"],
+                1,
+                /*recursive*/ false,
+                arrayToMap(
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    identity,
+                    () => [{
+                        fallbackPollingInterval: PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+        });
+
+        it("with fallbackPolling option as host configuration", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: protocol.CommandTypes.Configure,
+                arguments: {
+                    watchOptions: {
+                        fallbackPolling: protocol.PollingWatchKind.PriorityInterval
+                    }
+                }
+            });
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            const filePaths = files.map(f => f.path.toLowerCase());
+            checkWatchedFilesDetailed(
+                host,
+                filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                1,
+                arrayToMap(
+                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                    identity,
+                    f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                )
+            );
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+        });
+
+        it("with watchFile option in configFile", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    watchOptions: {
+                        watchFile: "UseFsEvents"
+                    }
+                })
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1));
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            // The closed script infos are watched using host settings
+            checkWatchedFilesDetailed(
+                host,
+                [libFile, commonFile2].map(f => f.path.toLowerCase()),
+                1,
+                arrayToMap(
+                    [libFile, commonFile2],
+                    f => f.path.toLowerCase(),
+                    () => [PollingInterval.Low]
+                )
+            );
+            // Config file with the setting with fsWatch
+            checkWatchedDirectoriesDetailed(
+                host,
+                [configFile.path.toLowerCase()],
+                1,
+                /*recursive*/ false,
+                arrayToMap(
+                    [configFile.path.toLowerCase()],
+                    identity,
+                    () => [{
+                        fallbackPollingInterval: PollingInterval.High,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+            checkWatchedDirectoriesDetailed(
+                host,
+                ["/a/b", "/a/b/node_modules/@types"],
+                1,
+                /*recursive*/ true,
+                arrayToMap(
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    identity,
+                    () => [{
+                        fallbackPollingInterval: PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+        });
+
+        it("with watchDirectory option in configFile", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    watchOptions: {
+                        watchDirectory: "UseFsEvents"
+                    }
+                })
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            checkWatchedFilesDetailed(
+                host,
+                files.map(f => f.path.toLowerCase()),
+                1,
+                arrayToMap(
+                    files,
+                    f => f.path.toLowerCase(),
+                    () => [PollingInterval.Low]
+                )
+            );
+            checkWatchedDirectoriesDetailed(
+                host,
+                ["/a/b", "/a/b/node_modules/@types"],
+                1,
+                /*recursive*/ false,
+                arrayToMap(
+                    ["/a/b", "/a/b/node_modules/@types"],
+                    identity,
+                    () => [{
+                        fallbackPollingInterval: PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+        });
+
+        it("with fallbackPolling option in configFile", () => {
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    watchOptions: {
+                        fallbackPolling: "PriorityInterval"
+                    }
+                })
+            };
+            const files = [libFile, commonFile2, configFile];
+            const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: protocol.CommandTypes.Configure,
+                arguments: {
+                    watchOptions: {
+                        fallbackPolling: protocol.PollingWatchKind.PriorityInterval
+                    }
+                }
+            });
+            const service = session.getProjectService();
+            openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
+            checkProjectActualFiles(
+                service.configuredProjects.get(configFile.path)!,
+                files.map(f => f.path).concat(commonFile1.path)
+            );
+
+            const filePaths = files.map(f => f.path.toLowerCase());
+            checkWatchedFilesDetailed(
+                host,
+                filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                1,
+                arrayToMap(
+                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                    identity,
+                    f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                )
+            );
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
         });
     });
 }

@@ -103,10 +103,10 @@ namespace ts.server {
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
      */
-    export type ProjectRoot = ScriptInfo | NormalizedPath;
     /* @internal */
-    export function isScriptInfo(value: ProjectRoot): value is ScriptInfo {
-        return value instanceof ScriptInfo;
+    export interface ProjectRootFile {
+        fileName: NormalizedPath;
+        info?: ScriptInfo;
     }
 
     interface GeneratedFileWatcher {
@@ -120,7 +120,7 @@ namespace ts.server {
 
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
+        private rootFilesMap = createMap<ProjectRootFile>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<FileWatcher> | undefined;
@@ -257,6 +257,7 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
+            protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
             customRealpath?: (s: string) => string) {
@@ -354,9 +355,9 @@ namespace ts.server {
 
             let result: string[] | undefined;
             this.rootFilesMap.forEach(value => {
-                if (this.languageServiceEnabled || (isScriptInfo(value) && value.isScriptOpen())) {
+                if (this.languageServiceEnabled || (value.info && value.info.isScriptOpen())) {
                     // if language service is disabled - process only files that are open
-                    (result || (result = [])).push(isScriptInfo(value) ? value.fileName : value);
+                    (result || (result = [])).push(value.fileName);
                 }
             });
 
@@ -367,10 +368,10 @@ namespace ts.server {
             const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
-                if (existingValue !== scriptInfo && existingValue !== undefined) {
+                if (existingValue && existingValue.info !== scriptInfo) {
                     // This was missing path earlier but now the file exists. Update the root
                     this.rootFiles.push(scriptInfo);
-                    this.rootFilesMap.set(scriptInfo.path, scriptInfo);
+                    existingValue.info = scriptInfo;
                 }
                 scriptInfo.attachToProject(this);
             }
@@ -472,6 +473,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.FailedLookupLocations,
                 this
             );
@@ -489,6 +491,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
+                this.projectService.getWatchOptions(this),
                 WatchType.TypeRoots,
                 this
             );
@@ -835,14 +838,14 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFilesMap && this.rootFilesMap.get(info.path) === info;
+            return this.rootFilesMap && this.rootFilesMap.get(info.path)?.info === info;
         }
 
         // add a root file to project
-        addRoot(info: ScriptInfo) {
+        addRoot(info: ScriptInfo, fileName?: NormalizedPath) {
             Debug.assert(!this.isRoot(info));
             this.rootFiles.push(info);
-            this.rootFilesMap.set(info.path, info);
+            this.rootFilesMap.set(info.path, { fileName: fileName || info.fileName, info });
             info.attachToProject(this);
 
             this.markAsDirty();
@@ -851,7 +854,7 @@ namespace ts.server {
         // add a root file that doesnt exist on host
         addMissingFileRoot(fileName: NormalizedPath) {
             const path = this.projectService.toPath(fileName);
-            this.rootFilesMap.set(path, fileName);
+            this.rootFilesMap.set(path, { fileName });
             this.markAsDirty();
         }
 
@@ -1084,6 +1087,7 @@ namespace ts.server {
                 removed => this.detachScriptInfoFromProject(removed)
             );
             const elapsed = timestamp() - start;
+            this.projectService.sendUpdateGraphPerformanceEvent(elapsed);
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
                 this.print();
@@ -1157,7 +1161,7 @@ namespace ts.server {
                 this.projectService.host,
                 missingFilePath,
                 (fileName, eventKind) => {
-                    if (this.projectKind === ProjectKind.Configured) {
+                    if (isConfiguredProject(this)) {
                         this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
@@ -1170,6 +1174,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
+                this.projectService.getWatchOptions(this),
                 WatchType.MissingFile,
                 this
             );
@@ -1213,6 +1218,7 @@ namespace ts.server {
                     generatedFile,
                     () => this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this),
                     PollingInterval.High,
+                    this.projectService.getWatchOptions(this),
                     WatchType.MissingGeneratedFile,
                     this
                 )
@@ -1248,9 +1254,8 @@ namespace ts.server {
         }
 
         filesToString(writeProjectFileNames: boolean) {
-            if (!this.program) {
-                return "\tFiles (0)\n";
-            }
+            if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
+            if (!this.program) return "\tFiles (0) NoProgram\n";
             const sourceFiles = this.program.getSourceFiles();
             let strBuilder = `\tFiles (${sourceFiles.length})\n`;
             if (writeProjectFileNames) {
@@ -1284,6 +1289,16 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            this.watchOptions = watchOptions;
+        }
+
+        /*@internal*/
+        getWatchOptions(): WatchOptions | undefined {
+            return this.watchOptions;
+        }
+
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             // Update the graph only if initial configured project load is not pending
@@ -1294,7 +1309,7 @@ namespace ts.server {
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
                 version: this.projectProgramVersion,
-                isInferred: this.projectKind === ProjectKind.Inferred,
+                isInferred: isInferredProject(this),
                 options: this.getCompilationSettings(),
                 languageServiceDisabled: !this.languageServiceEnabled,
                 lastFileExceededProgramSize: this.lastFileExceededProgramSize
@@ -1517,6 +1532,7 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
+                    this.projectService.getWatchOptions(this),
                     WatchType.PackageJsonFile,
                 ));
             }
@@ -1595,6 +1611,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
+            watchOptions: WatchOptions | undefined,
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined,
             pluginConfigOverrides: Map<any> | undefined) {
@@ -1607,6 +1624,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
+                watchOptions,
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -1689,6 +1707,9 @@ namespace ts.server {
         /* @internal */
         pendingReloadReason: string | undefined;
 
+        /* @internal */
+        openFileWatchTriggered = createMap<true>();
+
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
 
@@ -1702,10 +1723,15 @@ namespace ts.server {
 
         private projectReferences: readonly ProjectReference[] | undefined;
 
+        /** Potential project references before the project is actually loaded (read config file) */
+        /*@internal*/
+        potentialProjectReferences: Map<true> | undefined;
+
         /*@internal*/
         projectOptions?: ProjectOptions | true;
 
-        protected isInitialLoadPending: () => boolean = returnTrue;
+        /*@internal*/
+        isInitialLoadPending: () => boolean = returnTrue;
 
         /*@internal*/
         sendLoadingProjectFinish = false;
@@ -1723,6 +1749,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 /*compilerOptions*/ {},
                 /*compileOnSaveEnabled*/ false,
+                /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
                 projectService.host.realpath && (s => this.getRealpath(s))
@@ -1882,6 +1909,32 @@ namespace ts.server {
             ) || false;
         }
 
+        /* @internal */
+        setWatchOptions(watchOptions: WatchOptions | undefined) {
+            const oldOptions = this.getWatchOptions();
+            super.setWatchOptions(watchOptions);
+            // If watch options different than older options
+            if (this.isInitialLoadPending() &&
+                !isJsonEqual(oldOptions, this.getWatchOptions())) {
+                const oldWatcher = this.configFileWatcher;
+                this.createConfigFileWatcher();
+                if (oldWatcher) oldWatcher.close();
+            }
+        }
+
+        /* @internal */
+        createConfigFileWatcher() {
+            this.configFileWatcher = this.projectService.watchFactory.watchFile(
+                this.projectService.host,
+                this.getConfigFilePath(),
+                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.ConfigFile,
+                this
+            );
+        }
+
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -1897,9 +1950,11 @@ namespace ts.server {
             let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
+                    this.openFileWatchTriggered.clear();
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
+                    this.openFileWatchTriggered.clear();
                     const reason = Debug.assertDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
                     this.projectService.reloadConfiguredProject(this, reason);
@@ -1928,12 +1983,13 @@ namespace ts.server {
 
         updateReferences(refs: readonly ProjectReference[] | undefined) {
             this.projectReferences = refs;
+            this.potentialProjectReferences = undefined;
         }
 
         /*@internal*/
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
-            const program = this.getCurrentProgram();
-            return program && program.forEachResolvedProjectReference(cb);
+        setPotentialProjectReference(canonicalConfigPath: NormalizedPath) {
+            Debug.assert(this.isInitialLoadPending());
+            (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(canonicalConfigPath, true);
         }
 
         /*@internal*/
@@ -2028,6 +2084,7 @@ namespace ts.server {
             this.mapOfDeclarationDirectories = undefined;
             this.symlinkedDirectories = undefined;
             this.symlinkedFiles = undefined;
+            this.openFileWatchTriggered.clear();
             super.close();
         }
 
@@ -2100,7 +2157,8 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string,
-            pluginConfigOverrides?: Map<any>) {
+            pluginConfigOverrides?: Map<any>,
+            watchOptions?: WatchOptions) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -2109,6 +2167,7 @@ namespace ts.server {
                 lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
+                watchOptions,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
@@ -2135,5 +2194,20 @@ namespace ts.server {
             Debug.assert(typeof newTypeAcquisition.enable === "boolean", "newTypeAcquisition.enable may not be null/undefined");
             this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
+    }
+
+    /* @internal */
+    export function isInferredProject(project: Project): project is InferredProject {
+        return project.projectKind === ProjectKind.Inferred;
+    }
+
+    /* @internal */
+    export function isConfiguredProject(project: Project): project is ConfiguredProject {
+        return project.projectKind === ProjectKind.Configured;
+    }
+
+    /* @internal */
+    export function isExternalProject(project: Project): project is ExternalProject {
+        return project.projectKind === ProjectKind.External;
     }
 }

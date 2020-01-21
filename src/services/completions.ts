@@ -117,12 +117,12 @@ namespace ts.Completions {
                     // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
                     // in the checker, even though the symbols to merge are the same (guaranteed by
                     // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations) {
+                    if (suggestion.symbol.declarations?.length) {
                         suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol || suggestion.symbol.declarations[0].symbol
+                            ? suggestion.symbol.declarations[0].localSymbol ?? suggestion.symbol.declarations[0].symbol
                             : suggestion.symbol.declarations[0].symbol);
                     }
-                    if (suggestion.origin.moduleSymbol.declarations) {
+                    if (suggestion.origin.moduleSymbol.declarations?.length) {
                         suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
                     }
                 });
@@ -854,7 +854,7 @@ namespace ts.Completions {
                         insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
                     }
                 }
-                if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
+                if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
                     return { kind: CompletionDataKind.JsDocParameterName, tag };
                 }
             }
@@ -877,7 +877,7 @@ namespace ts.Completions {
 
         // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
         // Skip this partial identifier and adjust the contextToken to the token that precedes it.
-        if (contextToken && position <= contextToken.end && (isIdentifier(contextToken) || isKeyword(contextToken.kind))) {
+        if (contextToken && position <= contextToken.end && (isIdentifierOrPrivateIdentifier(contextToken) || isKeyword(contextToken.kind))) {
             const start = timestamp();
             contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
             log("getCompletionData: Get previous token 2: " + (timestamp() - start));
@@ -1143,7 +1143,7 @@ namespace ts.Completions {
                 }
             }
 
-            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword)) {
+            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword) && contextToken === node.getChildAt(1)) {
                 const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
                 symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
                 return;
@@ -1279,7 +1279,8 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
+            const baseType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.BaseConstraint);
+            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, baseType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -1624,6 +1625,9 @@ namespace ts.Completions {
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                 }
+                if (typeChecker.isUndefinedSymbol(symbol)) {
+                    return;
+                }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
                 const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
                 results.push({
@@ -1795,10 +1799,11 @@ namespace ts.Completions {
             let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                const typeForObject = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completion);
-                if (!typeForObject) return GlobalsSearch.Fail;
-                isNewIdentifierLocation = hasIndexSignature(typeForObject);
-                typeMembers = getPropertiesForObjectExpression(typeForObject, objectLikeContainer, typeChecker);
+                const instantiatedType = typeChecker.getContextualType(objectLikeContainer);
+                const baseType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
+                if (!instantiatedType || !baseType) return GlobalsSearch.Fail;
+                isNewIdentifierLocation = hasIndexSignature(instantiatedType || baseType);
+                typeMembers = getPropertiesForObjectExpression(instantiatedType, baseType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }
             else {
@@ -2072,7 +2077,7 @@ namespace ts.Completions {
             switch (contextToken.kind) {
                 case SyntaxKind.CommaToken:
                     return containingNodeKind === SyntaxKind.VariableDeclaration ||
-                        containingNodeKind === SyntaxKind.VariableDeclarationList ||
+                        isVariableDeclarationListButNotTypeArgument(contextToken) ||
                         containingNodeKind === SyntaxKind.VariableStatement ||
                         containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                         isFunctionLikeButNotConstructor(containingNodeKind) ||
@@ -2202,6 +2207,11 @@ namespace ts.Completions {
             }
 
             return false;
+        }
+
+        function isVariableDeclarationListButNotTypeArgument(node: Node): boolean {
+            return node.parent.kind === SyntaxKind.VariableDeclarationList
+                && !isPossiblyTypeArgumentPosition(node, sourceFile, typeChecker);
         }
 
         /**
@@ -2392,8 +2402,10 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const validIdentifierResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-        if (isIdentifierText(name, target)) return validIdentifierResult;
+        const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+        if (isIdentifierText(name, target) || symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+            return validNameResult;
+        }
         switch (kind) {
             case CompletionKind.MemberLike:
                 return undefined;
@@ -2406,7 +2418,7 @@ namespace ts.Completions {
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
             case CompletionKind.String:
-                return validIdentifierResult;
+                return validNameResult;
             default:
                 Debug.assertNever(kind);
         }
@@ -2535,15 +2547,31 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
-        return contextualType.isUnion()
-            ? checker.getAllPossiblePropertiesOfTypes(contextualType.types.filter(memberType =>
+    function getPropertiesForObjectExpression(contextualType: Type, baseConstrainedType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+        const hasBaseType = baseConstrainedType && baseConstrainedType !== contextualType;
+        const type = hasBaseType && !(baseConstrainedType!.flags & TypeFlags.AnyOrUnknown)
+            ? checker.getUnionType([contextualType, baseConstrainedType!])
+            : contextualType;
+
+        const properties = type.isUnion()
+            ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
                 !(memberType.flags & TypeFlags.Primitive ||
                     checker.isArrayLikeType(memberType) ||
                     typeHasCallOrConstructSignatures(memberType, checker) ||
                     checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
-            : contextualType.getApparentProperties();
+            : type.getApparentProperties();
+
+        return hasBaseType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
+
+        // Filter out members whose only declaration is the object literal itself to avoid
+        // self-fulfilling completions like:
+        //
+        // function f<T>(x: T) {}
+        // f({ abc/**/: "" }) // `abc` is a member of `T` but only because it declares itself
+        function hasDeclarationOtherThanSelf(member: Symbol) {
+            return some(member.declarations, decl => decl.parent !== obj);
+        }
     }
 
     /**
@@ -2580,6 +2608,9 @@ namespace ts.Completions {
         if (!contextToken) return undefined;
 
         switch (contextToken.kind) {
+            case SyntaxKind.EqualsToken: // class c { public prop = | /* global completions */ }
+                return undefined;
+
             case SyntaxKind.SemicolonToken: // class c {getValue(): number; | }
             case SyntaxKind.CloseBraceToken: // class c { method() { } | }
                 // class c { method() { } b| }

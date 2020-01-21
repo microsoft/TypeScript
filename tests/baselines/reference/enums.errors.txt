@@ -1,0 +1,38 @@
+/b.ts(3,1): error TS1362: Enum 'SyntaxKind' cannot be used as a value because only its type has been imported.
+/b.ts(4,1): error TS1362: Enum 'SymbolFlags' cannot be used as a value because only its type has been imported.
+
+
+==== /a.ts (0 errors) ====
+    enum SyntaxKind {
+      ImportClause,
+      ExportDeclaration
+    }
+    
+    const enum SymbolFlags {
+      Type = "Type",
+      Value = "Value"
+    }
+    
+    export type { SyntaxKind };
+    export { SymbolFlags };
+    
+==== /b.ts (2 errors) ====
+    import type { SyntaxKind, SymbolFlags } from './a';
+    
+    SyntaxKind.ImportClause;
+    ~~~~~~~~~~
+!!! error TS1362: Enum 'SyntaxKind' cannot be used as a value because only its type has been imported.
+    SymbolFlags.Type;
+    ~~~~~~~~~~~
+!!! error TS1362: Enum 'SymbolFlags' cannot be used as a value because only its type has been imported.
+    let kind: SyntaxKind.ImportClause;
+    let flags: SymbolFlags;
+    
+    type TypeFlag = SymbolFlags.Type;
+    export type { TypeFlag };
+    
+==== /c.ts (0 errors) ====
+    import { SymbolFlags } from './a';
+    import type { TypeFlag } from './b';
+    const flags: TypeFlag = SymbolFlags.Type;
+    

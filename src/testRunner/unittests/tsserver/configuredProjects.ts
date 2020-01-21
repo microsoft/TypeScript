@@ -905,6 +905,24 @@ declare var console: {
                 ]
             });
         });
+
+        it("when file name starts with ^", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: "const x = 10;"
+            };
+            const app: File = {
+                path: `${tscWatch.projectRoot}/^app.ts`,
+                content: "const y = 10;"
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const host = createServerHost([file, app, tsconfig, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {

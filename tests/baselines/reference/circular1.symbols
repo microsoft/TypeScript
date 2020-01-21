@@ -1,0 +1,8 @@
+=== /a.ts ===
+export type { A } from './b';
+>A : Symbol(A, Decl(a.ts, 0, 13))
+
+=== /b.ts ===
+export type { A } from './a';
+>A : Symbol(A, Decl(b.ts, 0, 13))
+

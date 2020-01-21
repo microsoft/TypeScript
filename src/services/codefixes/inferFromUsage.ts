@@ -403,7 +403,7 @@ namespace ts.codefix {
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
-    function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type {
+    function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
         const references = getReferences(token, program, cancellationToken);
         return inferTypeFromReferences(program, references, cancellationToken).single();
     }

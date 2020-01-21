@@ -2,10 +2,11 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.8";
 
-    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
+    function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-            new TokenObject(kind, pos, end);
+            kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
+                new TokenObject(kind, pos, end);
         node.parent = parent;
         node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
@@ -368,6 +369,19 @@ namespace ts {
         }
     }
     IdentifierObject.prototype.kind = SyntaxKind.Identifier;
+    class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
+        public kind!: SyntaxKind.PrivateIdentifier;
+        public escapedText!: __String;
+        public symbol!: Symbol;
+        constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+            super(pos, end);
+        }
+
+        get text(): string {
+            return idText(this);
+        }
+    }
+    PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
 
     class TypeObject implements Type {
         checker: TypeChecker;
@@ -752,8 +766,14 @@ namespace ts {
                     case SyntaxKind.ExportDeclaration:
                         // Handle named exports case e.g.:
                         //    export {a, b as B} from "mod";
-                        if ((<ExportDeclaration>node).exportClause) {
-                            forEach((<ExportDeclaration>node).exportClause!.elements, visit);
+                        const exportDeclaration = (<ExportDeclaration>node);
+                        if (exportDeclaration.exportClause) {
+                            if (isNamedExports(exportDeclaration.exportClause)) {
+                                forEach(exportDeclaration.exportClause.elements, visit);
+                            }
+                            else {
+                                visit(exportDeclaration.exportClause.name);
+                            }
                         }
                         break;
 
@@ -808,6 +828,7 @@ namespace ts {
             getTokenConstructor: () => TokenObject,
 
             getIdentifierConstructor: () => IdentifierObject,
+            getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
             getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
@@ -1025,59 +1046,54 @@ namespace ts {
         return sourceFile;
     }
 
-    export let disableIncrementalParsing = false; // eslint-disable-line prefer-const
-
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
-                // Once incremental parsing is ready, then just call into this function.
-                if (!disableIncrementalParsing) {
-                    let newText: string;
+                let newText: string;
 
-                    // grab the fragment from the beginning of the original text to the beginning of the span
-                    const prefix = textChangeRange.span.start !== 0
-                        ? sourceFile.text.substr(0, textChangeRange.span.start)
-                        : "";
+                // grab the fragment from the beginning of the original text to the beginning of the span
+                const prefix = textChangeRange.span.start !== 0
+                    ? sourceFile.text.substr(0, textChangeRange.span.start)
+                    : "";
 
-                    // grab the fragment from the end of the span till the end of the original text
-                    const suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
-                        ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
-                        : "";
+                // grab the fragment from the end of the span till the end of the original text
+                const suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
+                    ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
+                    : "";
 
-                    if (textChangeRange.newLength === 0) {
-                        // edit was a deletion - just combine prefix and suffix
-                        newText = prefix && suffix ? prefix + suffix : prefix || suffix;
-                    }
-                    else {
-                        // it was actual edit, fetch the fragment of new text that correspond to new span
-                        const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
-                        // combine prefix, changed text and suffix
-                        newText = prefix && suffix
-                            ? prefix + changedText + suffix
-                            : prefix
-                                ? (prefix + changedText)
-                                : (changedText + suffix);
-                    }
-
-                    const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
-                    setSourceFileFields(newSourceFile, scriptSnapshot, version);
-                    // after incremental parsing nameTable might not be up-to-date
-                    // drop it so it can be lazily recreated later
-                    newSourceFile.nameTable = undefined;
-
-                    // dispose all resources held by old script snapshot
-                    if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
-                        if (sourceFile.scriptSnapshot.dispose) {
-                            sourceFile.scriptSnapshot.dispose();
-                        }
-
-                        sourceFile.scriptSnapshot = undefined;
-                    }
-
-                    return newSourceFile;
+                if (textChangeRange.newLength === 0) {
+                    // edit was a deletion - just combine prefix and suffix
+                    newText = prefix && suffix ? prefix + suffix : prefix || suffix;
                 }
+                else {
+                    // it was actual edit, fetch the fragment of new text that correspond to new span
+                    const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
+                    // combine prefix, changed text and suffix
+                    newText = prefix && suffix
+                        ? prefix + changedText + suffix
+                        : prefix
+                            ? (prefix + changedText)
+                            : (changedText + suffix);
+                }
+
+                const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+                setSourceFileFields(newSourceFile, scriptSnapshot, version);
+                // after incremental parsing nameTable might not be up-to-date
+                // drop it so it can be lazily recreated later
+                newSourceFile.nameTable = undefined;
+
+                // dispose all resources held by old script snapshot
+                if (sourceFile !== newSourceFile && sourceFile.scriptSnapshot) {
+                    if (sourceFile.scriptSnapshot.dispose) {
+                        sourceFile.scriptSnapshot.dispose();
+                    }
+
+                    sourceFile.scriptSnapshot = undefined;
+                }
+
+                return newSourceFile;
             }
         }
 
@@ -2136,6 +2152,26 @@ namespace ts {
             return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
+        function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
+            synchronizeHostData();
+            const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+            return declarations && mapOneOrMany(declarations, declaration => CallHierarchy.createCallHierarchyItem(program, declaration));
+        }
+
+        function provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
+        }
+
+        function provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        }
+
         return {
             dispose,
             cleanupSemanticCache,
@@ -2191,6 +2227,9 @@ namespace ts {
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
+            prepareCallHierarchy,
+            provideCallHierarchyIncomingCalls,
+            provideCallHierarchyOutgoingCalls
         };
     }
 
@@ -2209,6 +2248,10 @@ namespace ts {
         sourceFile.forEachChild(function walk(node) {
             if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
+                nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
+            }
+            else if (isPrivateIdentifier(node)) {
+                const text = node.escapedText;
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
 

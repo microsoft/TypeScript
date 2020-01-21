@@ -337,9 +337,7 @@ namespace ts.FindAllReferences {
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: node.kind === SyntaxKind.DefaultKeyword
-                || !!getDeclarationFromName(node)
-                || isLiteralComputedPropertyDeclarationName(node),
+            isDefinition: isDefinitionForReference(node),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
@@ -380,7 +378,10 @@ namespace ts.FindAllReferences {
                 return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
             }
             else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
-                return originalNode === entry.node ? { prefixText: name + " as " } : { suffixText: " as " + name };
+                // If the symbol for the node is same as declared node symbol use prefix text
+                return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
+                    { prefixText: name + " as " } :
+                    { suffixText: " as " + name };
             }
         }
 
@@ -465,6 +466,13 @@ namespace ts.FindAllReferences {
     function isWriteAccessForReference(node: Node): boolean {
         const decl = getDeclarationFromName(node);
         return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
+    }
+
+    function isDefinitionForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword
+            || !!getDeclarationFromName(node)
+            || isLiteralComputedPropertyDeclarationName(node)
+            || (node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent));
     }
 
     /**
@@ -758,7 +766,6 @@ namespace ts.FindAllReferences {
 
             // Compute the meaning from the location and the symbol it references
             const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
-
             const result: SymbolAndEntries[] = [];
             const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
@@ -923,7 +930,7 @@ namespace ts.FindAllReferences {
                 // The other two forms seem to be handled downstream (e.g. in `skipPastExportOrImportSpecifier`), so special-casing the first form
                 // here appears to be intentional).
                 const {
-                    text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol).escapedName)),
+                    text = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol)),
                     allSearchSymbols = [symbol],
                 } = searchOptions;
                 const escapedText = escapeLeadingUnderscores(text);
@@ -1085,7 +1092,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private));
+                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }
@@ -1229,9 +1236,9 @@ namespace ts.FindAllReferences {
         function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
             // Compare the length so we filter out strict superstrings of the symbol we are looking for
             switch (node.kind) {
+                case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.Identifier:
-                    return (node as Identifier).text.length === searchSymbolName.length;
-
+                    return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral: {
                     const str = node as StringLiteralLike;
@@ -1892,6 +1899,13 @@ namespace ts.FindAllReferences {
                 const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
                 Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]
                 return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
+            }
+
+            const exportSpecifier = getDeclarationOfKind<ExportSpecifier>(symbol, SyntaxKind.ExportSpecifier);
+            const localSymbol = exportSpecifier && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
+            if (localSymbol) {
+                const res = cbSymbol(localSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.Node);
+                if (res) return res;
             }
 
             // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.

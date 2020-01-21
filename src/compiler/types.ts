@@ -201,8 +201,9 @@ namespace ts {
         AmpersandEqualsToken,
         BarEqualsToken,
         CaretEqualsToken,
-        // Identifiers
+        // Identifiers and PrivateIdentifiers
         Identifier,
+        PrivateIdentifier,
         // Reserved words
         BreakKeyword,
         CaseKeyword,
@@ -403,6 +404,7 @@ namespace ts {
         ExportAssignment,
         ExportDeclaration,
         NamedExports,
+        NamespaceExport,
         ExportSpecifier,
         MissingDeclaration,
 
@@ -468,6 +470,10 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocAuthorTag,
         JSDocClassTag,
+        JSDocPublicTag,
+        JSDocPrivateTag,
+        JSDocProtectedTag,
+        JSDocReadonlyTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -709,6 +715,13 @@ namespace ts {
         | JSDocOptionalType
         | JSDocVariadicType;
 
+    export type HasTypeArguments =
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | JsxOpeningElement
+        | JsxSelfClosingElement;
+
     export type HasInitializer =
         | HasExpressionInitializer
         | ForStatement
@@ -819,10 +832,11 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
     export type DeclarationName =
         | Identifier
+        | PrivateIdentifier
         | StringLiteralLike
         | NumericLiteral
         | ComputedPropertyName
@@ -873,6 +887,14 @@ namespace ts {
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
+
+    export interface PrivateIdentifier extends Node {
+        kind: SyntaxKind.PrivateIdentifier;
+        // escaping not strictly necessary
+        // avoids gotchas in transforms and utils
+        escapedText: __String;
+    }
+
 
     /* @internal */
     // A name that supports late-binding (used in checker)
@@ -985,6 +1007,11 @@ namespace ts {
         exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
+        name: PrivateIdentifier;
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
@@ -1819,11 +1846,17 @@ namespace ts {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
-        name: Identifier;
+        name: Identifier | PrivateIdentifier;
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyAccessExpression extends PropertyAccessExpression {
+        name: PrivateIdentifier;
     }
 
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
+        name: Identifier;
     }
 
     /* @internal */
@@ -1839,6 +1872,7 @@ namespace ts {
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
+        name: Identifier;
     }
 
     export interface ElementAccessExpression extends MemberExpression {
@@ -1897,6 +1931,7 @@ namespace ts {
     /** @internal */
     export interface WellKnownSymbolExpression extends PropertyAccessExpression {
         expression: Identifier & { escapedText: "Symbol" };
+        name: Identifier;
     }
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableStaticNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
@@ -2431,6 +2466,7 @@ namespace ts {
     }
 
     export type NamedImportBindings = NamespaceImport | NamedImports;
+    export type NamedExportBindings = NamespaceExport | NamedExports;
 
     // In case of:
     // import d from "mod" => name = d, namedBinding = undefined
@@ -2441,6 +2477,7 @@ namespace ts {
     export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent: ImportDeclaration;
+        isTypeOnly: boolean;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
@@ -2451,6 +2488,12 @@ namespace ts {
         name: Identifier;
     }
 
+    export interface NamespaceExport extends NamedDeclaration {
+        kind: SyntaxKind.NamespaceExport;
+        parent: ExportDeclaration;
+        name: Identifier
+    }
+
     export interface NamespaceExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
@@ -2459,8 +2502,9 @@ namespace ts {
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
+        isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
-        exportClause?: NamedExports;
+        exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
     }
@@ -2608,6 +2652,22 @@ namespace ts {
 
     export interface JSDocClassTag extends JSDocTag {
         kind: SyntaxKind.JSDocClassTag;
+    }
+
+    export interface JSDocPublicTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPublicTag;
+    }
+
+    export interface JSDocPrivateTag extends JSDocTag {
+        kind: SyntaxKind.JSDocPrivateTag;
+    }
+
+    export interface JSDocProtectedTag extends JSDocTag {
+        kind: SyntaxKind.JSDocProtectedTag;
+    }
+
+    export interface JSDocReadonlyTag extends JSDocTag {
+        kind: SyntaxKind.JSDocReadonlyTag;
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {
@@ -3082,6 +3142,7 @@ namespace ts {
 
     /*@internal*/
     export interface RefFile {
+        referencedFileName: string;
         kind: RefFileKind;
         index: number;
         file: Path;
@@ -3108,6 +3169,8 @@ namespace ts {
         getMissingFilePaths(): readonly Path[];
         /* @internal */
         getRefFileMap(): MultiMap<RefFile> | undefined;
+        /* @internal */
+        getFilesByNameMap(): Map<SourceFile | false | undefined>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3132,6 +3195,9 @@ namespace ts {
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         /* @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
 
+        /* @internal */ getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        /* @internal */ getProgramDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
          */
@@ -3150,7 +3216,7 @@ namespace ts {
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
+        getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
@@ -3293,6 +3359,7 @@ namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
+        getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
@@ -3417,8 +3484,11 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined;
+        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
@@ -3468,7 +3538,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
-        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -3522,6 +3592,7 @@ namespace ts {
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
+        /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     }
 
     /* @internal */
@@ -3533,10 +3604,10 @@ namespace ts {
 
     /* @internal */
     export const enum ContextFlags {
-        None          = 0,
-        Signature     = 1 << 0, // Obtaining contextual signature
-        NoConstraints = 1 << 1, // Don't obtain type variable constraints
-        Completion    = 1 << 2, // Obtaining constraint type for completion
+        None           = 0,
+        Signature      = 1 << 0, // Obtaining contextual signature
+        NoConstraints  = 1 << 1, // Don't obtain type variable constraints
+        BaseConstraint = 1 << 2, // Use base constraint type for completions
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -4140,6 +4211,7 @@ namespace ts {
         AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
+        ContainsClassWithPrivateIdentifiers = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
     }
 
     /* @internal */
@@ -4917,6 +4989,26 @@ namespace ts {
         circular?: boolean;
     }
 
+    export enum WatchFileKind {
+        FixedPollingInterval,
+        PriorityPollingInterval,
+        DynamicPriorityPolling,
+        UseFsEvents,
+        UseFsEventsOnParentDirectory,
+    }
+
+    export enum WatchDirectoryKind {
+        UseFsEvents,
+        FixedPollingInterval,
+        DynamicPriorityPolling,
+    }
+
+    export enum PollingWatchKind {
+        FixedInterval,
+        PriorityInterval,
+        DynamicPriority,
+    }
+
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
@@ -4945,6 +5037,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
+        disableSolutionSearching?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -4953,6 +5046,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
+        importsNotUsedAsValues?: importsNotUsedAsValues;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -4982,6 +5076,7 @@ namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
@@ -5030,6 +5125,15 @@ namespace ts {
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
+    export interface WatchOptions {
+        watchFile?: WatchFileKind;
+        watchDirectory?: WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind;
+        synchronousWatchDirectory?: boolean;
+
+        [option: string]: CompilerOptionsValue | undefined;
+    }
+
     export interface TypeAcquisition {
         /**
          * @deprecated typingOptions.enableAutoDiscovery
@@ -5053,6 +5157,7 @@ namespace ts {
         //       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
         //       module kind).
         ES2015 = 5,
+        ES2020 = 6,
         ESNext = 99
     }
 
@@ -5061,6 +5166,12 @@ namespace ts {
         Preserve = 1,
         React = 2,
         ReactNative = 3
+    }
+
+    export const enum importsNotUsedAsValues {
+        Remove,
+        Preserve,
+        Error
     }
 
     export const enum NewLineKind {
@@ -5117,6 +5228,7 @@ namespace ts {
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         projectReferences?: readonly ProjectReference[];
+        watchOptions?: WatchOptions;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -5197,7 +5309,8 @@ namespace ts {
     }
 
     /* @internal */
-    export interface DidYouMeanOptionalDiagnostics {
+    export interface DidYouMeanOptionsDiagnostics {
+        optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
     }
@@ -5206,7 +5319,7 @@ namespace ts {
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
         elementOptions?: Map<CommandLineOption>;
-        extraKeyDiagnostics?: DidYouMeanOptionalDiagnostics;
+        extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
     }
 
     /* @internal */
@@ -5515,27 +5628,29 @@ namespace ts {
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
-        ContainsES2019 = 1 << 3,
-        ContainsES2018 = 1 << 4,
-        ContainsES2017 = 1 << 5,
-        ContainsES2016 = 1 << 6,
-        ContainsES2015 = 1 << 7,
-        ContainsGenerator = 1 << 8,
-        ContainsDestructuringAssignment = 1 << 9,
+        ContainsES2020 = 1 << 3,
+        ContainsES2019 = 1 << 4,
+        ContainsES2018 = 1 << 5,
+        ContainsES2017 = 1 << 6,
+        ContainsES2016 = 1 << 7,
+        ContainsES2015 = 1 << 8,
+        ContainsGenerator = 1 << 9,
+        ContainsDestructuringAssignment = 1 << 10,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 10, // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 11,
-        ContainsRestOrSpread = 1 << 12,
-        ContainsObjectRestOrSpread = 1 << 13,
-        ContainsComputedPropertyName = 1 << 14,
-        ContainsBlockScopedBinding = 1 << 15,
-        ContainsBindingPattern = 1 << 16,
-        ContainsYield = 1 << 17,
-        ContainsHoistedDeclarationOrCompletion = 1 << 18,
-        ContainsDynamicImport = 1 << 19,
-        ContainsClassFields = 1 << 20,
+        ContainsTypeScriptClassSyntax = 1 << 11, // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 12,
+        ContainsRestOrSpread = 1 << 13,
+        ContainsObjectRestOrSpread = 1 << 14,
+        ContainsComputedPropertyName = 1 << 15,
+        ContainsBlockScopedBinding = 1 << 16,
+        ContainsBindingPattern = 1 << 17,
+        ContainsYield = 1 << 18,
+        ContainsAwait = 1 << 19,
+        ContainsHoistedDeclarationOrCompletion = 1 << 20,
+        ContainsDynamicImport = 1 << 21,
+        ContainsClassFields = 1 << 22,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5547,6 +5662,7 @@ namespace ts {
         AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2020 = ContainsES2020,
         AssertES2019 = ContainsES2019,
         AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
@@ -5561,10 +5677,10 @@ namespace ts {
         OuterExpressionExcludes = HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes,
         NodeExcludes = PropertyAccessExcludes,
-        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
         PropertyExcludes = NodeExcludes | ContainsLexicalThis,
         ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName,
         ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
@@ -5688,8 +5804,10 @@ namespace ts {
         AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
         ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
         FirstEmitHelper = Extends,
-        LastEmitHelper = MakeTemplateObject,
+        LastEmitHelper = ClassPrivateFieldSet,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
