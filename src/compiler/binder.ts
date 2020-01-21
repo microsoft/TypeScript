@@ -1445,13 +1445,33 @@ namespace ts {
             }
         }
 
+        const enum BindBinaryExpressionFlowState {
+            BindThenBindChildren,
+            MaybeBindLeft,
+            BindToken,
+            BindRight,
+            FinishBind
+        }
+
         function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const work: [BinaryExpression, number, boolean?, Node?, number?][] = [[node, 0, undefined, undefined, undefined]];
-            while (work.length) {
-                const res = work[work.length - 1];
-                node = res[0];
-                switch (res[1]) {
-                    case -1: {
+            const workStacks: {
+                expr: BinaryExpression[],
+                state: BindBinaryExpressionFlowState[],
+                inStrictMode: (boolean | undefined)[],
+                parent: (Node | undefined)[],
+                subtreeFlags: (number | undefined)[]
+            } = {
+                expr: [node],
+                state: [BindBinaryExpressionFlowState.MaybeBindLeft],
+                inStrictMode: [undefined],
+                parent: [undefined],
+                subtreeFlags: [undefined]
+            };
+            let stackIndex = 0;
+            while (stackIndex >= 0) {
+                node = workStacks.expr[stackIndex];
+                switch (workStacks.state[stackIndex]) {
+                    case BindBinaryExpressionFlowState.BindThenBindChildren: {
                         // The -1 state is used only when recuring, to emulate the work that `bind` does before
                         // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
                         node.parent = parent;
@@ -1460,28 +1480,26 @@ namespace ts {
                         const saveParent = parent;
                         parent = node;
 
+                        let subtreeFlagsState: number | undefined;
                         // While this next part does the work of `bindChildren` before it descends into `bindChildrenWorker`
                         // and uses `res[4]` to queue up the work that needs to be done once the node is bound.
                         if (skipTransformFlagAggregation) {
-                            /// do nothing extra
+                            // do nothing extra
                         }
                         else if (node.transformFlags & TransformFlags.HasComputedFlags) {
                             skipTransformFlagAggregation = true;
-                            res[4] = -1;
+                            subtreeFlagsState = -1;
                         }
                         else {
                             const savedSubtreeTransformFlags = subtreeTransformFlags;
                             subtreeTransformFlags = 0;
-                            res[4] = savedSubtreeTransformFlags;
+                            subtreeFlagsState = savedSubtreeTransformFlags;
                         }
 
-
-                        res[2] = saveInStrictMode;
-                        res[3] = saveParent;
-                        res[1] = 0;
+                        advanceState(BindBinaryExpressionFlowState.MaybeBindLeft, saveInStrictMode, saveParent, subtreeFlagsState);
                         break;
                     }
-                    case 0: {
+                    case BindBinaryExpressionFlowState.MaybeBindLeft: {
                         const operator = node.operatorToken.kind;
                         // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
                         // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
@@ -1495,25 +1513,25 @@ namespace ts {
                             else {
                                 bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
                             }
-                            completeNode(res);
+                            completeNode();
                         }
                         else {
+                            advanceState(BindBinaryExpressionFlowState.BindToken);
                             maybeBind(node.left);
-                            res[1] = 1;
                         }
                         break;
                     }
-                    case 1: {
+                    case BindBinaryExpressionFlowState.BindToken: {
+                        advanceState(BindBinaryExpressionFlowState.BindRight);
                         maybeBind(node.operatorToken);
-                        res[1] = 2;
                         break;
                     }
-                    case 2: {
+                    case BindBinaryExpressionFlowState.BindRight: {
+                        advanceState(BindBinaryExpressionFlowState.FinishBind);
                         maybeBind(node.right);
-                        res[1] = 3;
                         break;
                     }
-                    case 3: {
+                    case BindBinaryExpressionFlowState.FinishBind: {
                         const operator = node.operatorToken.kind;
                         if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                             bindAssignmentTargetFlow(node.left);
@@ -1524,25 +1542,43 @@ namespace ts {
                                 }
                             }
                         }
-                        completeNode(res);
+                        completeNode();
                         break;
                     }
+                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for bindBinaryExpressionFlow`);
                 }
             }
 
-            function completeNode(res: [BinaryExpression, number, boolean?, Node?, number?]) {
-                if (res[2] !== undefined) {
-                    if (res[4] === -1) {
+            /**
+             * Note that `advanceState` sets the _current_ head state, and that `maybeBind` potentially pushes on a new
+             * head state; so `advanceState` must be called before any `maybeBind` during a state's execution.
+             */
+            function advanceState(state: BindBinaryExpressionFlowState, isInStrictMode?: boolean, parent?: Node, subtreeFlags?: number) {
+                workStacks.state[stackIndex] = state;
+                if (isInStrictMode !== undefined) {
+                    workStacks.inStrictMode[stackIndex] = isInStrictMode;
+                }
+                if (parent !== undefined) {
+                    workStacks.parent[stackIndex] = parent;
+                }
+                if (subtreeFlags !== undefined) {
+                    workStacks.subtreeFlags[stackIndex] = subtreeFlags;
+                }
+            }
+
+            function completeNode() {
+                if (workStacks.inStrictMode[stackIndex] !== undefined) {
+                    if (workStacks.subtreeFlags[stackIndex] === -1) {
                         skipTransformFlagAggregation = false;
                         subtreeTransformFlags |= node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
                     }
-                    else if (res[4] !== undefined) {
-                        subtreeTransformFlags = res[4] | computeTransformFlagsForNode(node, subtreeTransformFlags);
+                    else if (workStacks.subtreeFlags[stackIndex] !== undefined) {
+                        subtreeTransformFlags = workStacks.subtreeFlags[stackIndex]! | computeTransformFlagsForNode(node, subtreeTransformFlags);
                     }
-                    inStrictMode = res[2]!;
-                    parent = res[3]!;
+                    inStrictMode = workStacks.inStrictMode[stackIndex]!;
+                    parent = workStacks.parent[stackIndex]!;
                 }
-                work.pop();
+                stackIndex--;
             }
 
             /**
@@ -1550,7 +1586,12 @@ namespace ts {
              */
             function maybeBind(node: Node) {
                 if (node && isBinaryExpression(node)) {
-                    work.push([node, -1, undefined, undefined, undefined]);
+                    stackIndex++;
+                    workStacks.expr[stackIndex] = node;
+                    workStacks.state[stackIndex] = BindBinaryExpressionFlowState.BindThenBindChildren;
+                    workStacks.inStrictMode[stackIndex] = undefined;
+                    workStacks.parent[stackIndex] = undefined;
+                    workStacks.subtreeFlags[stackIndex] = undefined;
                 }
                 else {
                     bind(node);

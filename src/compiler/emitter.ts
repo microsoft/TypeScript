@@ -2427,23 +2427,29 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
+        const enum EmitBinaryExpressionState {
+            EmitLeft,
+            EmitRight,
+            FinishEmit
+        }
+
         /**
          * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
          * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
          * not require notification/substitution/comment/sourcemap decorations.
          */
         function emitBinaryExpression(node: BinaryExpression) {
-            const work: [BinaryExpression, number][] = [[node, 0]];
-            while (work.length) {
-                const res = work[work.length - 1];
-                let next: Expression | undefined;
-                node = res[0];
-                switch (res[1]) {
-                    case 0: {
-                        next = node.left;
+            const nodeStack = [node];
+            const stateStack = [EmitBinaryExpressionState.EmitLeft];
+            let stackIndex = 0;
+            while (stackIndex >= 0) {
+                node = nodeStack[stackIndex];
+                switch (stateStack[stackIndex]) {
+                    case EmitBinaryExpressionState.EmitLeft: {
+                        maybePipelineEmitExpression(node.left);
                         break;
                     }
-                    case 1: {
+                    case EmitBinaryExpressionState.EmitRight: {
                         const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
                         const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
                         const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
@@ -2452,26 +2458,23 @@ namespace ts {
                         writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
                         emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
                         increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-                        next = node.right;
+                        maybePipelineEmitExpression(node.right);
                         break;
                     }
-                    case 2: {
+                    case EmitBinaryExpressionState.FinishEmit: {
                         const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
                         const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
                         decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        stackIndex--;
                         break;
                     }
-                    default: return Debug.fail(`Invalid state ${res[1]} for emitBinaryExpressionWorker`);
+                    default: return Debug.fail(`Invalid state ${stateStack[stackIndex]} for emitBinaryExpressionWorker`);
                 }
+            }
 
-                if (!next) {
-                    // This unit of work is complete, remove it from the queue
-                    work.pop();
-                    continue;
-                }
-
+            function maybePipelineEmitExpression(next: Expression) {
                 // Advance the state of this unit of work,
-                res[1]++;
+                stateStack[stackIndex]++;
 
                 // Then actually do the work of emitting the node `next` returned by the prior state
 
@@ -2488,7 +2491,9 @@ namespace ts {
                 if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
                     // If the target pipeline phase is emit directly, and the next node's also a binary expression,
                     // skip all the intermediate indirection and push the expression directly onto the work stack
-                    work.push([next, 0]);
+                    stackIndex++;
+                    stateStack[stackIndex] = EmitBinaryExpressionState.EmitLeft;
+                    nodeStack[stackIndex] = next;
                 }
                 else {
                     pipelinePhase(EmitHint.Expression, next);

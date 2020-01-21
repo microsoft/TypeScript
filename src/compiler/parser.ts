@@ -904,17 +904,17 @@ namespace ts {
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            const stack: [Node, Node[]][] = [[rootNode, gatherChildren(rootNode)]];
+            const stack: Node[] = [rootNode];
             while (stack.length) {
-                const [parent, children] = stack.pop()!;
-                bindParentToChildren(parent, children);
+                const parent = stack.pop()!;
+                bindParentToChildren(parent, gatherChildren(parent));
             }
 
             return;
 
             function gatherChildren(node: Node) {
                 const children: Node[] = [];
-                forEachChild(node, n => void children.unshift(n)); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
+                forEachChild(node, n => { children.unshift(n); }); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
                 return children;
             }
 
@@ -922,17 +922,11 @@ namespace ts {
                 for (const child of children) {
                     if (child.parent === parent) continue; // already bound, assume subtree is bound
                     child.parent = parent;
-                    const grandchildren = gatherChildren(child);
-                    if (length(grandchildren)) {
-                        stack.push([child, grandchildren]);
-                    }
+                    stack.push(child);
                     if (hasJSDocNodes(child)) {
                         for (const jsDoc of child.jsDoc!) {
                             jsDoc.parent = child;
-                            const grandchildren = gatherChildren(jsDoc);
-                            if (length(grandchildren)) {
-                                stack.push([jsDoc, grandchildren]);
-                            }
+                            stack.push(jsDoc);
                         }
                     }
                 }

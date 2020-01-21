@@ -22,20 +22,14 @@ namespace Harness {
     }
 
     function* forEachASTNode(node: ts.Node) {
-        const work = [[node]];
+        const work = [node];
         while (work.length) {
-            const res = work[work.length - 1];
-            if (res.length > 0) {
-                const elem = res.shift()!;
-                yield elem;
+            const elem = work.pop()!;
+            yield elem;
 
-                const resChildren: ts.Node[] = [];
-                ts.forEachChild(elem, c => void resChildren.push(c));
-                work.push(resChildren);
-            }
-            else {
-                work.pop();
-            }
+            const resChildren: ts.Node[] = [];
+            ts.forEachChild(elem, c => { resChildren.unshift(c); }); // push onto work queue in reverse order to maintain preorder traversal
+            work.push(...resChildren);
         }
     }
 

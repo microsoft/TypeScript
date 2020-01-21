@@ -27111,55 +27111,84 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
+        const enum CheckBinaryExpressionState {
+            MaybeCheckLeft,
+            CheckRight,
+            FinishCheck
+        }
+
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            const work: [BinaryExpression, number, Type | undefined][] = [[node, 0, undefined]];
+            const workStacks: {
+                expr: BinaryExpression[],
+                state: CheckBinaryExpressionState[],
+                leftType: (Type | undefined)[]
+            } = {
+                expr: [node],
+                state: [CheckBinaryExpressionState.MaybeCheckLeft],
+                leftType: [undefined]
+            };
+            let stackIndex = 0;
             let lastResult: Type | undefined;
-            while (work.length) {
-                const res = work[work.length - 1];
-                node = res[0];
-                switch(res[1]) {
-                    case 0: {
+            while (stackIndex >= 0) {
+                node = workStacks.expr[stackIndex];
+                switch (workStacks.state[stackIndex]) {
+                    case CheckBinaryExpressionState.MaybeCheckLeft: {
                         if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
-                            lastResult = checkExpression(node.right, checkMode);
-                            work.pop();
+                            finishInvocation(checkExpression(node.right, checkMode));
                             break;
                         }
                         checkGrammarNullishCoalesceWithLogicalExpression(node);
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                            lastResult = checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword);
-                            work.pop();
+                            finishInvocation(checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
                             break;
                         }
+                        advanceState(CheckBinaryExpressionState.CheckRight);
                         maybeCheckExpression(node.left);
-                        res[1]++;
                         break;
                     }
-                    case 1: {
-                        const leftType = res[2] = lastResult!;
+                    case CheckBinaryExpressionState.CheckRight: {
+                        const leftType = lastResult!;
+                        workStacks.leftType[stackIndex] = leftType;
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                             checkTruthinessOfType(leftType, node.left);
                         }
+                        advanceState(CheckBinaryExpressionState.FinishCheck);
                         maybeCheckExpression(node.right);
-                        res[1]++;
                         break;
                     }
-                    case 2: {
-                        const leftType = res[2]!;
+                    case CheckBinaryExpressionState.FinishCheck: {
+                        const leftType = workStacks.leftType[stackIndex]!;
                         const rightType = lastResult!;
-                        lastResult = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
-                        work.pop();
+                        finishInvocation(checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node));
                         break;
                     }
+                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for checkBinaryExpression`);
                 }
             }
 
             return lastResult!;
 
+            function finishInvocation(result: Type) {
+                lastResult = result;
+                stackIndex--;
+            }
+
+            /**
+             * Note that `advanceState` sets the _current_ head state, and that `maybeCheckExpression` potentially pushes on a new
+             * head state; so `advanceState` must be called before any `maybeCheckExpression` during a state's execution.
+             */
+            function advanceState(nextState: CheckBinaryExpressionState) {
+                workStacks.state[stackIndex] = nextState;
+            }
+
             function maybeCheckExpression(node: Expression) {
                 if (isBinaryExpression(node)) {
-                    work.push([node, 0, undefined]);
+                    stackIndex++;
+                    workStacks.expr[stackIndex] = node;
+                    workStacks.state[stackIndex] = CheckBinaryExpressionState.MaybeCheckLeft;
+                    workStacks.leftType[stackIndex] = undefined;
                 }
                 else {
                     lastResult = checkExpression(node, checkMode);
