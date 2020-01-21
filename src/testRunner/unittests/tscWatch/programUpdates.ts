@@ -1160,6 +1160,35 @@ export function f(p: C) { return p; }`
             ]
         });
 
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates errors when forceConsistentCasingInFileNames changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `/a.ts`,
+                    content: `export class C {}`
+                };
+                const bFile: File = {
+                    path: `/b.ts`,
+                    content: `import {C} from './a'; import * as A from './A';`
+                };
+                const config: File = {
+                    path: `/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable forceConsistentCasingInFileNames";
+                },
+            ]
+        });
+
         verifyTscWatch({
             scenario,
             subScenario: "updates errors when ambient modules of program changes",
