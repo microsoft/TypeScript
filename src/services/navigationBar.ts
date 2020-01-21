@@ -683,7 +683,7 @@ namespace ts.NavigationBar {
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
             case SyntaxKind.ExportAssignment:
-                return "default";
+                return isExportAssignment(node) && node.isExportEquals ? "export=" : "default";
 
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
