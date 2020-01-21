@@ -28,7 +28,8 @@ namespace Harness {
             yield elem;
 
             const resChildren: ts.Node[] = [];
-            ts.forEachChild(elem, c => { resChildren.unshift(c); }); // push onto work queue in reverse order to maintain preorder traversal
+            // push onto work queue in reverse order to maintain preorder traversal
+            ts.forEachChild(elem, c => { resChildren.unshift(c); });
             work.push(...resChildren);
         }
     }
