@@ -1055,10 +1055,6 @@
         "category": "Error",
         "code": 1359
     },
-    "Did you mean to parenthesize this function type?": {
-        "category": "Error",
-        "code": 1360
-    },
     "Type-only {0} must reference a type, but '{1}' is a value.": {
         "category": "Error",
         "code": 1361
