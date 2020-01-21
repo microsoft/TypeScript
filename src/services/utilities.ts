@@ -439,7 +439,9 @@ namespace ts {
             case SyntaxKind.Identifier:
                 return isImportClause(node.parent) ? ScriptElementKind.alias : ScriptElementKind.unknown;
             case SyntaxKind.ExportAssignment:
-                return ScriptElementKind.constElement;
+                const scriptKind = getNodeKind((node as ExportAssignment).expression);
+                // If the expression didn't come back with something (like it does for an identifiers)
+                return scriptKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : scriptKind;
             default:
                 return ScriptElementKind.unknown;
         }
