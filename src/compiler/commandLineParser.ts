@@ -951,6 +951,7 @@ namespace ts {
         {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
