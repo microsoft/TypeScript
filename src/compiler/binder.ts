@@ -861,7 +861,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    return isNarrowableReference(expr);
+                    return containsNarrowableReference(expr);
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
                 case SyntaxKind.ParenthesizedExpression:
@@ -879,20 +879,23 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
-                isOptionalChain(expr);
+                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression);
+        }
+
+        function containsNarrowableReference(expr: Expression): boolean {
+            return isNarrowableReference(expr) || isOptionalChain(expr) && containsNarrowableReference(expr.expression);
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
             if (expr.arguments) {
                 for (const argument of expr.arguments) {
-                    if (isNarrowableReference(argument)) {
+                    if (containsNarrowableReference(argument)) {
                         return true;
                     }
                 }
             }
             if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                isNarrowableReference((<PropertyAccessExpression>expr.expression).expression)) {
+                containsNarrowableReference((<PropertyAccessExpression>expr.expression).expression)) {
                 return true;
             }
             return false;
@@ -909,7 +912,7 @@ namespace ts {
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
-                    return isNarrowableReference(expr.left);
+                    return containsNarrowableReference(expr.left);
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
@@ -938,7 +941,7 @@ namespace ts {
                             return isNarrowableOperand((<BinaryExpression>expr).right);
                     }
             }
-            return isNarrowableReference(expr);
+            return containsNarrowableReference(expr);
         }
 
         function createBranchLabel(): FlowLabel {

@@ -191,6 +191,10 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
+        public codeFixAllAvailable(fixName: string) {
+            this.state.verifyCodeFixAllAvailable(this.negative, fixName);
+        }
+
         public applicableRefactorAvailableAtMarker(markerName: string) {
             this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
         }
@@ -1552,7 +1556,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string | DiagnosticIgnoredInterpolations;
+        readonly description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
