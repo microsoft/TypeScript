@@ -245,6 +245,49 @@ namespace ts.tscWatch {
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates diagnostics and emit for decorators",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aTs: File = {
+                    path: "/a.ts",
+                    content: `import {B} from './b'
+@((_) => {})
+export class A {
+    constructor(p: B) {}
+}`,
+                };
+                const bTs: File = {
+                    path: "/b.ts",
+                    content: `export class B {}`,
+                };
+                const tsconfig: File = {
+                    path: "/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
+                    })
+                };
+                return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
+            },
+            changes: [
+                sys => {
+                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    return "Enable experimentalDecorators";
+                },
+                sys => {
+                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
+                    }));
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    return "Enable emitDecoratorMetadata";
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "files explicitly excluded in config file",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {

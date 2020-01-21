@@ -743,12 +743,15 @@ namespace ts {
         {
             name: "experimentalDecorators",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
         },
         {
             name: "emitDecoratorMetadata",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
