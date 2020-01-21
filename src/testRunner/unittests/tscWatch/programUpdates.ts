@@ -1230,6 +1230,34 @@ export function f(p: C) { return p; }`
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates moduleResolution when resolveJsonModule changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `import * as data from './data.json'`
+                };
+                const jsonFile: File = {
+                    path: `${projectRoot}/data.json`,
+                    content: `{ "foo": 1 }`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } })
+                };
+                return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable resolveJsonModule";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "updates errors when ambient modules of program changes",
             commandLineArgs: ["-w"],
             sys: () => {
