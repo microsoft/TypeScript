@@ -4,5 +4,4 @@ const #foo = 3;
 
 //// [privateNamesNotAllowedInVariableDeclarations.js]
 "use strict";
-const ;
-3;
+const #foo = 3;

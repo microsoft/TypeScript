@@ -18,8 +18,8 @@ class C {
         // not supported yet, could support in future:
         const badForNow: C[#bar] = 3;   // Error
 >badForNow : C[]
->#bar : number
->3 : any
+>#bar : any
+>3 : 3
 
         // will never use this syntax, already taken:
         const badAlways: C["#bar"] = 3; // Error
