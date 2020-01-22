@@ -4278,7 +4278,7 @@ namespace ts {
     }
 
     export function isDottedName(node: Expression): boolean {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
             node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
             node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
     }
