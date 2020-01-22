@@ -3569,6 +3569,7 @@ namespace ts {
             if (!length(symbols)) return;
 
             let hadAccessibleChain: Symbol | undefined;
+            let earlyModuleBail = false;
             for (const symbol of symbols!) {
                 // Symbol is accessible if it by itself is accessible
                 const accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/ false);
@@ -3581,6 +3582,14 @@ namespace ts {
                 }
                 else {
                     if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        if (shouldComputeAliasesToMakeVisible) {
+                            earlyModuleBail = true;
+                            // Generally speaking, we want to use the aliases that already exist to refer to a module, if present
+                            // In order to do so, we need to find those aliases in order to retain them in declaration emit; so
+                            // if we are in declaration emit, we cannot use the fast path for module visibility until we've exhausted
+                            // all other visibility options (in order to capture the possible aliases used to reference the module)
+                            continue;
+                        }
                         // Any meaning of a module symbol is always accessible via an `import` type
                         return {
                             accessibility: SymbolAccessibility.Accessible
@@ -3615,6 +3624,12 @@ namespace ts {
                 if (parentResult) {
                     return parentResult;
                 }
+            }
+
+            if (earlyModuleBail) {
+                return {
+                    accessibility: SymbolAccessibility.Accessible
+                };
             }
 
             if (hadAccessibleChain) {
