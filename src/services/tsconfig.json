@@ -48,6 +48,7 @@
         "refactorProvider.ts",
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addEmptyExportDeclaration.ts",
+        "codefixes/addMissingAsync.ts",
         "codefixes/addMissingAwait.ts",
         "codefixes/addMissingConst.ts",
         "codefixes/addMissingDeclareProperty.ts",

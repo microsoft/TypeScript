@@ -5436,6 +5436,14 @@
         "category": "Message",
         "code": 95099
     },
+    "Add 'async'.": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Fix all functions possibly missing 'async'.": {
+        "category": "Message",
+        "code": 95101
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
