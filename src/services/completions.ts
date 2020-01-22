@@ -2461,6 +2461,7 @@ namespace ts.Completions {
                         || kind === SyntaxKind.ModuleKeyword
                         || kind === SyntaxKind.TypeKeyword
                         || kind === SyntaxKind.NamespaceKeyword
+                        || kind === SyntaxKind.AsKeyword
                         || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);
