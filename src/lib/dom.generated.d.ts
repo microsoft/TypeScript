@@ -6713,6 +6713,38 @@ declare var HTMLDocument: {
 interface HTMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, DocumentAndElementEventHandlersEventMap {
 }
 
+type FormValue = File | string | FormData | null;
+
+interface ValidityStateFlags {
+    valueMissing?: boolean;
+    typeMismatch?: boolean;
+    patternMismatch?: boolean;
+    tooLong?: boolean;
+    tooShort?: boolean;
+    rangeUnderflow?: boolean;
+    rangeOverflow?: boolean;
+    stepMismatch?: boolean;
+    badInput?: boolean;
+    customError?: boolean;
+}
+
+interface ElementInternals {
+    readonly form: HTMLFormElement;
+    readonly labels: NodeList;
+    readonly validationMessage: string;
+    readonly validity: ValidityState;
+    readonly willValidate: boolean;
+    checkValidity(): boolean;
+    reportValidity(): boolean;
+    setFormValue(value: FormValue, state?: FormValue): void;
+    setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void;
+}
+
+declare var ElementInternals: {
+    prototype: ElementInternals;
+    new(): ElementInternals;
+};
+
 /** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. */
 interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementCSSInlineStyle, ElementContentEditable, GlobalEventHandlers, HTMLOrSVGElement {
     accessKey: string;
@@ -6736,6 +6768,7 @@ interface HTMLElement extends Element, DocumentAndElementEventHandlers, ElementC
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    attachInternals(): ElementInternals;
 }
 
 declare var HTMLElement: {
