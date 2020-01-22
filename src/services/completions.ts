@@ -2525,6 +2525,7 @@ namespace ts.Completions {
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
             case SyntaxKind.AsyncKeyword:
+            case SyntaxKind.DeclareKeyword:
                 return true;
             default:
                 return isClassMemberModifier(kind);

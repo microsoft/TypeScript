@@ -1283,6 +1283,7 @@ namespace ts {
 
     export const typeKeywords: readonly SyntaxKind[] = [
         SyntaxKind.AnyKeyword,
+        SyntaxKind.AssertsKeyword,
         SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
