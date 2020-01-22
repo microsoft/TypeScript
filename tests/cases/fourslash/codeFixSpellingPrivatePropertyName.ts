@@ -11,7 +11,7 @@ verify.codeFixAvailable([
     { description: "Change spelling to '#foo'" },
     { description: "Declare property 'foo'" },
     { description: "Add index signature for property 'foo'" },
-    { description: "Remove declaration for: '#foo'" },
+    { description: "Remove unused declaration for: '#foo'" },
 ]);
 
 verify.codeFix({

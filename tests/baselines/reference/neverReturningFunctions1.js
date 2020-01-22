@@ -231,9 +231,39 @@ const Component = registerComponent('test-component', {
 	}
 });
 
+// Repro from #36147
+
+class MyThrowable {
+    throw(): never {
+        throw new Error();
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+    err(msg: string): never {
+        super.throw()
+    }
+    ok(): never {
+        this.throw()
+    }
+}
+
 
 //// [neverReturningFunctions1.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 function fail(message) {
     throw new Error(message);
@@ -415,6 +445,28 @@ var Component = registerComponent('test-component', {
         return f * this.data.num * this.system.data.counter;
     }
 });
+// Repro from #36147
+var MyThrowable = /** @class */ (function () {
+    function MyThrowable() {
+    }
+    MyThrowable.prototype["throw"] = function () {
+        throw new Error();
+    };
+    return MyThrowable;
+}());
+var SuperThrowable = /** @class */ (function (_super) {
+    __extends(SuperThrowable, _super);
+    function SuperThrowable() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    SuperThrowable.prototype.err = function (msg) {
+        _super.prototype["throw"].call(this);
+    };
+    SuperThrowable.prototype.ok = function () {
+        this["throw"]();
+    };
+    return SuperThrowable;
+}(MyThrowable));
 
 
 //// [neverReturningFunctions1.d.ts]

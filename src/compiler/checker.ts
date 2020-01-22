@@ -2355,7 +2355,7 @@ namespace ts {
                             }
                         }
                         else {
-                            if (moduleSymbol.exports && moduleSymbol.exports.has(InternalSymbolName.Default)) {
+                            if (moduleSymbol.exports?.has(InternalSymbolName.Default)) {
                                 error(
                                     name,
                                     Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead,
@@ -2364,12 +2364,33 @@ namespace ts {
                                 );
                             }
                             else {
-                                error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
+                                reportNonExportedMember(name, declarationName, moduleSymbol, moduleName);
                             }
                         }
                     }
                     return symbol;
                 }
+            }
+        }
+
+        function reportNonExportedMember(name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+            const localSymbol = moduleSymbol.valueDeclaration.locals?.get(name.escapedText);
+            const exports = moduleSymbol.exports;
+
+            if (localSymbol) {
+                const exportedSymbol = exports && !exports.has(InternalSymbolName.ExportEquals)
+                    ? find(symbolsToArray(exports), symbol => !!getSymbolIfSameReference(symbol, localSymbol))
+                    : undefined;
+                const diagnostic = exportedSymbol
+                    ? error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_exported_as_2, moduleName, declarationName, symbolToString(exportedSymbol))
+                    : error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName);
+
+                addRelatedInfo(diagnostic,
+                    createDiagnosticForNode(localSymbol.valueDeclaration, Diagnostics._0_is_declared_here, declarationName)
+                );
+            }
+            else {
+                error(name, Diagnostics.Module_0_has_no_exported_member_1, moduleName, declarationName);
             }
         }
 
@@ -19054,6 +19075,8 @@ namespace ts {
                         return getExplicitTypeOfSymbol(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol, diagnostic);
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
+                    case SyntaxKind.SuperKeyword:
+                        return checkSuperExpression(node);
                     case SyntaxKind.PropertyAccessExpression:
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression, diagnostic);
                         const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
@@ -26665,13 +26688,18 @@ namespace ts {
                 if (!(node.flags & NodeFlags.AwaitContext)) {
                     if (isTopLevelAwait(node)) {
                         const sourceFile = getSourceFileOfNode(node);
-                        if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) ||
-                            languageVersion < ScriptTarget.ES2017 ||
-                            !isEffectiveExternalModule(sourceFile, compilerOptions)) {
-                            if (!hasParseDiagnostics(sourceFile)) {
-                                const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                        if (!hasParseDiagnostics(sourceFile)) {
+                            let span: TextSpan | undefined;
+                            if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                                if (!span) span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                                 const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.await_outside_of_an_async_function_is_only_allowed_at_the_top_level_of_a_module_when_module_is_esnext_or_system_and_target_is_es2017_or_higher);
+                                    Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
+                                diagnostics.add(diagnostic);
+                            }
+                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
+                                span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                                const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher);
                                 diagnostics.add(diagnostic);
                             }
                         }
@@ -26681,7 +26709,7 @@ namespace ts {
                         const sourceFile = getSourceFileOfNode(node);
                         if (!hasParseDiagnostics(sourceFile)) {
                             const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
+                            const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules);
                             const func = getContainingFunction(node);
                             if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
                                 const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
