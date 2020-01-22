@@ -289,7 +289,14 @@ namespace ts {
         function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
             if (node) {
-                onEmitNode(hint, node, emitCallback);
+                // TODO: Remove check and unconditionally use onEmitNode when API is breakingly changed
+                // (see https://github.com/microsoft/TypeScript/pull/36248/files/5062623f39120171b98870c71344b3242eb03d23#r369766739)
+                if (isEmitNotificationEnabled(node)) {
+                    onEmitNode(hint, node, emitCallback);
+                }
+                else {
+                    emitCallback(hint, node);
+                }
             }
         }
 

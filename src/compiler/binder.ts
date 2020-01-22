@@ -1472,7 +1472,7 @@ namespace ts {
                 node = workStacks.expr[stackIndex];
                 switch (workStacks.state[stackIndex]) {
                     case BindBinaryExpressionFlowState.BindThenBindChildren: {
-                        // The -1 state is used only when recuring, to emulate the work that `bind` does before
+                        // This state is used only when recuring, to emulate the work that `bind` does before
                         // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
                         node.parent = parent;
                         const saveInStrictMode = inStrictMode;
@@ -1482,7 +1482,7 @@ namespace ts {
 
                         let subtreeFlagsState: number | undefined;
                         // While this next part does the work of `bindChildren` before it descends into `bindChildrenWorker`
-                        // and uses `res[4]` to queue up the work that needs to be done once the node is bound.
+                        // and uses `subtreeFlagsState` to queue up the work that needs to be done once the node is bound.
                         if (skipTransformFlagAggregation) {
                             // do nothing extra
                         }
