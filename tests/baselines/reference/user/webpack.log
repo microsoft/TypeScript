@@ -1,8 +1,8 @@
 Exit Code: 1
 Standard output:
 lib/ContextModule.js(436,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ContextModule.js(464,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ContextModule.js(769,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ContextModule.js(465,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ContextModule.js(767,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/Dependency.js(139,29): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/ExternalModule.js(284,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/Module.js(625,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
@@ -27,9 +27,9 @@ lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSyste
 lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
 lib/dependencies/ExportsInfoDependency.js(81,9): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(567,40): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(169,37): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(171,36): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/dependencies/HarmonyImportDependency.js(177,19): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/dependencies/HarmonyImportDependency.js(195,37): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/dependencies/HarmonyImportDependency.js(197,36): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/dependencies/HarmonyImportDependency.js(203,19): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportSpecifierDependency.js(167,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/wasm/WasmChunkLoadingRuntimeModule.js(44,33): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 
