@@ -1055,11 +1055,15 @@
         "category": "Error",
         "code": 1359
     },
-    "Type-only {0} must reference a type, but '{1}' is a value.": {
+    "Did you mean to parenthesize this function type?": {
+        "category": "Error",
+        "code": 1360
+    },
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
     },
-    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
         "category": "Error",
         "code": 1362
     },
@@ -1099,10 +1103,6 @@
         "category": "Error",
         "code": 1371
     },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
-    },
     "Convert to type-only import": {
         "category": "Message",
         "code": 1373
@@ -1115,9 +1115,17 @@
         "category": "Error",
         "code": 1375
     },
+    "'{0}' was imported here.": {
+        "category": "Message",
+        "code": 1376
+    },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
     "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
-        "code": 1376
+        "code": 1378
     },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
