@@ -1279,7 +1279,14 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            const baseType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.BaseConstraint);
+            const uninstantiatedType = typeChecker.getContextualType(jsxContainer!, ContextFlags.Uninstantiated);
+            let baseType;
+            if (uninstantiatedType) {
+                const signature = tryGetContextualTypeProvidingSignature(jsxContainer!, typeChecker)?.target;
+                if (signature && !isIndexedAccessTypeWithTypeParameterIndex(uninstantiatedType, signature)) {
+                    baseType = typeChecker.getContextualType(jsxContainer!.attributes, ContextFlags.BaseConstraint);
+                }
+            }
             symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, baseType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
@@ -1803,8 +1810,11 @@ namespace ts.Completions {
                 if (!instantiatedType) return GlobalsSearch.Fail;
                 const uninstantiatedType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Uninstantiated);
                 let baseType;
-                if (!(uninstantiatedType && uninstantiatedType.flags & TypeFlags.IndexedAccess)) {
-                    baseType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
+                if (uninstantiatedType) {
+                    const signature = tryGetContextualTypeProvidingSignature(objectLikeContainer, typeChecker)?.target;
+                    if (signature && !isIndexedAccessTypeWithTypeParameterIndex(uninstantiatedType, signature)) {
+                        baseType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.BaseConstraint);
+                    }
                 }
 
                 isNewIdentifierLocation = hasIndexSignature(instantiatedType);
@@ -1855,6 +1865,62 @@ namespace ts.Completions {
             setSortTextToOptionalMember();
 
             return GlobalsSearch.Success;
+        }
+
+        function tryGetContextualTypeProvidingSignature(node: Node, checker: TypeChecker): Signature | undefined {
+            loop: while (true) {
+                switch (node.kind) {
+                    case SyntaxKind.SpreadAssignment:
+                    case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.ParenthesizedExpression:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                    case SyntaxKind.ObjectLiteralExpression:
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxAttributes:
+                        node = node.parent;
+                        break;
+                    default:
+                        break loop;
+                }
+            }
+            if (!isCallLikeExpression(node) && !isJsxOpeningLikeElement(node)) {
+                return;
+            }
+            return checker.getResolvedSignature(node);
+        }
+
+        function isIndexedAccessTypeWithTypeParameterIndex(type: Type, signature: Signature): boolean {
+            if (type.isUnionOrIntersection()) {
+                return some(type.types, t => isIndexedAccessTypeWithTypeParameterIndex(t, signature));
+            }
+            if (type.flags & TypeFlags.IndexedAccess) {
+                return typeIsTypeParameterFromSignature((type as IndexedAccessType).indexType, signature);
+            }
+            return false;
+        }
+
+        function typeIsTypeParameterFromSignature(type: Type, signature: Signature): boolean {
+            if (!signature.typeParameters) {
+                return false;
+            }
+            if (type.isUnionOrIntersection()) {
+                return some(type.types, t => typeIsTypeParameterFromSignature(t, signature));
+            }
+            if (type.flags & TypeFlags.Conditional) {
+                return typeIsTypeParameterFromSignature((type as ConditionalType).checkType, signature)
+                    || typeIsTypeParameterFromSignature((type as ConditionalType).extendsType, signature)
+                    || typeIsTypeParameterFromSignature((type as ConditionalType).resolvedTrueType, signature)
+                    || typeIsTypeParameterFromSignature((type as ConditionalType).resolvedFalseType, signature);
+            }
+            if (type.flags & TypeFlags.Index) {
+                return typeIsTypeParameterFromSignature((type as IndexType).type, signature);
+            }
+            if (type.flags & TypeFlags.TypeParameter) {
+                return some(signature.typeParameters, p => p.symbol === type.symbol);
+            }
+            return false;
         }
 
         /**
