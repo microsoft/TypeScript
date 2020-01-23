@@ -14779,7 +14779,7 @@ namespace ts {
                             sourceType,
                             targetType,
                             typeToString(constraint!),
-                        );  
+                        );
                     }
                     else {
                         reportError(
