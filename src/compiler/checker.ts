@@ -2176,7 +2176,7 @@ namespace ts {
                 return getPropertyOfType(getTypeOfSymbol(exportValue), name);
             }
             const exportSymbol = moduleSymbol.exports!.get(name);
-            checkImportOrExportSymbolForTypeOnlyMarker(sourceNode, exportSymbol);
+            markSymbolOfAliasDeclarationIfResolvesToTypeOnly(sourceNode, exportSymbol);
             return resolveSymbol(exportSymbol, dontResolveAlias);
         }
 
@@ -2217,7 +2217,7 @@ namespace ts {
 
         function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSymbol = resolveExternalModuleName(node, node.parent.moduleSpecifier);
-            checkAliasDeclarationForTypeOnlyMarker(node);
+            markSymbolOfAliasDeclarationIfTypeOnly(node);
 
             if (moduleSymbol) {
                 let exportDefaultSymbol: Symbol | undefined;
@@ -2268,7 +2268,7 @@ namespace ts {
 
         function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSpecifier = node.parent.parent.moduleSpecifier;
-            checkAliasDeclarationForTypeOnlyMarker(node);
+            markSymbolOfAliasDeclarationIfTypeOnly(node);
             return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
         }
 
@@ -2315,7 +2315,7 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Module) {
                 const name = (specifier.propertyName ?? specifier.name).escapedText;
                 const exportSymbol = getExportsOfSymbol(symbol).get(name);
-                checkImportOrExportSymbolForTypeOnlyMarker(specifier, exportSymbol);
+                markSymbolOfAliasDeclarationIfResolvesToTypeOnly(specifier, exportSymbol);
                 return resolveSymbol(exportSymbol, dontResolveAlias);
             }
         }
@@ -2416,7 +2416,7 @@ namespace ts {
         }
 
         function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
-            checkAliasDeclarationForTypeOnlyMarker(node);
+            markSymbolOfAliasDeclarationIfTypeOnly(node);
             return getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
         }
 
@@ -2425,7 +2425,7 @@ namespace ts {
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
-            checkAliasDeclarationForTypeOnlyMarker(node);
+            markSymbolOfAliasDeclarationIfTypeOnly(node);
             return node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
@@ -2530,21 +2530,21 @@ namespace ts {
             return links.target;
         }
 
-        function checkImportOrExportSymbolForTypeOnlyMarker(sourceNode: TypeOnlyCompatibleAliasDeclaration | undefined, symbol: Symbol | undefined) {
-            if (!sourceNode || !symbol) return;
-            const sourceSymbol = getSymbolOfNode(sourceNode);
+        function markSymbolOfAliasDeclarationIfResolvesToTypeOnly(aliasDeclaration: TypeOnlyCompatibleAliasDeclaration | undefined, resolvesToSymbol: Symbol | undefined) {
+            if (!aliasDeclaration || !resolvesToSymbol) return;
+            const sourceSymbol = getSymbolOfNode(aliasDeclaration);
             const links = getSymbolLinks(sourceSymbol);
             if (links.typeOnlyDeclaration === undefined) {
-                const typeOnly = find(symbol.declarations, isTypeOnlyImportOrExportDeclaration);
-                links.typeOnlyDeclaration = typeOnly ?? getSymbolLinks(symbol).typeOnlyDeclaration ?? false;
+                const typeOnly = find(resolvesToSymbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                links.typeOnlyDeclaration = typeOnly ?? getSymbolLinks(resolvesToSymbol).typeOnlyDeclaration ?? false;
             }
         }
 
-        function checkAliasDeclarationForTypeOnlyMarker(node: TypeOnlyCompatibleAliasDeclaration) {
-            if (isTypeOnlyImportOrExportDeclaration(node)) {
-                const symbol = getSymbolOfNode(node);
+        function markSymbolOfAliasDeclarationIfTypeOnly(aliasDeclaration: TypeOnlyCompatibleAliasDeclaration) {
+            if (isTypeOnlyImportOrExportDeclaration(aliasDeclaration)) {
+                const symbol = getSymbolOfNode(aliasDeclaration);
                 const links = getSymbolLinks(symbol);
-                links.typeOnlyDeclaration = node;
+                links.typeOnlyDeclaration = aliasDeclaration;
             }
         }
 
@@ -2684,7 +2684,7 @@ namespace ts {
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             if (isIdentifier(name) && symbol.flags & SymbolFlags.Alias) {
-                checkImportOrExportSymbolForTypeOnlyMarker(getTypeOnlyCompatibleAliasDeclarationFromName(name), symbol);
+                markSymbolOfAliasDeclarationIfResolvesToTypeOnly(getTypeOnlyCompatibleAliasDeclarationFromName(name), symbol);
             }
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
