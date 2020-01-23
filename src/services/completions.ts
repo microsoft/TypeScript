@@ -1279,7 +1279,7 @@ namespace ts.Completions {
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            const uninstantiatedType = typeChecker.getContextualType(jsxContainer!, ContextFlags.Uninstantiated);
+            const uninstantiatedType = typeChecker.getContextualType(jsxContainer!.attributes, ContextFlags.Uninstantiated);
             let baseType;
             if (uninstantiatedType) {
                 const signature = tryGetContextualTypeProvidingSignature(jsxContainer!, typeChecker)?.target;
