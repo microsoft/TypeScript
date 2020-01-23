@@ -1428,6 +1428,57 @@ var x = 10;`
             host.checkTimeoutQueueLength(0);
         });
 
+        it("synchronizeProjectList provides redirect info when requested", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileA: File = {
+                path: `${projectRootPath}/A/a.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configA: File = {
+                path: `${projectRootPath}/A/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  }
+}`
+            };
+            const fileB: File = {
+                path: `${projectRootPath}/B/b.ts`,
+                content: "import { foo } from \"../A/a\"; console.log(foo);"
+            };
+            const configB: File = {
+                path: `${projectRootPath}/B/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "../A" }
+  ]
+}`
+            };
+            const files = [fileA, fileB, configA, configB, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(fileA.path);
+            projectService.openClientFile(fileB.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert(knownProjects.length === 2, `Expected 2 projects but received ${knownProjects.length}`);
+            assert(knownProjects[0].files?.length === 3, `Expected project A to have 3 files but received ${knownProjects[0].files?.length}`);
+            assert(knownProjects[0].files?.every(
+                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
+                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
+                `Expected every file in project A to not be redirected.`
+            );
+            assert(knownProjects[1].files?.length === 4, `Expected project B to have 4 files but received ${knownProjects[1].files?.length}`);
+            knownProjects[1].files?.forEach(
+                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
+                    assert(typeof file === "object" && (!file.isSourceOfProjectReferenceRedirect || file.fileName === fileA.path))
+            );
+        });
+
         it("handles delayed directory watch invoke on file creation", () => {
             const projectRootPath = "/users/username/projects/project";
             const fileB: File = {
