@@ -1885,7 +1885,7 @@ namespace ts.Completions {
                         break loop;
                 }
             }
-            if (!isCallLikeExpression(node) && !isJsxOpeningLikeElement(node)) {
+            if (!isCallLikeExpression(node)) {
                 return;
             }
             return checker.getResolvedSignature(node);
@@ -1897,6 +1897,12 @@ namespace ts.Completions {
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 return typeIsTypeParameterFromSignature((type as IndexedAccessType).indexType, signature);
+            }
+            if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                const { constraintType } = (type as MappedType);
+                if (constraintType && constraintType.flags & TypeFlags.Index) {
+                    return isIndexedAccessTypeWithTypeParameterIndex((constraintType as IndexType).type, signature);
+                }
             }
             return false;
         }
