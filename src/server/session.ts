@@ -807,7 +807,11 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
-                updateGraphDurationMs: this.updateGraphDurationMs,
+                performanceData: !this.updateGraphDurationMs
+                    ? undefined
+                    : {
+                        updateGraphDurationMs: this.updateGraphDurationMs,
+                    },
             };
 
             if (success) {

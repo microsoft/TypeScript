@@ -4,7 +4,7 @@ class A { a!: string }
 >a : string
 
 export type { A as B };
->A : A
+>A : typeof A
 >B : A
 
 export type Z = A;
@@ -16,26 +16,26 @@ import { Z as Y } from './a';
 >Y : any
 
 export { B as C } from './a';
->B : any
->C : any
+>B : typeof import("/a").B
+>C : typeof import("/a").B
 
 === /c.ts ===
 import type { C } from './b';
->C : A
+>C : C
 
 export { C as D };
->C : any
->D : any
+>C : typeof C
+>D : typeof C
 
 === /d.ts ===
 import { D } from './c';
->D : any
+>D : typeof D
 
 new D();
->new D() : any
->D : any
+>new D() : D
+>D : typeof D
 
 const d: D = {};
->d : A
+>d : D
 >{} : {}
 

@@ -571,14 +571,14 @@ namespace ts {
             return false;
         }
 
-        // If number of files in the program do not match, it is not up-to-date
-        if (program.getRootFileNames().length !== rootFileNames.length) {
+        // If root file names don't match
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
             return false;
         }
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
-        // If project references dont match
+        // If project references don't match
         if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
         }

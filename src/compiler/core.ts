@@ -1269,6 +1269,11 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
+     *
+     * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
+     */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {

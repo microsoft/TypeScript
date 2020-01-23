@@ -2778,8 +2778,8 @@ namespace ts {
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
             return importClause ||
-                compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Error
+                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
+                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? updateImportDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -2931,7 +2931,7 @@ namespace ts {
             if (isExternalModuleImportEqualsDeclaration(node)) {
                 const isReferenced = resolver.isReferencedAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-                if (!isReferenced && compilerOptions.importsNotUsedAsValues === importsNotUsedAsValues.Preserve) {
+                if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
                     return setOriginalNode(
                         setTextRange(
                             createImportDeclaration(
