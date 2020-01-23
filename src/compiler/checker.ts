@@ -21340,8 +21340,23 @@ namespace ts {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             let signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
-            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature.target && !hasTypeArguments(callTarget)) {
-                signature = getBaseSignature(signature.target);
+            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature !== resolvingSignature && !hasTypeArguments(callTarget)) {
+                if (isCallOrNewExpression(callTarget) && callTarget.arguments) {
+                    let clone = signature.omittedParameterCache && signature.omittedParameterCache[argIndex];
+                    if (!clone) {
+                        // clone the ast, eliding the target argument
+                        clone = getSynthesizedClone(callTarget) as CallExpression | NewExpression;
+                        (clone as any).id = undefined;
+                        clone.arguments = createNodeArray([...clone.arguments!.slice(0, argIndex), createOmittedExpression(), ...clone.arguments!.slice(argIndex + 1)]);
+                        clone.arguments![argIndex].parent = clone;
+                        clone.parent = callTarget.parent;
+                        (signature.omittedParameterCache || (signature.omittedParameterCache = []))[argIndex] = clone;
+                    }
+                    signature = getResolvedSignature(clone);
+                }
+                else if (signature.target) {
+                    signature = getBaseSignature(signature.target);
+                }
             }
 
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
