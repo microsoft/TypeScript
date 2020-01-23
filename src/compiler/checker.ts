@@ -35375,6 +35375,9 @@ namespace ts {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
                             }
                         }
+                        else if (isPrivateIdentifierPropertyDeclaration(node)) {
+                            return grammarErrorOnNode(modifier, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
+                        }
                         flags |= modifierToFlag(modifier.kind);
                         break;
 
@@ -35461,6 +35464,9 @@ namespace ts {
                         else if ((node.parent.flags & NodeFlags.Ambient) && node.parent.kind === SyntaxKind.ModuleBlock) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
+                        else if (isPrivateIdentifierPropertyDeclaration(node)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "declare");
+                        }
                         flags |= ModifierFlags.Ambient;
                         lastDeclare = modifier;
                         break;
@@ -35487,7 +35493,7 @@ namespace ts {
                             }
                         }
                         if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
-                            return grammarErrorOnNode(node, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
                         }
 
                         flags |= ModifierFlags.Abstract;
@@ -35532,9 +35538,6 @@ namespace ts {
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & ModifierFlags.ParameterPropertyModifier) && (<ParameterDeclaration>node).dotDotDotToken) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_cannot_be_declared_using_a_rest_parameter);
-            }
-            else if (isNamedDeclaration(node) && (flags & ModifierFlags.AccessibilityModifier) && node.name.kind === SyntaxKind.PrivateIdentifier) {
-                return grammarErrorOnNode(node, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
             }
             if (flags & ModifierFlags.Async) {
                 return checkGrammarAsyncModifier(node, lastAsync!);
