@@ -901,10 +901,88 @@ namespace ts {
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
+        const symbolAccessibilityTables = createMap<Map<true>>();
 
         initializeTypeChecker();
 
         return checker;
+
+        function isSymbolReachable(table: SymbolTable, value: Symbol, visited: SymbolTable[] = [table]): boolean {
+            if (!symbolAccessibilityTables.get("" + table.id)) {
+                symbolAccessibilityTables.set("" + table.id, createMapFromEntries(arrayFrom(table.elements.entries())));
+                table.forEach(value => {
+                    const symbols = getEquivalentSymbols(value);
+                    for (const value of symbols) {
+                        symbolAccessibilityTables.get("" + table.id)!.set("" + getSymbolId(value), true);
+                        const exports = getExportsOfSymbol(value);
+                        if (exports) {
+                            const prevIdx = visited.indexOf(exports);
+                            if (prevIdx === -1) {
+                                visited.push(exports);
+                                // calculate acccessibility for the export
+                                isSymbolReachable(exports, value, visited);
+                                // then merge the accessible table for the export into this one
+                                symbolAccessibilityTables.get("" + exports.id)!.forEach((_, key) => {
+                                    symbolAccessibilityTables.get("" + table.id)!.set(key, true);
+                                });
+                                visited.pop();
+                            }
+                            else {
+                                // circularity - reachability for all tables in the loop
+                                // is the same; so combine all their accessible sets into one.
+                                for (let i = prevIdx + 1; i < visited.length; i++) {
+                                    const subject = visited[i];
+                                    const old = symbolAccessibilityTables.get("" + subject.id);
+                                    symbolAccessibilityTables.set("" + subject.id, symbolAccessibilityTables.get("" + table.id)!);
+                                    old?.forEach((_, key) => {
+                                        symbolAccessibilityTables.get("" + table.id)!.set(key, true);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            return symbolAccessibilityTables.get("" + table.id)!.has("" + getSymbolId(value));
+        }
+
+        /**
+         * There are two definitions of accessible
+         * 1. accessible as in "there exists a path from this symbol table to this other symbol"
+         * 2. accessible as in "there exists a path from this symbol table to this other symbol, given these sets of shadowed names"
+         * The first is cacheable and potentially very efficient - we can compute reachability for all symbol tables once
+         * and then reuse those results for everything.
+         * The second is less cacheable - it layers onto the first the concept of scope nesting, and views which "block"
+         * certain connections. However, the second is still capable of using the first's caches as a preliminary method of eliminating
+         * and narrowing search space.
+         *
+         * `SymbolTable.isAccessible` is the first - it denotes absolute reachability between a symbol table and a symbol
+         * This function, `getAccessibleSymbolChain`, also follows the first definition by default. It produces a chain which does _not_
+         * care about any sort of scope shadowing.
+         */
+        // function getAccessibleSymbolChainNoShadowing(table: SymbolTable, value: Symbol, visited: SymbolTable[] = [table]): Symbol[] | undefined {
+        //     if (!isSymbolReachable(table, value)) {
+        //         return undefined;
+        //     }
+        //     const valueEquivalents = getEquivalentSymbols(value);
+        //     // First, check if any symbols in the table are or refer to `value`
+        //     const values = table.values();
+        //     const candidates: Symbol[] = [];
+        //     let res = values.next();
+        //     for (; !res.done; res = values.next()) {
+        //         if (some(getEquivalentSymbols(res.value), v => some(valueEquivalents, v2 => v2 === v))) {
+        //             return [value];
+        //         }
+        //         const candidateTable = getExportsOfSymbol(res.value);
+        //         if (visited.indexOf(candidateTable) === -1 && isSymbolReachable(candidateTable, value)) {
+        //             candidates.push(res.value);
+        //             visited.push(candidateTable);
+        //         }
+        //     }
+        //     const chains = map(candidates, c => [c, ...getAccessibleSymbolChainNoShadowing(getExportsOfSymbol(c), value, visited)!])
+        //     chains.sort((a, b) => a.length - b.length);
+        //     return chains[0];
+        // }
 
         function getJsxNamespace(location: Node | undefined): __String {
             if (location) {
@@ -2567,6 +2645,10 @@ namespace ts {
             return !dontResolveAlias && isNonLocalAlias(symbol) ? resolveAlias(symbol) : symbol;
         }
 
+        function resolvePotentialAliasSymbol(symbol: Symbol | undefined): Symbol | undefined {
+            return !!(symbol && symbol.flags & SymbolFlags.Alias) ? resolveAlias(symbol) : symbol;
+        }
+
         function resolveAlias(symbol: Symbol): Symbol {
             Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
             const links = getSymbolLinks(symbol);
@@ -3360,6 +3442,7 @@ namespace ts {
                 members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
+        // #region getAccessibleSymbolChainhelpers
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
@@ -3394,7 +3477,7 @@ namespace ts {
                         // The below is used to lookup type parameters within a class or interface, as they are added to the class/interface locals
                         // These can never be latebound, so the symbol's raw members are sufficient. `getMembersOfNode` cannot be used, as it would
                         // trigger resolving late-bound names, which we may already be in the process of doing while we're here!
-                        let table: UnderscoreEscapedMap<Symbol> | undefined;
+                        let table: SymbolTable | undefined;
                         // TODO: Should this filtered table be cached in some way?
                         (getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols).forEach((memberSymbol, key) => {
                             if (memberSymbol.flags & (SymbolFlags.Type & ~SymbolFlags.Assignment)) {
@@ -3416,6 +3499,20 @@ namespace ts {
             return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
         }
 
+        function getEquivalentSymbols(symbol: Symbol) {
+            const result = [symbol];
+            // It shouldn't be this complicated, but it probably is.
+            pushIfUnique(result, getMergedSymbol(symbol));
+            pushIfUnique(result, resolvePotentialAliasSymbol(symbol));
+            pushIfUnique(result, getMergedSymbol(resolvePotentialAliasSymbol(symbol)));
+            pushIfUnique(result, resolvePotentialAliasSymbol(getMergedSymbol(symbol)));
+            pushIfUnique(result, getMergedSymbol(resolvePotentialAliasSymbol(getMergedSymbol(symbol))));
+            if (symbol.exportSymbol) {
+                pushIfUnique(result, symbol.exportSymbol);
+            }
+            return result;
+        }
+
         function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolTable[]> = createMap()): Symbol[] | undefined {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
@@ -3432,6 +3529,9 @@ namespace ts {
              * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
              */
             function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean): Symbol[] | undefined {
+                if (!isSymbolReachable(symbols, symbol!)) {
+                    return undefined;
+                }
                 if (!pushIfUnique(visitedSymbolTables!, symbols)) {
                     return undefined;
                 }
@@ -3554,6 +3654,7 @@ namespace ts {
             }
             return false;
         }
+        // #endregion getAccessibleSymbolChainhelpers
 
         function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined): boolean {
             const access = isSymbolAccessible(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false);
@@ -8738,7 +8839,7 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
-        function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): UnderscoreEscapedMap<Symbol> {
+        function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): SymbolTable {
             const links = getSymbolLinks(symbol);
             if (!links[resolutionKind]) {
                 const isStatic = resolutionKind === MembersOrExportsResolutionKind.resolvedExports;
@@ -9295,7 +9396,7 @@ namespace ts {
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                     if (symbol === globalThisSymbol) {
-                        const varsOnly = createMap<Symbol>() as SymbolTable;
+                        const varsOnly = new SymbolTable();
                         members.forEach(p => {
                             if (!(p.flags & SymbolFlags.BlockScoped)) {
                                 varsOnly.set(p.escapedName, p);
@@ -10206,7 +10307,7 @@ namespace ts {
             return result;
         }
 
-        function symbolsToArray(symbols: SymbolTable): Symbol[] {
+        function symbolsToArray(symbols: UnderscoreEscapedMap<Symbol>): Symbol[] {
             const result: Symbol[] = [];
             symbols.forEach((symbol, id) => {
                 if (!isReservedMemberName(id)) {
@@ -33729,7 +33830,7 @@ namespace ts {
                 return [];
             }
 
-            const symbols = createSymbolTable();
+            const symbols = createUnderscoreEscapedMap<Symbol>();
             let isStatic = false;
 
             populateSymbols();

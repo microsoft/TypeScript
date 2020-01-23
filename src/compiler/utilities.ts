@@ -30,11 +30,18 @@ namespace ts {
         return !!map && !!map.size;
     }
 
-    export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
-        const result = createMap<Symbol>() as SymbolTable;
+    export function createSymbolTable(symbols?: readonly Symbol[] | readonly [__String, Symbol][]): SymbolTable {
+        const result = new SymbolTable();
         if (symbols) {
-            for (const symbol of symbols) {
-                result.set(symbol.escapedName, symbol);
+            if (symbols[0] && isArray(symbols[0])) {
+                for (const [symbolName, symbol] of (symbols as readonly [__String, Symbol][])) {
+                    result.set(symbolName, symbol);
+                }
+            }
+            else {
+                for (const symbol of (symbols as readonly Symbol[])) {
+                    result.set(symbol.escapedName, symbol);
+                }
             }
         }
         return result;
@@ -192,8 +199,8 @@ namespace ts {
     export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
     export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
     export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
-        const clone = createMap<T>();
-        copyEntries(map as Map<T>, clone);
+        const clone = map instanceof SymbolTable ? createSymbolTable() : createMap<T>();
+        copyEntries(map as Map<T>, clone as Map<T>);
         return clone;
     }
 

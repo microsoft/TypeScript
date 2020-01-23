@@ -4177,9 +4177,6 @@ namespace ts {
         clear(): void;
     }
 
-    /** SymbolTable based on ES6 Map interface. */
-    export type SymbolTable = UnderscoreEscapedMap<Symbol>;
-
     /** Used to track a `declare module "foo*"`-like declaration. */
     /* @internal */
     export interface PatternAmbientModule {

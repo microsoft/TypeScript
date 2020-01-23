@@ -61,6 +61,22 @@ declare namespace ts {
     interface Push<T> {
         push(...values: T[]): void;
     }
+    class SymbolTable implements UnderscoreEscapedMap<Symbol> {
+        private underlying;
+        get(key: __String): Symbol | undefined;
+        has(key: __String): boolean;
+        forEach(action: (value: Symbol, key: __String) => void): void;
+        get size(): number;
+        keys(): Iterator<__String>;
+        values(): Iterator<Symbol>;
+        entries(): Iterator<[__String, Symbol]>;
+        set(key: __String, value: Symbol): this;
+        /**
+         * It is an error to remove something from a symbol table
+         */
+        delete(_: __String): never;
+        clear(): never;
+    }
 }
 declare namespace ts {
     export type Path = string & {
@@ -2314,8 +2330,6 @@ declare namespace ts {
         delete(key: __String): boolean;
         clear(): void;
     }
-    /** SymbolTable based on ES6 Map interface. */
-    export type SymbolTable = UnderscoreEscapedMap<Symbol>;
     export enum TypeFlags {
         Any = 1,
         Unknown = 2,

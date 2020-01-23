@@ -93,4 +93,52 @@ namespace ts {
         EqualTo     = 0,
         GreaterThan = 1
     }
+
+    let symbolTableId = 1;
+    export class SymbolTable implements UnderscoreEscapedMap<Symbol> {
+        private underlying = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
+        /* @internal */
+        elements = createMap<true>();
+        /* @internal */
+        id = symbolTableId++;
+        get(key: __String): Symbol | undefined {
+            return this.underlying.get(key);
+        }
+        has(key: __String): boolean {
+            return this.underlying.has(key);
+        }
+        forEach(action: (value: Symbol, key: __String) => void) {
+            return this.underlying.forEach(action);
+        }
+        get size() {
+            return this.underlying.size;
+        }
+        keys(): Iterator<__String> {
+            return this.underlying.keys();
+        }
+        values(): Iterator<Symbol> {
+            return this.underlying.values();
+        }
+        entries(): Iterator<[__String, Symbol]> {
+            return this.underlying.entries();
+        }
+        set(key: __String, value: Symbol): this {
+            this.elements.set("" + getSymbolId(value), true);
+            this.underlying.set(key, value);
+            return this;
+        }
+        /**
+         * It is an error to remove something from a symbol table
+         */
+        delete(_: __String) {
+            return Debug.fail("Symbol tables are immutable and should not have elements deleted from them!");
+        }
+        clear() {
+            return Debug.fail("Symbol tables are immutable and should not be cleared");
+        }
+        /* @internal */
+        hasValue(value: Symbol): boolean {
+            return this.elements.has("" + getSymbolId(value));
+        }
+    }
 }

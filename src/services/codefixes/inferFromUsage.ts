@@ -945,7 +945,7 @@ namespace ts.codefix {
             });
             return checker.createAnonymousType(
                 anons[0].symbol,
-                members as UnderscoreEscapedMap<TransientSymbol>,
+                createSymbolTable(arrayFrom(members.entries()) as [__String, Symbol][]),
                 calls,
                 constructs,
                 stringIndices.length ? checker.createIndexInfo(checker.getUnionType(stringIndices), stringIndexReadonly) : undefined,
@@ -981,7 +981,7 @@ namespace ts.codefix {
         }
 
         function inferStructuralType(usage: Usage) {
-            const members = createUnderscoreEscapedMap<Symbol>();
+            const members = createSymbolTable();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);
