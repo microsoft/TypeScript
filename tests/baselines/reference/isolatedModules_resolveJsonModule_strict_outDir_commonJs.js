@@ -8,7 +8,6 @@ import * as j from "./j.json";
 
 
 //// [j.json]
-"use strict";
 {}
 //// [a.js]
 "use strict";
