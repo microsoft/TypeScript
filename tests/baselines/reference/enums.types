@@ -30,31 +30,31 @@ export { SymbolFlags };
 === /b.ts ===
 import type { SyntaxKind, SymbolFlags } from './a';
 >SyntaxKind : SyntaxKind
->SymbolFlags : import("/a").SymbolFlags
+>SymbolFlags : SymbolFlags
 
 SyntaxKind.ImportClause;
->SyntaxKind.ImportClause : any
->SyntaxKind : any
->ImportClause : any
+>SyntaxKind.ImportClause : SyntaxKind.ImportClause
+>SyntaxKind : typeof SyntaxKind
+>ImportClause : SyntaxKind.ImportClause
 
 SymbolFlags.Type;
->SymbolFlags.Type : any
->SymbolFlags : any
->Type : any
+>SymbolFlags.Type : SymbolFlags.Type
+>SymbolFlags : typeof SymbolFlags
+>Type : SymbolFlags.Type
 
 let kind: SyntaxKind.ImportClause;
 >kind : SyntaxKind.ImportClause
 >SyntaxKind : any
 
 let flags: SymbolFlags;
->flags : import("/a").SymbolFlags
+>flags : SymbolFlags
 
 type TypeFlag = SymbolFlags.Type;
->TypeFlag : import("/a").SymbolFlags.Type
+>TypeFlag : SymbolFlags.Type
 >SymbolFlags : any
 
 export type { TypeFlag };
->TypeFlag : import("/a").SymbolFlags.Type
+>TypeFlag : SymbolFlags.Type
 
 === /c.ts ===
 import { SymbolFlags } from './a';

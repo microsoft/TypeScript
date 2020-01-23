@@ -487,6 +487,10 @@ namespace ts {
                 }
             case SyntaxKind.Identifier:
                 return isImportClause(node.parent) ? ScriptElementKind.alias : ScriptElementKind.unknown;
+            case SyntaxKind.ExportAssignment:
+                const scriptKind = getNodeKind((node as ExportAssignment).expression);
+                // If the expression didn't come back with something (like it does for an identifiers)
+                return scriptKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : scriptKind;
             default:
                 return ScriptElementKind.unknown;
         }
@@ -1238,6 +1242,7 @@ namespace ts {
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
+        if (node.kind === SyntaxKind.ExportAssignment) result.push(ScriptElementKindModifier.exportedModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }
@@ -1362,6 +1367,7 @@ namespace ts {
 
     export const typeKeywords: readonly SyntaxKind[] = [
         SyntaxKind.AnyKeyword,
+        SyntaxKind.AssertsKeyword,
         SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,

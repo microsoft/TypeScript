@@ -463,6 +463,45 @@ class Test2 extends Test {
 >0 : 0
 }
 
+class Derived extends Test {
+>Derived : Derived
+>Test : Test
+
+    foo(x: unknown) {
+>foo : (x: unknown) => void
+>x : unknown
+
+        super.assert(typeof x === "string");
+>super.assert(typeof x === "string") : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        super.assert(false);
+>super.assert(false) : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;

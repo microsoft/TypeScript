@@ -454,7 +454,7 @@
   "Generic_type_0_requires_1_type_argument_s_2314": "泛型類型 '{0}' 需要 {1} 個型別引數。",
   "Generic_type_0_requires_between_1_and_2_type_arguments_2707": "泛型型別 '{0}' 需要介於 {1} 和 {2} 之間的型別引數。",
   "Generic_type_instantiation_is_excessively_deep_and_possibly_infinite_2550": "泛型類型具現化的深度過深，而且可能是無限深。",
-  "Getter_and_setter_accessors_do_not_agree_in_visibility_2379": "getter 和 setter 存取子的可視性不符。",
+  "Getter_and_setter_accessors_do_not_agree_in_visibility_2379": "getter 和 setter 存取子的可見度不符。",
   "Global_module_exports_may_only_appear_at_top_level_1316": "全域模組匯出只能顯示在最上層。",
   "Global_module_exports_may_only_appear_in_declaration_files_1315": "全域模組匯出只能顯示在宣告檔案中。",
   "Global_module_exports_may_only_appear_in_module_files_1314": "全域模組匯出只能顯示在模組檔案中。",

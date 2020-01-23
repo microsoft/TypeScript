@@ -863,7 +863,7 @@
         "category": "Error",
         "code": 1300
     },
-    "'await' expression is only allowed within an async function.": {
+    "'await' expressions are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1308
     },
@@ -1059,11 +1059,11 @@
         "category": "Error",
         "code": 1360
     },
-    "Type-only {0} must reference a type, but '{1}' is a value.": {
+    "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
     },
-    "Enum '{0}' cannot be used as a value because only its type has been imported.": {
+    "'{0}' cannot be used as a value because it was exported using 'export type'.": {
         "category": "Error",
         "code": 1362
     },
@@ -1085,7 +1085,7 @@
     },
     "Split all invalid type-only imports": {
         "category": "Message",
-        "code": 1377
+        "code": 1367
     },
     "Specify emit/checking behavior for imports that are only used for types": {
         "category": "Message",
@@ -1099,13 +1099,9 @@
         "category": "Error",
         "code": 1370
     },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValue' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
-    },
-    "This import may be converted to a type-only import.": {
-        "category": "Suggestion",
-        "code": 1372
     },
     "Convert to type-only import": {
         "category": "Message",
@@ -1115,11 +1111,22 @@
         "category": "Message",
         "code": 1374
     },
-    "'await' outside of an async function is only allowed at the top level of a module when '--module' is 'esnext' or 'system' and '--target' is 'es2017' or higher.": {
+    "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
     },
-
+    "'{0}' was imported here.": {
+        "category": "Message",
+        "code": 1376
+    },
+    "'{0}' was exported here.": {
+        "category": "Message",
+        "code": 1377
+    },
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1378
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1764,6 +1771,14 @@
     "An AMD module cannot have multiple name assignments.": {
         "category": "Error",
         "code": 2458
+    },
+    "Module '{0}' declares '{1}' locally, but it is not exported.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Module '{0}' declares '{1}' locally, but it is exported as '{2}'.": {
+        "category": "Error",
+        "code": 2460
     },
     "Type '{0}' is not an array type.": {
         "category": "Error",
@@ -2850,6 +2865,10 @@
     "The left-hand side of a 'for...of' statement may not be an optional property access.": {
         "category": "Error",
         "code": 2781
+    },
+    "'{0}' needs an explicit type annotation.": {
+        "category": "Message",
+        "code": 2782
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4921,7 +4940,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: '{0}'": {
+    "Remove unused declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
     },
@@ -5413,6 +5432,18 @@
         "category": "Message",
         "code": 95096
     },
+    "Add 'export {}' to make this file into a module": {
+        "category": "Message",
+        "code": 95097
+    },
+    "Set the 'target' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95098
+    },
+    "Set the 'module' option in your configuration file to '{0}'": {
+        "category": "Message",
+        "code": 95099
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5425,10 +5456,6 @@
     "JSX expressions may not use the comma operator. Did you mean to write an array?": {
         "category": "Error",
         "code": 18007
-    },
-    "'#!' can only be used at the start of a file.": {
-        "category": "Error",
-        "code": 18008
     },
     "Private identifiers cannot be used as parameters": {
         "category": "Error",

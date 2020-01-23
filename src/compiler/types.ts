@@ -2538,6 +2538,7 @@ namespace ts {
     }
 
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    export type TypeOnlyCompatibleAliasDeclaration = ImportClause | NamespaceImport | ImportOrExportSpecifier;
 
     /**
      * This is either an `export =` or an `export default` declaration.
@@ -3484,8 +3485,11 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined;
+        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
@@ -4059,7 +4063,8 @@ namespace ts {
         instantiations?: Map<Type>;                 // Instantiations of generic type alias (undefined if non-generic)
         inferredClassSymbol?: Map<TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
-        referenced?: boolean;                       // True if alias symbol has been referenced as a value
+        referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
+        constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
         containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                        // Left source for synthetic spread property
         rightSpread?: Symbol;                       // Right source for synthetic spread property
@@ -4082,6 +4087,7 @@ namespace ts {
         deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
+        typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
     }
 
     /* @internal */
@@ -5043,7 +5049,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
-        importsNotUsedAsValue?: ImportsNotUsedAsValue;
+        importsNotUsedAsValues?: ImportsNotUsedAsValues;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -5165,7 +5171,7 @@ namespace ts {
         ReactNative = 3
     }
 
-    export const enum ImportsNotUsedAsValue {
+    export const enum ImportsNotUsedAsValues {
         Remove,
         Preserve,
         Error

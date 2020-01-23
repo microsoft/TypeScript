@@ -191,6 +191,10 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
+        public codeFixAllAvailable(fixName: string) {
+            this.state.verifyCodeFixAllAvailable(this.negative, fixName);
+        }
+
         public applicableRefactorAvailableAtMarker(markerName: string) {
             this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
         }
@@ -898,7 +902,7 @@ namespace FourSlashInterface {
         export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "asserts", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
             interfaceEntry("Symbol"),
@@ -1054,7 +1058,7 @@ namespace FourSlashInterface {
         }
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
@@ -1148,6 +1152,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
+            "asserts",
             "any",
             "async",
             "await",
@@ -1347,6 +1353,8 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
+            "asserts",
             "any",
             "async",
             "await",
@@ -1552,7 +1560,7 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        readonly description: string | DiagnosticIgnoredInterpolations;
+        readonly description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
         readonly preferences?: ts.UserPreferences;
