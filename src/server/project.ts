@@ -1300,7 +1300,18 @@ namespace ts.server {
         }
 
         /* @internal */
-        getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
+        getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
+            const includeProjectReferenceRedirectInfoIfRequested = (files: string[]) => {
+                if (includeProjectReferenceRedirectInfo) {
+                    return files.map((fileName: string): protocol.FileWithProjectReferenceRedirectInfo => ({
+                        fileName,
+                        isSourceOfProjectReferenceRedirect: this.program?.isSourceOfProjectReferenceRedirect(fileName) ?? false
+                    }));
+                }
+
+                return files;
+            };
+
             // Update the graph only if initial configured project load is not pending
             if (!this.isInitialLoadPending()) {
                 updateProjectIfDirty(this);
@@ -1343,7 +1354,15 @@ namespace ts.server {
                 });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectProgramVersion;
-                return { info, changes: { added, removed, updated }, projectErrors: this.getGlobalProjectErrors() };
+                return {
+                    info,
+                    changes: {
+                        added: includeProjectReferenceRedirectInfoIfRequested(added),
+                        removed: includeProjectReferenceRedirectInfoIfRequested(removed),
+                        updated: includeProjectReferenceRedirectInfoIfRequested(updated)
+                    },
+                    projectErrors: this.getGlobalProjectErrors()
+                };
             }
             else {
                 // unknown version - return everything
@@ -1352,7 +1371,11 @@ namespace ts.server {
                 const allFiles = projectFileNames.concat(externalFiles);
                 this.lastReportedFileNames = arrayToSet(allFiles);
                 this.lastReportedVersion = this.projectProgramVersion;
-                return { info, files: allFiles, projectErrors: this.getGlobalProjectErrors() };
+                return {
+                    info,
+                    files: includeProjectReferenceRedirectInfoIfRequested(allFiles),
+                    projectErrors: this.getGlobalProjectErrors()
+                };
             }
         }
 

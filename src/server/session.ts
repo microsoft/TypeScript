@@ -2254,7 +2254,7 @@ namespace ts.server {
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
-                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
+                const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects, request.arguments.includeProjectReferenceRedirectInfo);
                 if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                     return this.requiredResponse(result);
                 }

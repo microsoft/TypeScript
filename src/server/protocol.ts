@@ -1319,6 +1319,18 @@ namespace ts.server.protocol {
         lastFileExceededProgramSize?: string;
     }
 
+    export interface FileWithProjectReferenceRedirectInfo {
+        /**
+         * Name of file
+         */
+        fileName: string;
+
+        /**
+         * True if the file is primarily included in a referenced project
+         */
+        isSourceOfProjectReferenceRedirect: boolean;
+    }
+
     /**
      * Represents a set of changes that happen in project
      */
@@ -1326,15 +1338,15 @@ namespace ts.server.protocol {
         /**
          * List of added files
          */
-        added: string[];
+        added: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of removed files
          */
-        removed: string[];
+        removed: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of updated files
          */
-        updated: string[];
+        updated: string[] | FileWithProjectReferenceRedirectInfo[];
     }
 
     /**
@@ -1353,7 +1365,7 @@ namespace ts.server.protocol {
         /**
          * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
          */
-        files?: string[];
+        files?: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * Set of changes in project (omitted if the entire set of files in project should be replaced)
          */
@@ -1616,6 +1628,11 @@ namespace ts.server.protocol {
          * List of last known projects
          */
         knownProjects: ProjectVersionInfo[];
+        /**
+         * If true, response specifies whether or not each file in each project
+         * is the result of a project reference redirect
+         */
+        includeProjectReferenceRedirectInfo?: boolean;
     }
 
     /**
