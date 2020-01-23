@@ -17,6 +17,9 @@ class A {
     readonly #qux = 3;       // OK
 >#qux : 3
 >3 : 3
+
+    declare #what: number;   // Error
+>#what : number
 }
 
 abstract class B {

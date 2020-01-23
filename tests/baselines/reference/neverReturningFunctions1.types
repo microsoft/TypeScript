@@ -667,3 +667,42 @@ const Component = registerComponent('test-component', {
 	}
 });
 
+// Repro from #36147
+
+class MyThrowable {
+>MyThrowable : MyThrowable
+
+    throw(): never {
+>throw : () => never
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+>SuperThrowable : SuperThrowable
+>MyThrowable : MyThrowable
+
+    err(msg: string): never {
+>err : (msg: string) => never
+>msg : string
+
+        super.throw()
+>super.throw() : never
+>super.throw : () => never
+>super : MyThrowable
+>throw : () => never
+    }
+    ok(): never {
+>ok : () => never
+
+        this.throw()
+>this.throw() : never
+>this.throw : () => never
+>this : this
+>throw : () => never
+    }
+}
+
