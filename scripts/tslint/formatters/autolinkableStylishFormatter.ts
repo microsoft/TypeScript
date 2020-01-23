@@ -1,5 +1,5 @@
 import * as Lint from "tslint";
-import chalk from "chalk";
+import chalk = require("chalk");
 import { sep } from "path";
 function groupBy<T>(array: ReadonlyArray<T> | undefined, getGroupId: (elem: T, index: number) => number | string): T[][] {
     if (!array) {
