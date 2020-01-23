@@ -1166,6 +1166,39 @@ foo().hello`
 
         verifyTscWatch({
             scenario,
+            subScenario: "updates errors when noErrorTruncation changes",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const aFile: File = {
+                    path: `${projectRoot}/a.ts`,
+                    content: `declare var v: {
+    reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName2: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName3: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName4: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName5: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName6: string | number | boolean | object | symbol | bigint;
+    reallyLongPropertyName7: string | number | boolean | object | symbol | bigint;
+};
+v === 'foo';`
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: {} })
+                };
+                return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                sys => {
+                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } }));
+                    sys.runQueuedTimeoutCallbacks();
+                    return "Enable noErrorTruncation";
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "updates diagnostics and emit when useDefineForClassFields changes",
             commandLineArgs: ["-w"],
             sys: () => {
