@@ -1,13 +1,13 @@
 Exit Code: 1
 Standard output:
 lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-lib/adapters/http.js(85,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-lib/adapters/http.js(121,17): error TS2532: Object is possibly 'undefined'.
-lib/adapters/http.js(121,40): error TS2532: Object is possibly 'undefined'.
+lib/adapters/http.js(85,22): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+lib/adapters/http.js(121,17): error TS2531: Object is possibly 'null'.
+lib/adapters/http.js(121,40): error TS2531: Object is possibly 'null'.
 lib/adapters/http.js(122,17): error TS2531: Object is possibly 'null'.
 lib/adapters/http.js(122,54): error TS2531: Object is possibly 'null'.
-lib/adapters/http.js(122,54): error TS2532: Object is possibly 'undefined'.
+lib/adapters/http.js(122,54): error TS2531: Object is possibly 'null'.
 lib/adapters/http.js(221,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/adapters/http.js(227,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/adapters/http.js(233,13): error TS2322: Type 'string' is not assignable to type 'Buffer'.

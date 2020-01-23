@@ -28,8 +28,6 @@ src/cli/util.js(122,38): error TS2339: Property 'sync' does not exist on type '(
 src/cli/util.js(416,36): error TS2345: Argument of type '{ dot: true; nodir: boolean; }' is not assignable to parameter of type 'GlobbyOptions'.
   Object literal may only specify known properties, and 'nodir' does not exist in type 'GlobbyOptions'.
 src/cli/util.js(483,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
-src/cli/util.js(509,36): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
-src/cli/util.js(562,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/cli/util.js(635,16): error TS2339: Property 'type' does not exist on type 'never'.
 src/cli/util.js(636,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
 src/cli/util.js(637,17): error TS2339: Property 'name' does not exist on type 'never'.
@@ -314,8 +312,6 @@ src/main/core.js(303,47): error TS2538: Type 'false' cannot be used as an index 
 src/main/core.js(308,28): error TS2538: Type 'false' cannot be used as an index type.
 src/main/core.js(308,72): error TS2538: Type 'false' cannot be used as an index type.
 src/main/core.js(316,14): error TS2538: Type 'false' cannot be used as an index type.
-src/main/options-normalizer.js(35,35): error TS2339: Property 'yellow' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
-src/main/options-normalizer.js(36,35): error TS2339: Property 'blue' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
 src/main/options-normalizer.js(54,5): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 src/main/options-normalizer.js(74,16): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.
 src/main/options-normalizer.js(80,39): error TS2341: Property '_hasDeprecationWarned' is private and only accessible within class 'Normalizer'.

@@ -23,48 +23,47 @@ node_modules/bluebird/js/release/debuggability.js(27,31): error TS2339: Property
 node_modules/bluebird/js/release/debuggability.js(28,24): error TS2339: Property 'env' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(30,29): error TS2339: Property 'env' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(31,25): error TS2339: Property 'env' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(48,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(172,39): error TS2339: Property 'contextBind' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(177,38): error TS2339: Property 'contextBind' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(215,28): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(216,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(220,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(225,28): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(129,39): error TS2339: Property 'contextBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(134,38): error TS2339: Property 'contextBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(172,28): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(173,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(177,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(182,28): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(183,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(187,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(198,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(203,26): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(209,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(225,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(226,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(230,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(241,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(246,26): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(252,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(268,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
-node_modules/bluebird/js/release/debuggability.js(269,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(275,26): error TS2339: Property 'detail' does not exist on type 'Event'.
-node_modules/bluebird/js/release/debuggability.js(283,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(299,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(301,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
-node_modules/bluebird/js/release/debuggability.js(304,19): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(311,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(313,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(344,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/bluebird/js/release/debuggability.js(232,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(240,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(256,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(258,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
+node_modules/bluebird/js/release/debuggability.js(261,19): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(268,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(270,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(301,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
-node_modules/bluebird/js/release/debuggability.js(376,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(452,51): error TS2554: Expected 0 arguments, but got 1.
-node_modules/bluebird/js/release/debuggability.js(466,18): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(538,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(540,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(605,19): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/debuggability.js(676,59): error TS2554: Expected 0 arguments, but got 1.
-node_modules/bluebird/js/release/debuggability.js(715,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(762,46): error TS2554: Expected 0 arguments, but got 1.
-node_modules/bluebird/js/release/debuggability.js(850,5): error TS2721: Cannot invoke an object which is possibly 'null'.
-node_modules/bluebird/js/release/debuggability.js(853,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(868,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(874,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(913,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(918,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(919,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(993,4): error TS2554: Expected 0 arguments, but got 1.
-node_modules/bluebird/js/release/debuggability.js(999,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/debuggability.js(1004,22): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(333,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(409,51): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(423,18): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(495,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(497,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(562,19): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/debuggability.js(633,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(672,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(719,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(807,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/release/debuggability.js(810,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(825,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(831,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(870,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
+node_modules/bluebird/js/release/debuggability.js(875,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(876,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(950,4): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(956,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(961,22): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/errors.js(5,21): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/errors.js(6,30): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
