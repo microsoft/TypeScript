@@ -468,7 +468,26 @@ namespace ts {
             getRootSymbols,
             getContextualType: (nodeIn: Expression, contextFlags?: ContextFlags) => {
                 const node = getParseTreeNode(nodeIn, isExpression);
-                return node ? getContextualType(node, contextFlags) : undefined;
+                if (!node) {
+                    return undefined;
+                }
+                const links = getNodeLinks(node);
+                const resolvedType = links.resolvedType;
+                const skipDirectInference = links.skipDirectInference;
+                const containingCall = findAncestor(node, isCallLikeExpression);
+                const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
+                if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
+                    links.resolvedType = undefined;
+                    links.skipDirectInference = true;
+                    getNodeLinks(containingCall).resolvedSignature = undefined;
+                }
+                const result = getContextualType(node, contextFlags);
+                if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
+                    links.skipDirectInference = skipDirectInference;
+                    links.resolvedType = resolvedType;
+                    getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
+                }
+                return result;
             },
             getContextualTypeForObjectLiteralElement: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isObjectLiteralElementLike);
@@ -17675,6 +17694,14 @@ namespace ts {
                 undefined;
         }
 
+        function hasSkipDirectInferenceFlag(node: Node) {
+            return !!getNodeLinks(node).skipDirectInference;
+        }
+
+        function isFromInferenceBlockedSource(type: Type) {
+            return !!(type.symbol && some(type.symbol.declarations, hasSkipDirectInferenceFlag));
+        }
+
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
             let symbolStack: Symbol[];
             let visited: Map<number>;
@@ -17765,7 +17792,7 @@ namespace ts {
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
                     if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || source === silentNeverType ||
-                        (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType))) {
+                        (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
@@ -21330,34 +21357,16 @@ namespace ts {
         }
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
-            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex, contextFlags);
+            return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
         }
 
-        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number, contextFlags?: ContextFlags): Type {
+        function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            let signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
-            if (contextFlags && contextFlags & ContextFlags.BaseConstraint && signature !== resolvingSignature && !hasTypeArguments(callTarget)) {
-                if (isCallOrNewExpression(callTarget) && callTarget.arguments) {
-                    let clone = signature.omittedParameterCache && signature.omittedParameterCache[argIndex];
-                    if (!clone) {
-                        // clone the ast, eliding the target argument
-                        clone = getSynthesizedClone(callTarget) as CallExpression | NewExpression;
-                        (clone as any).id = undefined;
-                        clone.arguments = createNodeArray([...clone.arguments!.slice(0, argIndex), createOmittedExpression(), ...clone.arguments!.slice(argIndex + 1)]);
-                        clone.arguments![argIndex].parent = clone;
-                        clone.parent = callTarget.parent;
-                        (signature.omittedParameterCache || (signature.omittedParameterCache = []))[argIndex] = clone;
-                    }
-                    signature = getResolvedSignature(clone);
-                }
-                else if (signature.target) {
-                    signature = getBaseSignature(signature.target);
-                }
-            }
+            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
 
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
@@ -21753,7 +21762,7 @@ namespace ts {
                     }
                     /* falls through */
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node, contextFlags);
+                    return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return isConstTypeReference((<AssertionExpression>parent).type) ? undefined : getTypeFromTypeNode((<AssertionExpression>parent).type);
@@ -21803,7 +21812,7 @@ namespace ts {
                 // (as below) instead!
                 return node.parent.contextualType;
             }
-            return getContextualTypeForArgumentAtIndex(node, 0, contextFlags);
+            return getContextualTypeForArgumentAtIndex(node, 0);
         }
 
         function getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxOpeningLikeElement) {
