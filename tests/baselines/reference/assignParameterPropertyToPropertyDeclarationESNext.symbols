@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts ===
+class C {
+>C : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+
+    bar = this.foo // should error
+>bar : Symbol(C.bar, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 9))
+>this.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+>this : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+
+    m1() {
+>m1 : Symbol(C.m1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 1, 18))
+
+        this.foo // ok
+>this.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+>this : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+    }
+    constructor(private foo: string) {}
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+
+    baz = this.foo; // should error
+>baz : Symbol(C.baz, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 39))
+>this.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+>this : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+
+    m2() {
+>m2 : Symbol(C.m2, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 6, 19))
+
+        this.foo // ok
+>this.foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+>this : Symbol(C, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 5, 16))
+    }
+}
+

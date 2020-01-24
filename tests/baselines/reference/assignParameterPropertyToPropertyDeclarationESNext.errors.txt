@@ -1,0 +1,23 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(2,16): error TS2729: Property 'foo' is used before its initialization.
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(7,16): error TS2729: Property 'foo' is used before its initialization.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts (2 errors) ====
+    class C {
+        bar = this.foo // should error
+                   ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:6:17: 'foo' is declared here.
+        m1() {
+            this.foo // ok
+        }
+        constructor(private foo: string) {}
+        baz = this.foo; // should error
+                   ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:6:17: 'foo' is declared here.
+        m2() {
+            this.foo // ok
+        }
+    }
+    
