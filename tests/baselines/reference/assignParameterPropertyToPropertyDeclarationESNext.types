@@ -1,0 +1,61 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts ===
+class C {
+>C : C
+
+    qux = this.bar // should error
+>qux : string
+>this.bar : string
+>this : this
+>bar : string
+
+    bar = this.foo // should error
+>bar : string
+>this.foo : string
+>this : this
+>foo : string
+
+    quiz = this.bar // ok
+>quiz : string
+>this.bar : string
+>this : this
+>bar : string
+
+    m1() {
+>m1 : () => void
+
+        this.foo // ok
+>this.foo : string
+>this : this
+>foo : string
+    }
+    constructor(private foo: string) {}
+>foo : string
+
+    quim = this.baz // should error
+>quim : string
+>this.baz : string
+>this : this
+>baz : string
+
+    baz = this.foo; // should error
+>baz : string
+>this.foo : string
+>this : this
+>foo : string
+
+    quid = this.baz // ok
+>quid : string
+>this.baz : string
+>this : this
+>baz : string
+
+    m2() {
+>m2 : () => void
+
+        this.foo // ok
+>this.foo : string
+>this : this
+>foo : string
+    }
+}
+

@@ -1328,6 +1328,11 @@ namespace ts {
                     // still might be illegal if a self-referencing property initializer (eg private x = this.x)
                     return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
                 }
+                else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
+                    // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
+                    return !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
+                             && isUsedInFunctionOrInstanceProperty(usage, declaration));
+                }
                 return true;
             }
 
@@ -1336,6 +1341,7 @@ namespace ts {
             // 1. inside an export specifier
             // 2. inside a function
             // 3. inside an instance property initializer, a reference to a non-instance property
+            //    (except when target: "esnext" and useDefineForClassFields: true and the reference is to a parameter property)
             // 4. inside a static property initializer, a reference to a static method in the same class
             // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
             // or if usage is in a type context:
@@ -1351,7 +1357,10 @@ namespace ts {
             }
 
             const container = getEnclosingBlockScopeContainer(declaration);
-            return !!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
+            return !!(usage.flags & NodeFlags.JSDoc)
+                || isInTypeQuery(usage)
+                || isUsedInFunctionOrInstanceProperty(usage, declaration, container)
+                   && !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
