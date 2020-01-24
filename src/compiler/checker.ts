@@ -33,14 +33,6 @@ namespace ts {
 
     }
 
-    // A sentinel value that indicates no iteration types could be discovered.
-    const noIterationTypes: IterationTypes = {
-        kind: IterationTypesKind.None,
-        get yieldType(): Type { throw new Error("Not supported"); },
-        get returnType(): Type { throw new Error("Not supported"); },
-        get nextType(): Type { throw new Error("Not supported"); },
-    };
-
     const enum IterationTypeKind {
         Yield,
         Return,
@@ -735,7 +727,12 @@ namespace ts {
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const iterationTypesCache = createMap<IterationTypes>(); // cache for common IterationTypes instances
-        const anyIterationTypes = createIterationTypesCore(anyType, anyType, anyType, IterationTypesKind.Any);
+        const noIterationTypes: IterationTypes = {
+            get yieldType(): Type { return Debug.fail("Not supported"); },
+            get returnType(): Type { return Debug.fail("Not supported"); },
+            get nextType(): Type { return Debug.fail("Not supported"); },
+        };
+        const anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
         const anyIterationTypesExceptNext = createIterationTypes(anyType, anyType, unknownType);
         const defaultIterationTypes = createIterationTypes(neverType, anyType, undefinedType); // default iteration types for `Iterator`.
 
@@ -31085,10 +31082,6 @@ namespace ts {
         }
 
         function createIterationTypes(yieldType: Type = neverType, returnType: Type = neverType, nextType: Type = unknownType): IterationTypes {
-            return createIterationTypesCore(yieldType, returnType, nextType, IterationTypesKind.Normal);
-        }
-
-        function createIterationTypesCore(yieldType: Type, returnType: Type, nextType: Type, kind: IterationTypesKind.Normal | IterationTypesKind.Any): IterationTypes {
             // `yieldType` and `returnType` are defaulted to `neverType` they each will be combined
             // via `getUnionType` when merging iteration types. `nextType` is defined as `unknownType`
             // as it is combined via `getIntersectionType` when merging iteration types.
@@ -31103,20 +31096,20 @@ namespace ts {
                 const id = getTypeListId([yieldType, returnType, nextType]);
                 let iterationTypes = iterationTypesCache.get(id);
                 if (!iterationTypes) {
-                    iterationTypes = { kind, yieldType, returnType, nextType };
+                    iterationTypes = { yieldType, returnType, nextType };
                     iterationTypesCache.set(id, iterationTypes);
                 }
                 return iterationTypes;
             }
-            return { kind, yieldType, returnType, nextType };
+            return { yieldType, returnType, nextType };
         }
 
         function isNoIterationTypes(iterationTypes: IterationTypes): boolean {
-            return iterationTypes.kind === IterationTypesKind.None;
+            return iterationTypes === noIterationTypes;
         }
 
         function isAnyIterationTypes(iterationTypes: IterationTypes): boolean {
-            return iterationTypes.kind === IterationTypesKind.Any;
+            return iterationTypes === anyIterationTypes;
         }
 
         function removeNoIterationTypes(iterationTypes: IterationTypes | undefined): IterationTypes | undefined {
