@@ -6134,4 +6134,11 @@ namespace ts {
     export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
         return (negative && base10Value !== "0" ? "-" : "") + base10Value;
     }
+
+    export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
+        return !!(useSite.flags & NodeFlags.Ambient)
+            || isPartOfTypeQuery(useSite)
+            || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
+            || !isExpressionNode(useSite);
+    }
 }

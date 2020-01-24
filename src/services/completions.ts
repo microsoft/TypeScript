@@ -614,8 +614,8 @@ namespace ts.Completions {
                 }
             }
             case "symbol": {
-                const { symbol, location, symbolToOriginInfoMap, previousToken, isTypeOnlyLocation } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, isTypeOnlyLocation);
+                const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -662,7 +662,6 @@ namespace ts.Completions {
         previousToken: Node | undefined,
         formatContext: formatting.FormatContext,
         preferences: UserPreferences,
-        isTypeOnlyLocation: boolean,
     ): CodeActionsAndSourceDisplay {
         const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
         if (!symbolOriginInfo || !originIsExport(symbolOriginInfo)) {
@@ -676,7 +675,6 @@ namespace ts.Completions {
             moduleSymbol,
             sourceFile,
             getSymbolName(symbol, symbolOriginInfo, compilerOptions.target!),
-            isTypeOnlyLocation ? SemanticMeaning.Type | SemanticMeaning.Namespace : SemanticMeaning.All,
             host,
             program,
             formatContext,
