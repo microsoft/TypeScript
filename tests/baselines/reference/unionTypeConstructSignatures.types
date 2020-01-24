@@ -8,7 +8,7 @@ var strOrBoolean: string | boolean;
 var strOrNum: string | number;
 >strOrNum : string | number
 
-// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
+// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
 >unionOfDifferentReturnType : (new (a: number) => number) | (new (a: number) => Date)
@@ -22,7 +22,7 @@ numOrDate = new unionOfDifferentReturnType(10);
 >unionOfDifferentReturnType : (new (a: number) => number) | (new (a: number) => Date)
 >10 : 10
 
-strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 >strOrBoolean = new unionOfDifferentReturnType("hello") : number | Date
 >strOrBoolean : string | boolean
 >new unionOfDifferentReturnType("hello") : number | Date
@@ -364,4 +364,14 @@ strOrNum = new unionWithRestParameter3(); // error no call signature
 >strOrNum : string | number
 >new unionWithRestParameter3() : string | number
 >unionWithRestParameter3 : (new (a: string, ...b: number[]) => string) | (new (a: string) => number)
+
+var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
+>unionWithAbstractSignature : (abstract new (a: string) => string) | (new (a: string) => string)
+>a : string
+>a : string
+
+new unionWithAbstractSignature('hello');
+>new unionWithAbstractSignature('hello') : any
+>unionWithAbstractSignature : (abstract new (a: string) => string) | (new (a: string) => string)
+>'hello' : "hello"
 

@@ -1648,6 +1648,7 @@ namespace ts {
 
         // @api
         function createConstructorTypeNode(
+            modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
@@ -1655,7 +1656,7 @@ namespace ts {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 /*name*/ undefined,
                 typeParameters,
                 parameters,
@@ -1668,14 +1669,16 @@ namespace ts {
         // @api
         function updateConstructorTypeNode(
             node: ConstructorTypeNode,
+            modifiers: readonly Modifier[] | undefined,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return node.typeParameters !== typeParameters
+            return node.modifiers !== modifiers
+                || node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructorTypeNode(typeParameters, parameters, type), node)
+                ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
                 : node;
         }
 

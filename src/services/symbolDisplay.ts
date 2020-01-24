@@ -194,6 +194,10 @@ namespace ts.SymbolDisplay {
                         pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
+                            if (signature.flags & SignatureFlags.Abstract) {
+                                displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                displayParts.push(spacePart());
+                            }
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
                         }
@@ -219,6 +223,10 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
+                                if (signature.flags & SignatureFlags.Abstract) {
+                                    displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                    displayParts.push(spacePart());
+                                }
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
                             }

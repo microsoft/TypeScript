@@ -24,6 +24,11 @@ class C {
     y = 0;
 }
 
+abstract class Abstract {
+    x = 0;
+    y = 0;
+}
+
 type T10 = ReturnType<() => string>;  // string
 type T11 = ReturnType<(s: string) => void>;  // void
 type T12 = ReturnType<(<T>() => T)>;  // {}
@@ -40,6 +45,9 @@ type U11 = InstanceType<any>;  // any
 type U12 = InstanceType<never>;  // never
 type U13 = InstanceType<string>;  // Error
 type U14 = InstanceType<Function>;  // Error
+type U15 = InstanceType<typeof Abstract>;  // Abstract
+type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
+type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 

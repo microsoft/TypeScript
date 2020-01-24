@@ -4622,7 +4622,7 @@ namespace ts {
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -5317,11 +5317,6 @@ namespace ts {
                 map.set(key, createNewValue(key, valueInNewMap));
             }
         });
-    }
-
-    // Return true if the given type is the constructor type for an abstract class
-    export function isAbstractConstructorType(type: Type): boolean {
-        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
     }
 
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
