@@ -2050,7 +2050,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForExportingPrimitiveType(errorLocation: Node, name: __String): boolean {
-            if (isPrimitiveTypeName(name) && (errorLocation.parent.kind === SyntaxKind.ExportSpecifier || errorLocation.parent.kind === SyntaxKind.ExportDeclaration)) {
+            if (isPrimitiveTypeName(name) && errorLocation.parent.kind === SyntaxKind.ExportSpecifier) {
                 error(errorLocation, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, name as string);
                 return true;
             }
@@ -33192,6 +33192,7 @@ namespace ts {
                 const id = node.expression as Identifier;
                 const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
                 if (sym) {
+
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
