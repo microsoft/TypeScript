@@ -2736,6 +2736,9 @@ namespace ts {
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
             else if (isNamespaceExport(node.exportClause)) {
+                // declareSymbol walks up parents to find name text, parent _must_ be set
+                // but won't be set by the normal binder walk until `bindChildren` later on.
+                node.exportClause.parent = node;
                 declareSymbol(container.symbol.exports, container.symbol, node.exportClause, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
         }

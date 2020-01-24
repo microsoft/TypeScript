@@ -2538,6 +2538,7 @@ namespace ts {
     }
 
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    export type TypeOnlyCompatibleAliasDeclaration = ImportClause | NamespaceImport | ImportOrExportSpecifier;
 
     /**
      * This is either an `export =` or an `export default` declaration.
@@ -4062,7 +4063,8 @@ namespace ts {
         instantiations?: Map<Type>;                 // Instantiations of generic type alias (undefined if non-generic)
         inferredClassSymbol?: Map<TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
-        referenced?: boolean;                       // True if alias symbol has been referenced as a value
+        referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
+        constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
         containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                        // Left source for synthetic spread property
         rightSpread?: Symbol;                       // Right source for synthetic spread property
@@ -4085,6 +4087,7 @@ namespace ts {
         deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
         deferralParent?: Type;              // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
+        typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
     }
 
     /* @internal */
@@ -5046,7 +5049,7 @@ namespace ts {
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
-        importsNotUsedAsValues?: importsNotUsedAsValues;
+        importsNotUsedAsValues?: ImportsNotUsedAsValues;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -5168,7 +5171,7 @@ namespace ts {
         ReactNative = 3
     }
 
-    export const enum importsNotUsedAsValues {
+    export const enum ImportsNotUsedAsValues {
         Remove,
         Preserve,
         Error
