@@ -5049,7 +5049,7 @@ namespace ts {
 
             // See getNameForSymbolFromNameType for a stringy equivalent
             function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean) {
-                const nameType = symbol.nameType;
+                const nameType = getSymbolLinks(symbol).nameType;
                 if (nameType) {
                     if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                         const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
@@ -6475,7 +6475,7 @@ namespace ts {
         }
 
         function getNameOfSymbolFromNameType(symbol: Symbol, context?: NodeBuilderContext) {
-            const nameType = symbol.nameType;
+            const nameType = getSymbolLinks(symbol).nameType;
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                     const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
@@ -6517,11 +6517,14 @@ namespace ts {
                     if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
                         return symbolName(symbol);
                     }
-                    if (isComputedPropertyName(name) && !(getCheckFlags(symbol) & CheckFlags.Late) && symbol.nameType && symbol.nameType.flags & TypeFlags.StringOrNumberLiteral) {
-                        // Computed property name isn't late bound, but has a well-known name type - use name type to generate a symbol name
-                        const result = getNameOfSymbolFromNameType(symbol, context);
-                        if (result !== undefined) {
-                            return result;
+                    if (isComputedPropertyName(name) && !(getCheckFlags(symbol) & CheckFlags.Late)) {
+                        const nameType = getSymbolLinks(symbol).nameType;
+                        if (nameType && nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                            // Computed property name isn't late bound, but has a well-known name type - use name type to generate a symbol name
+                            const result = getNameOfSymbolFromNameType(symbol, context);
+                            if (result !== undefined) {
+                                return result;
+                            }
                         }
                     }
                     return declarationNameToString(name);
@@ -8661,7 +8664,7 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: TransientSymbolTable, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
@@ -8719,7 +8722,7 @@ namespace ts {
                 links[resolutionKind] = earlySymbols || emptySymbols;
 
                 // fill in any as-yet-unresolved late-bound members.
-                const lateSymbols = createSymbolTable();
+                const lateSymbols = createSymbolTable() as TransientSymbolTable;
                 for (const decl of symbol.declarations) {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
@@ -9323,7 +9326,7 @@ namespace ts {
                 const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
                 const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
                 inferredProp.declarations = prop.declarations;
-                inferredProp.nameType = prop.nameType;
+                inferredProp.nameType = getSymbolLinks(prop).nameType;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
                 inferredProp.mappedType = type.mappedType;
                 inferredProp.constraintType = type.constraintType;
@@ -10012,7 +10015,7 @@ namespace ts {
                 const type = getTypeOfSymbol(prop);
                 if (!firstType) {
                     firstType = type;
-                    nameType = prop.nameType;
+                    nameType = getSymbolLinks(prop).nameType;
                 }
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
@@ -12007,7 +12010,7 @@ namespace ts {
 
         function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
-                let type = getLateBoundSymbol(prop).nameType;
+                let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
                 if (!type && !isKnownSymbol(prop)) {
                     if (prop.escapedName === InternalSymbolName.Default) {
                         type = getLiteralType("default");
@@ -12768,7 +12771,7 @@ namespace ts {
                         const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
                         result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
                         result.declarations = prop.declarations;
-                        result.nameType = prop.nameType;
+                        result.nameType = getSymbolLinks(prop).nameType;
                         result.syntheticOrigin = prop;
                         members.set(prop.escapedName, result);
                     }
@@ -12876,7 +12879,7 @@ namespace ts {
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
-                        result.nameType = leftProp.nameType;
+                        result.nameType = getSymbolLinks(leftProp).nameType;
                         members.set(leftProp.escapedName, result);
                     }
                 }
@@ -12911,7 +12914,7 @@ namespace ts {
             const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
             result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
-            result.nameType = prop.nameType;
+            result.nameType = getSymbolLinks(prop).nameType;
             result.syntheticOrigin = prop;
             return result;
         }
@@ -13277,8 +13280,8 @@ namespace ts {
             if (symbol.valueDeclaration) {
                 result.valueDeclaration = symbol.valueDeclaration;
             }
-            if (symbol.nameType) {
-                result.nameType = symbol.nameType;
+            if (links.nameType) {
+                result.nameType = links.nameType;
             }
             return result;
         }
@@ -16230,7 +16233,8 @@ namespace ts {
                         continue;
                     }
                     // Skip over symbol-named members
-                    if (prop.nameType && prop.nameType.flags & TypeFlags.UniqueESSymbol) {
+                    const nameType = getSymbolLinks(prop).nameType;
+                    if (nameType && nameType.flags & TypeFlags.UniqueESSymbol) {
                         continue;
                     }
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
@@ -17064,8 +17068,9 @@ namespace ts {
             if (source.valueDeclaration) {
                 symbol.valueDeclaration = source.valueDeclaration;
             }
-            if (source.nameType) {
-                symbol.nameType = source.nameType;
+            const nameType = getSymbolLinks(source).nameType;
+            if (nameType) {
+                symbol.nameType = nameType;
             }
             return symbol;
         }

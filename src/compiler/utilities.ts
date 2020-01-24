@@ -4971,7 +4971,7 @@ namespace ts {
         this.valueDeclaration = undefined!;
         this.id = undefined;
         this.mergeId = undefined;
-        this.parent = undefined;
+        (this as Mutable<Symbol>).parent = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
