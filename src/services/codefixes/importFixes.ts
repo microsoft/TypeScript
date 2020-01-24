@@ -553,17 +553,34 @@ namespace ts.codefix {
 
     function doAddExistingFix(changes: textChanges.ChangeTracker, sourceFile: SourceFile, clause: ImportClause, defaultImport: string | undefined, namedImports: readonly string[], canUseTypeOnlyImport: boolean): void {
         const convertTypeOnlyToRegular = !canUseTypeOnlyImport && clause.isTypeOnly;
-        let name: Identifier | undefined;
-        let newNamedImports: NamedImports | undefined;
         if (defaultImport) {
             Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
-            name = createIdentifier(defaultImport);
+            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
         }
+
         if (namedImports.length) {
             const specifiers = namedImports.map(name => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name)));
-            newNamedImports = createNamedImports(concatenate(tryCast(clause.namedBindings, isNamedImports)?.elements, specifiers));
+            if (clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements.length) {
+                for (const spec of specifiers) {
+                    changes.insertNodeInListAfter(sourceFile, last(cast(clause.namedBindings, isNamedImports).elements), spec);
+                }
+            }
+            else {
+                if (specifiers.length) {
+                    const namedImports = createNamedImports(specifiers);
+                    if (clause.namedBindings) {
+                        changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
+                    }
+                    else {
+                        changes.insertNodeAfter(sourceFile, Debug.assertDefined(clause.name, "Import clause must have either named imports or a default import"), namedImports);
+                    }
+                }
+            }
         }
-        changes.replaceNode(sourceFile, clause, updateImportClause(clause, name, newNamedImports, convertTypeOnlyToRegular ? false : clause.isTypeOnly));
+
+        if (convertTypeOnlyToRegular) {
+            changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
+        }
     }
 
     function addNamespaceQualifier(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { namespacePrefix, position }: FixUseNamespaceImport): void {
