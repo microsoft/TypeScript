@@ -115,7 +115,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
+    export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache, log: (s: string) => void = noop): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         const buckets = createMap<Map<DocumentRegistryEntry>>();
@@ -170,10 +170,12 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
+            const start = timestamp();
             const bucket = getOrUpdate<Map<DocumentRegistryEntry>>(buckets, key, createMap);
             let entry = bucket.get(path);
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
             if (!entry && externalCache) {
+                log(`Creating document ${path}`);
                 const sourceFile = externalCache.getDocument(key, path);
                 if (sourceFile) {
                     Debug.assert(acquiring);
@@ -217,9 +219,12 @@ namespace ts {
                 if (acquiring) {
                     entry.languageServiceRefCount++;
                 }
+                log(`${acquiring ? "acquiring" : "updating"} document ${path}`);
             }
             Debug.assert(entry.languageServiceRefCount !== 0);
 
+            const elapsed = timestamp() - start;
+            log(`${acquiring ? "acquiring" : "updating"} document ${path} elapsed: ${elapsed}ms`);
             return entry.sourceFile;
         }
 
@@ -233,9 +238,11 @@ namespace ts {
             const bucket = Debug.checkDefined(buckets.get(key));
             const entry = bucket.get(path)!;
             entry.languageServiceRefCount--;
+            log(`Releasing document: ${path}`);
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
+                log(`Deleting document: ${path}`);
                 bucket.delete(path);
             }
         }
