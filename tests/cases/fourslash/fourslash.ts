@@ -433,6 +433,7 @@ declare namespace FourSlashInterface {
         printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
+        printOutliningSpans(): void;
         printReferences(): void;
         printContext(): void;
     }
