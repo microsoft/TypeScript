@@ -1,9 +1,4 @@
 //// [emitStatementsBeforeSuperCall.ts]
-// TODO: With false, master is correct for `Test` but incorrect for `Sub`.
-// `Test` is correct because classic emit doesn't emit for definition and `Test`
-// doesn't need to emit any code for initialisation because it's already
-// part of the user code
-
 class Base {
 }
 class Sub extends Base {
@@ -27,10 +22,6 @@ class Test extends Base {
 
 
 //// [emitStatementsBeforeSuperCall.js]
-// TODO: With false, master is correct for `Test` but incorrect for `Sub`.
-// `Test` is correct because classic emit doesn't emit for definition and `Test`
-// doesn't need to emit any code for initialisation because it's already
-// part of the user code
 class Base {
 }
 class Sub extends Base {
