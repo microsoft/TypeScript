@@ -1352,6 +1352,11 @@ namespace ts.server.protocol {
          * List of updated files
          */
         updated: string[] | FileWithProjectReferenceRedirectInfo[];
+        /**
+         * List of files that have had their project reference redirect status updated
+         * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+         */
+        updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
     }
 
     /**
@@ -1369,6 +1374,8 @@ namespace ts.server.protocol {
         info?: ProjectVersionInfo;
         /**
          * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
+         * This property will have type FileWithProjectReferenceRedirectInfo[] if includeProjectReferenceRedirectInfo is set to true in
+         * the corresponding SynchronizeProjectList request; otherwise, it will have type string[].
          */
         files?: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
@@ -1635,7 +1642,7 @@ namespace ts.server.protocol {
         knownProjects: ProjectVersionInfo[];
         /**
          * If true, response specifies whether or not each file in each project
-         * is the result of a project reference redirect
+         * is a source from a project reference redirect
          */
         includeProjectReferenceRedirectInfo?: boolean;
     }

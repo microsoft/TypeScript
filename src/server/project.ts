@@ -167,7 +167,7 @@ namespace ts.server {
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<true> | undefined;
+        private lastReportedFileNames: Map<boolean> | undefined;
         /**
          * Last version that was reported.
          */
@@ -803,6 +803,22 @@ namespace ts.server {
             return result;
         }
 
+        /* @internal */
+        getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean) {
+            const fileNames = this.getFileNames();
+            if (includeProjectReferenceRedirectInfo) {
+                return fileNames.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
+                    fileName,
+                    isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)
+                 }));
+            }
+
+            return fileNames.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
+                fileName,
+                isSourceOfProjectReferenceRedirect: false
+             }));
+        }
+
         hasConfigFile(configFilePath: NormalizedPath) {
             if (this.program && this.languageServiceEnabled) {
                 const configFile = this.program.getCompilerOptions().configFile;
@@ -1301,16 +1317,13 @@ namespace ts.server {
 
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
-            const includeProjectReferenceRedirectInfoIfRequested = (files: string[]) => {
-                if (includeProjectReferenceRedirectInfo) {
-                    return files.map((fileName: string): protocol.FileWithProjectReferenceRedirectInfo => ({
+            const includeProjectReferenceRedirectInfoIfRequested =
+                includeProjectReferenceRedirectInfo
+                    ? (files: Map<boolean>) => arrayFrom(files.keys(), (fileName: string): protocol.FileWithProjectReferenceRedirectInfo => ({
                         fileName,
-                        isSourceOfProjectReferenceRedirect: this.program?.isSourceOfProjectReferenceRedirect(fileName) ?? false
-                    }));
-                }
-
-                return files;
-            };
+                        isSourceOfProjectReferenceRedirect: files.get(fileName)! // fileName guaranteed to be in files
+                    }))
+                    : (files: Map<boolean>) => arrayFrom(files.keys());
 
             // Update the graph only if initial configured project load is not pending
             if (!this.isInitialLoadPending()) {
@@ -1335,21 +1348,36 @@ namespace ts.server {
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
-                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
-                const currentFiles = arrayToSet(this.getFileNames().concat(externalFiles));
+                const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+                    fileName: toNormalizedPath(f),
+                    isSourceOfProjectReferenceRedirect: false
+                }));
+                const currentFiles = arrayToMap(
+                    this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo).concat(externalFiles),
+                    info => info.fileName,
+                    info => info.isSourceOfProjectReferenceRedirect
+                );
 
-                const added: string[] = [];
-                const removed: string[] = [];
+                const added: Map<boolean> = new Map<boolean>();
+                const removed: Map<boolean> = new Map<boolean>();
+
                 const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
+                const updatedRedirects: protocol.FileWithProjectReferenceRedirectInfo[] = [];
 
                 forEachKey(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
-                        added.push(id);
+                        added.set(id, currentFiles.get(id)!); // id guaranteed to be in currentFiles
+                    }
+                    else if (includeProjectReferenceRedirectInfo && lastReportedFileNames.get(id) !== currentFiles.get(id)){
+                        updatedRedirects.push({
+                            fileName: id,
+                            isSourceOfProjectReferenceRedirect: currentFiles.get(id)! // id guaranteed to be in currentFiles
+                        });
                     }
                 });
                 forEachKey(lastReportedFileNames, id => {
                     if (!currentFiles.has(id)) {
-                        removed.push(id);
+                        removed.set(id, lastReportedFileNames.get(id)!); // id guaranteed to be in lastReportedFileNames
                     }
                 });
                 this.lastReportedFileNames = currentFiles;
@@ -1359,21 +1387,34 @@ namespace ts.server {
                     changes: {
                         added: includeProjectReferenceRedirectInfoIfRequested(added),
                         removed: includeProjectReferenceRedirectInfoIfRequested(removed),
-                        updated: includeProjectReferenceRedirectInfoIfRequested(updated)
+                        updated: includeProjectReferenceRedirectInfoIfRequested
+                            ? updated.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
+                                fileName,
+                                isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)
+                            }))
+                            : updated,
+                        updatedRedirects: includeProjectReferenceRedirectInfo ? updatedRedirects : undefined
                     },
                     projectErrors: this.getGlobalProjectErrors()
                 };
             }
             else {
                 // unknown version - return everything
-                const projectFileNames = this.getFileNames();
-                const externalFiles = this.getExternalFiles().map(f => toNormalizedPath(f));
+                const projectFileNames = this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo);
+                const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+                    fileName: toNormalizedPath(f),
+                    isSourceOfProjectReferenceRedirect: false
+                }));
                 const allFiles = projectFileNames.concat(externalFiles);
-                this.lastReportedFileNames = arrayToSet(allFiles);
+                this.lastReportedFileNames = arrayToMap(
+                    projectFileNames.concat(externalFiles),
+                    info => info.fileName,
+                    info => info.isSourceOfProjectReferenceRedirect
+                );
                 this.lastReportedVersion = this.projectProgramVersion;
                 return {
                     info,
-                    files: includeProjectReferenceRedirectInfoIfRequested(allFiles),
+                    files: includeProjectReferenceRedirectInfo ? allFiles : allFiles.map(f => f.fileName),
                     projectErrors: this.getGlobalProjectErrors()
                 };
             }
