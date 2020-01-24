@@ -4607,7 +4607,15 @@ namespace ts {
     }
 
     /* @internal */
+    export const enum IterationTypesKind {
+        Normal,
+        Any,
+        None,
+    }
+
+    /* @internal */
     export interface IterationTypes {
+        readonly kind: IterationTypesKind;
         readonly yieldType: Type;
         readonly returnType: Type;
         readonly nextType: Type;

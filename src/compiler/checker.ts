@@ -33,6 +33,14 @@ namespace ts {
 
     }
 
+    // A sentinel value that indicates no iteration types could be discovered.
+    const noIterationTypes: IterationTypes = {
+        kind: IterationTypesKind.None,
+        get yieldType(): Type { throw new Error("Not supported"); },
+        get returnType(): Type { throw new Error("Not supported"); },
+        get nextType(): Type { throw new Error("Not supported"); },
+    };
+
     const enum IterationTypeKind {
         Yield,
         Return,
@@ -727,12 +735,7 @@ namespace ts {
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const iterationTypesCache = createMap<IterationTypes>(); // cache for common IterationTypes instances
-        const noIterationTypes: IterationTypes = {
-            get yieldType(): Type { throw new Error("Not supported"); },
-            get returnType(): Type { throw new Error("Not supported"); },
-            get nextType(): Type { throw new Error("Not supported"); },
-        };
-        const anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
+        const anyIterationTypes = createIterationTypesCore(anyType, anyType, anyType, IterationTypesKind.Any);
         const anyIterationTypesExceptNext = createIterationTypes(anyType, anyType, unknownType);
         const defaultIterationTypes = createIterationTypes(neverType, anyType, undefinedType); // default iteration types for `Iterator`.
 
@@ -30625,8 +30628,11 @@ namespace ts {
                 if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 if (!compilerOptions.noEmit && languageVersion < ScriptTarget.ESNext && needCollisionCheckForIdentifier(node, node.name as Identifier, "WeakMap")) {
                     potentialWeakMapCollisions.push(node);
                 }
@@ -31074,6 +31080,10 @@ namespace ts {
         }
 
         function createIterationTypes(yieldType: Type = neverType, returnType: Type = neverType, nextType: Type = unknownType): IterationTypes {
+            return createIterationTypesCore(yieldType, returnType, nextType, IterationTypesKind.Normal);
+        }
+
+        function createIterationTypesCore(yieldType: Type, returnType: Type, nextType: Type, kind: IterationTypesKind.Normal | IterationTypesKind.Any): IterationTypes {
             // `yieldType` and `returnType` are defaulted to `neverType` they each will be combined
             // via `getUnionType` when merging iteration types. `nextType` is defined as `unknownType`
             // as it is combined via `getIntersectionType` when merging iteration types.
@@ -31088,12 +31098,24 @@ namespace ts {
                 const id = getTypeListId([yieldType, returnType, nextType]);
                 let iterationTypes = iterationTypesCache.get(id);
                 if (!iterationTypes) {
-                    iterationTypes = { yieldType, returnType, nextType };
+                    iterationTypes = { kind, yieldType, returnType, nextType };
                     iterationTypesCache.set(id, iterationTypes);
                 }
                 return iterationTypes;
             }
-            return { yieldType, returnType, nextType };
+            return { kind, yieldType, returnType, nextType };
+        }
+
+        function isNoIterationTypes(iterationTypes: IterationTypes): boolean {
+            return iterationTypes.kind === IterationTypesKind.None;
+        }
+
+        function isAnyIterationTypes(iterationTypes: IterationTypes): boolean {
+            return iterationTypes.kind === IterationTypesKind.Any;
+        }
+
+        function removeNoIterationTypes(iterationTypes: IterationTypes | undefined): IterationTypes | undefined {
+            return iterationTypes && isNoIterationTypes(iterationTypes) ? undefined : iterationTypes;
         }
 
         /**
@@ -31108,10 +31130,10 @@ namespace ts {
             let returnTypes: Type[] | undefined;
             let nextTypes: Type[] | undefined;
             for (const iterationTypes of array) {
-                if (iterationTypes === undefined || iterationTypes === noIterationTypes) {
+                if (iterationTypes === undefined || isNoIterationTypes(iterationTypes)) {
                     continue;
                 }
-                if (iterationTypes === anyIterationTypes) {
+                if (isAnyIterationTypes(iterationTypes)) {
                     return anyIterationTypes;
                 }
                 yieldTypes = append(yieldTypes, iterationTypes.yieldType);
@@ -31155,7 +31177,7 @@ namespace ts {
 
             if (!(type.flags & TypeFlags.Union)) {
                 const iterationTypes = getIterationTypesOfIterableWorker(type, use, errorNode);
-                if (iterationTypes === noIterationTypes) {
+                if (isNoIterationTypes(iterationTypes)) {
                     if (errorNode) {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                     }
@@ -31166,12 +31188,12 @@ namespace ts {
 
             const cacheKey = use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable";
             const cachedTypes = (type as IterableOrIteratorType)[cacheKey];
-            if (cachedTypes) return cachedTypes === noIterationTypes ? undefined : cachedTypes;
+            if (cachedTypes) return removeNoIterationTypes(cachedTypes);
 
             let allIterationTypes: IterationTypes[] | undefined;
             for (const constituent of (type as UnionType).types) {
                 const iterationTypes = getIterationTypesOfIterableWorker(constituent, use, errorNode);
-                if (iterationTypes === noIterationTypes) {
+                if (isNoIterationTypes(iterationTypes)) {
                     if (errorNode) {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                         errorNode = undefined;
@@ -31183,13 +31205,12 @@ namespace ts {
             }
 
             const iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes) : noIterationTypes;
-            (type as IterableOrIteratorType)[cacheKey] = iterationTypes;
-            return iterationTypes === noIterationTypes ? undefined : iterationTypes;
+            return removeNoIterationTypes((type as IterableOrIteratorType)[cacheKey] = iterationTypes);
         }
 
         function getAsyncFromSyncIterationTypes(iterationTypes: IterationTypes, errorNode: Node | undefined) {
-            if (iterationTypes === noIterationTypes) return noIterationTypes;
-            if (iterationTypes === anyIterationTypes) return anyIterationTypes;
+            if (isNoIterationTypes(iterationTypes)) return noIterationTypes;
+            if (isAnyIterationTypes(iterationTypes)) return anyIterationTypes;
             const { yieldType, returnType, nextType } = iterationTypes;
             return createIterationTypes(
                 getAwaitedType(yieldType, errorNode) || anyType,
@@ -31228,7 +31249,7 @@ namespace ts {
                 if (iterationTypes) {
                     if (use & IterationUse.AllowsAsyncIterablesFlag) {
                         // for a sync iterable in an async context, only use the cached types if they are valid.
-                        if (iterationTypes !== noIterationTypes) {
+                        if (!isNoIterationTypes(iterationTypes)) {
                             return (type as IterableOrIteratorType).iterationTypesOfAsyncIterable = getAsyncFromSyncIterationTypes(iterationTypes, errorNode);
                         }
                     }
@@ -31240,14 +31261,14 @@ namespace ts {
 
             if (use & IterationUse.AllowsAsyncIterablesFlag) {
                 const iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode);
-                if (iterationTypes !== noIterationTypes) {
+                if (!isNoIterationTypes(iterationTypes)) {
                     return iterationTypes;
                 }
             }
 
             if (use & IterationUse.AllowsSyncIterablesFlag) {
                 const iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode);
-                if (iterationTypes !== noIterationTypes) {
+                if (!isNoIterationTypes(iterationTypes)) {
                     if (use & IterationUse.AllowsAsyncIterablesFlag) {
                         return (type as IterableOrIteratorType).iterationTypesOfAsyncIterable = iterationTypes
                             ? getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
@@ -31277,7 +31298,7 @@ namespace ts {
             const globalIterationTypes =
                 getIterationTypesOfIterableCached(globalType, resolver) ||
                 getIterationTypesOfIterableSlow(globalType, resolver, /*errorNode*/ undefined);
-            return globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+            return removeNoIterationTypes(globalIterationTypes) ?? defaultIterationTypes;
         }
 
         /**
@@ -31341,7 +31362,7 @@ namespace ts {
             }
 
             const iteratorType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-            const iterationTypes = getIterationTypesOfIterator(iteratorType, resolver, errorNode) || noIterationTypes;
+            const iterationTypes = getIterationTypesOfIterator(iteratorType, resolver, errorNode) ?? noIterationTypes;
             return (type as IterableOrIteratorType)[resolver.iterableCacheKey] = iterationTypes;
         }
 
@@ -31367,7 +31388,7 @@ namespace ts {
                 getIterationTypesOfIteratorCached(type, resolver) ||
                 getIterationTypesOfIteratorFast(type, resolver) ||
                 getIterationTypesOfIteratorSlow(type, resolver, errorNode);
-            return iterationTypes === noIterationTypes ? undefined : iterationTypes;
+            return removeNoIterationTypes(iterationTypes);
         }
 
         /**
@@ -31408,7 +31429,7 @@ namespace ts {
                 const globalIterationTypes =
                     getIterationTypesOfIteratorCached(globalType, resolver) ||
                     getIterationTypesOfIteratorSlow(globalType, resolver, /*errorNode*/ undefined);
-                const { returnType, nextType } = globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
+                const { returnType, nextType } = removeNoIterationTypes(globalIterationTypes) ?? defaultIterationTypes;
                 return (type as IterableOrIteratorType)[resolver.iteratorCacheKey] = createIterationTypes(yieldType, returnType, nextType);
             }
             if (isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
@@ -31549,7 +31570,7 @@ namespace ts {
             const methodReturnType = methodReturnTypes ? getUnionType(methodReturnTypes, UnionReduction.Subtype) : neverType;
             const resolvedMethodReturnType = resolver.resolveIterationType(methodReturnType, errorNode) || anyType;
             const iterationTypes = getIterationTypesOfIteratorResult(resolvedMethodReturnType);
-            if (iterationTypes === noIterationTypes) {
+            if (isNoIterationTypes(iterationTypes)) {
                 if (errorNode) {
                     error(errorNode, resolver.mustHaveAValueDiagnostic, methodName);
                 }
@@ -35887,9 +35908,11 @@ namespace ts {
                     node.kind === SyntaxKind.FunctionExpression ||
                     node.kind === SyntaxKind.MethodDeclaration);
                 if (node.flags & NodeFlags.Ambient) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
                 if (!node.body) {
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
             }
