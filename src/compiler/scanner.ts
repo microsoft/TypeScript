@@ -2067,6 +2067,8 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
+            let lastNonWhitespace = -1;
+
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
@@ -2095,10 +2097,22 @@ namespace ts {
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
+
+                // newlines are OK
+                if (!isWhiteSpaceLike(char)) {
+                    // console.log(text.charAt(pos));
+                    lastNonWhitespace = pos + 1;
+                }
+
                 pos++;
             }
 
-            tokenValue = text.substring(startPos, pos);
+            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
+            tokenValue = text.substring(startPos, endPosition);
+            pos = endPosition;
+
+            // console.log("one: '" + text.substring(startPos, pos) + "'");
+            // console.log("two: '" + tokenValue + "'");
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
