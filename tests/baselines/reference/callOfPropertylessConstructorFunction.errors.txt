@@ -1,0 +1,14 @@
+tests/cases/conformance/jsdoc/callOfPropertylessConstructorFunction.js(7,1): error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
+
+
+==== tests/cases/conformance/jsdoc/callOfPropertylessConstructorFunction.js (1 errors) ====
+    /**
+     * @constructor
+     */
+    function Dependency(j) {
+      return j
+    }
+    Dependency({})
+    ~~~~~~~~~~~~~~
+!!! error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
+    

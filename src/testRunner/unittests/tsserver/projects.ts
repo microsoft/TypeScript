@@ -366,7 +366,8 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -464,7 +465,8 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -504,7 +506,8 @@ namespace ts.projectSystem {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]), typeAcquisition: { enable: true } });
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(), [file2.path]);
-            } finally {
+            }
+            finally {
                 projectService.resetSafeList();
             }
         });
@@ -1061,7 +1064,7 @@ namespace ts.projectSystem {
                 content: "let x = 1;"
             };
 
-            const host = createServerHost([file1, configFile], { useWindowsStylePaths: true });
+            const host = createServerHost([file1, configFile], { windowsStyleRoot: "c:/" });
             const projectService = createProjectService(host);
 
             projectService.openClientFile(file1.path);
@@ -1091,6 +1094,7 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
+            verifyDynamic(projectService, `/${file.path}`);
 
             assert.strictEqual(projectService.ensureDefaultProjectForFile(server.toNormalizedPath(file.path)), project);
             const indexOfX = file.content.indexOf("x");
@@ -1121,11 +1125,69 @@ var x = 10;`
             const host = createServerHost([libFile]);
             const projectService = createProjectService(host);
             projectService.openClientFile(file.path, file.content);
+            verifyDynamic(projectService, projectService.toPath(file.path));
 
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
             checkProjectRootFiles(project, [file.path]);
             checkProjectActualFiles(project, [file.path, libFile.path]);
+        });
+
+        describe("dynamic file with projectRootPath", () => {
+            const file: File = {
+                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                content: "var x = 10;"
+            };
+            const configFile: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const configProjectFile: File = {
+                path: `${tscWatch.projectRoot}/a.ts`,
+                content: "let y = 10;"
+            };
+            it("with useInferredProjectPerProjectRoot", () => {
+                const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+                const session = createSession(host, { useInferredProjectPerProjectRoot: true });
+                openFilesForSession([{ file: file.path, projectRootPath: tscWatch.projectRoot }], session);
+
+                const projectService = session.getProjectService();
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
+                verifyDynamic(projectService, `${tscWatch.projectRoot}/${file.path}`);
+
+                session.executeCommandSeq<protocol.OutliningSpansRequest>({
+                    command: protocol.CommandTypes.GetOutliningSpans,
+                    arguments: {
+                        file: file.path
+                    }
+                });
+
+                // Without project root
+                const file2Path = file.path.replace("#1", "#2");
+                projectService.openClientFile(file2Path, file.content);
+                checkNumberOfProjects(projectService, { inferredProjects: 2 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
+                checkProjectActualFiles(projectService.inferredProjects[1], [file2Path, libFile.path]);
+            });
+
+            it("fails when useInferredProjectPerProjectRoot is false", () => {
+                const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+                const projectService = createProjectService(host);
+                try {
+                    projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, tscWatch.projectRoot);
+                }
+                catch (e) {
+                    assert.strictEqual(
+                        e.message.replace(/\r?\n/, "\n"),
+                        `Debug Failure. False expression: \nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
+                    );
+                }
+                const file2Path = file.path.replace("#1", "#2");
+                projectService.openClientFile(file2Path, file.content);
+                projectService.checkNumberOfProjects({ inferredProjects: 1 });
+                checkProjectActualFiles(projectService.inferredProjects[0], [file2Path, libFile.path]);
+            });
         });
 
         it("files opened, closed affecting multiple projects", () => {
@@ -1206,17 +1268,16 @@ var x = 10;`
         });
 
         it("requests are done on file on pendingReload but has svc for previous version", () => {
-            const projectLocation = "/user/username/projects/project";
             const file1: File = {
-                path: `${projectLocation}/src/file1.ts`,
+                path: `${tscWatch.projectRoot}/src/file1.ts`,
                 content: `import { y } from "./file2"; let x = 10;`
             };
             const file2: File = {
-                path: `${projectLocation}/src/file2.ts`,
+                path: `${tscWatch.projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const config: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const files = [file1, file2, libFile, config];
@@ -1306,20 +1367,19 @@ var x = 10;`
         });
 
         it("Orphan source files are handled correctly on watch trigger", () => {
-            const projectLocation = "/user/username/projects/project";
             const file1: File = {
-                path: `${projectLocation}/src/file1.ts`,
+                path: `${tscWatch.projectRoot}/src/file1.ts`,
                 content: `export let x = 10;`
             };
             const file2: File = {
-                path: `${projectLocation}/src/file2.ts`,
+                path: `${tscWatch.projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
             const configContent1 = JSON.stringify({
                 files: ["src/file1.ts", "src/file2.ts"]
             });
             const config: File = {
-                path: `${projectLocation}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: configContent1
             };
             const files = [file1, file2, libFile, config];
@@ -1442,36 +1502,17 @@ var x = 10;`
             // Actually trigger the file move
             host.reloadFS(files);
             host.checkTimeoutQueueLength(2);
-            const fileBErrorTimeoutId = host.getNextTimeoutId();
 
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: protocol.CommandTypes.Geterr,
-                arguments: {
-                    files: [fileB.path, fileSubA.path],
-                    delay: 0
-                }
+            verifyGetErrRequest({
+                session,
+                host,
+                expected: [
+                    { file: fileB, syntax: [], semantic: [], suggestion: [] },
+                    { file: fileSubA },
+                ],
+                existingTimeouts: 2,
+                onErrEvent: () => assert.isFalse(hasErrorMsg())
             });
-            const getErrSeqId = session.getSeq();
-            host.checkTimeoutQueueLength(3);
-
-            session.clearMessages();
-            host.runQueuedTimeoutCallbacks(fileBErrorTimeoutId);
-            checkErrorMessage(session, "syntaxDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "semanticDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            const fileSubAErrorTimeoutId = host.getNextTimeoutId();
-            host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "suggestionDiag", { file: fileB.path, diagnostics: [] });
-
-            session.clearMessages();
-            host.checkTimeoutQueueLength(3);
-            host.runQueuedTimeoutCallbacks(fileSubAErrorTimeoutId);
-            checkCompleteEvent(session, 1, getErrSeqId);
-            assert.isFalse(hasErrorMsg());
 
             function openFile(file: File) {
                 openFilesForSession([{ file, projectRootPath }], session);

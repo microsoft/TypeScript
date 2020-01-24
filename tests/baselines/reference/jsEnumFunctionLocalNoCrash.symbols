@@ -1,0 +1,45 @@
+=== tests/cases/compiler/index.js ===
+function defineCommonExtensionSymbols(apiPrivate) {
+>defineCommonExtensionSymbols : Symbol(defineCommonExtensionSymbols, Decl(index.js, 0, 0))
+>apiPrivate : Symbol(apiPrivate, Decl(index.js, 0, 38))
+
+    /** @enum {string} */
+    apiPrivate.Events = {
+>apiPrivate : Symbol(apiPrivate, Decl(index.js, 0, 38))
+
+      ButtonClicked: 'button-clicked-',
+>ButtonClicked : Symbol(ButtonClicked, Decl(index.js, 2, 25))
+
+      PanelObjectSelected: 'panel-objectSelected-',
+>PanelObjectSelected : Symbol(PanelObjectSelected, Decl(index.js, 3, 39))
+
+      NetworkRequestFinished: 'network-request-finished',
+>NetworkRequestFinished : Symbol(NetworkRequestFinished, Decl(index.js, 4, 51))
+
+      OpenResource: 'open-resource',
+>OpenResource : Symbol(OpenResource, Decl(index.js, 5, 57))
+
+      PanelSearch: 'panel-search-',
+>PanelSearch : Symbol(PanelSearch, Decl(index.js, 6, 36))
+
+      RecordingStarted: 'trace-recording-started-',
+>RecordingStarted : Symbol(RecordingStarted, Decl(index.js, 7, 35))
+
+      RecordingStopped: 'trace-recording-stopped-',
+>RecordingStopped : Symbol(RecordingStopped, Decl(index.js, 8, 51))
+
+      ResourceAdded: 'resource-added',
+>ResourceAdded : Symbol(ResourceAdded, Decl(index.js, 9, 51))
+
+      ResourceContentCommitted: 'resource-content-committed',
+>ResourceContentCommitted : Symbol(ResourceContentCommitted, Decl(index.js, 10, 38))
+
+      ViewShown: 'view-shown-',
+>ViewShown : Symbol(ViewShown, Decl(index.js, 11, 61))
+
+      ViewHidden: 'view-hidden-'
+>ViewHidden : Symbol(ViewHidden, Decl(index.js, 12, 31))
+
+    };
+}
+

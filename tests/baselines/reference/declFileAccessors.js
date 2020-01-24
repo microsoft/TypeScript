@@ -273,35 +273,47 @@ var c2 = /** @class */ (function () {
 /** This is comment for c1*/
 export declare class c1 {
     /** getter property*/
+    get p3(): number;
     /** setter property*/
-    p3: number;
+    set p3(/** this is value*/ value: number);
     /** private getter property*/
+    private get pp3();
     /** private setter property*/
-    private pp3;
+    private set pp3(value);
     /** static getter property*/
+    static get s3(): number;
     /** setter property*/
-    static s3: number;
-    nc_p3: number;
-    private nc_pp3;
-    static nc_s3: string;
-    readonly onlyGetter: number;
-    onlySetter: number;
+    static set s3(/** this is value*/ value: number);
+    get nc_p3(): number;
+    set nc_p3(value: number);
+    private get nc_pp3();
+    private set nc_pp3(value);
+    static get nc_s3(): string;
+    static set nc_s3(value: string);
+    get onlyGetter(): number;
+    set onlySetter(value: number);
 }
 //// [declFileAccessors_1.d.ts]
 /** This is comment for c2 - the global class*/
 declare class c2 {
     /** getter property*/
+    get p3(): number;
     /** setter property*/
-    p3: number;
+    set p3(/** this is value*/ value: number);
     /** private getter property*/
+    private get pp3();
     /** private setter property*/
-    private pp3;
+    private set pp3(value);
     /** static getter property*/
+    static get s3(): number;
     /** setter property*/
-    static s3: number;
-    nc_p3: number;
-    private nc_pp3;
-    static nc_s3: string;
-    readonly onlyGetter: number;
-    onlySetter: number;
+    static set s3(/** this is value*/ value: number);
+    get nc_p3(): number;
+    set nc_p3(value: number);
+    private get nc_pp3();
+    private set nc_pp3(value);
+    static get nc_s3(): string;
+    static set nc_s3(value: string);
+    get onlyGetter(): number;
+    set onlySetter(value: number);
 }

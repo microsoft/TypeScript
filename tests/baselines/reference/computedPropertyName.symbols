@@ -1,0 +1,82 @@
+=== tests/cases/conformance/externalModules/typeOnly/framework-hooks.ts ===
+export const onInit = Symbol("onInit");
+>onInit : Symbol(onInit, Decl(framework-hooks.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+=== tests/cases/conformance/externalModules/typeOnly/component.ts ===
+import type { onInit } from "./framework-hooks";
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+
+interface Component {
+>Component : Symbol(Component, Decl(component.ts, 0, 48))
+
+  [onInit]?(): void;
+>[onInit] : Symbol(Component[onInit], Decl(component.ts, 2, 21))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+type T = {
+>T : Symbol(T, Decl(component.ts, 4, 1))
+
+  [onInit]: any;
+>[onInit] : Symbol([onInit], Decl(component.ts, 6, 10))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+const o = {
+>o : Symbol(o, Decl(component.ts, 10, 5))
+
+  [onInit]: 0 // Error
+>[onInit] : Symbol([onInit], Decl(component.ts, 10, 11))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+
+};
+
+class C {
+>C : Symbol(C, Decl(component.ts, 12, 2))
+
+  [onInit]: any; // Error (because class fields)
+>[onInit] : Symbol(C[onInit], Decl(component.ts, 14, 9))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+class D {
+>D : Symbol(D, Decl(component.ts, 16, 1))
+
+  [onInit] = 0; // Error
+>[onInit] : Symbol(D[onInit], Decl(component.ts, 18, 9))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+class E {
+>E : Symbol(E, Decl(component.ts, 20, 1))
+
+  [onInit]() {} // Error
+>[onInit] : Symbol(E[onInit], Decl(component.ts, 22, 9))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+abstract class F {
+>F : Symbol(F, Decl(component.ts, 24, 1))
+
+  abstract [onInit](): void;
+>[onInit] : Symbol(F[onInit], Decl(component.ts, 26, 18))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+class G {
+>G : Symbol(G, Decl(component.ts, 28, 1))
+
+  declare [onInit]: any;
+>[onInit] : Symbol(G[onInit], Decl(component.ts, 30, 9))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+
+declare class H {
+>H : Symbol(H, Decl(component.ts, 32, 1))
+
+  [onInit]: any;
+>[onInit] : Symbol(H[onInit], Decl(component.ts, 34, 17))
+>onInit : Symbol(onInit, Decl(component.ts, 0, 13))
+}
+

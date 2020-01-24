@@ -19,7 +19,7 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS23
   Type 'String' has no call signatures.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
 
 
 ==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (20 errors) ====
@@ -99,5 +99,5 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS23
        ~~~~~~~~
 !!! error TS2538: Type 'any' cannot be used as an index type.
         ~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
     

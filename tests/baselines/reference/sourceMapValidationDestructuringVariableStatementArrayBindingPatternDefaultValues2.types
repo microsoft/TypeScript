@@ -7,10 +7,10 @@ declare var console: {
 >msg : string
 }
 type MultiSkilledRobot = [string, string[]];
->MultiSkilledRobot : [string, string[]]
+>MultiSkilledRobot : MultiSkilledRobot
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 >["mower", ["mowing", ""]] : [string, string[]]
 >"mower" : "mower"
 >["mowing", ""] : string[]
@@ -18,7 +18,7 @@ var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >"" : ""
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
->multiRobotB : [string, string[]]
+>multiRobotB : MultiSkilledRobot
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
@@ -31,12 +31,12 @@ let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 >["noSkill", "noSkill"] : string[]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 
 let [nameMB = "noName" ] = multiRobotB;
 >nameMB : string
 >"noName" : "noName"
->multiRobotB : [string, string[]]
+>multiRobotB : MultiSkilledRobot
 
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 >nameMA : string
@@ -48,7 +48,7 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 
 let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
 >nameMC : string
