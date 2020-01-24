@@ -1783,6 +1783,7 @@ namespace ts {
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
+                        !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
@@ -2044,9 +2045,21 @@ namespace ts {
             return false;
         }
 
+        function isPrimitiveTypeName(name: __String) {
+            return name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never" || name === "unknown";
+        }
+
+        function checkAndReportErrorForExportingPrimitiveType(errorLocation: Node, name: __String): boolean {
+            if (isPrimitiveTypeName(name) && (errorLocation.parent.kind === SyntaxKind.ExportSpecifier || errorLocation.parent.kind === SyntaxKind.ExportDeclaration)) {
+                error(errorLocation, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, name as string);
+                return true;
+            }
+            return false;
+        }
+
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
-                if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
+                if (isPrimitiveTypeName(name)) {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
