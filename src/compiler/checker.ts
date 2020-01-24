@@ -5387,7 +5387,7 @@ namespace ts {
                         symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property) &&
                         symbol.escapedName !== InternalSymbolName.ExportEquals;
                     const isConstMergedWithNSPrintableAsSignatureMerge = isConstMergedWithNS && isTypeRepresentableAsFunctionNamespaceMerge(getTypeOfSymbol(symbol), symbol);
-                    if (symbol.flags & SymbolFlags.Function || isConstMergedWithNSPrintableAsSignatureMerge) {
+                    if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) || isConstMergedWithNSPrintableAsSignatureMerge) {
                         serializeAsFunctionNamespaceMerge(getTypeOfSymbol(symbol), symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.TypeAlias) {
