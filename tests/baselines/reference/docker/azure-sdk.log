@@ -19,10 +19,11 @@ XX of XX: [@azure/event-hubs] completed successfully in ? seconds
 XX of XX: [@azure/event-processor-host] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-keys] completed successfully in ? seconds
 XX of XX: [@azure/keyvault-secrets] completed successfully in ? seconds
-XX of XX: [@azure/storage-blob] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
 XX of XX: [@azure/ai-text-analytics] completed successfully in ? seconds
 XX of XX: [@azure/core-arm] completed successfully in ? seconds
 XX of XX: [@azure/core-tracing] completed successfully in ? seconds
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -54,7 +55,7 @@ XX of XX: [@azure/storage-file-share] completed successfully in ? seconds
 XX of XX: [@azure/storage-queue] completed successfully in ? seconds
 XX of XX: [@azure/template] completed successfully in ? seconds
 XX of XX: [testhub] completed successfully in ? seconds
-SUCCESS (23)
+SUCCESS (22)
 ================================
 @azure/abort-controller (? seconds)
 @azure/core-auth (? seconds)
@@ -70,7 +71,6 @@ SUCCESS (23)
 @azure/event-processor-host (? seconds)
 @azure/keyvault-keys (? seconds)
 @azure/keyvault-secrets (? seconds)
-@azure/storage-blob (? seconds)
 @azure/ai-text-analytics (? seconds)
 @azure/core-arm (? seconds)
 @azure/core-tracing (? seconds)
@@ -80,9 +80,12 @@ SUCCESS (23)
 @azure/template (? seconds)
 testhub (? seconds)
 ================================
-SUCCESS WITH WARNINGS (1)
+SUCCESS WITH WARNINGS (2)
 ================================
+@azure/storage-blob (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/storage-blob.api.md
 @azure/cosmos (? seconds)
+Warning: You have changed the public API signature for this project. Updating review/cosmos.api.md
 dist-esm/index.js → dist/index.js...
 (!) Unresolved dependencies
 https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
@@ -156,7 +159,7 @@ rush rebuild - Errors! ( ? seconds)
 
 
 Standard error:
-
+XX of XX: [@azure/storage-blob] completed with warnings in ? seconds
 XX of XX: [@azure/app-configuration] failed to build!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
 XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
