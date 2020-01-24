@@ -184,7 +184,7 @@
         "unittests/tsserver/syntaxOperations.ts",
         "unittests/tsserver/textStorage.ts",
         "unittests/tsserver/telemetry.ts",
-        "unittests/tsserver/typeAcquisition.tss",
+        "unittests/tsserver/typeAcquisition.ts",
         "unittests/tsserver/typeReferenceDirectives.ts",
         "unittests/tsserver/typingsInstaller.ts",
         "unittests/tsserver/untitledFiles.ts",

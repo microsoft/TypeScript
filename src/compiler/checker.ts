@@ -32014,7 +32014,7 @@ namespace ts {
                     const sourceConstraint = constraint && getTypeFromTypeNode(constraint);
                     const targetConstraint = getConstraintOfTypeParameter(target);
                     // relax check if later interface augmentation has no constraint, it's more broad and is OK to merge with
-                    // a more constrained interface (this could be generalized to a full heirarchy check, but that's maybe overkill)
+                    // a more constrained interface (this could be generalized to a full hierarchy check, but that's maybe overkill)
                     if (sourceConstraint && targetConstraint && !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
                         return false;
                     }
