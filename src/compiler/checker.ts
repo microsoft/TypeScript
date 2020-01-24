@@ -29257,6 +29257,7 @@ namespace ts {
                             : DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.EnumMember:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
