@@ -18,7 +18,7 @@ namespace ts.projectSystem {
             });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             const typeAcquisition = projectService.externalProjects[0].getTypeAcquisition();
-            assert.isTrue(typeAcquisition.enable, "Typine acquisition should be enabled");
+            assert.isTrue(typeAcquisition.enable, "Typing acquisition should be enabled");
         });
     });
 

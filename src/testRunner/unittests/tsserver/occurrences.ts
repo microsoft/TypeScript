@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: occurence highlight on string", () => {
+    describe("unittests:: tsserver:: occurrence highlight on string", () => {
         it("should be marked if only on string values", () => {
             const file1: File = {
                 path: "/a/b/file1.ts",
@@ -17,8 +17,8 @@ namespace ts.projectSystem {
                     { file: file1.path, line: 1, offset: 11 }
                 );
                 const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
-                const firstOccurence = highlightResponse[0];
-                assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
+                const firstOccurrence = highlightResponse[0];
+                assert.isTrue(firstOccurrence.isInString, "Highlights should be marked with isInString");
             }
 
             {
@@ -28,8 +28,8 @@ namespace ts.projectSystem {
                 );
                 const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
                 assert.isTrue(highlightResponse.length === 2);
-                const firstOccurence = highlightResponse[0];
-                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on property name");
+                const firstOccurrence = highlightResponse[0];
+                assert.isUndefined(firstOccurrence.isInString, "Highlights should not be marked with isInString if on property name");
             }
 
             {
@@ -39,8 +39,8 @@ namespace ts.projectSystem {
                 );
                 const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
                 assert.isTrue(highlightResponse.length === 2);
-                const firstOccurence = highlightResponse[0];
-                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
+                const firstOccurrence = highlightResponse[0];
+                assert.isUndefined(firstOccurrence.isInString, "Highlights should not be marked with isInString if on indexer");
             }
         });
     });

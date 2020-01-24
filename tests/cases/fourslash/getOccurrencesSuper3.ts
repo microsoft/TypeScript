@@ -13,10 +13,10 @@
 ////    d: () => [|super|].b();
 ////}
 
-function checkRange(r: FourSlashInterface.Range, expectedOccurences: FourSlashInterface.Range[]): void {
+function checkRange(r: FourSlashInterface.Range, expectedOccurrences: FourSlashInterface.Range[]): void {
     goTo.rangeStart(r);
-    if (expectedOccurences.length) {
-        for (const expected of expectedOccurences) {
+    if (expectedOccurrences.length) {
+        for (const expected of expectedOccurrences) {
             verify.occurrencesAtPositionContains(expected);
         }
     }
