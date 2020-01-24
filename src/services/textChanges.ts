@@ -1152,23 +1152,46 @@ namespace ts.textChanges {
             advancePastLineBreak();
         }
 
-        // For a source file, it is possible there are detached comments we should not skip
-        let ranges = getLeadingCommentRanges(text, position);
+        const ranges = getLeadingCommentRanges(text, position);
         if (!ranges) return position;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0].pos)) {
-            position = ranges[0].end;
-            advancePastLineBreak();
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
+
+        // Find the first attached comment to the first node and add before it
+        let lastComment: { range: CommentRange; pinnedOrTripleSlash: boolean; } | undefined;
+        let firstNodeLine: number | undefined;
         for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
-                position = range.end;
-                advancePastLineBreak();
+            if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
+                if (isPinnedComment(text, range.pos)) {
+                    lastComment = { range, pinnedOrTripleSlash: true };
+                    continue;
+                }
+            }
+            else if (isRecognizedTripleSlashComment(text, range.pos, range.end)) {
+                lastComment = { range, pinnedOrTripleSlash: true };
                 continue;
             }
-            break;
+
+            if (lastComment) {
+                // Always insert after pinned or triple slash comments
+                if (lastComment.pinnedOrTripleSlash) break;
+
+                // There was a blank line between the last comment and this comment.
+                // This comment is not part of the copyright comments
+                const commentLine = sourceFile.getLineAndCharacterOfPosition(range.pos).line;
+                const lastCommentEndLine = sourceFile.getLineAndCharacterOfPosition(lastComment.range.end).line;
+                if (commentLine >= lastCommentEndLine + 2) break;
+            }
+
+            if (sourceFile.statements.length) {
+                if (firstNodeLine === undefined) firstNodeLine = sourceFile.getLineAndCharacterOfPosition(sourceFile.statements[0].getStart()).line;
+                const commentEndLine = sourceFile.getLineAndCharacterOfPosition(range.end).line;
+                if (firstNodeLine < commentEndLine + 2) break;
+            }
+            lastComment = { range, pinnedOrTripleSlash: false };
+        }
+
+        if (lastComment) {
+            position = lastComment.range.end;
+            advancePastLineBreak();
         }
         return position;
 
