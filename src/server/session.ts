@@ -719,10 +719,8 @@ namespace ts.server {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
                 if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
-                    const checkList = this.createCheckList(openFiles);
-
                     // For now only queue error checking for open files. We can change this to include non open files as well
-                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
                 }
 
                 // Send project changed event
@@ -870,20 +868,37 @@ namespace ts.server {
         }
 
         /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+        private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
             Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
             let index = 0;
+            const goNext = () => {
+                index++;
+                if (checkList.length > index) {
+                    next.delay(followMs, checkOne);
+                }
+            };
             const checkOne = () => {
                 if (this.changeSeq !== seq) {
                     return;
                 }
 
-                const { fileName, project } = checkList[index];
-                index++;
+                let item: string | PendingErrorCheck | undefined = checkList[index];
+                if (isString(item)) {
+                    // Find out project for the file name
+                    item = this.toPendingErrorCheck(item);
+                    if (!item) {
+                        // Ignore file if there is no project for the file
+                        goNext();
+                        return;
+                    }
+                }
+
+                const { fileName, project } = item;
+
                 // Ensure the project is upto date before checking if this file is present in the project
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
@@ -901,11 +916,6 @@ namespace ts.server {
                         return;
                     }
 
-                    const goNext = () => {
-                        if (checkList.length > index) {
-                            next.delay(followMs, checkOne);
-                        }
-                    };
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
                     }
@@ -1727,12 +1737,10 @@ namespace ts.server {
             }
         }
 
-        private createCheckList(fileNames: string[]): PendingErrorCheck[] {
-            return mapDefined<string, PendingErrorCheck>(fileNames, uncheckedFileName => {
-                const fileName = toNormalizedPath(uncheckedFileName);
-                const project = this.projectService.tryGetDefaultProjectForFile(fileName);
-                return project && { fileName, project };
-            });
+        private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
+            const fileName = toNormalizedPath(uncheckedFileName);
+            const project = this.projectService.tryGetDefaultProjectForFile(fileName);
+            return project && { fileName, project };
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
@@ -1740,9 +1748,8 @@ namespace ts.server {
                 return;
             }
 
-            const checkList = this.createCheckList(fileNames);
-            if (checkList.length > 0) {
-                this.updateErrorCheck(next, checkList, delay);
+            if (fileNames.length > 0) {
+                this.updateErrorCheck(next, fileNames, delay);
             }
         }
 

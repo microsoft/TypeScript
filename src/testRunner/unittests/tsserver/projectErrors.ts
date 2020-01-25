@@ -382,7 +382,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.runQueuedImmediateCallbacks();
+            host.checkTimeoutQueueLengthAndRun(1);
             assert.isFalse(hasError());
             checkCompleteEvent(session, 1, expectedSequenceId);
             session.clearMessages();

@@ -1508,7 +1508,7 @@ var x = 10;`
                 host,
                 expected: [
                     { file: fileB, syntax: [], semantic: [], suggestion: [] },
-                    { file: fileSubA },
+                    { file: fileSubA, syntax: [], semantic: [], suggestion: [] },
                 ],
                 existingTimeouts: 2,
                 onErrEvent: () => assert.isFalse(hasErrorMsg())

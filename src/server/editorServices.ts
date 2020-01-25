@@ -1110,7 +1110,14 @@ namespace ts.server {
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                            project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            if (info.isAttached(project)) {
+                                project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                            }
+                            else {
+                                project.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                                this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                            }
                         }
                         return;
                     }
