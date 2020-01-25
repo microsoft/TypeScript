@@ -3,6 +3,9 @@ namespace ts {
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
 
+    /* @internal */
+    export type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -4037,6 +4040,7 @@ namespace ts {
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
+        /* @internal */ checker?: TypeChecker;  // TypeChecker that created the symbol (if the symbol is Transient)
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
@@ -4116,12 +4120,9 @@ namespace ts {
 
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
-        parent?: Symbol;
+        checker: TypeChecker;
         checkFlags: CheckFlags;
     }
-
-    /* @internal */
-    export type TransientSymbolTable = UnderscoreEscapedMap<TransientSymbol>;
 
     /* @internal */
     export interface ReverseMappedSymbol extends TransientSymbol {

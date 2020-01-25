@@ -4971,21 +4971,18 @@ namespace ts {
         this.valueDeclaration = undefined!;
         this.id = undefined;
         this.mergeId = undefined;
-        (this as Mutable<Symbol>).parent = undefined;
+        this.parent = undefined;
+        this.checker = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging) {
-            this.checker = checker;
-        }
+        this.checker = checker;
     }
 
     function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
         this.flags = flags;
-        if (Debug.isDebugging) {
-            this.checker = checker;
-        }
+        this.checker = checker;
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
