@@ -509,7 +509,7 @@ namespace ts {
     }
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+        return !!findAncestor(node, isJSDocTypeExpression);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {

@@ -3055,6 +3055,12 @@ declare namespace ts {
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
+         * Indicates if a given node needs an emit notification
+         *
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node): boolean;
+        /**
          * Clean up EmitNode entries on any parse-tree nodes.
          */
         dispose(): void;
@@ -3126,6 +3132,11 @@ declare namespace ts {
          * ```
          */
         onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        /**
+         * A hook used to check if an emit notification is required for a node.
+         * @param node The node to emit.
+         */
+        isEmitNotificationEnabled?(node: Node | undefined): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,

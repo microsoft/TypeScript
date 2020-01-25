@@ -27136,12 +27136,89 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
+        const enum CheckBinaryExpressionState {
+            MaybeCheckLeft,
+            CheckRight,
+            FinishCheck
+        }
+
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
-                return checkExpression(node.right, checkMode);
+            const workStacks: {
+                expr: BinaryExpression[],
+                state: CheckBinaryExpressionState[],
+                leftType: (Type | undefined)[]
+            } = {
+                expr: [node],
+                state: [CheckBinaryExpressionState.MaybeCheckLeft],
+                leftType: [undefined]
+            };
+            let stackIndex = 0;
+            let lastResult: Type | undefined;
+            while (stackIndex >= 0) {
+                node = workStacks.expr[stackIndex];
+                switch (workStacks.state[stackIndex]) {
+                    case CheckBinaryExpressionState.MaybeCheckLeft: {
+                        if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
+                            finishInvocation(checkExpression(node.right, checkMode));
+                            break;
+                        }
+                        checkGrammarNullishCoalesceWithLogicalExpression(node);
+                        const operator = node.operatorToken.kind;
+                        if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                            finishInvocation(checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
+                            break;
+                        }
+                        advanceState(CheckBinaryExpressionState.CheckRight);
+                        maybeCheckExpression(node.left);
+                        break;
+                    }
+                    case CheckBinaryExpressionState.CheckRight: {
+                        const leftType = lastResult!;
+                        workStacks.leftType[stackIndex] = leftType;
+                        const operator = node.operatorToken.kind;
+                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                            checkTruthinessOfType(leftType, node.left);
+                        }
+                        advanceState(CheckBinaryExpressionState.FinishCheck);
+                        maybeCheckExpression(node.right);
+                        break;
+                    }
+                    case CheckBinaryExpressionState.FinishCheck: {
+                        const leftType = workStacks.leftType[stackIndex]!;
+                        const rightType = lastResult!;
+                        finishInvocation(checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node));
+                        break;
+                    }
+                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for checkBinaryExpression`);
+                }
             }
-            checkGrammarNullishCoalesceWithLogicalExpression(node);
-            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
+
+            return lastResult!;
+
+            function finishInvocation(result: Type) {
+                lastResult = result;
+                stackIndex--;
+            }
+
+            /**
+             * Note that `advanceState` sets the _current_ head state, and that `maybeCheckExpression` potentially pushes on a new
+             * head state; so `advanceState` must be called before any `maybeCheckExpression` during a state's execution.
+             */
+            function advanceState(nextState: CheckBinaryExpressionState) {
+                workStacks.state[stackIndex] = nextState;
+            }
+
+            function maybeCheckExpression(node: Expression) {
+                if (isBinaryExpression(node)) {
+                    stackIndex++;
+                    workStacks.expr[stackIndex] = node;
+                    workStacks.state[stackIndex] = CheckBinaryExpressionState.MaybeCheckLeft;
+                    workStacks.leftType[stackIndex] = undefined;
+                }
+                else {
+                    lastResult = checkExpression(node, checkMode);
+                }
+            }
         }
 
         function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
@@ -27156,6 +27233,8 @@ namespace ts {
             }
         }
 
+        // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some
+        // expression-wide checks and does not use a work stack to fold nested binary expressions into the same callstack frame
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -27169,7 +27248,19 @@ namespace ts {
                 leftType = checkExpression(left, checkMode);
             }
 
-            let rightType = checkExpression(right, checkMode);
+            const rightType = checkExpression(right, checkMode);
+            return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
+        }
+
+        function checkBinaryLikeExpressionWorker(
+            left: Expression,
+            operatorToken: Node,
+            right: Expression,
+            leftType: Type,
+            rightType: Type,
+            errorNode?: Node
+        ): Type {
+            const operator = operatorToken.kind;
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -30774,12 +30865,15 @@ namespace ts {
             checkSourceElement(node.statement);
         }
 
-        function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
-            const type = checkExpression(node, checkMode);
+        function checkTruthinessOfType(type: Type, node: Node) {
             if (type.flags & TypeFlags.Void) {
                 error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
             }
             return type;
+        }
+
+        function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
+            return checkTruthinessOfType(checkExpression(node, checkMode), node);
         }
 
         function checkForStatement(node: ForStatement) {
