@@ -1482,6 +1482,76 @@ var x = 10;`
             );
         });
 
+        it("synchronizeProjectList provides updates to redirect info when requested", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileA: File = {
+                path: `${projectRootPath}/A/a.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configA: File = {
+                path: `${projectRootPath}/A/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  }
+}`
+            };
+            const fileB: File = {
+                path: `${projectRootPath}/B/b.ts`,
+                content: "import { foo } from \"../B/b2\"; console.log(foo);"
+            };
+            const fileB2: File = {
+                path: `${projectRootPath}/B/b2.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configB: File = {
+                path: `${projectRootPath}/B/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "../A" }
+  ]
+}`
+            };
+            const files = [fileA, fileB, fileB2, configA, configB, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(fileA.path);
+            projectService.openClientFile(fileB.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert(knownProjects.length === 2, `Expected 2 projects but received ${knownProjects.length}`);
+            assert(knownProjects[0].files?.length === 3, `Expected project A to have 3 files but received ${knownProjects[0].files?.length}`);
+            assert(knownProjects[0].files?.every(
+                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
+                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
+                `Expected every file in project A to not be redirected.`
+            );
+            assert(knownProjects[1].files?.length === 4, `Expected project B to have 4 files but received ${knownProjects[1].files?.length}`);
+            assert(knownProjects[1].files?.every(
+                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
+                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
+                `Expected every file in project B to not be redirected.`
+            );
+
+            host.modifyFile(configA.path, `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "include": [
+      "**/*",
+      "../B/b2.ts"
+  ]
+}`);
+            const newKnownProjects = projectService.synchronizeProjectList(knownProjects.map(proj => proj.info!), /*includeProjectReferenceRedirectInfo*/ true);
+            assert(newKnownProjects[0].changes?.added.length === 1, `Expected b2.ts to be added to project A`);
+            assert(newKnownProjects[1].changes?.updatedRedirects?.length === 1, `Expected b2.ts to be updated in project B`);
+        });
+
         it("handles delayed directory watch invoke on file creation", () => {
             const projectRootPath = "/users/username/projects/project";
             const fileB: File = {
