@@ -805,17 +805,9 @@ namespace ts.server {
 
         /* @internal */
         getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean) {
-            const fileNames = this.getFileNames();
-            if (includeProjectReferenceRedirectInfo) {
-                return fileNames.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
-                    fileName,
-                    isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)
-                 }));
-            }
-
-            return fileNames.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
+            return this.getFileNames().map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName,
-                isSourceOfProjectReferenceRedirect: false
+                isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo && this.isSourceOfProjectReferenceRedirect(fileName)
              }));
         }
 
@@ -1319,9 +1311,9 @@ namespace ts.server {
         getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
             const includeProjectReferenceRedirectInfoIfRequested =
                 includeProjectReferenceRedirectInfo
-                    ? (files: Map<boolean>) => arrayFrom(files.keys(), (fileName: string): protocol.FileWithProjectReferenceRedirectInfo => ({
+                    ? (files: Map<boolean>) => arrayFrom(files.entries(), ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
                         fileName,
-                        isSourceOfProjectReferenceRedirect: files.get(fileName)! // fileName guaranteed to be in files
+                        isSourceOfProjectReferenceRedirect
                     }))
                     : (files: Map<boolean>) => arrayFrom(files.keys());
 
@@ -1364,20 +1356,20 @@ namespace ts.server {
                 const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
                 const updatedRedirects: protocol.FileWithProjectReferenceRedirectInfo[] = [];
 
-                forEachKey(currentFiles, id => {
-                    if (!lastReportedFileNames.has(id)) {
-                        added.set(id, currentFiles.get(id)!); // id guaranteed to be in currentFiles
+                forEachEntry(currentFiles, (isSourceOfProjectReferenceRedirect, fileName) => {
+                    if (!lastReportedFileNames.has(fileName)) {
+                        added.set(fileName, isSourceOfProjectReferenceRedirect);
                     }
-                    else if (includeProjectReferenceRedirectInfo && lastReportedFileNames.get(id) !== currentFiles.get(id)){
+                    else if (includeProjectReferenceRedirectInfo && isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)){
                         updatedRedirects.push({
-                            fileName: id,
-                            isSourceOfProjectReferenceRedirect: currentFiles.get(id)! // id guaranteed to be in currentFiles
+                            fileName,
+                            isSourceOfProjectReferenceRedirect
                         });
                     }
                 });
-                forEachKey(lastReportedFileNames, id => {
-                    if (!currentFiles.has(id)) {
-                        removed.set(id, lastReportedFileNames.get(id)!); // id guaranteed to be in lastReportedFileNames
+                forEachEntry(lastReportedFileNames, (isSourceOfProjectReferenceRedirect, fileName) => {
+                    if (!currentFiles.has(fileName)) {
+                        removed.set(fileName, isSourceOfProjectReferenceRedirect);
                     }
                 });
                 this.lastReportedFileNames = currentFiles;
@@ -1407,7 +1399,7 @@ namespace ts.server {
                 }));
                 const allFiles = projectFileNames.concat(externalFiles);
                 this.lastReportedFileNames = arrayToMap(
-                    projectFileNames.concat(externalFiles),
+                    allFiles,
                     info => info.fileName,
                     info => info.isSourceOfProjectReferenceRedirect
                 );
