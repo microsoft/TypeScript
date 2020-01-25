@@ -346,8 +346,6 @@ const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lin
 
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
-    const ESLINTRC_CI = ".eslintrc.ci.json";
-    const isCIEnv = cmdLineOptions.ci || process.env.CI === "true";
 
     const args = [
         "node_modules/eslint/bin/eslint",
@@ -357,13 +355,6 @@ const eslint = (folder) => async () => {
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
-
-    if (
-        isCIEnv &&
-        fs.existsSync(path.resolve(folder, ESLINTRC_CI))
-    ) {
-        args.push("--config", path.resolve(folder, ESLINTRC_CI));
-    }
 
     if (cmdLineOptions.fix) {
         args.push("--fix");
