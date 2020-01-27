@@ -716,6 +716,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocTemplateTag);
     }
 
+    /** Gets the JSDoc typedef tag for the node if present */
+    export function getJSDocTypedefTag(node: Node): JSDocTypedefTag | undefined {
+        return getFirstJSDocTag(node, isJSDocTypedefTag);
+    }
+
     /** Gets the JSDoc type tag for the node if present and valid */
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
         // We should have already issued an error if there were multiple type jsdocs, so just use the first one.

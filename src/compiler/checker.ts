@@ -7084,6 +7084,14 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
+            const jsDocTypeDefTag = getJSDocTypedefTag(declaration);
+            // The typedef is attached to a variable declaration, instead of specifying the name in the typedef itself
+            // This means that the variable declared references the typedef and should not be used in regular control
+            // flow of the program, only in jsdoc type references.
+            if (jsDocTypeDefTag && !jsDocTypeDefTag.name && isVariableDeclaration(declaration)) {
+                return neverType;
+            }
+
             if ((noImplicitAny || isInJSFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {

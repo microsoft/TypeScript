@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/index.js ===
+/** @typedef {{foo: number}} */
+export let a;
+>a : never
+
+/** @typedef {number} */
+let b;
+>b : never
+

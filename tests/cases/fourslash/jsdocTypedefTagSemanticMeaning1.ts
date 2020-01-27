@@ -9,4 +9,4 @@
 /////** @type {[|T|]} */
 ////const n = [|T|];
 
-verify.singleReferenceGroup("type T = number\nconst T: 1", "T");
+verify.singleReferenceGroup("type T = number\nconst T: never", "T");

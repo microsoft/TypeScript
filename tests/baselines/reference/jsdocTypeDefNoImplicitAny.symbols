@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/index.js ===
+/** @typedef {{foo: number}} */
+export let a;
+>a : Symbol(a, Decl(index.js, 1, 10), Decl(index.js, 0, 4))
+
+/** @typedef {number} */
+let b;
+>b : Symbol(b, Decl(index.js, 3, 3), Decl(index.js, 2, 4))
+
