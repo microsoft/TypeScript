@@ -2776,7 +2776,7 @@ namespace ts {
          */
         function getExpandoSymbol(symbol: Symbol): Symbol | undefined {
             const decl = symbol.valueDeclaration;
-            if (!decl || !isInJSFile(decl) || symbol.flags & SymbolFlags.TypeAlias) {
+            if (!decl || !isInJSFile(decl) || symbol.flags & SymbolFlags.TypeAlias || getExpandoInitializer(decl, /*isPrototypeAssignment*/ false)) {
                 return undefined;
             }
             const init = isVariableDeclaration(decl) ? getDeclaredExpandoInitializer(decl) : getAssignedExpandoInitializer(decl);
