@@ -2651,6 +2651,8 @@ namespace ts.Completions {
             case "`":
                 // Only automatically bring up completions if this is an opening quote.
                 return !!contextToken && isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
+            case "#":
+                return !!contextToken && isPrivateIdentifier(contextToken) && !!getContainingClass(contextToken);
             case "<":
                 // Opening JSX tag
                 return !!contextToken && contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
