@@ -49,13 +49,15 @@ namespace ts {
         ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2020.bigint", "lib.es2020.bigint.d.ts"],
+        ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
-        ["esnext.bigint", "lib.esnext.bigint.d.ts"]
+        ["esnext.bigint", "lib.es2020.bigint.d.ts"]
     ];
 
     /**
@@ -201,6 +203,14 @@ namespace ts {
             transpileOptionValue: undefined
         },
         {
+            name: "assumeChangesOnlyAffectDirectDependencies",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
+        },
+        {
             name: "locale",
             type: "string",
             category: Diagnostics.Advanced_Options,
@@ -291,7 +301,7 @@ namespace ts {
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_or_ESNEXT,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
         },
         {
             name: "module",
@@ -304,6 +314,7 @@ namespace ts {
                 umd: ModuleKind.UMD,
                 es6: ModuleKind.ES2015,
                 es2015: ModuleKind.ES2015,
+                es2020: ModuleKind.ES2020,
                 esnext: ModuleKind.ESNext
             }),
             affectsModuleResolution: true,
@@ -311,7 +322,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_or_ESNext,
+            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_es2020_or_ESNext,
         },
         {
             name: "lib",
@@ -460,6 +471,18 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Import_emit_helpers_from_tslib
+        },
+        {
+            name: "importsNotUsedAsValues",
+            type: createMapFromTemplate({
+                remove: ImportsNotUsedAsValues.Remove,
+                preserve: ImportsNotUsedAsValues.Preserve,
+                error: ImportsNotUsedAsValues.Error
+            }),
+            affectsEmit: true,
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
         },
         {
             name: "downlevelIteration",
@@ -720,12 +743,15 @@ namespace ts {
         {
             name: "experimentalDecorators",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
         },
         {
             name: "emitDecoratorMetadata",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
@@ -740,6 +766,7 @@ namespace ts {
         {
             name: "resolveJsonModule",
             type: "boolean",
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Include_modules_imported_with_json_extension
         },
@@ -795,6 +822,7 @@ namespace ts {
         {
             name: "noErrorTruncation",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_truncate_error_messages
         },
@@ -924,6 +952,7 @@ namespace ts {
         {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
@@ -945,6 +974,7 @@ namespace ts {
             name: "useDefineForClassFields",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },

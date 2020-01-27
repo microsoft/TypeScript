@@ -226,7 +226,7 @@ declare namespace FourSlashInterface {
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
-            description: string | DiagnosticIgnoredInterpolations,
+            description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
             newFileContent?: NewFileContent,
             newRangeContent?: string,
             errorCode?: number,
@@ -236,6 +236,7 @@ declare namespace FourSlashInterface {
             commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
+        codeFixAllAvailable(fixName: string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -383,6 +384,7 @@ declare namespace FourSlashInterface {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
         }): void;
+        baselineCallHierarchy(): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;

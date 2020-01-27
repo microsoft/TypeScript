@@ -1087,6 +1087,7 @@ namespace ts.server {
                 removed => this.detachScriptInfoFromProject(removed)
             );
             const elapsed = timestamp() - start;
+            this.projectService.sendUpdateGraphPerformanceEvent(elapsed);
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
                 this.print();

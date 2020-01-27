@@ -147,6 +147,12 @@ namespace FourSlash {
         return ts.ScriptSnapshot.fromString(sourceText);
     }
 
+    const enum CallHierarchyItemDirection {
+        Root,
+        Incoming,
+        Outgoing
+    }
+
     export class TestState {
         // Language service instance
         private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
@@ -248,7 +254,7 @@ namespace FourSlash {
                         const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
 
                         if (!tsConfig.errors || !tsConfig.errors.length) {
-                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
+                            compilationOptions = ts.extend(tsConfig.options, compilationOptions);
                         }
                     }
                     configFileName = file.fileName;
@@ -732,13 +738,18 @@ namespace FourSlash {
             }
 
             if (!range) {
-                this.raiseError(`goToDefinitionsAndBoundSpan failed - found a TextSpan ${JSON.stringify(defs.textSpan)} when it wasn't expected.`);
+                const marker = this.getMarkerByName(startMarkerName);
+                const startFile = marker.fileName;
+                const fileContent = this.getFileContent(startFile);
+                const spanContent = fileContent.slice(defs.textSpan.start, ts.textSpanEnd(defs.textSpan));
+                const spanContentWithMarker = spanContent.slice(0, marker.position - defs.textSpan.start) + `/*${startMarkerName}*/` + spanContent.slice(marker.position - defs.textSpan.start);
+                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
+                    .split(/\r?\n/).map(line => " ".repeat(6) + line).join(ts.sys.newLine);
+                this.raiseError(`goToDefinitionsAndBoundSpan failed. Found a starting TextSpan around '${spanContent}' in '${startFile}' (at position ${defs.textSpan.start}). `
+                    + `If this is the correct input span, put a fourslash range around it: \n\n${suggestedFileContent}\n`);
             }
-            else if (defs.textSpan.start !== range.pos || defs.textSpan.length !== range.end - range.pos) {
-                const expected: ts.TextSpan = {
-                    start: range.pos, length: range.end - range.pos
-                };
-                this.raiseError(`goToDefinitionsAndBoundSpan failed - expected to find TextSpan ${JSON.stringify(expected)} but got ${JSON.stringify(defs.textSpan)}`);
+            else {
+                this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
             }
         }
 
@@ -849,10 +860,10 @@ namespace FourSlash {
 
             if (kind !== undefined || kindModifiers !== undefined) {
                 if (actual.kind !== kind) {
-                    this.raiseError(`Unexpected kind for ${actual.name}: Expected ${kind}, actual ${actual.kind}`);
+                    this.raiseError(`Unexpected kind for ${actual.name}: Expected '${kind}', actual '${actual.kind}'`);
                 }
                 if (actual.kindModifiers !== (kindModifiers || "")) {
-                    this.raiseError(`Bad kind modifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
+                    this.raiseError(`Bad kindModifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
                 }
             }
 
@@ -1411,18 +1422,91 @@ namespace FourSlash {
 
         private alignmentForExtraInfo = 50;
 
-        private spanInfoToString(spanInfo: ts.TextSpan, prefixString: string) {
+        private spanLines(file: FourSlashFile, spanInfo: ts.TextSpan, { selection = false, fullLines = false, lineNumbers = false } = {}) {
+            if (selection) {
+                fullLines = true;
+            }
+
+            let contextStartPos = spanInfo.start;
+            let contextEndPos = contextStartPos + spanInfo.length;
+            if (fullLines) {
+                if (contextStartPos > 0) {
+                    while (contextStartPos > 1) {
+                        const ch = file.content.charCodeAt(contextStartPos - 1);
+                        if (ch === ts.CharacterCodes.lineFeed || ch === ts.CharacterCodes.carriageReturn) {
+                            break;
+                        }
+                        contextStartPos--;
+                    }
+                }
+                if (contextEndPos < file.content.length) {
+                    while (contextEndPos < file.content.length - 1) {
+                        const ch = file.content.charCodeAt(contextEndPos);
+                        if (ch === ts.CharacterCodes.lineFeed || ch === ts.CharacterCodes.carriageReturn) {
+                            break;
+                        }
+                        contextEndPos++;
+                    }
+                }
+            }
+
+            let contextString: string;
+            let contextLineMap: number[];
+            let contextStart: ts.LineAndCharacter;
+            let contextEnd: ts.LineAndCharacter;
+            let selectionStart: ts.LineAndCharacter;
+            let selectionEnd: ts.LineAndCharacter;
+            let lineNumberPrefixLength: number;
+            if (lineNumbers) {
+                contextString = file.content;
+                contextLineMap = ts.computeLineStarts(contextString);
+                contextStart = ts.computeLineAndCharacterOfPosition(contextLineMap, contextStartPos);
+                contextEnd = ts.computeLineAndCharacterOfPosition(contextLineMap, contextEndPos);
+                selectionStart = ts.computeLineAndCharacterOfPosition(contextLineMap, spanInfo.start);
+                selectionEnd = ts.computeLineAndCharacterOfPosition(contextLineMap, ts.textSpanEnd(spanInfo));
+                lineNumberPrefixLength = (contextEnd.line + 1).toString().length + 2;
+            }
+            else {
+                contextString = file.content.substring(contextStartPos, contextEndPos);
+                contextLineMap = ts.computeLineStarts(contextString);
+                contextStart = { line: 0, character: 0 };
+                contextEnd = { line: contextLineMap.length - 1, character: 0 };
+                selectionStart = selection ? ts.computeLineAndCharacterOfPosition(contextLineMap, spanInfo.start - contextStartPos) : contextStart;
+                selectionEnd = selection ? ts.computeLineAndCharacterOfPosition(contextLineMap, ts.textSpanEnd(spanInfo) - contextStartPos) : contextEnd;
+                lineNumberPrefixLength = 0;
+            }
+
+            const output: string[] = [];
+            for (let lineNumber = contextStart.line; lineNumber <= contextEnd.line; lineNumber++) {
+                const spanLine = contextString.substring(contextLineMap[lineNumber], contextLineMap[lineNumber + 1]);
+                output.push(lineNumbers ? `${`${lineNumber + 1}: `.padStart(lineNumberPrefixLength, " ")}${spanLine}` : spanLine);
+                if (selection) {
+                    if (lineNumber < selectionStart.line || lineNumber > selectionEnd.line) {
+                        continue;
+                    }
+
+                    const isEmpty = selectionStart.line === selectionEnd.line && selectionStart.character === selectionEnd.character;
+                    const selectionPadLength = lineNumber === selectionStart.line ? selectionStart.character : 0;
+                    const selectionPad = " ".repeat(selectionPadLength + lineNumberPrefixLength);
+                    const selectionLength = isEmpty ? 0 : Math.max(lineNumber < selectionEnd.line ? spanLine.trimRight().length - selectionPadLength : selectionEnd.character - selectionPadLength, 1);
+                    const selectionLine = isEmpty ? "<" : "^".repeat(selectionLength);
+                    output.push(`${selectionPad}${selectionLine}`);
+                }
+            }
+            return output;
+        }
+
+        private spanInfoToString(spanInfo: ts.TextSpan, prefixString: string, file: FourSlashFile = this.activeFile) {
             let resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
-                const spanString = this.activeFile.content.substr(spanInfo.start, spanInfo.length);
-                const spanLineMap = ts.computeLineStarts(spanString);
-                for (let i = 0; i < spanLineMap.length; i++) {
+                const spanLines = this.spanLines(file, spanInfo);
+                for (let i = 0; i < spanLines.length; i++) {
                     if (!i) {
                         resultString += "\n";
                     }
-                    resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
+                    resultString += prefixString + spanLines[i];
                 }
-                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start) + ") to (" + this.getLineColStringAtPosition(ts.textSpanEnd(spanInfo)) + ")";
+                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start, file) + ") to (" + this.getLineColStringAtPosition(ts.textSpanEnd(spanInfo), file) + ")";
             }
 
             return resultString;
@@ -1701,13 +1785,13 @@ namespace FourSlash {
             Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
         }
 
-        private getBaselineFileNameForInternalFourslashFile() {
+        private getBaselineFileNameForInternalFourslashFile(ext = ".baseline") {
             return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
-                ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
+                ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ext);
         }
 
-        private getBaselineFileNameForContainingTestFile() {
-            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ".baseline");
+        private getBaselineFileNameForContainingTestFile(ext = ".baseline") {
+            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -2460,8 +2544,8 @@ namespace FourSlash {
 
         public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
             const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
-            ts.Debug.assert(fixWithId !== undefined, "No available code fix has that group id.", () =>
-                `Expected '${fixId}'. Available action ids: ${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId)}`);
+            ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
+                `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
             ts.Debug.assertEqual(fixWithId!.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
@@ -2489,6 +2573,10 @@ namespace FourSlash {
 
             if (typeof options.description === "string") {
                 assert.equal(action.description, options.description);
+            }
+            else if (Array.isArray(options.description)) {
+                const description = ts.formatStringFromArgs(options.description[0], options.description, 1);
+                assert.equal(action.description, description);
             }
             else {
                 assert.match(action.description, templateToRegExp(options.description.template));
@@ -2597,7 +2685,7 @@ namespace FourSlash {
             }
             const range = ts.firstOrUndefined(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixId === ts.codefix.importFixId);
+            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixName === ts.codefix.importFixName);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -2633,7 +2721,7 @@ namespace FourSlash {
             const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
                 includeCompletionsForModuleExports: true,
                 includeCompletionsWithInsertText: true
-            }, marker.position).filter(f => f.fixId === ts.codefix.importFixId);
+            }, marker.position).filter(f => f.fixName === ts.codefix.importFixName);
 
             const actualModuleSpecifiers = ts.mapDefined(codeFixes, fix => {
                 return ts.forEach(ts.flatMap(fix.changes, c => c.textChanges), c => {
@@ -2785,7 +2873,7 @@ namespace FourSlash {
 
         private verifyNavigationTreeOrBar(json: any, tree: any, name: "Tree" | "Bar", options: { checkSpans?: boolean } | undefined) {
             if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigation${name} failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+                this.raiseError(`verifyNavigation${name} failed - \n${showTextDiff(stringify(json), stringify(tree, replacer))}`);
             }
 
             function replacer(key: string, value: any) {
@@ -2957,6 +3045,26 @@ namespace FourSlash {
             else {
                 const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
                 this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            }
+        }
+
+        public verifyCodeFixAllAvailable(negative: boolean, fixName: string) {
+            const availableFixes = this.getCodeFixes(this.activeFile.fileName);
+            const hasFix = availableFixes.some(fix => fix.fixName === fixName && fix.fixId);
+            if (negative && hasFix) {
+                this.raiseError(`Expected not to find a fix with the name '${fixName}', but one exists.`);
+            }
+            else if (!negative && !hasFix) {
+                if (availableFixes.some(fix => fix.fixName === fixName)) {
+                    this.raiseError(`Found a fix with the name '${fixName}', but fix-all is not available.`);
+                }
+
+                this.raiseError(
+                    `Expected to find a fix with the name '${fixName}', but none exists.` +
+                    availableFixes.length
+                        ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
+                        : ""
+                );
             }
         }
 
@@ -3164,6 +3272,131 @@ namespace FourSlash {
             Harness.IO.log(stringify(codeFixes));
         }
 
+        private formatCallHierarchyItemSpan(file: FourSlashFile, span: ts.TextSpan, prefix: string, trailingPrefix = prefix) {
+            const startLc = this.languageServiceAdapterHost.positionToLineAndCharacter(file.fileName, span.start);
+            const endLc = this.languageServiceAdapterHost.positionToLineAndCharacter(file.fileName, ts.textSpanEnd(span));
+            const lines = this.spanLines(file, span, { fullLines: true, lineNumbers: true, selection: true });
+            let text = "";
+            text += `${prefix}╭ ${file.fileName}:${startLc.line + 1}:${startLc.character + 1}-${endLc.line + 1}:${endLc.character + 1}\n`;
+            for (const line of lines) {
+                text += `${prefix}│ ${line.trimRight()}\n`;
+            }
+            text += `${trailingPrefix}╰\n`;
+            return text;
+        }
+
+        private formatCallHierarchyItemSpans(file: FourSlashFile, spans: ts.TextSpan[], prefix: string, trailingPrefix = prefix) {
+            let text = "";
+            for (let i = 0; i < spans.length; i++) {
+                text += this.formatCallHierarchyItemSpan(file, spans[i], prefix, i < spans.length - 1 ? prefix : trailingPrefix);
+            }
+            return text;
+        }
+
+        private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: ts.Map<boolean>, prefix: string, trailingPrefix: string = prefix) {
+            const key = `${callHierarchyItem.file}|${JSON.stringify(callHierarchyItem.span)}|${direction}`;
+            const alreadySeen = seen.has(key);
+            seen.set(key, true);
+
+            const incomingCalls =
+                direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const :
+                alreadySeen ? { result: "seen" } as const :
+                { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+
+            const outgoingCalls =
+                direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const :
+                alreadySeen ? { result: "seen" } as const :
+                { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+
+            let text = "";
+            text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
+            text += `${prefix}├ kind: ${callHierarchyItem.kind}\n`;
+            text += `${prefix}├ file: ${callHierarchyItem.file}\n`;
+            text += `${prefix}├ span:\n`;
+            text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.span, `${prefix}│ `);
+            text += `${prefix}├ selectionSpan:\n`;
+            text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.selectionSpan, `${prefix}│ `,
+                incomingCalls.result !== "skip" || outgoingCalls.result !== "skip" ? `${prefix}│ ` :
+                `${trailingPrefix}╰ `);
+
+            if (incomingCalls.result === "seen") {
+                if (outgoingCalls.result === "skip") {
+                    text += `${trailingPrefix}╰ incoming: ...\n`;
+                }
+                else {
+                    text += `${prefix}├ incoming: ...\n`;
+                }
+            }
+            else if (incomingCalls.result === "show") {
+                if (!ts.some(incomingCalls.values)) {
+                    if (outgoingCalls.result === "skip") {
+                        text += `${trailingPrefix}╰ incoming: none\n`;
+                    }
+                    else {
+                        text += `${prefix}├ incoming: none\n`;
+                    }
+                }
+                else {
+                    text += `${prefix}├ incoming:\n`;
+                    for (let i = 0; i < incomingCalls.values.length; i++) {
+                        const incomingCall = incomingCalls.values[i];
+                        const file = this.findFile(incomingCall.from.file);
+                        text += `${prefix}│ ╭ from:\n`;
+                        text += this.formatCallHierarchyItem(file, incomingCall.from, CallHierarchyItemDirection.Incoming, seen, `${prefix}│ │ `);
+                        text += `${prefix}│ ├ fromSpans:\n`;
+                        text += this.formatCallHierarchyItemSpans(file, incomingCall.fromSpans, `${prefix}│ │ `,
+                            i < incomingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
+                            outgoingCalls.result !== "skip" ? `${prefix}│ ╰ ` :
+                            `${trailingPrefix}╰ ╰ `);
+                    }
+                }
+            }
+
+            if (outgoingCalls.result === "seen") {
+                text += `${trailingPrefix}╰ outgoing: ...\n`;
+            }
+            else if (outgoingCalls.result === "show") {
+                if (!ts.some(outgoingCalls.values)) {
+                    text += `${trailingPrefix}╰ outgoing: none\n`;
+                }
+                else {
+                    text += `${prefix}├ outgoing:\n`;
+                    for (let i = 0; i < outgoingCalls.values.length; i++) {
+                        const outgoingCall = outgoingCalls.values[i];
+                        text += `${prefix}│ ╭ to:\n`;
+                        text += this.formatCallHierarchyItem(this.findFile(outgoingCall.to.file), outgoingCall.to, CallHierarchyItemDirection.Outgoing, seen, `${prefix}│ │ `);
+                        text += `${prefix}│ ├ fromSpans:\n`;
+                        text += this.formatCallHierarchyItemSpans(file, outgoingCall.fromSpans, `${prefix}│ │ `,
+                            i < outgoingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
+                            `${trailingPrefix}╰ ╰ `);
+                    }
+                }
+            }
+            return text;
+        }
+
+        private formatCallHierarchy(callHierarchyItem: ts.CallHierarchyItem | undefined) {
+            let text = "";
+            if (callHierarchyItem) {
+                const file = this.findFile(callHierarchyItem.file);
+                text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, ts.createMap(), "");
+            }
+            return text;
+        }
+
+        public baselineCallHierarchy() {
+            const baselineFile = this.getBaselineFileNameForContainingTestFile(".callHierarchy.txt");
+            const callHierarchyItem = this.languageService.prepareCallHierarchy(this.activeFile.fileName, this.currentCaretPosition);
+            const text = callHierarchyItem ? ts.mapOneOrMany(callHierarchyItem, item => this.formatCallHierarchy(item), result => result.join("")) : "none";
+            Harness.Baseline.runBaseline(baselineFile, text);
+        }
+
+        private assertTextSpanEqualsRange(span: ts.TextSpan, range: Range, message?: string) {
+            if (!textSpanEqualsRange(span, range)) {
+                this.raiseError(`${prefixMessage(message)}Expected to find TextSpan ${JSON.stringify({ start: range.pos, length: range.end - range.pos })} but got ${JSON.stringify(span)} instead.`);
+            }
+        }
+
         private getLineContent(index: number) {
             const text = this.getFileContent(this.activeFile.fileName);
             const pos = this.languageServiceAdapterHost.lineAndCharacterToPosition(this.activeFile.fileName, { line: index, character: 0 });
@@ -3243,8 +3476,8 @@ namespace FourSlash {
             return this.tryFindFileWorker(name).file !== undefined;
         }
 
-        private getLineColStringAtPosition(position: number) {
-            const pos = this.languageServiceAdapterHost.positionToLineAndCharacter(this.activeFile.fileName, position);
+        private getLineColStringAtPosition(position: number, file: FourSlashFile = this.activeFile) {
+            const pos = this.languageServiceAdapterHost.positionToLineAndCharacter(file.fileName, position);
             return `line ${(pos.line + 1)}, col ${pos.character}`;
         }
 
@@ -3295,6 +3528,14 @@ namespace FourSlash {
         public configurePlugin(pluginName: string, configuration: any): void {
             (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
         }
+    }
+
+    function prefixMessage(message: string | undefined) {
+        return message ? `${message} - ` : "";
+    }
+
+    function textSpanEqualsRange(span: ts.TextSpan, range: Range) {
+        return span.start === range.pos && span.length === range.end - range.pos;
     }
 
     function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {

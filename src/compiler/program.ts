@@ -571,14 +571,14 @@ namespace ts {
             return false;
         }
 
-        // If number of files in the program do not match, it is not up-to-date
-        if (program.getRootFileNames().length !== rootFileNames.length) {
+        // If root file names don't match
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
             return false;
         }
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
-        // If project references dont match
+        // If project references don't match
         if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
         }
@@ -853,7 +853,7 @@ namespace ts {
                             }
                             else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 for (const fileName of parsedRef.commandLine.fileNames) {
-                                    if (!fileExtensionIs(fileName, Extension.Dts)) {
+                                    if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
                                         processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames()), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                                     }
                                 }
@@ -933,6 +933,7 @@ namespace ts {
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
             getRefFileMap: () => refFileMap,
+            getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
@@ -1422,21 +1423,25 @@ namespace ts {
             refFileMap = oldProgram.getRefFileMap();
 
             // update fileName -> file mapping
+            Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
             for (const newSourceFile of newSourceFiles) {
-                const filePath = newSourceFile.path;
-                addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
-                if (useSourceOfProjectReferenceRedirect) {
-                    const redirectProject = getProjectReferenceRedirectProject(newSourceFile.fileName);
-                    if (redirectProject && !(redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out)) {
-                        const redirect = getProjectReferenceOutputName(redirectProject, newSourceFile.fileName);
-                        addFileToFilesByName(newSourceFile, toPath(redirect), /*redirectedPath*/ undefined);
-                    }
-                }
-                // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(newSourceFile.resolvedPath)!)) {
-                    sourceFilesFoundSearchingNodeModules.set(filePath, true);
-                }
+                filesByName.set(newSourceFile.path, newSourceFile);
             }
+            const oldFilesByNameMap = oldProgram.getFilesByNameMap();
+            oldFilesByNameMap.forEach((oldFile, path) => {
+                if (!oldFile) {
+                    filesByName.set(path, oldFile);
+                    return;
+                }
+                if (oldFile.path === path) {
+                    // Set the file as found during node modules search if it was found that way in old progra,
+                    if (oldProgram!.isSourceFileFromExternalLibrary(oldFile)) {
+                        sourceFilesFoundSearchingNodeModules.set(oldFile.path, true);
+                    }
+                    return;
+                }
+                filesByName.set(path, filesByName.get(oldFile.path));
+            });
 
             files = newSourceFiles;
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
@@ -1815,6 +1820,18 @@ namespace ts {
                     }
 
                     switch (node.kind) {
+                        case SyntaxKind.ImportClause:
+                            if ((node as ImportClause).isTypeOnly) {
+                                diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                return;
+                            }
+                            break;
+                        case SyntaxKind.ExportDeclaration:
+                            if ((node as ExportDeclaration).isTypeOnly) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
+                                return;
+                            }
+                            break;
                         case SyntaxKind.ImportEqualsDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                             return;
@@ -1832,7 +1849,9 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.InterfaceDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.Interface_declaration_cannot_have_implements_clause));
+                            const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
+                            Debug.assertDefined(interfaceKeyword);
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
                             return;
                         case SyntaxKind.ModuleDeclaration:
                             const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
@@ -2481,8 +2500,8 @@ namespace ts {
         }
 
         function getProjectReferenceRedirectProject(fileName: string) {
-            // Ignore dts
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts)) {
+            // Ignore dts or any json files
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts) || fileExtensionIs(fileName, Extension.Json)) {
                 return undefined;
             }
 
@@ -2543,7 +2562,7 @@ namespace ts {
                         }
                         else {
                             forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                if (!fileExtensionIs(fileName, Extension.Dts)) {
+                                if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
                                     const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
                                     mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
                                 }

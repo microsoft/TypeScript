@@ -1,0 +1,52 @@
+=== tests/cases/compiler/jsFileESModuleWithEnumTag.js ===
+export {}; // mark as module
+/** @enum {number} */
+const ChangeDetectionStrategy = {
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>{  OnPush: 0,  Default: 1,} : { OnPush: number; Default: number; }
+
+  OnPush: 0,
+>OnPush : number
+>0 : 0
+
+  Default: 1,
+>Default : number
+>1 : 1
+
+};
+ChangeDetectionStrategy[ChangeDetectionStrategy.OnPush] = 'OnPush';
+>ChangeDetectionStrategy[ChangeDetectionStrategy.OnPush] = 'OnPush' : "OnPush"
+>ChangeDetectionStrategy[ChangeDetectionStrategy.OnPush] : error
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>ChangeDetectionStrategy.OnPush : number
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>OnPush : number
+>'OnPush' : "OnPush"
+
+ChangeDetectionStrategy[ChangeDetectionStrategy.Default] = 'Default';
+>ChangeDetectionStrategy[ChangeDetectionStrategy.Default] = 'Default' : "Default"
+>ChangeDetectionStrategy[ChangeDetectionStrategy.Default] : error
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>ChangeDetectionStrategy.Default : number
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>Default : number
+>'Default' : "Default"
+
+Object.defineProperty(ChangeDetectionStrategy, "aField", {value: 42});
+>Object.defineProperty(ChangeDetectionStrategy, "aField", {value: 42}) : any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object : ObjectConstructor
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>"aField" : "aField"
+>{value: 42} : { value: number; }
+>value : number
+>42 : 42
+
+/** @type {number} */
+ChangeDetectionStrategy["bField"];
+>ChangeDetectionStrategy["bField"] : error
+>ChangeDetectionStrategy : { OnPush: number; Default: number; }
+>"bField" : "bField"
+
+

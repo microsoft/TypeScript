@@ -185,7 +185,7 @@ namespace ts.codefix {
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
-            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
@@ -310,11 +310,10 @@ namespace ts.codefix {
         return undefined;
     }
 
-    export function setJsonCompilerOptionValue(
+    export function setJsonCompilerOptionValues(
         changeTracker: textChanges.ChangeTracker,
         configFile: TsConfigSourceFile,
-        optionName: string,
-        optionValue: Expression,
+        options: [string, Expression][]
     ) {
         const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
         if (!tsconfigObjectLiteral) return undefined;
@@ -323,9 +322,7 @@ namespace ts.codefix {
         if (compilerOptionsProperty === undefined) {
             changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
                 "compilerOptions",
-                createObjectLiteral([
-                    createJsonPropertyAssignment(optionName, optionValue),
-                ])));
+                createObjectLiteral(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
             return;
         }
 
@@ -334,14 +331,24 @@ namespace ts.codefix {
             return;
         }
 
-        const optionProperty = findJsonProperty(compilerOptions, optionName);
+        for (const [optionName, optionValue] of options) {
+            const optionProperty = findJsonProperty(compilerOptions, optionName);
+            if (optionProperty === undefined) {
+                changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
+            }
+            else {
+                changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
+            }
+        }
+    }
 
-        if (optionProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
-        }
-        else {
-            changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
-        }
+    export function setJsonCompilerOptionValue(
+        changeTracker: textChanges.ChangeTracker,
+        configFile: TsConfigSourceFile,
+        optionName: string,
+        optionValue: Expression,
+    ) {
+        setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
     }
 
     export function createJsonPropertyAssignment(name: string, initializer: Expression) {

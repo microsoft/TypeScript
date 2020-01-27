@@ -477,7 +477,7 @@ export class E<T, U> {
      * @type {string}
      * @readonly
      */
-    static staticReadonlyField: string;
+    static readonly staticReadonlyField: string;
     static staticInitializedField: number;
     /**
      * @param {string} _p
@@ -508,7 +508,7 @@ export class E<T, U> {
      * @type {T & U}
      * @readonly
      */
-    readonlyField: T & U;
+    readonly readonlyField: T & U;
     initializedField: number;
     /**
      * @param {U} _p

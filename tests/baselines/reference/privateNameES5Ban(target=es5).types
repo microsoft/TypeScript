@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts ===
+class A {
+>A : A
+
+    constructor() {}
+    #field = 123;
+>#field : number
+>123 : 123
+
+    #method() {}
+>#method : () => void
+
+    static #sField = "hello world";
+>#sField : string
+>"hello world" : "hello world"
+
+    static #sMethod() {}
+>#sMethod : () => void
+
+    get #acc() { return ""; }
+>#acc : string
+>"" : ""
+
+    set #acc(x: string) {}
+>#acc : string
+>x : string
+
+    static get #sAcc() { return 0; }
+>#sAcc : number
+>0 : 0
+
+    static set #sAcc(x: number) {}
+>#sAcc : number
+>x : number
+}
+
+

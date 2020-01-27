@@ -630,10 +630,18 @@ namespace ts {
         return [...array1, ...array2];
     }
 
+    function selectIndex(_: unknown, i: number) {
+        return i;
+    }
+
+    export function indicesOf(array: readonly unknown[]): number[] {
+        return array.map(selectIndex);
+    }
+
     function deduplicateRelational<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
 
         let last = array[indices[0]];
@@ -939,7 +947,7 @@ namespace ts {
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
         return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
@@ -1245,8 +1253,10 @@ namespace ts {
         return result;
     }
 
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+    export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
     export function clone<T>(object: T): T {
@@ -1259,6 +1269,11 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
+     *
+     * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
+     */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {
@@ -1497,6 +1512,13 @@ namespace ts {
      */
     export function compareValues(a: number | undefined, b: number | undefined): Comparison {
         return compareComparableValues(a, b);
+    }
+
+    /**
+     * Compare two TextSpans, first by `start`, then by `length`.
+     */
+    export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<TextSpan> | undefined): Comparison {
+        return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
     }
 
     export function min<T>(a: T, b: T, compare: Comparer<T>): T {
@@ -1904,10 +1926,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
-        return arg => {
+    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+        return (...args) => {
             for (const f of fs) {
-                if (f(arg)) {
+                if (f(...args)) {
                     return true;
                 }
             }

@@ -1,0 +1,35 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(2,5): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(6,5): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(10,5): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(12,9): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(16,28): error TS18016: Private identifiers are not allowed outside class bodies.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts (5 errors) ====
+    type A = {
+        #foo: string
+        ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    
+    interface B {
+        #foo: string;
+        ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    
+    declare const x: {
+        #foo: number;
+        ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+        bar: {
+            #baz: string;
+            ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+        }
+    };
+    
+    declare const y: [{ qux: { #quux: 3 } }];
+                               ~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    
