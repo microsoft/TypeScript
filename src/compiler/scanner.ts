@@ -1907,11 +1907,12 @@ namespace ts {
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
                             }
-                            return token = SyntaxKind.PrivateIdentifier;
                         }
-                        error(Diagnostics.Invalid_character);
-                        // no `pos++` because already advanced past the '#'
-                        return token = SyntaxKind.Unknown;
+                        else {
+                            tokenValue = "#";
+                            error(Diagnostics.Invalid_character);
+                        }
+                        return token = SyntaxKind.PrivateIdentifier;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
                             pos += charSize(ch);
