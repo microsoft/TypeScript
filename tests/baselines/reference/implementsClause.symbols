@@ -1,0 +1,14 @@
+=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+export interface Component {}
+>Component : Symbol(Component, Decl(types.ts, 0, 0))
+
+=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+import type * as types from './types';
+>types : Symbol(types, Decl(index.ts, 0, 11))
+
+class C implements types.Component {}
+>C : Symbol(C, Decl(index.ts, 0, 38))
+>types.Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+>types : Symbol(types, Decl(index.ts, 0, 11))
+>Component : Symbol(types.Component, Decl(types.ts, 0, 0))
+

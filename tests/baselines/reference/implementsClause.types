@@ -1,0 +1,11 @@
+=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+export interface Component {}
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+import type * as types from './types';
+>types : typeof types
+
+class C implements types.Component {}
+>C : C
+>types : typeof types
+
