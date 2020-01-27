@@ -3630,6 +3630,7 @@ namespace ts {
         UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
         OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
+        UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
@@ -3672,6 +3673,7 @@ namespace ts {
         OmitParameterModifiers                  = 1 << 13, // Omit modifiers on parameters
 
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
+        UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -3690,7 +3692,8 @@ namespace ts {
 
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
-            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
+            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
+            UseSingleQuotesForStringLiteralType,
     }
 
     export const enum SymbolFormatFlags {
