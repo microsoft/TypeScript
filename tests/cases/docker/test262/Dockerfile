@@ -16,4 +16,4 @@ ENTRYPOINT [ "test262-harness" ]
 # In such cases, it's probably better to run the container interactively, with `docker run -it --entrypoint "/bin/sh" tstest/test262`
 # and then execute the `test262-harness` commands interactively.
 # Run tests
-CMD [ "test/**/*.js", "--threads", "1", "--hostType", "node", "--hostPath", "/.node/node-v0.10.48-linux-x64/bin/node", "--transformer", "../typescript.js" ]
+CMD [ "test/language/**/*.js", "--threads", "1", "--hostType", "node", "--hostPath", "/.node/node-v0.10.48-linux-x64/bin/node", "--transformer", "../typescript.js" ]
