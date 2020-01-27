@@ -308,18 +308,24 @@ namespace ts {
             return primaryResult;
         }
 
-        function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-            names: readonly string[],
-            containingFile: string,
-            redirectedReference: ResolvedProjectReference | undefined,
-            cache: Map<Map<T>>,
-            perDirectoryCacheWithRedirects: CacheWithRedirects<Map<T>>,
-            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T,
-            getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
-            shouldRetryResolution: (t: T) => boolean,
-            reusedNames: readonly string[] | undefined,
-            logChanges: boolean): (R | undefined)[] {
-
+        interface ResolveNamesWithLocalCacheInput<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
+            names: readonly string[];
+            containingFile: string;
+            redirectedReference: ResolvedProjectReference | undefined;
+            cache: Map<Map<T>>;
+            perDirectoryCacheWithRedirects: CacheWithRedirects<Map<T>>;
+            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T;
+            getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
+            shouldRetryResolution: (t: T) => boolean;
+            reusedNames?: readonly string[];
+            logChanges?: boolean;
+        }
+        function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
+            names, containingFile, redirectedReference,
+            cache, perDirectoryCacheWithRedirects,
+            loader, getResolutionWithResolvedFileName,
+            shouldRetryResolution, reusedNames, logChanges
+        }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
             const path = resolutionHost.toPath(containingFile);
             const resolutionsInFile = cache.get(path) || cache.set(path, createMap()).get(path)!;
             const dirPath = getDirectoryPath(path);
@@ -404,23 +410,31 @@ namespace ts {
         }
 
         function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
-            return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>(
-                typeDirectiveNames, containingFile, redirectedReference,
-                resolvedTypeReferenceDirectives, perDirectoryResolvedTypeReferenceDirectives,
-                resolveTypeReferenceDirective, getResolvedTypeReferenceDirective,
-                /*shouldRetryResolution*/ resolution => resolution.resolvedTypeReferenceDirective === undefined,
-                /*reusedNames*/ undefined, /*logChanges*/ false
-            );
+            return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
+                names: typeDirectiveNames,
+                containingFile,
+                redirectedReference,
+                cache: resolvedTypeReferenceDirectives,
+                perDirectoryCacheWithRedirects: perDirectoryResolvedTypeReferenceDirectives,
+                loader: resolveTypeReferenceDirective,
+                getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
+                shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
+            });
         }
 
         function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference?: ResolvedProjectReference): (ResolvedModuleFull | undefined)[] {
-            return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>(
-                moduleNames, containingFile, redirectedReference,
-                resolvedModuleNames, perDirectoryResolvedModuleNames,
-                resolveModuleName, getResolvedModule,
-                /*shouldRetryResolution*/ resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
-                reusedNames, logChangesWhenResolvingModule
-            );
+            return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>({
+                names: moduleNames,
+                containingFile,
+                redirectedReference,
+                cache: resolvedModuleNames,
+                perDirectoryCacheWithRedirects: perDirectoryResolvedModuleNames,
+                loader: resolveModuleName,
+                getResolutionWithResolvedFileName: getResolvedModule,
+                shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
+                reusedNames,
+                logChanges: logChangesWhenResolvingModule
+            });
         }
 
         function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): CachedResolvedModuleWithFailedLookupLocations | undefined {
