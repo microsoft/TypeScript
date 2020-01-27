@@ -22,21 +22,6 @@ namespace ts {
         All = Value | Type | Namespace
     }
 
-    export function getMeaningFromSymbol(symbol: Symbol, checker: TypeChecker): SemanticMeaning {
-        const flags = skipAlias(symbol, checker).flags;
-        let meaning = SemanticMeaning.None;
-        if (flags & SymbolFlags.Type) {
-            meaning |= SemanticMeaning.Type;
-        }
-        if (flags & SymbolFlags.Namespace) {
-            meaning |= SemanticMeaning.Namespace;
-        }
-        if (flags & SymbolFlags.Value) {
-            meaning |= SemanticMeaning.Value;
-        }
-        return meaning;
-    }
-
     export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
