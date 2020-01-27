@@ -2767,7 +2767,7 @@ namespace ts {
                 return undefined;
             }
             const init = isVariableDeclaration(decl) ? getDeclaredExpandoInitializer(decl) : getAssignedExpandoInitializer(decl);
-            if (init) {
+            if (init && init !== decl as unknown as Expression) {
                 const initSymbol = getSymbolOfNode(init);
                 if (initSymbol) {
                     return mergeJSSymbols(initSymbol, symbol);
