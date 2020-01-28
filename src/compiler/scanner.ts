@@ -2073,6 +2073,13 @@ namespace ts {
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
+
+                // newlines are OK
+                if (!isWhiteSpaceSingleLine(char)) {
+                    // console.log(text.charAt(pos));
+                    lastNonWhitespace = pos;
+                }
+
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2084,6 +2091,8 @@ namespace ts {
                     }
                     break;
                 }
+
+                if (lastNonWhitespace > 0) lastNonWhitespace++;
 
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
@@ -2098,18 +2107,12 @@ namespace ts {
                     firstNonWhitespace = pos;
                 }
 
-                // newlines are OK
-                if (!isWhiteSpaceLike(char)) {
-                    // console.log(text.charAt(pos));
-                    lastNonWhitespace = pos + 1;
-                }
-
                 pos++;
             }
 
             const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
             tokenValue = text.substring(startPos, endPosition);
-            pos = endPosition;
+            // pos = endPosition;
 
             // console.log("one: '" + text.substring(startPos, pos) + "'");
             // console.log("two: '" + tokenValue + "'");
