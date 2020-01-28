@@ -1431,6 +1431,176 @@ var x = 10;`
             host.checkTimeoutQueueLength(0);
         });
 
+        it("synchronizeProjectList provides redirect info when requested", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileA: File = {
+                path: `${projectRootPath}/A/a.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configA: File = {
+                path: `${projectRootPath}/A/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  }
+}`
+            };
+            const fileB: File = {
+                path: `${projectRootPath}/B/b.ts`,
+                content: "import { foo } from \"../A/a\"; console.log(foo);"
+            };
+            const configB: File = {
+                path: `${projectRootPath}/B/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "../A" }
+  ]
+}`
+            };
+            const files = [fileA, fileB, configA, configB, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(fileA.path);
+            projectService.openClientFile(fileB.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert.deepEqual(knownProjects[0].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: configA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(knownProjects[1].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: true,
+                },
+                {
+                    fileName: fileB.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: configB.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+        });
+
+        it("synchronizeProjectList provides updates to redirect info when requested", () => {
+            const projectRootPath = "/users/username/projects/project";
+            const fileA: File = {
+                path: `${projectRootPath}/A/a.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configA: File = {
+                path: `${projectRootPath}/A/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  }
+}`
+            };
+            const fileB: File = {
+                path: `${projectRootPath}/B/b.ts`,
+                content: "import { foo } from \"../B/b2\"; console.log(foo);"
+            };
+            const fileB2: File = {
+                path: `${projectRootPath}/B/b2.ts`,
+                content: "export const foo: string = 5;"
+            };
+            const configB: File = {
+                path: `${projectRootPath}/B/tsconfig.json`,
+                content: `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "references": [
+    { "path": "../A" }
+  ]
+}`
+            };
+            const files = [fileA, fileB, fileB2, configA, configB, libFile];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(fileA.path);
+            projectService.openClientFile(fileB.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert.deepEqual(knownProjects[0].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: configA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(knownProjects[1].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: fileB.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: configB.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+
+            host.modifyFile(configA.path, `{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "include": [
+      "**/*",
+      "../B/b2.ts"
+  ]
+}`);
+            const newKnownProjects = projectService.synchronizeProjectList(knownProjects.map(proj => proj.info!), /*includeProjectReferenceRedirectInfo*/ true);
+            assert.deepEqual(newKnownProjects[0].changes?.added, [
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(newKnownProjects[1].changes?.updatedRedirects, [
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: true
+                }
+            ]);
+        });
+
         it("handles delayed directory watch invoke on file creation", () => {
             const projectRootPath = "/users/username/projects/project";
             const fileB: File = {
