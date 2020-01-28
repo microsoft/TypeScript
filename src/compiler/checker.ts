@@ -3378,7 +3378,7 @@ namespace ts {
                         // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
                         // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
                         // to one another anyway)
-                        if (result = callback(sym.exports || emptySymbols)) {
+                        if (result = callback(sym?.exports || emptySymbols)) {
                             return result;
                         }
                         break;
@@ -6134,7 +6134,7 @@ namespace ts {
                 }
 
                 function getDeclarationWithTypeAnnotation(symbol: Symbol) {
-                    return find(symbol.declarations, s => !!getEffectiveTypeAnnotationNode(s) && !!findAncestor(s, n => n === enclosingDeclaration));
+                    return symbol.declarations && find(symbol.declarations, s => !!getEffectiveTypeAnnotationNode(s) && !!findAncestor(s, n => n === enclosingDeclaration));
                 }
 
                 /**
