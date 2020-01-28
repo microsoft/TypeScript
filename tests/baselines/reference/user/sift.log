@@ -1,6 +1,16 @@
 Exit Code: 1
 Standard output:
-node_modules/sift/index.d.ts(80,15): error TS2307: Cannot find module './core'.
+node_modules/sift/lib/core.d.ts(14,5): error TS2411: Property '$elemMatch' of type 'Query | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(15,5): error TS2411: Property '$lt' of type 'number | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(16,5): error TS2411: Property '$gt' of type 'number | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(17,5): error TS2411: Property '$lte' of type 'number | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(18,5): error TS2411: Property '$gte' of type 'number | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(19,5): error TS2411: Property '$mod' of type '[number, number] | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(20,5): error TS2411: Property '$exists' of type 'boolean | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(21,5): error TS2411: Property '$regex' of type 'string | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(22,5): error TS2411: Property '$options' of type '"i" | "u" | "g" | "m" | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(24,5): error TS2411: Property '$or' of type 'Query[] | undefined' is not assignable to string index type 'Object | Query'.
+node_modules/sift/lib/core.d.ts(25,5): error TS2411: Property '$nor' of type 'Query[] | undefined' is not assignable to string index type 'Object | Query'.
 
 
 

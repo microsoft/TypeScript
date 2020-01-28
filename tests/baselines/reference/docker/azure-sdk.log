@@ -150,18 +150,18 @@ npm ERR! This is probably not a problem with npm. There is likely additional log
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ================================
-Error: Project(s) failed to build
+Error: Project(s) failed
 rush rebuild - Errors! ( ? seconds)
 
 
 
 Standard error:
 
-XX of XX: [@azure/app-configuration] failed to build!
+XX of XX: [@azure/app-configuration] failed!
 XX of XX: [@azure/cosmos] completed with warnings in ? seconds
-XX of XX: [@azure/eventhubs-checkpointstore-blob] failed to build!
-XX of XX: [@azure/keyvault-certificates] failed to build!
-XX of XX: [@azure/storage-file-datalake] failed to build!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] failed!
+XX of XX: [@azure/keyvault-certificates] failed!
+XX of XX: [@azure/storage-file-datalake] failed!
 [@azure/app-configuration] Returned error code: 2
 [@azure/eventhubs-checkpointstore-blob] Returned error code: 2
 [@azure/keyvault-certificates] Returned error code: 2
