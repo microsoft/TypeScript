@@ -2766,13 +2766,14 @@ namespace ts {
             node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
     }
 
-    export function getTypeOnlyAliasDeclarationFromName(node: Identifier): TypeOnlyCompatibleAliasDeclaration | undefined {
+    export function getAliasDeclarationFromName(node: Identifier): Declaration | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ExportSpecifier:
-                return node.parent as TypeOnlyCompatibleAliasDeclaration;
+            case SyntaxKind.ExportAssignment:
+                return node.parent as Declaration;
         }
     }
 
