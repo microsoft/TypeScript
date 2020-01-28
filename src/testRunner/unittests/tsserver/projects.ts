@@ -1468,18 +1468,38 @@ var x = 10;`
             projectService.openClientFile(fileA.path);
             projectService.openClientFile(fileB.path);
             const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
-            assert(knownProjects.length === 2, `Expected 2 projects but received ${knownProjects.length}`);
-            assert(knownProjects[0].files?.length === 3, `Expected project A to have 3 files but received ${knownProjects[0].files?.length}`);
-            assert(knownProjects[0].files?.every(
-                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
-                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
-                `Expected every file in project A to not be redirected.`
-            );
-            assert(knownProjects[1].files?.length === 4, `Expected project B to have 4 files but received ${knownProjects[1].files?.length}`);
-            knownProjects[1].files?.forEach(
-                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
-                    assert(typeof file === "object" && (!file.isSourceOfProjectReferenceRedirect || file.fileName === fileA.path))
-            );
+            assert.deepEqual(knownProjects[0].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: configA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(knownProjects[1].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: true,
+                },
+                {
+                    fileName: fileB.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: configB.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
         });
 
         it("synchronizeProjectList provides updates to redirect info when requested", () => {
@@ -1523,19 +1543,38 @@ var x = 10;`
             projectService.openClientFile(fileA.path);
             projectService.openClientFile(fileB.path);
             const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
-            assert(knownProjects.length === 2, `Expected 2 projects but received ${knownProjects.length}`);
-            assert(knownProjects[0].files?.length === 3, `Expected project A to have 3 files but received ${knownProjects[0].files?.length}`);
-            assert(knownProjects[0].files?.every(
-                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
-                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
-                `Expected every file in project A to not be redirected.`
-            );
-            assert(knownProjects[1].files?.length === 4, `Expected project B to have 4 files but received ${knownProjects[1].files?.length}`);
-            assert(knownProjects[1].files?.every(
-                (file: string | protocol.FileWithProjectReferenceRedirectInfo) =>
-                    typeof file === "object" && !file.isSourceOfProjectReferenceRedirect),
-                `Expected every file in project B to not be redirected.`
-            );
+            assert.deepEqual(knownProjects[0].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: configA.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(knownProjects[1].files, [
+                {
+                    fileName: libFile.path,
+                    isSourceOfProjectReferenceRedirect: false
+                },
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: fileB.path,
+                    isSourceOfProjectReferenceRedirect: false,
+                },
+                {
+                    fileName: configB.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
 
             host.modifyFile(configA.path, `{
   "compilerOptions": {
@@ -1548,8 +1587,18 @@ var x = 10;`
   ]
 }`);
             const newKnownProjects = projectService.synchronizeProjectList(knownProjects.map(proj => proj.info!), /*includeProjectReferenceRedirectInfo*/ true);
-            assert(newKnownProjects[0].changes?.added.length === 1, `Expected b2.ts to be added to project A`);
-            assert(newKnownProjects[1].changes?.updatedRedirects?.length === 1, `Expected b2.ts to be updated in project B`);
+            assert.deepEqual(newKnownProjects[0].changes?.added, [
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: false
+                }
+            ]);
+            assert.deepEqual(newKnownProjects[1].changes?.updatedRedirects, [
+                {
+                    fileName: fileB2.path,
+                    isSourceOfProjectReferenceRedirect: true
+                }
+            ]);
         });
 
         it("handles delayed directory watch invoke on file creation", () => {
