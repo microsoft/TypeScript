@@ -16135,9 +16135,9 @@ namespace ts {
                 ) {
                     const privateIdentifierDescription = unmatchedProperty.valueDeclaration.name.escapedText;
                     const symbolTableKey = getSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription);
-                    if (symbolTableKey && !!getPropertyOfType(source, symbolTableKey)) {
+                    if (symbolTableKey && getPropertyOfType(source, symbolTableKey)) {
                         const sourceName = source.symbol.valueDeclaration.name;
-                        const targetName = isClassDeclaration(target.symbol.valueDeclaration) ? target.symbol.valueDeclaration.name : undefined;
+                        const targetName = target.symbol.valueDeclaration && isClassDeclaration(target.symbol.valueDeclaration) ? target.symbol.valueDeclaration.name : undefined;
                         reportError(
                             Diagnostics.Property_0_in_type_1_refers_to_a_different_member_that_cannot_be_accessed_from_within_type_2,
                             diagnosticName(privateIdentifierDescription),
