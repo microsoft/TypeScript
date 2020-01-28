@@ -4040,7 +4040,6 @@ namespace ts {
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
-        /* @internal */ checker?: TypeChecker;  // TypeChecker that created the symbol (if the symbol is Transient)
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
@@ -4120,7 +4119,6 @@ namespace ts {
 
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
-        checker: TypeChecker;
         checkFlags: CheckFlags;
     }
 

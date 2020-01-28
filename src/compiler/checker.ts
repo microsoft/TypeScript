@@ -317,6 +317,21 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
+        const globals = createSymbolTable();
+        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
+        undefinedSymbol.declarations = [];
+
+        const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
+        globalThisSymbol.exports = globals;
+        globalThisSymbol.declarations = [];
+        globals.set(globalThisSymbol.escapedName, globalThisSymbol);
+
+        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
+        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+
+        /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
+        let apparentArgumentCount: number | undefined;
+
         // for public members that accept a Node or one of its subtypes, we must guard against
         // synthetic nodes created during transformations by calling `getParseTreeNode`.
         // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -336,14 +351,10 @@ namespace ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             isUnknownSymbol: symbol => symbol === unknownSymbol,
-            getMergedSymbol: symbol => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getMergedSymbol(symbol);
-            },
+            getMergedSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation: (symbol, location) => {
-                verifyTypeCheckerOfSymbol(symbol);
                 location = getParseTreeNode(location);
                 return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;
             },
@@ -352,20 +363,10 @@ namespace ts {
                 if (parameter === undefined) return Debug.fail("Cannot get symbols of a synthetic parameter that cannot be resolved to a parse-tree node.");
                 return getSymbolsOfParameterPropertyDeclaration(parameter, escapeLeadingUnderscores(parameterName));
             },
-            getDeclaredTypeOfSymbol: symbol => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getDeclaredTypeOfSymbol(symbol);
-            },
-            getPropertiesOfType: type => {
-                verifyTypeCheckerOfType(type);
-                return getPropertiesOfType(type);
-            },
-            getPropertyOfType: (type, name) => {
-                verifyTypeCheckerOfType(type);
-                return getPropertyOfType(type, escapeLeadingUnderscores(name));
-            },
+            getDeclaredTypeOfSymbol,
+            getPropertiesOfType,
+            getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
             getPrivateIdentifierPropertyOfType: (leftType: Type, name: string, location: Node) => {
-                verifyTypeCheckerOfType(leftType);
                 const node = getParseTreeNode(location);
                 if (!node) {
                     return undefined;
@@ -374,99 +375,33 @@ namespace ts {
                 const lexicallyScopedIdentifier = lookupSymbolForPrivateIdentifierDeclaration(propName, node);
                 return lexicallyScopedIdentifier ? getPrivateIdentifierPropertyOfType(leftType, lexicallyScopedIdentifier) : undefined;
             },
-            getTypeOfPropertyOfType: (type, name) => {
-                verifyTypeCheckerOfType(type);
-                return getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name));
-            },
-            getIndexInfoOfType: (type, kind) => {
-                verifyTypeCheckerOfType(type);
-                return getIndexInfoOfType(type, kind);
-            },
-            getSignaturesOfType: (type, kind) => {
-                verifyTypeCheckerOfType(type);
-                return getSignaturesOfType(type, kind);
-            },
-            getIndexTypeOfType: (type, kind) => {
-                verifyTypeCheckerOfType(type);
-                return getIndexTypeOfType(type, kind);
-            },
-            getBaseTypes: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getBaseTypes(type);
-            },
-            getBaseTypeOfLiteralType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getBaseTypeOfLiteralType(type);
-            },
-            getWidenedType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getWidenedType(type);
-            },
+            getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
+            getIndexInfoOfType,
+            getSignaturesOfType,
+            getIndexTypeOfType,
+            getBaseTypes,
+            getBaseTypeOfLiteralType,
+            getWidenedType,
             getTypeFromTypeNode: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
                 return node ? getTypeFromTypeNode(node) : errorType;
             },
-            getParameterType: (signature, pos) => {
-                verifyTypeCheckerOfSignature(signature);
-                return getTypeAtPosition(signature, pos);
-            },
-            getPromisedTypeOfPromise: (promise, errorNode) => {
-                verifyTypeCheckerOfType(promise);
-                return getPromisedTypeOfPromise(promise, errorNode);
-            },
-            getReturnTypeOfSignature: (signature) => {
-                verifyTypeCheckerOfSignature(signature);
-                return getReturnTypeOfSignature(signature);
-            },
+            getParameterType: getTypeAtPosition,
+            getPromisedTypeOfPromise,
+            getReturnTypeOfSignature,
             isNullableType,
-            getNullableType: (type, flags) => {
-                verifyTypeCheckerOfType(type);
-                return getNullableType(type, flags);
-            },
-            getNonNullableType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getNonNullableType(type);
-            },
-            getNonOptionalType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return removeOptionalTypeMarker(type);
-            },
-            getTypeArguments: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getTypeArguments(type);
-            },
-            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfType(type);
-                return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags, tracker);
-            },
-            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfType(indexInfo.type);
-                return nodeBuilder.indexInfoToIndexSignatureDeclaration(indexInfo, kind, enclosingDeclaration, flags, tracker);
-            },
-            signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfSignature(signature);
-                return nodeBuilder.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, tracker);
-            },
-            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return nodeBuilder.symbolToEntityName(symbol, meaning, enclosingDeclaration, flags, tracker);
-            },
-            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return nodeBuilder.symbolToExpression(symbol, meaning, enclosingDeclaration, flags, tracker);
-            },
-            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return nodeBuilder.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, flags, tracker);
-            },
-            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return nodeBuilder.symbolToParameterDeclaration(symbol, enclosingDeclaration, flags, tracker);
-            },
-            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => {
-                verifyTypeCheckerOfType(parameter);
-                return nodeBuilder.typeParameterToDeclaration(parameter, enclosingDeclaration, flags, tracker);
-            },
+            getNullableType,
+            getNonNullableType,
+            getNonOptionalType: removeOptionalTypeMarker,
+            getTypeArguments,
+            typeToTypeNode: nodeBuilder.typeToTypeNode,
+            indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
+            signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
+            symbolToEntityName: nodeBuilder.symbolToEntityName,
+            symbolToExpression: nodeBuilder.symbolToExpression,
+            symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
+            symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
+            typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -484,7 +419,6 @@ namespace ts {
                 return node ? getExportSpecifierLocalTargetSymbol(node) : undefined;
             },
             getExportSymbolOfSymbol(symbol) {
-                verifyTypeCheckerOfSymbol(symbol);
                 return getMergedSymbol(symbol.exportSymbol || symbol);
             },
             getTypeAtLocation: node => {
@@ -500,45 +434,31 @@ namespace ts {
                 return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
             signatureToString: (signature, enclosingDeclaration, flags, kind) => {
-                verifyTypeCheckerOfSignature(signature);
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
             },
             typeToString: (type, enclosingDeclaration, flags) => {
-                verifyTypeCheckerOfType(type);
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
             },
             symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
-                verifyTypeCheckerOfSymbol(symbol);
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
             },
             typePredicateToString: (predicate, enclosingDeclaration, flags) => {
-                verifyTypeCheckerOfType(predicate.type);
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
             },
             writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
-                verifyTypeCheckerOfSignature(signature);
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
             },
             writeType: (type, enclosingDeclaration, flags, writer) => {
-                verifyTypeCheckerOfType(type);
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
             writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
-                verifyTypeCheckerOfSymbol(symbol);
                 return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
             },
             writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
-                verifyTypeCheckerOfType(predicate.type);
                 return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
             },
-            getAugmentedPropertiesOfType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getAugmentedPropertiesOfType(type);
-            },
-            getRootSymbols: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getRootSymbols(symbol);
-            },
+            getAugmentedPropertiesOfType,
+            getRootSymbols,
             getContextualType: (nodeIn: Expression, contextFlags?: ContextFlags) => {
                 const node = getParseTreeNode(nodeIn, isExpression);
                 return node ? getContextualType(node, contextFlags) : undefined;
@@ -556,22 +476,13 @@ namespace ts {
                 return node && getContextualTypeForJsxAttribute(node);
             },
             isContextSensitive,
-            getFullyQualifiedName: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getFullyQualifiedName(symbol);
-            },
+            getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
             getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp),
-            getExpandedParameters: (sig) => {
-                verifyTypeCheckerOfSignature(sig);
-                return getExpandedParameters(sig);
-            },
-            hasEffectiveRestParameter: (sig) => {
-                verifyTypeCheckerOfSignature(sig);
-                return hasEffectiveRestParameter(sig);
-            },
+            getExpandedParameters,
+            hasEffectiveRestParameter,
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
@@ -581,8 +492,6 @@ namespace ts {
                 return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
             },
             isValidPropertyAccessForCompletions: (nodeIn, type, property) => {
-                verifyTypeCheckerOfType(type);
-                verifyTypeCheckerOfSymbol(property);
                 const node = getParseTreeNode(nodeIn, isPropertyAccessExpression);
                 return !!node && isValidPropertyAccessForCompletions(node, type, property);
             },
@@ -594,23 +503,11 @@ namespace ts {
                 const parsed = getParseTreeNode(node, isFunctionLike);
                 return parsed ? isImplementationOfOverload(parsed) : undefined;
             },
-            getImmediateAliasedSymbol: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getImmediateAliasedSymbol(symbol);
-            },
-            getAliasedSymbol: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return resolveAlias(symbol);
-            },
+            getImmediateAliasedSymbol,
+            getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getExportsOfModule: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getExportsOfModuleAsArray(symbol);
-            },
-            getExportsAndPropertiesOfModule: (moduleSymbol) => {
-                verifyTypeCheckerOfSymbol(moduleSymbol);
-                return getExportsAndPropertiesOfModule(moduleSymbol);
-            },
+            getExportsOfModule: getExportsOfModuleAsArray,
+            getExportsAndPropertiesOfModule,
             getSymbolWalker: createGetSymbolWalker(
                 getRestTypeOfSignature,
                 getTypePredicateOfSignature,
@@ -630,69 +527,28 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn, isParameter);
                 return node ? isOptionalParameter(node) : false;
             },
-            tryGetMemberInModuleExports: (name, symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return tryGetMemberInModuleExports(escapeLeadingUnderscores(name), symbol);
-            },
-            tryGetMemberInModuleExportsAndProperties: (name, symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return tryGetMemberInModuleExportsAndProperties(escapeLeadingUnderscores(name), symbol);
-            },
+            tryGetMemberInModuleExports: (name, symbol) => tryGetMemberInModuleExports(escapeLeadingUnderscores(name), symbol),
+            tryGetMemberInModuleExportsAndProperties: (name, symbol) => tryGetMemberInModuleExportsAndProperties(escapeLeadingUnderscores(name), symbol),
             tryFindAmbientModuleWithoutAugmentations: moduleName => {
                 // we deliberately exclude augmentations
                 // since we are only interested in declarations of the module itself
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
-            getApparentType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getApparentType(type);
-            },
-            getUnionType: (types: readonly Type[], unionReduction?: UnionReduction, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) => {
-                verifyTypeCheckerOfTypes(types);
-                return getUnionType(types, unionReduction, aliasSymbol, aliasTypeArguments);
-            },
+            getApparentType,
+            getUnionType,
             isTypeAssignableTo: (source, target) => {
-                verifyTypeCheckerOfType(source);
-                verifyTypeCheckerOfType(target);
                 return isTypeAssignableTo(source, target);
             },
-            createAnonymousType: (symbol, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                verifyTypeCheckerOfSymbolTable(members);
-                verifyTypeCheckerOfSignatures(callSignatures);
-                verifyTypeCheckerOfSignatures(constructSignatures);
-                verifyTypeCheckerOfType(stringIndexInfo?.type);
-                verifyTypeCheckerOfType(numberIndexInfo?.type);
-                return createAnonymousType(symbol, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
-            },
-            createSignature: (declaration, typeParameters, thisParameter, parameters, resolvedReturnType, resolvedTypePredicate, minArgumentCount, flags) => {
-                verifyTypeCheckerOfTypes(typeParameters);
-                verifyTypeCheckerOfSymbol(thisParameter);
-                verifyTypeCheckerOfSymbols(parameters);
-                verifyTypeCheckerOfType(resolvedReturnType);
-                verifyTypeCheckerOfType(resolvedTypePredicate?.type);
-                return createSignature(declaration, typeParameters, thisParameter, parameters, resolvedReturnType, resolvedTypePredicate, minArgumentCount, flags);
-            },
+            createAnonymousType,
+            createSignature,
             createSymbol,
-            createIndexInfo: (type, isReadonly, declaration?: IndexSignatureDeclaration) => {
-                verifyTypeCheckerOfType(type);
-                return createIndexInfo(type, isReadonly, declaration);
-            },
+            createIndexInfo,
             getAnyType: () => anyType,
             getStringType: () => stringType,
             getNumberType: () => numberType,
-            createPromiseType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return createPromiseType(type);
-            },
-            createArrayType: (elementType) => {
-                verifyTypeCheckerOfType(elementType);
-                return createArrayType(elementType);
-            },
-            getElementTypeOfArrayType: (arrayType) => {
-                verifyTypeCheckerOfType(arrayType);
-                return getElementTypeOfArrayType(arrayType);
-            },
+            createPromiseType,
+            createArrayType,
+            getElementTypeOfArrayType,
             getBooleanType: () => booleanType,
             getFalseType: (fresh?) => fresh ? falseType : regularFalseType,
             getTrueType: (fresh?) => fresh ? trueType : regularTrueType,
@@ -702,63 +558,24 @@ namespace ts {
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
             getOptionalType: () => optionalType,
-            isSymbolAccessible: (symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return isSymbolAccessible(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible);
-            },
-            isArrayType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return isArrayType(type);
-            },
-            isTupleType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return isTupleType(type);
-            },
-            isArrayLikeType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return isArrayLikeType(type);
-            },
-            isTypeInvalidDueToUnionDiscriminant: (contextualType, obj) => {
-                verifyTypeCheckerOfType(contextualType);
-                return isTypeInvalidDueToUnionDiscriminant(contextualType, obj);
-            },
-            getAllPossiblePropertiesOfTypes: (types) => {
-                verifyTypeCheckerOfTypes(types);
-                return getAllPossiblePropertiesOfTypes(types);
-            },
-            getSuggestionForNonexistentProperty: (node, type) => {
-                verifyTypeCheckerOfType(type);
-                return getSuggestionForNonexistentProperty(node, type);
-            },
+            isSymbolAccessible,
+            isArrayType,
+            isTupleType,
+            isArrayLikeType,
+            isTypeInvalidDueToUnionDiscriminant,
+            getAllPossiblePropertiesOfTypes,
+            getSuggestionForNonexistentProperty: (node, type) => getSuggestionForNonexistentProperty(node, type),
             getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
-            getSuggestionForNonexistentExport: (node, target) => {
-                verifyTypeCheckerOfSymbol(target);
-                return getSuggestionForNonexistentExport(node, target);
-            },
-            getBaseConstraintOfType: (type) => {
-                verifyTypeCheckerOfType(type);
-                return getBaseConstraintOfType(type);
-            },
-            getDefaultFromTypeParameter: type => {
-                verifyTypeCheckerOfType(type);
-                return type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined;
-            },
+            getSuggestionForNonexistentExport: (node, target) => getSuggestionForNonexistentExport(node, target),
+            getBaseConstraintOfType,
+            getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
             resolveName(name, location, meaning, excludeGlobals) {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, excludeGlobals);
             },
             getJsxNamespace: n => unescapeLeadingUnderscores(getJsxNamespace(n)),
-            getAccessibleSymbolChain: (symbol, enclosingDeclaration, meaning, useOnlyExternalAliasing) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning, useOnlyExternalAliasing);
-            },
-            getTypePredicateOfSignature: (signature) => {
-                verifyTypeCheckerOfSignature(signature);
-                return getTypePredicateOfSignature(signature);
-            },
-            resolveExternalModuleSymbol: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return resolveExternalModuleSymbol(symbol);
-            },
+            getAccessibleSymbolChain,
+            getTypePredicateOfSignature,
+            resolveExternalModuleSymbol,
             tryGetThisTypeAt: (node, includeGlobalThis) => {
                 node = getParseTreeNode(node);
                 return node && tryGetThisTypeAt(node, includeGlobalThis);
@@ -807,27 +624,9 @@ namespace ts {
                 }
             },
 
-            getLocalTypeParametersOfClassOrInterfaceOrTypeAlias: (symbol) => {
-                verifyTypeCheckerOfSymbol(symbol);
-                return getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-            },
+            getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
         };
-
-        const globals = createSymbolTable();
-        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
-        undefinedSymbol.declarations = [];
-
-        const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
-        globalThisSymbol.exports = globals;
-        globalThisSymbol.declarations = [];
-        globals.set(globalThisSymbol.escapedName, globalThisSymbol);
-
-        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
-        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
-
-        /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
-        let apparentArgumentCount: number | undefined;
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
             const node = getParseTreeNode(nodeIn, isCallLikeExpression);
@@ -1187,7 +986,6 @@ namespace ts {
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
             symbolCount++;
             const symbol = <TransientSymbol>(new Symbol(flags | SymbolFlags.Transient, name));
-            symbol.checker = checker;
             symbol.checkFlags = checkFlags || 0;
             return symbol;
         }
@@ -11708,36 +11506,6 @@ namespace ts {
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
             const type = getTypeFromTypeNode(node.type);
             return strictNullChecks ? getOptionalType(type) : type;
-        }
-
-        function verifyTypeCheckerOfType(type: Type | undefined) {
-            Debug.assert(!type || type.checker === undefined || type.checker === checker, "Type was created by a different TypeChecker and cannot be used in this context.");
-        }
-
-        function verifyTypeCheckerOfTypes(types: readonly Type[] | undefined) {
-            forEach(types, verifyTypeCheckerOfType);
-        }
-
-        function verifyTypeCheckerOfSignature(signature: Signature | undefined) {
-            Debug.assert(!signature || signature.checker === undefined || signature.checker === checker, "Signature was created by a different TypeChecker and cannot be used in this context.");
-        }
-
-        function verifyTypeCheckerOfSignatures(signatures: readonly Signature[] | undefined) {
-            forEach(signatures, verifyTypeCheckerOfSignature);
-        }
-
-        function verifyTypeCheckerOfSymbol(symbol: Symbol | undefined) {
-            Debug.assert(!symbol || symbol.checker === undefined || symbol.checker === checker, "Symbol was created by a different TypeChecker and cannot be used in this context.");
-        }
-
-        function verifyTypeCheckerOfSymbols(symbols: readonly Symbol[] | undefined) {
-            forEach(symbols, verifyTypeCheckerOfSymbol);
-        }
-
-        function verifyTypeCheckerOfSymbolTable(symbols: SymbolTable | undefined) {
-            if (symbols) {
-                forEachEntry(symbols, verifyTypeCheckerOfSymbol);
-            }
         }
 
         function getTypeId(type: Type) {

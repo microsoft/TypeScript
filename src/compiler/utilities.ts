@@ -4972,17 +4972,20 @@ namespace ts {
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;
-        this.checker = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        this.checker = checker;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
     }
 
     function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
         this.flags = flags;
-        this.checker = checker;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
