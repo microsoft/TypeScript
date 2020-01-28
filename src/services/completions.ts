@@ -403,8 +403,8 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
             sortText,
             source: getSourceFromOrigin(origin),
-            hasAction: trueOrUndefined(!!origin && originIsExport(origin)),
-            isRecommended: trueOrUndefined(isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker)),
+            hasAction: origin && originIsExport(origin) || undefined,
+            isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
         };
@@ -413,10 +413,6 @@ namespace ts.Completions {
     function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion: Symbol | undefined, checker: TypeChecker): boolean {
         return localSymbol === recommendedCompletion ||
             !!(localSymbol.flags & SymbolFlags.ExportValue) && checker.getExportSymbolOfSymbol(localSymbol) === recommendedCompletion;
-    }
-
-    function trueOrUndefined(b: boolean): true | undefined {
-        return b ? true : undefined;
     }
 
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
