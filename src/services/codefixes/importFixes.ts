@@ -461,10 +461,10 @@ namespace ts.codefix {
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
         const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getExportEqualsImportKind(importingFile, compilerOptions, checker) };
+        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getExportEqualsImportKind(importingFile, compilerOptions) };
     }
 
-    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker): ImportKind {
+    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
         const allowSyntheticDefaults = getAllowSyntheticDefaultImports(compilerOptions);
         // 1. 'import =' will not work in es2015+, so the decision is between a default
         //    and a namespace import, based on allowSyntheticDefaultImports/esModuleInterop.
@@ -482,12 +482,6 @@ namespace ts.codefix {
         for (const statement of importingFile.statements) {
             if (isImportEqualsDeclaration(statement)) {
                 return ImportKind.Equals;
-            }
-            if (isImportDeclaration(statement) && statement.importClause && statement.importClause.name) {
-                const moduleSymbol = checker.getImmediateAliasedSymbol(statement.importClause.symbol);
-                if (moduleSymbol && moduleSymbol.name !== InternalSymbolName.Default) {
-                    return ImportKind.Default;
-                }
             }
         }
         // 4. We have no precedent to go on, so just use a default import if
