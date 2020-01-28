@@ -2727,8 +2727,8 @@ namespace ts {
                 throw Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
-            if (isIdentifier(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
-                markSymbolOfAliasDeclarationIfResolvesToTypeOnly(getAliasDeclarationFromName(name), symbol);
+            if (isIdentifier(name) && symbol.flags & SymbolFlags.Alias) {
+                markSymbolOfAliasDeclarationIfResolvesToTypeOnly(getTypeOnlyAliasDeclarationFromName(name), symbol);
             }
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
