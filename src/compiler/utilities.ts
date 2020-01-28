@@ -1792,9 +1792,10 @@ namespace ts {
         return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
     }
 
-    export function isFirstIdentifierOfImplementsClause(node: Node) {
-        return node.parent?.parent?.parent?.kind === SyntaxKind.HeritageClause
-            && (node.parent.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword;
+    export function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
+        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
+        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent.parent, isHeritageClause);
+        return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
@@ -6143,7 +6144,7 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfImplementsClause(useSite)
+            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
     }
