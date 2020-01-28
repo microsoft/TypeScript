@@ -16009,6 +16009,7 @@ namespace ts {
                     unmatchedProperty.valueDeclaration
                     && isNamedDeclaration(unmatchedProperty.valueDeclaration)
                     && isPrivateIdentifier(unmatchedProperty.valueDeclaration.name)
+                    && source.symbol.valueDeclaration
                     && isClassDeclaration(source.symbol.valueDeclaration)
                 ) {
                     const privateIdentifierDescription = unmatchedProperty.valueDeclaration.name.escapedText;
