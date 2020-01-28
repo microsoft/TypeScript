@@ -3405,6 +3405,7 @@ namespace ts {
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol | undefined;
+        /* @internal*/ getSymbolAtLocation(node: Node, includeKeywords?: boolean): Symbol | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         /**
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.

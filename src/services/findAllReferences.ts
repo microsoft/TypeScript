@@ -187,11 +187,15 @@ namespace ts.FindAllReferences {
          * Default is false for backwards compatibility.
          */
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        /**
+         * If the source is a modifier or declaration keyword, find references to its parent declaration.
+         */
+        readonly keywords?: boolean;
     }
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
-        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken);
+        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, { keywords: true });
         const checker = program.getTypeChecker();
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
@@ -229,7 +233,7 @@ namespace ts.FindAllReferences {
         }
         else {
             // Perform "Find all References" and retrieve only those that are implementations
-            return getReferenceEntriesForNode(position, node, program, sourceFiles, cancellationToken, { implementations: true });
+            return getReferenceEntriesForNode(position, node, program, sourceFiles, cancellationToken, { implementations: true, keywords: true });
         }
     }
 
@@ -553,7 +557,7 @@ namespace ts.FindAllReferences {
             }
 
             const checker = program.getTypeChecker();
-            const symbol = checker.getSymbolAtLocation(node);
+            const symbol = checker.getSymbolAtLocation(node, options.keywords);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -723,6 +727,11 @@ namespace ts.FindAllReferences {
         /** getReferencedSymbols for special node kinds. */
         function getReferencedSymbolsSpecial(node: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
             if (isTypeKeyword(node.kind)) {
+                // A void expression (i.e., `void foo()`) is not special, but the `void` type is.
+                if (node.kind === SyntaxKind.VoidKeyword && isVoidExpression(node.parent)) {
+                    return undefined;
+                }
+
                 // A modifier readonly (like on a property declaration) is not special;
                 // a readonly type keyword (like `readonly string[]`) is.
                 if (node.kind === SyntaxKind.ReadonlyKeyword && !isReadonlyTypeOperator(node)) {

@@ -114,6 +114,24 @@ namespace ts {
             // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
             return SemanticMeaning.Type | SemanticMeaning.Value;
         }
+        else if (isModifier(node) && contains(node.parent.modifiers, node)) {
+            // on the modifier of a declaration
+            return getMeaningFromDeclaration(node.parent);
+        }
+        else if (node.kind === SyntaxKind.ClassKeyword && isClassLike(node.parent) ||
+            node.kind === SyntaxKind.InterfaceKeyword && isInterfaceDeclaration(node.parent) ||
+            node.kind === SyntaxKind.TypeKeyword && isTypeAliasDeclaration(node.parent) ||
+            node.kind === SyntaxKind.EnumKeyword && isEnumDeclaration(node.parent) ||
+            node.kind === SyntaxKind.FunctionKeyword && isFunctionLikeDeclaration(node.parent) ||
+            node.kind === SyntaxKind.GetKeyword && isGetAccessorDeclaration(node.parent) ||
+            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(node.parent) ||
+            (node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword) && isModuleDeclaration(node.parent)) {
+            // on the keyword of a declaration
+            return getMeaningFromDeclaration(node.parent);
+        }
+        else if (node.kind === SyntaxKind.TypeKeyword && isImportClause(node.parent) && node.parent.isTypeOnly) {
+            return getMeaningFromDeclaration(node.parent.parent);
+        }
         else {
             return SemanticMeaning.Value;
         }
