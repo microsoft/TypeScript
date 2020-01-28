@@ -94,7 +94,9 @@ declare function id5<T extends (x?: number) => any>(input: T): T;
 declare const f10: ({ foo }: {
     foo?: number | undefined;
 }) => number;
-declare const f11: ({ foo }: any) => any;
+declare const f11: ({ foo }: {
+    foo?: number | undefined;
+}) => number;
 declare const f12: ({ foo }: any) => any;
 declare const f13: ({ foo }: {
     foo: any;
@@ -103,7 +105,7 @@ declare const f14: ({ foo }: {
     foo?: number | undefined;
 }) => number;
 declare const f20: (foo?: number) => number;
-declare const f21: (foo?: any) => any;
+declare const f21: (foo?: number) => number;
 declare const f22: (foo?: any) => any;
 declare const f25: (foo?: number | undefined) => number;
 declare function id<T>(input: T): T;
@@ -111,4 +113,6 @@ declare function getFoo({ foo }: {
     foo?: number | undefined;
 }): number;
 declare const newGetFoo: typeof getFoo;
-declare const newGetFoo2: ({ foo }: any) => any;
+declare const newGetFoo2: ({ foo }: {
+    foo?: number | undefined;
+}) => number;
