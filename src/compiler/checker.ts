@@ -21176,7 +21176,7 @@ namespace ts {
                 links.resolvedSignature = cached;
                 return type;
             }
-            let contextualSignature = getContextualSignature(func);
+            const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
                 const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
                 return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
