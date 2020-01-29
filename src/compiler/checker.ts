@@ -2596,7 +2596,7 @@ namespace ts {
             const links = getSymbolLinks(sourceSymbol);
             if (links.typeOnlyDeclaration === undefined || overwriteEmpty && links.typeOnlyDeclaration === false) {
                 resolvesToSymbol = resolvesToSymbol.exports?.get(InternalSymbolName.ExportEquals) ?? resolvesToSymbol;
-                const typeOnly = find(resolvesToSymbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                const typeOnly = resolvesToSymbol.declarations && find(resolvesToSymbol.declarations, isTypeOnlyImportOrExportDeclaration);
                 links.typeOnlyDeclaration = typeOnly ?? getSymbolLinks(resolvesToSymbol).typeOnlyDeclaration ?? false;
             }
             return !!links.typeOnlyDeclaration;

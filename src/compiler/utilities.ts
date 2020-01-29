@@ -1794,7 +1794,7 @@ namespace ts {
 
     export function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
         // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
-        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent.parent, isHeritageClause);
+        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
         return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 
