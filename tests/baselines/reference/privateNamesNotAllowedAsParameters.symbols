@@ -4,6 +4,6 @@ class A {
 
     setFoo(#foo: string) {}
 >setFoo : Symbol(A.setFoo, Decl(privateNamesNotAllowedAsParameters.ts, 0, 9))
->#foo : Symbol(A.#foo, Decl(privateNamesNotAllowedAsParameters.ts, 1, 11))
+>#foo : Symbol(#foo, Decl(privateNamesNotAllowedAsParameters.ts, 1, 11))
 }
 

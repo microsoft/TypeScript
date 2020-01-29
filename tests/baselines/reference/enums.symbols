@@ -31,11 +31,19 @@ import type { SyntaxKind, SymbolFlags } from './a';
 >SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
 
 SyntaxKind.ImportClause;
+>SyntaxKind.ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+>SyntaxKind : Symbol(SyntaxKind, Decl(b.ts, 0, 13))
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+
 SymbolFlags.Type;
+>SymbolFlags.Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+>SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+
 let kind: SyntaxKind.ImportClause;
 >kind : Symbol(kind, Decl(b.ts, 4, 3))
 >SyntaxKind : Symbol(SyntaxKind, Decl(b.ts, 0, 13))
->ImportClause : Symbol(SyntaxKind.ImportClause)
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
 
 let flags: SymbolFlags;
 >flags : Symbol(flags, Decl(b.ts, 5, 3))
@@ -44,7 +52,7 @@ let flags: SymbolFlags;
 type TypeFlag = SymbolFlags.Type;
 >TypeFlag : Symbol(TypeFlag, Decl(b.ts, 5, 23))
 >SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
->Type : Symbol(SymbolFlags.Type)
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
 
 export type { TypeFlag };
 >TypeFlag : Symbol(TypeFlag, Decl(b.ts, 8, 13))

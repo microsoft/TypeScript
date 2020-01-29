@@ -1110,7 +1110,14 @@ namespace ts.server {
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
                         if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                            project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                            const info = Debug.assertDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
+                            if (info.isAttached(project)) {
+                                project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                            }
+                            else {
+                                project.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                                this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                            }
                         }
                         return;
                     }
@@ -1304,7 +1311,7 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            const fileExists = this.host.fileExists(info.fileName);
+            const fileExists = info.isDynamic ? false : this.host.fileExists(info.fileName);
             info.close(fileExists);
             this.stopWatchingConfigFilesForClosedScriptInfo(info);
 
@@ -3117,19 +3124,24 @@ namespace ts.server {
             return result;
         }
 
-        private collectChanges(lastKnownProjectVersions: protocol.ProjectVersionInfo[], currentProjects: Project[], result: ProjectFilesWithTSDiagnostics[]): void {
+        private collectChanges(
+            lastKnownProjectVersions: protocol.ProjectVersionInfo[],
+            currentProjects: Project[],
+            includeProjectReferenceRedirectInfo: boolean | undefined,
+            result: ProjectFilesWithTSDiagnostics[]
+            ): void {
             for (const proj of currentProjects) {
                 const knownProject = find(lastKnownProjectVersions, p => p.projectName === proj.getProjectName());
-                result.push(proj.getChangesSinceVersion(knownProject && knownProject.version));
+                result.push(proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo));
             }
         }
 
         /* @internal */
-        synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): ProjectFilesWithTSDiagnostics[] {
+        synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[], includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics[] {
             const files: ProjectFilesWithTSDiagnostics[] = [];
-            this.collectChanges(knownProjects, this.externalProjects, files);
-            this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), files);
-            this.collectChanges(knownProjects, this.inferredProjects, files);
+            this.collectChanges(knownProjects, this.externalProjects, includeProjectReferenceRedirectInfo, files);
+            this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), includeProjectReferenceRedirectInfo, files);
+            this.collectChanges(knownProjects, this.inferredProjects, includeProjectReferenceRedirectInfo, files);
             return files;
         }
 

@@ -44,14 +44,6 @@ namespace ts {
         return (symbol.flags & SymbolFlags.Transient) !== 0;
     }
 
-    export function isTypeOnlyAlias(symbol: Symbol): symbol is TransientSymbol & { immediateTarget: Symbol } {
-        return isTransientSymbol(symbol) && !!symbol.immediateTarget;
-    }
-
-    export function isTypeOnlyEnumAlias(symbol: Symbol): ReturnType<typeof isTypeOnlyAlias> {
-        return isTypeOnlyAlias(symbol) && !!(symbol.immediateTarget.flags & SymbolFlags.Enum);
-    }
-
     const stringWriter = createSingleLineStringWriter();
 
     function createSingleLineStringWriter(): EmitTextWriter {
@@ -517,7 +509,7 @@ namespace ts {
     }
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+        return !!findAncestor(node, isJSDocTypeExpression);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
@@ -1779,6 +1771,32 @@ namespace ts {
         }
     }
 
+    export function isPartOfTypeQuery(node: Node) {
+        while (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier) {
+            node = node.parent;
+        }
+        return node.kind === SyntaxKind.TypeQuery;
+    }
+
+    export function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
+        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+            node = node.parent;
+        }
+        if (node.kind !== SyntaxKind.ComputedPropertyName) {
+            return false;
+        }
+        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+            return true;
+        }
+        const containerKind = node.parent.parent.kind;
+        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+    }
+
+    export function isFirstIdentifierOfImplementsClause(node: Node) {
+        return node.parent?.parent?.parent?.kind === SyntaxKind.HeritageClause
+            && (node.parent.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword;
+    }
+
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -2285,6 +2303,19 @@ namespace ts {
         return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
     }
 
+    export function forEachImportClauseDeclaration<T>(node: ImportClause, action: (declaration: ImportClause | NamespaceImport | ImportSpecifier) => T | undefined): T | undefined {
+        if (node.name) {
+            const result = action(node);
+            if (result) return result;
+        }
+        if (node.namedBindings) {
+            const result = isNamespaceImport(node.namedBindings)
+                ? action(node.namedBindings)
+                : forEach(node.namedBindings.elements, action);
+            if (result) return result;
+        }
+    }
+
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {
@@ -2705,6 +2736,16 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    export function getTypeOnlyCompatibleAliasDeclarationFromName(node: Identifier): TypeOnlyCompatibleAliasDeclaration | undefined {
+        switch (node.parent.kind) {
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.ExportSpecifier:
+                return node.parent as TypeOnlyCompatibleAliasDeclaration;
+        }
     }
 
     export function isAliasableExpression(e: Expression) {
@@ -4251,7 +4292,7 @@ namespace ts {
     }
 
     export function isDottedName(node: Expression): boolean {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
             node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
             node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
     }
@@ -6070,5 +6111,13 @@ namespace ts {
 
     export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
         return (negative && base10Value !== "0" ? "-" : "") + base10Value;
+    }
+
+    export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
+        return !!(useSite.flags & NodeFlags.Ambient)
+            || isPartOfTypeQuery(useSite)
+            || isFirstIdentifierOfImplementsClause(useSite)
+            || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
+            || !isExpressionNode(useSite);
     }
 }

@@ -32,17 +32,17 @@ import type ns from './ns';
 >ns : any
 
 ns.Class; // Error
->ns.Class : any
->ns : any
->Class : any
+>ns.Class : typeof ns.Class
+>ns : typeof ns
+>Class : typeof ns.Class
 
 ns.Value; // Error
->ns.Value : any
->ns : any
->Value : any
+>ns.Value : ""
+>ns : typeof ns
+>Value : ""
 
 let c: ns.Class;
->c : import("/ns").default.Class
+>c : ns.Class
 >ns : any
 
 let t: ns.Type = "";
@@ -51,7 +51,7 @@ let t: ns.Type = "";
 >"" : ""
 
 let n: ns.nested.NestedClass = { a: '' };
->n : import("/ns").default.nested.NestedClass
+>n : ns.nested.NestedClass
 >ns : any
 >nested : any
 >{ a: '' } : { a: string; }

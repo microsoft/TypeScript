@@ -254,7 +254,7 @@ namespace FourSlash {
                         const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
 
                         if (!tsConfig.errors || !tsConfig.errors.length) {
-                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
+                            compilationOptions = ts.extend(tsConfig.options, compilationOptions);
                         }
                     }
                     configFileName = file.fileName;
@@ -843,8 +843,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, kind, kindModifiers, text, documentation, tags, source, sourceDisplay, sortText } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, kindModifiers: undefined, text: undefined, documentation: undefined, tags: undefined, source: undefined, sourceDisplay: undefined, sortText: undefined }
+            const { insertText, replacementSpan, hasAction, isRecommended, isFromUncheckedFile, kind, kindModifiers, text, documentation, tags, source, sourceDisplay, sortText } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, isFromUncheckedFile: undefined, kind: undefined, kindModifiers: undefined, text: undefined, documentation: undefined, tags: undefined, source: undefined, sourceDisplay: undefined, sortText: undefined }
                 : expected;
 
             if (actual.insertText !== insertText) {
@@ -860,15 +860,21 @@ namespace FourSlash {
 
             if (kind !== undefined || kindModifiers !== undefined) {
                 if (actual.kind !== kind) {
-                    this.raiseError(`Unexpected kind for ${actual.name}: Expected ${kind}, actual ${actual.kind}`);
+                    this.raiseError(`Unexpected kind for ${actual.name}: Expected '${kind}', actual '${actual.kind}'`);
                 }
                 if (actual.kindModifiers !== (kindModifiers || "")) {
-                    this.raiseError(`Bad kind modifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
+                    this.raiseError(`Bad kindModifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
+                }
+            }
+
+            if (isFromUncheckedFile !== undefined) {
+                if (actual.isFromUncheckedFile !== isFromUncheckedFile) {
+                    this.raiseError(`Expected 'isFromUncheckedFile' value '${actual.isFromUncheckedFile}' to equal '${isFromUncheckedFile}'`);
                 }
             }
 
             assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' value '${actual.hasAction}' to equal '${hasAction}'`);
-            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' value '${actual.source}' to equal '${isRecommended}'`);
+            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' value '${actual.isRecommended}' to equal '${isRecommended}'`);
             assert.equal(actual.source, source, `Expected 'source' value '${actual.source}' to equal '${source}'`);
             assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
@@ -2544,8 +2550,8 @@ namespace FourSlash {
 
         public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
             const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
-            ts.Debug.assert(fixWithId !== undefined, "No available code fix has that group id.", () =>
-                `Expected '${fixId}'. Available action ids: ${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId)}`);
+            ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
+                `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
             ts.Debug.assertEqual(fixWithId!.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
@@ -2573,6 +2579,10 @@ namespace FourSlash {
 
             if (typeof options.description === "string") {
                 assert.equal(action.description, options.description);
+            }
+            else if (Array.isArray(options.description)) {
+                const description = ts.formatStringFromArgs(options.description[0], options.description, 1);
+                assert.equal(action.description, description);
             }
             else {
                 assert.match(action.description, templateToRegExp(options.description.template));
@@ -2681,7 +2691,7 @@ namespace FourSlash {
             }
             const range = ts.firstOrUndefined(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixId === ts.codefix.importFixId);
+            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixName === ts.codefix.importFixName);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -2717,7 +2727,7 @@ namespace FourSlash {
             const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
                 includeCompletionsForModuleExports: true,
                 includeCompletionsWithInsertText: true
-            }, marker.position).filter(f => f.fixId === ts.codefix.importFixId);
+            }, marker.position).filter(f => f.fixName === ts.codefix.importFixName);
 
             const actualModuleSpecifiers = ts.mapDefined(codeFixes, fix => {
                 return ts.forEach(ts.flatMap(fix.changes, c => c.textChanges), c => {
@@ -2869,7 +2879,7 @@ namespace FourSlash {
 
         private verifyNavigationTreeOrBar(json: any, tree: any, name: "Tree" | "Bar", options: { checkSpans?: boolean } | undefined) {
             if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
-                this.raiseError(`verifyNavigation${name} failed - expected: ${stringify(json)}, got: ${stringify(tree, replacer)}`);
+                this.raiseError(`verifyNavigation${name} failed - \n${showTextDiff(stringify(json), stringify(tree, replacer))}`);
             }
 
             function replacer(key: string, value: any) {
@@ -3041,6 +3051,26 @@ namespace FourSlash {
             else {
                 const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
                 this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+            }
+        }
+
+        public verifyCodeFixAllAvailable(negative: boolean, fixName: string) {
+            const availableFixes = this.getCodeFixes(this.activeFile.fileName);
+            const hasFix = availableFixes.some(fix => fix.fixName === fixName && fix.fixId);
+            if (negative && hasFix) {
+                this.raiseError(`Expected not to find a fix with the name '${fixName}', but one exists.`);
+            }
+            else if (!negative && !hasFix) {
+                if (availableFixes.some(fix => fix.fixName === fixName)) {
+                    this.raiseError(`Found a fix with the name '${fixName}', but fix-all is not available.`);
+                }
+
+                this.raiseError(
+                    `Expected to find a fix with the name '${fixName}', but none exists.` +
+                    availableFixes.length
+                        ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
+                        : ""
+                );
             }
         }
 
