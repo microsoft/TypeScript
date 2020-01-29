@@ -1308,7 +1308,7 @@ const a = {
                     },
                     libFile
                 ],
-                { currentDirectory: tscWatch.projectRoot }
+                { currentDirectory: projectRoot }
             ),
             commandLineArgs: ["--b", "-w"],
             changes: [
