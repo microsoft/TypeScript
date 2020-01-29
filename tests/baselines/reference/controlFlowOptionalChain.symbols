@@ -1801,3 +1801,34 @@ someFunction(undefined);
 >someFunction : Symbol(someFunction, Decl(controlFlowOptionalChain.ts, 561, 42))
 >undefined : Symbol(undefined)
 
+// Repro from #35970
+
+let i = 0;
+>i : Symbol(i, Decl(controlFlowOptionalChain.ts, 580, 3))
+
+declare const arr: { tag: ("left" | "right") }[];
+>arr : Symbol(arr, Decl(controlFlowOptionalChain.ts, 581, 13))
+>tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
+
+while (arr[i]?.tag === "left") {
+>arr[i]?.tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
+>arr : Symbol(arr, Decl(controlFlowOptionalChain.ts, 581, 13))
+>i : Symbol(i, Decl(controlFlowOptionalChain.ts, 580, 3))
+>tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
+
+    i += 1;
+>i : Symbol(i, Decl(controlFlowOptionalChain.ts, 580, 3))
+
+    if (arr[i]?.tag === "right") {
+>arr[i]?.tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
+>arr : Symbol(arr, Decl(controlFlowOptionalChain.ts, 581, 13))
+>i : Symbol(i, Decl(controlFlowOptionalChain.ts, 580, 3))
+>tag : Symbol(tag, Decl(controlFlowOptionalChain.ts, 581, 20))
+
+        console.log("I should ALSO be reachable");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+

@@ -91,7 +91,7 @@ namespace ts {
 
             const statements: Statement[] = [];
             const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict && !isJsonSourceFile(node), sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());

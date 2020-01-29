@@ -2031,3 +2031,45 @@ someFunction(undefined);
 >someFunction : (someOptionalObject: SomeObject | undefined) => void
 >undefined : undefined
 
+// Repro from #35970
+
+let i = 0;
+>i : number
+>0 : 0
+
+declare const arr: { tag: ("left" | "right") }[];
+>arr : { tag: "left" | "right"; }[]
+>tag : "left" | "right"
+
+while (arr[i]?.tag === "left") {
+>arr[i]?.tag === "left" : boolean
+>arr[i]?.tag : "left" | "right"
+>arr[i] : { tag: "left" | "right"; }
+>arr : { tag: "left" | "right"; }[]
+>i : number
+>tag : "left" | "right"
+>"left" : "left"
+
+    i += 1;
+>i += 1 : number
+>i : number
+>1 : 1
+
+    if (arr[i]?.tag === "right") {
+>arr[i]?.tag === "right" : boolean
+>arr[i]?.tag : "left" | "right"
+>arr[i] : { tag: "left" | "right"; }
+>arr : { tag: "left" | "right"; }[]
+>i : number
+>tag : "left" | "right"
+>"right" : "right"
+
+        console.log("I should ALSO be reachable");
+>console.log("I should ALSO be reachable") : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>"I should ALSO be reachable" : "I should ALSO be reachable"
+    }
+}
+

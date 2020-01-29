@@ -69,56 +69,63 @@ namespace Utils {
 
     export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
 
-    export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined): void {
-        if (node) {
-            assert.isFalse(node.pos < 0, "node.pos < 0");
-            assert.isFalse(node.end < 0, "node.end < 0");
-            assert.isFalse(node.end < node.pos, "node.end < node.pos");
-            assert.equal(node.parent, parent, "node.parent !== parent");
+    export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined) {
+        const queue: [ts.Node | undefined, ts.Node | undefined][] = [[node, parent]];
+        for (const [node, parent] of queue) {
+            assertInvariantsWorker(node, parent);
+        }
 
-            if (parent) {
-                // Make sure each child is contained within the parent.
-                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
-                assert.isFalse(node.end > parent.end, "node.end > parent.end");
-            }
+        function assertInvariantsWorker(node: ts.Node | undefined, parent: ts.Node | undefined): void {
+            if (node) {
+                assert.isFalse(node.pos < 0, "node.pos < 0");
+                assert.isFalse(node.end < 0, "node.end < 0");
+                assert.isFalse(node.end < node.pos, "node.end < node.pos");
+                assert.equal(node.parent, parent, "node.parent !== parent");
 
-            ts.forEachChild(node, child => {
-                assertInvariants(child, node);
-            });
+                if (parent) {
+                    // Make sure each child is contained within the parent.
+                    assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
+                    assert.isFalse(node.end > parent.end, "node.end > parent.end");
+                }
 
-            // Make sure each of the children is in order.
-            let currentPos = 0;
-            ts.forEachChild(node,
-                child => {
-                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
-                    currentPos = child.end;
-                },
-                array => {
-                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
-                    assert.isFalse(array.end > node.end, "array.end > node.end");
-                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
-
-                    for (const item of array) {
-                        assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = item.end;
-                    }
-
-                    currentPos = array.end;
+                ts.forEachChild(node, child => {
+                    queue.push([child, node]);
                 });
 
-            const childNodesAndArrays: any[] = [];
-            ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
+                // Make sure each of the children is in order.
+                let currentPos = 0;
+                ts.forEachChild(node,
+                    child => {
+                        assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
+                        currentPos = child.end;
+                    },
+                    array => {
+                        assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
+                        assert.isFalse(array.end > node.end, "array.end > node.end");
+                        assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
-            for (const childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
-                    // for now ignore jsdoc comments
-                    childName === "jsDocComment" || childName === "checkJsDirective" || childName === "commonJsModuleIndicator") {
-                    continue;
-                }
-                const child = (<any>node)[childName];
-                if (isNodeOrArray(child)) {
-                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                        "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
+                        for (const item of array) {
+                            assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
+                            currentPos = item.end;
+                        }
+
+                        currentPos = array.end;
+                    });
+
+                const childNodesAndArrays: any[] = [];
+                ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
+
+                for (const childName in node) {
+                    if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
+                        // for now ignore jsdoc comments
+                        childName === "jsDocComment" || childName === "checkJsDirective" || childName === "commonJsModuleIndicator") {
+                        continue;
+                    }
+                    const child = (<any>node)[childName];
+                    if (isNodeOrArray(child)) {
+                        assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
+                            "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
+                    }
                 }
             }
         }

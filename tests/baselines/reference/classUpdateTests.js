@@ -214,9 +214,9 @@ var K = /** @class */ (function (_super) {
     __extends(K, _super);
     function K(p1) {
         var _this = this;
-        _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;
+        _this.p1 = p1;
         return _this;
     }
     return K;
@@ -234,9 +234,9 @@ var M = /** @class */ (function (_super) {
     __extends(M, _super);
     function M(p1) {
         var _this = this;
-        _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;
+        _this.p1 = p1;
         return _this;
     }
     return M;

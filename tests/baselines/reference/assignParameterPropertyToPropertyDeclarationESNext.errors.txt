@@ -1,0 +1,35 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(2,16): error TS2729: Property 'bar' is used before its initialization.
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(3,16): error TS2729: Property 'foo' is used before its initialization.
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(9,17): error TS2729: Property 'baz' is used before its initialization.
+tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts(10,16): error TS2729: Property 'foo' is used before its initialization.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts (4 errors) ====
+    class C {
+        qux = this.bar // should error
+                   ~~~
+!!! error TS2729: Property 'bar' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:3:5: 'bar' is declared here.
+        bar = this.foo // should error
+                   ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:8:17: 'foo' is declared here.
+        quiz = this.bar // ok
+        m1() {
+            this.foo // ok
+        }
+        constructor(private foo: string) {}
+        quim = this.baz // should error
+                    ~~~
+!!! error TS2729: Property 'baz' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:10:5: 'baz' is declared here.
+        baz = this.foo; // should error
+                   ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts:8:17: 'foo' is declared here.
+        quid = this.baz // ok
+        m2() {
+            this.foo // ok
+        }
+    }
+    

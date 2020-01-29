@@ -60,7 +60,8 @@ namespace ts.codefix {
         switch (declaration.kind) {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+                const flags = preferences.quotePreference === "single" ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
                 out(createProperty(
                     /*decorators*/undefined,
                     modifiers,
@@ -310,11 +311,10 @@ namespace ts.codefix {
         return undefined;
     }
 
-    export function setJsonCompilerOptionValue(
+    export function setJsonCompilerOptionValues(
         changeTracker: textChanges.ChangeTracker,
         configFile: TsConfigSourceFile,
-        optionName: string,
-        optionValue: Expression,
+        options: [string, Expression][]
     ) {
         const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
         if (!tsconfigObjectLiteral) return undefined;
@@ -323,9 +323,7 @@ namespace ts.codefix {
         if (compilerOptionsProperty === undefined) {
             changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
                 "compilerOptions",
-                createObjectLiteral([
-                    createJsonPropertyAssignment(optionName, optionValue),
-                ])));
+                createObjectLiteral(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
             return;
         }
 
@@ -334,14 +332,24 @@ namespace ts.codefix {
             return;
         }
 
-        const optionProperty = findJsonProperty(compilerOptions, optionName);
+        for (const [optionName, optionValue] of options) {
+            const optionProperty = findJsonProperty(compilerOptions, optionName);
+            if (optionProperty === undefined) {
+                changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
+            }
+            else {
+                changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
+            }
+        }
+    }
 
-        if (optionProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
-        }
-        else {
-            changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
-        }
+    export function setJsonCompilerOptionValue(
+        changeTracker: textChanges.ChangeTracker,
+        configFile: TsConfigSourceFile,
+        optionName: string,
+        optionValue: Expression,
+    ) {
+        setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
     }
 
     export function createJsonPropertyAssignment(name: string, initializer: Expression) {

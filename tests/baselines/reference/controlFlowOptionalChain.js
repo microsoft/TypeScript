@@ -577,10 +577,22 @@ const someObject: SomeObject = {
 someFunction(someObject);
 someFunction(undefined);
 
+// Repro from #35970
+
+let i = 0;
+declare const arr: { tag: ("left" | "right") }[];
+
+while (arr[i]?.tag === "left") {
+    i += 1;
+    if (arr[i]?.tag === "right") {
+        console.log("I should ALSO be reachable");
+    }
+}
+
 
 //// [controlFlowOptionalChain.js]
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
 var a;
 o === null || o === void 0 ? void 0 : o[a = 1];
 a.toString();
@@ -1071,3 +1083,11 @@ var someObject = {
 };
 someFunction(someObject);
 someFunction(undefined);
+// Repro from #35970
+var i = 0;
+while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
+    i += 1;
+    if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {
+        console.log("I should ALSO be reachable");
+    }
+}
