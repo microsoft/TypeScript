@@ -2192,7 +2192,6 @@ namespace ts {
             const resolved = getSymbolOfPartOfRightHandSideOfImportEquals(node.moduleReference, dontResolveAlias);
             checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node, resolved);
             return resolved;
-
         }
 
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
