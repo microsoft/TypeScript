@@ -118,7 +118,7 @@ namespace ts {
         sys.baseLine = () => {
             const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
             // eslint-disable-next-line no-null/no-null
-            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch).replace(version, "CURRENT.VERSION") : null);
+            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch).replace(version, fakes.version) : null);
         };
         return sys;
     }

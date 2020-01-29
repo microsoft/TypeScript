@@ -1,6 +1,6 @@
 //// [/lib/initial-buildOutput.txt]
 /lib/tsc 
-Version CURRENT.VERSION
+Version FakeTSVersion
 Syntax:   tsc [options] [file...]
 
 Examples: tsc hello.ts
