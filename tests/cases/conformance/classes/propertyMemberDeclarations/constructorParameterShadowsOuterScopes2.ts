@@ -27,3 +27,9 @@ class D {
         var y = "";
     }
 }
+
+class E {
+    b = z; // not ok
+    constructor(z: string) {
+    }
+}

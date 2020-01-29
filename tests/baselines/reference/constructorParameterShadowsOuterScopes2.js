@@ -25,6 +25,12 @@ class D {
     }
 }
 
+class E {
+    b = z; // not ok
+    constructor(z: string) {
+    }
+}
+
 
 //// [constructorParameterShadowsOuterScopes2.js]
 // With useDefineForClassFields: true and ESNext target, initializer
@@ -47,5 +53,10 @@ class D {
     b = y; // ok
     constructor(x) {
         var y = "";
+    }
+}
+class E {
+    b = z; // not ok
+    constructor(z) {
     }
 }

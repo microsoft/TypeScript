@@ -46,3 +46,15 @@ class D {
     }
 }
 
+class E {
+>E : E
+
+    b = z; // not ok
+>b : any
+>z : any
+
+    constructor(z: string) {
+>z : string
+    }
+}
+
