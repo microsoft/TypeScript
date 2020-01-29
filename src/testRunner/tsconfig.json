@@ -185,6 +185,7 @@
         "unittests/tsserver/textStorage.ts",
         "unittests/tsserver/telemetry.ts",
         "unittests/tsserver/typeAquisition.ts",
+        "unittests/tsserver/typeOnlyImportChains.ts",
         "unittests/tsserver/typeReferenceDirectives.ts",
         "unittests/tsserver/typingsInstaller.ts",
         "unittests/tsserver/untitledFiles.ts",
