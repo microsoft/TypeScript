@@ -3,10 +3,28 @@
 exitCode:: ExitStatus.Success
 
 
-//// [/src/a.d.ts] file written with same contents
-//// [/src/a.js] file written with same contents
-//// [/src/b.d.ts] file written with same contents
-//// [/src/b.js] file written with same contents
+//// [/src/a.d.ts]
+export declare function foo(): void;
+
+
+//// [/src/a.js]
+"use strict";
+exports.__esModule = true;
+function foo() { }
+exports.foo = foo;
+
+
+//// [/src/b.d.ts]
+export declare function bar(): void;
+
+
+//// [/src/b.js]
+"use strict";
+exports.__esModule = true;
+function bar() { }
+exports.bar = bar;
+
+
 //// [/src/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
 
