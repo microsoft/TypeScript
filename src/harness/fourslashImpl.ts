@@ -1249,6 +1249,10 @@ namespace FourSlash {
         }
 
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
+            interface RangeMarkerData {
+                contextRangeIndex?: number,
+                contextRangeDelta?: number
+            }
             const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
 
             const _startRanges = toArray(startRanges);
@@ -1269,13 +1273,22 @@ namespace FourSlash {
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
                     const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line no-in-operator
-                    const { contextRangeIndex } = (range.marker && range.marker.data || {}) as { contextRangeIndex?: number; };
+                    const { contextRangeIndex, contextRangeDelta } = (range.marker && range.marker.data || {}) as RangeMarkerData;
+                    let contextSpan: ts.TextSpan | undefined;
+                    if (contextRangeDelta !== undefined) {
+                        const allRanges = this.getRanges();
+                        const index = allRanges.indexOf(range);
+                        if (index !== -1) {
+                            contextSpan = ts.createTextSpanFromRange(allRanges[index + contextRangeDelta]);
+                        }
+                    }
+                    else if (contextRangeIndex !== undefined) {
+                        contextSpan = ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]);
+                    }
                     return {
                         fileName: range.fileName,
                         textSpan: ts.createTextSpanFromRange(range),
-                        ...(contextRangeIndex !== undefined ?
-                            { contextSpan: ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]) } :
-                            undefined),
+                        ...(contextSpan ? { contextSpan } : undefined),
                         ...prefixSuffixText
                     };
                 })));

@@ -738,6 +738,32 @@ namespace ts {
         return syntaxList;
     }
 
+    export function getAdjustedRenameLocation(node: Node): Node {
+        const { parent } = node;
+        if (isModifier(node) ? contains(parent.modifiers, node) :
+            node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) :
+            node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) :
+            node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
+            node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
+            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
+            node.kind === SyntaxKind.NamespaceKeyword ? isModuleDeclaration(parent) :
+            node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
+            node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
+            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)) {
+            if (isNamedDeclaration(parent)) {
+                return parent.name;
+            }
+        }
+        if ((node.kind === SyntaxKind.VarKeyword || node.kind === SyntaxKind.ConstKeyword || node.kind === SyntaxKind.LetKeyword) &&
+            isVariableDeclarationList(parent) && parent.declarations.length === 1) {
+            const decl = parent.declarations[0];
+            if (isIdentifier(decl.name)) {
+                return decl.name;
+            }
+        }
+        return node;
+    }
+
     /**
      * Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
