@@ -2181,6 +2181,43 @@ namespace ts {
             return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
+        /**
+         * An alias symbol is created by one of the following declarations:
+         * import <symbol> = ...
+         * import <symbol> from ...
+         * import * as <symbol> from ...
+         * import { x as <symbol> } from ...
+         * export { x as <symbol> } from ...
+         * export * as ns <symbol> from ...
+         * export = <EntityNameExpression>
+         * export default <EntityNameExpression>
+         * module.exports = <EntityNameExpression>
+         * {<Identifier>}
+         * {name: <EntityNameExpression>}
+         */
+        function isAliasSymbolDeclaration(node: Node): boolean {
+            return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+                node.kind === SyntaxKind.NamespaceExportDeclaration ||
+                node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+                node.kind === SyntaxKind.NamespaceImport ||
+                node.kind === SyntaxKind.NamespaceExport ||
+                node.kind === SyntaxKind.ImportSpecifier ||
+                node.kind === SyntaxKind.ExportSpecifier ||
+                node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
+                isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
+                isPropertyAccessExpression(node)
+                    && isBinaryExpression(node.parent)
+                    && node.parent.left === node
+                    && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                    && isAliasableOrJsExpression(node.parent.right) ||
+                node.kind === SyntaxKind.ShorthandPropertyAssignment ||
+                node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer);
+        }
+
+        function isAliasableOrJsExpression(e: Expression) {
+            return isAliasableExpression(e) || isFunctionExpression(e) && isJSConstructor(e);
+        }
+
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration, dontResolveAlias: boolean): Symbol | undefined {
             if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)));
@@ -5784,8 +5821,8 @@ namespace ts {
 
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
-                    // need to mark the alias `symbol` points
-                    // at as something we need to serialize as a private declaration as well
+                    // need to mark the alias `symbol` points at
+                    // as something we need to serialize as a private declaration as well
                     const node = getDeclarationOfAliasSymbol(symbol);
                     if (!node) return Debug.fail();
                     const target = getMergedSymbol(getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true));
