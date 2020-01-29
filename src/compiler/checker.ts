@@ -11105,26 +11105,30 @@ namespace ts {
          * but this function's special-case code fakes alias resolution as well.
          */
         function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
-            const valueType = getTypeOfSymbol(symbol);
-            let typeType = valueType;
-            if (symbol.valueDeclaration) {
-                const decl = getRootDeclaration(symbol.valueDeclaration);
-                let isRequireAlias = false;
-                if (isVariableDeclaration(decl) && decl.initializer) {
-                    let expr = decl.initializer;
-                    // skip past entity names, eg `require("x").a.b.c`
-                    while (isPropertyAccessExpression(expr)) {
-                        expr = expr.expression;
+            const links = getSymbolLinks(symbol);
+            if (!links.resolvedJSDocType) {
+                const valueType = getTypeOfSymbol(symbol);
+                let typeType = valueType;
+                if (symbol.valueDeclaration) {
+                    const decl = getRootDeclaration(symbol.valueDeclaration);
+                    let isRequireAlias = false;
+                    if (isVariableDeclaration(decl) && decl.initializer) {
+                        let expr = decl.initializer;
+                        // skip past entity names, eg `require("x").a.b.c`
+                        while (isPropertyAccessExpression(expr)) {
+                            expr = expr.expression;
+                        }
+                        isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
                     }
-                    isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
+                    const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
+                    // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
+                    if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
+                        typeType = getTypeReferenceType(node, valueType.symbol);
+                    }
                 }
-                const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
-                // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
-                if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
-                    typeType = getTypeReferenceType(node, valueType.symbol);
-                }
+                links.resolvedJSDocType = typeType;
             }
-            return getSymbolLinks(symbol).resolvedJSDocType = typeType;
+            return links.resolvedJSDocType;
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
