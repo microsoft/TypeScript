@@ -1127,6 +1127,7 @@
         "category": "Error",
         "code": 1378
     },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -5063,6 +5064,10 @@
     "Add parameter name": {
         "category": "Message",
         "code": 90034
+    },
+    "Declare a private field named '{0}'.": {
+        "category": "Message",
+        "code": 90053
     },
     "Convert function to an ES2015 class": {
         "category": "Message",

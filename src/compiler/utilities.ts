@@ -509,7 +509,7 @@ namespace ts {
     }
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+        return !!findAncestor(node, isJSDocTypeExpression);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
@@ -1792,6 +1792,11 @@ namespace ts {
         return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
     }
 
+    export function isFirstIdentifierOfImplementsClause(node: Node) {
+        return node.parent?.parent?.parent?.kind === SyntaxKind.HeritageClause
+            && (node.parent.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword;
+    }
+
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -2733,33 +2738,6 @@ namespace ts {
         return false;
     }
 
-    // An alias symbol is created by one of the following declarations:
-    // import <symbol> = ...
-    // import <symbol> from ...
-    // import * as <symbol> from ...
-    // import { x as <symbol> } from ...
-    // export { x as <symbol> } from ...
-    // export * as ns <symbol> from ...
-    // export = <EntityNameExpression>
-    // export default <EntityNameExpression>
-    // module.exports = <EntityNameExpression>
-    // {<Identifier>}
-    // {name: <EntityNameExpression>}
-    export function isAliasSymbolDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-            node.kind === SyntaxKind.NamespaceExportDeclaration ||
-            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
-            node.kind === SyntaxKind.NamespaceImport ||
-            node.kind === SyntaxKind.NamespaceExport ||
-            node.kind === SyntaxKind.ImportSpecifier ||
-            node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
-            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
-            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
-    }
-
     export function getTypeOnlyCompatibleAliasDeclarationFromName(node: Identifier): TypeOnlyCompatibleAliasDeclaration | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportClause:
@@ -2770,7 +2748,7 @@ namespace ts {
         }
     }
 
-    function isAliasableExpression(e: Expression) {
+    export function isAliasableExpression(e: Expression) {
         return isEntityNameExpression(e) || isClassExpression(e);
     }
 
@@ -6133,5 +6111,13 @@ namespace ts {
 
     export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
         return (negative && base10Value !== "0" ? "-" : "") + base10Value;
+    }
+
+    export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
+        return !!(useSite.flags & NodeFlags.Ambient)
+            || isPartOfTypeQuery(useSite)
+            || isFirstIdentifierOfImplementsClause(useSite)
+            || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
+            || !isExpressionNode(useSite);
     }
 }

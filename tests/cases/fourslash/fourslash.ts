@@ -433,6 +433,7 @@ declare namespace FourSlashInterface {
         printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
+        printOutliningSpans(): void;
         printReferences(): void;
         printContext(): void;
     }
@@ -610,6 +611,7 @@ declare namespace FourSlashInterface {
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;
+        readonly isFromUncheckedFile?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;

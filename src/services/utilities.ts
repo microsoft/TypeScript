@@ -1306,6 +1306,10 @@ namespace ts {
         return contains(typeKeywords, kind);
     }
 
+    export function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKeyword> {
+        return node.kind === SyntaxKind.TypeKeyword;
+    }
+
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
@@ -1492,6 +1496,11 @@ namespace ts {
         else {
             changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
         }
+    }
+
+    export function getTypeKeywordOfTypeOnlyImport(importClause: ImportClause, sourceFile: SourceFile): Token<SyntaxKind.TypeKeyword> {
+        Debug.assert(importClause.isTypeOnly);
+        return cast(importClause.getChildAt(0, sourceFile), isTypeKeywordToken);
     }
 
     export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean {

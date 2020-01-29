@@ -363,7 +363,7 @@ namespace ts.FindAllReferences {
             const { node, kind } = entry;
             const name = originalNode.text;
             const isShorthandAssignment = isShorthandPropertyAssignment(node.parent);
-            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(node.parent)) {
+            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(node.parent) && node.parent.name === node) {
                 const prefixColon: PrefixAndSuffix = { prefixText: name + ": " };
                 const suffixColon: PrefixAndSuffix = { suffixText: ": " + name };
                 return kind === EntryKind.SearchedLocalFoundProperty ? prefixColon

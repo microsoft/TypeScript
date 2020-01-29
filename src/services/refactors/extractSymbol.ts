@@ -437,6 +437,7 @@ namespace ts.refactor.extractSymbol {
                             permittedJumps = PermittedJumps.Return;
                         }
                         break;
+                    case SyntaxKind.DefaultClause:
                     case SyntaxKind.CaseClause:
                         // allow unlabeled break inside case clauses
                         permittedJumps |= PermittedJumps.Break;

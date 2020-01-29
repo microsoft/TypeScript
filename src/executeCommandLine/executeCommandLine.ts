@@ -243,13 +243,12 @@ namespace ts {
         if (commandLine.fileNames.length === 0 && !configFileName) {
             if (commandLine.options.showConfig) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             else {
                 printVersion(sys);
                 printHelp(sys, getOptionsForHelp(commandLine));
-                return sys.exit(ExitStatus.Success);
             }
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         const currentDirectory = sys.getCurrentDirectory();

@@ -5,17 +5,26 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length));
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
     });
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number): void {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number, errorCode: number): void {
         const token = getTokenAtPosition(sourceFile, start);
         const statement = findAncestor(token, isStatement)!;
-        Debug.assert(statement.getStart(sourceFile) === token.getStart(sourceFile), "token and statement should start at the same point");
+        if (statement.getStart(sourceFile) !== token.getStart(sourceFile)) {
+            const logData = JSON.stringify({
+                statementKind: Debug.formatSyntaxKind(statement.kind),
+                tokenKind: Debug.formatSyntaxKind(token.kind),
+                errorCode,
+                start,
+                length
+            });
+            Debug.fail("Token and statement should start at the same point. " + logData);
+        }
 
         const container = (isBlock(statement.parent) ? statement.parent : statement).parent;
         if (!isBlock(statement.parent) || statement === first(statement.parent.statements)) {

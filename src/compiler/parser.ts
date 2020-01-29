@@ -904,28 +904,31 @@ namespace ts {
             // overhead.  This functions allows us to set all the parents, without all the expense of
             // binding.
 
-            let parent: Node = rootNode;
-            forEachChild(rootNode, visitNode);
+            const stack: Node[] = [rootNode];
+            while (stack.length) {
+                const parent = stack.pop()!;
+                bindParentToChildren(parent, gatherChildren(parent));
+            }
+
             return;
 
-            function visitNode(n: Node): void {
-                // walk down setting parents that differ from the parent we think it should be.  This
-                // allows us to quickly bail out of setting parents for subtrees during incremental
-                // parsing
-                if (n.parent !== parent) {
-                    n.parent = parent;
+            function gatherChildren(node: Node) {
+                const children: Node[] = [];
+                forEachChild(node, n => { children.unshift(n); }); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
+                return children;
+            }
 
-                    const saveParent = parent;
-                    parent = n;
-                    forEachChild(n, visitNode);
-                    if (hasJSDocNodes(n)) {
-                        for (const jsDoc of n.jsDoc!) {
-                            jsDoc.parent = n;
-                            parent = jsDoc;
-                            forEachChild(jsDoc, visitNode);
+            function bindParentToChildren(parent: Node, children: readonly Node[]) {
+                for (const child of children) {
+                    if (child.parent === parent) continue; // already bound, assume subtree is bound
+                    child.parent = parent;
+                    stack.push(child);
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDoc of child.jsDoc!) {
+                            jsDoc.parent = child;
+                            stack.push(jsDoc);
                         }
                     }
-                    parent = saveParent;
                 }
             }
         }
@@ -7142,7 +7145,7 @@ namespace ts {
                         case SyntaxKind.ArrayType:
                             return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                         default:
-                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object";
+                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                     }
                 }
 
