@@ -218,6 +218,9 @@ namespace ts {
 
     // Private Identifiers
     export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        if (text[0] !== "#") {
+            Debug.fail("First character of private identifier must be #: " + text);
+        }
         const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
         node.escapedText = escapeLeadingUnderscores(text);
         return node;

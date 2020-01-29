@@ -2783,7 +2783,7 @@ namespace ts {
         }
     }
 
-    function isAliasableExpression(e: Expression) {
+    export function isAliasableExpression(e: Expression) {
         return isEntityNameExpression(e) || isClassExpression(e);
     }
 
