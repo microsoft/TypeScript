@@ -2590,6 +2590,18 @@ namespace ts {
             return links.target;
         }
 
+        /**
+         * If an alias symbol is not itself marked type-only, but resolves to a type-only alias
+         * somewhere in its resolution chain, save a reference to the type-only alias declaration
+         * so the alias _not_ marked type-only can be identified as _transitively_ type-only.
+         * @param aliasDeclaration The alias declaration not marked as type-only
+         * @param resolvesToSymbol A symbol somewhere in the resolution chain of the alias symbol
+         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
+         * has already been marked as not resolving to a type-only alias. Used when recursively resolving qualified
+         * names of import aliases, e.g. `import C = a.b.C`. If namespace `a` is not found to be type-only, the
+         * import declaration will initially be marked as not resolving to a type-only symbol. But, namespace `b`
+         * must still be checked for a type-only marker, overwriting the previous negative result if found.
+         */
         function markSymbolOfAliasDeclarationIfResolvesToTypeOnly(aliasDeclaration: Declaration | undefined, resolvesToSymbol: Symbol | undefined, overwriteEmpty?: boolean): boolean {
             if (!aliasDeclaration || !resolvesToSymbol) return false;
             const sourceSymbol = getSymbolOfNode(aliasDeclaration);
