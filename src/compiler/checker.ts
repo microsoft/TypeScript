@@ -16126,24 +16126,20 @@ namespace ts {
             function reportUnmatchedProperty(source: Type, target: Type, unmatchedProperty: Symbol, requireOptionalProperties: boolean) {
                 let shouldSkipElaboration = false;
                 // give specific error in case where private names have the same description
-                if (
-                    unmatchedProperty.valueDeclaration
+                if (unmatchedProperty.valueDeclaration
                     && isNamedDeclaration(unmatchedProperty.valueDeclaration)
                     && isPrivateIdentifier(unmatchedProperty.valueDeclaration.name)
-                    && source.symbol.valueDeclaration
-                    && isClassDeclaration(source.symbol.valueDeclaration)
-                ) {
+                    && source.symbol.flags & SymbolFlags.Class) {
                     const privateIdentifierDescription = unmatchedProperty.valueDeclaration.name.escapedText;
                     const symbolTableKey = getSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription);
                     if (symbolTableKey && getPropertyOfType(source, symbolTableKey)) {
-                        const sourceName = source.symbol.valueDeclaration.name;
-                        const targetName = target.symbol.valueDeclaration && isClassDeclaration(target.symbol.valueDeclaration) ? target.symbol.valueDeclaration.name : undefined;
+                        const sourceName = getDeclarationName(source.symbol.valueDeclaration);
+                        const targetName = getDeclarationName(target.symbol.valueDeclaration);
                         reportError(
                             Diagnostics.Property_0_in_type_1_refers_to_a_different_member_that_cannot_be_accessed_from_within_type_2,
                             diagnosticName(privateIdentifierDescription),
-                            diagnosticName(sourceName || anon),
-                            diagnosticName(targetName || anon),
-                        );
+                            diagnosticName(sourceName.escapedText === "" ? anon : sourceName),
+                            diagnosticName(targetName.escapedText === "" ? anon : targetName));
                         return;
                     }
                 }
