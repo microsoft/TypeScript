@@ -1778,26 +1778,6 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
-    export function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
-        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
-            node = node.parent;
-        }
-        if (node.kind !== SyntaxKind.ComputedPropertyName) {
-            return false;
-        }
-        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
-            return true;
-        }
-        const containerKind = node.parent.parent.kind;
-        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
-    }
-
-    export function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
-        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
-        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
-        return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
-    }
-
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -6154,5 +6134,26 @@ namespace ts {
             || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
+    }
+
+    function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
+        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+            node = node.parent;
+        }
+        if (node.kind !== SyntaxKind.ComputedPropertyName) {
+            return false;
+        }
+        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+            return true;
+        }
+        const containerKind = node.parent.parent.kind;
+        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+    }
+
+    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
+        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
+        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
+        return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 }
