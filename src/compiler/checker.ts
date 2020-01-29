@@ -1824,7 +1824,8 @@ namespace ts {
             if (nameNotFoundMessage) {
                 if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                    // to a local variable in the constructor where the code will be emitted.
+                    // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+                    // with ESNext+useDefineForClassFields because the scope semantics are different.
                     const propertyName = (<PropertyDeclaration>propertyWithInvalidInitializer).name;
                     error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
                         declarationNameToString(propertyName), diagnosticName(nameArg!));
