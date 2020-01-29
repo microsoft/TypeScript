@@ -13688,31 +13688,32 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            if (isFunctionDeclaration(node) && (!isInJSFile(node) || !getTypeForDeclarationFromJSDocComment(node))) {
-                return false;
-            }
+            return (!isFunctionDeclaration(node) || isInJSFile(node) && !!getTypeForDeclarationFromJSDocComment(node)) &&
+                (hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node));
+        }
+
+        function hasContextSensitiveParameters(node: FunctionLikeDeclaration) {
             // Functions with type parameters are not context sensitive.
-            if (node.typeParameters) {
-                return false;
-            }
-            // Functions with any parameters that lack type annotations are context sensitive.
-            if (some(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
-                return true;
-            }
-            if (node.kind !== SyntaxKind.ArrowFunction) {
-                // If the first parameter is not an explicit 'this' parameter, then the function has
-                // an implicit 'this' parameter which is subject to contextual typing.
-                const parameter = firstOrUndefined(node.parameters);
-                if (!(parameter && parameterIsThisKeyword(parameter))) {
+            if (!node.typeParameters) {
+                // Functions with any parameters that lack type annotations are context sensitive.
+                if (some(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
                     return true;
                 }
+                if (node.kind !== SyntaxKind.ArrowFunction) {
+                    // If the first parameter is not an explicit 'this' parameter, then the function has
+                    // an implicit 'this' parameter which is subject to contextual typing.
+                    const parameter = firstOrUndefined(node.parameters);
+                    if (!(parameter && parameterIsThisKeyword(parameter))) {
+                        return true;
+                    }
+                }
             }
-            return hasContextSensitiveReturnExpression(node);
+            return false;
         }
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
             // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
-            return !!node.body && node.body.kind !== SyntaxKind.Block && isContextSensitive(node.body);
+            return !getEffectiveReturnTypeNode(node) && !!node.body && node.body.kind !== SyntaxKind.Block && isContextSensitive(node.body);
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
@@ -26427,7 +26428,7 @@ namespace ts {
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode && checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
-                if (!getEffectiveReturnTypeNode(node) && node.kind === SyntaxKind.ArrowFunction && node.parameters.length === 0) {
+                if (!getEffectiveReturnTypeNode(node) && !hasContextSensitiveParameters(node)) {
                     // Return plain anyFunctionType if there is no possibility we'll make inferences from the return type
                     const contextualSignature = getContextualSignature(node);
                     if (contextualSignature && couldContainTypeVariables(getReturnTypeOfSignature(contextualSignature))) {
