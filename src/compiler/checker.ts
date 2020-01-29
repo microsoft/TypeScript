@@ -2190,6 +2190,12 @@ namespace ts {
                 return resolved;
             }
             const resolved = getSymbolOfPartOfRightHandSideOfImportEquals(node.moduleReference, dontResolveAlias);
+            checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node, resolved);
+            return resolved;
+
+        }
+
+        function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
             if (markSymbolOfAliasDeclarationIfResolvesToTypeOnly(node, resolved)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
                 const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
@@ -2201,11 +2207,8 @@ namespace ts {
                 // Non-null assertion is safe because the optionality comes from ImportClause,
                 // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
                 const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
-                addRelatedInfo(
-                    error(node.moduleReference, message),
-                    createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
+                addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
             }
-            return resolved;
         }
 
         function resolveExportByName(moduleSymbol: Symbol, name: __String, sourceNode: TypeOnlyCompatibleAliasDeclaration | undefined, dontResolveAlias: boolean) {
