@@ -1127,6 +1127,14 @@
         "category": "Error",
         "code": 1378
     },
+    "An import alias cannot reference a declaration that was exported using 'export type'.": {
+        "category": "Error",
+        "code": 1379
+    },
+    "An import alias cannot reference a declaration that was imported using 'import type'.": {
+        "category": "Error",
+        "code": 1380
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

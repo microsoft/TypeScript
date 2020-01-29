@@ -1778,25 +1778,6 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
-    export function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
-        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
-            node = node.parent;
-        }
-        if (node.kind !== SyntaxKind.ComputedPropertyName) {
-            return false;
-        }
-        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
-            return true;
-        }
-        const containerKind = node.parent.parent.kind;
-        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
-    }
-
-    export function isFirstIdentifierOfImplementsClause(node: Node) {
-        return node.parent?.parent?.parent?.kind === SyntaxKind.HeritageClause
-            && (node.parent.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword;
-    }
-
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -2738,13 +2719,47 @@ namespace ts {
         return false;
     }
 
-    export function getTypeOnlyCompatibleAliasDeclarationFromName(node: Identifier): TypeOnlyCompatibleAliasDeclaration | undefined {
+    // An alias symbol is created by one of the following declarations:
+    // import <symbol> = ...
+    // import <symbol> from ...
+    // import * as <symbol> from ...
+    // import { x as <symbol> } from ...
+    // export { x as <symbol> } from ...
+    // export * as ns <symbol> from ...
+    // export = <EntityNameExpression>
+    // export default <EntityNameExpression>
+    // module.exports = <EntityNameExpression>
+    // {<Identifier>}
+    // {name: <EntityNameExpression>}
+    export function isAliasSymbolDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+            node.kind === SyntaxKind.NamespaceExportDeclaration ||
+            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+            node.kind === SyntaxKind.NamespaceImport ||
+            node.kind === SyntaxKind.NamespaceExport ||
+            node.kind === SyntaxKind.ImportSpecifier ||
+            node.kind === SyntaxKind.ExportSpecifier ||
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
+            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
+            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
+            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+    }
+
+    export function getAliasDeclarationFromName(node: EntityName): Declaration | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ExportSpecifier:
-                return node.parent as TypeOnlyCompatibleAliasDeclaration;
+            case SyntaxKind.ExportAssignment:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.parent as Declaration;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.parent as QualifiedName;
+                } while (node.parent.kind === SyntaxKind.QualifiedName);
+                return getAliasDeclarationFromName(node);
         }
     }
 
@@ -6116,8 +6131,29 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfImplementsClause(useSite)
+            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
+    }
+
+    function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
+        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+            node = node.parent;
+        }
+        if (node.kind !== SyntaxKind.ComputedPropertyName) {
+            return false;
+        }
+        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+            return true;
+        }
+        const containerKind = node.parent.parent.kind;
+        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+    }
+
+    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
+        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
+        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
+        return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 }
