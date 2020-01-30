@@ -1,37 +1,839 @@
 Exit Code: 1
 Standard output:
+lib/AmdTemplatePlugin.js(42,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/AmdTemplatePlugin.js(49,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+  Type 'Stats' is missing the following properties from type 'Compilation': hooks, name, compiler, resolverFactory, and 107 more.
+lib/AmdTemplatePlugin.js(53,16): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/AmdTemplatePlugin.js(53,23): error TS2339: Property 'runtimeTemplate' does not exist on type 'Module'.
+lib/AmdTemplatePlugin.js(53,40): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/AmdTemplatePlugin.js(88,32): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/AmdTemplatePlugin.js(119,32): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/AutomaticPrefetchPlugin.js(32,41): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/BannerPlugin.js(76,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/BannerPlugin.js(94,35): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/BannerPlugin.js(96,19): error TS2339: Property 'updateAsset' does not exist on type 'Stats'.
+lib/Cache.js(122,37): error TS2554: Expected 4 arguments, but got 2.
+lib/Cache.js(140,22): error TS2554: Expected 4 arguments, but got 1.
+lib/Cache.js(150,23): error TS2554: Expected 4 arguments, but got 1.
+lib/Chunk.js(79,3): error TS2322: Type 'SortableSet<ChunkGroup>' is not assignable to type 'SortableSet<string>'.
+  Type 'ChunkGroup' is not assignable to type 'string'.
+lib/Chunk.js(395,16): error TS2339: Property 'isInitial' does not exist on type 'string'.
+lib/Chunk.js(396,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+lib/Chunk.js(410,19): error TS2339: Property 'isInitial' does not exist on type 'string'.
+lib/Chunk.js(421,20): error TS2339: Property 'isInitial' does not exist on type 'string'.
+lib/Chunk.js(431,24): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'string'.
+lib/Chunk.js(432,20): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'string'.
+lib/Chunk.js(441,25): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'string'.
+lib/Chunk.js(442,23): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'string'.
+lib/Chunk.js(451,27): error TS2345: Argument of type 'ChunkGroup' is not assignable to parameter of type 'string'.
+lib/Chunk.js(466,3): error TS2322: Type 'SortableSet<string>' is not assignable to type 'Iterable<ChunkGroup>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<ChunkGroup, any>'.
+      Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<ChunkGroup, any>'.
+        Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<ChunkGroup>'.
+          Type 'string' is not assignable to type 'ChunkGroup'.
+lib/Chunk.js(474,15): error TS2339: Property 'removeChunk' does not exist on type 'string'.
+lib/Chunk.js(484,15): error TS2339: Property 'insertChunk' does not exist on type 'string'.
+lib/Chunk.js(485,22): error TS2345: Argument of type 'string' is not assignable to parameter of type 'ChunkGroup'.
+lib/ChunkGraph.js(64,2): error TS2719: Type 'T[]' is not assignable to type 'T[]'. Two different types with this name exist, but they are unrelated.
+  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+    'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(75,35): error TS2339: Property 'getSourceTypes' does not exist on type 'T'.
+lib/ChunkGraph.js(273,65): error TS2345: Argument of type 'T' is not assignable to parameter of type 'Module'.
+lib/ChunkGraph.js(283,10): error TS2345: Argument of type '(a: Module, b: Module) => 0 | 1 | -1' is not assignable to parameter of type '(a: T, b: T) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(294,18): error TS2345: Argument of type 'Chunk' is not assignable to parameter of type 'T'.
+  'Chunk' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(295,19): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(306,22): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(307,21): error TS2345: Argument of type 'Chunk' is not assignable to parameter of type 'T'.
+  'Chunk' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(317,42): error TS2345: Argument of type 'T' is not assignable to parameter of type 'Module'.
+lib/ChunkGraph.js(318,22): error TS2345: Argument of type 'Chunk' is not assignable to parameter of type 'T'.
+  'Chunk' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(332,20): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(344,27): error TS2345: Argument of type 'RuntimeModule' is not assignable to parameter of type 'T'.
+  'RuntimeModule' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(358,41): error TS2345: Argument of type 'T' is not assignable to parameter of type 'Chunk'.
+lib/ChunkGraph.js(359,23): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(360,20): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(392,60): error TS2345: Argument of type 'RuntimeModule' is not assignable to parameter of type 'T'.
+  'RuntimeModule' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(393,57): error TS2345: Argument of type 'RuntimeModule' is not assignable to parameter of type 'T'.
+  'RuntimeModule' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(407,26): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'T'.
+  'Module' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(437,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Chunk>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<T, any>' is not assignable to type 'IteratorResult<Chunk, any>'.
+      Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorResult<Chunk, any>'.
+        Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorYieldResult<Chunk>'.
+          Type 'T' is not assignable to type 'Chunk'.
+lib/ChunkGraph.js(447,23): error TS2345: Argument of type '(arg0: Chunk, arg1: Chunk) => 0 | 1 | -1' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+  Types of parameters 'arg0' and 'arg0' are incompatible.
+    Type 'T' is not assignable to type 'Chunk'.
+lib/ChunkGraph.js(448,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Chunk>'.
+lib/ChunkGraph.js(457,3): error TS2322: Type 'unknown[]' is not assignable to type 'Chunk[]'.
+  Type '{}' is missing the following properties from type 'Chunk': id, ids, debugId, name, and 48 more.
+lib/ChunkGraph.js(478,24): error TS2345: Argument of type '(a: Chunk, b: Chunk) => number' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+  Types of parameters 'a' and 'arg0' are incompatible.
+    Type 'T' is not assignable to type 'Chunk'.
+lib/ChunkGraph.js(479,24): error TS2345: Argument of type '(a: Chunk, b: Chunk) => number' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+lib/ChunkGraph.js(506,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<T, any>' is not assignable to type 'IteratorResult<Module, any>'.
+      Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorResult<Module, any>'.
+        Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorYieldResult<Module>'.
+          Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(519,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+lib/ChunkGraph.js(529,24): error TS2345: Argument of type '(arg0: Module, arg1: Module) => 0 | 1 | -1' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+  Types of parameters 'arg0' and 'arg0' are incompatible.
+    Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(530,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+lib/ChunkGraph.js(545,34): error TS2345: Argument of type '(arg0: Module, arg1: Module) => 0 | 1 | -1' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+  Types of parameters 'arg0' and 'arg0' are incompatible.
+    Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(546,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+lib/ChunkGraph.js(555,3): error TS2322: Type 'unknown[]' is not assignable to type 'Module[]'.
+  Type '{}' is missing the following properties from type 'Module': type, context, needId, debugId, and 74 more.
+lib/ChunkGraph.js(566,44): error TS2345: Argument of type '(set: SortableSet<Module>) => Module[]' is not assignable to parameter of type '(arg0: SortableSet<T>) => Module[]'.
+  Types of parameters 'set' and 'arg0' are incompatible.
+    Type 'SortableSet<T>' is not assignable to type 'SortableSet<Module>'.
+      Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(681,25): error TS2345: Argument of type '(a: Module, b: Module) => 0 | 1 | -1' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+  Types of parameters 'a' and 'arg0' are incompatible.
+    Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(682,25): error TS2345: Argument of type '(a: Module, b: Module) => 0 | 1 | -1' is not assignable to parameter of type '(arg0: T, arg1: T) => number'.
+lib/ChunkGraph.js(683,33): error TS2345: Argument of type 'SortableSet<T>' is not assignable to parameter of type 'Iterable<Module>'.
+lib/ChunkGraph.js(692,44): error TS2345: Argument of type '(modules: Iterable<Module>) => number' is not assignable to parameter of type '(arg0: SortableSet<T>) => number'.
+  Types of parameters 'modules' and 'arg0' are incompatible.
+    Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+lib/ChunkGraph.js(701,44): error TS2345: Argument of type '(modules: Iterable<Module>) => Record<string, number>' is not assignable to parameter of type '(arg0: SortableSet<T>) => Record<string, number>'.
+  Types of parameters 'modules' and 'arg0' are incompatible.
+    Type 'SortableSet<T>' is not assignable to type 'Iterable<Module>'.
+lib/ChunkGraph.js(720,57): error TS2345: Argument of type '(modules: Iterable<Module>) => number' is not assignable to parameter of type '(arg0: SortableSet<T>) => number'.
+lib/ChunkGraph.js(744,36): error TS2345: Argument of type 'Set<T>' is not assignable to parameter of type 'Iterable<Module>'.
+  The types returned by '[Symbol.iterator]()' are incompatible between these types.
+    Type 'IterableIterator<T>' is not assignable to type 'Iterator<Module, any, undefined>'.
+lib/ChunkGraph.js(884,26): error TS2345: Argument of type 'RuntimeModule' is not assignable to parameter of type 'T'.
+  'RuntimeModule' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(914,29): error TS2345: Argument of type 'RuntimeModule' is not assignable to parameter of type 'T'.
+  'RuntimeModule' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGraph.js(1012,3): error TS2322: Type 'SortableSet<T>' is not assignable to type 'Iterable<RuntimeModule>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<T, any>' is not assignable to type 'IteratorResult<RuntimeModule, any>'.
+      Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorResult<RuntimeModule, any>'.
+        Type 'IteratorYieldResult<T>' is not assignable to type 'IteratorYieldResult<RuntimeModule>'.
+          Type 'T' is not assignable to type 'RuntimeModule'.
+lib/ChunkGraph.js(1023,4): error TS2345: Argument of type '(arg0: Module, arg1: Module) => 0 | 1 | -1' is not assignable to parameter of type '(a: T, b: T) => number'.
+  Types of parameters 'arg0' and 'a' are incompatible.
+    Type 'T' is not assignable to type 'Module'.
+lib/ChunkGraph.js(1035,3): error TS2322: Type 'T[]' is not assignable to type 'RuntimeModule[]'.
+  Type 'T' is not assignable to type 'RuntimeModule'.
+lib/ChunkGroup.js(41,25): error TS2322: Type 'ChunkGroup[]' is not assignable to type 'T[]'.
+  Type 'ChunkGroup' is not assignable to type 'T'.
+    'ChunkGroup' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+lib/ChunkGroup.js(263,3): error TS2322: Type 'unknown[]' is not assignable to type 'ChunkGroup[]'.
+  Type '{}' is missing the following properties from type 'ChunkGroup': groupDebugId, options, _children, _parents, and 45 more.
+lib/ChunkGroup.js(304,3): error TS2322: Type 'unknown[]' is not assignable to type 'ChunkGroup[]'.
+lib/ChunkTemplate.js(32,21): error TS2339: Property 'chunk' does not exist on type 'Dependency'.
+lib/ChunkTemplate.js(82,24): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/ChunkTemplate.js(83,25): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/ChunkTemplate.js(85,24): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/ChunkTemplate.js(89,41): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/CompatibilityPlugin.js(73,59): error TS2345: Argument of type '(statement: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/CompatibilityPlugin.js(75,8): error TS2367: This condition will always return 'false' since the types '"UnaryExpression"' and '"FunctionDeclaration"' have no overlap.
+lib/CompatibilityPlugin.js(76,18): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/CompatibilityPlugin.js(77,18): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/CompatibilityPlugin.js(80,59): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/CompatibilityPlugin.js(81,28): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/CompatibilityPlugin.js(84,19): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/CompatibilityPlugin.js(107,35): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/Compilation.js(563,29): error TS2339: Property 'identifier' does not exist on type 'FactorizeModuleOptions'.
+lib/Compilation.js(682,62): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(684,44): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(688,44): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(695,46): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(701,46): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(742,35): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(830,27): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+  Type 'Module' is missing the following properties from type 'FactorizeModuleOptions': currentProfile, factory, originModule
+lib/Compilation.js(904,23): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(949,45): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(964,47): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(983,37): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(1168,53): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(1221,54): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(1386,35): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1397,40): error TS2554: Expected 1 arguments, but got 3.
+lib/Compilation.js(1400,40): error TS2554: Expected 1 arguments, but got 3.
+lib/Compilation.js(1411,25): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(1424,30): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'FactorizeModuleOptions'.
+lib/Compilation.js(1427,56): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'Iterable<Module>'.
+  Property '[Symbol.iterator]' is missing in type 'Module' but required in type 'Iterable<Module>'.
+lib/Compilation.js(1444,49): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'Iterable<Module>'.
+lib/Compilation.js(1502,21): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1526,19): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1531,45): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+  Type 'Set<Module>' is missing the following properties from type 'Module': type, context, needId, debugId, and 73 more.
+lib/Compilation.js(1533,27): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1559,31): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+  Type 'Set<Chunk>' is missing the following properties from type 'Module': type, context, needId, debugId, and 73 more.
+lib/Compilation.js(1561,23): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1566,40): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1568,54): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1571,52): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1573,64): error TS2554: Expected 2 arguments, but got 3.
+lib/Compilation.js(1580,51): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1592,61): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1594,51): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1596,50): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1597,38): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1598,32): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1599,40): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1600,45): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1602,48): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1603,37): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1604,31): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1605,39): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1606,44): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1611,51): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1612,49): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1615,45): error TS2345: Argument of type 'Set<Module>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1617,34): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1619,33): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1621,38): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1623,37): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1625,43): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1627,42): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1629,28): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1631,27): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1639,36): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1643,45): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1646,37): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1649,35): error TS2554: Expected 2 arguments, but got 1.
+lib/Compilation.js(1655,49): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Iterable<Module>'.
+  The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<Chunk, any>' is not assignable to type 'IteratorResult<Module, any>'.
+      Type 'IteratorYieldResult<Chunk>' is not assignable to type 'IteratorResult<Module, any>'.
+        Type 'IteratorYieldResult<Chunk>' is not assignable to type 'IteratorYieldResult<Module>'.
+          Type 'Chunk' is not assignable to type 'Module'.
+lib/Compilation.js(1664,50): error TS2345: Argument of type 'Set<Chunk>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1665,45): error TS2345: Argument of type 'Record<string, Source>' is not assignable to parameter of type 'Iterable<Module>'.
+  Property '[Symbol.iterator]' is missing in type 'Record<string, Source>' but required in type 'Iterable<Module>'.
+lib/Compilation.js(1671,46): error TS2345: Argument of type 'Record<string, Source>' is not assignable to parameter of type 'Module'.
+  Type 'Record<string, Source>' is missing the following properties from type 'Module': type, context, needId, debugId, and 74 more.
+lib/Compilation.js(1672,44): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1676,44): error TS2345: Argument of type 'Record<string, Source>' is not assignable to parameter of type 'Iterable<Module>'.
+lib/Compilation.js(1682,45): error TS2345: Argument of type 'Record<string, Source>' is not assignable to parameter of type 'Module'.
+lib/Compilation.js(1689,41): error TS2554: Expected 2 arguments, but got 1.
+lib/Compilation.js(1698,47): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1699,36): error TS2554: Expected 1 arguments, but got 0.
+lib/Compilation.js(1810,54): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1814,48): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1828,62): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1831,61): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1861,61): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1864,60): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(1904,41): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(2159,28): error TS2345: Argument of type 'Hash' is not assignable to parameter of type 'Module'.
+  Type 'Hash' is missing the following properties from type 'Module': type, context, needId, debugId, and 74 more.
+lib/Compilation.js(2207,38): error TS2554: Expected 1 arguments, but got 3.
+lib/Compilation.js(2215,33): error TS2345: Argument of type 'Chunk' is not assignable to parameter of type 'Module'.
+  Type 'Chunk' is missing the following properties from type 'Module': type, context, needId, resolveOptions, and 68 more.
+lib/Compilation.js(2353,42): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(2364,45): error TS2345: Argument of type 'RenderManifestOptions' is not assignable to parameter of type 'Dependency'.
+  Type 'RenderManifestOptions' is missing the following properties from type 'Dependency': weak, optional, loc, type, and 13 more.
+lib/Compilation.js(2476,43): error TS2554: Expected 1 arguments, but got 2.
+lib/Compilation.js(2544,4): error TS2554: Expected 2 arguments, but got 3.
+lib/Compilation.js(2559,4): error TS2554: Expected 2 arguments, but got 3.
+lib/Compilation.js(2561,12): error TS2322: Type 'string[][]' is not assignable to type 'string'.
+lib/Compiler.js(250,49): error TS2554: Expected 1 arguments, but got 3.
+lib/Compiler.js(386,34): error TS2554: Expected 2 arguments, but got 1.
+lib/Compiler.js(416,35): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Stats'.
+  Type 'Compiler' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Compiler.js(419,30): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Stats'.
+lib/Compiler.js(561,10): error TS2554: Expected 2 arguments, but got 3.
+lib/Compiler.js(668,37): error TS2345: Argument of type 'Compilation' is not assignable to parameter of type 'Stats'.
+lib/Compiler.js(677,29): error TS2345: Argument of type 'Compilation' is not assignable to parameter of type 'Stats'.
+  Type 'Compilation' is missing the following properties from type 'Stats': compilation, startTime, endTime, hasWarnings, and 2 more.
+lib/Compiler.js(833,4): error TS2554: Expected 1 arguments, but got 3.
+lib/Compiler.js(856,48): error TS2554: Expected 1 arguments, but got 2.
+lib/Compiler.js(857,44): error TS2554: Expected 1 arguments, but got 2.
+lib/Compiler.js(868,39): error TS2345: Argument of type 'NormalModuleFactory' is not assignable to parameter of type 'Stats'.
+  Type 'NormalModuleFactory' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Compiler.js(874,40): error TS2345: Argument of type 'ContextModuleFactory' is not assignable to parameter of type 'Stats'.
+  Type 'ContextModuleFactory' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Compiler.js(892,38): error TS2345: Argument of type '{ normalModuleFactory: NormalModuleFactory; contextModuleFactory: ContextModuleFactory; }' is not assignable to parameter of type 'Stats'.
+  Type '{ normalModuleFactory: NormalModuleFactory; contextModuleFactory: ContextModuleFactory; }' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Compiler.js(895,28): error TS2345: Argument of type '{ normalModuleFactory: NormalModuleFactory; contextModuleFactory: ContextModuleFactory; }' is not assignable to parameter of type 'Stats'.
+lib/Compiler.js(918,42): error TS2345: Argument of type 'Compilation' is not assignable to parameter of type 'Stats'.
+lib/ContextExclusionPlugin.js(25,8): error TS2339: Property 'hooks' does not exist on type 'Stats'.
 lib/ContextModule.js(436,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/ContextModule.js(465,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/ContextModule.js(767,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/DefinePlugin.js(153,64): error TS2345: Argument of type '() => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+lib/DefinePlugin.js(169,60): error TS2345: Argument of type '() => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/DefinePlugin.js(188,61): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/DefinePlugin.js(242,59): error TS2345: Argument of type '() => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+lib/DefinePlugin.js(251,60): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/DefinePlugin.js(270,9): error TS2345: Argument of type '(expr: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/DelegatedPlugin.js(34,52): error TS2339: Property 'normalModuleFactory' does not exist on type 'Stats'.
 lib/Dependency.js(139,29): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/ExternalModule.js(284,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/EntryOptionPlugin.js(37,23): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'EntryItem'.
+  Type 'any[]' is not assignable to type 'EntryItem'.
+    Property '0' is missing in type 'any[]' but required in type '[string, ...string[]]'.
+lib/EnvironmentPlugin.js(50,18): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/EvalDevToolModulePlugin.js(43,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/EvalSourceMapDevToolPlugin.js(60,63): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/EvalSourceMapDevToolPlugin.js(61,60): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/EvalSourceMapDevToolPlugin.js(116,35): error TS2339: Property 'findModule' does not exist on type 'Stats'.
+lib/ExportPropertyTemplatePlugin.js(40,37): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ExportPropertyTemplatePlugin.js(41,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ExportPropertyTemplatePlugin.js(42,37): error TS2339: Property 'entryDependencies' does not exist on type 'Stats'.
+lib/ExportPropertyTemplatePlugin.js(61,63): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ExportPropertyTemplatePlugin.js(65,17): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/ExportPropertyTemplatePlugin.js(65,24): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/ExportsInfoApiPlugin.js(34,36): error TS2345: Argument of type '(expr: any, members: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/ExportsInfoApiPlugin.js(49,36): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/ExternalModule.js(285,54): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ExternalsPlugin.js(23,52): error TS2339: Property 'normalModuleFactory' does not exist on type 'Stats'.
+lib/FileSystemInfo.js(325,32): error TS2345: Argument of type '(arg0?: WebpackError, arg1?: string) => void' is not assignable to parameter of type 'Callback<FileSystemInfoEntry>'.
+  Types of parameters 'arg1' and 'result' are incompatible.
+    Type 'FileSystemInfoEntry' is not assignable to type 'string'.
+lib/FileSystemInfo.js(336,35): error TS2345: Argument of type '(arg0?: WebpackError, arg1?: string) => void' is not assignable to parameter of type 'Callback<FileSystemInfoEntry>'.
+  Types of parameters 'arg1' and 'result' are incompatible.
+    Type 'FileSystemInfoEntry' is not assignable to type 'string'.
+lib/FileSystemInfo.js(362,4): error TS2345: Argument of type '({ type, context, path, expected }: { type: any; context: any; path: any; expected: any; }, callback: any) => void' is not assignable to parameter of type 'AsyncFunction<{ type: number; path: string; context?: string; expected?: string; }, Error>'.
+  Types of parameters '__0' and 'callback' are incompatible.
+    Type '(err?: Error, result?: { type: number; path: string; context?: string; expected?: string; }) => void' is missing the following properties from type '{ type: any; context: any; path: any; expected: any; }': type, context, path, expected
+lib/FileSystemInfo.js(751,30): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(828,33): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(928,33): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(1178,28): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(1220,28): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(1265,28): error TS2345: Argument of type 'FileSystemInfoEntry' is not assignable to parameter of type 'string'.
+lib/FileSystemInfo.js(1529,18): error TS2339: Property 'has' does not exist on type 'FileSystemInfoEntry'.
+lib/FlagAllModulesAsUsedPlugin.js(23,37): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/FlagAllModulesAsUsedPlugin.js(24,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(32,37): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(33,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(52,21): error TS2339: Property 'cache' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(229,23): error TS2339: Property 'cache' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(247,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagDependencyExportsPlugin.js(256,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagDependencyUsagePlugin.js(26,36): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/FlagDependencyUsagePlugin.js(27,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagDependencyUsagePlugin.js(126,45): error TS2339: Property 'getDependencyReferencedExports' does not exist on type 'Stats'.
+lib/FlagDependencyUsagePlugin.js(142,37): error TS2339: Property 'entryDependencies' does not exist on type 'Stats'.
+lib/FlagEntryExportAsUsedPlugin.js(24,37): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/FlagEntryExportAsUsedPlugin.js(25,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/FlagEntryExportAsUsedPlugin.js(26,37): error TS2339: Property 'entryDependencies' does not exist on type 'Stats'.
+lib/HotModuleReplacementPlugin.js(79,38): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(callback: (...args: any[]) => void, ms: number, ...args: any[]): Timeout', gave the following error.
+    Argument of type 'Stats' is not assignable to parameter of type '(...args: any[]) => void'.
+      Type 'Stats' provides no match for the signature '(...args: any[]): void'.
+  Overload 2 of 2, '(handler: TimerHandler, timeout?: number, ...arguments: any[]): number', gave the following error.
+    Argument of type 'Stats' is not assignable to parameter of type 'TimerHandler'.
+      Type 'Stats' is missing the following properties from type 'Function': apply, call, bind, prototype, and 5 more.
+lib/HotModuleReplacementPlugin.js(80,12): error TS2349: This expression is not callable.
+  Type 'Stats' has no call signatures.
+lib/IgnorePlugin.js(69,8): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/IgnorePlugin.js(72,8): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/LibManifestPlugin.js(48,37): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/LibManifestPlugin.js(50,29): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/LibManifestPlugin.js(56,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/LibManifestPlugin.js(57,38): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/LibManifestPlugin.js(62,20): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/LoaderOptionsPlugin.js(42,37): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/LoaderTargetPlugin.js(26,37): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/MainTemplate.js(50,22): error TS2339: Property 'chunk' does not exist on type 'Dependency'.
+lib/MainTemplate.js(112,24): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/MainTemplate.js(113,25): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/MainTemplate.js(115,25): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/MainTemplate.js(121,24): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/MainTemplate.js(139,24): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/MainTemplate.js(140,25): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/MainTemplate.js(142,25): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/MainTemplate.js(146,41): error TS2339: Property 'chunk' does not exist on type 'Module'.
 lib/Module.js(625,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
-lib/MultiCompiler.js(15,65): error TS2300: Duplicate identifier 'AsyncSeriesHook'.
-lib/MultiCompiler.js(16,77): error TS2300: Duplicate identifier 'SyncBailHook'.
-lib/MultiCompiler.js(17,70): error TS2300: Duplicate identifier 'WatchOptions'.
-lib/MultiCompiler.js(18,37): error TS2300: Duplicate identifier 'Compiler'.
-lib/MultiCompiler.js(19,34): error TS2300: Duplicate identifier 'Stats'.
-lib/MultiCompiler.js(20,37): error TS2300: Duplicate identifier 'Watching'.
-lib/MultiCompiler.js(21,52): error TS2300: Duplicate identifier 'InputFileSystem'.
-lib/MultiCompiler.js(22,59): error TS2300: Duplicate identifier 'IntermediateFileSystem'.
-lib/MultiCompiler.js(23,53): error TS2300: Duplicate identifier 'OutputFileSystem'.
-lib/MultiCompiler.js(25,23): error TS2300: Duplicate identifier 'CompilerStatus'.
-lib/MultiCompiler.js(33,14): error TS2300: Duplicate identifier 'Callback'.
-lib/MultiCompiler.js(39,14): error TS2300: Duplicate identifier 'RunWithDependenciesHandler'.
-lib/MultiCompiler.js(105,6): error TS2300: Duplicate identifier 'outputPath'.
-lib/MultiCompiler.js(120,6): error TS2300: Duplicate identifier 'inputFileSystem'.
-lib/MultiCompiler.js(124,6): error TS2300: Duplicate identifier 'outputFileSystem'.
-lib/MultiCompiler.js(128,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
-lib/MultiCompiler.js(135,6): error TS2300: Duplicate identifier 'inputFileSystem'.
-lib/MultiCompiler.js(144,6): error TS2300: Duplicate identifier 'outputFileSystem'.
-lib/MultiCompiler.js(153,6): error TS2300: Duplicate identifier 'intermediateFileSystem'.
+lib/ModuleInfoHeaderPlugin.js(66,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/MultiWatching.js(59,36): error TS2554: Expected 1 arguments, but got 0.
+lib/NoEmitOnErrorsPlugin.js(21,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/NoEmitOnErrorsPlugin.js(22,21): error TS2339: Property 'getStats' does not exist on type 'Stats'.
+lib/NormalModuleReplacementPlugin.js(35,9): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/NormalModuleReplacementPlugin.js(44,9): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(285,20): error TS2339: Property 'compiler' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(293,16): error TS2339: Property 'factorizeQueue' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(297,16): error TS2339: Property 'factorizeQueue' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(302,16): error TS2339: Property 'addModuleQueue' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(303,16): error TS2339: Property 'processDependenciesQueue' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(308,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(310,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(311,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(312,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(365,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ProgressPlugin.js(382,41): error TS2339: Property 'compiler' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(51,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(59,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(80,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(90,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(111,19): error TS2339: Property 'usedModuleIds' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(169,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(195,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RecordIdsPlugin.js(233,19): error TS2339: Property 'usedChunkIds' does not exist on type 'Stats'.
+lib/ResolverFactory.js(101,20): error TS2554: Expected 1 arguments, but got 3.
+lib/RuntimePlugin.js(72,16): error TS2339: Property 'dependencyTemplates' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(77,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(82,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(90,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(98,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(104,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(107,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(113,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(116,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(122,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(125,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(131,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(134,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(140,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(143,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(149,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(152,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(155,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(158,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(161,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(166,20): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(170,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(179,24): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(180,24): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(186,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(191,20): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(195,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(201,25): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(207,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(212,20): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(217,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(222,20): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(227,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(234,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(240,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(246,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(249,14): error TS2339: Property 'mainTemplate' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(256,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/RuntimePlugin.js(260,48): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/SetVarTemplatePlugin.js(32,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/SetVarTemplatePlugin.js(39,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/SetVarTemplatePlugin.js(43,16): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/SetVarTemplatePlugin.js(43,23): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/SetVarTemplatePlugin.js(45,40): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/SetVarTemplatePlugin.js(66,40): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(148,59): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/SourceMapDevToolPlugin.js(150,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(153,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(161,46): error TS2339: Property 'compiler' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(165,38): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(190,34): error TS2339: Property 'getAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(191,42): error TS2339: Property 'compilerPath' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(194,20): error TS2339: Property 'cache' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(204,24): error TS2339: Property 'updateAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(206,24): error TS2339: Property 'emitAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(240,10): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/SourceMapDevToolPlugin.js(396,43): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(413,25): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(419,24): error TS2339: Property 'updateAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(426,23): error TS2339: Property 'emitAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(454,23): error TS2339: Property 'updateAsset' does not exist on type 'Stats'.
+lib/SourceMapDevToolPlugin.js(457,22): error TS2339: Property 'cache' does not exist on type 'Stats'.
+lib/SystemTemplatePlugin.js(35,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/SystemTemplatePlugin.js(42,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/SystemTemplatePlugin.js(46,16): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/SystemTemplatePlugin.js(46,23): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/SystemTemplatePlugin.js(56,39): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/SystemTemplatePlugin.js(137,31): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/TemplatedPathPlugin.js(296,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/UmdTemplatePlugin.js(86,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/UmdTemplatePlugin.js(93,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/UmdTemplatePlugin.js(97,16): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/UmdTemplatePlugin.js(97,23): error TS2339: Property 'moduleGraph' does not exist on type 'Module'.
+lib/UmdTemplatePlugin.js(97,36): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/UmdTemplatePlugin.js(97,48): error TS2339: Property 'runtimeTemplate' does not exist on type 'Module'.
+lib/UmdTemplatePlugin.js(126,26): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/WarnCaseSensitiveModulesPlugin.js(22,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/WarnCaseSensitiveModulesPlugin.js(24,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/WarnCaseSensitiveModulesPlugin.js(36,20): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/WarnCaseSensitiveModulesPlugin.js(37,60): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/WarnDeprecatedOptionPlugin.js(34,17): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/WarnNoModeSetPlugin.js(20,16): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/Watching.js(66,43): error TS2345: Argument of type 'Compiler' is not assignable to parameter of type 'Stats'.
+  Type 'Compiler' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Watching.js(100,46): error TS2554: Expected 2 arguments, but got 1.
+lib/Watching.js(139,36): error TS2345: Argument of type 'Error' is not assignable to parameter of type 'Stats'.
+  Type 'Error' is missing the following properties from type 'Stats': compilation, hash, startTime, endTime, and 3 more.
+lib/Watching.js(207,48): error TS2554: Expected 1 arguments, but got 2.
+lib/Watching.js(268,36): error TS2554: Expected 1 arguments, but got 0.
+lib/WebpackOptionsApply.js(309,52): error TS2554: Expected 1 arguments, but got 2.
+lib/WebpackOptionsApply.js(592,36): error TS2345: Argument of type 'Compiler' is not assignable to parameter of type 'Stats'.
+lib/WebpackOptionsApply.js(621,38): error TS2345: Argument of type 'Compiler' is not assignable to parameter of type 'Stats'.
+lib/async-modules/InferAsyncModulesPlugin.js(29,12): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/async-modules/InferAsyncModulesPlugin.js(30,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/async-modules/InferAsyncModulesPlugin.js(58,22): error TS2339: Property 'errors' does not exist on type 'Stats'.
+lib/cache/AddBuildDependenciesPlugin.js(26,17): error TS2339: Property 'buildDependencies' does not exist on type 'Stats'.
+lib/cache/ResolverCachePlugin.js(100,33): error TS2339: Property 'fileSystemInfo' does not exist on type 'Stats'.
+lib/cache/ResolverCachePlugin.js(101,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/cache/ResolverCachePlugin.js(103,33): error TS2339: Property 'getLogger' does not exist on type 'Stats'.
+lib/cache/ResolverCachePlugin.js(205,6): error TS2345: Argument of type '(resolver: any, options: any, userOptions: any) => void' is not assignable to parameter of type '(args_0: any) => any'.
+lib/dependencies/CommonJsExportsParserPlugin.js(94,40): error TS2345: Argument of type '(expr: any, members: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(110,40): error TS2345: Argument of type '(expr: any, members: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(127,40): error TS2345: Argument of type '(expr: any, members: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(144,40): error TS2345: Argument of type '(expression: UnaryExpression, ...args: any[]) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(145,22): error TS2352: Conversion of type 'UnaryExpression' to type 'CallExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is not comparable to type 'NewExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(182,40): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(196,40): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(210,40): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/dependencies/CommonJsExportsParserPlugin.js(221,63): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
 lib/dependencies/ExportsInfoDependency.js(81,9): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(567,40): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportDependency.js(195,37): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportDependency.js(197,36): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportDependency.js(203,19): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
 lib/dependencies/HarmonyImportSpecifierDependency.js(167,34): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/ids/ChunkModuleIdRangePlugin.js(28,36): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ids/ChunkModuleIdRangePlugin.js(29,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/ChunkModuleIdRangePlugin.js(30,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/ChunkModuleIdRangePlugin.js(32,18): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/ids/DeterministicChunkIdsPlugin.js(31,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/DeterministicChunkIdsPlugin.js(34,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/DeterministicChunkIdsPlugin.js(42,39): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/DeterministicModuleIdsPlugin.js(33,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/DeterministicModuleIdsPlugin.js(36,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/DeterministicModuleIdsPlugin.js(42,40): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/DeterministicModuleIdsPlugin.js(52,21): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ids/NamedChunkIdsPlugin.js(33,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/NamedChunkIdsPlugin.js(34,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/NamedChunkIdsPlugin.js(63,22): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/NamedChunkIdsPlugin.js(70,45): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/NamedModuleIdsPlugin.js(32,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/NamedModuleIdsPlugin.js(33,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/NamedModuleIdsPlugin.js(47,23): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/NamedModuleIdsPlugin.js(51,47): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/NaturalChunkIdsPlugin.js(22,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/NaturalChunkIdsPlugin.js(23,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/NaturalChunkIdsPlugin.js(26,51): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/NaturalModuleIdsPlugin.js(23,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/NaturalModuleIdsPlugin.js(24,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/NaturalModuleIdsPlugin.js(33,61): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ids/NaturalModuleIdsPlugin.js(35,53): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/OccurrenceChunkIdsPlugin.js(37,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/OccurrenceChunkIdsPlugin.js(38,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/OccurrenceChunkIdsPlugin.js(68,54): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/ids/OccurrenceModuleIdsPlugin.js(39,36): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ids/OccurrenceModuleIdsPlugin.js(41,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/ids/OccurrenceModuleIdsPlugin.js(42,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/ids/OccurrenceModuleIdsPlugin.js(117,18): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/ids/OccurrenceModuleIdsPlugin.js(134,56): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/javascript/JavascriptModulesPlugin.js(138,35): error TS2345: Argument of type '[string, string]' is not assignable to parameter of type 'readonly string[] & { 0: string; length: 3; }'.
+  Type '[string, string]' is not assignable to type '{ 0: string; length: 3; }'.
+    Types of property 'length' are incompatible.
+      Type '2' is not assignable to type '3'.
+lib/javascript/JavascriptModulesPlugin.js(139,40): error TS2345: Argument of type '[string, string]' is not assignable to parameter of type 'readonly string[] & { 0: string; length: 3; }'.
+  Type '[string, string]' is not assignable to type '{ 0: string; length: 3; }'.
+lib/javascript/JavascriptModulesPlugin.js(140,39): error TS2345: Argument of type '[string, string]' is not assignable to parameter of type 'readonly string[] & { 0: string; length: 3; }'.
+  Type '[string, string]' is not assignable to type '{ 0: string; length: 3; }'.
+lib/javascript/JavascriptModulesPlugin.js(141,42): error TS2345: Argument of type '[string, string]' is not assignable to parameter of type 'readonly string[] & { 0: string; length: 3; }'.
+  Type '[string, string]' is not assignable to type '{ 0: string; length: 3; }'.
+lib/javascript/JavascriptModulesPlugin.js(488,28): error TS2554: Expected 3 arguments, but got 2.
+lib/javascript/JavascriptModulesPlugin.js(492,23): error TS2554: Expected 3 arguments, but got 2.
+lib/javascript/JavascriptModulesPlugin.js(645,27): error TS2554: Expected 3 arguments, but got 2.
+lib/javascript/JavascriptModulesPlugin.js(654,23): error TS2554: Expected 3 arguments, but got 2.
+lib/javascript/JavascriptModulesPlugin.js(946,30): error TS2554: Expected 3 arguments, but got 2.
+lib/javascript/JavascriptParser.js(285,21): error TS2352: Conversion of type 'UnaryExpression' to type 'Literal' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'regex' is missing in type 'UnaryExpression' but required in type 'RegExpLiteral'.
+lib/javascript/JavascriptParser.js(285,21): error TS2352: Conversion of type 'UnaryExpression' to type 'Literal' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is not comparable to type 'RegExpLiteral'.
+lib/javascript/JavascriptParser.js(313,22): error TS2352: Conversion of type 'UnaryExpression' to type 'LogicalExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'LogicalExpression': left, right
+lib/javascript/JavascriptParser.js(337,22): error TS2352: Conversion of type 'UnaryExpression' to type 'BinaryExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'BinaryExpression': left, right
+lib/javascript/JavascriptParser.js(697,21): error TS2352: Conversion of type 'UnaryExpression' to type 'Identifier' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'name' is missing in type 'UnaryExpression' but required in type 'Identifier'.
+lib/javascript/JavascriptParser.js(709,24): error TS2345: Argument of type 'Identifier' is not assignable to parameter of type 'UnaryExpression'.
+  Type 'Identifier' is missing the following properties from type 'UnaryExpression': operator, prefix, argument
+lib/javascript/JavascriptParser.js(716,21): error TS2352: Conversion of type 'UnaryExpression' to type 'ThisExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'type' are incompatible.
+    Type '"UnaryExpression"' is not comparable to type '"ThisExpression"'.
+lib/javascript/JavascriptParser.js(728,24): error TS2345: Argument of type 'ThisExpression' is not assignable to parameter of type 'UnaryExpression'.
+  Type 'ThisExpression' is missing the following properties from type 'UnaryExpression': operator, prefix, argument
+lib/javascript/JavascriptParser.js(737,28): error TS2352: Conversion of type 'UnaryExpression' to type 'MemberExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'MemberExpression': object, property, computed
+lib/javascript/JavascriptParser.js(749,25): error TS2345: Argument of type 'MemberExpression' is not assignable to parameter of type 'UnaryExpression'.
+  Type 'MemberExpression' is missing the following properties from type 'UnaryExpression': operator, prefix, argument
+lib/javascript/JavascriptParser.js(756,21): error TS2352: Conversion of type 'UnaryExpression' to type 'CallExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'NewExpression': callee, arguments
+lib/javascript/JavascriptParser.js(756,21): error TS2352: Conversion of type 'UnaryExpression' to type 'CallExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is not comparable to type 'NewExpression'.
+lib/javascript/JavascriptParser.js(776,28): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(880,22): error TS2352: Conversion of type 'UnaryExpression' to type 'TemplateLiteral' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'TemplateLiteral': quasis, expressions
+lib/javascript/JavascriptParser.js(893,22): error TS2352: Conversion of type 'UnaryExpression' to type 'TaggedTemplateExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'TaggedTemplateExpression': tag, quasi
+lib/javascript/JavascriptParser.js(991,22): error TS2352: Conversion of type 'UnaryExpression' to type 'ConditionalExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'UnaryExpression' is missing the following properties from type 'ConditionalExpression': test, alternate, consequent
+lib/javascript/JavascriptParser.js(1022,22): error TS2352: Conversion of type 'UnaryExpression' to type 'ArrayExpression' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'elements' is missing in type 'UnaryExpression' but required in type 'ArrayExpression'.
+lib/javascript/JavascriptParser.js(1280,8): error TS2367: This condition will always return 'false' since the types 'BasicEvaluatedExpression' and 'boolean' have no overlap.
+lib/javascript/JavascriptParser.js(1471,37): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1477,51): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1486,8): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1495,54): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1530,44): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1536,51): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1542,49): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1559,9): error TS2554: Expected 1 arguments, but got 5.
+lib/javascript/JavascriptParser.js(1567,9): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1595,5): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1610,51): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1626,53): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1629,6): error TS2554: Expected 1 arguments, but got 4.
+lib/javascript/JavascriptParser.js(1639,43): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1640,52): error TS2554: Expected 1 arguments, but got 5.
+lib/javascript/JavascriptParser.js(1661,53): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(1698,50): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(2188,7): error TS2367: This condition will always return 'false' since the types 'BasicEvaluatedExpression' and 'boolean' have no overlap.
+lib/javascript/JavascriptParser.js(2443,31): error TS2556: Expected 1 arguments, but got 0 or more.
+lib/javascript/JavascriptParser.js(2445,32): error TS2322: Type 'BasicEvaluatedExpression' is not assignable to type 'R'.
+  'BasicEvaluatedExpression' is assignable to the constraint of type 'R', but 'R' could be instantiated with a different subtype of constraint '{}'.
+lib/javascript/JavascriptParser.js(2459,29): error TS2556: Expected 1 arguments, but got 0 or more.
+lib/javascript/JavascriptParser.js(2460,30): error TS2322: Type 'BasicEvaluatedExpression' is not assignable to type 'R'.
+  'BasicEvaluatedExpression' is assignable to the constraint of type 'R', but 'R' could be instantiated with a different subtype of constraint '{}'.
+lib/javascript/JavascriptParser.js(2652,30): error TS2345: Argument of type 'Expression' is not assignable to parameter of type 'UnaryExpression'.
+  Type 'Identifier' is not assignable to type 'UnaryExpression'.
+lib/javascript/JavascriptParser.js(2810,36): error TS2554: Expected 1 arguments, but got 2.
+lib/javascript/JavascriptParser.js(2816,31): error TS2554: Expected 1 arguments, but got 2.
+lib/node/NodeEnvironmentPlugin.js(44,17): error TS2339: Property 'inputFileSystem' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(33,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/node/NodeTemplatePlugin.js(35,13): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/node/NodeTemplatePlugin.js(35,20): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/node/NodeTemplatePlugin.js(46,58): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'RenderContext'.
+lib/node/NodeTemplatePlugin.js(64,17): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(67,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(70,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(73,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(77,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(82,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/NodeTemplatePlugin.js(90,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/ReadFileCompileAsyncWasmPlugin.js(50,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/ReadFileCompileAsyncWasmPlugin.js(53,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/node/ReadFileCompileAsyncWasmPlugin.js(63,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/node/ReadFileCompileWasmPlugin.js(54,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/node/ReadFileCompileWasmPlugin.js(57,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/node/ReadFileCompileWasmPlugin.js(67,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/optimize/AggressiveMergingPlugin.js(37,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/AggressiveMergingPlugin.js(43,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/AggressiveMergingPlugin.js(82,19): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(90,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(95,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(101,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(105,35): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(122,21): error TS2339: Property 'records' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(122,44): error TS2339: Property 'records' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(175,37): error TS2339: Property 'addChunk' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(253,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(262,39): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(280,40): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(294,21): error TS2339: Property 'records' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(294,44): error TS2339: Property 'records' does not exist on type 'Stats'.
+lib/optimize/AggressiveSplittingPlugin.js(308,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/EnsureChunkConditionsPlugin.js(24,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/EnsureChunkConditionsPlugin.js(31,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/EnsureChunkConditionsPlugin.js(72,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/FlagIncludedChunksPlugin.js(19,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/FlagIncludedChunksPlugin.js(22,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/FlagIncludedChunksPlugin.js(37,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/FlagIncludedChunksPlugin.js(48,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/InnerGraphPlugin.js(114,51): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'void' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(118,50): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'void' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(140,56): error TS2345: Argument of type '(statement: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(144,12): error TS2367: This condition will always return 'false' since the types '"UnaryExpression"' and '"FunctionDeclaration"' have no overlap.
+lib/optimize/InnerGraphPlugin.js(145,32): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/optimize/InnerGraphPlugin.js(145,47): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/optimize/InnerGraphPlugin.js(152,61): error TS2345: Argument of type '(statement: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(156,12): error TS2367: This condition will always return 'false' since the types '"UnaryExpression"' and '"ClassDeclaration"' have no overlap.
+lib/optimize/InnerGraphPlugin.js(157,32): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/optimize/InnerGraphPlugin.js(157,47): error TS2339: Property 'id' does not exist on type 'UnaryExpression'.
+lib/optimize/InnerGraphPlugin.js(162,12): error TS2367: This condition will always return 'false' since the types '"UnaryExpression"' and '"ExportDefaultDeclaration"' have no overlap.
+lib/optimize/InnerGraphPlugin.js(163,32): error TS2339: Property 'declaration' does not exist on type 'UnaryExpression'.
+lib/optimize/InnerGraphPlugin.js(182,7): error TS2345: Argument of type '(decl: any, statement: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(209,53): error TS2345: Argument of type '(statement: UnaryExpression) => void' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'void' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(219,54): error TS2345: Argument of type '(decl: any, statement: any) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(238,32): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'void' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(252,32): error TS2345: Argument of type '(expr: UnaryExpression) => boolean' is not assignable to parameter of type '(args_0: UnaryExpression) => BasicEvaluatedExpression'.
+  Type 'boolean' is not assignable to type 'BasicEvaluatedExpression'.
+lib/optimize/InnerGraphPlugin.js(254,12): error TS2367: This condition will always return 'false' since the types 'UnaryOperator' and '"="' have no overlap.
+lib/optimize/LimitChunkCountPlugin.js(60,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/LimitChunkCountPlugin.js(66,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/LimitChunkCountPlugin.js(70,22): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/LimitChunkCountPlugin.js(72,47): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/LimitChunkCountPlugin.js(179,20): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/MangleExportsPlugin.js(115,36): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/optimize/MangleExportsPlugin.js(116,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/MergeDuplicateChunksPlugin.js(21,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/MergeDuplicateChunksPlugin.js(27,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/MergeDuplicateChunksPlugin.js(82,23): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/MinChunkSizePlugin.js(37,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/MinChunkSizePlugin.js(43,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/MinChunkSizePlugin.js(101,18): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/RemoveEmptyChunksPlugin.js(25,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/RemoveEmptyChunksPlugin.js(32,19): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/RemoveEmptyChunksPlugin.js(33,19): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/RemoveEmptyChunksPlugin.js(39,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/RemoveEmptyChunksPlugin.js(46,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/RemoveParentModulesPlugin.js(22,36): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/RemoveParentModulesPlugin.js(26,42): error TS2339: Property 'entrypoints' does not exist on type 'Stats'.
+lib/optimize/RemoveParentModulesPlugin.js(104,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/RuntimeChunkPlugin.js(26,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/RuntimeChunkPlugin.js(32,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/RuntimeChunkPlugin.js(33,43): error TS2339: Property 'entrypoints' does not exist on type 'Stats'.
+lib/optimize/RuntimeChunkPlugin.js(44,37): error TS2339: Property 'addChunk' does not exist on type 'Stats'.
+lib/optimize/SideEffectsFlagPlugin.js(57,8): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/SideEffectsFlagPlugin.js(80,8): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/SideEffectsFlagPlugin.js(95,36): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/optimize/SideEffectsFlagPlugin.js(96,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(548,31): error TS2339: Property 'getLogger' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(550,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(553,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(562,37): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(563,38): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(577,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(697,24): error TS2339: Property 'namedChunks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(698,21): error TS2339: Property 'errors' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(767,39): error TS2339: Property 'modules' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(930,40): error TS2339: Property 'namedChunks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1044,31): error TS2339: Property 'addChunk' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1064,39): error TS2339: Property 'entrypoints' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1066,21): error TS2339: Property 'entrypoints' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1080,46): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/optimize/SplitChunksPlugin.js(1179,49): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1211,22): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1268,37): error TS2339: Property 'addChunk' does not exist on type 'Stats'.
+lib/optimize/SplitChunksPlugin.js(1273,46): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/performance/SizeLimitsPlugin.js(77,32): error TS2339: Property 'getAsset' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(91,53): error TS2339: Property 'getAssets' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(107,31): error TS2339: Property 'getAsset' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(113,44): error TS2339: Property 'entrypoints' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(147,19): error TS2339: Property 'chunks' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(156,19): error TS2339: Property 'errors' does not exist on type 'Stats'.
+lib/performance/SizeLimitsPlugin.js(158,19): error TS2339: Property 'warnings' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(24,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(27,15): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(33,20): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(44,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(47,15): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(52,20): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(64,20): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(76,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(79,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(89,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/prefetch/ChunkPrefetchPreloadPlugin.js(92,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/runtime/CompatRuntimePlugin.js(36,50): error TS2554: Expected 5 arguments, but got 3.
+lib/runtime/CompatRuntimePlugin.js(41,66): error TS2554: Expected 5 arguments, but got 3.
+lib/runtime/CompatRuntimePlugin.js(49,66): error TS2554: Expected 5 arguments, but got 4.
+lib/runtime/StartupChunkDependenciesPlugin.js(29,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/runtime/StartupChunkDependenciesPlugin.js(32,23): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/runtime/StartupChunkDependenciesPlugin.js(36,20): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/stats/DefaultStatsFactoryPlugin.js(1276,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/stats/DefaultStatsFactoryPlugin.js(1337,30): error TS2339: Property 'createStatsFactory' does not exist on type 'Stats'.
+lib/stats/DefaultStatsFactoryPlugin.js(1338,24): error TS2339: Property 'createStatsOptions' does not exist on type 'Stats'.
+lib/stats/DefaultStatsFactoryPlugin.js(1346,41): error TS2339: Property 'createStatsFactory' does not exist on type 'Stats'.
+lib/stats/DefaultStatsFactoryPlugin.js(1347,21): error TS2339: Property 'createStatsOptions' does not exist on type 'Stats'.
+lib/stats/DefaultStatsPresetPlugin.js(244,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/stats/DefaultStatsPresetPlugin.js(251,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/stats/DefaultStatsPresetPlugin.js(257,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/stats/DefaultStatsPresetPlugin.js(262,55): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/stats/DefaultStatsPrinterPlugin.js(1035,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/util/AsyncQueue.js(253,48): error TS2554: Expected 2 arguments, but got 4.
 lib/wasm/WasmChunkLoadingRuntimeModule.js(44,33): error TS2341: Property 'moduleGraph' is private and only accessible within class 'ChunkGraph'.
+lib/wasm/WasmFinalizeExportsPlugin.js(20,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/wasm/WasmFinalizeExportsPlugin.js(33,45): error TS2339: Property 'moduleGraph' does not exist on type 'Stats'.
+lib/wasm/WasmFinalizeExportsPlugin.js(42,48): error TS2339: Property 'getDependencyReferencedExports' does not exist on type 'Stats'.
+lib/wasm/WasmFinalizeExportsPlugin.js(61,27): error TS2339: Property 'requestShortener' does not exist on type 'Stats'.
+lib/wasm/WasmFinalizeExportsPlugin.js(65,24): error TS2339: Property 'errors' does not exist on type 'Stats'.
+lib/web/FetchCompileAsyncWasmPlugin.js(25,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/FetchCompileAsyncWasmPlugin.js(28,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/web/FetchCompileAsyncWasmPlugin.js(38,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/web/FetchCompileWasmPlugin.js(29,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/FetchCompileWasmPlugin.js(32,38): error TS2339: Property 'chunkGraph' does not exist on type 'Stats'.
+lib/web/FetchCompileWasmPlugin.js(43,19): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/web/JsonpExportTemplatePlugin.js(30,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpExportTemplatePlugin.js(37,63): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/web/JsonpExportTemplatePlugin.js(41,17): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/web/JsonpExportTemplatePlugin.js(41,24): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/web/JsonpExportTemplatePlugin.js(43,32): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/web/JsonpExportTemplatePlugin.js(55,32): error TS2339: Property 'getPath' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(61,62): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/web/JsonpTemplatePlugin.js(63,13): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/web/JsonpTemplatePlugin.js(63,20): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/web/JsonpTemplatePlugin.js(63,32): error TS2339: Property 'runtimeTemplate' does not exist on type 'Module'.
+lib/web/JsonpTemplatePlugin.js(70,57): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'RenderContext'.
+  Type 'Module' is missing the following properties from type 'RenderContext': chunk, dependencyTemplates, runtimeTemplate, moduleGraph, chunkGraph
+lib/web/JsonpTemplatePlugin.js(129,48): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/web/JsonpTemplatePlugin.js(130,12): error TS2339: Property 'runtimeTemplate' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(137,21): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(198,21): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(226,48): error TS2339: Property 'outputOptions' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(250,17): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(260,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(263,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(266,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(270,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(276,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(285,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/web/JsonpTemplatePlugin.js(292,16): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webpack.js(69,29): error TS2554: Expected 1 arguments, but got 0.
+lib/webpack.js(70,34): error TS2554: Expected 1 arguments, but got 0.
+lib/webworker/WebWorkerTemplatePlugin.js(26,63): error TS2345: Argument of type 'Stats' is not assignable to parameter of type 'Compilation'.
+lib/webworker/WebWorkerTemplatePlugin.js(30,15): error TS2339: Property 'chunk' does not exist on type 'Module'.
+lib/webworker/WebWorkerTemplatePlugin.js(30,22): error TS2339: Property 'chunkGraph' does not exist on type 'Module'.
+lib/webworker/WebWorkerTemplatePlugin.js(30,34): error TS2339: Property 'runtimeTemplate' does not exist on type 'Module'.
+lib/webworker/WebWorkerTemplatePlugin.js(40,59): error TS2345: Argument of type 'Module' is not assignable to parameter of type 'RenderContext'.
+lib/webworker/WebWorkerTemplatePlugin.js(86,18): error TS2339: Property 'addRuntimeModule' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(91,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(94,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(97,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(101,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(107,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
+lib/webworker/WebWorkerTemplatePlugin.js(116,17): error TS2339: Property 'hooks' does not exist on type 'Stats'.
 
 
 
