@@ -49,7 +49,7 @@ const c2 = <OneThing {...obj} yy1 />; // type incompatible;
 >obj : { yy: number; yy1: string; }
 >yy1 : true
 
-const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
+const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
 >c3 : JSX.Element
 ><OneThing {...obj} {...{extra: "extra attr"}} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }

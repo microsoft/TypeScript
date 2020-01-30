@@ -1744,7 +1744,7 @@ namespace ts.server {
 
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
-     * and if successfull create a ConfiguredProject for it.
+     * and if successful create a ConfiguredProject for it.
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {

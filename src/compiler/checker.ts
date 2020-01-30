@@ -5733,7 +5733,7 @@ namespace ts {
                                 // function g() {}
                                 // module.exports.g = g
                                 // ```
-                                // In such a situation, we have a local variable named `g`, and a seperate exported variable named `g`.
+                                // In such a situation, we have a local variable named `g`, and a separate exported variable named `g`.
                                 // Naively, we would emit
                                 // ```
                                 // function g() {}
@@ -32279,7 +32279,7 @@ namespace ts {
                     const sourceConstraint = constraint && getTypeFromTypeNode(constraint);
                     const targetConstraint = getConstraintOfTypeParameter(target);
                     // relax check if later interface augmentation has no constraint, it's more broad and is OK to merge with
-                    // a more constrained interface (this could be generalized to a full heirarchy check, but that's maybe overkill)
+                    // a more constrained interface (this could be generalized to a full hierarchy check, but that's maybe overkill)
                     if (sourceConstraint && targetConstraint && !isTypeIdenticalTo(sourceConstraint, targetConstraint)) {
                         return false;
                     }
