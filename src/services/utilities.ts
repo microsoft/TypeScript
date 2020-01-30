@@ -1488,13 +1488,13 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
+    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
         if (lastImportDeclaration) {
             changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
+            changes.insertNodeAtTopOfFile(sourceFile, importDecl, blankLineBetween);
         }
     }
 
