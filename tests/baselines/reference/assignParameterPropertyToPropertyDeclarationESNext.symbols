@@ -89,3 +89,36 @@ class E {
 >foo2 : Symbol(E.foo2, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 23, 16))
 }
 
+class F {
+>F : Symbol(F, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 24, 1))
+
+    Inner = class extends F {
+>Inner : Symbol(F.Inner, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 26, 9))
+>F : Symbol(F, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 24, 1))
+
+        p2 = this.p1
+>p2 : Symbol((Anonymous class).p2, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 27, 29))
+>this.p1 : Symbol(F.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 29, 5))
+>this : Symbol((Anonymous class), Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 27, 11))
+>p1 : Symbol(F.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 29, 5))
+    }
+    p1 = 0
+>p1 : Symbol(F.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 29, 5))
+}
+class G {
+>G : Symbol(G, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 31, 1))
+
+    Inner = class extends G {
+>Inner : Symbol(G.Inner, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 32, 9))
+>G : Symbol(G, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 31, 1))
+
+        p2 = this.p1
+>p2 : Symbol((Anonymous class).p2, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 33, 29))
+>this.p1 : Symbol(G.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 36, 16))
+>this : Symbol((Anonymous class), Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 33, 11))
+>p1 : Symbol(G.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 36, 16))
+    }
+    constructor(public p1: number) {}
+>p1 : Symbol(G.p1, Decl(assignParameterPropertyToPropertyDeclarationESNext.ts, 36, 16))
+}
+

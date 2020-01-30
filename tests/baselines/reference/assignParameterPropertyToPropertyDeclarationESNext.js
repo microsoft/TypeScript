@@ -25,6 +25,19 @@ class E {
     constructor(public foo2: string) {}
 }
 
+class F {
+    Inner = class extends F {
+        p2 = this.p1
+    }
+    p1 = 0
+}
+class G {
+    Inner = class extends G {
+        p2 = this.p1
+    }
+    constructor(public p1: number) {}
+}
+
 
 //// [assignParameterPropertyToPropertyDeclarationESNext.js]
 class C {
@@ -54,5 +67,20 @@ class E {
     foo1 = '';
     constructor(foo2) {
         this.foo2 = foo2;
+    }
+}
+class F {
+    Inner = class extends F {
+        p2 = this.p1;
+    };
+    p1 = 0;
+}
+class G {
+    p1;
+    Inner = class extends G {
+        p2 = this.p1;
+    };
+    constructor(p1) {
+        this.p1 = p1;
     }
 }

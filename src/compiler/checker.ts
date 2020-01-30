@@ -1326,7 +1326,7 @@ namespace ts {
                 }
                 else if (isPropertyDeclaration(declaration)) {
                     // still might be illegal if a self-referencing property initializer (eg private x = this.x)
-                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAllPropertyDeclarations*/ false);
+                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
                     const container = getEnclosingBlockScopeContainer(declaration.parent);
@@ -1365,7 +1365,7 @@ namespace ts {
             if (isUsedInFunctionOrInstanceProperty(usage, declaration, container)) {
                 if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields) {
                     return (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent)) &&
-                        !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAllPropertyDeclarations*/ true);
+                        !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
                 }
                 else {
                     return true;
@@ -1423,7 +1423,8 @@ namespace ts {
                 });
             }
 
-            function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration | ParameterPropertyDeclaration, usage: Node, stopAtAllPropertyDeclarations: boolean) {
+            /** stopAtAnyPropertyDeclaration is used for detecting ES-standard class field use-before-def errors */
+            function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration | ParameterPropertyDeclaration, usage: Node, stopAtAnyPropertyDeclaration: boolean) {
                 // always legal if usage is after declaration
                 if (usage.end > declaration.end) {
                     return false;
@@ -1440,7 +1441,11 @@ namespace ts {
                         case SyntaxKind.ArrowFunction:
                             return true;
                         case SyntaxKind.PropertyDeclaration:
-                            return stopAtAllPropertyDeclarations ? "quit": true;
+                            // even when stopping at any property declaration, they need to come from the same class
+                            return stopAtAnyPropertyDeclaration &&
+                                (isPropertyDeclaration(declaration) && node.parent === declaration.parent
+                                 || isParameterPropertyDeclaration(declaration, declaration.parent) && node.parent === declaration.parent.parent)
+                                ? "quit": true;
                         case SyntaxKind.Block:
                             switch (node.parent.kind) {
                                 case SyntaxKind.GetAccessor:
