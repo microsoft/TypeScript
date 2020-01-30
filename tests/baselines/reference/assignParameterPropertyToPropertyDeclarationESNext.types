@@ -28,7 +28,7 @@ class C {
 >this : this
 >foo : string
     }
-    constructor(private foo: string) {}
+    constructor(public foo: string) {}
 >foo : string
 
     quim = this.baz // should error
@@ -57,5 +57,74 @@ class C {
 >this : this
 >foo : string
     }
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    quill = this.foo // ok
+>quill : string
+>this.foo : string
+>this : this
+>foo : string
+}
+
+class E {
+>E : E
+
+    bar = () => this.foo1 + this.foo2; // both ok
+>bar : () => string
+>() => this.foo1 + this.foo2 : () => string
+>this.foo1 + this.foo2 : string
+>this.foo1 : string
+>this : this
+>foo1 : string
+>this.foo2 : string
+>this : this
+>foo2 : string
+
+    foo1 = '';
+>foo1 : string
+>'' : ""
+
+    constructor(public foo2: string) {}
+>foo2 : string
+}
+
+class F {
+>F : F
+
+    Inner = class extends F {
+>Inner : typeof (Anonymous class)
+>class extends F {        p2 = this.p1    } : typeof (Anonymous class)
+>F : F
+
+        p2 = this.p1
+>p2 : number
+>this.p1 : number
+>this : this
+>p1 : number
+    }
+    p1 = 0
+>p1 : number
+>0 : 0
+}
+class G {
+>G : G
+
+    Inner = class extends G {
+>Inner : typeof (Anonymous class)
+>class extends G {        p2 = this.p1    } : typeof (Anonymous class)
+>G : G
+
+        p2 = this.p1
+>p2 : number
+>this.p1 : number
+>this : this
+>p1 : number
+    }
+    constructor(public p1: number) {}
+>p1 : number
 }
 

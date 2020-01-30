@@ -1327,12 +1327,14 @@ namespace ts {
                 }
                 else if (isPropertyDeclaration(declaration)) {
                     // still might be illegal if a self-referencing property initializer (eg private x = this.x)
-                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
+                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
+                    const container = getEnclosingBlockScopeContainer(declaration.parent);
                     // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
                     return !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
-                             && isUsedInFunctionOrInstanceProperty(usage, declaration));
+                             && getContainingClass(declaration) === getContainingClass(usage)
+                             && isUsedInFunctionOrInstanceProperty(usage, declaration, container));
                 }
                 return true;
             }
@@ -1358,10 +1360,19 @@ namespace ts {
             }
 
             const container = getEnclosingBlockScopeContainer(declaration);
-            return !!(usage.flags & NodeFlags.JSDoc)
-                || isInTypeQuery(usage)
-                || isUsedInFunctionOrInstanceProperty(usage, declaration, container)
-                   && !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields);
+            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage)) {
+                return true;
+            }
+            if (isUsedInFunctionOrInstanceProperty(usage, declaration, container)) {
+                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields) {
+                    return (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent)) &&
+                        !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -1413,7 +1424,8 @@ namespace ts {
                 });
             }
 
-            function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration, usage: Node) {
+            /** stopAtAnyPropertyDeclaration is used for detecting ES-standard class field use-before-def errors */
+            function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration | ParameterPropertyDeclaration, usage: Node, stopAtAnyPropertyDeclaration: boolean) {
                 // always legal if usage is after declaration
                 if (usage.end > declaration.end) {
                     return false;
@@ -1428,8 +1440,13 @@ namespace ts {
 
                     switch (node.kind) {
                         case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.PropertyDeclaration:
                             return true;
+                        case SyntaxKind.PropertyDeclaration:
+                            // even when stopping at any property declaration, they need to come from the same class
+                            return stopAtAnyPropertyDeclaration &&
+                                (isPropertyDeclaration(declaration) && node.parent === declaration.parent
+                                 || isParameterPropertyDeclaration(declaration, declaration.parent) && node.parent === declaration.parent.parent)
+                                ? "quit": true;
                         case SyntaxKind.Block:
                             switch (node.parent.kind) {
                                 case SyntaxKind.GetAccessor:
