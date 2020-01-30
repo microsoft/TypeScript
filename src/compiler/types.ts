@@ -4799,8 +4799,6 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
-        /* @internal */
-        omittedParameterCache?: CallLikeExpression[];
     }
 
     export const enum IndexKind {
