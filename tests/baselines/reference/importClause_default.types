@@ -5,14 +5,14 @@ export default class A { a!: string }
 
 === /b.ts ===
 import type A from './a';
->A : import("/a").default
+>A : A
 
 new A();
->new A() : any
->A : any
+>new A() : A
+>A : typeof A
 
 let a: A = { a: '' };
->a : import("/a").default
+>a : A
 >{ a: '' } : { a: string; }
 >a : string
 >'' : ""

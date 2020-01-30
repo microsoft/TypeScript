@@ -1306,6 +1306,10 @@ namespace ts {
         return contains(typeKeywords, kind);
     }
 
+    export function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKeyword> {
+        return node.kind === SyntaxKind.TypeKeyword;
+    }
+
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
@@ -1484,14 +1488,19 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement): void {
+    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
         const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
         if (lastImportDeclaration) {
             changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
+            changes.insertNodeAtTopOfFile(sourceFile, importDecl, blankLineBetween);
         }
+    }
+
+    export function getTypeKeywordOfTypeOnlyImport(importClause: ImportClause, sourceFile: SourceFile): Token<SyntaxKind.TypeKeyword> {
+        Debug.assert(importClause.isTypeOnly);
+        return cast(importClause.getChildAt(0, sourceFile), isTypeKeywordToken);
     }
 
     export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean {

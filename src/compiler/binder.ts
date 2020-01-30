@@ -1445,28 +1445,156 @@ namespace ts {
             }
         }
 
+        const enum BindBinaryExpressionFlowState {
+            BindThenBindChildren,
+            MaybeBindLeft,
+            BindToken,
+            BindRight,
+            FinishBind
+        }
+
         function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                if (isTopLevelLogicalExpression(node)) {
-                    const postExpressionLabel = createBranchLabel();
-                    bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
-                    currentFlow = finishFlowLabel(postExpressionLabel);
-                }
-                else {
-                    bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
+            const workStacks: {
+                expr: BinaryExpression[],
+                state: BindBinaryExpressionFlowState[],
+                inStrictMode: (boolean | undefined)[],
+                parent: (Node | undefined)[],
+                subtreeFlags: (number | undefined)[]
+            } = {
+                expr: [node],
+                state: [BindBinaryExpressionFlowState.MaybeBindLeft],
+                inStrictMode: [undefined],
+                parent: [undefined],
+                subtreeFlags: [undefined]
+            };
+            let stackIndex = 0;
+            while (stackIndex >= 0) {
+                node = workStacks.expr[stackIndex];
+                switch (workStacks.state[stackIndex]) {
+                    case BindBinaryExpressionFlowState.BindThenBindChildren: {
+                        // This state is used only when recuring, to emulate the work that `bind` does before
+                        // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
+                        node.parent = parent;
+                        const saveInStrictMode = inStrictMode;
+                        bindWorker(node);
+                        const saveParent = parent;
+                        parent = node;
+
+                        let subtreeFlagsState: number | undefined;
+                        // While this next part does the work of `bindChildren` before it descends into `bindChildrenWorker`
+                        // and uses `subtreeFlagsState` to queue up the work that needs to be done once the node is bound.
+                        if (skipTransformFlagAggregation) {
+                            // do nothing extra
+                        }
+                        else if (node.transformFlags & TransformFlags.HasComputedFlags) {
+                            skipTransformFlagAggregation = true;
+                            subtreeFlagsState = -1;
+                        }
+                        else {
+                            const savedSubtreeTransformFlags = subtreeTransformFlags;
+                            subtreeTransformFlags = 0;
+                            subtreeFlagsState = savedSubtreeTransformFlags;
+                        }
+
+                        advanceState(BindBinaryExpressionFlowState.MaybeBindLeft, saveInStrictMode, saveParent, subtreeFlagsState);
+                        break;
+                    }
+                    case BindBinaryExpressionFlowState.MaybeBindLeft: {
+                        const operator = node.operatorToken.kind;
+                        // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
+                        // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
+                        // For now, though, since the common cases are chained `+`, leaving it recursive is fine
+                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                            if (isTopLevelLogicalExpression(node)) {
+                                const postExpressionLabel = createBranchLabel();
+                                bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                                currentFlow = finishFlowLabel(postExpressionLabel);
+                            }
+                            else {
+                                bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
+                            }
+                            completeNode();
+                        }
+                        else {
+                            advanceState(BindBinaryExpressionFlowState.BindToken);
+                            maybeBind(node.left);
+                        }
+                        break;
+                    }
+                    case BindBinaryExpressionFlowState.BindToken: {
+                        advanceState(BindBinaryExpressionFlowState.BindRight);
+                        maybeBind(node.operatorToken);
+                        break;
+                    }
+                    case BindBinaryExpressionFlowState.BindRight: {
+                        advanceState(BindBinaryExpressionFlowState.FinishBind);
+                        maybeBind(node.right);
+                        break;
+                    }
+                    case BindBinaryExpressionFlowState.FinishBind: {
+                        const operator = node.operatorToken.kind;
+                        if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
+                            bindAssignmentTargetFlow(node.left);
+                            if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
+                                const elementAccess = <ElementAccessExpression>node.left;
+                                if (isNarrowableOperand(elementAccess.expression)) {
+                                    currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
+                                }
+                            }
+                        }
+                        completeNode();
+                        break;
+                    }
+                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for bindBinaryExpressionFlow`);
                 }
             }
-            else {
-                bindEachChild(node);
-                if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
-                    bindAssignmentTargetFlow(node.left);
-                    if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
-                        const elementAccess = <ElementAccessExpression>node.left;
-                        if (isNarrowableOperand(elementAccess.expression)) {
-                            currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
-                        }
+
+            /**
+             * Note that `advanceState` sets the _current_ head state, and that `maybeBind` potentially pushes on a new
+             * head state; so `advanceState` must be called before any `maybeBind` during a state's execution.
+             */
+            function advanceState(state: BindBinaryExpressionFlowState, isInStrictMode?: boolean, parent?: Node, subtreeFlags?: number) {
+                workStacks.state[stackIndex] = state;
+                if (isInStrictMode !== undefined) {
+                    workStacks.inStrictMode[stackIndex] = isInStrictMode;
+                }
+                if (parent !== undefined) {
+                    workStacks.parent[stackIndex] = parent;
+                }
+                if (subtreeFlags !== undefined) {
+                    workStacks.subtreeFlags[stackIndex] = subtreeFlags;
+                }
+            }
+
+            function completeNode() {
+                if (workStacks.inStrictMode[stackIndex] !== undefined) {
+                    if (workStacks.subtreeFlags[stackIndex] === -1) {
+                        skipTransformFlagAggregation = false;
+                        subtreeTransformFlags |= node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
                     }
+                    else if (workStacks.subtreeFlags[stackIndex] !== undefined) {
+                        subtreeTransformFlags = workStacks.subtreeFlags[stackIndex]! | computeTransformFlagsForNode(node, subtreeTransformFlags);
+                    }
+                    inStrictMode = workStacks.inStrictMode[stackIndex]!;
+                    parent = workStacks.parent[stackIndex]!;
+                }
+                stackIndex--;
+            }
+
+            /**
+             * If `node` is a BinaryExpression, adds it to the local work stack, otherwise recursively binds it
+             */
+            function maybeBind(node: Node) {
+                if (node && isBinaryExpression(node)) {
+                    stackIndex++;
+                    workStacks.expr[stackIndex] = node;
+                    workStacks.state[stackIndex] = BindBinaryExpressionFlowState.BindThenBindChildren;
+                    workStacks.inStrictMode[stackIndex] = undefined;
+                    workStacks.parent[stackIndex] = undefined;
+                    workStacks.subtreeFlags[stackIndex] = undefined;
+                }
+                else {
+                    bind(node);
                 }
             }
         }
@@ -2608,6 +2736,9 @@ namespace ts {
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
             else if (isNamespaceExport(node.exportClause)) {
+                // declareSymbol walks up parents to find name text, parent _must_ be set
+                // but won't be set by the normal binder walk until `bindChildren` later on.
+                node.exportClause.parent = node;
                 declareSymbol(container.symbol.exports, container.symbol, node.exportClause, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
         }

@@ -475,9 +475,9 @@ namespace ts {
         {
             name: "importsNotUsedAsValues",
             type: createMapFromTemplate({
-                remove: importsNotUsedAsValues.Remove,
-                preserve: importsNotUsedAsValues.Preserve,
-                error: importsNotUsedAsValues.Error
+                remove: ImportsNotUsedAsValues.Remove,
+                preserve: ImportsNotUsedAsValues.Preserve,
+                error: ImportsNotUsedAsValues.Error
             }),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -822,6 +822,7 @@ namespace ts {
         {
             name: "noErrorTruncation",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_truncate_error_messages
         },

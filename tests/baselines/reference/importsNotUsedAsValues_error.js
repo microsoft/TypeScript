@@ -4,6 +4,7 @@
 export default class {}
 export class A {}
 export type B = {};
+export const enum C { One, Two }
 
 //// [b.ts]
 import { A, B } from './a'; // Error
@@ -26,6 +27,19 @@ console.log(a, b);
 //// [e.ts]
 import { A, B } from './a'; // noUnusedLocals error only
 
+//// [f.ts]
+import { C } from './a';
+import type { C as D } from './a';
+C.One;
+let c: D = C.Two;
+let d: D.Two = C.Two;
+console.log(c, d);
+
+//// [g.ts]
+import { C } from './a';
+let c: C;
+let d: C.Two;
+console.log(c, d);
 
 //// [a.js]
 "use strict";
@@ -67,3 +81,18 @@ console.log(a, b);
 "use strict";
 exports.__esModule = true;
 require("./a"); // noUnusedLocals error only
+//// [f.js]
+"use strict";
+exports.__esModule = true;
+require("./a");
+0 /* One */;
+var c = 1 /* Two */;
+var d = 1 /* Two */;
+console.log(c, d);
+//// [g.js]
+"use strict";
+exports.__esModule = true;
+require("./a");
+var c;
+var d;
+console.log(c, d);

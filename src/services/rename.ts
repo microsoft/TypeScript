@@ -92,6 +92,7 @@ namespace ts.Rename {
     function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:

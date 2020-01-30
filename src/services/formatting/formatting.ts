@@ -263,7 +263,7 @@ namespace ts.formatting {
 
                 const error = sorted[index];
                 if (r.end <= error.start!) {
-                    // specified range ends before the error refered by 'index' - no error in range
+                    // specified range ends before the error referred by 'index' - no error in range
                     return false;
                 }
 
