@@ -8845,7 +8845,7 @@ declare namespace ts.server {
     }
     /**
      * If a file is opened, the server will look for a tsconfig (or jsconfig)
-     * and if successful create a ConfiguredProject for it.
+     * and if successfull create a ConfiguredProject for it.
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
@@ -9122,7 +9122,7 @@ declare namespace ts.server {
          */
         private readonly projectToSizeMap;
         /**
-         * This is a map of config file paths existence that doesnt need query to disk
+         * This is a map of config file paths existance that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
          *   In this case the exists could be true/false based on config file is present or not
          * - Or it is present if we have configured project open with config file at that location
