@@ -471,20 +471,23 @@ namespace ts {
                 if (!node) {
                     return undefined;
                 }
-                const links = getNodeLinks(node);
-                const resolvedType = links.resolvedType;
-                const skipDirectInference = links.skipDirectInference;
                 const containingCall = findAncestor(node, isCallLikeExpression);
                 const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
                 if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
-                    links.resolvedType = undefined;
-                    links.skipDirectInference = true;
+                    let toMarkSkip = node as Node;
+                    do {
+                        getNodeLinks(toMarkSkip).skipDirectInference = true;
+                        toMarkSkip = toMarkSkip.parent;
+                    } while (toMarkSkip && toMarkSkip !== containingCall);
                     getNodeLinks(containingCall).resolvedSignature = undefined;
                 }
                 const result = getContextualType(node, contextFlags);
                 if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
-                    links.skipDirectInference = skipDirectInference;
-                    links.resolvedType = resolvedType;
+                    let toMarkSkip = node as Node;
+                    do {
+                        getNodeLinks(toMarkSkip).skipDirectInference = undefined;
+                        toMarkSkip = toMarkSkip.parent;
+                    } while (toMarkSkip && toMarkSkip !== containingCall);
                     getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
                 }
                 return result;
@@ -18218,7 +18221,7 @@ namespace ts {
                     // type and then make a secondary inference from that type to T. We make a secondary inference
                     // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                     const inference = getInferenceInfoForType((<IndexType>constraintType).type);
-                    if (inference && !inference.isFixed) {
+                    if (inference && !inference.isFixed && !isFromInferenceBlockedSource(source)) {
                         const inferredType = inferTypeForHomomorphicMappedType(source, target, <IndexType>constraintType);
                         if (inferredType) {
                             // We assign a lower priority to inferences made from types containing non-inferrable
