@@ -494,7 +494,7 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 }
 
 type T35<T extends { a: string, b: number }> = T[];
->T35 : T[]
+>T35 : T35<T>
 >a : string
 >b : number
 

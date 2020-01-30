@@ -18,6 +18,7 @@ const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
     sourceDisplay: "./foo-bar",
     text: "(property) export=: 0",
     kind: "property",
+    kindModifiers: "export",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
 };
@@ -38,7 +39,7 @@ verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",
     source: "/src/foo-bar",
     description: `Import 'fooBar' from module "./foo-bar"`,
-    newFileContent: `import fooBar = require("./foo-bar");
+    newFileContent: `import fooBar = require("./foo-bar")
 
 exp
 fooB`,

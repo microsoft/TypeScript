@@ -7,10 +7,10 @@ declare var console: {
 >msg : string
 }
 type MultiSkilledRobot = [string, string[]];
->MultiSkilledRobot : [string, string[]]
+>MultiSkilledRobot : MultiSkilledRobot
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 >["mower", ["mowing", ""]] : [string, string[]]
 >"mower" : "mower"
 >["mowing", ""] : string[]
@@ -18,7 +18,7 @@ var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >"" : ""
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
->multiRobotB : [string, string[]]
+>multiRobotB : MultiSkilledRobot
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
@@ -31,12 +31,12 @@ let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 >["noSkill", "noSkill"] : string[]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 
 let [nameMB = "noName" ] = multiRobotB;
 >nameMB : string
 >"noName" : "noName"
->multiRobotB : [string, string[]]
+>multiRobotB : MultiSkilledRobot
 
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 >nameMA : string
@@ -48,18 +48,18 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->multiRobotA : [string, string[]]
+>multiRobotA : MultiSkilledRobot
 
-let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
 >nameMC : string
 >"noName" : "noName"
->["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >"roomba" : "roomba"
->["vaccum", "mopping"] : string[]
->"vaccum" : "vaccum"
+>["vacuum", "mopping"] : string[]
+>"vacuum" : "vacuum"
 >"mopping" : "mopping"
 
-let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
 >nameMC2 : string
 >"noName" : "noName"
 >primarySkillC : string
@@ -69,10 +69,10 @@ let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
->["vaccum", "mopping"] : [string, string]
->"vaccum" : "vaccum"
+>["vacuum", "mopping"] : [string, string]
+>"vacuum" : "vacuum"
 >"mopping" : "mopping"
 
 if (nameMB == nameMA) {

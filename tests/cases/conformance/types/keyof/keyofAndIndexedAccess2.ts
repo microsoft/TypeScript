@@ -139,11 +139,12 @@ function fn4<K extends number>() {
     let y: ReadonlyArray<string>[K] = 'abc';
 }
 
-// Repro from #31439
+// Repro from #31439 and #31691
 
 export class c {
   [x: string]: string;
   constructor() {
+    this.a = "b";
     this["a"] = "b";
   }
 }
@@ -157,3 +158,12 @@ type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
 type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
 
 type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
+
+// Repro from #32038
+
+const actions = ['resizeTo', 'resizeBy'] as const;
+for (const action of actions) {
+	window[action] = (x, y) => {
+		window[action](x, y);
+	}
+}

@@ -67,7 +67,7 @@ enum E11 {
 
     C = window,
 >C : E11
->window : Window
+>window : Window & typeof globalThis
 
     D = {}
 >D : E11
@@ -89,7 +89,7 @@ enum E12 {
 
     C = window,
 >C : E12.B
->window : Window
+>window : Window & typeof globalThis
 
     D = {},
 >D : E12.B
@@ -101,4 +101,38 @@ enum E12 {
 >1 : 1
 >1 : 1
 }
+
+// Enum with incorrect syntax
+enum E13 {
+>E13 : E13
+
+    postComma,
+>postComma : E13.postComma
+
+    postValueComma = 1,
+>postValueComma : E13.postValueComma
+>1 : 1
+
+    postSemicolon;
+>postSemicolon : E13.postSemicolon
+
+    postColonValueComma: 2,
+>postColonValueComma : E13.postColonValueComma
+>2 : E13.2
+
+    postColonValueSemicolon: 3;
+>postColonValueSemicolon : E13.postColonValueSemicolon
+>3 : E13.3
+
+};
+
+enum E14 { a, b: any "hello" += 1, c, d}
+>E14 : E14
+>a : E14.a
+>b : E14.b
+>any : E14.any
+>"hello" : E14.hello
+>1 : E14.1
+>c : E14.c
+>d : E14.d
 

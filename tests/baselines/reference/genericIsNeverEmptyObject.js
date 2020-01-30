@@ -37,7 +37,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 function test(obj) {
     var a = obj.a, rest = __rest(obj, ["a"]);
-    return __assign({}, rest, { b: a });
+    return __assign(__assign({}, rest), { b: a });
 }
 var o1 = { a: 'hello', x: 42 };
 var o2 = test(o1);

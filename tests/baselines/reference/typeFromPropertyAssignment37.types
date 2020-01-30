@@ -25,7 +25,7 @@ const util = exports = module.exports = {}
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >module.exports = {} : typeof import("tests/cases/conformance/salsa/mod")
 >module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
+>module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >{} : {}
 

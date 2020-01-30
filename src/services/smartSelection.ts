@@ -17,7 +17,7 @@ namespace ts.SmartSelectionRange {
                     break outer;
                 }
 
-                if (positionShouldSnapToNode(pos, node, nextNode)) {
+                if (positionShouldSnapToNode(sourceFile, pos, node)) {
                     // 1. Blocks are effectively redundant with SyntaxLists.
                     // 2. TemplateSpans, along with the SyntaxLists containing them, are a somewhat unintuitive grouping
                     //    of things that should be considered independently.
@@ -26,7 +26,7 @@ namespace ts.SmartSelectionRange {
                     //
                     // Dive in without pushing a selection range.
                     if (isBlock(node)
-                        || isTemplateSpan(node) || isTemplateHead(node)
+                        || isTemplateSpan(node) || isTemplateHead(node) || isTemplateTail(node)
                         || prevNode && isTemplateHead(prevNode)
                         || isVariableDeclarationList(node) && isVariableStatement(parentNode)
                         || isSyntaxList(node) && isVariableDeclarationList(parentNode)
@@ -64,6 +64,13 @@ namespace ts.SmartSelectionRange {
                     parentNode = node;
                     break;
                 }
+
+                // If we made it to the end of the for loop, we’re done.
+                // In practice, I’ve only seen this happen at the very end
+                // of a SourceFile.
+                if (i === children.length - 1) {
+                    break outer;
+                }
             }
         }
 
@@ -72,9 +79,13 @@ namespace ts.SmartSelectionRange {
         function pushSelectionRange(start: number, end: number): void {
             // Skip empty ranges
             if (start !== end) {
-                // Skip ranges that are identical to the parent
                 const textSpan = createTextSpanFromBounds(start, end);
-                if (!selectionRange || !textSpansEqual(textSpan, selectionRange.textSpan)) {
+                if (!selectionRange || (
+                    // Skip ranges that are identical to the parent
+                    !textSpansEqual(textSpan, selectionRange.textSpan) &&
+                    // Skip ranges that don’t contain the original position
+                    textSpanIntersectsWithPosition(textSpan, pos)
+                )) {
                     selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
                 }
             }
@@ -86,12 +97,11 @@ namespace ts.SmartSelectionRange {
      * count too, unless that position belongs to the next node. In effect, makes
      * selections able to snap to preceding tokens when the cursor is on the tail
      * end of them with only whitespace ahead.
+     * @param sourceFile The source file containing the nodes.
      * @param pos The position to check.
      * @param node The candidate node to snap to.
-     * @param nextNode The next sibling node in the tree.
-     * @param sourceFile The source file containing the nodes.
      */
-    function positionShouldSnapToNode(pos: number, node: Node, nextNode: Node | undefined) {
+    function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
         // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
         // for missing nodes, which can’t really be considered when deciding what
         // to select.
@@ -100,9 +110,8 @@ namespace ts.SmartSelectionRange {
             return true;
         }
         const nodeEnd = node.getEnd();
-        const nextNodeStart = nextNode && nextNode.getStart();
         if (nodeEnd === pos) {
-            return pos !== nextNodeStart;
+            return getTouchingPropertyName(sourceFile, pos).pos < node.end;
         }
         return false;
     }
@@ -117,7 +126,7 @@ namespace ts.SmartSelectionRange {
      * selected all together, even though in the AST they’re just siblings of each
      * other as well as of other top-level statements and declarations.
      */
-    function getSelectionChildren(node: Node): ReadonlyArray<Node> {
+    function getSelectionChildren(node: Node): readonly Node[] {
         // Group top-level imports
         if (isSourceFile(node)) {
             return groupChildren(node.getChildAt(0).getChildren(), isImport);

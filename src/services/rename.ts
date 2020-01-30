@@ -81,7 +81,7 @@ namespace ts.Rename {
     function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {
         let start = node.getStart(sourceFile);
         let width = node.getWidth(sourceFile);
-        if (node.kind === SyntaxKind.StringLiteral) {
+        if (isStringLiteralLike(node)) {
             // Exclude the quotes
             start += 1;
             width -= 2;
@@ -92,7 +92,9 @@ namespace ts.Rename {
     function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:
                 return true;
             case SyntaxKind.NumericLiteral:

@@ -1,0 +1,11 @@
+Exit Code: 0
+Standard output:
+yarn run vX.X.X
+$ gulp compile --max_old_space_size=4095
+[XX:XX:XX] Node flags detected: --max_old_space_size=4095
+[XX:XX:XX] Using gulpfile /vscode/gulpfile.js
+Done in ?s.
+
+
+
+Standard error:

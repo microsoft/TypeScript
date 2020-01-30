@@ -11,8 +11,8 @@ const bar = 1;
 >1 : 1
 
 let [baz] = [];
->baz : any
->[] : [undefined?]
+>baz : undefined
+>[] : []
 
 let {a: baz2} = { a: 1 };
 >a : any
@@ -22,8 +22,8 @@ let {a: baz2} = { a: 1 };
 >1 : 1
 
 const [baz3] = []
->baz3 : any
->[] : [undefined?]
+>baz3 : undefined
+>[] : []
 
 const {a: baz4} = { a: 1 };
 >a : any

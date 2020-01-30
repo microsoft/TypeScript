@@ -29,7 +29,7 @@ export = y;
 
 === tests/cases/conformance/externalModules/foo3.ts ===
 module x {
->x : typeof x
+>x : typeof import("tests/cases/conformance/externalModules/foo3")
 
 	export var x = 10;
 >x : number

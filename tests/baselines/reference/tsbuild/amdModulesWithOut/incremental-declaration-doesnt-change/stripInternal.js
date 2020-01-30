@@ -1,3 +1,22 @@
+//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+/lib/tsc --b /src/app --verbose
+12:04:00 AM - Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+12:04:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+
+12:04:00 AM - Building project '/src/lib/tsconfig.json'...
+
+12:04:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+
+12:04:00 AM - Updating output of project '/src/app/tsconfig.json'...
+
+12:04:00 AM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
+
 //// [/src/app/module.js]
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
@@ -1664,10 +1683,10 @@ sourceFile:file4.ts
 //// [/src/app/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/app/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/app/file3.ts",
-      "/src/app/file4.ts"
+      "./file3.ts",
+      "./file4.ts"
     ],
     "js": {
       "sections": [
@@ -1675,7 +1694,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 4158,
           "kind": "prepend",
-          "data": "/src/lib/module.js",
+          "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
@@ -1697,7 +1716,7 @@ sourceFile:file4.ts
           "pos": 0,
           "end": 217,
           "kind": "prepend",
-          "data": "/src/lib/module.d.ts",
+          "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
@@ -1721,7 +1740,7 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4158):: /src/lib/module.js texts:: 1
+prepend: (0-4158):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-4158)
 /*@internal*/ var myGlob = 20;
@@ -1841,7 +1860,7 @@ var myVar = 30;
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-217):: /src/lib/module.d.ts texts:: 1
+prepend: (0-217):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-217)
 declare module "file1" {
@@ -1893,6 +1912,9 @@ export namespace normalN {
 /*@internal*/ export const internalConst = 10;
 /*@internal*/ export enum internalEnum { a, b, c }console.log(x);
 
+//// [/src/lib/module.d.ts] file written with same contents
+//// [/src/lib/module.d.ts.map] file written with same contents
+//// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
@@ -3500,12 +3522,12 @@ sourceFile:global.ts
 //// [/src/lib/module.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/lib/",
+    "commonSourceDirectory": "./",
     "sourceFiles": [
-      "/src/lib/file0.ts",
-      "/src/lib/file1.ts",
-      "/src/lib/file2.ts",
-      "/src/lib/global.ts"
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
     ],
     "js": {
       "sections": [
@@ -3530,32 +3552,32 @@ sourceFile:global.ts
         },
         {
           "pos": 108,
-          "end": 212,
+          "end": 233,
           "kind": "internal"
         },
         {
-          "pos": 214,
-          "end": 253,
+          "pos": 235,
+          "end": 274,
           "kind": "text"
         },
         {
-          "pos": 253,
-          "end": 721,
+          "pos": 274,
+          "end": 742,
           "kind": "internal"
         },
         {
-          "pos": 723,
-          "end": 730,
+          "pos": 744,
+          "end": 751,
           "kind": "text"
         },
         {
-          "pos": 730,
-          "end": 1219,
+          "pos": 751,
+          "end": 1240,
           "kind": "internal"
         },
         {
-          "pos": 1221,
-          "end": 1312,
+          "pos": 1242,
+          "end": 1333,
           "kind": "text"
         }
       ]
@@ -3686,18 +3708,19 @@ declare module "file1" {
     export class normalC {
 
 ----------------------------------------------------------------------
-internal: (108-212)
+internal: (108-233)
         constructor();
         prop: string;
         method(): void;
-        /*@internal*/ c: number;
+        get c(): number;
+        set c(val: number);
 ----------------------------------------------------------------------
-text: (214-253)
+text: (235-274)
     }
     export namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (253-721)
+internal: (274-742)
         class C {
         }
         function foo(): void;
@@ -3718,11 +3741,11 @@ internal: (253-721)
             c = 2
         }
 ----------------------------------------------------------------------
-text: (723-730)
+text: (744-751)
     }
 
 ----------------------------------------------------------------------
-internal: (730-1219)
+internal: (751-1240)
     export class internalC {
     }
     export function internalfoo(): void;
@@ -3743,7 +3766,7 @@ internal: (730-1219)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (1221-1312)
+text: (1242-1333)
 }
 declare module "file2" {
     export const y = 20;

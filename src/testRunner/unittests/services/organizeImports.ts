@@ -1,5 +1,5 @@
 namespace ts {
-    describe("unittests:: services:: Organize imports", () => {
+    describe("unittests:: services:: organizeImports", () => {
         describe("Sort imports", () => {
             it("Sort - non-relative vs non-relative", () => {
                 assertSortsBefore(
@@ -343,8 +343,38 @@ import { } from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_false_positive_module_augmentation",
+                {
+                    path: "/test.d.ts",
+                    content: `
+import foo from 'foo';
+import { Caseless } from 'caseless';
+
+declare module 'foo' {}
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+                });
+
+            testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
+                {
+                    path: "/test.ts",
+                    content: `
+import foo from 'foo';
+import { Caseless } from 'caseless';
+
+declare module 'foo' {}
+declare module 'caseless' {
+    interface Caseless {
+        test(name: KeyType): boolean;
+    }
+}`
+                });
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
-            {
+                {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
@@ -353,7 +383,7 @@ const o = { x };
                 });
 
             testOrganizeImports("Unused_false_positive_export_shorthand",
-            {
+                {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
@@ -376,7 +406,7 @@ D();
                 },
                 libFile);
 
-            // tslint:disable no-invalid-template-strings
+            /* eslint-disable no-template-curly-in-string */
             testOrganizeImports("MoveToTop_Invalid",
                 {
                     path: "/test.ts",
@@ -393,7 +423,7 @@ D();
 `,
                 },
                 libFile);
-            // tslint:enable no-invalid-template-strings
+            /* eslint-enable no-template-curly-in-string */
 
             testOrganizeImports("CoalesceMultipleModules",
                 {
@@ -638,7 +668,7 @@ export * from "lib";
                     },
                     libFile);
 
-                // tslint:disable no-invalid-template-strings
+                /* eslint-disable no-template-curly-in-string */
                 testOrganizeExports("MoveToTop_Invalid",
                     {
                         path: "/test.ts",
@@ -654,7 +684,7 @@ export { D } from "lib";
 `,
                     },
                     libFile);
-                // tslint:enable no-invalid-template-strings
+                /* eslint-enable no-template-curly-in-string */
 
                 testOrganizeExports("MoveToTop_WithImportsFirst",
                     {
@@ -801,14 +831,14 @@ export * from "lib";
             }
         });
 
-        function parseImports(...importStrings: string[]): ReadonlyArray<ImportDeclaration> {
+        function parseImports(...importStrings: string[]): readonly ImportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", importStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const imports = filter(sourceFile.statements, isImportDeclaration);
             assert.equal(imports.length, importStrings.length);
             return imports;
         }
 
-        function parseExports(...exportStrings: string[]): ReadonlyArray<ExportDeclaration> {
+        function parseExports(...exportStrings: string[]): readonly ExportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", exportStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const exports = filter(sourceFile.statements, isExportDeclaration);
             assert.equal(exports.length, exportStrings.length);
@@ -890,7 +920,7 @@ export * from "lib";
             }
         }
 
-        function assertListEqual(list1: ReadonlyArray<Node>, list2: ReadonlyArray<Node>) {
+        function assertListEqual(list1: readonly Node[], list2: readonly Node[]) {
             if (list1 === undefined || list2 === undefined) {
                 assert.isUndefined(list1);
                 assert.isUndefined(list2);

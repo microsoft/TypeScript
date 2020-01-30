@@ -36,10 +36,23 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 type Cond<T> = T extends number ? number : never;
 declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
 
+// Repro from #31823
+
+export type Prepend<Elm, T extends unknown[]> =
+  T extends unknown ?
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+  never :
+  never;
+export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+
+type Conv<T, U = T> =
+  { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+
 
 //// [infiniteConstraints.js]
 "use strict";
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
+exports.__esModule = true;
 var out = myBug({ obj1: { a: "test" } });
 var noError = ensureNoDuplicates({ main: value("test"), alternate: value("test2") });
 var shouldBeNoError = ensureNoDuplicates({ main: value("test") });

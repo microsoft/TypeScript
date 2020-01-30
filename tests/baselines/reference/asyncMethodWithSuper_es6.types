@@ -336,7 +336,7 @@ class B extends A {
     }
 
     async * property_access_only_read_only_in_generator() {
->property_access_only_read_only_in_generator : () => AsyncIterableIterator<any>
+>property_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
 
         // call with property access
         super.x();
@@ -372,7 +372,7 @@ class B extends A {
     }
 
     async * property_access_only_write_only_in_generator() {
->property_access_only_write_only_in_generator : () => AsyncIterableIterator<any>
+>property_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
 
         const f = () => {};
 >f : () => void
@@ -420,7 +420,7 @@ class B extends A {
     }
 
     async * element_access_only_read_only_in_generator() {
->element_access_only_read_only_in_generator : () => AsyncIterableIterator<any>
+>element_access_only_read_only_in_generator : () => AsyncGenerator<never, void, unknown>
 
         // call with element access
         super["x"]();
@@ -456,7 +456,7 @@ class B extends A {
     }
 
     async * element_access_only_write_only_in_generator() {
->element_access_only_write_only_in_generator : () => AsyncIterableIterator<any>
+>element_access_only_write_only_in_generator : () => AsyncGenerator<never, void, unknown>
 
         const f = () => {};
 >f : () => void

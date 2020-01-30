@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="pl-PL" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="HobbitID" Val="6d166059-1f22-4f75-80d1-261d6407ef5d" />
@@ -303,7 +303,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A definite assignment assertion '!' is not permitted in this context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Asercja określonego przydziału „!” nie jest dozwolona w tym kontekście.]]></Val>
+            <Val><![CDATA[Asercja określonego przypisania „!” nie jest dozwolona w tym kontekście.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2577,7 +2577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Znaleziono sprzeczne definicje dla „{0}” w „{1}” i „{2}”. Rozważ zainstalowanie konkretnej wersji tej biblioteki, aby rozwiązać problem.]]></Val>
+            <Val><![CDATA[Znaleziono definicje będące w konflikcie dla „{0}” w „{1}” i „{2}”. Rozważ zainstalowanie konkretnej wersji tej biblioteki, aby rozwiązać problem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3291,7 +3291,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Emituj źródło razem z mapami źródłowymi w pojedynczym pliku; wymaga ustawienia opcji „--inlineSourceMap” lub „--sourceMap”.]]></Val>
+            <Val><![CDATA[Emituj źródło razem z mapami źródeł w pojedynczym pliku; wymaga ustawienia opcji „--inlineSourceMap” lub „--sourceMap”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4077,7 +4077,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Function lacks ending return statement and return type does not include 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Funkcja nie zawiera końcowej instrukcji „return”, a zwracany typ nie obejmuje wartości „undefined”.]]></Val>
+            <Val><![CDATA[Funkcja nie zawiera końcowej instrukcji return, a zwracany typ nie obejmuje wartości „undefined”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4113,7 +4113,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Generuje mapę źródła dla każdego odpowiadającego pliku „.d.ts”.]]></Val>
+            <Val><![CDATA[Generuje mapę źródła dla poszczególnych plików „.d.ts”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5517,7 +5517,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Not all code paths return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie wszystkie ścieżki kodu zwracają wartość.]]></Val>
+            <Val><![CDATA[Nie wszystkie ścieżki w kodzie zwracają wartość.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6891,7 +6891,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Report error when not all code paths in function return a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zgłoś błąd, gdy nie wszystkie ścieżki kodu zwracają wartość.]]></Val>
+            <Val><![CDATA[Zgłoś błąd, gdy nie wszystkie ścieżki w kodzie zwracają wartość.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

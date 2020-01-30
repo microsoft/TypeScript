@@ -1,0 +1,13 @@
+=== tests/cases/conformance/salsa/a.js ===
+const foo = {};
+>foo : Symbol(foo, Decl(a.js, 0, 5), Decl(a.js, 0, 15), Decl(a.js, 1, 16))
+
+foo["baz"] = {};
+>foo : Symbol(foo, Decl(a.js, 0, 5), Decl(a.js, 0, 15), Decl(a.js, 1, 16))
+>"baz" : Symbol(foo["baz"], Decl(a.js, 0, 15), Decl(a.js, 2, 4))
+
+foo["baz"]["blah"] = 3;
+>foo : Symbol(foo, Decl(a.js, 0, 5), Decl(a.js, 0, 15), Decl(a.js, 1, 16))
+>"baz" : Symbol(foo["baz"], Decl(a.js, 0, 15), Decl(a.js, 2, 4))
+>"blah" : Symbol(foo["baz"]["blah"], Decl(a.js, 1, 16))
+

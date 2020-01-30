@@ -1,0 +1,139 @@
+=== tests/cases/compiler/twiceNestedKeyofIndexInference.ts ===
+type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+>Set1 : Symbol(Set1, Decl(twiceNestedKeyofIndexInference.ts, 0, 0))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
+
+    [SK1 in K1]-?: Required<Pick<T, SK1>>;
+>SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 1, 5))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
+>SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 1, 5))
+
+}[K1];
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
+
+type Set2<T, K1 extends keyof T, K2 extends keyof T[K1]> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+>Set2 : Symbol(Set2, Decl(twiceNestedKeyofIndexInference.ts, 2, 6))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 4, 32))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+
+    [SK1 in K1]-?: Required<{
+>SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 5, 5))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+
+        [key in K1]: Set1<T[K1], K2>;
+>key : Symbol(key, Decl(twiceNestedKeyofIndexInference.ts, 6, 9))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+>Set1 : Symbol(Set1, Decl(twiceNestedKeyofIndexInference.ts, 0, 0))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 4, 32))
+
+    }>;
+}[K1];
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
+
+declare function set<T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>;
+>set : Symbol(set, Decl(twiceNestedKeyofIndexInference.ts, 8, 6), Decl(twiceNestedKeyofIndexInference.ts, 10, 94))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 10, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 10, 23))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 10, 21))
+>source : Symbol(source, Decl(twiceNestedKeyofIndexInference.ts, 10, 44))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 10, 21))
+>path : Symbol(path, Decl(twiceNestedKeyofIndexInference.ts, 10, 54))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 10, 23))
+>value : Symbol(value, Decl(twiceNestedKeyofIndexInference.ts, 10, 66))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 10, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 10, 23))
+>Set1 : Symbol(Set1, Decl(twiceNestedKeyofIndexInference.ts, 0, 0))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 10, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 10, 23))
+
+declare function set<T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>;
+>set : Symbol(set, Decl(twiceNestedKeyofIndexInference.ts, 8, 6), Decl(twiceNestedKeyofIndexInference.ts, 10, 94))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 12, 23))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 12, 43))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 12, 23))
+>source : Symbol(source, Decl(twiceNestedKeyofIndexInference.ts, 12, 68))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>path : Symbol(path, Decl(twiceNestedKeyofIndexInference.ts, 12, 78))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 12, 23))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 12, 43))
+>value : Symbol(value, Decl(twiceNestedKeyofIndexInference.ts, 12, 94))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 12, 23))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 12, 43))
+>Set2 : Symbol(Set2, Decl(twiceNestedKeyofIndexInference.ts, 2, 6))
+>T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 12, 21))
+>K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 12, 23))
+>K2 : Symbol(K2, Decl(twiceNestedKeyofIndexInference.ts, 12, 43))
+
+
+interface State {
+>State : Symbol(State, Decl(twiceNestedKeyofIndexInference.ts, 12, 130))
+
+    a: {
+>a : Symbol(State.a, Decl(twiceNestedKeyofIndexInference.ts, 15, 17))
+
+        b: string;
+>b : Symbol(b, Decl(twiceNestedKeyofIndexInference.ts, 16, 8))
+
+        c: number;
+>c : Symbol(c, Decl(twiceNestedKeyofIndexInference.ts, 17, 18))
+
+    };
+    d: boolean;
+>d : Symbol(State.d, Decl(twiceNestedKeyofIndexInference.ts, 19, 6))
+}
+
+const state: State = {
+>state : Symbol(state, Decl(twiceNestedKeyofIndexInference.ts, 23, 5))
+>State : Symbol(State, Decl(twiceNestedKeyofIndexInference.ts, 12, 130))
+
+    a: {
+>a : Symbol(a, Decl(twiceNestedKeyofIndexInference.ts, 23, 22))
+
+        b: "",
+>b : Symbol(b, Decl(twiceNestedKeyofIndexInference.ts, 24, 8))
+
+        c: 0,
+>c : Symbol(c, Decl(twiceNestedKeyofIndexInference.ts, 25, 14))
+
+    },
+    d: false,
+>d : Symbol(d, Decl(twiceNestedKeyofIndexInference.ts, 27, 6))
+
+};
+
+const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
+>newState : Symbol(newState, Decl(twiceNestedKeyofIndexInference.ts, 31, 5))
+>State : Symbol(State, Decl(twiceNestedKeyofIndexInference.ts, 12, 130))
+>set : Symbol(set, Decl(twiceNestedKeyofIndexInference.ts, 8, 6), Decl(twiceNestedKeyofIndexInference.ts, 10, 94))
+>state : Symbol(state, Decl(twiceNestedKeyofIndexInference.ts, 23, 5))
+
