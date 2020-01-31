@@ -224,7 +224,9 @@ verify.referenceGroups([importDecl3_importKeyword, importDecl3_typeKeyword], [
 verify.referenceGroups(importDecl3_fromKeyword, [{ definition: "module \"/d\"", ranges: [importDecl3_module] }]);
 
 // importDecl4:
-verify.referenceGroups([importDecl4_importKeyword, importDecl4_typeKeyword, importDecl4_fromKeyword], [{ definition: "module \"/e\"", ranges: [importDecl4_module] }]);
+verify.noReferences(importDecl4_importKeyword);
+verify.noReferences(importDecl4_typeKeyword);
+verify.referenceGroups(importDecl4_fromKeyword, [{ definition: "module \"/e\"", ranges: [importDecl4_module] }]);
 verify.referenceGroups(importDecl4_asKeyword, [{ definition: "(alias) const e3: 2\nimport e3", ranges: [importDecl4_name] }]);
 
 // importDecl5
@@ -245,7 +247,9 @@ verify.referenceGroups([exportDecl3_exportKeyword, exportDecl3_typeKeyword], [
 verify.referenceGroups(exportDecl3_fromKeyword, [{ definition: "module \"/i\"", ranges: [exportDecl3_module] }]);
 
 // exportDecl4:
-verify.referenceGroups([exportDecl4_exportKeyword, exportDecl4_typeKeyword, exportDecl4_fromKeyword], [{ definition: "module \"/j\"", ranges: [exportDecl4_module] }]);
+verify.noReferences(exportDecl4_exportKeyword);
+verify.noReferences(exportDecl4_typeKeyword);
+verify.referenceGroups(exportDecl4_fromKeyword, [{ definition: "module \"/j\"", ranges: [exportDecl4_module] }]);
 verify.referenceGroups(exportDecl4_asKeyword, [{ definition: "(alias) const j3: 2\nexport j3", ranges: [exportDecl4_name] }]);
 
 // exportDecl5:

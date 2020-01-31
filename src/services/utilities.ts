@@ -785,28 +785,36 @@ namespace ts {
 
     function getAdjustedLocationForImportDeclaration(node: ImportDeclaration, forRename: boolean) {
         if (node.importClause) {
+            if (node.importClause.name && node.importClause.namedBindings) {
+                // do not adjust if we have both a name and named bindings
+                return;
+            }
+
             // /**/import [|name|] from ...;
             // import /**/type [|name|] from ...;
-            if (node.importClause.name && !node.importClause.namedBindings) {
+            if (node.importClause.name) {
                 return node.importClause.name;
             }
+
             // /**/import { [|name|] } from ...;
             // /**/import { propertyName as [|name|] } from ...;
             // /**/import * as [|name|] from ...;
             // import /**/type { [|name|] } from ...;
             // import /**/type { propertyName as [|name|] } from ...;
             // import /**/type * as [|name|] from ...;
-            if (!node.importClause.name && node.importClause.namedBindings) {
+            if (node.importClause.namedBindings) {
                 if (isNamedImports(node.importClause.namedBindings)) {
-                    if (node.importClause.namedBindings.elements.length === 1) {
-                        return node.importClause.namedBindings.elements[0].name;
+                    // do nothing if there is more than one binding
+                    const onlyBinding = singleOrUndefined(node.importClause.namedBindings.elements);
+                    if (!onlyBinding) {
+                        return;
                     }
+                    return onlyBinding.name;
                 }
                 else if (isNamespaceImport(node.importClause.namedBindings)) {
                     return node.importClause.namedBindings.name;
                 }
             }
-
         }
         if (!forRename) {
             // /**/import "[|module|]";
@@ -825,9 +833,12 @@ namespace ts {
             // export /**/type { propertyName as [|name|] } from ...
             // export /**/type * as [|name|] ...
             if (isNamedExports(node.exportClause)) {
-                if (node.exportClause.elements.length === 1) {
-                    return node.exportClause.elements[0].name;
+                // do nothing if there is more than one binding
+                const onlyBinding = singleOrUndefined(node.exportClause.elements);
+                if (!onlyBinding) {
+                    return;
                 }
+                return node.exportClause.elements[0].name;
             }
             else if (isNamespaceExport(node.exportClause)) {
                 return node.exportClause.name;
