@@ -4685,12 +4685,20 @@ namespace ts {
                 && lookAhead(nextTokenIsIdentifierOrKeywordOrOpenBracketOrTemplate);
         }
 
+        function hasOptionalChain(node: Node) {
+            while (true) {
+                if (node.flags & NodeFlags.OptionalChain) return true;
+                if (!isNonNullExpression(node)) return false;
+                node = node.expression;
+            }
+        }
+
         function parsePropertyAccessExpressionRest(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
             const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
             propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
-            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+            if (questionDotToken || hasOptionalChain(expression)) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
                 if (isPrivateIdentifier(propertyAccess.name)) {
                     parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
@@ -4716,7 +4724,7 @@ namespace ts {
             }
 
             parseExpected(SyntaxKind.CloseBracketToken);
-            if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+            if (questionDotToken || hasOptionalChain(expression)) {
                 indexedAccess.flags |= NodeFlags.OptionalChain;
             }
             return finishNode(indexedAccess);
@@ -4803,7 +4811,7 @@ namespace ts {
                         callExpr.questionDotToken = questionDotToken;
                         callExpr.typeArguments = typeArguments;
                         callExpr.arguments = parseArgumentList();
-                        if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                        if (questionDotToken || hasOptionalChain(expression)) {
                             callExpr.flags |= NodeFlags.OptionalChain;
                         }
                         expression = finishNode(callExpr);
@@ -4815,7 +4823,7 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.questionDotToken = questionDotToken;
                     callExpr.arguments = parseArgumentList();
-                    if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
+                    if (questionDotToken || hasOptionalChain(expression)) {
                         callExpr.flags |= NodeFlags.OptionalChain;
                     }
                     expression = finishNode(callExpr);
