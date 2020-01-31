@@ -163,7 +163,6 @@ namespace ts {
         ResolvedReturnType,
         ImmediateBaseConstraint,
         EnumTagType,
-        JSDocTypeReference,
         ResolvedTypeArguments,
     }
 
@@ -6920,8 +6919,6 @@ namespace ts {
                     return !!(<Signature>target).resolvedReturnType;
                 case TypeSystemPropertyName.ImmediateBaseConstraint:
                     return !!(<Type>target).immediateBaseConstraint;
-                case TypeSystemPropertyName.JSDocTypeReference:
-                    return !!getSymbolLinks(target as Symbol).resolvedJSDocType;
                 case TypeSystemPropertyName.ResolvedTypeArguments:
                     return !!(target as TypeReference).resolvedTypeArguments;
             }
@@ -11184,7 +11181,7 @@ namespace ts {
          * but this function's special-case code fakes alias resolution as well.
          */
         function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
-            const links = getSymbolLinks(symbol);
+            const links = getNodeLinks(node);
             if (!links.resolvedJSDocType) {
                 const valueType = getTypeOfSymbol(symbol);
                 let typeType = valueType;

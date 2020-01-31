@@ -4063,7 +4063,6 @@ namespace ts {
         nameType?: Type;                            // Type associated with a late-bound symbol
         uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
         declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
-        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
         instantiations?: Map<Type>;                 // Instantiations of generic type alias (undefined if non-generic)
@@ -4239,6 +4238,7 @@ namespace ts {
         jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
+        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
