@@ -2372,7 +2372,10 @@ namespace ts {
 
         function getTargetOfNamespaceExport(node: NamespaceExport, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSpecifier = node.parent.moduleSpecifier;
-            return moduleSpecifier && resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
+            const immediate = moduleSpecifier && resolveExternalModuleName(node, moduleSpecifier);
+            const resolved = moduleSpecifier && resolveESModuleSymbol(immediate, moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
+            markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
+            return resolved;
         }
 
         // This function creates a synthetic symbol that combines the value side of one symbol with the
@@ -2521,7 +2524,9 @@ namespace ts {
         }
 
         function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol {
-            return resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
+            const resolved = resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
+            markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
+            return resolved;
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
