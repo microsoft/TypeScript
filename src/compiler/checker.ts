@@ -2616,25 +2616,25 @@ namespace ts {
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
         function getTypeOnlyAliasDeclaration(symbol: Symbol | undefined): TypeOnlyCompatibleAliasDeclaration | undefined {
-            if (!symbol || !(symbol.flags & SymbolFlags.Alias)) {
+            if (!symbol || !(symbol.flags & SymbolFlags.Alias) || !symbol.declarations) {
                 return undefined;
             }
             const links = getSymbolLinks(symbol);
             if (links.typeOnlyDeclaration === undefined) {
                 const node = getDeclarationOfAliasSymbol(symbol);
+                links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
                 if (!node) return Debug.fail();
                 if (isTypeOnlyAliasDeclaration(node)) {
                     links.typeOnlyDeclaration = node;
                 }
                 else if (isInternalModuleImportEqualsDeclaration(node)) {
-                    return getTypeOnlyAliasDeclarationOfInternalModuleReference(node.moduleReference);
+                    links.typeOnlyDeclaration = getTypeOnlyAliasDeclarationOfInternalModuleReference(node.moduleReference);
                 }
                 else {
                     let alias = getImmediateAliasedSymbol(symbol);
                     if (alias && alias.flags & SymbolFlags.ValueModule) {
                         alias = alias.exports!.get(InternalSymbolName.ExportEquals);
                     }
-                    links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
                     links.typeOnlyDeclaration = !!alias && getTypeOnlyAliasDeclaration(alias);
                 }
             }
