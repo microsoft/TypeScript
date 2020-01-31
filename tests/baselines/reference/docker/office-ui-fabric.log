@@ -6,31 +6,10 @@ Standard output:
 @uifabric/example-data: yarn run vX.X.X
 @uifabric/example-data: $ just-scripts build
 @uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/example-data: [XX:XX:XX XM] ■ Running tslint
-@uifabric/example-data: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/example-data/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Running webpack-cli as a node process
-@uifabric/example-data: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
-@uifabric/example-data: Webpack version: 4.X.X
-@uifabric/example-data: Hash: [redacted]
-@uifabric/example-data: Version: webpack 4.X.X
-@uifabric/example-data: Child
-@uifabric/example-data:     Hash: [redacted]
-@uifabric/example-data:     Time: ?s
-@uifabric/example-data:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/example-data:                   Asset      Size        Chunks             Chunk Names
-@uifabric/example-data:         example-data.js  X KiB  example-data  [emitted]  example-data
-@uifabric/example-data:     example-data.js.map  X KiB  example-data  [emitted]  example-data
-@uifabric/example-data:     Entrypoint example-data = example-data.js example-data.js.map
-@uifabric/example-data:     [./lib/facepile.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/index.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/listItems.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/lorem.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/people.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/testImages.js] X KiB {example-data} [built]
 @uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
 @uifabric/example-data: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
@@ -50,8 +29,6 @@ Standard output:
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/set-version: [XX:XX:XX XM] ■ Running tslint
-@uifabric/set-version: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/set-version/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
@@ -60,101 +37,25 @@ Standard output:
 @uifabric/webpack-utils: yarn run vX.X.X
 @uifabric/webpack-utils: $ just-scripts build
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Running tslint
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
 @uifabric/webpack-utils: Done in ?s.
 @uifabric/merge-styles: yarn run vX.X.X
 @uifabric/merge-styles: $ just-scripts build
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running tslint
-@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running webpack-cli as a node process
-@uifabric/merge-styles: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
-@uifabric/merge-styles: Webpack version: 4.X.X
-@uifabric/merge-styles: Hash: [redacted]
-@uifabric/merge-styles: Version: webpack 4.X.X
-@uifabric/merge-styles: Child
-@uifabric/merge-styles:     Hash: [redacted]
-@uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/merge-styles:                   Asset      Size        Chunks             Chunk Names
-@uifabric/merge-styles:         merge-styles.js  X KiB  merge-styles  [emitted]  merge-styles
-@uifabric/merge-styles:     merge-styles.js.map  X KiB  merge-styles  [emitted]  merge-styles
-@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.js merge-styles.js.map
-@uifabric/merge-styles:     [../set-version/lib/index.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [../set-version/lib/setVersion.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/StyleOptionsState.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/Stylesheet.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/concatStyleSets.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/concatStyleSetsWithProps.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/extractStyleParts.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/fontFace.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/index.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/keyframes.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/mergeStyleSets.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/mergeStyles.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/styleToClassName.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/transforms/kebabRules.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/version.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:         + 5 hidden modules
-@uifabric/merge-styles: Child
-@uifabric/merge-styles:     Hash: [redacted]
-@uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/merge-styles:                       Asset      Size  Chunks             Chunk Names
-@uifabric/merge-styles:         merge-styles.min.js  X KiB       0  [emitted]  merge-styles
-@uifabric/merge-styles:     merge-styles.min.js.map  X KiB       0  [emitted]  merge-styles
-@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.min.js merge-styles.min.js.map
-@uifabric/merge-styles:     [0] ./lib/index.js + 19 modules X KiB {0} [built]
-@uifabric/merge-styles:         | ./lib/index.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/Stylesheet.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/StyleOptionsState.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/mergeStyles.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/concatStyleSets.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/mergeStyleSets.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/concatStyleSetsWithProps.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/fontFace.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/keyframes.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/version.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/extractStyleParts.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/styleToClassName.js X KiB [built]
-@uifabric/merge-styles:         | ../set-version/lib/index.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/transforms/kebabRules.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/transforms/prefixRules.js X KiB [built]
-@uifabric/merge-styles:         |     + 5 hidden modules
-@uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
-@uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
-@uifabric/merge-styles:  PASS  src/mergeCssSets.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
-@uifabric/merge-styles:  PASS  src/keyframes.test.ts
-@uifabric/merge-styles:  PASS  src/mergeCss.test.ts
-@uifabric/merge-styles:  PASS  src/server.test.ts
-@uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
-@uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
 @uifabric/jest-serializer-merge-styles: $ just-scripts build
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
 @uifabric/jest-serializer-merge-styles: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
 @uifabric/test-utilities: $ just-scripts build
@@ -167,50 +68,67 @@ Standard output:
 @uifabric/utilities: yarn run vX.X.X
 @uifabric/utilities: $ just-scripts build
 @uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/utilities: [XX:XX:XX XM] ■ Running tslint
-@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/utilities/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
-@uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
-@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
-@uifabric/utilities:  PASS  src/focus.test.tsx
-@uifabric/utilities:  PASS  src/styled.test.tsx
-@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
-@uifabric/utilities:  PASS  src/EventGroup.test.ts
-@uifabric/utilities:  PASS  src/array.test.ts
-@uifabric/utilities:  PASS  src/math.test.ts
-@uifabric/utilities:  PASS  src/warn/warn.test.ts
-@uifabric/utilities:  PASS  src/dom/dom.test.ts
-@uifabric/utilities:  PASS  src/customizations/customizable.test.tsx
-@uifabric/utilities:  PASS  src/initials.test.ts
-@uifabric/utilities:  PASS  src/selection/Selection.test.ts
-@uifabric/utilities:  PASS  src/initializeFocusRects.test.ts
-@uifabric/utilities:  PASS  src/memoize.test.ts
-@uifabric/utilities:  PASS  src/rtl.test.ts
-@uifabric/utilities:  PASS  src/osDetector.test.ts
-@uifabric/utilities:  PASS  src/mobileDetector.test.ts
-@uifabric/utilities:  PASS  src/aria.test.ts
-@uifabric/utilities:  PASS  src/setFocusVisibility.test.ts
-@uifabric/utilities:  PASS  src/properties.test.ts
-@uifabric/utilities:  PASS  src/asAsync.test.tsx
-@uifabric/utilities:  PASS  src/object.test.ts
-@uifabric/utilities:  PASS  src/classNamesFunction.test.ts
-@uifabric/utilities:  PASS  src/merge.test.ts
-@uifabric/utilities:  PASS  src/customizations/Customizations.test.ts
-@uifabric/utilities:  PASS  src/safeSetTimeout.test.tsx
-@uifabric/utilities:  PASS  src/safeRequestAnimationFrame.test.tsx
-@uifabric/utilities:  PASS  src/overflow.test.ts
-@uifabric/utilities:  PASS  src/appendFunction.test.ts
-@uifabric/utilities:  PASS  src/controlled.test.ts
-@uifabric/utilities:  PASS  src/extendComponent.test.tsx
-@uifabric/utilities:  PASS  src/initializeComponentRef.test.tsx
-@uifabric/utilities:  PASS  src/BaseComponent.test.tsx
-@uifabric/utilities:  PASS  src/keyboard.test.ts
 @uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
-@uifabric/utilities: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+@uifabric/utilities: Done in ?s.
+@uifabric/react-hooks: yarn run vX.X.X
+@uifabric/react-hooks: $ just-scripts build
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-hooks/tsconfig.json
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-hooks/tsconfig.json"
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-hooks/tsconfig.json
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-hooks/tsconfig.json"
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/react-hooks/lib/index.d.ts'
+@uifabric/react-hooks: Done in ?s.
+@uifabric/styling: yarn run vX.X.X
+@uifabric/styling: $ just-scripts build
+@uifabric/styling: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
+@uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
+@uifabric/styling: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/styling/tsconfig.json
+@uifabric/styling: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/styling/tsconfig.json"
+@uifabric/styling: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/styling/lib/index.d.ts'
+@uifabric/styling: Done in ?s.
+@uifabric/file-type-icons: yarn run vX.X.X
+@uifabric/file-type-icons: $ just-scripts build
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/file-type-icons/tsconfig.json
+@uifabric/file-type-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/file-type-icons/tsconfig.json"
+@uifabric/file-type-icons: Done in ?s.
+@uifabric/foundation: yarn run vX.X.X
+@uifabric/foundation: $ just-scripts build
+@uifabric/foundation: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
+@uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
+@uifabric/foundation: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/foundation/tsconfig.json
+@uifabric/foundation: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/foundation/tsconfig.json"
+@uifabric/foundation: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/foundation/lib/index.d.ts'
+@uifabric/foundation: Done in ?s.
+@uifabric/icons: yarn run vX.X.X
+@uifabric/icons: $ just-scripts build
+@uifabric/icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/icons: [XX:XX:XX XM] ■ Copying [src/**/*.json] to '/office-ui-fabric-react/packages/icons/lib'
+@uifabric/icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/icons/tsconfig.json
+@uifabric/icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/icons/tsconfig.json"
+@uifabric/icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/icons/tsconfig.json
+@uifabric/icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/icons/tsconfig.json"
+@uifabric/icons: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/icons/lib/index.d.ts'
+@uifabric/icons: Done in ?s.
+office-ui-fabric-react: yarn run vX.X.X
+office-ui-fabric-react: $ just-scripts build
+office-ui-fabric-react: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+office-ui-fabric-react: [XX:XX:XX XM] ■ Copying [../../node_modules/office-ui-fabric-core/dist/sass/**/*, src/common/_highContrast.scss, src/common/_i18n.scss, src/common/_semanticSlots.scss, src/common/_themeOverrides.scss, src/common/_legacyThemePalette.scss, src/common/_effects.scss, src/common/_themeVariables.scss, src/common/ThemingSass.scss] to '/office-ui-fabric-react/packages/office-ui-fabric-react/dist/sass'
+office-ui-fabric-react: [XX:XX:XX XM] ■ Copying [../../node_modules/office-ui-fabric-core/dist/css/**/*] to '/office-ui-fabric-react/packages/office-ui-fabric-react/dist/css'
+office-ui-fabric-react: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json
+office-ui-fabric-react: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
+office-ui-fabric-react: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json
+office-ui-fabric-react: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
+office-ui-fabric-react: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
@@ -221,32 +139,92 @@ lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/merge-styles: Force exiting Jest
-@uifabric/merge-styles: 
-@uifabric/merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
-@uifabric/jest-serializer-merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/jest-serializer-merge-styles: Force exiting Jest
-@uifabric/jest-serializer-merge-styles: 
-@uifabric/jest-serializer-merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/utilities: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/utilities: Force exiting Jest
-@uifabric/utilities: 
-@uifabric/utilities: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
-@uifabric/utilities: Warning: You have changed the public API signature for this project. Please copy the file "temp/utilities.api.md" to "etc/utilities.api.md", or perform a local build (which does this automatically). See the Git repo documentation for more info.
-@uifabric/utilities: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
-@uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
-@uifabric/utilities: [XX:XX:XX XM] x Error: The public API file is out of date. Please run the API snapshot and commit the updated API file.
-@uifabric/utilities:     at apiExtractorVerify (/office-ui-fabric-react/node_modules/just-scripts/lib/tasks/apiExtractorTask.js:26:19)
-@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:13:36)
-@uifabric/utilities:     at verify-api-extractor (/office-ui-fabric-react/node_modules/undertaker/lib/set-task.js:13:15)
-@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:10:16)
-@uifabric/utilities:     at bound (domain.js:419:14)
-@uifabric/utilities:     at runBound (domain.js:432:12)
-@uifabric/utilities:     at asyncRunner (/office-ui-fabric-react/node_modules/async-done/index.js:55:18)
-@uifabric/utilities:     at processTicksAndRejections (internal/process/task_queues.js:75:11)
-@uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
-@uifabric/utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@uifabric/utilities: error Command failed with exit code 1.
-lerna ERR! yarn run build exited 1 in '@uifabric/utilities'
+@uifabric/react-hooks: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/styling: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/file-type-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/foundation: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+office-ui-fabric-react: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
+office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
+office-ui-fabric-react:     at ChildProcess.exithandler (child_process.js:295:12)
+office-ui-fabric-react:     at ChildProcess.emit (events.js:223:5)
+office-ui-fabric-react:     at ChildProcess.EventEmitter.emit (domain.js:498:23)
+office-ui-fabric-react:     at maybeClose (internal/child_process.js:1021:16)
+office-ui-fabric-react:     at Process.ChildProcess._handle.onexit (internal/child_process.js:283:5)
+office-ui-fabric-react: [XX:XX:XX XM] x stdout:
+office-ui-fabric-react: [XX:XX:XX XM] x src/components/Calendar/Calendar.tsx:8:31 - error TS2307: Cannot find module './Calendar.scss'.
+office-ui-fabric-react: 8 import * as stylesImport from './Calendar.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/Calendar/CalendarDay.tsx:21:31 - error TS2307: Cannot find module './Calendar.scss'.
+office-ui-fabric-react: 21 import * as stylesImport from './Calendar.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/Calendar/CalendarMonth.tsx:15:31 - error TS2307: Cannot find module './Calendar.scss'.
+office-ui-fabric-react: 15 import * as stylesImport from './Calendar.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/Calendar/CalendarYear.tsx:5:31 - error TS2307: Cannot find module './Calendar.scss'.
+office-ui-fabric-react: 5 import * as stylesImport from './Calendar.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ChoiceGroup/ChoiceGroupOption/ChoiceGroupOption.base.tsx:70:38 - error TS2554: Expected 1 arguments, but got 2.
+office-ui-fabric-react: 70           {onRenderField(this.props, this._onRenderField)}
+office-ui-fabric-react:                                         ~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ComboBox/ComboBox.tsx:457:13 - error TS2554: Expected 1 arguments, but got 2.
+office-ui-fabric-react: 457             this._onRenderContainer
+office-ui-fabric-react:                 ~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ContextualMenu/examples/ContextualMenu.Icon.Example.tsx:12:31 - error TS2307: Cannot find module './ContextualMenuExample.scss'.
+office-ui-fabric-react: 12 import * as stylesImport from './ContextualMenuExample.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/ExtendedPicker/BaseExtendedPicker.tsx:5:31 - error TS2307: Cannot find module './BaseExtendedPicker.scss'.
+office-ui-fabric-react: 5 import * as stylesImport from './BaseExtendedPicker.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/FloatingPicker/BaseFloatingPicker.tsx:2:31 - error TS2307: Cannot find module './BaseFloatingPicker.scss'.
+office-ui-fabric-react: 2 import * as stylesImport from './BaseFloatingPicker.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/FloatingPicker/PeoplePicker/PeoplePickerItems/SelectedItemDefault.tsx:8:31 - error TS2307: Cannot find module './PickerItemsDefault.scss'.
+office-ui-fabric-react: 8 import * as stylesImport from './PickerItemsDefault.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/FloatingPicker/PeoplePicker/PeoplePickerItems/SuggestionItemDefault.tsx:7:31 - error TS2307: Cannot find module '../PeoplePicker.scss'.
+office-ui-fabric-react: 7 import * as stylesImport from '../PeoplePicker.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/FloatingPicker/Suggestions/SuggestionsControl.tsx:12:31 - error TS2307: Cannot find module './SuggestionsControl.scss'.
+office-ui-fabric-react: 12 import * as stylesImport from './SuggestionsControl.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/FloatingPicker/Suggestions/SuggestionsCore.tsx:5:31 - error TS2307: Cannot find module './SuggestionsCore.scss'.
+office-ui-fabric-react: 5 import * as stylesImport from './SuggestionsCore.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/Layer/examples/Layer.Basic.Example.tsx:2:25 - error TS2307: Cannot find module './Layer.Example.scss'.
+office-ui-fabric-react: 2 import * as styles from './Layer.Example.scss';
+office-ui-fabric-react:                           ~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/Layer/examples/Layer.Hosted.Example.tsx:8:25 - error TS2307: Cannot find module './Layer.Example.scss'.
+office-ui-fabric-react: 8 import * as styles from './Layer.Example.scss';
+office-ui-fabric-react:                           ~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/SelectedItemsList/SelectedPeopleList/Items/ExtendedSelectedItem.tsx:8:31 - error TS2307: Cannot find module './ExtendedSelectedItem.scss'.
+office-ui-fabric-react: 8 import * as stylesImport from './ExtendedSelectedItem.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/BasePicker.tsx:14:31 - error TS2307: Cannot find module './BasePicker.scss'.
+office-ui-fabric-react: 14 import * as stylesImport from './BasePicker.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/PeoplePicker/PeoplePickerItems/SelectedItemDefault.tsx:9:31 - error TS2307: Cannot find module './PickerItemsDefault.scss'.
+office-ui-fabric-react: 9 import * as stylesImport from './PickerItemsDefault.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/PeoplePicker/PeoplePickerItems/SelectedItemWithMenu.tsx:9:31 - error TS2307: Cannot find module './PickerItemsDefault.scss'.
+office-ui-fabric-react: 9 import * as stylesImport from './PickerItemsDefault.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/PeoplePicker/PeoplePickerItems/SuggestionItemDefault.tsx:7:31 - error TS2307: Cannot find module './SuggestionItemDefault.scss'.
+office-ui-fabric-react: 7 import * as stylesImport from './SuggestionItemDefault.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/Suggestions/Suggestions.tsx:13:31 - error TS2307: Cannot find module './Suggestions.scss'.
+office-ui-fabric-react: 13 import * as stylesImport from './Suggestions.scss';
+office-ui-fabric-react:                                  ~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: src/components/pickers/Suggestions/SuggestionsItem.tsx:8:31 - error TS2307: Cannot find module './Suggestions.scss'.
+office-ui-fabric-react: 8 import * as stylesImport from './Suggestions.scss';
+office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~
+office-ui-fabric-react: Found 22 errors.
+office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
+office-ui-fabric-react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+office-ui-fabric-react: error Command failed with exit code 1.
+lerna ERR! yarn run build exited 1 in 'office-ui-fabric-react'
