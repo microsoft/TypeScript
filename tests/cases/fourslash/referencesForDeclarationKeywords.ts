@@ -71,7 +71,7 @@ const [
 ] = test.ranges();
 verify.referenceGroups(classDecl1_classKeyword, [{ definition: "class C1", ranges: [classDecl1_name] }]);
 verify.referenceGroups(classDecl1_extendsKeyword, [{ definition: "class Base", ranges: [baseDecl_name, classDecl1_extendsName, interfaceDecl1_extendsName] }]);
-verify.referenceGroups(classDecl1_implementsKeyword, [{ definition: "", ranges: [implemented1Decl_name, classDecl1_implementsName] }]);
+verify.referenceGroups(classDecl1_implementsKeyword, [{ definition: "interface Implemented1", ranges: [implemented1Decl_name, classDecl1_implementsName] }]);
 for (const keyword of [getDecl_getKeyword, setDecl_setKeyword]) {
     verify.referenceGroups(keyword, [{ definition: "(property) C1.e: number", ranges: [getDecl_name, setDecl_name] }]);
 }

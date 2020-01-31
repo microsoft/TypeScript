@@ -413,9 +413,9 @@ namespace ts {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
             },
-            getSymbolAtLocation: (node: Node) => {
+            getSymbolAtLocation: node => {
                 node = getParseTreeNode(node);
-                return node && getSymbolAtLocation(node);
+                return node ? getSymbolAtLocation(node) : undefined;
             },
             getShorthandAssignmentValueSymbol: node => {
                 node = getParseTreeNode(node);
@@ -34249,7 +34249,7 @@ namespace ts {
                     if (constructorDeclaration && constructorDeclaration.kind === SyntaxKind.Constructor) {
                         return (<ClassDeclaration>constructorDeclaration.parent).symbol;
                     }
-                    break;
+                    return undefined;
 
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -34287,10 +34287,10 @@ namespace ts {
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal) : undefined;
 
                 case SyntaxKind.ExportKeyword:
-                    if (isExportAssignment(node.parent)) {
-                        return Debug.assertDefined(node.parent.symbol);
-                    }
-                    break;
+                    return isExportAssignment(node.parent) ? Debug.assertDefined(node.parent.symbol) : undefined;
+
+                default:
+                    return undefined;
             }
         }
 

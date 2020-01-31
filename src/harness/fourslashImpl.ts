@@ -229,7 +229,7 @@ namespace FourSlash {
             }
         }
 
-        constructor(public originalInputFileName: string, private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
+        constructor(private originalInputFileName: string, private basePath: string, private testType: FourSlashTestType, public testData: FourSlashData) {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             let compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
@@ -3637,18 +3637,17 @@ namespace FourSlash {
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
         const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
         const actualFileName = Harness.IO.resolvePath(fileName) || absoluteFileName;
-        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, sourceMap: true } });
+        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
         }
-        runCode(output, state, actualFileName);
+        runCode(output.outputText, state, actualFileName);
     }
 
-    function runCode(output: ts.TranspileOutput, state: TestState, fileName: string): void {
+    function runCode(code: string, state: TestState, fileName: string): void {
         // Compile and execute the test
         const generatedFile = ts.changeExtension(fileName, ".js");
-        const mapFile = generatedFile + ".map";
-        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${output.outputText}\n//# sourceURL=${generatedFile}\n})`;
+        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${generatedFile}\n})`;
 
         type SourceMapSupportModule = typeof import("source-map-support") & {
             // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
@@ -3668,7 +3667,6 @@ namespace FourSlash {
         sourceMapSupportModule?.install({
             retrieveFile: path => {
                 return path === generatedFile ? wrappedCode :
-                    path === mapFile ? output.sourceMapText! :
                     undefined!;
             }
         });
@@ -3687,7 +3685,7 @@ namespace FourSlash {
             f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
         catch (err) {
-            // ensure we trigger 'source-map-support' while we still have the handler attached
+            // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.
             err.stack?.toString();
             throw err;
         }
@@ -3862,7 +3860,7 @@ namespace FourSlash {
             markerValue = JSON.parse("{ " + text + " }");
         }
         catch (e) {
-            reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message + "\nSource:\n  {| " + text + " |}");
+            reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
         }
 
         if (markerValue === undefined) {

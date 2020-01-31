@@ -249,7 +249,7 @@ verify.referenceGroups([exportDecl4_exportKeyword, exportDecl4_typeKeyword, expo
 verify.referenceGroups(exportDecl4_asKeyword, [{ definition: "(alias) const j3: 2\nexport j3", ranges: [exportDecl4_name] }]);
 
 // exportDecl5:
-verify.referenceGroups([exportDecl5_exportKeyword, exportDecl5_typeKeyword], [{ definition: "", ranges: [typeDecl1_name, exportDecl5_name] }]);
+verify.referenceGroups([exportDecl5_exportKeyword, exportDecl5_typeKeyword], [{ definition: "type Z1 = 1", ranges: [typeDecl1_name, exportDecl5_name] }]);
 
 // exportDecl6:
 verify.noReferences(exportDecl6_exportKeyword);

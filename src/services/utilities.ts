@@ -88,6 +88,7 @@ namespace ts {
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
+        node = getAdjustedReferenceLocation(node);
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
@@ -113,24 +114,6 @@ namespace ts {
         else if (isLiteralTypeNode(node.parent)) {
             // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
             return SemanticMeaning.Type | SemanticMeaning.Value;
-        }
-        else if (isModifier(node) && contains(node.parent.modifiers, node)) {
-            // on the modifier of a declaration
-            return getMeaningFromDeclaration(node.parent);
-        }
-        else if (node.kind === SyntaxKind.ClassKeyword && isClassLike(node.parent) ||
-            node.kind === SyntaxKind.InterfaceKeyword && isInterfaceDeclaration(node.parent) ||
-            node.kind === SyntaxKind.TypeKeyword && isTypeAliasDeclaration(node.parent) ||
-            node.kind === SyntaxKind.EnumKeyword && isEnumDeclaration(node.parent) ||
-            node.kind === SyntaxKind.FunctionKeyword && isFunctionLikeDeclaration(node.parent) ||
-            node.kind === SyntaxKind.GetKeyword && isGetAccessorDeclaration(node.parent) ||
-            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(node.parent) ||
-            (node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword) && isModuleDeclaration(node.parent)) {
-            // on the keyword of a declaration
-            return getMeaningFromDeclaration(node.parent);
-        }
-        else if (node.kind === SyntaxKind.TypeKeyword && isImportClause(node.parent) && node.parent.isTypeOnly) {
-            return getMeaningFromDeclaration(node.parent.parent);
         }
         else {
             return SemanticMeaning.Value;
@@ -986,8 +969,36 @@ namespace ts {
                 return location;
             }
         }
+        if (node.kind === SyntaxKind.ExtendsKeyword) {
+            // ... <T /**/extends [|U|]> ...
+            if (isTypeParameterDeclaration(parent) && parent.constraint && isTypeReferenceNode(parent.constraint)) {
+                return parent.constraint.typeName;
+            }
+            // ... T /**/extends [|U|] ? ...
+            if (isConditionalTypeNode(parent) && isTypeReferenceNode(parent.extendsType)) {
+                return parent.extendsType.typeName;
+            }
+        }
+        // ... T extends /**/infer [|U|] ? ...
+        if (node.kind === SyntaxKind.InferKeyword && isInferTypeNode(parent)) {
+            return parent.typeParameter.name;
+        }
+        // { [ [|K|] /**/in keyof T]: ... }
+        if (node.kind === SyntaxKind.InKeyword && isTypeParameterDeclaration(parent) && isMappedTypeNode(parent.parent)) {
+            return parent.name;
+        }
+        // /**/keyof [|T|]
+        if (node.kind === SyntaxKind.KeyOfKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.KeyOfKeyword &&
+            isTypeReferenceNode(parent.type)) {
+            return parent.type.typeName;
+        }
+        // /**/readonly [|name|][]
+        if (node.kind === SyntaxKind.ReadonlyKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.ReadonlyKeyword &&
+            isArrayTypeNode(parent.type) && isTypeReferenceNode(parent.type.elementType)) {
+            return parent.type.elementType.typeName;
+        }
         if (!forRename) {
-            // /**/new [|name|](...)
+            // /**/new [|name|]
             // /**/void [|name|]
             // /**/void obj.[|name|]
             // /**/typeof [|name|]
@@ -1006,6 +1017,21 @@ namespace ts {
                 if (parent.expression) {
                     return skipOuterExpressions(parent.expression);
                 }
+            }
+            // left /**/in [|name|]
+            // left /**/instanceof [|name|]
+            if ((node.kind === SyntaxKind.InKeyword || node.kind === SyntaxKind.InstanceOfKeyword) && isBinaryExpression(parent) && parent.operatorToken === node) {
+                return skipOuterExpressions(parent.right);
+            }
+            // left /**/as [|name|]
+            if (node.kind === SyntaxKind.AsKeyword && isAsExpression(parent) && isTypeReferenceNode(parent.type)) {
+                return parent.type.typeName;
+            }
+            // for (... /**/in [|name|])
+            // for (... /**/of [|name|])
+            if (node.kind === SyntaxKind.InKeyword && isForInStatement(parent) ||
+                node.kind === SyntaxKind.OfKeyword && isForOfStatement(parent)) {
+                return skipOuterExpressions(parent.expression);
             }
         }
         return node;
