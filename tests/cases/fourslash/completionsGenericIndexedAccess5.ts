@@ -1,3 +1,5 @@
+/// <reference path="fourslash.ts" />
+
 ////interface CustomElements {
 ////  'component-one': {
 ////      foo?: string;

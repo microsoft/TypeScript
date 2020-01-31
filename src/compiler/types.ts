@@ -4250,7 +4250,7 @@ namespace ts {
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;           // Is node an exhaustive switch statement
-        skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `BaseConstraint` is passed to force the checker to skip making inferences to a node's type
+        skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     }
 
     export const enum TypeFlags {

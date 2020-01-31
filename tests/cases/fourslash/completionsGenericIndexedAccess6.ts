@@ -1,3 +1,5 @@
+/// <reference path="fourslash.ts" />
+
 // @Filename: component.tsx
 
 ////interface CustomElements {
