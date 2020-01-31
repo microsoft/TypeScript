@@ -2074,9 +2074,9 @@ namespace ts {
 
             while (pos < end) {
 
-                // newlines are OK
+                // We want to keep track of the last non-whitespace (but including
+                // newlines character for hitting the end of the JSX Text region)
                 if (!isWhiteSpaceSingleLine(char)) {
-                    // console.log(text.charAt(pos));
                     lastNonWhitespace = pos;
                 }
 
@@ -2112,10 +2112,7 @@ namespace ts {
 
             const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
             tokenValue = text.substring(startPos, endPosition);
-            // pos = endPosition;
 
-            // console.log("one: '" + text.substring(startPos, pos) + "'");
-            // console.log("two: '" + tokenValue + "'");
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 

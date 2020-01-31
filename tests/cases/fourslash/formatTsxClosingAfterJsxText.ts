@@ -1,27 +1,31 @@
 /// <reference path="fourslash.ts"/>
+// @Filename: foo.tsx
 ////
 ////const a = (
-////  <div>
-////      text
-////      </div>
+////    <div>
+////        text
+////               </div>
+////)
+////const b = (
+////    <div>
+////        text
+////      twice
+////               </div>
 ////)
 ////
-////const b = (
-////  <div>
-////  <span />
-////  </div>
-////)
+
 
 format.document();
 verify.currentFileContentIs(`
 const a = (
-  <div>
-    text
-  </div>
+    <div>
+        text
+    </div>
 )
-
 const b = (
-  <div>
-    <span />
-  </div>
-);`);
+    <div>
+        text
+        twice
+    </div>
+)
+`);

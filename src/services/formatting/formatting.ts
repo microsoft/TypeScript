@@ -501,6 +501,9 @@ namespace ts.formatting {
                 else if (SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)) {
                     return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
+                else if (SmartIndenter.isJSXClosingWithMultiLineText(parent, node, startLine, sourceFile)) {
+                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
+                }
                 else {
                     return { indentation: parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node), delta };
                 }
@@ -736,7 +739,6 @@ namespace ts.formatting {
                 const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
-
                 if (child.kind === SyntaxKind.JsxText) {
                     const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
                     indentMultilineCommentOrJsxText(range, childIndentation.indentation, /*firstLineIsIndented*/ true, /*indentFinalLine*/ false);
