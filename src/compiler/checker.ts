@@ -15581,29 +15581,44 @@ namespace ts {
                 // is some specialization or subtype of Q
                 // This is difficult to detect generally, so we scan for prior comparisons of the same instantiated type, and match up matching
                 // type arguments into sets to create a canonicalization based on those matches
-                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && source.aliasTypeArguments) || (getObjectFlags(source) & ObjectFlags.Reference && !!(<TypeReference>source).node && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
-                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && target.aliasTypeArguments) || (getObjectFlags(target) & ObjectFlags.Reference && !!(<TypeReference>target).node && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
+                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && source.aliasTypeArguments) || (getObjectFlags(source) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>source).length && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
+                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && target.aliasTypeArguments) || (getObjectFlags(target) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>target).length && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
                     if (source.aliasSymbol || target.aliasSymbol || (<TypeReference>source).target !== (<TypeReference>target).target) { // ensure like symbols are just handled by standard variance analysis
-                        const originalKey = getRelationKey(source, target, intersectionState, relation);
                         const sourceTypeArguments = source.aliasTypeArguments || getTypeArguments(<TypeReference>source);
+                        const sourceHasMarker = some(sourceTypeArguments, a => a === markerOtherType);
                         const targetTypeArguments = target.aliasTypeArguments || getTypeArguments(<TypeReference>target);
-                        for (let i = 0; i < sourceTypeArguments.length; i++) {
-                            for (let j = 0; j < targetTypeArguments.length; j++) {
-                                if (!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && isTypeIdenticalTo(sourceTypeArguments[i], targetTypeArguments[j])) {
-                                    const sourceClone = sourceTypeArguments.slice();
-                                    sourceClone[i] = markerOtherType;
-                                    const s = getInstanceOfAliasOrReferenceWithMarker(source, sourceClone);
-                                    const targetClone = targetTypeArguments.slice();
-                                    targetClone[j] = markerOtherType;
-                                    const t = getInstanceOfAliasOrReferenceWithMarker(target, targetClone);
-                                    // If the marker-instantiated form looks "the same" as the type we already have (eg,
-                                    // because we replace unconstrained generics with unconstrained generics), skip the check
-                                    // since we'll otherwise deliver a spurious `Maybe` result from the key _just_ set upon
-                                    // entry into `recursiveTypeRelatedTo`
-                                    if (getRelationKey(s, t, intersectionState, relation) !== originalKey) {
-                                        const result = isRelatedTo(s, t, /*reportErrors*/ false);
-                                        if (result) {
-                                            return result;
+                        const targetHasMarker = some(targetTypeArguments, a => a === markerOtherType);
+                        // We're using `markerOtherType` as an existential, so we can't use it again if it's already in use,
+                        // as we'd get spurious equivalencies - we'd need to use a second existential type, and once we're doing
+                        // that we lose a lot of the benefit of canonicalizing back to a single-existential comparison, since then
+                        // we'd need to manufacture new type identities for every new existential we make
+                        // The above checks don't catch all cases this can occur, as they can only detect when the containing type
+                        // was flagged during construction as containing a marker; however if a marker enters a type through instantiation
+                        // we need to catch that here.
+                        if (!sourceHasMarker && !targetHasMarker) {
+                            const originalKey = getRelationKey(source, target, intersectionState, relation);
+                            for (let i = 0; i < sourceTypeArguments.length; i++) {
+                                for (let j = 0; j < targetTypeArguments.length; j++) {
+                                    if ((!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && !isTypeAny(sourceTypeArguments[i]) && isTypeIdenticalTo(sourceTypeArguments[i], targetTypeArguments[j])) ||
+                                    // Similarly, if we're comparing X<Q> to Z<any>, X<Q> is assignable to Z<any> trivially if X<?> is assignable to Z<?>
+                                    (!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && isTypeAny(targetTypeArguments[j])) ||
+                                    // Again, but for `X<any>` vs `Z<Q>`
+                                    (isTypeAny(sourceTypeArguments[i]) && !(targetTypeArguments[j].flags & TypeFlags.TypeParameter))) {
+                                        const sourceClone = sourceTypeArguments.slice();
+                                        sourceClone[i] = markerOtherType;
+                                        const s = getInstanceOfAliasOrReferenceWithMarker(source, sourceClone);
+                                        const targetClone = targetTypeArguments.slice();
+                                        targetClone[j] = markerOtherType;
+                                        const t = getInstanceOfAliasOrReferenceWithMarker(target, targetClone);
+                                        // If the marker-instantiated form looks "the same" as the type we already have (eg,
+                                        // because we replace unconstrained generics with unconstrained generics), skip the check
+                                        // since we'll otherwise deliver a spurious `Maybe` result from the key _just_ set upon
+                                        // entry into `recursiveTypeRelatedTo`
+                                        if (getRelationKey(s, t, intersectionState, relation) !== originalKey) {
+                                            const result = isRelatedTo(s, t, /*reportErrors*/ false);
+                                            if (result) {
+                                                return result;
+                                            }
                                         }
                                     }
                                 }
