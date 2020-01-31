@@ -9551,6 +9551,7 @@ declare namespace ts.server {
         private configurePlugin;
         private getSmartSelectionRange;
         private mapSelectionRange;
+        private getScriptInfoFromProjectService;
         private toProtocolCallHierarchyItem;
         private toProtocolCallHierarchyIncomingCall;
         private toProtocolCallHierarchyOutgoingCall;
