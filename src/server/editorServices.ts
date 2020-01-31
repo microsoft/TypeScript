@@ -376,7 +376,7 @@ namespace ts.server {
          * openFilesImpactedByConfigFiles is a map of open files that would be impacted by this config file
          *   because these are the paths being looked up for their default configured project location
          * The value in the map is true if the open file is root of the inferred project
-         * It is false when the open file that would still be impacted by existance of
+         * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
         openFilesImpactedByConfigFile: Map<boolean>;
@@ -575,7 +575,7 @@ namespace ts.server {
          */
         private readonly projectToSizeMap: Map<number> = createMap<number>();
         /**
-         * This is a map of config file paths existance that doesnt need query to disk
+         * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
          *   In this case the exists could be true/false based on config file is present or not
          * - Or it is present if we have configured project open with config file at that location
@@ -1439,7 +1439,7 @@ namespace ts.server {
         private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
             const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (configFileExistenceInfo) {
-                // The existance might not be set if the file watcher is not invoked by the time config project is created by external project
+                // The existence might not be set if the file watcher is not invoked by the time config project is created by external project
                 configFileExistenceInfo.exists = true;
                 // close existing watcher
                 if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
@@ -2731,7 +2731,7 @@ namespace ts.server {
             // since info is added as root to the inferred project only when there are no other projects containing it
             // So when it is root of the inferred project and after project structure updates its now part
             // of multiple project it needs to be removed from that inferred project because:
-            // - references in inferred project supercede the root part
+            // - references in inferred project supersede the root part
             // - root / reference in non - inferred project beats root in inferred project
 
             // eg. say this is structure /a/b/a.ts /a/b/c.ts where c.ts references a.ts

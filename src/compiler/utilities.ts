@@ -551,7 +551,7 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent && !(
@@ -561,24 +561,29 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
-        // had to include a backslash: `not \${a} substitution`.
-        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
-
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
-            case SyntaxKind.StringLiteral:
+            case SyntaxKind.StringLiteral: {
+                const escapeText = jsxAttributeEscape ? escapeJsxAttributeString :
+                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                    escapeNonAsciiString;
                 if ((<StringLiteral>node).singleQuote) {
                     return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
                 }
                 else {
                     return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
                 }
+            }
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
-            case SyntaxKind.TemplateTail:
+            case SyntaxKind.TemplateTail: {
+                // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
+                // had to include a backslash: `not \${a} substitution`.
+                const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                    escapeNonAsciiString;
+
                 const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
                 switch (node.kind) {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -591,6 +596,7 @@ namespace ts {
                         return "}" + rawText + "`";
                 }
                 break;
+            }
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
@@ -1778,25 +1784,6 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
-    export function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
-        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
-            node = node.parent;
-        }
-        if (node.kind !== SyntaxKind.ComputedPropertyName) {
-            return false;
-        }
-        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
-            return true;
-        }
-        const containerKind = node.parent.parent.kind;
-        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
-    }
-
-    export function isFirstIdentifierOfImplementsClause(node: Node) {
-        return node.parent?.parent?.parent?.kind === SyntaxKind.HeritageClause
-            && (node.parent.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword;
-    }
-
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -2738,13 +2725,47 @@ namespace ts {
         return false;
     }
 
-    export function getTypeOnlyCompatibleAliasDeclarationFromName(node: Identifier): TypeOnlyCompatibleAliasDeclaration | undefined {
+    // An alias symbol is created by one of the following declarations:
+    // import <symbol> = ...
+    // import <symbol> from ...
+    // import * as <symbol> from ...
+    // import { x as <symbol> } from ...
+    // export { x as <symbol> } from ...
+    // export * as ns <symbol> from ...
+    // export = <EntityNameExpression>
+    // export default <EntityNameExpression>
+    // module.exports = <EntityNameExpression>
+    // {<Identifier>}
+    // {name: <EntityNameExpression>}
+    export function isAliasSymbolDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+            node.kind === SyntaxKind.NamespaceExportDeclaration ||
+            node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
+            node.kind === SyntaxKind.NamespaceImport ||
+            node.kind === SyntaxKind.NamespaceExport ||
+            node.kind === SyntaxKind.ImportSpecifier ||
+            node.kind === SyntaxKind.ExportSpecifier ||
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
+            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
+            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
+            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+    }
+
+    export function getAliasDeclarationFromName(node: EntityName): Declaration | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ExportSpecifier:
-                return node.parent as TypeOnlyCompatibleAliasDeclaration;
+            case SyntaxKind.ExportAssignment:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.parent as Declaration;
+            case SyntaxKind.QualifiedName:
+                do {
+                    node = node.parent as QualifiedName;
+                } while (node.parent.kind === SyntaxKind.QualifiedName);
+                return getAliasDeclarationFromName(node);
         }
     }
 
@@ -3369,6 +3390,25 @@ namespace ts {
         "\u0085": "\\u0085"  // nextLine
     });
 
+    function encodeUtf16EscapeSequence(charCode: number): string {
+        const hexCharCode = charCode.toString(16).toUpperCase();
+        const paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        return "\\u" + paddedHexCode;
+    }
+
+    function getReplacement(c: string, offset: number, input: string) {
+        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
+            const lookAhead = input.charCodeAt(offset + c.length);
+            if (lookAhead >= CharacterCodes._0 && lookAhead <= CharacterCodes._9) {
+                // If the null character is followed by digits, print as a hex escape to prevent the result from parsing as an octal (which is forbidden in strict mode)
+                return "\\x00";
+            }
+            // Otherwise, keep printing a literal \0 for the null character
+            return "\\0";
+        }
+        return escapedCharsMap.get(c) || encodeUtf16EscapeSequence(c.charCodeAt(0));
+    }
+
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
@@ -3380,6 +3420,46 @@ namespace ts {
             quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
             doubleQuoteEscapedCharsRegExp;
         return s.replace(escapedCharsRegExp, getReplacement);
+    }
+
+    const nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
+        s = escapeString(s, quoteChar);
+        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
+        // Otherwise just return the original string.
+        return nonAsciiCharacters.test(s) ?
+            s.replace(nonAsciiCharacters, c => encodeUtf16EscapeSequence(c.charCodeAt(0))) :
+            s;
+    }
+
+    // This consists of the first 19 unprintable ASCII characters, JSX canonical escapes, lineSeparator,
+    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
+    // the language service. These characters should be escaped when printing, and if any characters are added,
+    // the map below must be updated.
+    const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
+    const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
+    const jsxEscapedCharsMap = createMapFromTemplate({
+        "\"": "&quot;",
+        "\'": "&apos;"
+    });
+
+    function encodeJsxCharacterEntity(charCode: number): string {
+        const hexCharCode = charCode.toString(16).toUpperCase();
+        return "&#x" + hexCharCode + ";";
+    }
+
+    function getJsxAttributeStringReplacement(c: string) {
+        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
+            return "&#0;";
+        }
+        return jsxEscapedCharsMap.get(c) || encodeJsxCharacterEntity(c.charCodeAt(0));
+    }
+
+    export function escapeJsxAttributeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote) {
+        const escapedCharsRegExp =
+            quoteChar === CharacterCodes.singleQuote ? jsxSingleQuoteEscapedCharsRegExp :
+            jsxDoubleQuoteEscapedCharsRegExp;
+        return s.replace(escapedCharsRegExp, getJsxAttributeStringReplacement);
     }
 
     /**
@@ -3401,38 +3481,9 @@ namespace ts {
             charCode === CharacterCodes.backtick;
     }
 
-    function getReplacement(c: string, offset: number, input: string) {
-        if (c.charCodeAt(0) === CharacterCodes.nullCharacter) {
-            const lookAhead = input.charCodeAt(offset + c.length);
-            if (lookAhead >= CharacterCodes._0 && lookAhead <= CharacterCodes._9) {
-                // If the null character is followed by digits, print as a hex escape to prevent the result from parsing as an octal (which is forbidden in strict mode)
-                return "\\x00";
-            }
-            // Otherwise, keep printing a literal \0 for the null character
-            return "\\0";
-        }
-        return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
-    }
-
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
         return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
-    }
-
-    function get16BitUnicodeEscapeSequence(charCode: number): string {
-        const hexCharCode = charCode.toString(16).toUpperCase();
-        const paddedHexCode = ("0000" + hexCharCode).slice(-4);
-        return "\\u" + paddedHexCode;
-    }
-
-    const nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote | CharacterCodes.backtick): string {
-        s = escapeString(s, quoteChar);
-        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
-        // Otherwise just return the original string.
-        return nonAsciiCharacters.test(s) ?
-            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
-            s;
     }
 
     const indentStrings: string[] = ["", "    "];
@@ -6116,8 +6167,29 @@ namespace ts {
     export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         return !!(useSite.flags & NodeFlags.Ambient)
             || isPartOfTypeQuery(useSite)
-            || isFirstIdentifierOfImplementsClause(useSite)
+            || isFirstIdentifierOfNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !isExpressionNode(useSite);
+    }
+
+    function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
+        while (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
+            node = node.parent;
+        }
+        if (node.kind !== SyntaxKind.ComputedPropertyName) {
+            return false;
+        }
+        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+            return true;
+        }
+        const containerKind = node.parent.parent.kind;
+        return containerKind === SyntaxKind.InterfaceDeclaration || containerKind === SyntaxKind.TypeLiteral;
+    }
+
+    /** Returns true for the first identifier of 1) an `implements` clause, and 2) an `extends` clause of an interface. */
+    function isFirstIdentifierOfNonEmittingHeritageClause(node: Node): boolean {
+        // Number of parents to climb from identifier is 2 for `implements I`, 3 for `implements x.I`
+        const heritageClause = tryCast(node.parent.parent, isHeritageClause) ?? tryCast(node.parent.parent?.parent, isHeritageClause);
+        return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
     }
 }

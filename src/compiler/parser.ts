@@ -7145,7 +7145,7 @@ namespace ts {
                         case SyntaxKind.ArrayType:
                             return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                         default:
-                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object";
+                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                     }
                 }
 
