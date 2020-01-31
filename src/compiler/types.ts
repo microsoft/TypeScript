@@ -3611,7 +3611,7 @@ namespace ts {
         None           = 0,
         Signature      = 1 << 0, // Obtaining contextual signature
         NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-        BaseConstraint = 1 << 2, // Use base constraint type for completions
+        Completions    = 1 << 2, // Ignore inference to current node for completions
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!

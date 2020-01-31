@@ -473,7 +473,7 @@ namespace ts {
                 }
                 const containingCall = findAncestor(node, isCallLikeExpression);
                 const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
-                if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
+                if (contextFlags! & ContextFlags.Completions && containingCall) {
                     let toMarkSkip = node as Node;
                     do {
                         getNodeLinks(toMarkSkip).skipDirectInference = true;
@@ -482,7 +482,7 @@ namespace ts {
                     getNodeLinks(containingCall).resolvedSignature = undefined;
                 }
                 const result = getContextualType(node, contextFlags);
-                if (contextFlags! & ContextFlags.BaseConstraint && containingCall) {
+                if (contextFlags! & ContextFlags.Completions && containingCall) {
                     let toMarkSkip = node as Node;
                     do {
                         getNodeLinks(toMarkSkip).skipDirectInference = undefined;
@@ -21929,7 +21929,7 @@ namespace ts {
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags?: ContextFlags) {
-            if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.BaseConstraint) {
+            if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.Completions) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
                 // (as below) instead!
