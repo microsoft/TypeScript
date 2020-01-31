@@ -413,13 +413,9 @@ namespace ts {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
             },
-            getSymbolAtLocation: (node: Node, includeKeywords?: boolean) => {
+            getSymbolAtLocation: (node: Node) => {
                 node = getParseTreeNode(node);
-                if (node) {
-                    return includeKeywords ?
-                        getSymbolAtLocation(node) ?? getSymbolAtKeyword(node) :
-                        getSymbolAtLocation(node);
-                }
+                return node && getSymbolAtLocation(node);
             },
             getShorthandAssignmentValueSymbol: node => {
                 node = getParseTreeNode(node);
@@ -34295,65 +34291,6 @@ namespace ts {
                         return Debug.assertDefined(node.parent.symbol);
                     }
                     break;
-            }
-        }
-
-        /**
-         * Gets the symbol related to the provided location, if it that location is a keyword.
-         * These additional keywords are normally only used to resolve references but would
-         * not be used for document highlights, quickinfo, etc.
-         */
-        function getSymbolAtKeyword(node: Node): Symbol | undefined {
-            if (node.flags & NodeFlags.InWithStatement) {
-                // We cannot answer semantic questions within a with block, do not proceed any further
-                return undefined;
-            }
-
-            const { parent } = node;
-
-            // If the node is a modifier of its parent, get the symbol for the parent.
-            if (isModifier(node) && contains(parent.modifiers, node)) {
-                return getSymbolOfNode(parent);
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.EnumKeyword:
-                case SyntaxKind.NamespaceKeyword:
-                case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.GetKeyword:
-                case SyntaxKind.SetKeyword:
-                    return getSymbolOfNode(parent);
-
-                case SyntaxKind.TypeKeyword:
-                    if (isTypeAliasDeclaration(parent)) {
-                        return getSymbolOfNode(parent);
-                    }
-                    if (isImportClause(parent)) {
-                        return getSymbolAtLocation(parent.parent.moduleSpecifier);
-                    }
-                    if (isLiteralImportTypeNode(parent)) {
-                        return getSymbolAtLocation(parent.argument.literal);
-                    }
-                    break;
-
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.LetKeyword:
-                    if (isVariableDeclarationList(parent) && parent.declarations.length === 1) {
-                        return getSymbolOfNode(parent.declarations[0]);
-                    }
-                    break;
-            }
-            if (node.kind === SyntaxKind.NewKeyword && isNewExpression(parent) ||
-                node.kind === SyntaxKind.VoidKeyword && isVoidExpression(parent) ||
-                node.kind === SyntaxKind.TypeOfKeyword && isTypeOfExpression(parent) ||
-                node.kind === SyntaxKind.AwaitKeyword && isAwaitExpression(parent) ||
-                node.kind === SyntaxKind.YieldKeyword && isYieldExpression(parent) ||
-                node.kind === SyntaxKind.DeleteKeyword && isDeleteExpression(parent)) {
-                if (parent.expression) {
-                    return getSymbolAtLocation(skipOuterExpressions(parent.expression));
-                }
             }
         }
 
