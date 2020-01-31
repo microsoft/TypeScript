@@ -52,11 +52,11 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -101,11 +101,11 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -141,11 +141,11 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -179,11 +179,11 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -276,11 +276,11 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 

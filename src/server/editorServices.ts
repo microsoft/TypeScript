@@ -1256,7 +1256,20 @@ namespace ts.server {
 
             const project = this.getOrCreateInferredProjectForProjectRootPathIfEnabled(info, projectRootPath) ||
                 this.getOrCreateSingleInferredProjectIfEnabled() ||
-                this.getOrCreateSingleInferredWithoutProjectRoot(info.isDynamic ? projectRootPath || this.currentDirectory : getDirectoryPath(info.path));
+                this.getOrCreateSingleInferredWithoutProjectRoot(
+                    info.isDynamic ?
+                        projectRootPath || this.currentDirectory :
+                        getDirectoryPath(
+                            isRootedDiskPath(info.fileName) ?
+                                info.fileName :
+                                getNormalizedAbsolutePath(
+                                    info.fileName,
+                                    projectRootPath ?
+                                        this.getNormalizedAbsolutePath(projectRootPath) :
+                                        this.currentDirectory
+                                )
+                        )
+                );
 
             project.addRoot(info);
             if (info.containingProjects[0] !== project) {
@@ -3354,7 +3367,7 @@ namespace ts.server {
                 else {
                     let exclude = false;
                     if (typeAcquisition.enable || typeAcquisition.enableAutoDiscovery) {
-                        const baseName = getBaseFileName(normalizedNames[i].toLowerCase());
+                        const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);

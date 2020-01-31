@@ -53,21 +53,21 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/tsconfig.json","pollingInterval":250}
 /a/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/a.ts","pollingInterval":250}
 /a/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -102,20 +102,20 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/tsconfig.json","pollingInterval":250}
 /a/a.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/a.ts","pollingInterval":250}
 /a/b.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
