@@ -643,8 +643,8 @@ namespace ts {
     export function isEffectiveModuleDeclaration(node: Node) {
         return isModuleDeclaration(node) || isIdentifier(node);
     }
-    /** Given a symbol for a module, checks that it is a shorthand ambient module. */
 
+    /** Given a symbol for a module, checks that it is a shorthand ambient module. */
     export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
