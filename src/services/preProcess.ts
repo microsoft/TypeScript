@@ -57,6 +57,11 @@ namespace ts {
             }
         }
 
+        function isStringLiteralLike(token: SyntaxKind) {
+            return token === SyntaxKind.StringLiteral
+                || token === SyntaxKind.NoSubstitutionTemplateLiteral;
+        }
+
         /**
          * Returns true if at least one token was consumed from the stream
          */
@@ -81,7 +86,13 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
-            if (lastToken === SyntaxKind.DotToken) {
+            if (lastToken === SyntaxKind.DotToken
+                // the following is used to prevent matches of
+                // `import * as doh from 'ooops';\n`;
+                // however this is only best-effort as it is possible to have a template
+                // literal ending right before, not only opening, which would prevent this
+                // import from being detected.
+                || lastToken === SyntaxKind.NoSubstitutionTemplateLiteral) {
                 return false;
             }
             let token = scanner.getToken();
@@ -89,14 +100,16 @@ namespace ts {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (isStringLiteralLike(token)) {
                         // import("mod");
+                        // import(`mod`);
                         recordModuleName();
                         return true;
                     }
                 }
-                else if (token === SyntaxKind.StringLiteral) {
+                else if (isStringLiteralLike(token)) {
                     // import "mod";
+                    // import `mod`;
                     recordModuleName();
                     return true;
                 }
@@ -105,8 +118,9 @@ namespace ts {
                         token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
                             token = nextToken();
-                            if (token === SyntaxKind.StringLiteral) {
+                            if (isStringLiteralLike(token)) {
                                 // import d from "mod";
+                                // import d from `mod`
                                 recordModuleName();
                                 return true;
                             }
@@ -138,9 +152,10 @@ namespace ts {
                             token = nextToken();
                             if (token === SyntaxKind.FromKeyword) {
                                 token = nextToken();
-                                if (token === SyntaxKind.StringLiteral) {
+                                if (isStringLiteralLike(token)) {
                                     // import {a as A} from "mod";
                                     // import d, {a, b as B} from "mod"
+                                    // import d, {a, b as B} from `mod`
                                     recordModuleName();
                                 }
                             }
@@ -154,9 +169,10 @@ namespace ts {
                                 token = nextToken();
                                 if (token === SyntaxKind.FromKeyword) {
                                     token = nextToken();
-                                    if (token === SyntaxKind.StringLiteral) {
+                                    if (isStringLiteralLike(token)) {
                                         // import * as NS from "mod"
                                         // import d, * as NS from "mod"
+                                        // import d, * as NS from `mod`
                                         recordModuleName();
                                     }
                                 }
@@ -188,9 +204,10 @@ namespace ts {
                         token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
                             token = nextToken();
-                            if (token === SyntaxKind.StringLiteral) {
-                                // export {a as A} from "mod";
+                            if (isStringLiteralLike(token)) {
+                                // export {a as A} from "mod"
                                 // export {a, b as B} from "mod"
+                                // export {a, b as B} from `mod`
                                 recordModuleName();
                             }
                         }
@@ -200,8 +217,9 @@ namespace ts {
                     token = nextToken();
                     if (token === SyntaxKind.FromKeyword) {
                         token = nextToken();
-                        if (token === SyntaxKind.StringLiteral) {
+                        if (isStringLiteralLike(token)) {
                             // export * from "mod"
+                            // export * from `mod`
                             recordModuleName();
                         }
                     }
@@ -230,8 +248,9 @@ namespace ts {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (isStringLiteralLike(token)) {
                         //  require("mod");
+                        //  require(`mod`);
                         recordModuleName();
                     }
                 }
@@ -294,15 +313,19 @@ namespace ts {
             //    import d, {a, b as B} from "mod"
             //    import i = require("mod");
             //    import("mod");
+            //    import(`mod`);
+
 
             //    export * from "mod"
             //    export {a as b} from "mod"
             //    export import i = require("mod")
             //    (for JavaScript files) require("mod")
+            //    (for JavaScript files) require(`mod`);
 
             // Do not look for:
             //    AnySymbol.import("mod")
             //    AnySymbol.nested.import("mod")
+            //    `import * as doh from 'ooops';`;
 
             while (true) {
                 if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
