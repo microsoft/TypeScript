@@ -86,13 +86,7 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
-            if (lastToken === SyntaxKind.DotToken
-                // the following is used to prevent matches of
-                // `import * as doh from 'ooops';\n`;
-                // however this is only best-effort as it is possible to have a template
-                // literal ending right before, not only opening, which would prevent this
-                // import from being detected.
-                || lastToken === SyntaxKind.NoSubstitutionTemplateLiteral) {
+            if (lastToken === SyntaxKind.DotToken) {
                 return false;
             }
             let token = scanner.getToken();

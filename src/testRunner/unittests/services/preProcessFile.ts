@@ -88,51 +88,6 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 });
         });
 
-        // https://github.com/microsoft/TypeScript/issues/30878#issuecomment-540698189
-        it.skip("Do not return reference path of imports in string literals", () => {
-            test("`${}`;\n`import * as doh from 'ooops';\n`;",
-                /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
-                    typeReferenceDirectives: [],
-                    libReferenceDirectives: [],
-                    ambientExternalModules: undefined,
-                    isLibFile: false
-                });
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/30878#issue-432369315
-        it.skip("Correctly return statically imported files after string literals", () => {
-            test("`${foo}`; import './r1.ts';",
-                /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: <ts.FileReference[]>[],
-                    typeReferenceDirectives: [],
-                    libReferenceDirectives: [],
-                    importedFiles: [{ fileName: "r1.ts", pos: 17, end: 24 }],
-                    ambientExternalModules: undefined,
-                    isLibFile: false
-                });
-        });
-
-        // https://github.com/microsoft/TypeScript/issues/30878#issue-432369315
-        it("Correctly return dynamically imported files after string literals", () => {
-            test("`${foo}`; import('./r1.ts');",
-                /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: <ts.FileReference[]>[],
-                    typeReferenceDirectives: [],
-                    libReferenceDirectives: [],
-                    importedFiles: [{ fileName: "r1.ts", pos: 17, end: 25 }],
-                    ambientExternalModules: undefined,
-                    isLibFile: false
-                });
-        });
-
         // https://github.com/microsoft/TypeScript/issues/33680#issue-500399194
         it("Correctly return dynamically imported files using string literals", () => {
             test("import(`r1.ts`);",
