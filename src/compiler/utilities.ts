@@ -1787,7 +1787,7 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
+    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: EntityName } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
@@ -2744,23 +2744,6 @@ namespace ts {
             isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
             node.kind === SyntaxKind.ShorthandPropertyAssignment ||
             node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
-    }
-
-    export function getAliasDeclarationFromName(node: EntityName): Declaration | undefined {
-        switch (node.parent.kind) {
-            case SyntaxKind.ImportClause:
-            case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ExportSpecifier:
-            case SyntaxKind.ExportAssignment:
-            case SyntaxKind.ImportEqualsDeclaration:
-                return node.parent as Declaration;
-            case SyntaxKind.QualifiedName:
-                do {
-                    node = node.parent as QualifiedName;
-                } while (node.parent.kind === SyntaxKind.QualifiedName);
-                return getAliasDeclarationFromName(node);
-        }
     }
 
     export function isAliasableExpression(e: Expression) {

@@ -2238,18 +2238,17 @@ namespace ts {
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration, dontResolveAlias: boolean): Symbol | undefined {
             if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                const immediate = resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node));
-                const resolved = resolveExternalModuleSymbol(immediate);
-                markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
-                return resolved;
+                return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)), dontResolveAlias);
             }
             const resolved = getSymbolOfPartOfRightHandSideOfImportEquals(node.moduleReference, dontResolveAlias);
-            checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node, resolved);
+            if (!dontResolveAlias) {
+                checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node);
+            }
             return resolved;
         }
 
-        function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
-            if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false)) {
+        function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration) {
+            if (getTypeOnlyAliasDeclaration(getSymbolOfNode(node))) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
                 const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
@@ -2264,15 +2263,12 @@ namespace ts {
             }
         }
 
-        function resolveExportByName(moduleSymbol: Symbol, name: __String, sourceNode: TypeOnlyCompatibleAliasDeclaration | undefined, dontResolveAlias: boolean) {
+        function resolveExportByName(moduleSymbol: Symbol, name: __String, dontResolveAlias: boolean) {
             const exportValue = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
             if (exportValue) {
                 return getPropertyOfType(getTypeOfSymbol(exportValue), name);
             }
-            const exportSymbol = moduleSymbol.exports!.get(name);
-            const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-            markSymbolOfAliasDeclarationIfTypeOnly(sourceNode, exportSymbol, resolved, /*overwriteEmpty*/ false);
-            return resolved;
+            return resolveSymbol(moduleSymbol.exports!.get(name), dontResolveAlias);
         }
 
         function isSyntacticDefault(node: Node) {
@@ -2286,13 +2282,13 @@ namespace ts {
             // Declaration files (and ambient modules)
             if (!file || file.isDeclarationFile) {
                 // Definitely cannot have a synthetic default if they have a syntactic default member specified
-                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, /*sourceNode*/ undefined, /*dontResolveAlias*/ true); // Dont resolve alias because we want the immediately exported symbol's declaration
+                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, /*dontResolveAlias*/ true); // Dont resolve alias because we want the immediately exported symbol's declaration
                 if (defaultExportSymbol && some(defaultExportSymbol.declarations, isSyntacticDefault)) {
                     return false;
                 }
                 // It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
                 // So we check a bit more,
-                if (resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), /*sourceNode*/ undefined, dontResolveAlias)) {
+                if (resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), dontResolveAlias)) {
                     // If there is an `__esModule` specified in the declaration (meaning someone explicitly added it or wrote it in their code),
                     // it definitely is a module and does not have a synthetic default
                     return false;
@@ -2307,7 +2303,7 @@ namespace ts {
                 return hasExportAssignmentSymbol(moduleSymbol);
             }
             // JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
-            return !file.externalModuleIndicator && !resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), /*sourceNode*/ undefined, dontResolveAlias);
+            return !file.externalModuleIndicator && !resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), dontResolveAlias);
         }
 
         function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol | undefined {
@@ -2318,7 +2314,7 @@ namespace ts {
                     exportDefaultSymbol = moduleSymbol;
                 }
                 else {
-                    exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, node, dontResolveAlias);
+                    exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
                 }
 
                 const file = find(moduleSymbol.declarations, isSourceFile);
@@ -2353,21 +2349,15 @@ namespace ts {
                 }
                 else if (hasSyntheticDefault) {
                     // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
-                    const resolved = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
-                    markSymbolOfAliasDeclarationIfTypeOnly(node, moduleSymbol, resolved, /*overwriteTypeOnly*/ false);
-                    return resolved;
+                    return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                 }
-                markSymbolOfAliasDeclarationIfTypeOnly(node, exportDefaultSymbol, /*finalTarget*/ undefined, /*overwriteTypeOnly*/ false);
                 return exportDefaultSymbol;
             }
         }
 
         function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSpecifier = node.parent.parent.moduleSpecifier;
-            const immediate = resolveExternalModuleName(node, moduleSpecifier);
-            const resolved = resolveESModuleSymbol(immediate, moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
-            markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
-            return resolved;
+            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias, /*suppressUsageError*/ false);
         }
 
         function getTargetOfNamespaceExport(node: NamespaceExport, dontResolveAlias: boolean): Symbol | undefined {
@@ -2412,10 +2402,7 @@ namespace ts {
         function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
             if (symbol.flags & SymbolFlags.Module) {
                 const name = (specifier.propertyName ?? specifier.name).escapedText;
-                const exportSymbol = getExportsOfSymbol(symbol).get(name);
-                const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-                markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
-                return resolved;
+                return resolveSymbol(getExportsOfSymbol(symbol).get(name), dontResolveAlias);
             }
         }
 
@@ -2515,9 +2502,7 @@ namespace ts {
         }
 
         function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
-            const resolved = getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
-            markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
-            return resolved;
+            return getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
         }
 
         function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol {
@@ -2525,18 +2510,14 @@ namespace ts {
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
-            const resolved = node.parent.parent.moduleSpecifier ?
+            return node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
-            markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
-            return resolved;
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
             const expression = (isExportAssignment(node) ? node.expression : node.right) as EntityNameExpression | ClassExpression;
-            const resolved = getTargetOfAliasLikeExpression(expression, dontResolveAlias);
-            markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
-            return resolved;
+            return getTargetOfAliasLikeExpression(expression, dontResolveAlias);
         }
 
         function getTargetOfAliasLikeExpression(expression: Expression, dontResolveAlias: boolean) {
@@ -2633,64 +2614,55 @@ namespace ts {
             return links.target;
         }
 
-        /**
-         * Marks a symbol as type-only if its declaration is syntactically type-only.
-         * If it is not itself marked type-only, but resolves to a type-only alias
-         * somewhere in its resolution chain, save a reference to the type-only alias declaration
-         * so the alias _not_ marked type-only can be identified as _transitively_ type-only.
-         *
-         * This function is called on each alias declaration that could be type-only or resolve to
-         * another type-only alias during `resolveAlias`, so that later, when an alias is used in a
-         * JS-emitting expression, we can quickly determine if that symbol is effectively type-only
-         * and issue an error if so.
-         *
-         * @param aliasDeclaration The alias declaration not marked as type-only
-         * has already been marked as not resolving to a type-only alias. Used when recursively resolving qualified
-         * names of import aliases, e.g. `import C = a.b.C`. If namespace `a` is not found to be type-only, the
-         * import declaration will initially be marked as not resolving to a type-only symbol. But, namespace `b`
-         * must still be checked for a type-only marker, overwriting the previous negative result if found.
-         * @param immediateTarget The symbol to which the alias declaration immediately resolves
-         * @param finalTarget The symbol to which the alias declaration ultimately resolves
-         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
-         */
-        function markSymbolOfAliasDeclarationIfTypeOnly(
-            aliasDeclaration: Declaration | undefined,
-            immediateTarget: Symbol | undefined,
-            finalTarget: Symbol | undefined,
-            overwriteEmpty: boolean,
-        ): boolean {
-            if (!aliasDeclaration) return false;
-
-            // If the declaration itself is type-only, mark it and return.
-            // No need to check what it resolves to.
-            const sourceSymbol = getSymbolOfNode(aliasDeclaration);
-            if (isTypeOnlyImportOrExportDeclaration(aliasDeclaration)) {
-                const links = getSymbolLinks(sourceSymbol);
-                links.typeOnlyDeclaration = aliasDeclaration;
-                return true;
-            }
-
-            const links = getSymbolLinks(sourceSymbol);
-            return markSymbolOfAliasDeclarationIfTypeOnlyWorker(links, immediateTarget, overwriteEmpty)
-                || markSymbolOfAliasDeclarationIfTypeOnlyWorker(links, finalTarget, overwriteEmpty);
-        }
-
-        function markSymbolOfAliasDeclarationIfTypeOnlyWorker(aliasDeclarationLinks: SymbolLinks, target: Symbol | undefined, overwriteEmpty: boolean): boolean {
-            if (target && (aliasDeclarationLinks.typeOnlyDeclaration === undefined || overwriteEmpty && aliasDeclarationLinks.typeOnlyDeclaration === false)) {
-                const exportSymbol = target.exports?.get(InternalSymbolName.ExportEquals) ?? target;
-                const typeOnly = exportSymbol.declarations && find(exportSymbol.declarations, isTypeOnlyImportOrExportDeclaration);
-                aliasDeclarationLinks.typeOnlyDeclaration = typeOnly ?? getSymbolLinks(exportSymbol).typeOnlyDeclaration ?? false;
-            }
-            return !!aliasDeclarationLinks.typeOnlyDeclaration;
-        }
-
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined {
-            if (!(symbol.flags & SymbolFlags.Alias)) {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol | undefined): TypeOnlyCompatibleAliasDeclaration | undefined {
+            if (!symbol || !(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
             const links = getSymbolLinks(symbol);
+            if (links.typeOnlyDeclaration === undefined) {
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
+                if (isTypeOnlyAliasDeclaration(node)) {
+                    links.typeOnlyDeclaration = node;
+                }
+                else if (isInternalModuleImportEqualsDeclaration(node)) {
+                    return getTypeOnlyAliasDeclarationOfInternalModuleReference(node.moduleReference);
+                }
+                else {
+                    let alias = getImmediateAliasedSymbol(symbol);
+                    if (alias && alias.flags & SymbolFlags.ValueModule) {
+                        alias = alias.exports!.get(InternalSymbolName.ExportEquals);
+                    }
+                    links.typeOnlyDeclaration = false; // Prevents circular resolution possible in error scenarios
+                    links.typeOnlyDeclaration = !!alias && getTypeOnlyAliasDeclaration(alias);
+                }
+            }
             return links.typeOnlyDeclaration || undefined;
+        }
+
+        function isTypeOnlyAliasDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+            switch (node.kind) {
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ExportSpecifier:
+                    return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+                case SyntaxKind.NamespaceImport:
+                    return (node as NamespaceImport).parent.isTypeOnly;
+                case SyntaxKind.ImportClause:
+                    return (node as ImportClause).isTypeOnly;
+                default:
+                    return false;
+            }
+        }
+
+        function getTypeOnlyAliasDeclarationOfInternalModuleReference(reference: EntityName | undefined): TypeOnlyCompatibleAliasDeclaration | undefined {
+            while (reference) {
+                const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfPartOfRightHandSideOfImportEquals(reference, /*dontResolveAlias*/ true));
+                if (typeOnlyDeclaration) {
+                    return typeOnlyDeclaration;
+                }
+                reference = reference.kind === SyntaxKind.QualifiedName ? reference.left : undefined;
+            }
         }
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
@@ -2819,9 +2791,6 @@ namespace ts {
                 throw Debug.assertNever(name, "Unknown entity name kind.");
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
-            if (isEntityName(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
-                markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), symbol, /*finalTarget*/ undefined, /*overwriteEmpty*/ true);
-            }
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
