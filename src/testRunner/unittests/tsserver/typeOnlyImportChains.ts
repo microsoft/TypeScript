@@ -14,7 +14,7 @@ namespace ts.projectSystem {
                 content: "import { a } from './b'; new a.A();"
             };
 
-            assertUsageError([a, b, c], c);
+            assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
         });
 
         it("named export -> type-only named import -> named export -> named import", () => {
@@ -31,7 +31,7 @@ namespace ts.projectSystem {
                 content: "import { A } from './b'; new A();"
             };
 
-            assertUsageError([a, b, c], c);
+            assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
         });
 
         it("named export -> type-only namespace import -> export equals -> import equals", () => {
@@ -48,7 +48,7 @@ namespace ts.projectSystem {
                 content: "import a = require('./b'); new a.A();"
             };
 
-            assertUsageError([a, b, c], c);
+            assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
         });
 
         it("named export -> type-only namespace import -> export default -> import default", () => {
@@ -65,13 +65,13 @@ namespace ts.projectSystem {
                 content: "import a from './b'; new a.A();"
             };
 
-            assertUsageError([a, b, c], c);
+            assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
         });
 
         it("export default -> type-only import default -> export default -> import default", () => {
             const a = {
                 path: "/a.ts",
-                content: "export defai;t class A {}"
+                content: "export default class A {}"
             };
             const b = {
                 path: "/b.ts",
@@ -82,11 +82,74 @@ namespace ts.projectSystem {
                 content: "import A from './b'; new A();"
             };
 
-            assertUsageError([a, b, c], c);
+            assertUsageError([a, b, c], c, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        });
+
+        it("named export -> type-only export from -> export star from -> named import", () => {
+            const a = {
+                path: "/a.ts",
+                content: "export class A {}"
+            };
+            const b = {
+                path: "/b.ts",
+                content: "export type { A } from './a';"
+            };
+            const c = {
+                path: "/c.ts",
+                content: "export * from './b';"
+            };
+            const d = {
+                path: "/d.ts",
+                content: "import { A } from './c'; new A();"
+            };
+
+            assertUsageError([a, b, c, d], d, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type);
+        });
+
+        it("named export -> export namespace from -> type-only named import -> named export -> named import", () => {
+            const a = {
+                path: "/a.ts",
+                content: "export class A {}"
+            };
+            const b = {
+                path: "/b.ts",
+                content: "export * as a from './a';"
+            };
+            const c = {
+                path: "/c.ts",
+                content: "import type { a } from './b'; export { a };"
+            };
+            const d = {
+                path: "/d.ts",
+                content: "import { a } from './c'; new a.A();"
+            };
+
+            assertUsageError([a, b, c, d], d, Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type);
+        });
+
+        it("named export -> type-only export from -> export namespace from -> named import", () => {
+            const a = {
+                path: "/a.ts",
+                content: "export class A {}"
+            };
+            const b = {
+                path: "/b.ts",
+                content: "export type { A } from './a';"
+            };
+            const c = {
+                path: "/c.ts",
+                content: "export * as a from './b';"
+            };
+            const d = {
+                path: "/d.ts",
+                content: "import { a } from './c'; new a.A();"
+            };
+
+            assertUsageError([a, b, c, d], d, Diagnostics.Property_0_does_not_exist_on_type_1);
         });
     });
 
-    function assertUsageError(files: readonly TestFSWithWatch.File[], openFile: TestFSWithWatch.File) {
+    function assertUsageError(files: readonly TestFSWithWatch.File[], openFile: TestFSWithWatch.File, diagnostic: DiagnosticMessage) {
         const host = createServerHost(files);
         const session = createSession(host);
         openFilesForSession([openFile], session);
@@ -96,9 +159,6 @@ namespace ts.projectSystem {
         );
         const diagnostics = session.executeCommand(req).response as protocol.Diagnostic[];
         assert.lengthOf(diagnostics, 1);
-        assert.oneOf(diagnostics[0].code, [
-            Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.code,
-            Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type.code
-        ]);
+        assert.equal(diagnostics[0].code, diagnostic.code);
     }
 }
