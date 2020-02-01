@@ -4440,6 +4440,10 @@ namespace ts {
         ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
         NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
+        /* @internal */
+        TypeVariablesChecked = 1 << 22,
+        /* @internal */
+        CouldContainTypeVariables = 1 << 23,
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
@@ -4558,8 +4562,6 @@ namespace ts {
         resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
-        /* @internal */
-        couldContainTypeVariables: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType {

@@ -294,9 +294,9 @@ namespace ts {
     export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) => U): U[] | undefined {
         let result: U[] | undefined;
         if (array) {
-            result = [];
+            result = new Array<U>(array.length);
             for (let i = 0; i < array.length; i++) {
-                result.push(f(array[i], i));
+                result[i] = f(array[i], i);
             }
         }
         return result;
@@ -323,10 +323,13 @@ namespace ts {
                 const item = array[i];
                 const mapped = f(item, i);
                 if (item !== mapped) {
-                    const result = array.slice(0, i);
-                    result.push(mapped);
+                    const result = new Array<T>(array.length);
+                    for (let j = 0; j < i; j++) {
+                        result[j] = array[j];
+                    }
+                    result[i] = mapped;
                     for (i++; i < array.length; i++) {
-                        result.push(f(array[i], i));
+                        result[i] = f(array[i], i);
                     }
                     return result;
                 }

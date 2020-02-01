@@ -13276,10 +13276,13 @@ namespace ts {
                     const item = items[i];
                     const mapped = instantiator(item, mapper);
                     if (item !== mapped) {
-                        const result = i === 0 ? [] : items.slice(0, i);
-                        result.push(mapped);
+                        const result = new Array<T>(items.length);
+                        for (let j = 0; j < i; j++) {
+                            result[j] = items[j];
+                        }
+                        result[i] = mapped;
                         for (i++; i < items.length; i++) {
-                            result.push(instantiator(items[i], mapper));
+                            result[i] = instantiator(items[i], mapper);
                         }
                         return result;
                     }
@@ -13403,7 +13406,7 @@ namespace ts {
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
             const links = getSymbolLinks(symbol);
-            if (links.type && !maybeTypeOfKind(links.type, TypeFlags.Object | TypeFlags.Instantiable)) {
+            if (links.type && !couldContainTypeVariables(links.type)) {
                 // If the type of the symbol is already resolved, and if that type could not possibly
                 // be affected by instantiation, simply return the symbol itself.
                 return symbol;
@@ -13645,7 +13648,7 @@ namespace ts {
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
-            if (!type || !mapper || mapper === identityMapper) {
+            if (!type || !mapper || mapper === identityMapper || !couldContainTypeVariables(type)) {
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
@@ -13673,8 +13676,7 @@ namespace ts {
                     // If the anonymous type originates in a declaration of a function, method, class, or
                     // interface, in an object type literal, or in an object literal expression, we may need
                     // to instantiate the type because it might reference a type parameter.
-                    return couldContainTypeVariables(type) ?
-                        getObjectTypeInstantiation(<AnonymousType>type, mapper) : type;
+                    return getObjectTypeInstantiation(<AnonymousType>type, mapper);
                 }
                 if (objectFlags & ObjectFlags.Mapped) {
                     return getObjectTypeInstantiation(<AnonymousType>type, mapper);
@@ -17624,19 +17626,20 @@ namespace ts {
         // we perform type inference (i.e. a type parameter of a generic function). We cache
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
-            const objectFlags = getObjectFlags(type);
-            return !!(type.flags & TypeFlags.Instantiable ||
-                objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
-                objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
-                objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType) ||
-                type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
-        }
-
-        function couldUnionOrIntersectionContainTypeVariables(type: UnionOrIntersectionType): boolean {
-            if (type.couldContainTypeVariables === undefined) {
-                type.couldContainTypeVariables = some(type.types, couldContainTypeVariables);
+            const flags = type.flags;
+            if (flags & TypeFlags.Object) {
+                const objectFlags = (<ObjectType>type).objectFlags;
+                return !!(objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
+                    objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
+                    objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType));
             }
-            return type.couldContainTypeVariables;
+            if (flags & TypeFlags.UnionOrIntersection) {
+                if (!((<ObjectFlagsType>type).objectFlags & ObjectFlags.TypeVariablesChecked)) {
+                    (<ObjectFlagsType>type).objectFlags = ObjectFlags.TypeVariablesChecked | (some((<UnionOrIntersectionType>type).types, couldContainTypeVariables) ? ObjectFlags.CouldContainTypeVariables : 0);
+                }
+                return !!((<ObjectFlagsType>type).objectFlags & ObjectFlags.CouldContainTypeVariables);
+            }
+            return !!(flags & TypeFlags.Instantiable);
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
