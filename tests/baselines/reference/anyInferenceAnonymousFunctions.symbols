@@ -10,7 +10,9 @@ paired.reduce(function (a1, a2) {
 >a2 : Symbol(a2, Decl(anyInferenceAnonymousFunctions.ts, 2, 27))
 
     return a1.concat({});
+>a1.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a1 : Symbol(a1, Decl(anyInferenceAnonymousFunctions.ts, 2, 24))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 } , []);
 
@@ -22,7 +24,9 @@ paired.reduce((b1, b2) => {
 >b2 : Symbol(b2, Decl(anyInferenceAnonymousFunctions.ts, 8, 18))
 
     return b1.concat({});
+>b1.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b1 : Symbol(b1, Decl(anyInferenceAnonymousFunctions.ts, 8, 15))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 } , []);
 
@@ -32,7 +36,9 @@ paired.reduce((b3, b4) => b3.concat({}), []);
 >reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b3 : Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
 >b4 : Symbol(b4, Decl(anyInferenceAnonymousFunctions.ts, 13, 18))
+>b3.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b3 : Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 paired.map((c1) => c1.count);
 >paired.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

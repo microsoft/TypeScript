@@ -89,9 +89,9 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 >(x: T) => fns.reduce((prev, fn) => fn(prev), x) : (x: T) => T
 >x : T
 >fns.reduce((prev, fn) => fn(prev), x) : T
->fns.reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
+>fns.reduce : { <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; }
 >fns : ((x: T) => T)[]
->reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
+>reduce : { <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; }
 >(prev, fn) => fn(prev) : (prev: T, fn: (x: T) => T) => T
 >prev : T
 >fn : (x: T) => T
