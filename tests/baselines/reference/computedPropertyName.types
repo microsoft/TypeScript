@@ -1,0 +1,85 @@
+=== tests/cases/conformance/externalModules/typeOnly/framework-hooks.ts ===
+export const onInit = Symbol("onInit");
+>onInit : unique symbol
+>Symbol("onInit") : unique symbol
+>Symbol : SymbolConstructor
+>"onInit" : "onInit"
+
+=== tests/cases/conformance/externalModules/typeOnly/component.ts ===
+import type { onInit } from "./framework-hooks";
+>onInit : any
+
+interface Component {
+  [onInit]?(): void;
+>[onInit] : () => void
+>onInit : unique symbol
+}
+
+type T = {
+>T : T
+
+  [onInit]: any;
+>[onInit] : any
+>onInit : unique symbol
+}
+
+const o = {
+>o : { [onInit]: number; }
+>{  [onInit]: 0 // Error} : { [onInit]: number; }
+
+  [onInit]: 0 // Error
+>[onInit] : number
+>onInit : unique symbol
+>0 : 0
+
+};
+
+class C {
+>C : C
+
+  [onInit]: any; // Error (because class fields)
+>[onInit] : any
+>onInit : unique symbol
+}
+
+class D {
+>D : D
+
+  [onInit] = 0; // Error
+>[onInit] : number
+>onInit : unique symbol
+>0 : 0
+}
+
+class E {
+>E : E
+
+  [onInit]() {} // Error
+>[onInit] : () => void
+>onInit : unique symbol
+}
+
+abstract class F {
+>F : F
+
+  abstract [onInit](): void;
+>[onInit] : () => void
+>onInit : unique symbol
+}
+
+class G {
+>G : G
+
+  declare [onInit]: any;
+>[onInit] : any
+>onInit : unique symbol
+}
+
+declare class H {
+>H : H
+
+  [onInit]: any;
+>[onInit] : any
+>onInit : unique symbol
+}
+

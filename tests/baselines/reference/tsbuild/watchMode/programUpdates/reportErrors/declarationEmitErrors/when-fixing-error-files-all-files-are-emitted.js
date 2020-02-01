@@ -50,17 +50,17 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -162,16 +162,16 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

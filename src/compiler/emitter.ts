@@ -379,6 +379,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: transform.emitNodeWithNotification,
+                isEmitNotificationEnabled: transform.isEmitNotificationEnabled,
                 substituteNode: transform.substituteNode,
             });
 
@@ -437,6 +438,7 @@ namespace ts {
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
+                isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
@@ -819,6 +821,7 @@ namespace ts {
         const {
             hasGlobalName,
             onEmitNode = noEmitNotification,
+            isEmitNotificationEnabled,
             substituteNode = noEmitSubstitution,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
@@ -1154,13 +1157,17 @@ namespace ts {
             return pipelineEmit(EmitHint.Expression, node);
         }
 
+        function emitJsxAttributeValue(node: StringLiteral | JsxExpression): Node {
+            return pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
+        }
+
         function pipelineEmit(emitHint: EmitHint, node: Node) {
             const savedLastNode = lastNode;
             const savedLastSubstitution = lastSubstitution;
             lastNode = node;
             lastSubstitution = undefined;
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
             pipelinePhase(emitHint, node);
 
             Debug.assert(lastNode === node);
@@ -1172,16 +1179,16 @@ namespace ts {
             return substitute || node;
         }
 
-        function getPipelinePhase(phase: PipelinePhase, node: Node) {
+        function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
             switch (phase) {
                 case PipelinePhase.Notification:
-                    if (onEmitNode !== noEmitNotification) {
+                    if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
                     // falls through
 
                 case PipelinePhase.Substitution:
-                    if (substituteNode !== noEmitSubstitution) {
+                    if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
                     // falls through
@@ -1206,13 +1213,13 @@ namespace ts {
             }
         }
 
-        function getNextPipelinePhase(currentPhase: PipelinePhase, node: Node) {
-            return getPipelinePhase(currentPhase + 1, node);
+        function getNextPipelinePhase(currentPhase: PipelinePhase, emitHint: EmitHint, node: Node) {
+            return getPipelinePhase(currentPhase + 1, emitHint, node);
         }
 
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
             onEmitNode(hint, node, pipelinePhase);
             Debug.assert(lastNode === node);
         }
@@ -1221,6 +1228,7 @@ namespace ts {
             Debug.assert(lastNode === node || lastSubstitution === node);
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
+            if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
             if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
             if (hint === EmitHint.EmbeddedStatement) {
                 Debug.assertNode(node, isEmptyStatement);
@@ -1234,7 +1242,7 @@ namespace ts {
                     case SyntaxKind.TemplateHead:
                     case SyntaxKind.TemplateMiddle:
                     case SyntaxKind.TemplateTail:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     case SyntaxKind.UnparsedSource:
                     case SyntaxKind.UnparsedPrepend:
@@ -1553,7 +1561,7 @@ namespace ts {
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return emitLiteral(<LiteralExpression>node);
+                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1653,9 +1661,8 @@ namespace ts {
 
         function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node || lastSubstitution === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, node);
-            lastSubstitution = substituteNode(hint, node);
-            pipelinePhase(hint, lastSubstitution);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, hint, node);
+            pipelinePhase(hint, lastSubstitution!);
             Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
@@ -1744,7 +1751,7 @@ namespace ts {
         // SyntaxKind.NumericLiteral
         // SyntaxKind.BigIntLiteral
         function emitNumericOrBigIntLiteral(node: NumericLiteral | BigIntLiteral) {
-            emitLiteral(node);
+            emitLiteral(node, /*jsxAttributeEscape*/ false);
         }
 
         // SyntaxKind.StringLiteral
@@ -1753,8 +1760,8 @@ namespace ts {
         // SyntaxKind.TemplateHead
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
-        function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
+        function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -2293,7 +2300,7 @@ namespace ts {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
                 // If he number will be printed verbatim and it doesn't already contain a dot, add one
                 // if the expression doesn't have any comments that will be emitted.
                 return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
@@ -2425,19 +2432,84 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
-        function emitBinaryExpression(node: BinaryExpression) {
-            const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-            const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
-            const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+        const enum EmitBinaryExpressionState {
+            EmitLeft,
+            EmitRight,
+            FinishEmit
+        }
 
-            emitExpression(node.left);
-            increaseIndentIf(indentBeforeOperator, isCommaOperator);
-            emitLeadingCommentsOfPosition(node.operatorToken.pos);
-            writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-            increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-            emitExpression(node.right);
-            decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+        /**
+         * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
+         * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
+         * not require notification/substitution/comment/sourcemap decorations.
+         */
+        function emitBinaryExpression(node: BinaryExpression) {
+            const nodeStack = [node];
+            const stateStack = [EmitBinaryExpressionState.EmitLeft];
+            let stackIndex = 0;
+            while (stackIndex >= 0) {
+                node = nodeStack[stackIndex];
+                switch (stateStack[stackIndex]) {
+                    case EmitBinaryExpressionState.EmitLeft: {
+                        maybePipelineEmitExpression(node.left);
+                        break;
+                    }
+                    case EmitBinaryExpressionState.EmitRight: {
+                        const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        increaseIndentIf(indentBeforeOperator, isCommaOperator);
+                        emitLeadingCommentsOfPosition(node.operatorToken.pos);
+                        writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                        emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                        increaseIndentIf(indentAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+                        maybePipelineEmitExpression(node.right);
+                        break;
+                    }
+                    case EmitBinaryExpressionState.FinishEmit: {
+                        const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
+                        const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
+                        decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
+                        stackIndex--;
+                        break;
+                    }
+                    default: return Debug.fail(`Invalid state ${stateStack[stackIndex]} for emitBinaryExpressionWorker`);
+                }
+            }
+
+            function maybePipelineEmitExpression(next: Expression) {
+                // Advance the state of this unit of work,
+                stateStack[stackIndex]++;
+
+                // Then actually do the work of emitting the node `next` returned by the prior state
+
+                // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
+                // binary expression handling, where possible, to the contained work queue
+
+                // #region trampolinePipelineEmit
+                const savedLastNode = lastNode;
+                const savedLastSubstitution = lastSubstitution;
+                lastNode = next;
+                lastSubstitution = undefined;
+
+                const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
+                if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
+                    // If the target pipeline phase is emit directly, and the next node's also a binary expression,
+                    // skip all the intermediate indirection and push the expression directly onto the work stack
+                    stackIndex++;
+                    stateStack[stackIndex] = EmitBinaryExpressionState.EmitLeft;
+                    nodeStack[stackIndex] = next;
+                }
+                else {
+                    pipelinePhase(EmitHint.Expression, next);
+                }
+
+                Debug.assert(lastNode === next);
+
+                lastNode = savedLastNode;
+                lastSubstitution = savedLastSubstitution;
+                // #endregion trampolinePipelineEmit
+            }
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {
@@ -2672,11 +2744,11 @@ namespace ts {
             const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
-            if (isSimilarNode) {
-                pos = skipTrivia(currentSourceFile!.text, pos);
+            if (isSimilarNode && currentSourceFile) {
+                pos = skipTrivia(currentSourceFile.text, pos);
             }
             if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
-                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile!);
+                const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
                 }
@@ -3228,7 +3300,7 @@ namespace ts {
 
         function emitJsxAttribute(node: JsxAttribute) {
             emit(node.name);
-            emitNodeWithPrefix("=", writePunctuation, node.initializer!, emit); // TODO: GH#18217
+            emitNodeWithPrefix("=", writePunctuation, node.initializer, emitJsxAttributeValue);
         }
 
         function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
@@ -3761,7 +3833,7 @@ namespace ts {
             }
         }
 
-        function emitNodeWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node, emit: (node: Node) => void) {
+        function emitNodeWithPrefix<T extends Node>(prefix: string, prefixWriter: (s: string) => void, node: T | undefined, emit: (node: T) => void) {
             if (node) {
                 prefixWriter(prefix);
                 emit(node);
@@ -4318,20 +4390,20 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile!, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
-                        `"${escapeString(getTextOfNode(textSourceNode))}"` :
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
                         `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape);
+            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
         }
 
         /**
@@ -4773,7 +4845,7 @@ namespace ts {
             forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
             exitComment();
 
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint, node);
             if (emitFlags & EmitFlags.NoNestedComments) {
                 commentsDisabled = true;
                 pipelinePhase(hint, node);
@@ -5046,7 +5118,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node || lastSubstitution === node);
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, hint, node);
             if (isUnparsedSource(node) || isUnparsedPrepend(node)) {
                 pipelinePhase(hint, node);
             }

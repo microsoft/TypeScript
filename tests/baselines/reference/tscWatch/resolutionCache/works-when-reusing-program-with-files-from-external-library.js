@@ -66,29 +66,29 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/tsconfig.json","pollingInterval":250}
 /a/b/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/file1.ts","pollingInterval":250}
 /a/b/projects/myproject/node_modules/module1/index.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/node_modules/module1/index.js","pollingInterval":250}
 /a/b/projects/myproject/src/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/projects/myproject/src/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/src/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/src/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/src:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -130,28 +130,28 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/tsconfig.json","pollingInterval":250}
 /a/b/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/file1.ts","pollingInterval":250}
 /a/b/projects/myproject/node_modules/module1/index.js:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/node_modules/module1/index.js","pollingInterval":250}
 /a/b/projects/myproject/src/file2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/projects/myproject/src/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/src/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/src/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myProject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/projects/myproject/src:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

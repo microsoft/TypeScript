@@ -201,21 +201,21 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -299,21 +299,21 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -435,21 +435,21 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -529,21 +529,21 @@ No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -651,20 +651,20 @@ Output::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/sample1/logic:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
