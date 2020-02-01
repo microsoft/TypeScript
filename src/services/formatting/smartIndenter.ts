@@ -343,24 +343,6 @@ namespace ts.formatting {
             return false;
         }
 
-        export function isJSXClosingWithMultiLineText(parent: Node, child: TextRangeWithKind, _childStartLine: number, sourceFile: SourceFileLike): boolean {
-            if (isJsxElement(parent) && isParenthesizedExpression(parent.parent)) {
-                const siblings = parent.getChildren(sourceFile);
-                const currentNode = find(siblings, arg => arg.pos === child.pos);
-                if (!currentNode) return false;
-
-                const currentIndex = siblings.indexOf(currentNode);
-                if (currentIndex === 0) return false;
-
-                const previousNode = siblings[currentIndex - 1];
-                const startLineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getStart()).line;
-                const endLineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getEnd()).line;
-
-                return startLineOfPreviousNode !== endLineOfPreviousNode;
-            }
-            return false;
-        }
-
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }
