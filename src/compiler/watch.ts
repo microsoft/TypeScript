@@ -360,7 +360,7 @@ namespace ts {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
         let host: DirectoryStructureHost = system;
         // TODO: `host` is unused!
-        // eslint-disable-next-line no-unused-expressions
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         host;
         return {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,

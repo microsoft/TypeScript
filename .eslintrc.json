@@ -26,6 +26,10 @@
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-this-alias": "error",
+
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
+
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
@@ -97,7 +101,6 @@
         "no-trailing-spaces": "error",
         "no-undef-init": "error",
         "no-unsafe-finally": "error",
-        "no-unused-expressions": ["error", { "allowTernary": true }],
         "no-unused-labels": "error",
         "no-var": "error",
         "object-shorthand": "error",
