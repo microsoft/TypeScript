@@ -40,6 +40,13 @@
         "semi": "off",
         "@typescript-eslint/semi": "error",
 
+        "space-before-function-paren": "off",
+        "@typescript-eslint/space-before-function-paren": ["error", {
+            "asyncArrow": "always",
+            "anonymous": "always",
+            "named": "never"
+        }],
+
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
