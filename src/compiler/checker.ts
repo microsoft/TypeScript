@@ -12641,64 +12641,73 @@ namespace ts {
 
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
             const checkType = instantiateType(root.checkType, mapper);
-            const extendsType = instantiateType(root.extendsType, mapper);
-            if (checkType === wildcardType || extendsType === wildcardType) {
-                return wildcardType;
-            }
             const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
-            let combinedMapper: TypeMapper | undefined;
-            if (root.inferTypeParameters) {
-                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
-                // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
-                // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
-                // so in those cases we refain from performing inference and retain the uninfered type parameter
-                if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
-                    // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                    // conditional type instead of deferring resolution. Also, we always want strict function
-                    // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+            while (true) {
+                const extendsType = instantiateType(root.extendsType, mapper);
+                if (checkType === wildcardType || extendsType === wildcardType) {
+                    return wildcardType;
                 }
-                combinedMapper = combineTypeMappers(mapper, context.mapper);
+                let combinedMapper: TypeMapper | undefined;
+                if (root.inferTypeParameters) {
+                    const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
+                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
+                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
+                    // so in those cases we refain from performing inference and retain the uninfered type parameter
+                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                        // We don't want inferences from constraints as they may cause us to eagerly resolve the
+                        // conditional type instead of deferring resolution. Also, we always want strict function
+                        // types rules (i.e. proper contravariance) for inferences.
+                        inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                    }
+                    combinedMapper = combineTypeMappers(mapper, context.mapper);
+                }
+                // Instantiate the extends type including inferences for 'infer T' type parameters
+                const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
+                // We attempt to resolve the conditional type only when the check and extends types are non-generic
+                if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
+                    if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
+                        return instantiateType(root.trueType, combinedMapper || mapper);
+                    }
+                    // Return union of trueType and falseType for 'any' since it matches anything
+                    if (checkType.flags & TypeFlags.Any) {
+                        return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    }
+                    // Return falseType for a definitely false extends check. We check an instantiations of the two
+                    // types with type parameters mapped to the wildcard type, the most permissive instantiations
+                    // possible (the wildcard type is assignable to and from all types). If those are not related,
+                    // then no instantiations will be and we can just return the false branch type.
+                    if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                        // If falseType is another conditional type with the same checkType, just switch to the new
+                        // root and loop. This short-circuits a lot of work for conditional types of the form
+                        // 'T extends A ? X : T extends B ? Y : T extends C ? Z : ...', which are quite common.
+                        if (root.falseType.flags & TypeFlags.Conditional && root.checkType === (<ConditionalType>root.falseType).root.checkType) {
+                            root = (<ConditionalType>root.falseType).root;
+                            continue;
+                        }
+                        return instantiateType(root.falseType, mapper);
+                    }
+                    // Return trueType for a definitely true extends check. We check instantiations of the two
+                    // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
+                    // that has no constraint. This ensures that, for example, the type
+                    //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
+                    // doesn't immediately resolve to 'string' instead of being deferred.
+                    if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                        return instantiateType(root.trueType, combinedMapper || mapper);
+                    }
+                }
+                // Return a deferred type for a check that is neither definitely true nor definitely false
+                const erasedCheckType = getActualTypeVariable(checkType);
+                const result = <ConditionalType>createType(TypeFlags.Conditional);
+                result.root = root;
+                result.checkType = erasedCheckType;
+                result.extendsType = extendsType;
+                result.mapper = mapper;
+                result.combinedMapper = combinedMapper;
+                result.aliasSymbol = root.aliasSymbol;
+                result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+                return result;
             }
-            // Instantiate the extends type including inferences for 'infer T' type parameters
-            const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
-            // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
-                if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
-                }
-                // Return union of trueType and falseType for 'any' since it matches anything
-                if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
-                }
-                // Return falseType for a definitely false extends check. We check an instantiations of the two
-                // types with type parameters mapped to the wildcard type, the most permissive instantiations
-                // possible (the wildcard type is assignable to and from all types). If those are not related,
-                // then no instantiations will be and we can just return the false branch type.
-                if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
-                }
-                // Return trueType for a definitely true extends check. We check instantiations of the two
-                // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
-                // that has no constraint. This ensures that, for example, the type
-                //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
-                // doesn't immediately resolve to 'string' instead of being deferred.
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
-                }
-            }
-            // Return a deferred type for a check that is neither definitely true nor definitely false
-            const erasedCheckType = getActualTypeVariable(checkType);
-            const result = <ConditionalType>createType(TypeFlags.Conditional);
-            result.root = root;
-            result.checkType = erasedCheckType;
-            result.extendsType = extendsType;
-            result.mapper = mapper;
-            result.combinedMapper = combinedMapper;
-            result.aliasSymbol = root.aliasSymbol;
-            result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
-            return result;
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
@@ -17629,7 +17638,7 @@ namespace ts {
             const flags = type.flags;
             if (flags & TypeFlags.Object) {
                 const objectFlags = (<ObjectType>type).objectFlags;
-                return !!(objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
+                return !!(objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || some(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
                     objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                     objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType));
             }
