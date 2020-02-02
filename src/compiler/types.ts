@@ -4812,7 +4812,17 @@ namespace ts {
     }
 
     /* @internal */
-    export type TypeMapper = (t: TypeParameter) => Type;
+    export const enum TypeMapKind {
+        Single,
+        Multiple,
+        Function,
+    }
+
+    /* @internal */
+    export type TypeMapper =
+        { kind: TypeMapKind.Single, source: Type, target: Type } |
+        { kind: TypeMapKind.Multiple, sources: readonly Type[], targets: readonly Type[] | undefined } |
+        { kind: TypeMapKind.Function, func: (t: Type) => Type };
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
