@@ -1146,7 +1146,7 @@ declare namespace ts {
     }
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause | JSDocHeritageTag;
+        parent: HeritageClause | JSDocAugmentsTag | JSDocImplementsTag;
         expression: LeftHandSideExpression;
     }
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -1626,11 +1626,17 @@ declare namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
     /**
-     * Represents @augments @extends and @implements
      * Note that `@extends` is a synonym of `@augments`.
+     * Both tags are represented by this interface.
      */
-    export interface JSDocHeritageTag extends JSDocTag {
-        kind: SyntaxKind.JSDocAugmentsTag | SyntaxKind.JSDocImplementsTag;
+    export interface JSDocAugmentsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag;
+        class: ExpressionWithTypeArguments & {
+            expression: Identifier | PropertyAccessEntityNameExpression;
+        };
+    }
+    export interface JSDocImplementsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocImplementsTag;
         class: ExpressionWithTypeArguments & {
             expression: Identifier | PropertyAccessEntityNameExpression;
         };
@@ -3494,9 +3500,9 @@ declare namespace ts {
      */
     function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean;
     /** Gets the JSDoc augments tag for the node if present */
-    function getJSDocAugmentsTag(node: Node): JSDocHeritageTag | undefined;
+    function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc implements tags for the node if present */
-    function getJSDocImplementsTags(node: Node): readonly JSDocHeritageTag[];
+    function getJSDocImplementsTags(node: Node): readonly JSDocImplementsTag[];
     /** Gets the JSDoc class tag for the node if present */
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
     /** Gets the JSDoc public tag for the node if present */
@@ -3715,8 +3721,8 @@ declare namespace ts {
     function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
-    function isJSDocAugmentsTag(node: Node): node is JSDocHeritageTag;
-    function isJSDocImplementsTag(node: Node): node is JSDocHeritageTag;
+    function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
+    function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
     function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
     function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;

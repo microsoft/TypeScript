@@ -29853,14 +29853,14 @@ namespace ts {
             checkSignatureDeclaration(node);
         }
 
-        function checkJSDocImplementsTag(node: JSDocHeritageTag): void {
+        function checkJSDocImplementsTag(node: JSDocImplementsTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
             }
         }
-        function checkJSDocAugmentsTag(node: JSDocHeritageTag): void {
+        function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
@@ -33338,9 +33338,9 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
-                    return checkJSDocAugmentsTag(node as JSDocHeritageTag);
+                    return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocImplementsTag:
-                    return checkJSDocImplementsTag(node as JSDocHeritageTag);
+                    return checkJSDocImplementsTag(node as JSDocImplementsTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:

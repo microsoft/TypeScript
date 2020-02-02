@@ -1,4 +1,3 @@
-/a.js(2,18): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 /a.js(13,5): error TS2416: Property 'method' in type 'B2' is not assignable to the same property in base type 'A'.
   Type '() => string' is not assignable to type '() => number'.
     Type 'string' is not assignable to type 'number'.
@@ -6,12 +5,10 @@
   Property 'method' is missing in type 'B3' but required in type 'A'.
 
 
-==== /a.js (3 errors) ====
+==== /a.js (2 errors) ====
     class A {
         /** @return {number} */
-                     ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-        method() { }
+        method() { throw new Error(); }
     }
     /** @implements A */
     class B  {

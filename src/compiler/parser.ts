@@ -480,9 +480,11 @@ namespace ts {
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.JSDocImplementsTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocImplementsTag>node).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocHeritageTag>node).class);
+                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
@@ -6924,11 +6926,11 @@ namespace ts {
                             tag = parseAuthorTag(start, tagName, margin);
                             break;
                         case "implements":
-                            tag = parseHeritageTag(start, tagName, SyntaxKind.JSDocImplementsTag);
+                            tag = parseImplementsTag(start, tagName);
                             break;
                         case "augments":
                         case "extends":
-                            tag = parseHeritageTag(start, tagName, SyntaxKind.JSDocAugmentsTag);
+                            tag = parseAugmentsTag(start, tagName);
                             break;
                         case "class":
                         case "constructor":
@@ -7280,8 +7282,15 @@ namespace ts {
                     }
                 }
 
-                function parseHeritageTag(start: number, tagName: Identifier, kind: SyntaxKind.JSDocAugmentsTag | SyntaxKind.JSDocImplementsTag): JSDocHeritageTag {
-                    const result = <JSDocHeritageTag>createNode(kind, start);
+                function parseImplementsTag(start: number, tagName: Identifier): JSDocImplementsTag {
+                    const result = <JSDocImplementsTag>createNode(SyntaxKind.JSDocImplementsTag, start);
+                    result.tagName = tagName;
+                    result.class = parseExpressionWithTypeArgumentsForAugments();
+                    return finishNode(result);
+                }
+
+                function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {
+                    const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, start);
                     result.tagName = tagName;
                     result.class = parseExpressionWithTypeArgumentsForAugments();
                     return finishNode(result);

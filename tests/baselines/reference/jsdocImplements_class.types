@@ -3,8 +3,10 @@ class A {
 >A : A
 
     /** @return {number} */
-    method() { }
+    method() { throw new Error(); }
 >method : () => number
+>new Error() : Error
+>Error : ErrorConstructor
 }
 /** @implements A */
 class B  {

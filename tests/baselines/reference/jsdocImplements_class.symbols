@@ -3,8 +3,9 @@ class A {
 >A : Symbol(A, Decl(a.js, 0, 0))
 
     /** @return {number} */
-    method() { }
+    method() { throw new Error(); }
 >method : Symbol(A.method, Decl(a.js, 0, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 /** @implements A */
 class B  {

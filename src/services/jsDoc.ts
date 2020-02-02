@@ -130,8 +130,9 @@ namespace ts.JsDoc {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocImplementsTag:
+                return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
-                return withNode((tag as JSDocHeritageTag).class);
+                return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:

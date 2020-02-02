@@ -667,12 +667,12 @@ namespace ts {
     }
 
     /** Gets the JSDoc augments tag for the node if present */
-    export function getJSDocAugmentsTag(node: Node): JSDocHeritageTag | undefined {
+    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined {
         return getFirstJSDocTag(node, isJSDocAugmentsTag);
     }
 
     /** Gets the JSDoc implements tags for the node if present */
-    export function getJSDocImplementsTags(node: Node): readonly JSDocHeritageTag[] {
+    export function getJSDocImplementsTags(node: Node): readonly JSDocImplementsTag[] {
         return getAllJSDocTags(node, isJSDocImplementsTag);
     }
 
@@ -1588,11 +1588,11 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocAuthorTag;
     }
 
-    export function isJSDocAugmentsTag(node: Node): node is JSDocHeritageTag {
+    export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
         return node.kind === SyntaxKind.JSDocAugmentsTag;
     }
 
-    export function isJSDocImplementsTag(node: Node): node is JSDocHeritageTag {
+    export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
         return node.kind === SyntaxKind.JSDocImplementsTag;
     }
 

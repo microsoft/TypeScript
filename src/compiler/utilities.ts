@@ -2774,18 +2774,15 @@ namespace ts {
             return getJSDocImplementsTags(node).map(n => n.class);
         }
         else {
-            return getClassImplementsHeritageClauseElements(node);
+            const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
+            return heritageClause ? heritageClause.types : undefined;
         }
-    }
-    export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
-        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
-        return heritageClause ? heritageClause.types : undefined;
     }
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
         return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
-            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray :
+            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || emptyArray :
             emptyArray;
     }
 

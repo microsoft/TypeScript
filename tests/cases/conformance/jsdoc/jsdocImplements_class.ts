@@ -5,7 +5,7 @@
 // @Filename: /a.js
 class A {
     /** @return {number} */
-    method() { }
+    method() { throw new Error(); }
 }
 /** @implements A */
 class B  {
