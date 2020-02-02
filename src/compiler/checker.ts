@@ -13345,12 +13345,23 @@ namespace ts {
             return { kind: TypeMapKind.Function, func: t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? unknownType : t };
         }
 
+        function getTypeMapperSources(mapper: TypeMapper) {
+            return mapper.kind === TypeMapKind.Single ? [mapper.source] : mapper.kind === TypeMapKind.Multiple ? mapper.sources : emptyArray;
+        }
+
+        function getTypeMapperTargets(mapper: TypeMapper) {
+            return mapper.kind === TypeMapKind.Single ? [mapper.target] : mapper.kind === TypeMapKind.Multiple ? mapper.targets : emptyArray;
+        }
+
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             if (!mapper1) return mapper2;
             if (!mapper2) return mapper1;
-            return makeFunctionTypeMapper(t => instantiateType(getMappedType(t, mapper1), mapper2));
+            return mapper1.kind !== TypeMapKind.Function && mapper2.kind !== TypeMapKind.Function ?
+                createTypeMapper(concatenate(getTypeMapperSources(mapper1), getTypeMapperSources(mapper2)),
+                    concatenate(map(getTypeMapperTargets(mapper1), t => instantiateType(t, mapper2)), getTypeMapperTargets(mapper2))) :
+                makeFunctionTypeMapper(t => instantiateType(getMappedType(t, mapper1), mapper2));
         }
 
         function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper): TypeMapper {
