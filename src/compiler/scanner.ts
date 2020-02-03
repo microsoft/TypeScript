@@ -2068,10 +2068,19 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
+            let lastNonWhitespace = -1;
+
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
+
+                // We want to keep track of the last non-whitespace (but including
+                // newlines character for hitting the end of the JSX Text region)
+                if (!isWhiteSpaceSingleLine(char)) {
+                    lastNonWhitespace = pos;
+                }
+
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2083,6 +2092,8 @@ namespace ts {
                     }
                     break;
                 }
+
+                if (lastNonWhitespace > 0) lastNonWhitespace++;
 
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
@@ -2096,10 +2107,13 @@ namespace ts {
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
+
                 pos++;
             }
 
-            tokenValue = text.substring(startPos, pos);
+            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
+            tokenValue = text.substring(startPos, endPosition);
+
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
