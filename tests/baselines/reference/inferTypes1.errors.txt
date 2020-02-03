@@ -1,9 +1,9 @@
-tests/cases/conformance/types/conditional/inferTypes1.ts(31,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(32,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-  Type 'Function' provides no match for the signature '(...args: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(38,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(39,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
-  Type 'Function' provides no match for the signature 'new (...args: any): any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(31,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any[]) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(32,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+  Type 'Function' provides no match for the signature '(...args: any[]): any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(38,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any[]) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(39,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any[]) => any'.
+  Type 'Function' provides no match for the signature 'new (...args: any[]): any'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(47,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(48,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
@@ -54,11 +54,11 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
     type T16 = ReturnType<never>;  // never
     type T17 = ReturnType<string>;  // Error
                           ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any[]) => any'.
     type T18 = ReturnType<Function>;  // Error
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any[]): any'.
     type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
     
     type U10 = InstanceType<typeof C>;  // C
@@ -66,11 +66,11 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
     type U12 = InstanceType<never>;  // never
     type U13 = InstanceType<string>;  // Error
                             ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any[]) => any'.
     type U14 = InstanceType<Function>;  // Error
                             ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any[]) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any[]): any'.
     
     type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
     

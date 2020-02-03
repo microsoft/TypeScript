@@ -1,7 +1,7 @@
 tests/cases/conformance/types/rest/genericRestParameters1.ts(22,11): error TS2556: Expected 3 arguments, but got 1 or more.
 tests/cases/conformance/types/rest/genericRestParameters1.ts(31,11): error TS2556: Expected 3 arguments, but got 1 or more.
-tests/cases/conformance/types/rest/genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-  Type 'Function' provides no match for the signature '(...args: any): any'.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+  Type 'Function' provides no match for the signature '(...args: any[]): any'.
 tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
   Types of parameters 'a' and 'args' are incompatible.
     Type 'any' is not assignable to type 'never'.
@@ -149,8 +149,8 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS232
     type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
     type T09 = Parameters<Function>;
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any[]): any'.
     
     type Record1 = {
       move: [number, 'left' | 'right'];
