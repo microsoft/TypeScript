@@ -745,8 +745,7 @@ namespace ts.formatting {
                     const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
                     if (range.pos !== range.end) { // don't indent zero-width jsx text
                         const siblings = parent.getChildren(sourceFile);
-                        const currentNode = find(siblings, arg => arg.pos === child.pos);
-                        const currentIndex = siblings.indexOf(currentNode!);
+                        const currentIndex = findIndex(siblings, arg => arg.pos === child.pos);
                         const previousNode = siblings[currentIndex - 1];
                         if (previousNode) {
                             // The jsx text needs no indentation whatsoever if it ends on the same line the previous sibling ends on
