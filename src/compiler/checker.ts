@@ -14706,10 +14706,16 @@ namespace ts {
             if (isFreshLiteralType(target)) {
                 target = (<FreshableType>target).regularType;
             }
-            if (source === target ||
-                relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
-                relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
+            if (source === target) {
                 return true;
+            }
+            if (relation !== identityRelation) {
+                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
+                    return true;
+                }
+            }
+            else {
+                if (source.flags !== target.flags || source.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.NonPrimitive | TypeFlags.TypeParameter)) return false;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
@@ -18390,7 +18396,7 @@ namespace ts {
         }
 
         function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
-            return isTypeIdenticalTo(s, t) || !!(s.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) && isTypeIdenticalTo(getBaseTypeOfLiteralType(s), t);
+            return isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral);
         }
 
         function isTypeCloselyMatchedBy(s: Type, t: Type) {
