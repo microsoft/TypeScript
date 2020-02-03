@@ -12767,18 +12767,18 @@ namespace ts {
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    return instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    return getUnionType([instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper), instantiateTypeWithoutDepthIncrease(root.falseType, mapper)]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
+                    return instantiateTypeWithoutDepthIncrease(root.falseType, mapper);
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
@@ -12786,7 +12786,7 @@ namespace ts {
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    return instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
@@ -13768,6 +13768,17 @@ namespace ts {
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
+            return result;
+        }
+
+        /**
+         * This can be used to avoid the penalty on instantiation depth for types which result from immediate
+         * simplification. It essentially removes the depth increase done in `instantiateType`.
+         */
+        function instantiateTypeWithoutDepthIncrease(type: Type, mapper: TypeMapper | undefined) {
+            instantiationDepth--;
+            const result = instantiateType(type, mapper);
+            instantiationDepth++;
             return result;
         }
 
