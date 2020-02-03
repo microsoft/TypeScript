@@ -680,6 +680,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
     Type 'number' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19744,7): error TS2339: Property 'expected' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20005,8): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window & typeof globalThis'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20015,15): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20035,8): error TS2339: Property 'runLighthouseInWorker' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20039,15): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20046,8): error TS2339: Property 'getDefaultCategories' does not exist on type 'Window & typeof globalThis'.
