@@ -2748,5 +2748,13 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget) {
+        if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
+            return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
+                || codefix.moduleSymbolToValidIdentifier(Debug.assertDefined(symbol.parent), scriptTarget);
+        }
+        return symbol.name;
+    }
+
     // #endregion
 }
