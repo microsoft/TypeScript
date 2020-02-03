@@ -12719,7 +12719,7 @@ namespace ts {
                     if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                         // Return union of trueType and falseType for 'any' since it matches anything
                         if (checkType.flags & TypeFlags.Any) {
-                            (extraTypes || (extraTypes = [])).push(instantiateType(root.trueType, combinedMapper || mapper));
+                            (extraTypes || (extraTypes = [])).push(instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper));
                         }
                         // If falseType is an immediately nested conditional type that isn't distributive or has an
                         // identical checkType, switch to that type and loop.
@@ -12731,7 +12731,7 @@ namespace ts {
                                 continue;
                             }
                         }
-                        result = instantiateType(falseType, mapper);
+                        result = instantiateTypeWithoutDepthIncrease(falseType, mapper);
                         break;
                     }
                     // Return trueType for a definitely true extends check. We check instantiations of the two
@@ -12740,7 +12740,7 @@ namespace ts {
                     //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                     // doesn't immediately resolve to 'string' instead of being deferred.
                     if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                        result = instantiateType(root.trueType, combinedMapper || mapper);
+                        result = instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
                         break;
                     }
                 }
@@ -13717,6 +13717,17 @@ namespace ts {
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
+            return result;
+        }
+
+        /**
+         * This can be used to avoid the penalty on instantiation depth for types which result from immediate
+         * simplification. It essentially removes the depth increase done in `instantiateType`.
+         */
+        function instantiateTypeWithoutDepthIncrease(type: Type, mapper: TypeMapper | undefined) {
+            instantiationDepth--;
+            const result = instantiateType(type, mapper);
+            instantiationDepth++;
             return result;
         }
 
