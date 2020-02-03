@@ -12721,11 +12721,15 @@ namespace ts {
                         if (checkType.flags & TypeFlags.Any) {
                             (extraTypes || (extraTypes = [])).push(instantiateType(root.trueType, combinedMapper || mapper));
                         }
-                        // If falseType is an immediately nested conditional type, switch to that type and loop.
+                        // If falseType is an immediately nested conditional type that isn't distributive or has an
+                        // identical checkType, switch to that type and loop.
                         const falseType = root.falseType;
-                        if (falseType.flags & TypeFlags.Conditional && (<ConditionalType>falseType).root.node.parent === root.node) {
-                            root = (<ConditionalType>falseType).root;
-                            continue;
+                        if (falseType.flags & TypeFlags.Conditional) {
+                            const newRoot = (<ConditionalType>falseType).root;
+                            if (newRoot.node.parent === root.node && (!newRoot.isDistributive || newRoot.checkType === root.checkType)) {
+                                root = newRoot;
+                                continue;
+                            }
                         }
                         result = instantiateType(falseType, mapper);
                         break;
