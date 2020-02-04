@@ -29,10 +29,11 @@ interface SymbolConstructor {
     readonly asyncIterator: symbol;
 }
 
-interface AsyncIterator<T> {
-    next(value?: any): Promise<IteratorResult<T>>;
-    return?(value?: any): Promise<IteratorResult<T>>;
-    throw?(e?: any): Promise<IteratorResult<T>>;
+interface AsyncIterator<T, TReturn = any, TNext = undefined> {
+    // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+    next(...args: [] | [TNext]): Promise<IteratorResult<T, TReturn>>;
+    return?(value?: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>;
+    throw?(e?: any): Promise<IteratorResult<T, TReturn>>;
 }
 
 interface AsyncIterable<T> {

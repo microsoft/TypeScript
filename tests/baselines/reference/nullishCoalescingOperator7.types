@@ -1,0 +1,58 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator7.ts ===
+declare const a: string | undefined;
+>a : string | undefined
+
+declare const b: string | undefined;
+>b : string | undefined
+
+declare const c: string | undefined;
+>c : string | undefined
+
+const foo1 = a ? 1 : 2;
+>foo1 : 1 | 2
+>a ? 1 : 2 : 1 | 2
+>a : string | undefined
+>1 : 1
+>2 : 2
+
+const foo2 = a ?? 'foo' ? 1 : 2;
+>foo2 : 1 | 2
+>a ?? 'foo' ? 1 : 2 : 1 | 2
+>a ?? 'foo' : string
+>a : string | undefined
+>'foo' : "foo"
+>1 : 1
+>2 : 2
+
+const foo3 = a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz');
+>foo3 : string
+>a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz') : string
+>a ?? 'foo' : string
+>a : string | undefined
+>'foo' : "foo"
+>(b ?? 'bar') : string
+>b ?? 'bar' : string
+>b : string | undefined
+>'bar' : "bar"
+>(c ?? 'baz') : string
+>c ?? 'baz' : string
+>c : string | undefined
+>'baz' : "baz"
+
+function f () {
+>f : () => void
+
+    const foo4 = a ?? 'foo' ? b ?? 'bar' : c ?? 'baz';
+>foo4 : string
+>a ?? 'foo' ? b ?? 'bar' : c ?? 'baz' : string
+>a ?? 'foo' : string
+>a : string | undefined
+>'foo' : "foo"
+>b ?? 'bar' : string
+>b : string | undefined
+>'bar' : "bar"
+>c ?? 'baz' : string
+>c : string | undefined
+>'baz' : "baz"
+}
+

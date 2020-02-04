@@ -19,8 +19,17 @@ declare let f4: (...args: [string, string] | [string, number, boolean]) => void;
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
 >args : [string, string] | [string, number, boolean]
 
-declare const tt: [string] | [number, boolean];
->tt : [string] | [number, boolean]
+declare const t1: [string] | [number, boolean];
+>t1 : [string] | [number, boolean]
+
+declare const t2: readonly [string] | [number, boolean];
+>t2 : [number, boolean] | readonly [string]
+
+declare const t3: [string] | readonly [number, boolean];
+>t3 : [string] | readonly [number, boolean]
+
+declare const t4: readonly [string] | readonly [number, boolean];
+>t4 : readonly [string] | readonly [number, boolean]
 
 f1("foo", "abc");
 >f1("foo", "abc") : void
@@ -35,12 +44,33 @@ f1("foo", 10, true);
 >10 : 10
 >true : true
 
-f1("foo", ...tt);
->f1("foo", ...tt) : void
+f1("foo", ...t1);
+>f1("foo", ...t1) : void
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >"foo" : "foo"
->...tt : string | number | boolean
->tt : [string] | [number, boolean]
+>...t1 : string | number | boolean
+>t1 : [string] | [number, boolean]
+
+f1("foo", ...t2);
+>f1("foo", ...t2) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t2 : string | number | boolean
+>t2 : [number, boolean] | readonly [string]
+
+f1("foo", ...t3);
+>f1("foo", ...t3) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t3 : string | number | boolean
+>t3 : [string] | readonly [number, boolean]
+
+f1("foo", ...t4);
+>f1("foo", ...t4) : void
+>f1 : (x: string, ...args: [string] | [number, boolean]) => void
+>"foo" : "foo"
+>...t4 : string | number | boolean
+>t4 : readonly [string] | readonly [number, boolean]
 
 f1("foo", 10);  // Error
 >f1("foo", 10) : void
@@ -179,4 +209,21 @@ hmm("what"); // no error?  A = [] | [number, string] ?
 >hmm("what") : any
 >hmm : <A extends [] | [number, string]>(...args: A) => void
 >"what" : "what"
+
+// Repro from #35066
+
+declare function foo2(...args: string[] | number[]): void;
+>foo2 : (...args: string[] | number[]) => void
+>args : string[] | number[]
+
+let x2: ReadonlyArray<string> = ["hello"];
+>x2 : readonly string[]
+>["hello"] : string[]
+>"hello" : "hello"
+
+foo2(...x2);
+>foo2(...x2) : void
+>foo2 : (...args: string[] | number[]) => void
+>...x2 : string
+>x2 : readonly string[]
 

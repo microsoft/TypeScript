@@ -1,0 +1,60 @@
+=== /ns.ts ===
+namespace ns {
+>ns : typeof ns
+
+  export type Type = string;
+>Type : string
+
+  export class Class {}
+>Class : Class
+
+  export const Value = "";
+>Value : ""
+>"" : ""
+
+  export namespace nested {
+>nested : typeof nested
+
+    export class NestedClass {
+>NestedClass : NestedClass
+
+      a!: string;
+>a : string
+    }
+  }
+}
+
+export default ns;
+>ns : typeof ns
+
+=== /a.ts ===
+import type ns from './ns';
+>ns : any
+
+ns.Class; // Error
+>ns.Class : typeof ns.Class
+>ns : typeof ns
+>Class : typeof ns.Class
+
+ns.Value; // Error
+>ns.Value : ""
+>ns : typeof ns
+>Value : ""
+
+let c: ns.Class;
+>c : ns.Class
+>ns : any
+
+let t: ns.Type = "";
+>t : string
+>ns : any
+>"" : ""
+
+let n: ns.nested.NestedClass = { a: '' };
+>n : ns.nested.NestedClass
+>ns : any
+>nested : any
+>{ a: '' } : { a: string; }
+>a : string
+>'' : ""
+

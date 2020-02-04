@@ -198,7 +198,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 exports.__esModule = true;
 var simpleAction = function (payload) { return ({
     type: "SIMPLE_ACTION",
@@ -206,7 +205,7 @@ var simpleAction = function (payload) { return ({
 }); };
 var thunkAction = function (param1, param2) { return function (dispatch, _a) {
     var foo = _a.foo;
-    return __awaiter(_this, void 0, void 0, function () {
+    return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_b) {
             return [2 /*return*/, foo];
         });

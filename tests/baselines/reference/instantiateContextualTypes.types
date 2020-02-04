@@ -422,3 +422,27 @@ let xx: 0 | 1 | 2 = invoke(() => 1);
 >() => 1 : () => 1
 >1 : 1
 
+// Repro from #32416
+
+declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+>assignPartial : <T>(target: T, partial: Partial<T>) => T
+>target : T
+>partial : Partial<T>
+
+let obj = {
+>obj : { foo(bar: string): void; }
+>{  foo(bar: string) {}} : { foo(bar: string): void; }
+
+  foo(bar: string) {}
+>foo : (bar: string) => void
+>bar : string
+}
+
+assignPartial(obj, { foo(...args) {} });  // args has type [string]
+>assignPartial(obj, { foo(...args) {} }) : { foo(bar: string): void; }
+>assignPartial : <T>(target: T, partial: Partial<T>) => T
+>obj : { foo(bar: string): void; }
+>{ foo(...args) {} } : { foo(bar: string): void; }
+>foo : (bar: string) => void
+>args : [string]
+

@@ -31,7 +31,7 @@ interface ReadonlyArray<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U|ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
         thisArg?: This
     ): U[]
 
@@ -130,7 +130,7 @@ interface ReadonlyArray<T> {
      * @param depth The maximum recursion depth
      */
     flat<U>(depth?: number): any[];
-  }
+}
 
 interface Array<T> {
 
@@ -145,7 +145,7 @@ interface Array<T> {
      * thisArg is omitted, undefined is used as the this value.
      */
     flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U|ReadonlyArray<U>,
+        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
         thisArg?: This
     ): U[]
 

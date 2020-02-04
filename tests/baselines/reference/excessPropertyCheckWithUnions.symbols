@@ -221,3 +221,92 @@ const abac: AB = {
     }
 }
 
+// Excess property checks must match all discriminable properties
+type Button = { tag: 'button'; type?: 'submit'; };
+>Button : Symbol(Button, Decl(excessPropertyCheckWithUnions.ts, 74, 1))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 77, 15))
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 77, 30))
+
+type Anchor = { tag: 'a'; type?: string; href: string };
+>Anchor : Symbol(Anchor, Decl(excessPropertyCheckWithUnions.ts, 77, 50))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 78, 15))
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 78, 25))
+>href : Symbol(href, Decl(excessPropertyCheckWithUnions.ts, 78, 40))
+
+type Union = Button | Anchor;
+>Union : Symbol(Union, Decl(excessPropertyCheckWithUnions.ts, 78, 56))
+>Button : Symbol(Button, Decl(excessPropertyCheckWithUnions.ts, 74, 1))
+>Anchor : Symbol(Anchor, Decl(excessPropertyCheckWithUnions.ts, 77, 50))
+
+const obj: Union = {
+>obj : Symbol(obj, Decl(excessPropertyCheckWithUnions.ts, 81, 5))
+>Union : Symbol(Union, Decl(excessPropertyCheckWithUnions.ts, 78, 56))
+
+    tag: 'button',
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 81, 20))
+
+    type: 'submit',
+>type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 82, 18))
+
+    // should have error here
+    href: 'foo',
+>href : Symbol(href, Decl(excessPropertyCheckWithUnions.ts, 83, 19))
+
+};
+
+// Repro from #34611
+
+interface IValue {
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 87, 2))
+
+  value: string
+>value : Symbol(IValue.value, Decl(excessPropertyCheckWithUnions.ts, 91, 18))
+}
+
+interface StringKeys { 
+>StringKeys : Symbol(StringKeys, Decl(excessPropertyCheckWithUnions.ts, 93, 1))
+
+    [propertyName: string]: IValue;
+>propertyName : Symbol(propertyName, Decl(excessPropertyCheckWithUnions.ts, 96, 5))
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 87, 2))
+
+};
+
+interface NumberKeys {
+>NumberKeys : Symbol(NumberKeys, Decl(excessPropertyCheckWithUnions.ts, 97, 2))
+
+    [propertyName: number]: IValue;
+>propertyName : Symbol(propertyName, Decl(excessPropertyCheckWithUnions.ts, 100, 5))
+>IValue : Symbol(IValue, Decl(excessPropertyCheckWithUnions.ts, 87, 2))
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+>ObjectDataSpecification : Symbol(ObjectDataSpecification, Decl(excessPropertyCheckWithUnions.ts, 101, 1))
+>StringKeys : Symbol(StringKeys, Decl(excessPropertyCheckWithUnions.ts, 93, 1))
+>NumberKeys : Symbol(NumberKeys, Decl(excessPropertyCheckWithUnions.ts, 97, 2))
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+>dataSpecification : Symbol(dataSpecification, Decl(excessPropertyCheckWithUnions.ts, 106, 5))
+>ObjectDataSpecification : Symbol(ObjectDataSpecification, Decl(excessPropertyCheckWithUnions.ts, 101, 1))
+
+    foo: "asdfsadffsd"
+>foo : Symbol(foo, Decl(excessPropertyCheckWithUnions.ts, 106, 52))
+
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+>obj1 : Symbol(obj1, Decl(excessPropertyCheckWithUnions.ts, 112, 5))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 112, 15))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 112, 41))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 112, 65))
+
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
+>obj2 : Symbol(obj2, Decl(excessPropertyCheckWithUnions.ts, 113, 5))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 113, 15))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 113, 39))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 113, 55))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 113, 61))
+

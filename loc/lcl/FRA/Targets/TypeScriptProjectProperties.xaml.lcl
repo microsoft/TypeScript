@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LCX SchemaVersion="6.0" Name="E:\A\_work\326\s\VS\TypeScriptTasks\bin\Release\Targets\TypeScriptProjectProperties.xaml" PsrId="22" FileType="1" SrcCul="en-US" TgtCul="fr-FR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
+  <OwnedComments>
+    <Cmt Name="Dev" />
+    <Cmt Name="LcxAdmin" />
+    <Cmt Name="Rccx" />
+  </OwnedComments>
+  <Settings Name="@vsLocTools@\default.lss" Type="Lss" />
+  <Item ItemId=";&lt;Category&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptbuild@Category@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Build TypeScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptcompileonsaveenabled@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Recompile sources on save]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Recompiler les sources lors de l'enregistrement]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptgeneratesdeclarations@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate corresponding d.ts file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Générer le fichier d.ts correspondant]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptjsxemit@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify JSX code compilation mode for .tsx files, this doesn't affect .ts files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Spécifiez le mode de compilation du code JSX pour les fichiers .tsx. Ceci n'affecte pas les fichiers .ts]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmodulekind@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[External module code generation target]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Cible de génération de code de module externe]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoemitonerror@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit outputs if any errors were reported]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Émettre des sorties si des erreurs sont signalées]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoimplicitany@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Suppress warnings on expressions and declarations with an implied Any type]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Supprimer les avertissements en cas d'expressions et de déclarations possédant un type 'any' implicite]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptremovecomments@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit comments to output]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Publier des commentaires dans la sortie]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourcemap@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generates corresponding .map file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Générer le fichier .map correspondant]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescripttarget@EnumProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript version to use for generated JavaScript]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Version ECMAScript à utiliser pour le code JavaScript généré]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptcompileonsaveenabled@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Compile on save]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Compiler lors de l'enregistrement]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptgeneratesdeclarations@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate declaration files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Générer des fichiers de déclaration]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptjsxemit@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Compilation mode for .tsx files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Mode de compilation pour les fichiers .tsx]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmodulekind@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Module system]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Système de module]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoemitonerror@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit on error]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Émettre lors d'une erreur]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptnoimplicitany@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Allow implicit 'any' types]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Autoriser les types 'any' implicites]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptremovecomments@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Keep comments in JavaScript output]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Conserver les commentaires dans la sortie JavaScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourcemap@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Generate source maps]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Générer des mappages de sources]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescripttarget@EnumProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript version]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Version ECMAScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;EnumValue&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;amd@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[AMD]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[AMD]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;commonjs@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[CommonJS]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[CommonJS]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es3@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 3]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 3]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es5@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 5]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 5]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;es6@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[ECMAScript 6]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[ECMAScript 6]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Aucun]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;preserve@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Preserve JSX elements]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Préserver les éléments JSX]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;react@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emit React call for JSX elements]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Émettre un appel React pour les éléments JSX]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;system@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[System]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Système]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;umd@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[UMD]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[UMD]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;none@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[None]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Aucun]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="1;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="2;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="2;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="3;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="3;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="4;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="4;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="5;false@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Yes]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Oui]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="5;true@EnumValue@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[No]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Non]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;Rule&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptbuild@Rule@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Build TypeScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptbuild@Rule@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[TypeScript Build]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Build TypeScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+  <Item ItemId=";&lt;StringProperty&gt;" ItemType="0" PsrId="210" Leaf="false">
+    <Disp Icon="Str" Disp="true" LocTbl="false" />
+    <Item ItemId="0;typescriptmaproot@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emits the sourcemaps such that soucemaps while debugging will be located in the sourcemap root]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Publie les mappages de sources pour qu'ils se trouvent à la racine pendant le débogage]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutdir@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect output to a different directory than sources]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Rediriger la sortie vers un autre répertoire que les sources]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutfile@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect output to a file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Rediriger la sortie vers un fichier]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourceroot@StringProperty@Description" ItemType="47;XML:Attr:Description" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Emits the sourcemaps such that sources while debugging will be located in the source root]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Publie les mappages de sources pour que les sources se trouvent à la racine pendant le débogage]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptmaproot@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify root directory of source maps]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Spécifier le répertoire racine des mappages de sources]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutdir@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Redirect JavaScript output to directory]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Rediriger la sortie JavaScript vers un répertoire]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptoutfile@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Combine JavaScript output into file]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Combiner la sortie JavaScript dans un fichier]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+    <Item ItemId="0;typescriptsourceroot@StringProperty@DisplayName" ItemType="47;XML:Attr:DisplayName" PsrId="210" Leaf="true">
+      <Str Cat="AppData">
+        <Val><![CDATA[Specify root directory of TypeScript files]]></Val>
+        <Tgt Cat="AppData" Stat="Loc" Orig="New">
+          <Val><![CDATA[Spécifier le répertoire racine des fichiers TypeScript]]></Val>
+        </Tgt>
+      </Str>
+      <Disp Icon="Str" />
+    </Item>
+  </Item>
+</LCX>

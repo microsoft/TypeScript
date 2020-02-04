@@ -1,0 +1,25 @@
+=== tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
+type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
+>PartialDeep : PartialDeep<T>
+
+type Many<T> = T | readonly T[];
+>Many : Many<T>
+
+interface Collection<T> {
+    sortBy(...iteratees: Many<PartialDeep<T>>[]): Collection<T>;
+>sortBy : (...iteratees: Many<PartialDeep<T>>[]) => Collection<T>
+>iteratees : Many<PartialDeep<T>>[]
+}
+
+const x: Collection<{x: number}> = (null as any as Collection<{x: number, y: number}>);
+>x : Collection<{ x: number; }>
+>x : number
+>(null as any as Collection<{x: number, y: number}>) : Collection<{ x: number; y: number; }>
+>null as any as Collection<{x: number, y: number}> : Collection<{ x: number; y: number; }>
+>null as any : any
+>null : null
+>x : number
+>y : number
+
+export {};
+

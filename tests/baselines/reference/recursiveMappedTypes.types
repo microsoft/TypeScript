@@ -25,10 +25,10 @@ export type Circular<T> = {[P in keyof T]: Circular<T>};
 >Circular : Circular<T>
 
 type tup = [number, number, number, number];
->tup : [number, number, number, number]
+>tup : tup
 
 function foo(arg: Circular<tup>): tup {
->foo : (arg: any) => [number, number, number, number]
+>foo : (arg: any) => tup
 >arg : any
 
   return arg;
@@ -44,10 +44,10 @@ type DeepMap<T extends unknown[], R> = {
 };
 
 type tpl = [string, [string, [string]]];
->tpl : [string, [string, [string]]]
+>tpl : tpl
 
 type arr = string[][];
->arr : string[][]
+>arr : arr
 
 type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
 >t1 : [number, [number, [number]]]

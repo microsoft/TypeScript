@@ -174,3 +174,13 @@ class Interesting {
 declare function invoke<T>(f: () => T): T;
 
 let xx: 0 | 1 | 2 = invoke(() => 1);
+
+// Repro from #32416
+
+declare function assignPartial<T>(target: T, partial: Partial<T>): T;
+
+let obj = {
+  foo(bar: string) {}
+}
+
+assignPartial(obj, { foo(...args) {} });  // args has type [string]

@@ -7,7 +7,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'B'",
+    description: "Remove unused declaration for: 'B'",
     newFileContent: `namespace A {
 }`,
 });
