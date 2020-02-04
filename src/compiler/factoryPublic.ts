@@ -3387,7 +3387,7 @@ namespace ts {
      */
     /* @internal */
     export function getOrCreateEmitNode(node: Node): EmitNode {
-        if (node && !node.emitNode) {
+        if (!node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
                 // parse tree node we are annotating. This allows us to clean them up after
@@ -3403,7 +3403,7 @@ namespace ts {
             node.emitNode = {} as EmitNode;
         }
 
-        return node.emitNode;
+        return node && node.emitNode;
     }
 
     /**
