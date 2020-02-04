@@ -68,28 +68,28 @@
 
     ~                                             => Pos: (365 to 365)  SpanInfo: undefined
 --------------------------------
-12 >let [nameMC] = ["roomba", ["vaccum", "mopping"]];
+12 >let [nameMC] = ["roomba", ["vacuum", "mopping"]];
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (366 to 415)  SpanInfo: {"start":371,"length":6}
     >nameMC
     >:=> (line 12, col 5) to (line 12, col 11)
 --------------------------------
-13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 
     ~~~~~~~~~~~~~                                 => Pos: (416 to 428)  SpanInfo: {"start":421,"length":7}
     >nameMC2
     >:=> (line 13, col 5) to (line 13, col 12)
-13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 
                  ~~~~~~~~~~~~~~~~                 => Pos: (429 to 444)  SpanInfo: {"start":431,"length":13}
     >primarySkillC
     >:=> (line 13, col 15) to (line 13, col 28)
-13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 
                                  ~~~~~~~~~~~~~~~~~=> Pos: (445 to 461)  SpanInfo: {"start":446,"length":15}
     >secondarySkillC
     >:=> (line 13, col 30) to (line 13, col 45)
-13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 
                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (462 to 500)  SpanInfo: {"start":430,"length":32}
     >[primarySkillC, secondarySkillC]

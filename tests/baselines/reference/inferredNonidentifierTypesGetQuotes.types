@@ -8,9 +8,9 @@ var x = [{ "a-b": "string" }, {}];
 >{} : {}
 
 var y = [{ ["a-b"]: "string" }, {}];
->y : ({ ["a-b"]: string; } | { "a-b"?: undefined; })[]
->[{ ["a-b"]: "string" }, {}] : ({ ["a-b"]: string; } | {})[]
->{ ["a-b"]: "string" } : { ["a-b"]: string; }
+>y : ({ "a-b": string; } | { "a-b"?: undefined; })[]
+>[{ ["a-b"]: "string" }, {}] : ({ "a-b": string; } | {})[]
+>{ ["a-b"]: "string" } : { "a-b": string; }
 >["a-b"] : string
 >"a-b" : "a-b"
 >"string" : "string"

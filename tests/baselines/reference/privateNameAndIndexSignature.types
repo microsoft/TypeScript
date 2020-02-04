@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts ===
+class A {
+>A : A
+
+    [k: string]: any;
+>k : string
+
+    #foo = 3;
+>#foo : number
+>3 : 3
+
+    ["#bar"] = this["#bar"]   // Error (private identifiers should not prevent circularity checking for computeds)
+>["#bar"] : any
+>"#bar" : "#bar"
+>this["#bar"] : any
+>this : this
+>"#bar" : "#bar"
+
+    constructor(message: string) {
+>message : string
+
+        this.#f = 3           // Error (index signatures do not implicitly declare private names)
+>this.#f = 3 : 3
+>this.#f : any
+>this : this
+>3 : 3
+
+        this["#foo"] = 3;     // Okay (type has index signature and "#foo" does not collide with private identifier #foo)
+>this["#foo"] = 3 : 3
+>this["#foo"] : any
+>this : this
+>"#foo" : "#foo"
+>3 : 3
+
+    }
+}
+

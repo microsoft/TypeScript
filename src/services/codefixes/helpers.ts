@@ -6,7 +6,7 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
@@ -60,7 +60,8 @@ namespace ts.codefix {
         switch (declaration.kind) {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+                const flags = preferences.quotePreference === "single" ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
                 out(createProperty(
                     /*decorators*/undefined,
                     modifiers,
@@ -185,8 +186,7 @@ namespace ts.codefix {
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
-            isIdentifier(arg) ? arg.text :
-                isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
@@ -219,10 +219,10 @@ namespace ts.codefix {
     }
 
     function createMethodImplementingSignatures(
-        signatures: ReadonlyArray<Signature>,
+        signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
-        modifiers: ReadonlyArray<Modifier> | undefined,
+        modifiers: readonly Modifier[] | undefined,
         preferences: UserPreferences,
     ): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
@@ -234,14 +234,14 @@ namespace ts.codefix {
         let someSigHasRestParameter = false;
         for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            if (sig.hasRestParameter) {
+            if (signatureHasRestParameter(sig)) {
                 someSigHasRestParameter = true;
             }
-            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
+            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))) {
                 maxArgsSignature = sig;
             }
         }
-        const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
+        const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
@@ -270,11 +270,11 @@ namespace ts.codefix {
     }
 
     function createStubbedMethod(
-        modifiers: ReadonlyArray<Modifier> | undefined,
+        modifiers: readonly Modifier[] | undefined,
         name: PropertyName,
         optional: boolean,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
         returnType: TypeNode | undefined,
         preferences: UserPreferences
     ): MethodDeclaration {
@@ -311,11 +311,10 @@ namespace ts.codefix {
         return undefined;
     }
 
-    export function setJsonCompilerOptionValue(
+    export function setJsonCompilerOptionValues(
         changeTracker: textChanges.ChangeTracker,
         configFile: TsConfigSourceFile,
-        optionName: string,
-        optionValue: Expression,
+        options: [string, Expression][]
     ) {
         const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
         if (!tsconfigObjectLiteral) return undefined;
@@ -324,9 +323,7 @@ namespace ts.codefix {
         if (compilerOptionsProperty === undefined) {
             changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
                 "compilerOptions",
-                createObjectLiteral([
-                    createJsonPropertyAssignment(optionName, optionValue),
-                ])));
+                createObjectLiteral(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
             return;
         }
 
@@ -335,14 +332,24 @@ namespace ts.codefix {
             return;
         }
 
-        const optionProperty = findJsonProperty(compilerOptions, optionName);
+        for (const [optionName, optionValue] of options) {
+            const optionProperty = findJsonProperty(compilerOptions, optionName);
+            if (optionProperty === undefined) {
+                changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
+            }
+            else {
+                changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
+            }
+        }
+    }
 
-        if (optionProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
-        }
-        else {
-            changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
-        }
+    export function setJsonCompilerOptionValue(
+        changeTracker: textChanges.ChangeTracker,
+        configFile: TsConfigSourceFile,
+        optionName: string,
+        optionValue: Expression,
+    ) {
+        setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
     }
 
     export function createJsonPropertyAssignment(name: string, initializer: Expression) {

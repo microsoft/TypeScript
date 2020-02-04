@@ -1,0 +1,80 @@
+=== tests/cases/compiler/observableInferenceCanBeMade.ts ===
+// Repro from #33131
+
+declare function of<T>(a: T): Observable<T>;
+>of : Symbol(of, Decl(observableInferenceCanBeMade.ts, 0, 0))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 2, 20))
+>a : Symbol(a, Decl(observableInferenceCanBeMade.ts, 2, 23))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 2, 20))
+>Observable : Symbol(Observable, Decl(observableInferenceCanBeMade.ts, 10, 64))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 2, 20))
+
+declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
+>from : Symbol(from, Decl(observableInferenceCanBeMade.ts, 2, 44))
+>O : Symbol(O, Decl(observableInferenceCanBeMade.ts, 3, 22))
+>ObservableInput : Symbol(ObservableInput, Decl(observableInferenceCanBeMade.ts, 9, 1))
+>input : Symbol(input, Decl(observableInferenceCanBeMade.ts, 3, 54))
+>O : Symbol(O, Decl(observableInferenceCanBeMade.ts, 3, 22))
+>Observable : Symbol(Observable, Decl(observableInferenceCanBeMade.ts, 10, 64))
+>ObservedValueOf : Symbol(ObservedValueOf, Decl(observableInferenceCanBeMade.ts, 3, 96))
+>O : Symbol(O, Decl(observableInferenceCanBeMade.ts, 3, 22))
+
+type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
+>ObservedValueOf : Symbol(ObservedValueOf, Decl(observableInferenceCanBeMade.ts, 3, 96))
+>O : Symbol(O, Decl(observableInferenceCanBeMade.ts, 5, 21))
+>O : Symbol(O, Decl(observableInferenceCanBeMade.ts, 5, 21))
+>ObservableInput : Symbol(ObservableInput, Decl(observableInferenceCanBeMade.ts, 9, 1))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 5, 57))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 5, 57))
+
+interface Subscribable<T> {
+>Subscribable : Symbol(Subscribable, Decl(observableInferenceCanBeMade.ts, 5, 73))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 7, 23))
+
+    subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
+>subscribe : Symbol(Subscribable.subscribe, Decl(observableInferenceCanBeMade.ts, 7, 27))
+>next : Symbol(next, Decl(observableInferenceCanBeMade.ts, 8, 14))
+>value : Symbol(value, Decl(observableInferenceCanBeMade.ts, 8, 22))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 7, 23))
+>error : Symbol(error, Decl(observableInferenceCanBeMade.ts, 8, 40))
+>error : Symbol(error, Decl(observableInferenceCanBeMade.ts, 8, 50))
+>complete : Symbol(complete, Decl(observableInferenceCanBeMade.ts, 8, 70))
+}
+type ObservableInput<T> = Subscribable<T> | Subscribable<never>;
+>ObservableInput : Symbol(ObservableInput, Decl(observableInferenceCanBeMade.ts, 9, 1))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 10, 21))
+>Subscribable : Symbol(Subscribable, Decl(observableInferenceCanBeMade.ts, 5, 73))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 10, 21))
+>Subscribable : Symbol(Subscribable, Decl(observableInferenceCanBeMade.ts, 5, 73))
+
+
+declare class Observable<T> implements Subscribable<T> {
+>Observable : Symbol(Observable, Decl(observableInferenceCanBeMade.ts, 10, 64))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 13, 25))
+>Subscribable : Symbol(Subscribable, Decl(observableInferenceCanBeMade.ts, 5, 73))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 13, 25))
+
+    subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
+>subscribe : Symbol(Observable.subscribe, Decl(observableInferenceCanBeMade.ts, 13, 56))
+>next : Symbol(next, Decl(observableInferenceCanBeMade.ts, 14, 14))
+>value : Symbol(value, Decl(observableInferenceCanBeMade.ts, 14, 22))
+>T : Symbol(T, Decl(observableInferenceCanBeMade.ts, 13, 25))
+>error : Symbol(error, Decl(observableInferenceCanBeMade.ts, 14, 40))
+>error : Symbol(error, Decl(observableInferenceCanBeMade.ts, 14, 50))
+>complete : Symbol(complete, Decl(observableInferenceCanBeMade.ts, 14, 70))
+}
+
+function asObservable(input: string | ObservableInput<string>): Observable<string> {
+>asObservable : Symbol(asObservable, Decl(observableInferenceCanBeMade.ts, 15, 1))
+>input : Symbol(input, Decl(observableInferenceCanBeMade.ts, 17, 22))
+>ObservableInput : Symbol(ObservableInput, Decl(observableInferenceCanBeMade.ts, 9, 1))
+>Observable : Symbol(Observable, Decl(observableInferenceCanBeMade.ts, 10, 64))
+
+    return typeof input === 'string' ? of(input) : from(input)
+>input : Symbol(input, Decl(observableInferenceCanBeMade.ts, 17, 22))
+>of : Symbol(of, Decl(observableInferenceCanBeMade.ts, 0, 0))
+>input : Symbol(input, Decl(observableInferenceCanBeMade.ts, 17, 22))
+>from : Symbol(from, Decl(observableInferenceCanBeMade.ts, 2, 44))
+>input : Symbol(input, Decl(observableInferenceCanBeMade.ts, 17, 22))
+}
+

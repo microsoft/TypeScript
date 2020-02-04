@@ -1,8 +1,8 @@
 error TS5052: Option 'checkJs' cannot be specified without specifying option 'allowJs'.
-error TS6054: File 'tests/cases/compiler/a.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+error TS6504: File 'tests/cases/compiler/a.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 
 
 !!! error TS5052: Option 'checkJs' cannot be specified without specifying option 'allowJs'.
-!!! error TS6054: File 'tests/cases/compiler/a.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+!!! error TS6504: File 'tests/cases/compiler/a.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 ==== tests/cases/compiler/a.js (0 errors) ====
     var x;

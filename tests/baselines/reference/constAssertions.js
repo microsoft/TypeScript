@@ -159,14 +159,14 @@ declare let o1: {
 declare let o2: {
     readonly [x: string]: 1 | 2 | 3 | (() => void) | 4;
     readonly a: 1;
-    readonly 'b': 2;
-    readonly ['c']: 3;
+    readonly b: 2;
+    readonly c: 3;
     readonly d: () => void;
 };
 declare let o3: {
     readonly a: 1;
-    readonly 'b': 2;
-    readonly ['c']: 3;
+    readonly b: 2;
+    readonly c: 3;
     readonly d: () => void;
     readonly x: 10;
     readonly y: 20;

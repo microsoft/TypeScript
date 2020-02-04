@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts ===
+class D {};
+>D : D
+
+class C {
+>C : C
+
+    #x;
+>#x : any
+
+    foo () {
+>foo : () => void
+
+        const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+        c.#x;     // OK
+>c.#x : any
+>c : C
+
+        const d: D = new C();
+>d : D
+>new C() : C
+>C : typeof C
+
+        d.#x;    // Error
+>d.#x : any
+>d : D
+    }
+}
+interface C {
+    new (): D;
+}
+

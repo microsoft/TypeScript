@@ -91,7 +91,7 @@ namespace ts {
 
             const statements: Statement[] = [];
             const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict && !isJsonSourceFile(node), sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
@@ -175,18 +175,18 @@ namespace ts {
                                     jsonSourceFile ?
                                         jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : createObjectLiteral() :
                                         createFunctionExpression(
-                                        /*modifiers*/ undefined,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        [
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
-                                        ],
-                                        /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
+                                            /*modifiers*/ undefined,
+                                            /*asteriskToken*/ undefined,
+                                            /*name*/ undefined,
+                                            /*typeParameters*/ undefined,
+                                            [
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                ...importAliasNames
+                                            ],
+                                            /*type*/ undefined,
+                                            transformAsynchronousModuleBody(node)
+                                        )
                                 ]
                             )
                         )
@@ -747,6 +747,17 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+        function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+                return innerExpr;
+            }
+            if (getExportNeedsImportStarHelper(node)) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            return innerExpr;
+        }
+
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
@@ -967,7 +978,7 @@ namespace ts {
 
             const generatedName = getGeneratedNameForNode(node);
 
-            if (node.exportClause) {
+            if (node.exportClause && isNamedExports(node.exportClause)) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
@@ -1005,6 +1016,28 @@ namespace ts {
                         )
                     );
                 }
+
+                return singleOrMany(statements);
+            }
+            else if (node.exportClause) {
+                const statements: Statement[] = [];
+                // export * as ns from "mod";
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            createExpressionStatement(
+                                createExportExpression(
+                                    getSynthesizedClone(node.exportClause.name),
+                                    moduleKind !== ModuleKind.AMD ?
+                                        getHelperExpressionForExport(node, createRequireCall(node)) :
+                                        createIdentifier(idText(node.exportClause.name))
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    )
+                );
 
                 return singleOrMany(statements);
             }
