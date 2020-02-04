@@ -11090,7 +11090,7 @@ namespace ts {
                         return errorType;
                     }
                 }
-                if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(<TypeReferenceNode>node)) {
+                if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(<TypeReferenceNode>node, length(node.typeArguments) !== typeParameters.length)) {
                     return createDeferredTypeReference(<GenericType>type, <TypeReferenceNode>node, /*mapper*/ undefined);
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
@@ -11554,11 +11554,11 @@ namespace ts {
 
         // Return true if the given type reference node is directly aliased or if it needs to be deferred
         // because it is possibly contained in a circular chain of eagerly resolved types.
-        function isDeferredTypeReferenceNode(node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode) {
-            return !!getAliasSymbolForTypeNode(node) || isResolvedByTypeAlias(node) &&
-                (node.kind === SyntaxKind.ArrayType ?
-                    mayResolveTypeAlias(node.elementType) :
-                    some(node.kind === SyntaxKind.TypeReference ? node.typeArguments : node.elementTypes, mayResolveTypeAlias));
+        function isDeferredTypeReferenceNode(node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, hasDefaultTypeArguments?: boolean) {
+            return !!getAliasSymbolForTypeNode(node) || isResolvedByTypeAlias(node) && (
+                node.kind === SyntaxKind.ArrayType ? mayResolveTypeAlias(node.elementType) :
+                node.kind === SyntaxKind.TupleType ? some(node.elementTypes, mayResolveTypeAlias) :
+                hasDefaultTypeArguments || some(node.typeArguments, mayResolveTypeAlias));
         }
 
         // Return true when the given node is transitively contained in type constructs that eagerly
