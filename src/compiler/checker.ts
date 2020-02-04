@@ -11556,9 +11556,9 @@ namespace ts {
         // because it is possibly contained in a circular chain of eagerly resolved types.
         function isDeferredTypeReferenceNode(node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode) {
             return !!getAliasSymbolForTypeNode(node) || isResolvedByTypeAlias(node) &&
-                node.kind === SyntaxKind.ArrayType ?
-                    mayResolveTypeAlias((<ArrayTypeNode>node).elementType) :
-                    some(node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeArguments : (<TupleTypeNode>node).elementTypes, mayResolveTypeAlias);
+                (node.kind === SyntaxKind.ArrayType ?
+                    mayResolveTypeAlias(node.elementType) :
+                    some(node.kind === SyntaxKind.TypeReference ? node.typeArguments : node.elementTypes, mayResolveTypeAlias));
         }
 
         // Return true when the given node is transitively contained in type constructs that eagerly
@@ -11590,14 +11590,14 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return true;
                 case SyntaxKind.TypeOperator:
-                    if ((<TypeOperatorNode>node).operator === SyntaxKind.UniqueKeyword) break;
+                    return (<TypeOperatorNode>node).operator !== SyntaxKind.UniqueKeyword && mayResolveTypeAlias((<TypeOperatorNode>node).type);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.OptionalType:
                 case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
-                    return mayResolveTypeAlias((<TypeOperatorNode | ParenthesizedTypeNode | OptionalTypeNode | JSDocTypeReferencingNode>node).type);
+                    return mayResolveTypeAlias((<ParenthesizedTypeNode | OptionalTypeNode | JSDocTypeReferencingNode>node).type);
                 case SyntaxKind.RestType:
                     return (<RestTypeNode>node).type.kind !== SyntaxKind.ArrayType || mayResolveTypeAlias((<ArrayTypeNode>(<RestTypeNode>node).type).elementType);
                 case SyntaxKind.UnionType:
