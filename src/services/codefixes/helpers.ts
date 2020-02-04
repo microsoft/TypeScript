@@ -67,7 +67,7 @@ namespace ts.codefix {
                     const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
                     if (importableReference) {
                         typeNode = importableReference.typeReference;
-                        forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                        importSymbols(importAdder, importableReference.symbols);
                     }
                 }
                 addClassElement(createProperty(
@@ -89,7 +89,7 @@ namespace ts.codefix {
                     const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
                     if (importableReference) {
                         typeNode = importableReference.typeReference;
-                        forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                        importSymbols(importAdder, importableReference.symbols);
                     }
                 }
                 for (const accessor of orderedAccessors) {
@@ -187,14 +187,14 @@ namespace ts.codefix {
                         const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.constraint, typeParameter.constraint, scriptTarget);
                         if (importableReference) {
                             typeParameterDecl.constraint = importableReference.typeReference;
-                            forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                            importSymbols(importAdder, importableReference.symbols);
                         }
                     }
                     if (typeParameterDecl.default) {
                         const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.default, typeParameter.default, scriptTarget);
                         if (importableReference) {
                             typeParameterDecl.default = importableReference.typeReference;
-                            forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                            importSymbols(importAdder, importableReference.symbols);
                         }
                     }
                 });
@@ -204,14 +204,14 @@ namespace ts.codefix {
                 const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), scriptTarget);
                 if (importableReference) {
                     parameterDecl.type = importableReference.typeReference;
-                    forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                    importSymbols(importAdder, importableReference.symbols);
                 }
             });
             if (signatureDeclaration.type) {
                 const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(signatureDeclaration.type, signature.resolvedReturnType, scriptTarget);
                 if (importableReference) {
                     signatureDeclaration.type = importableReference.typeReference;
-                    forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+                    importSymbols(importAdder, importableReference.symbols);
                 }
             }
         }
@@ -452,5 +452,9 @@ namespace ts.codefix {
             return newIdentifier;
         }
         return createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
+    }
+
+    function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
     }
 }

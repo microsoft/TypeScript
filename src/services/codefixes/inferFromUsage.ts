@@ -319,7 +319,7 @@ namespace ts.codefix {
     function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, scriptTarget: ScriptTarget): boolean {
         const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
         if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeReference)) {
-            forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+            forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
             return true;
         }
         return false;
