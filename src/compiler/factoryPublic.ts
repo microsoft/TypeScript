@@ -3387,7 +3387,7 @@ namespace ts {
      */
     /* @internal */
     export function getOrCreateEmitNode(node: Node): EmitNode {
-        if (!node.emitNode) {
+        if (node && !node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
                 // parse tree node we are annotating. This allows us to clean them up after
@@ -3448,7 +3448,7 @@ namespace ts {
      * Gets a custom text range to use when emitting source maps.
      */
     export function getSourceMapRange(node: Node): SourceMapRange {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return (emitNode && emitNode.sourceMapRange) || node;
     }
 
@@ -3473,7 +3473,7 @@ namespace ts {
      * Gets the TextRange to use for source maps for a token of a node.
      */
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
@@ -3493,7 +3493,7 @@ namespace ts {
      */
     /*@internal*/
     export function getStartsOnNewLine(node: Node) {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return emitNode && emitNode.startsOnNewLine;
     }
 
@@ -3510,7 +3510,7 @@ namespace ts {
      * Gets a custom text range to use when emitting comments.
      */
     export function getCommentRange(node: Node) {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return (emitNode && emitNode.commentRange) || node;
     }
 
@@ -3523,7 +3523,7 @@ namespace ts {
     }
 
     export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return emitNode && emitNode.leadingComments;
     }
 
@@ -3537,7 +3537,7 @@ namespace ts {
     }
 
     export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return emitNode && emitNode.trailingComments;
     }
 
@@ -3563,7 +3563,7 @@ namespace ts {
      * Gets the constant value to emit for an expression.
      */
     export function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return emitNode && emitNode.constantValue;
     }
 
@@ -3602,7 +3602,7 @@ namespace ts {
      * Removes an EmitHelper from a node.
      */
     export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         if (emitNode) {
             const helpers = emitNode.helpers;
             if (helpers) {
@@ -3616,7 +3616,7 @@ namespace ts {
      * Gets the EmitHelpers of a node.
      */
     export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
-        const emitNode = node.emitNode;
+        const emitNode = node && node.emitNode;
         return emitNode && emitNode.helpers;
     }
 
@@ -3624,7 +3624,7 @@ namespace ts {
      * Moves matching emit helpers from a source node to a target node.
      */
     export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
-        const sourceEmitNode = source.emitNode;
+        const sourceEmitNode = source && source.emitNode;
         const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
         if (!some(sourceEmitHelpers)) return;
 
