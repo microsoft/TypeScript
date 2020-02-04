@@ -260,7 +260,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } = host;
         let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
-        let configFileSpecs: ConfigFileSpecs;
+        let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
@@ -636,11 +636,10 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost);
-            if (updateErrorForNoInputFiles(result, getNormalizedAbsolutePath(configFileName, currentDirectory), configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+            rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost);
+            if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
-            rootFileNames = result.fileNames;
 
             // Update the program
             synchronizeProgram();
@@ -669,8 +668,8 @@ namespace ts {
             rootFileNames = configFileParseResult.fileNames;
             compilerOptions = configFileParseResult.options;
             watchOptions = configFileParseResult.watchOptions;
-            configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
             projectReferences = configFileParseResult.projectReferences;
+            wildcardDirectories = configFileParseResult.wildcardDirectories;
             configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
             canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
@@ -716,10 +715,10 @@ namespace ts {
         }
 
         function watchConfigFileWildCardDirectories() {
-            if (configFileSpecs) {
+            if (wildcardDirectories) {
                 updateWatchingWildcardDirectories(
                     watchedWildcardDirectories || (watchedWildcardDirectories = new Map()),
-                    new Map(getEntries(configFileSpecs.wildcardDirectories)),
+                    new Map(getEntries(wildcardDirectories)),
                     watchWildcardDirectory
                 );
             }
@@ -748,7 +747,6 @@ namespace ts {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
-                        configFileSpecs,
                         options: compilerOptions,
                         program: getCurrentBuilderProgram(),
                         currentDirectory,

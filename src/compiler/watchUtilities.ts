@@ -336,7 +336,6 @@ namespace ts {
         fileOrDirectoryPath: Path;
         configFileName: string;
         options: CompilerOptions;
-        configFileSpecs: ConfigFileSpecs;
         program: BuilderProgram | Program | undefined;
         extraFileExtensions?: readonly FileExtensionInfo[];
         currentDirectory: string;
@@ -346,7 +345,7 @@ namespace ts {
     /* @internal */
     export function isIgnoredFileFromWildCardWatching({
         watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
-        configFileName, options, configFileSpecs, program, extraFileExtensions,
+        configFileName, options, program, extraFileExtensions,
         currentDirectory, useCaseSensitiveFileNames,
         writeLog,
     }: IsIgnoredFileFromWildCardWatchingInput): boolean {
@@ -366,7 +365,7 @@ namespace ts {
             return true;
         }
 
-        if (isExcludedFile(fileOrDirectory, configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
+        if (isExcludedFile(fileOrDirectory, options.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
             writeLog(`Project: ${configFileName} Detected excluded file: ${fileOrDirectory}`);
             return true;
         }

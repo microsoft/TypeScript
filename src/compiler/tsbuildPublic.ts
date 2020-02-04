@@ -1173,9 +1173,8 @@ namespace ts {
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
-                const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
-                config.fileNames = result.fileNames;
+                config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
+                updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 watchInputFiles(state, project, projectPath, config);
             }
 
@@ -1800,7 +1799,7 @@ namespace ts {
         if (!state.watch) return;
         updateWatchingWildcardDirectories(
             getOrCreateValueMapFromConfigFileMap(state.allWatchedWildcardDirectories, resolvedPath),
-            new Map(getEntries(parsed.configFileSpecs!.wildcardDirectories)),
+            new Map(getEntries(parsed.wildcardDirectories!)),
             (dir, flags) => state.watchDirectory(
                 state.hostWithWatch,
                 dir,
@@ -1810,7 +1809,6 @@ namespace ts {
                         fileOrDirectory,
                         fileOrDirectoryPath: toPath(state, fileOrDirectory),
                         configFileName: resolved,
-                        configFileSpecs: parsed.configFileSpecs!,
                         currentDirectory: state.currentDirectory,
                         options: parsed.options,
                         program: state.builderPrograms.get(resolvedPath),

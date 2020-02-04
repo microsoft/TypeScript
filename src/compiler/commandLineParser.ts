@@ -1940,10 +1940,10 @@ namespace ts {
         const files = map(
             filter(
                 configParseResult.fileNames,
-                (!configParseResult.configFileSpecs || !configParseResult.configFileSpecs.validatedIncludeSpecs) ? _ => true : matchesSpecs(
+                !configParseResult.options.configFile?.configFileSpecs?.validatedIncludeSpecs ? returnTrue : matchesSpecs(
                     configFileName,
-                    configParseResult.configFileSpecs.validatedIncludeSpecs,
-                    configParseResult.configFileSpecs.validatedExcludeSpecs,
+                    configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs,
+                    configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs,
                     host,
                 )
             ),
@@ -1968,9 +1968,9 @@ namespace ts {
             watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
             references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
             files: length(files) ? files : undefined,
-            ...(configParseResult.configFileSpecs ? {
-                include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
-                exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
+            ...(configParseResult.options.configFile?.configFileSpecs ? {
+                include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
+                exclude: configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs
             } : {}),
             compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
@@ -1991,7 +1991,7 @@ namespace ts {
     }
 
     function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined, excludeSpecs: readonly string[] | undefined, host: ConvertToTSConfigHost): (path: string) => boolean {
-        if (!includeSpecs) return _ => true;
+        if (!includeSpecs) return returnTrue;
         const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, host.useCaseSensitiveFileNames, host.getCurrentDirectory());
         const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, host.useCaseSensitiveFileNames);
         const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, host.useCaseSensitiveFileNames);
@@ -2004,7 +2004,7 @@ namespace ts {
         if (excludeRe) {
             return path => excludeRe.test(path);
         }
-        return _ => true;
+        return returnTrue;
     }
 
     function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): ESMap<string, string | number> | undefined {
@@ -2297,23 +2297,28 @@ namespace ts {
             parsedConfig.watchOptions || existingWatchOptions;
 
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
+        const configFileSpecs = getConfigFileSpecs();
+        if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
         setConfigFileInOptions(options, sourceFile);
-        let projectReferences: ProjectReference[] | undefined;
-        const { fileNames, wildcardDirectories, spec } = getFileNames();
+
+        const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
         return {
             options,
             watchOptions,
-            fileNames,
-            projectReferences,
+            fileNames: getFileNames(basePathForFileNames),
+            projectReferences: getProjectReferences(basePathForFileNames),
             typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),
             raw,
             errors,
-            wildcardDirectories,
+            // Wildcard directories (provided as part of a wildcard path) are stored in a
+            // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
+            // or a recursive directory. This information is used by filesystem watchers to monitor for
+            // new entries in these paths.
+            wildcardDirectories: getWildcardDirectories(configFileSpecs, basePathForFileNames, host.useCaseSensitiveFileNames),
             compileOnSave: !!raw.compileOnSave,
-            configFileSpecs: spec
         };
 
-        function getFileNames(): ExpandResult {
+        function getConfigFileSpecs(): ConfigFileSpecs {
             let filesSpecs: readonly string[] | undefined;
             if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
                 if (isArray(raw.files)) {
@@ -2372,12 +2377,33 @@ namespace ts {
             if (filesSpecs === undefined && includeSpecs === undefined) {
                 includeSpecs = ["**/*"];
             }
+            let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
-            const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (shouldReportNoInputFiles(result, canJsonReportNoInputFiles(raw), resolutionStack)) {
-                errors.push(getErrorForNoInputFiles(result.spec, configFileName));
+            // The exclude spec list is converted into a regular expression, which allows us to quickly
+            // test whether a file or directory should be excluded before recursively traversing the
+            // file system.
+
+            if (includeSpecs) {
+                validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false, sourceFile, "include");
             }
 
+            if (excludeSpecs) {
+                validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*allowTrailingRecursion*/ true, sourceFile, "exclude");
+            }
+
+            return { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs };
+        }
+
+        function getFileNames(basePath: string): string[] {
+            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, basePath, options, host, extraFileExtensions);
+            if (shouldReportNoInputFiles(fileNames, canJsonReportNoInputFiles(raw), resolutionStack)) {
+                errors.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
+            }
+            return fileNames;
+        }
+
+        function getProjectReferences(basePath: string): readonly ProjectReference[] | undefined {
+            let projectReferences: ProjectReference[] | undefined;
             if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
                 if (isArray(raw.references)) {
                     for (const ref of raw.references) {
@@ -2398,8 +2424,7 @@ namespace ts {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
                 }
             }
-
-            return result;
+            return projectReferences;
         }
 
         function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
@@ -2421,8 +2446,8 @@ namespace ts {
             JSON.stringify(excludeSpecs || []));
     }
 
-    function shouldReportNoInputFiles(result: ExpandResult, canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
-        return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
+    function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
+        return fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
     }
 
     /*@internal*/
@@ -2431,9 +2456,9 @@ namespace ts {
     }
 
     /*@internal*/
-    export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+    export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
         const existingErrors = configParseDiagnostics.length;
-        if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {
+        if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
             configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
         }
         else {
@@ -2905,56 +2930,9 @@ namespace ts {
     const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
 
     /**
-     * Expands an array of file specifications.
-     *
-     * @param filesSpecs The literal file names to include.
-     * @param includeSpecs The wildcard file specifications to include.
-     * @param excludeSpecs The wildcard file specifications to exclude.
-     * @param basePath The base path for any relative file specifications.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param errors An array for diagnostic reporting.
-     */
-    function matchFileNames(
-        filesSpecs: readonly string[] | undefined,
-        includeSpecs: readonly string[] | undefined,
-        excludeSpecs: readonly string[] | undefined,
-        basePath: string,
-        options: CompilerOptions,
-        host: ParseConfigHost,
-        errors: Push<Diagnostic>,
-        extraFileExtensions: readonly FileExtensionInfo[],
-        jsonSourceFile: TsConfigSourceFile | undefined
-    ): ExpandResult {
-        basePath = normalizePath(basePath);
-        let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
-
-        // The exclude spec list is converted into a regular expression, which allows us to quickly
-        // test whether a file or directory should be excluded before recursively traversing the
-        // file system.
-
-        if (includeSpecs) {
-            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
-        }
-
-        if (excludeSpecs) {
-            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*allowTrailingRecursion*/ true, jsonSourceFile, "exclude");
-        }
-
-        // Wildcard directories (provided as part of a wildcard path) are stored in a
-        // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
-        // or a recursive directory. This information is used by filesystem watchers to monitor for
-        // new entries in these paths.
-        const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
-
-        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
-        return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
-    }
-
-    /**
      * Gets the file names from the provided config file specs that contain, files, include, exclude and
      * other properties needed to resolve the file names
-     * @param spec The config file specs extracted with file names to include, wildcards to include/exclude and other details
+     * @param configFileSpecs The config file specs extracted with file names to include, wildcards to include/exclude and other details
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
@@ -2962,12 +2940,12 @@ namespace ts {
      */
     /* @internal */
     export function getFileNamesFromConfigSpecs(
-        spec: ConfigFileSpecs,
+        configFileSpecs: ConfigFileSpecs,
         basePath: string,
         options: CompilerOptions,
         host: ParseConfigHost,
         extraFileExtensions: readonly FileExtensionInfo[] = emptyArray
-    ): ExpandResult {
+    ): string[] {
         basePath = normalizePath(basePath);
 
         const keyMapper = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -2986,7 +2964,7 @@ namespace ts {
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard of *.json kind
         const wildCardJsonFileMap = new Map<string, string>();
-        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
+        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs } = configFileSpecs;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -3047,11 +3025,7 @@ namespace ts {
         const literalFiles = arrayFrom(literalFileMap.values());
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
-        return {
-            fileNames: literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values())),
-            wildcardDirectories,
-            spec
-        };
+        return literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values()));
     }
 
     /* @internal */
@@ -3110,7 +3084,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: readonly string[] | undefined, exclude: readonly string[] | undefined, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+    function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
