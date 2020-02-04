@@ -14715,7 +14715,7 @@ namespace ts {
                 }
             }
             else {
-                if (source.flags !== target.flags || source.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.NonPrimitive | TypeFlags.TypeParameter)) return false;
+                if (!(source.flags === target.flags && source.flags & TypeFlags.Substructure)) return false;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
@@ -15054,6 +15054,12 @@ namespace ts {
                 let source = getNormalizedType(originalSource, /*writing*/ false);
                 let target = getNormalizedType(originalTarget, /*writing*/ true);
 
+                if (source === target) return Ternary.True;
+
+                if (relation === identityRelation) {
+                    return isIdenticalTo(source, target);
+                }
+
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
                 // First, see if we're even relating an object type to a union.
@@ -15067,15 +15073,9 @@ namespace ts {
                     (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
                     const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
                     if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                        if (source === nullStrippedTarget) return Ternary.True;
                         target = nullStrippedTarget;
                     }
-                }
-
-                // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
-                if (source === target) return Ternary.True;
-
-                if (relation === identityRelation) {
-                    return isIdenticalTo(source, target);
                 }
 
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
@@ -15223,19 +15223,18 @@ namespace ts {
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
-                let result: Ternary;
                 const flags = source.flags & target.flags;
-                if (flags & TypeFlags.Object || flags & TypeFlags.IndexedAccess || flags & TypeFlags.Conditional || flags & TypeFlags.Index || flags & TypeFlags.Substitution) {
-                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None);
+                if (!(flags & TypeFlags.Substructure)) {
+                    return Ternary.False;
                 }
-                if (flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                    if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
-                        if (result &= eachTypeRelatedToSomeType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source)) {
-                            return result;
-                        }
+                if (flags & TypeFlags.UnionOrIntersection) {
+                    let result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target);
+                    if (result) {
+                        result &= eachTypeRelatedToSomeType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source);
                     }
+                    return result;
                 }
-                return Ternary.False;
+                return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None);
             }
 
             function getTypeOfPropertyInTypes(types: Type[], name: __String) {
