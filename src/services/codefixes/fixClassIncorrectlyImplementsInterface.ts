@@ -33,7 +33,7 @@ namespace ts.codefix {
         return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
     }
 
-    function symbolPointsToNonPrivateMember (symbol: Symbol) {
+    function symbolPointsToNonPrivateMember(symbol: Symbol) {
         return !symbol.valueDeclaration || !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
     }
 
@@ -83,7 +83,7 @@ namespace ts.codefix {
         }
     }
 
-    function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
+    function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
         const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
         if (!heritageClauseNode) return createSymbolTable();
         const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;

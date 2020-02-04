@@ -54,7 +54,7 @@ namespace Utils {
     export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
-        return <any>(function(this: any, ...args: any[]) {
+        return <any>(function (this: any, ...args: any[]) {
             const key = memoKey(...args);
             if (cache.has(key)) {
                 return cache.get(key);
