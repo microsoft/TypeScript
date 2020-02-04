@@ -310,24 +310,17 @@ namespace ts.codefix {
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
-            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, importAdder, sourceFile, declaration, type)) {
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, importAdder, sourceFile, declaration, type, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
         }
     }
 
-    function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type): boolean {
-        if (isLiteralImportTypeNode(typeNode) && typeNode.qualifier && type.symbol) {
-            // Replace 'import("./a").SomeType' with 'SomeType' and an actual import if possible
-            const moduleSymbol = find(type.symbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)?.getSourceFile().symbol;
-            // Symbol for the left-most thing after the dot
-            if (moduleSymbol) {
-                const symbol = getFirstIdentifier(typeNode.qualifier).symbol;
-                if (changes.tryInsertTypeAnnotation(sourceFile, declaration, createTypeReferenceNode(typeNode.qualifier, typeNode.typeArguments))) {
-                    importAdder.addImportFromExportedSymbol(symbol);
-                    return true;
-                }
-            }
+    function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, scriptTarget: ScriptTarget): boolean {
+        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeReference)) {
+            forEach(importableReference.symbols, importAdder.addImportFromExportedSymbol);
+            return true;
         }
         return false;
     }

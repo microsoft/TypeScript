@@ -57,7 +57,9 @@ namespace ts.codefix {
         function addImportFromExportedSymbol(exportedSymbol: Symbol) {
             const moduleSymbol = Debug.assertDefined(exportedSymbol.parent);
             const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
-            const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, sourceFile, compilerOptions, program.getTypeChecker(), program.getSourceFiles());
+            const checker = program.getTypeChecker();
+            const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
+            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, sourceFile, compilerOptions, checker, program.getSourceFiles());
             const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, /*position*/ undefined, host, preferences);
             addImport({ fixes: [fix], symbolName });
         }
