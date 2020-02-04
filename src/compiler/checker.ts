@@ -14727,9 +14727,13 @@ namespace ts {
             return getObjectFlags(source) & ObjectFlags.JsxAttributes && !isUnhyphenatedJsxName(sourceProp.escapedName);
         }
 
+        function normalizeTypeReference(type: TypeReference) {
+            return createTypeReference(type.target, getTypeArguments(type));
+        }
+
         function getNormalizedType(type: Type, writing: boolean): Type {
             return isFreshLiteralType(type) ? (<FreshableType>type).regularType :
-                getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
+                getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? normalizeTypeReference(<TypeReference>type) :
                 type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                 type;
@@ -16707,11 +16711,17 @@ namespace ts {
             return result;
         }
 
+        function getCanonicalIdentityType(type: Type) {
+            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? normalizeTypeReference(<TypeReference>type) : type;
+        }
+
         /**
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
         function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: Map<RelationComparisonResult>) {
+            source = getCanonicalIdentityType(source);
+            target = getCanonicalIdentityType(target);
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
