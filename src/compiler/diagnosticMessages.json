@@ -1135,6 +1135,14 @@
         "category": "Error",
         "code": 1380
     },
+    "Unexpected token. Did you mean `{'}'}` or `&rbrace;`?": {
+        "category": "Error",
+        "code": 1381
+    },
+    "Unexpected token. Did you mean `{'>'}` or `&gt;`?": {
+        "category": "Error",
+        "code": 1382
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
