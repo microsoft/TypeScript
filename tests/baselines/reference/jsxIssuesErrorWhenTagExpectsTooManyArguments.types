@@ -1,0 +1,48 @@
+=== tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : typeof React
+
+interface MyProps {
+    x: number;
+>x : number
+}
+
+function MyComp(props: MyProps, context: any, bad: any, verybad: any) {
+>MyComp : (props: MyProps, context: any, bad: any, verybad: any) => JSX.Element
+>props : MyProps
+>context : any
+>bad : any
+>verybad : any
+
+    return <div></div>;
+><div></div> : JSX.Element
+>div : any
+>div : any
+}
+
+const a = <MyComp x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>a : JSX.Element
+><MyComp x={2}/> : JSX.Element
+>MyComp : (props: MyProps, context: any, bad: any, verybad: any) => JSX.Element
+>x : number
+>2 : 2
+
+function MyComp2(props: MyProps, context: any) {
+>MyComp2 : (props: MyProps, context: any) => JSX.Element
+>props : MyProps
+>context : any
+
+    return <div></div>
+><div></div> : JSX.Element
+>div : any
+>div : any
+}
+const b  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
+>b : JSX.Element
+><MyComp2 x={2}/> : JSX.Element
+>MyComp2 : (props: MyProps, context: any) => JSX.Element
+>x : number
+>2 : 2
+

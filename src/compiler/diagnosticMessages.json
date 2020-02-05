@@ -4280,6 +4280,10 @@
         "category": "Message",
         "code": 6228
     },
+    "Function-like tag expects more arguments than the JSX factory can provide.": {
+        "category": "Error",
+        "code": 6229
+    },
 
     "Projects to reference": {
         "category": "Message",

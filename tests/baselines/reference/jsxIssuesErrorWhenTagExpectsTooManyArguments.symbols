@@ -1,0 +1,46 @@
+=== tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 6))
+
+interface MyProps {
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+
+    x: number;
+>x : Symbol(MyProps.x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 4, 19))
+}
+
+function MyComp(props: MyProps, context: any, bad: any, verybad: any) {
+>MyComp : Symbol(MyComp, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 6, 1))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 16))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 31))
+>bad : Symbol(bad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 45))
+>verybad : Symbol(verybad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 55))
+
+    return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+}
+
+const a = <MyComp x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>a : Symbol(a, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 12, 5))
+>MyComp : Symbol(MyComp, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 6, 1))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 12, 17))
+
+function MyComp2(props: MyProps, context: any) {
+>MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 12, 26))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 17))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 32))
+
+    return <div></div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+}
+const b  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
+>b : Symbol(b, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 17, 5))
+>MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 12, 26))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 17, 19))
+
