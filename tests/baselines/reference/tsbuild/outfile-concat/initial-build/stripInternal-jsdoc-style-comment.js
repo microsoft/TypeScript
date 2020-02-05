@@ -17,7 +17,7 @@
 
 12:01:00 AM - Building project '/src/third/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/2/second-output.d.ts]
@@ -5274,7 +5274,7 @@ declare var c: C;
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-"stripInternal": true
+    "stripInternal": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true
   },

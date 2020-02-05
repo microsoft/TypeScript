@@ -298,7 +298,7 @@ declare var Function: FunctionConstructor;
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
  */
-type ThisParameterType<T> = T extends (this: unknown, ...args: any[]) => any ? unknown : T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
 
 /**
  * Removes the 'this' parameter from a function type.
@@ -682,8 +682,8 @@ interface Math {
     /** Returns a pseudorandom number between 0 and 1. */
     random(): number;
     /**
-     * Returns a supplied numeric expression rounded to the nearest number.
-     * @param x The value to be rounded to the nearest number.
+     * Returns a supplied numeric expression rounded to the nearest integer.
+     * @param x The value to be rounded to the nearest integer.
      */
     round(x: number): number;
     /**
@@ -873,12 +873,12 @@ interface DateConstructor {
     /**
      * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
      * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
-     * @param month The month as an number between 0 and 11 (January to December).
-     * @param date The date as an number between 1 and 31.
-     * @param hours Must be supplied if minutes is supplied. An number from 0 to 23 (midnight to 11pm) that specifies the hour.
-     * @param minutes Must be supplied if seconds is supplied. An number from 0 to 59 that specifies the minutes.
-     * @param seconds Must be supplied if milliseconds is supplied. An number from 0 to 59 that specifies the seconds.
-     * @param ms An number from 0 to 999 that specifies the milliseconds.
+     * @param month The month as a number between 0 and 11 (January to December).
+     * @param date The date as a number between 1 and 31.
+     * @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+     * @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+     * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+     * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
     UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
     now(): number;
@@ -966,7 +966,7 @@ declare var Error: ErrorConstructor;
 interface EvalError extends Error {
 }
 
-interface EvalErrorConstructor {
+interface EvalErrorConstructor extends ErrorConstructor {
     new(message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
@@ -977,7 +977,7 @@ declare var EvalError: EvalErrorConstructor;
 interface RangeError extends Error {
 }
 
-interface RangeErrorConstructor {
+interface RangeErrorConstructor extends ErrorConstructor {
     new(message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
@@ -988,7 +988,7 @@ declare var RangeError: RangeErrorConstructor;
 interface ReferenceError extends Error {
 }
 
-interface ReferenceErrorConstructor {
+interface ReferenceErrorConstructor extends ErrorConstructor {
     new(message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
@@ -999,7 +999,7 @@ declare var ReferenceError: ReferenceErrorConstructor;
 interface SyntaxError extends Error {
 }
 
-interface SyntaxErrorConstructor {
+interface SyntaxErrorConstructor extends ErrorConstructor {
     new(message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
@@ -1010,7 +1010,7 @@ declare var SyntaxError: SyntaxErrorConstructor;
 interface TypeError extends Error {
 }
 
-interface TypeErrorConstructor {
+interface TypeErrorConstructor extends ErrorConstructor {
     new(message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
@@ -1021,7 +1021,7 @@ declare var TypeError: TypeErrorConstructor;
 interface URIError extends Error {
 }
 
-interface URIErrorConstructor {
+interface URIErrorConstructor extends ErrorConstructor {
     new(message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;

@@ -41,11 +41,11 @@ function F() {
 >F : typeof F
 }
 F.prototype = {
->F.prototype = {    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; [_str]: string; }
->F.prototype : { [_sym]: string; [_str]: string; }
+>F.prototype = {    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
+>F.prototype : { [_sym]: string; "my-fake-sym": string; }
 >F : typeof F
->prototype : { [_sym]: string; [_str]: string; }
->{    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; [_str]: string; }
+>prototype : { [_sym]: string; "my-fake-sym": string; }
+>{    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
 
     [_sym]: "ok",
 >[_sym] : string
@@ -78,7 +78,7 @@ module.exports.F = F;
 >module.exports.F = F : typeof F
 >module.exports.F : typeof F
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5")
 >F : typeof F
 >F : typeof F
@@ -87,7 +87,7 @@ module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5")
->module : { "tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5"); }
+>module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5")
 >S : unique symbol
 >_sym : unique symbol

@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        function createHost(files: readonly File[], rootNames: readonly string[]) {
+        function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
             const host = createServerHost(files);
 
             // ts build should succeed
@@ -68,7 +68,9 @@ namespace ts.projectSystem {
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
-                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
                 const { file: myConstFile, start: myConstStart, end: myConstEnd } = protocolFileSpanFromSubstring({
                     file: containerCompositeExec[1],
                     text: "myConst",
@@ -84,18 +86,68 @@ namespace ts.projectSystem {
                     contextText: "export const myConst = 30;"
                 });
                 const { file: _, ...renameTextOfMyConstInLib } = locationOfMyConstInLib;
+                const locationOfMyConstInExec = protocolFileSpanWithContextFromSubstring({
+                    file: containerExec[1],
+                    text: "myConst"
+                });
+                const { file: myConstInExecFile, ...renameTextOfMyConstInExec } = locationOfMyConstInExec;
                 assert.deepEqual(response.locs, [
                     { file: locationOfMyConstInLib.file, locs: [renameTextOfMyConstInLib] },
-                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] }
+                    { file: myConstFile, locs: [{ start: myConstStart, end: myConstEnd }] },
+                    { file: myConstInExecFile, locs: [renameTextOfMyConstInExec] },
                 ]);
+                checkNumberOfProjects(service, { configuredProjects: 4 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
+            });
+
+            it("ancestor and project ref management", () => {
+                const tempFile: File = {
+                    path: `/user/username/projects/temp/temp.ts`,
+                    content: "let x = 10"
+                };
+                const host = createHost(files.concat([tempFile]), [containerConfig.path]);
+                const session = createSession(host);
+                openFilesForSession([containerCompositeExec[1]], session);
+                const service = session.getProjectService();
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 2, inferredProjects: 1 });
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+                session.executeCommandSeq<protocol.RenameRequest>({
+                    command: protocol.CommandTypes.Rename,
+                    arguments: {
+                        file: containerCompositeExec[1].path,
+                        ...locationOfMyConst
+                    }
+                });
+
+                // Ref projects are loaded
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+
+                // Close all files and open temp file, only inferred project should be alive
+                service.closeClientFile(containerCompositeExec[1].path);
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { inferredProjects: 1 });
             });
         });
 
         describe("with main and depedency project", () => {
-            const projectLocation = "/user/username/projects/myproject";
-            const dependecyLocation = `${projectLocation}/dependency`;
-            const dependecyDeclsLocation = `${projectLocation}/decls`;
-            const mainLocation = `${projectLocation}/main`;
+            const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
+            const dependecyDeclsLocation = `${tscWatch.projectRoot}/decls`;
+            const mainLocation = `${tscWatch.projectRoot}/main`;
             const dependencyTs: File = {
                 path: `${dependecyLocation}/FnS.ts`,
                 content: `export function fn1() { }
@@ -137,11 +189,11 @@ fn5();
             };
 
             const randomFile: File = {
-                path: `${projectLocation}/random/random.ts`,
+                path: `${tscWatch.projectRoot}/random/random.ts`,
                 content: "let a = 10;"
             };
             const randomConfig: File = {
-                path: `${projectLocation}/random/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/random/tsconfig.json`,
                 content: "{}"
             };
             const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
@@ -1302,9 +1354,8 @@ function foo() {
         });
 
         it("reusing d.ts files from composite and non composite projects", () => {
-            const projectLocation = "/user/username/projects/myproject";
             const configA: File = {
-                path: `${projectLocation}/compositea/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositea/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1316,27 +1367,27 @@ function foo() {
                 })
             };
             const aTs: File = {
-                path: `${projectLocation}/compositea/a.ts`,
+                path: `${tscWatch.projectRoot}/compositea/a.ts`,
                 content: `import { b } from "@ref/compositeb/b";`
             };
             const a2Ts: File = {
-                path: `${projectLocation}/compositea/a2.ts`,
+                path: `${tscWatch.projectRoot}/compositea/a2.ts`,
                 content: `export const x = 10;`
             };
             const configB: File = {
-                path: `${projectLocation}/compositeb/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositeb/tsconfig.json`,
                 content: configA.content
             };
             const bTs: File = {
-                path: `${projectLocation}/compositeb/b.ts`,
+                path: `${tscWatch.projectRoot}/compositeb/b.ts`,
                 content: "export function b() {}"
             };
             const bDts: File = {
-                path: `${projectLocation}/dist/compositeb/b.d.ts`,
+                path: `${tscWatch.projectRoot}/dist/compositeb/b.d.ts`,
                 content: "export declare function b(): void;"
             };
             const configC: File = {
-                path: `${projectLocation}/compositec/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/compositec/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1349,7 +1400,7 @@ function foo() {
                 })
             };
             const cTs: File = {
-                path: `${projectLocation}/compositec/c.ts`,
+                path: `${tscWatch.projectRoot}/compositec/c.ts`,
                 content: aTs.content
             };
             const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
@@ -1374,6 +1425,407 @@ function foo() {
             host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
             assert.isTrue(projectA.dirty);
             projectA.updateGraph();
+        });
+
+        describe("when references are monorepo like with symlinks", () => {
+            interface Packages {
+                bPackageJson: File;
+                aTest: File;
+                bFoo: File;
+                bBar: File;
+                bSymlink: SymLink;
+            }
+            function verifySymlinkScenario(packages: () => Packages) {
+                describe("when solution is not built", () => {
+                    it("with preserveSymlinks turned off", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ false, {});
+                    });
+
+                    it("with preserveSymlinks turned on", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ false, { preserveSymlinks: true });
+                    });
+                });
+
+                describe("when solution is already built", () => {
+                    it("with preserveSymlinks turned off", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ true, {});
+                    });
+
+                    it("with preserveSymlinks turned on", () => {
+                        verifySession(packages(), /*alreadyBuilt*/ true, { preserveSymlinks: true });
+                    });
+                });
+            }
+
+            function verifySession({ bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: CompilerOptions) {
+                const aConfig = config("A", extraOptions, ["../B"]);
+                const bConfig = config("B", extraOptions);
+                const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
+                const host = alreadyBuilt ?
+                    createHost(files, [aConfig.path]) :
+                    createServerHost(files);
+
+                // Create symlink in node module
+                const session = createSession(host, { canUseEvents: true });
+                openFilesForSession([aTest], session);
+                const service = session.getProjectService();
+                const project = service.configuredProjects.get(aConfig.path.toLowerCase())!;
+                assert.deepEqual(project.getAllProjectErrors(), []);
+                checkProjectActualFiles(
+                    project,
+                    [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
+                );
+                verifyGetErrRequest({
+                    host,
+                    session,
+                    expected: [
+                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
+                    ]
+                });
+                session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
+                    arguments: {
+                        changedFiles: [{
+                            fileName: aTest.path,
+                            textChanges: [{
+                                newText: "\n",
+                                start: { line: 5, offset: 1 },
+                                end: { line: 5, offset: 1 }
+                            }]
+                        }]
+                    }
+                });
+                verifyGetErrRequest({
+                    host,
+                    session,
+                    expected: [
+                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
+                    ]
+                });
+            }
+
+            function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
+                return {
+                    path: `${tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            outDir: "lib",
+                            rootDir: "src",
+                            composite: true,
+                            ...extraOptions
+                        },
+                        include: ["src"],
+                        ...(references ? { references: references.map(path => ({ path })) } : {})
+                    })
+                };
+            }
+
+            function file(packageName: string, fileName: string, content: string): File {
+                return {
+                    path: `${tscWatch.projectRoot}/packages/${packageName}/src/${fileName}`,
+                    content
+                };
+            }
+
+            function verifyMonoRepoLike(scope = "") {
+                describe("when packageJson has types field and has index.ts", () => {
+                    verifySymlinkScenario(() => ({
+                        bPackageJson: {
+                            path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                            content: JSON.stringify({
+                                main: "lib/index.js",
+                                types: "lib/index.d.ts"
+                            })
+                        },
+                        aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+import { bar } from '${scope}b/lib/bar';
+foo();
+bar();
+`),
+                        bFoo: file("B", "index.ts", `export function foo() { }`),
+                        bBar: file("B", "bar.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `${tscWatch.projectRoot}/node_modules/${scope}b`,
+                            symLink: `${tscWatch.projectRoot}/packages/B`
+                        }
+                    }));
+                });
+
+                describe("when referencing file from subFolder", () => {
+                    verifySymlinkScenario(() => ({
+                        bPackageJson: {
+                            path: `${tscWatch.projectRoot}/packages/B/package.json`,
+                            content: "{}"
+                        },
+                        aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+import { bar } from '${scope}b/lib/bar/foo';
+foo();
+bar();
+`),
+                        bFoo: file("B", "foo.ts", `export function foo() { }`),
+                        bBar: file("B", "bar/foo.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `${tscWatch.projectRoot}/node_modules/${scope}b`,
+                            symLink: `${tscWatch.projectRoot}/packages/B`
+                        }
+                    }));
+                });
+            }
+            describe("when package is not scoped", () => {
+                verifyMonoRepoLike();
+            });
+            describe("when package is scoped", () => {
+                verifyMonoRepoLike("@issue/");
+            });
+        });
+
+        it("when finding local reference doesnt load ancestor/sibling projects", () => {
+            const solutionLocation = "/user/username/projects/solution";
+            const solution: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: [
+                        { path: "./compiler" },
+                        { path: "./services" },
+                    ]
+                })
+            };
+            const compilerConfig: File = {
+                path: `${solutionLocation}/compiler/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        module: "none"
+                    },
+                    files: ["./types.ts", "./program.ts"]
+                })
+            };
+            const typesFile: File = {
+                path: `${solutionLocation}/compiler/types.ts`,
+                content: `
+                namespace ts {
+                    export interface Program {
+                        getSourceFiles(): string[];
+                    }
+                }`
+            };
+            const programFile: File = {
+                path: `${solutionLocation}/compiler/program.ts`,
+                content: `
+                namespace ts {
+                    export const program: Program = {
+                        getSourceFiles: () => [getSourceFile()]
+                    };
+                    function getSourceFile() { return "something"; }
+                }`
+            };
+            const servicesConfig: File = {
+                path: `${solutionLocation}/services/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./services.ts"],
+                    references: [
+                        { path: "../compiler" }
+                    ]
+                })
+            };
+            const servicesFile: File = {
+                path: `${solutionLocation}/services/services.ts`,
+                content: `
+                namespace ts {
+                    const result = program.getSourceFiles();
+                }`
+            };
+
+            const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openClientFile(programFile.path);
+            checkNumberOfProjects(service, { configuredProjects: 2 });
+            const compilerProject = service.configuredProjects.get(compilerConfig.path)!;
+            checkProjectActualFiles(compilerProject, [libFile.path, typesFile.path, programFile.path, compilerConfig.path]);
+            const solutionProject = service.configuredProjects.get(solution.path)!;
+            assert.isTrue(solutionProject.isInitialLoadPending());
+
+            // Find all references for getSourceFile
+            const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(programFile, "getSourceFile", { index: 1 })
+            }).response as protocol.ReferencesResponseBody;
+            assert.deepEqual(response, {
+                refs: [
+                    makeReferenceItem({
+                        file: programFile,
+                        text: "getSourceFile",
+                        options: { index: 1 },
+                        isDefinition: false,
+                        lineText: `                        getSourceFiles: () => [getSourceFile()]`,
+                    }),
+                    makeReferenceItem({
+                        file: programFile,
+                        text: "getSourceFile",
+                        options: { index: 2 },
+                        contextText: `function getSourceFile() { return "something"; }`,
+                        isDefinition: true,
+                        lineText: `                    function getSourceFile() { return "something"; }`,
+                    })
+                ],
+                symbolName: "getSourceFile",
+                symbolStartOffset: protocolLocationFromSubstring(programFile.content, "getSourceFile", { index: 1 }).offset,
+                symbolDisplayString: "function getSourceFile(): string"
+            });
+            // Shouldnt load more projects
+            checkNumberOfProjects(service, { configuredProjects: 2 });
+            assert.isTrue(solutionProject.isInitialLoadPending());
+
+            // Find all references for getSourceFiles
+            const getSourceFilesResponse = session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
+            }).response as protocol.ReferencesResponseBody;
+            assert.deepEqual(getSourceFilesResponse, {
+                refs: [
+                    makeReferenceItem({
+                        file: typesFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles(): string[];`,
+                        isDefinition: true,
+                        isWriteAccess: false,
+                        lineText: `                        getSourceFiles(): string[];`,
+                    }),
+                    makeReferenceItem({
+                        file: programFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles: () => [getSourceFile()]`,
+                        isDefinition: true,
+                        lineText: `                        getSourceFiles: () => [getSourceFile()]`,
+                    }),
+                    makeReferenceItem({
+                        file: servicesFile,
+                        text: "getSourceFiles",
+                        isDefinition: false,
+                        lineText: `                    const result = program.getSourceFiles();`,
+                    })
+                ],
+                symbolName: "getSourceFiles",
+                symbolStartOffset: protocolLocationFromSubstring(typesFile.content, "getSourceFiles").offset,
+                symbolDisplayString: "(method) ts.Program.getSourceFiles(): string[]"
+            });
+
+            // Should load more projects
+            checkNumberOfProjects(service, { configuredProjects: 3 });
+            assert.isFalse(solutionProject.isInitialLoadPending());
+            checkProjectActualFiles(solutionProject, [solution.path]);
+            checkProjectActualFiles(service.configuredProjects.get(servicesConfig.path)!, [servicesFile.path, servicesConfig.path, libFile.path, typesFile.path, programFile.path]);
+        });
+
+        it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
+            const solutionLocation = "/user/username/projects/solution";
+            const solution: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: [
+                        { path: "./compiler" },
+                        { path: "./services" },
+                    ]
+                })
+            };
+            const compilerConfig: File = {
+                path: `${solutionLocation}/compiler/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        module: "none",
+                        disableSolutionSearching: true
+                    },
+                    files: ["./types.ts", "./program.ts"]
+                })
+            };
+            const typesFile: File = {
+                path: `${solutionLocation}/compiler/types.ts`,
+                content: `
+                namespace ts {
+                    export interface Program {
+                        getSourceFiles(): string[];
+                    }
+                }`
+            };
+            const programFile: File = {
+                path: `${solutionLocation}/compiler/program.ts`,
+                content: `
+                namespace ts {
+                    export const program: Program = {
+                        getSourceFiles: () => [getSourceFile()]
+                    };
+                    function getSourceFile() { return "something"; }
+                }`
+            };
+            const servicesConfig: File = {
+                path: `${solutionLocation}/services/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true
+                    },
+                    files: ["./services.ts"],
+                    references: [
+                        { path: "../compiler" }
+                    ]
+                })
+            };
+            const servicesFile: File = {
+                path: `${solutionLocation}/services/services.ts`,
+                content: `
+                namespace ts {
+                    const result = program.getSourceFiles();
+                }`
+            };
+
+            const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openClientFile(programFile.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const compilerProject = service.configuredProjects.get(compilerConfig.path)!;
+            checkProjectActualFiles(compilerProject, [libFile.path, typesFile.path, programFile.path, compilerConfig.path]);
+
+            // Find all references
+            const getSourceFilesResponse = session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
+            }).response as protocol.ReferencesResponseBody;
+            assert.deepEqual(getSourceFilesResponse, {
+                refs: [
+                    makeReferenceItem({
+                        file: typesFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles(): string[];`,
+                        isDefinition: true,
+                        isWriteAccess: false,
+                        lineText: `                        getSourceFiles(): string[];`,
+                    }),
+                    makeReferenceItem({
+                        file: programFile,
+                        text: "getSourceFiles",
+                        contextText: `getSourceFiles: () => [getSourceFile()]`,
+                        isDefinition: true,
+                        lineText: `                        getSourceFiles: () => [getSourceFile()]`,
+                    }),
+                ],
+                symbolName: "getSourceFiles",
+                symbolStartOffset: protocolLocationFromSubstring(typesFile.content, "getSourceFiles").offset,
+                symbolDisplayString: "(method) ts.Program.getSourceFiles(): string[]"
+            });
+
+            // No new solutions/projects loaded
+            checkNumberOfProjects(service, { configuredProjects: 1 });
         });
     });
 }

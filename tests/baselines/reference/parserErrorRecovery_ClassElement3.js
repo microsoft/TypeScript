@@ -1,11 +1,11 @@
 //// [parserErrorRecovery_ClassElement3.ts]
 module M {
-   #
+   ¬
    class C {
    }
    @
    enum E {
-   #
+   ¬
 
 //// [parserErrorRecovery_ClassElement3.js]
 var M;

@@ -248,6 +248,18 @@ namespace ts.textChanges {
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
+        public pushRaw(sourceFile: SourceFile, change: FileTextChanges) {
+            Debug.assertEqual(sourceFile.fileName, change.fileName);
+            for (const c of change.textChanges) {
+                this.changes.push({
+                    kind: ChangeKind.Text,
+                    sourceFile,
+                    text: c.newText,
+                    range: createTextRangeFromSpan(c.span),
+                });
+            }
+        }
+
         public deleteRange(sourceFile: SourceFile, range: TextRange): void {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
         }
@@ -383,12 +395,12 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): boolean {
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
                 if (!endNode) {
-                    if (!isArrowFunction(node)) return; // Function missing parentheses, give up
+                    if (!isArrowFunction(node)) return false; // Function missing parentheses, give up
                     // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
                     endNode = first(node.parameters);
                 }
@@ -398,6 +410,7 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+            return true;
         }
 
         public tryInsertThisTypeAnnotation(sourceFile: SourceFile, node: ThisTypeAnnotatable, type: TypeNode): void {
@@ -464,32 +477,69 @@ namespace ts.textChanges {
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
             this.insertNodeAtStartWorker(sourceFile, cls, newElement);
         }
+
         public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
             this.insertNodeAtStartWorker(sourceFile, obj, newElement);
         }
 
         private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
-            const clsStart = cls.getStart(sourceFile);
-            const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
-                + this.formatContext.options.indentSize!;
-            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, { indentation, ...this.getInsertNodeAtStartPrefixSuffix(sourceFile, cls) });
+            const indentation = this.guessIndentationFromExistingMembers(sourceFile, cls) ?? this.computeIndentationForNewMember(sourceFile, cls);
+            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, cls, indentation));
         }
 
-        private getInsertNodeAtStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): { prefix: string, suffix: string } {
-            const comma = isObjectLiteralExpression(cls) ? "," : "";
-            if (getMembersOrProperties(cls).length === 0) {
-                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile })) {
-                    // For `class C {\n}`, don't add the trailing "\n"
-                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassOrObjectBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
-                    return { prefix: this.newLineCharacter, suffix: comma + (shouldSuffix ? this.newLineCharacter : "") };
+        /**
+         * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
+         * new lines and must share the same indentation.
+         */
+        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+            let indentation: number | undefined;
+            let lastRange: TextRange = cls;
+            for (const member of getMembersOrProperties(cls)) {
+                if (rangeStartPositionsAreOnSameLine(lastRange, member, sourceFile)) {
+                    // each indented member must be on a new line
+                    return undefined;
                 }
-                else {
-                    return { prefix: "", suffix: comma + this.newLineCharacter };
+                const memberStart = member.getStart(sourceFile);
+                const memberIndentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(memberStart, sourceFile), memberStart, sourceFile, this.formatContext.options);
+                if (indentation === undefined) {
+                    indentation = memberIndentation;
                 }
+                else if (memberIndentation !== indentation) {
+                    // indentation of multiple members is not consistent
+                    return undefined;
+                }
+                lastRange = member;
             }
-            else {
-                return { prefix: this.newLineCharacter, suffix: comma };
-            }
+            return indentation;
+        }
+
+        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+            const clsStart = cls.getStart(sourceFile);
+            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
+                + (this.formatContext.options.indentSize ?? 4);
+        }
+
+        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, indentation: number): InsertNodeOptions {
+            // Rules:
+            // - Always insert leading newline.
+            // - For object literals:
+            //   - Add a trailing comma if there are existing members in the node, or the source file is not a JSON file
+            //     (because trailing commas are generally illegal in a JSON file).
+            //   - Add a leading comma if the source file is not a JSON file, there are existing insertions,
+            //     and the node is empty (because we didn't add a trailing comma per the previous rule).
+            // - Only insert a trailing newline if body is single-line and there are no other insertions for the node.
+            //   NOTE: This is handled in `finishClassesWithNodesInsertedAtStart`.
+
+            const members = getMembersOrProperties(cls);
+            const isEmpty = members.length === 0;
+            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
+            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
+            return {
+                indentation,
+                prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
+                suffix: insertTrailingComma ? "," : ""
+            };
         }
 
         public insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void {
@@ -530,6 +580,7 @@ namespace ts.textChanges {
                 prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
             };
         }
+
         private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -712,9 +763,16 @@ namespace ts.textChanges {
         private finishClassesWithNodesInsertedAtStart(): void {
             this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
-                // For `class C { }` remove the whitespace inside the braces.
-                if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
-                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                if (openBraceEnd !== undefined && closeBraceEnd !== undefined) {
+                    const isEmpty = getMembersOrProperties(node).length === 0;
+                    const isSingleLine = positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile);
+                    if (isEmpty && isSingleLine && openBraceEnd !== closeBraceEnd - 1) {
+                        // For `class C { }` remove the whitespace inside the braces.
+                        this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
+                    }
+                    if (isSingleLine) {
+                        this.insertText(sourceFile, closeBraceEnd - 1, this.newLineCharacter);
+                    }
                 }
             });
         }
@@ -770,8 +828,10 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number, number] {
-        return [findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile)!.end, findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)!.end];
+    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
+        const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
+        const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
+        return [open?.end, close?.end];
     }
     function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
         return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
@@ -1092,23 +1152,46 @@ namespace ts.textChanges {
             advancePastLineBreak();
         }
 
-        // For a source file, it is possible there are detached comments we should not skip
-        let ranges = getLeadingCommentRanges(text, position);
+        const ranges = getLeadingCommentRanges(text, position);
         if (!ranges) return position;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0].pos)) {
-            position = ranges[0].end;
-            advancePastLineBreak();
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
+
+        // Find the first attached comment to the first node and add before it
+        let lastComment: { range: CommentRange; pinnedOrTripleSlash: boolean; } | undefined;
+        let firstNodeLine: number | undefined;
         for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(text, range.pos, range.end)) {
-                position = range.end;
-                advancePastLineBreak();
+            if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
+                if (isPinnedComment(text, range.pos)) {
+                    lastComment = { range, pinnedOrTripleSlash: true };
+                    continue;
+                }
+            }
+            else if (isRecognizedTripleSlashComment(text, range.pos, range.end)) {
+                lastComment = { range, pinnedOrTripleSlash: true };
                 continue;
             }
-            break;
+
+            if (lastComment) {
+                // Always insert after pinned or triple slash comments
+                if (lastComment.pinnedOrTripleSlash) break;
+
+                // There was a blank line between the last comment and this comment.
+                // This comment is not part of the copyright comments
+                const commentLine = sourceFile.getLineAndCharacterOfPosition(range.pos).line;
+                const lastCommentEndLine = sourceFile.getLineAndCharacterOfPosition(lastComment.range.end).line;
+                if (commentLine >= lastCommentEndLine + 2) break;
+            }
+
+            if (sourceFile.statements.length) {
+                if (firstNodeLine === undefined) firstNodeLine = sourceFile.getLineAndCharacterOfPosition(sourceFile.statements[0].getStart()).line;
+                const commentEndLine = sourceFile.getLineAndCharacterOfPosition(range.end).line;
+                if (firstNodeLine < commentEndLine + 2) break;
+            }
+            lastComment = { range, pinnedOrTripleSlash: false };
+        }
+
+        if (lastComment) {
+            position = lastComment.range.end;
+            advancePastLineBreak();
         }
         return position;
 

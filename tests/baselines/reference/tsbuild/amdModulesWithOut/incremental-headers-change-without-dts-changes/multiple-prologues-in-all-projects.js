@@ -14,7 +14,7 @@
 
 12:08:00 AM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/app/module.d.ts.map]

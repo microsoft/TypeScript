@@ -12,7 +12,7 @@
 
 12:01:00 AM - Building project '/src/app/tsconfig.json'...
 
-exitCode:: 0
+exitCode:: ExitStatus.Success
 
 
 //// [/src/app/file3.ts]
@@ -1046,7 +1046,7 @@ declare function appfile4Spread(...b: number[]): void;
         "declarationMap": true,
         "outFile": "module.js"
     },
-    "exclude": ["module.d.ts"]
+    "exclude": ["module.d.ts"],
     "references": [
         { "path": "../lib", "prepend": true }
     ]
