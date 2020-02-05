@@ -1735,6 +1735,8 @@ namespace ts {
 
     export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export const enum TokenFlags {
@@ -1757,6 +1759,8 @@ namespace ts {
         /* @internal */
         UnicodeEscape = 1 << 10,
         /* @internal */
+        ContainsInvalidEscape = 1 << 11,    // e.g. `\uhello`
+        /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         /* @internal */
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
@@ -1775,16 +1779,22 @@ namespace ts {
     export interface TemplateHead extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
+        /* @internal */
+        templateFlags?: TokenFlags;
     }
 
     export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;

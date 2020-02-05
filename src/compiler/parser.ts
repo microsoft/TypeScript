@@ -1137,8 +1137,12 @@ namespace ts {
             return currentToken = scanner.reScanSlashToken();
         }
 
-        function reScanTemplateToken(): SyntaxKind {
-            return currentToken = scanner.reScanTemplateToken();
+        function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
+            return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
+        }
+
+        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+            return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2329,17 +2333,17 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseTemplateExpression(): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseTemplateHead();
+            template.head = parseTemplateHead(isTaggedTemplate);
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const list = [];
             const listPos = getNodePos();
 
             do {
-                list.push(parseTemplateSpan());
+                list.push(parseTemplateSpan(isTaggedTemplate));
             }
             while (last(list).literal.kind === SyntaxKind.TemplateMiddle);
 
@@ -2348,13 +2352,13 @@ namespace ts {
             return finishNode(template);
         }
 
-        function parseTemplateSpan(): TemplateSpan {
+        function parseTemplateSpan(isTaggedTemplate: boolean): TemplateSpan {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
             let literal: TemplateMiddle | TemplateTail;
             if (token() === SyntaxKind.CloseBraceToken) {
-                reScanTemplateToken();
+                reScanTemplateToken(isTaggedTemplate);
                 literal = parseTemplateMiddleOrTemplateTail();
             }
             else {
@@ -2369,7 +2373,10 @@ namespace ts {
             return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
-        function parseTemplateHead(): TemplateHead {
+        function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
+            if (isTaggedTemplate) {
+                reScanTemplateHeadOrNoSubstitutionTemplate();
+            }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
             return <TemplateHead>fragment;
@@ -2411,6 +2418,10 @@ namespace ts {
             // parent unary expression.
             if (node.kind === SyntaxKind.NumericLiteral) {
                 (<NumericLiteral>node).numericLiteralFlags = scanner.getTokenFlags() & TokenFlags.NumericLiteralFlags;
+            }
+
+            if (isTemplateLiteralKind(node.kind)) {
+                (<TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral>node).templateFlags = scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape;
             }
 
             nextToken();
@@ -4772,8 +4783,8 @@ namespace ts {
             tagExpression.questionDotToken = questionDotToken;
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
-                : parseTemplateExpression();
+                ? (reScanTemplateHeadOrNoSubstitutionTemplate(), <NoSubstitutionTemplateLiteral>parseLiteralNode())
+                : parseTemplateExpression(/*isTaggedTemplate*/ true);
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
                 tagExpression.flags |= NodeFlags.OptionalChain;
             }
@@ -4945,7 +4956,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression();
+                    return parseTemplateExpression(/* isTaggedTemplate */ false);
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);

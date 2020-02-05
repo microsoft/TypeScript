@@ -3365,6 +3365,13 @@ namespace ts {
         return str.replace(templateSubstitutionRegExp, "\\${");
     }
 
+    /** @internal */
+    export function hasInvalidEscape(template: TemplateLiteral): boolean {
+        return template && !!(isNoSubstitutionTemplateLiteral(template)
+            ? template.templateFlags
+            : (template.head.templateFlags || some(template.templateSpans, span => !!span.literal.templateFlags)));
+    }
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
