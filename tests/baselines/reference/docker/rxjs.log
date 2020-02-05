@@ -1,54 +1,9 @@
 Exit Code: 1
 Standard output:
 
-> @reactivex/rxjs@X.X.X-alpha.0 build_all /rxjs
-> npm-run-all clean_dist copy_sources build_cjs build_esm5 build_esm2015 build_esm5_for_rollup build_umd build_types generate_packages
-> @reactivex/rxjs@X.X.X-alpha.0 clean_dist /rxjs
-> shx rm -rf ./dist
-> @reactivex/rxjs@X.X.X-alpha.0 copy_sources /rxjs
-> mkdirp dist && shx cp -r ./src/ ./dist/src
-> @reactivex/rxjs@X.X.X-alpha.0 build_cjs /rxjs
-> npm-run-all clean_dist_cjs compile_dist_cjs
-> @reactivex/rxjs@X.X.X-alpha.0 clean_dist_cjs /rxjs
-> shx rm -rf ./dist/cjs
-> @reactivex/rxjs@X.X.X-alpha.0 compile_dist_cjs /rxjs
-> tsc -p ./tsconfig/tsconfig.cjs.json
-node_modules/@types/node/index.d.ts(74,11): error TS2300: Duplicate identifier 'IteratorResult'.
-src/internal/operators/windowTime.ts(115,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
-  Type 'string' is not assignable to type 'number'.
-src/internal/operators/windowTime.ts(121,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
-  Type 'string' is not assignable to type 'number'.
-../typescript/package/lib/lib.es2015.iterable.d.ts(41,6): error TS2300: Duplicate identifier 'IteratorResult'.
-
 
 
 Standard error:
-npm ERR! code ELIFECYCLE
-npm ERR! errno 2
-npm ERR! @reactivex/rxjs@X.X.X-alpha.0 compile_dist_cjs: `tsc -p ./tsconfig/tsconfig.cjs.json`
-npm ERR! Exit status 2
-npm ERR! 
-npm ERR! Failed at the @reactivex/rxjs@X.X.X-alpha.0 compile_dist_cjs script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "compile_dist_cjs" exited with 2.
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @reactivex/rxjs@X.X.X-alpha.0 build_cjs: `npm-run-all clean_dist_cjs compile_dist_cjs`
-npm ERR! Exit status 1
-npm ERR! 
-npm ERR! Failed at the @reactivex/rxjs@X.X.X-alpha.0 build_cjs script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
-ERROR: "build_cjs" exited with 1.
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @reactivex/rxjs@X.X.X-alpha.0 build_all: `npm-run-all clean_dist copy_sources build_cjs build_esm5 build_esm2015 build_esm5_for_rollup build_umd build_types generate_packages`
-npm ERR! Exit status 1
-npm ERR! 
-npm ERR! Failed at the @reactivex/rxjs@X.X.X-alpha.0 build_all script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm ERR! missing script: build_all
 npm ERR! A complete log of this run can be found in:
 npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
