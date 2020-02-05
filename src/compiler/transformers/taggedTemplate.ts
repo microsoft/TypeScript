@@ -62,7 +62,7 @@ namespace ts {
         return createCall(tag, /*typeArguments*/ undefined, templateArguments);
     }
 
-    function createTemplateCooked (template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
+    function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
         return template.templateFlags ? createIdentifier("undefined") : createLiteral(template.text);
     }
 

@@ -321,7 +321,7 @@ namespace ts {
             return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
         }
 
-        function visitTaggedTemplateExpression (node: TaggedTemplateExpression) {
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             return processTaggedTemplateExpression(
                 context,
                 node,
