@@ -109,6 +109,8 @@ namespace ts {
          * Get the current directory of the program
          */
         getCurrentDirectory(): string;
+        /* @internal */
+        useCaseSensitiveFileNames(): boolean;
         /*@internal*/
         getCanonicalFileName(fileName: string): string;
         /*@internal*/

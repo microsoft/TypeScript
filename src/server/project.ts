@@ -1374,6 +1374,8 @@ namespace ts.server {
                 for (const file of sourceFiles) {
                     strBuilder += `\t${file.fileName}\n`;
                 }
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
             }
             return strBuilder;
         }

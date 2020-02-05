@@ -3743,6 +3743,7 @@ namespace ts {
         /* @internal */ isEmittedFile(file: string): boolean;
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
         /* @internal */ getCanonicalFileName(fileName: string): string;
+        /* @internal */ useCaseSensitiveFileNames(): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
