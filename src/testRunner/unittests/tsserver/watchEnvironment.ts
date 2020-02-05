@@ -286,6 +286,7 @@ namespace ts.projectSystem {
                     files,
                     f => f.path.toLowerCase(),
                     f => [{
+                        directoryName: f.path,
                         fallbackPollingInterval: f === configFile ? PollingInterval.High : PollingInterval.Medium,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -299,7 +300,8 @@ namespace ts.projectSystem {
                 arrayToMap(
                     ["/a/b", "/a/b/node_modules/@types"],
                     identity,
-                    () => [{
+                    directoryName => [{
+                        directoryName,
                         fallbackPollingInterval: PollingInterval.Medium,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -337,7 +339,10 @@ namespace ts.projectSystem {
                 arrayToMap(
                     files,
                     f => f.path.toLowerCase(),
-                    () => [PollingInterval.Low]
+                    f => [{
+                        fileName: f.path,
+                        pollingInterval: PollingInterval.Low
+                    }]
                 )
             );
             checkWatchedDirectoriesDetailed(
@@ -348,7 +353,8 @@ namespace ts.projectSystem {
                 arrayToMap(
                     ["/a/b", "/a/b/node_modules/@types"],
                     identity,
-                    () => [{
+                    directoryName => [{
+                        directoryName,
                         fallbackPollingInterval: PollingInterval.Medium,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -380,15 +386,19 @@ namespace ts.projectSystem {
                 files.map(f => f.path).concat(commonFile1.path)
             );
 
-            const filePaths = files.map(f => f.path.toLowerCase());
+            const filePaths = files.map(f => f.path);
+            const allFilePaths = filePaths.concat(["/a/b", "/a/b/node_modules/@types"]);
             checkWatchedFilesDetailed(
                 host,
-                filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                allFilePaths.map(toLowerCase),
                 1,
                 arrayToMap(
-                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
-                    identity,
-                    f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                    allFilePaths,
+                    toLowerCase,
+                    fileName => [{
+                        fileName,
+                        pollingInterval: contains(filePaths, fileName) ? PollingInterval.Low : PollingInterval.Medium
+                    }]
                 )
             );
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -422,7 +432,10 @@ namespace ts.projectSystem {
                 arrayToMap(
                     [libFile, commonFile2],
                     f => f.path.toLowerCase(),
-                    () => [PollingInterval.Low]
+                    f => [{
+                        fileName: f.path,
+                        pollingInterval: PollingInterval.Low
+                    }]
                 )
             );
             // Config file with the setting with fsWatch
@@ -432,9 +445,10 @@ namespace ts.projectSystem {
                 1,
                 /*recursive*/ false,
                 arrayToMap(
-                    [configFile.path.toLowerCase()],
-                    identity,
-                    () => [{
+                    [configFile.path],
+                    toLowerCase,
+                    directoryName => [{
+                        directoryName,
                         fallbackPollingInterval: PollingInterval.High,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -448,7 +462,8 @@ namespace ts.projectSystem {
                 arrayToMap(
                     ["/a/b", "/a/b/node_modules/@types"],
                     identity,
-                    () => [{
+                    directoryName => [{
+                        directoryName,
                         fallbackPollingInterval: PollingInterval.Medium,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -482,7 +497,10 @@ namespace ts.projectSystem {
                 arrayToMap(
                     files,
                     f => f.path.toLowerCase(),
-                    () => [PollingInterval.Low]
+                    f => [{
+                        fileName: f.path,
+                        pollingInterval: PollingInterval.Low
+                    }]
                 )
             );
             checkWatchedDirectoriesDetailed(
@@ -493,7 +511,8 @@ namespace ts.projectSystem {
                 arrayToMap(
                     ["/a/b", "/a/b/node_modules/@types"],
                     identity,
-                    () => [{
+                    directoryName => [{
+                        directoryName,
                         fallbackPollingInterval: PollingInterval.Medium,
                         fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
                     }]
@@ -529,19 +548,79 @@ namespace ts.projectSystem {
                 files.map(f => f.path).concat(commonFile1.path)
             );
 
-            const filePaths = files.map(f => f.path.toLowerCase());
+            const filePaths = files.map(f => f.path);
+            const allFilePaths = filePaths.concat(["/a/b", "/a/b/node_modules/@types"]);
             checkWatchedFilesDetailed(
                 host,
-                filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
+                allFilePaths.map(toLowerCase),
                 1,
                 arrayToMap(
-                    filePaths.concat(["/a/b", "/a/b/node_modules/@types"]),
-                    identity,
-                    f => [contains(filePaths, f) ? PollingInterval.Low : PollingInterval.Medium]
+                    allFilePaths,
+                    toLowerCase,
+                    fileName => [{
+                        fileName,
+                        pollingInterval: contains(filePaths, fileName) ? PollingInterval.Low : PollingInterval.Medium
+                    }]
                 )
             );
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+        });
+    });
+
+    describe("unittests:: tsserver:: watchEnvironment:: file names on case insensitive file system", () => {
+        function verifyFileNames(projectRoot: string, projectRootPath: string) {
+            const keyMapper = (str: string) => str.replace(projectRoot, projectRootPath);
+            const file: File = {
+                path: `${projectRoot}/foo.ts`,
+                content: `import { foo } from "bar"`
+            };
+            const host = createServerHost([file, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
+            const expectedWatchFiles = [libFile.path, `${projectRoot}/tsconfig.json`, `${projectRoot}/jsconfig.json`];
+            checkWatchedFilesDetailed(
+                host,
+                expectedWatchFiles.map(keyMapper),
+                1,
+                arrayToMap(
+                    expectedWatchFiles,
+                    keyMapper,
+                    fileName => [{
+                        fileName,
+                        pollingInterval: PollingInterval.Low
+                    }]
+                )
+            );
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            const expectedWatchedDirectories = [`${projectRoot}/node_modules`, `${projectRoot}/node_modules/@types`];
+            checkWatchedDirectoriesDetailed(
+                host,
+                expectedWatchedDirectories.map(keyMapper),
+                1,
+                /*recursive*/ true,
+                arrayToMap(
+                    expectedWatchedDirectories,
+                    keyMapper,
+                    directoryName => [{
+                        directoryName,
+                        fallbackPollingInterval: PollingInterval.Medium,
+                        fallbackOptions: { watchFile: WatchFileKind.PriorityPollingInterval }
+                    }]
+                )
+            );
+        }
+
+        it("project with ascii file names", () => {
+            verifyFileNames("/User/userName/Projects/I", "/user/username/projects/i");
+        });
+
+        it("project with ascii file names with i", () => {
+            verifyFileNames("/User/userName/Projects/i", "/user/username/projects/i");
+        });
+
+        it("project with unicode file names", () => {
+            verifyFileNames("/User/userName/Projects/İ", "/user/username/projects/İ");
         });
     });
 }

@@ -190,25 +190,25 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/session.ts","pollingInterval":250}
 /user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/reexport/src/main:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -324,25 +324,25 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/session.ts","pollingInterval":250}
 /user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/reexport/src/main:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -459,24 +459,24 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/pure/session.ts","pollingInterval":250}
 /user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/reexport/src/main:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined

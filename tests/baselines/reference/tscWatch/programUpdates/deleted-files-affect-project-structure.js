@@ -71,13 +71,13 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/f1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/b/f2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f2.ts","pollingInterval":250}
 /a/c/f3.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/c/f3.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -112,11 +112,11 @@ Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /a/b/f1.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/f2.ts:
-  {"pollingInterval":250}
+  {"fileName":"/a/b/f2.ts","pollingInterval":250}
 
 FsWatches::
 

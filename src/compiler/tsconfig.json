@@ -5,7 +5,7 @@
     },
 
     "references": [
-        { "path": "../shims" },
+        { "path": "../shims" }
     ],
 
     "files": [
@@ -69,6 +69,6 @@
         "watch.ts",
         "watchPublic.ts",
         "tsbuild.ts",
-        "tsbuildPublic.ts",
+        "tsbuildPublic.ts"
     ]
 }

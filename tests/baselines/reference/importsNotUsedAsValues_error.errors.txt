@@ -1,12 +1,14 @@
 /b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 /c.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 /e.ts(1,1): error TS6192: All imports in import declaration are unused.
+/g.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 
 
 ==== /a.ts (0 errors) ====
     export default class {}
     export class A {}
     export type B = {};
+    export const enum C { One, Two }
     
 ==== /b.ts (1 errors) ====
     import { A, B } from './a'; // Error
@@ -35,3 +37,18 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6192: All imports in import declaration are unused.
     
+==== /f.ts (0 errors) ====
+    import { C } from './a';
+    import type { C as D } from './a';
+    C.One;
+    let c: D = C.Two;
+    let d: D.Two = C.Two;
+    console.log(c, d);
+    
+==== /g.ts (1 errors) ====
+    import { C } from './a';
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+    let c: C;
+    let d: C.Two;
+    console.log(c, d);
