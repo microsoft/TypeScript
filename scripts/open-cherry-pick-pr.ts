@@ -2,7 +2,7 @@
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 /// <reference types="node" />
 
-import Octokit = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 const {runSequence} = require("./run-sequence");
 import fs = require("fs");
 import path = require("path");
