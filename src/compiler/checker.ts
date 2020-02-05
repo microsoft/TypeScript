@@ -2530,7 +2530,7 @@ namespace ts {
                     : error(name, Diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName);
 
                 addRelatedInfo(diagnostic,
-                    createDiagnosticForNode(localSymbol.valueDeclaration, Diagnostics._0_is_declared_here, declarationName)
+                    createDiagnosticForNode(localSymbol.valueDeclaration ?? localSymbol.declarations[0], Diagnostics._0_is_declared_here, declarationName)
                 );
             }
             else {
