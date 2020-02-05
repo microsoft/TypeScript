@@ -60,8 +60,9 @@ namespace ts.moduleSpecifiers {
         files: readonly SourceFile[],
         preferences: UserPreferences = {},
         redirectTargetsMap: RedirectTargetsMap,
+        refFileMap?:  MultiMap<RefFile> | undefined
     ): string {
-        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile));
+        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile), refFileMap);
     }
 
     export function getNodeModulesPackageName(
@@ -85,12 +86,13 @@ namespace ts.moduleSpecifiers {
         host: ModuleSpecifierResolutionHost,
         files: readonly SourceFile[],
         redirectTargetsMap: RedirectTargetsMap,
-        preferences: Preferences
+        preferences: Preferences,
+        refFileMap?: MultiMap<RefFile> | undefined
     ): string {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
         return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions)) ||
-            getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
+            getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences, files, refFileMap);
     }
 
     /** Returns an import for each symlink and for the realpath. */
@@ -112,7 +114,7 @@ namespace ts.moduleSpecifiers {
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
-        return global.length ? global : modulePaths.map(moduleFileName => getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences));
+        return global.length ? global : modulePaths.map(moduleFileName => getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences, files));
     }
 
     interface Info {
@@ -126,13 +128,26 @@ namespace ts.moduleSpecifiers {
         return { getCanonicalFileName, sourceDirectory };
     }
 
-    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
+    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences, files: readonly SourceFile[], refFileMap?: MultiMap<RefFile> | undefined): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl || relativePreference === RelativePreference.Relative) {
             return relativePath;
+        }
+
+        if (refFileMap && relativePreference === RelativePreference.Auto) {
+            const references = refFileMap.get(getCanonicalFileName(moduleFileName));
+            const nonRelativeReference = forEach(
+                references,
+                ref => {
+                    if (ref.kind !== RefFileKind.ReferenceFile) return true;
+                    const file = find(files, file => file.path == ref.file)!;
+                    return !pathIsRelative(file.referencedFiles[ref.index].fileName);
+                }
+            );
+            if (!nonRelativeReference)  return relativePath
         }
 
         const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);

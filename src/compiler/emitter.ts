@@ -760,6 +760,7 @@ namespace ts {
             isSourceFileFromExternalLibrary: returnFalse,
             getResolvedProjectReferenceToRedirect: returnUndefined,
             isSourceOfProjectReferenceRedirect: returnFalse,
+            getRefFileMap: returnUndefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
@@ -798,7 +799,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+           
         };
         emitFiles(
             notImplementedResolver,

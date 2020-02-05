@@ -5862,6 +5862,7 @@ namespace ts {
         getCurrentDirectory(): string;
 
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
+        getRefFileMap(): MultiMap<RefFile> | undefined;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;

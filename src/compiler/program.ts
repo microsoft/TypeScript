@@ -1467,6 +1467,7 @@ namespace ts {
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
+                getRefFileMap: () => refFileMap,
                 getSourceFiles: program.getSourceFiles,
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
