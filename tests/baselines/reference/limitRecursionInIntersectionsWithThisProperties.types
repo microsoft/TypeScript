@@ -1,0 +1,27 @@
+=== tests/cases/compiler/limitRecursionInIntersectionsWithThisProperties.ts ===
+// 35804
+
+interface ITreeItem {    
+  Parent?: this;
+>Parent : this
+}
+
+type NodeWithId = ITreeItem & { Id?: number };
+>NodeWithId : NodeWithId
+>Id : number
+
+function getMaxId(items: NodeWithId[]) {
+>getMaxId : (items: NodeWithId[]) => void
+>items : NodeWithId[]
+}
+
+const nodes = [] as ITreeItem[];
+>nodes : ITreeItem[]
+>[] as ITreeItem[] : ITreeItem[]
+>[] : undefined[]
+
+getMaxId(nodes);
+>getMaxId(nodes) : void
+>getMaxId : (items: NodeWithId[]) => void
+>nodes : ITreeItem[]
+

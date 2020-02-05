@@ -1357,7 +1357,7 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                throw new Error(`The baseline file ${relativeFileName} has changed. \n\tSee it at: ${actualFileName}\n`);
             }
         }
 

@@ -300,6 +300,7 @@ namespace ts {
         let enumCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
+        let isRelatedToDepth = 0;
         let constraintDepth = 0;
         let currentNode: Node | undefined;
 
@@ -14770,7 +14771,10 @@ namespace ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
+            isRelatedToDepth = 0
             const result = isRelatedTo(source, target, /*reportErrors*/ !!errorNode, headMessage);
+            isRelatedToDepth = 0
+
             if (incompatibleStack.length) {
                 reportIncompatibleStack();
             }
@@ -15041,6 +15045,10 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+                isRelatedToDepth++;
+                if (isRelatedToDepth > 250) {
+                    return Ternary.Maybe;
+                }
                 // Normalize the source and target types: Turn fresh literal types into regular literal types,
                 // turn deferred type references into regular type references, simplify indexed access and
                 // conditional types, and resolve substitution types to either the substitution (on the source

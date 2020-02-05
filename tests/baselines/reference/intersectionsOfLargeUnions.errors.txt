@@ -1,8 +1,7 @@
-tests/cases/compiler/intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'T' cannot be used to index type 'HTMLElementTagNameMap'.
 tests/cases/compiler/intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'P' cannot be used to index type 'HTMLElementTagNameMap[T]'.
 
 
-==== tests/cases/compiler/intersectionsOfLargeUnions.ts (2 errors) ====
+==== tests/cases/compiler/intersectionsOfLargeUnions.ts (1 errors) ====
     // Repro from #23977
     
     export function assertIsElement(node: Node | null): node is Element {
@@ -24,8 +23,6 @@ tests/cases/compiler/intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'P
         T extends keyof ElementTagNameMap,
         P extends keyof ElementTagNameMap[T],
         V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
-                  ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type 'T' cannot be used to index type 'HTMLElementTagNameMap'.
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'HTMLElementTagNameMap[T]'.
         if (assertNodeTagName(node, tagName)) {
