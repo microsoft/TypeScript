@@ -5073,6 +5073,10 @@
         "category": "Message",
         "code": 90034
     },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
     "Declare a private field named '{0}'.": {
         "category": "Message",
         "code": 90053
