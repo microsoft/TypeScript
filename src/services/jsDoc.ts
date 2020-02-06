@@ -372,7 +372,7 @@ namespace ts.JsDoc {
             case SyntaxKind.PropertyDeclaration:
                 const init = (commentOwner as PropertyDeclaration).initializer;
                 if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
-                    return { commentOwner, parameters: init.parameters  };
+                    return { commentOwner, parameters: init.parameters };
                 }
         }
     }
