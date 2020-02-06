@@ -7010,6 +7010,13 @@ namespace ts {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
+                    function pushComment(text: string) {
+                        if (!margin) {
+                            margin = indent;
+                        }
+                        comments.push(text);
+                        indent += text.length;
+                    }
                     if (initialMargin !== undefined) {
                         // jump straight to saving comments if there is some initial indentation
                         if (initialMargin !== "") {
@@ -7092,14 +7099,6 @@ namespace ts {
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
                     return comments.length === 0 ? undefined : comments.join("");
-
-                    function pushComment(text: string) {
-                        if (!margin) {
-                            margin = indent;
-                        }
-                        comments.push(text);
-                        indent += text.length;
-                    }
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier) {
