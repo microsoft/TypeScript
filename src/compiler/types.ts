@@ -4348,9 +4348,6 @@ namespace ts {
         IncludesWildcard = Index,
         /* @internal */
         IncludesEmptyObject = IndexedAccess,
-        // The following flag is used for different purposes by maybeTypeOfKind
-        /* @internal */
-        GenericMappedType = Never,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -4454,6 +4451,14 @@ namespace ts {
         ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
         /* @internal */
         NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
+        /* @internal */
+        IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        /* @internal */
+        IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
+        /* @internal */
+        IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
+        /* @internal */
+        IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
