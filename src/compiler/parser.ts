@@ -7017,7 +7017,7 @@ namespace ts {
                         comments.push(text);
                         indent += text.length;
                     }
-                    if (initialMargin) {
+                    if (initialMargin !== undefined) {
                         // jump straight to saving comments if there is some initial indentation
                         pushComment(initialMargin);
                         state = JSDocState.SavingComments;
