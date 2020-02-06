@@ -2924,14 +2924,14 @@ namespace ts {
                 return false;
             }
 
-            if (shouldWriteLeadingLineTerminator(body, body.statements, ListFormat.PreserveLines)
-                || shouldWriteClosingLineTerminator(body, body.statements, ListFormat.PreserveLines)) {
+            if (getLeadingLineTerminatorCount(body, body.statements, ListFormat.PreserveLines)
+                || getClosingLineTerminatorCount(body, body.statements, ListFormat.PreserveLines)) {
                 return false;
             }
 
             let previousStatement: Statement | undefined;
             for (const statement of body.statements) {
-                if (shouldWriteSeparatingLineTerminator(previousStatement, statement, ListFormat.PreserveLines)) {
+                if (getSeparatingLineTerminatorCount(previousStatement, statement, ListFormat.PreserveLines) > 0) {
                     return false;
                 }
 
@@ -4002,8 +4002,9 @@ namespace ts {
                 // Write the opening line terminator or leading whitespace.
                 const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
                 let shouldEmitInterveningComments = mayEmitInterveningComments;
-                if (shouldWriteLeadingLineTerminator(parentNode, children!, format)) { // TODO: GH#18217
-                    writeLine();
+                const leadingLineTerminatorCount = getLeadingLineTerminatorCount(parentNode, children!, format); // TODO: GH#18217
+                if (leadingLineTerminatorCount) {
+                    writeLine(leadingLineTerminatorCount);
                     shouldEmitInterveningComments = false;
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
@@ -4042,7 +4043,8 @@ namespace ts {
                         recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                         // Write either a line terminator or whitespace to separate the elements.
-                        if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
+                        const separatingLineTerminatorCount = getSeparatingLineTerminatorCount(previousSibling, child, format);
+                        if (separatingLineTerminatorCount > 0) {
                             // If a synthesized node in a single-line list starts on a new
                             // line, we should increase the indent.
                             if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
@@ -4050,7 +4052,7 @@ namespace ts {
                                 shouldDecreaseIndentAfterEmit = true;
                             }
 
-                            writeLine();
+                            writeLine(separatingLineTerminatorCount);
                             shouldEmitInterveningComments = false;
                         }
                         else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
@@ -4105,8 +4107,9 @@ namespace ts {
                 recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                 // Write the closing line terminator or closing whitespace.
-                if (shouldWriteClosingLineTerminator(parentNode, children!, format)) {
-                    writeLine();
+                const closingLineTerminatorCount = getClosingLineTerminatorCount(parentNode, children!, format);
+                if (closingLineTerminatorCount) {
+                    writeLine(closingLineTerminatorCount);
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
                     writeSpace();
@@ -4176,8 +4179,10 @@ namespace ts {
             writer.writeProperty(s);
         }
 
-        function writeLine() {
-            writer.writeLine();
+        function writeLine(count = 1) {
+            for (let i = 0; i < count; i++) {
+                writer.writeLine(i > 0);
+            }
         }
 
         function increaseIndent() {
@@ -4256,75 +4261,65 @@ namespace ts {
             }
         }
 
-        function shouldWriteLeadingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return true;
-            }
-
-            if (format & ListFormat.PreserveLines) {
+        function getLeadingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
                 if (format & ListFormat.PreferNewLine) {
-                    return true;
+                    return 1;
                 }
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return !rangeIsOnSingleLine(parentNode, currentSourceFile!);
+                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
-                    return synthesizedNodeStartsOnNewLine(firstChild, format);
+                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild)) {
+                    return getLinesBetweenRangeEndAndRangeStart(parentNode, firstChild, currentSourceFile!);
                 }
-                else {
-                    return !rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile!);
+                else if (synthesizedNodeStartsOnNewLine(firstChild, format)) {
+                    return 1;
                 }
             }
-            else {
-                return false;
-            }
+            return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function shouldWriteSeparatingLineTerminator(previousNode: Node | undefined, nextNode: Node, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return true;
-            }
-            else if (format & ListFormat.PreserveLines) {
+        function getSeparatingLineTerminatorCount(previousNode: Node | undefined, nextNode: Node, format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
                 if (previousNode === undefined || nextNode === undefined) {
-                    return false;
+                    return 0;
                 }
-                else if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
-                    return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
+                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
+                    return getLinesBetweenRangeEndAndRangeStart(previousNode, nextNode, currentSourceFile!);
                 }
-                else {
-                    return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!);
+                else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
+                    return 1;
                 }
             }
-            else {
-                return getStartsOnNewLine(nextNode);
+            else if (getStartsOnNewLine(nextNode)) {
+                return 1;
             }
+            return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function shouldWriteClosingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
-            if (format & ListFormat.MultiLine) {
-                return (format & ListFormat.NoTrailingNewLine) === 0;
-            }
-            else if (format & ListFormat.PreserveLines) {
+        function getClosingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
+            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
                 if (format & ListFormat.PreferNewLine) {
-                    return true;
+                    return 1;
                 }
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return !rangeIsOnSingleLine(parentNode, currentSourceFile!);
+                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
-                    return synthesizedNodeStartsOnNewLine(lastChild, format);
+                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild)) {
+                    return getLinesBetweenRangeEndAndRangeStart(parentNode, lastChild, currentSourceFile!);
                 }
                 else {
-                    return !rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!);
+                    return Number(synthesizedNodeStartsOnNewLine(lastChild, format));
                 }
             }
-            else {
-                return false;
+            if (format & ListFormat.MultiLine) {
+                return (format & ListFormat.NoTrailingNewLine) === 0 ? 1 : 0;
             }
+            return 0;
         }
 
         function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {

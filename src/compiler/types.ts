@@ -3753,7 +3753,7 @@ namespace ts {
         writeParameter(text: string): void;
         writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
-        writeLine(): void;
+        writeLine(force?: boolean): void;
         increaseIndent(): void;
         decreaseIndent(): void;
         clear(): void;
@@ -6242,6 +6242,7 @@ namespace ts {
         /*@internal*/ writeBundleFileInfo?: boolean;
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
+        /*@internal*/ preserveNewlines?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 

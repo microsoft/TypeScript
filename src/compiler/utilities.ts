@@ -3569,8 +3569,8 @@ namespace ts {
             }
         }
 
-        function writeLine() {
-            if (!lineStart) {
+        function writeLine(force?: boolean) {
+            if (!lineStart || force) {
                 output += newLine;
                 lineCount++;
                 linePos = output.length;
@@ -4674,6 +4674,10 @@ namespace ts {
 
     export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
         return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
+    }
+
+    export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile)) - getLineOfLocalPosition(sourceFile, range1.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {

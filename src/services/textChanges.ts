@@ -923,7 +923,7 @@ namespace ts.textChanges {
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true, preserveNewlines: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
@@ -1053,8 +1053,8 @@ namespace ts.textChanges {
             writer.writeSymbol(s, sym);
             setLastNonTriviaPosition(s, /*force*/ false);
         }
-        function writeLine(): void {
-            writer.writeLine();
+        function writeLine(force?: boolean): void {
+            writer.writeLine(force);
         }
         function increaseIndent(): void {
             writer.increaseIndent();
