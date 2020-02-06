@@ -5465,6 +5465,14 @@
         "category": "Message",
         "code": 95099
     },
+    "Convert invalid character to its html entity code": {
+        "category": "Message",
+        "code": 95100
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95101
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
