@@ -13,7 +13,7 @@ function a0([a, b, [[c]]]: [number, number, string[][]]) { }
 a0([1, "string", [["world"]]);      // Error
 >a0([1, "string", [["world"]]) : void
 >a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->[1, "string", [["world"]] : (string | number | string[][])[]
+>[1, "string", [["world"]] : [number, string, string[][]]
 >1 : 1
 >"string" : "string"
 >[["world"]] : string[][]
@@ -23,7 +23,7 @@ a0([1, "string", [["world"]]);      // Error
 a0([1, 2, [["world"]], "string"]);  // Error
 >a0([1, 2, [["world"]], "string"]) : void
 >a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->[1, 2, [["world"]], "string"] : (string | number | string[][])[]
+>[1, 2, [["world"]], "string"] : [number, number, string[][], string]
 >1 : 1
 >2 : 2
 >[["world"]] : string[][]
@@ -183,7 +183,7 @@ c3({ b: true });   // Error, implied type is { b: number|string }.
 c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 >c5([1, 2, false, true]) : void
 >c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2, false, true] : (number | boolean)[]
+>[1, 2, false, true] : [number, number, boolean, boolean]
 >1 : 1
 >2 : 2
 >false : false
@@ -192,11 +192,11 @@ c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 >c6([1, 2, [["string"]]]) : void
 >c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
->[1, 2, [["string"]]] : (number | string[][])[]
+>[1, 2, [["string"]]] : [number, number, [[string]]]
 >1 : 1
 >2 : 2
->[["string"]] : string[][]
->["string"] : string[]
+>[["string"]] : [[string]]
+>["string"] : [string]
 >"string" : "string"
 
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)

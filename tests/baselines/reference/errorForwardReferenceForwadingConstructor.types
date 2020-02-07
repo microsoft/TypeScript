@@ -5,8 +5,8 @@ function f() {
 >f : () => void
 
     var d1 = new derived();
->d1 : any
->new derived() : any
+>d1 : derived
+>new derived() : derived
 >derived : typeof derived
 
     var d2 = new derived(4);
