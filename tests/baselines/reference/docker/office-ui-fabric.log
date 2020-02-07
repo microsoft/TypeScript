@@ -147,9 +147,9 @@ lerna info Executing command in 42 packages: "yarn run build"
 @uifabric/foundation: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @uifabric/icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 office-ui-fabric-react: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:commonjs'
+office-ui-fabric-react: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
-office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
+office-ui-fabric-react: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/office-ui-fabric-react/tsconfig.json"
 office-ui-fabric-react:     at ChildProcess.exithandler (child_process.js:295:12)
 office-ui-fabric-react:     at ChildProcess.emit (events.js:223:5)
 office-ui-fabric-react:     at ChildProcess.EventEmitter.emit (domain.js:498:23)
@@ -225,6 +225,6 @@ office-ui-fabric-react:                                 ~~~~~~~~~~~~~~~~~~~~
 office-ui-fabric-react: Found 22 errors.
 office-ui-fabric-react: [XX:XX:XX XM] x ------------------------------------
 office-ui-fabric-react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+office-ui-fabric-react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 office-ui-fabric-react: error Command failed with exit code 1.
 lerna ERR! yarn run build exited 1 in 'office-ui-fabric-react'
