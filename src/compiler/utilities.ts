@@ -4676,8 +4676,16 @@ namespace ts {
         return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
     }
 
-    export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
-        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile)) - getLineOfLocalPosition(sourceFile, range1.end);
+    export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
+        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments)) - getLineOfLocalPosition(sourceFile, range1.end);
+    }
+
+    export function getLinesBetweenRangeStartPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
+        return getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments)) - getLineOfLocalPosition(sourceFile, getStartPositionOfRange(range1, sourceFile));
+    }
+
+    export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return getLineOfLocalPosition(sourceFile, range2.end) - getLineOfLocalPosition(sourceFile, range1.end);
     }
 
     export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
@@ -4689,8 +4697,8 @@ namespace ts {
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
     }
 
-    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile) {
-        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
+    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments?: boolean) {
+        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
     }
 
     /**

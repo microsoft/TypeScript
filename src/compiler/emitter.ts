@@ -4271,8 +4271,9 @@ namespace ts {
                 if (firstChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild)) {
-                    return getLinesBetweenRangeEndAndRangeStart(parentNode, firstChild, currentSourceFile!);
+                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && firstChild.parent === parentNode) {
+                    const lines = getEffectiveLinesBetweenRanges(parentNode, firstChild, getLinesBetweenRangeStartPositions);
+                    return printerOptions.preserveNewlines ? lines : Math.min(lines, 1);
                 }
                 else if (synthesizedNodeStartsOnNewLine(firstChild, format)) {
                     return 1;
@@ -4286,8 +4287,9 @@ namespace ts {
                 if (previousNode === undefined || nextNode === undefined) {
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
-                    return getLinesBetweenRangeEndAndRangeStart(previousNode, nextNode, currentSourceFile!);
+                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
+                    const lines = getEffectiveLinesBetweenRanges(previousNode, nextNode, getLinesBetweenRangeEndAndRangeStart);
+                    return printerOptions.preserveNewlines ? lines : Math.min(lines, 1);
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
                     return 1;
@@ -4309,17 +4311,42 @@ namespace ts {
                 if (lastChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild)) {
-                    return getLinesBetweenRangeEndAndRangeStart(parentNode, lastChild, currentSourceFile!);
+                else if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && lastChild.parent === parentNode) {
+                    const lines = getLinesBetweenRangeEndPositions(lastChild, parentNode, currentSourceFile!);
+                    return printerOptions.preserveNewlines ? lines : Math.min(lines, 1);
                 }
-                else {
-                    return Number(synthesizedNodeStartsOnNewLine(lastChild, format));
+                else if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
+                    return 1;
                 }
             }
-            if (format & ListFormat.MultiLine) {
-                return (format & ListFormat.NoTrailingNewLine) === 0 ? 1 : 0;
+            if (format & ListFormat.MultiLine && !(format & ListFormat.NoTrailingNewLine)) {
+                return 1;
             }
             return 0;
+        }
+
+        function getEffectiveLinesBetweenRanges(
+            node1: TextRange,
+            node2: TextRange,
+            getLinesBetweenPositions: (range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeComments: boolean) => number
+        ) {
+            // We start by measuring the line difference from parentNode's start to node2's comments start,
+            // so that this is counted as a one line difference, not two:
+            //
+            //   function node1() {
+            //     // NODE2 COMMENT
+            //     node2;
+            const lines = getLinesBetweenPositions(node1, node2, currentSourceFile!, /*includeComments*/ true);
+            if (lines === 0) {
+                // However, if the line difference considering node2's comments was 0, we might have this:
+                //
+                //   function node1() { // NODE2 COMMENT
+                //     node2;
+                //
+                // in which case we should be ignoring node2's comment.
+                return getLinesBetweenPositions(node1, node2, currentSourceFile!, /*includeComments*/ false);
+            }
+            return lines;
         }
 
         function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {
