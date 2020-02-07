@@ -7017,10 +7017,12 @@ namespace ts {
                         comments.push(text);
                         indent += text.length;
                     }
-                    if (initialMargin) {
+                    if (initialMargin !== undefined) {
                         // jump straight to saving comments if there is some initial indentation
-                        pushComment(initialMargin);
-                        state = JSDocState.SavingComments;
+                        if (initialMargin !== "") {
+                            pushComment(initialMargin);
+                        }
+                        state = JSDocState.SawAsterisk;
                     }
                     let tok = token() as JSDocSyntaxKind;
                     loop: while (true) {
@@ -7558,7 +7560,7 @@ namespace ts {
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
                         typeParameter.name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                         finishNode(typeParameter);
-                        skipWhitespace();
+                        skipWhitespaceOrAsterisk();
                         typeParameters.push(typeParameter);
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 
