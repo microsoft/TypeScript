@@ -195,6 +195,8 @@ namespace ts {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
+
+        Both = Source | Target,
     }
 
     const enum MappedTypeModifiers {
@@ -15582,6 +15584,27 @@ namespace ts {
                 depth--;
                 if (result) {
                     if (result === Ternary.True || depth === 0) {
+                        // IntersectionState.Target _disables_ excess and common property checking on the target
+                        // IntersectionState.Source _disables_ inferable index relating on the source
+                        // This means if a type is assignable with none of these set, it should be assignable with either
+                        // or both set
+                        if (intersectionState === IntersectionState.None) {
+                            const keys = [
+                                getRelationKey(source, target, IntersectionState.Both, relation),
+                                getRelationKey(source, target, IntersectionState.Target, relation),
+                                getRelationKey(source, target, IntersectionState.Source, relation)
+                            ];
+                            for (const k of keys) {
+                                if (relation.has(k)) continue;
+                                relation.set(k, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                            }
+                        }
+                        else if (intersectionState !== IntersectionState.Both) {
+                            const k = getRelationKey(source, target, IntersectionState.Both, relation);
+                            if (!relation.has(k)) {
+                                relation.set(k, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                            }
+                        }
                         // If result is definitely true, record all maybe keys as having succeeded
                         for (let i = maybeStart; i < maybeCount; i++) {
                             relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
@@ -15594,6 +15617,26 @@ namespace ts {
                     // assumptions it will also be false without assumptions)
                     relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
                     maybeCount = maybeStart;
+
+                    // similarly to the success case, if a type _is not_ assignable with IntersectionState.Both set,
+                    // then it's impossible for it to have been assignable in any of the stronger modes, too
+                    if (intersectionState === IntersectionState.Both) {
+                        const keys = [
+                            getRelationKey(source, target, IntersectionState.None, relation),
+                            getRelationKey(source, target, IntersectionState.Target, relation),
+                            getRelationKey(source, target, IntersectionState.Source, relation)
+                        ];
+                        for (const k of keys) {
+                            if (relation.has(k)) continue;
+                            relation.set(k, RelationComparisonResult.Failed | propagatingVarianceFlags);
+                        }
+                    }
+                    else if (intersectionState !== IntersectionState.None) {
+                        const k = getRelationKey(source, target, IntersectionState.None, relation);
+                        if (!relation.has(k)) {
+                            relation.set(k, RelationComparisonResult.Failed | propagatingVarianceFlags);
+                        }
+                    }
                 }
                 return result;
             }
