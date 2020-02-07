@@ -565,9 +565,8 @@ namespace ts.formatting {
                     !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
                 getIndentation: () => indentation,
                 getDelta,
-                recomputeIndentation: (lineAdded, parentIn) => {
-                    const parent = node.parent || parentIn;
-                    if (node !== parent && SmartIndenter.shouldIndentChildNode(options, parent, node, sourceFile)) {
+                recomputeIndentation: (lineAdded, parent) => {
+                    if (SmartIndenter.shouldIndentChildNode(options, parent, node, sourceFile)) {
                         indentation += lineAdded ? options.indentSize! : -options.indentSize!;
                         delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
                     }
@@ -992,7 +991,7 @@ namespace ts.formatting {
                             // Handle the case where the next line is moved to be the end of this line.
                             // In this case we don't indent the next line in the next pass.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, currentParent);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, contextNode);
                             }
                             break;
                         case LineAction.LineAdded:
@@ -1000,7 +999,7 @@ namespace ts.formatting {
                             // In this case we indent token2 in the next pass but we set
                             // sameLineIndent flag to notify the indenter that the indentation is within the line.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, currentParent);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, contextNode);
                             }
                             break;
                         default:
