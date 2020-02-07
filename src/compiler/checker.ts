@@ -12176,12 +12176,47 @@ namespace ts {
                             UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                 }
+                else if (includes & TypeFlags.Object && hasPropertiesWithDisjointTypes(typeSet)) {
+                    result = neverType;
+                }
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
                 intersectionTypes.set(id, result);
             }
             return result;
+        }
+
+        function hasPropertiesWithDisjointTypes(typeSet: Type[]) {
+            const members = createMap<Symbol | Symbol[]>();
+            for (const type of typeSet) {
+                if (type.flags & TypeFlags.Object && !isGenericMappedType(type) && !isArrayType(type) && !isTupleType(type)) {
+                    for (const prop of getPropertiesOfObjectType(type)) {
+                        if (prop.flags & SymbolFlags.Property) {
+                            const name = <string>prop.escapedName;
+                            const cached = members.get(name);
+                            if (!cached) {
+                                members.set(name, prop);
+                            }
+                            else if (!isArray(cached)) {
+                                members.set(name, [cached, prop]);
+                            }
+                            else {
+                                cached.push(prop);
+                            }
+                        }
+                    }
+                }
+            }
+            for (const props of arrayFrom(members.values())) {
+                if (isArray(props)) {
+                    const types = map(props, getTypeOfSymbol);
+                    if (every(types, isLiteralType) && getIntersectionType(types).flags & TypeFlags.Never) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -16256,7 +16291,6 @@ namespace ts {
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: UnderscoreEscapedMap<true> | undefined, intersectionState: IntersectionState): Ternary {
-
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
