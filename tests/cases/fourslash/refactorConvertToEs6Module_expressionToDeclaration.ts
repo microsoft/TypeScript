@@ -15,8 +15,6 @@ verify.codeFix({
 `var C = {};
 console.log(C);
 export async function* f(p) { p; }
-const _C = class C extends D {
-    m() { }
-};
+const _C = class C extends D { m() { } };
 export { _C as C };`,
 });

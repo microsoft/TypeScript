@@ -842,6 +842,7 @@ namespace ts {
         let tempFlags: TempFlags; // TempFlags for the current name generation scope.
         let reservedNamesStack: Map<true>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
         let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
+        let preserveNewlines = printerOptions.preserveNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
 
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
@@ -1164,8 +1165,12 @@ namespace ts {
         function pipelineEmit(emitHint: EmitHint, node: Node) {
             const savedLastNode = lastNode;
             const savedLastSubstitution = lastSubstitution;
+            const savedPreserveNewlines = preserveNewlines;
             lastNode = node;
             lastSubstitution = undefined;
+            if (preserveNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+                preserveNewlines = false;
+            }
 
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
             pipelinePhase(emitHint, node);
@@ -1175,6 +1180,7 @@ namespace ts {
             const substitute = lastSubstitution;
             lastNode = savedLastNode;
             lastSubstitution = savedLastSubstitution;
+            preserveNewlines = savedPreserveNewlines;
 
             return substitute || node;
         }
@@ -3991,7 +3997,7 @@ namespace ts {
 
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
-                if (format & ListFormat.MultiLine) {
+                if (format & ListFormat.MultiLine && !(preserveNewlines && rangeIsOnSingleLine(parentNode, currentSourceFile!))) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -4262,7 +4268,7 @@ namespace ts {
         }
 
         function getLeadingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }
@@ -4283,7 +4289,7 @@ namespace ts {
         }
 
         function getSeparatingLineTerminatorCount(previousNode: Node | undefined, nextNode: Node, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveNewlines) {
                 if (previousNode === undefined || nextNode === undefined) {
                     return 0;
                 }
@@ -4302,7 +4308,7 @@ namespace ts {
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat): number {
-            if (format & ListFormat.PreserveLines || printerOptions.preserveNewlines) {
+            if (format & ListFormat.PreserveLines || preserveNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
                 }

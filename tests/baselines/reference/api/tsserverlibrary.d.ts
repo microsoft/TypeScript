@@ -4359,6 +4359,7 @@ declare namespace ts {
     function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
     function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
     function moveSyntheticComments<T extends Node>(node: T, original: Node): T;
+    function ignoreSourceNewlines<T extends Node>(node: T): T;
     /**
      * Gets the constant value to emit for an expression.
      */

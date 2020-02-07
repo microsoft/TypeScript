@@ -159,7 +159,7 @@ namespace ts.refactor {
             typeParameters.map(id => updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
@@ -174,7 +174,7 @@ namespace ts.refactor {
             /* heritageClauses */ undefined,
             typeElements
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
